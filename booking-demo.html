@@ -543,7 +543,7 @@ function printRequest(id){
 
 function downloadICS(id){
   const b=state.bookings.find(x=>x.id===id);if(!b)return;const date=b.date.split('-').join('');const start=b.start.replace(':','')+'00';const end=b.end.replace(':','')+'00';const clean=s=>String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
-  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Classroom Booking Manager//EN','BEGIN:VEVENT',`UID:${b.id}@classroom-booking`,`DTSTART:${date}T${start}`,`DTEND:${date}T${end}`,`SUMMARY:${clean(b.title)}`,`LOCATION:${clean(settings.rooms[b.room])}`,`DESCRIPTION:${clean(b.description)}\\nRequester: ${clean(b.requesterName||'')}`,`STATUS:CONFIRMED`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Classroom Booking Manager//EN','BEGIN:VEVENT','UID:'+b.id+'@classroom-booking','DTSTART:'+date+'T'+start,'DTEND:'+date+'T'+end,'SUMMARY:'+clean(b.title),'LOCATION:'+clean(settings.rooms[b.room]),'DESCRIPTION:'+clean(b.description)+'\\nRequester: '+clean(b.requesterName||''),'STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR'].join('\\r\\n');
   const blob=new Blob([ics],{type:'text/calendar'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${b.id}-${b.date}.ics`;a.click();URL.revokeObjectURL(url);
 }
 
