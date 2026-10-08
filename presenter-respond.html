@@ -63,8 +63,11 @@
    html+='<div class="ends"><span>'+escapeHtml(left)+'</span><span>'+escapeHtml(right)+'</span></div>';
   }else if(session.activity_type==='rank'){
    items=cfg.items||[];html+='<div class="rank">';for(i=0;i<items.length;i++){html+='<div class="rankrow"><select class="rankSelect" data-index="'+i+'"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><strong>'+escapeHtml(items[i])+'</strong></div>'}html+='</div><div class="small">1 = highest priority</div>';
+  }else if(session.activity_type==='wordcloud'){
+   var wcLimit=Number(cfg.responseLimit||1),wcFields=wcLimit>=99?10:wcLimit;
+   html+='<div class="options">';for(i=0;i<wcFields;i++)html+='<input class="input wordResponse" maxlength="80" autocomplete="off" placeholder="Word or phrase '+(i+1)+'">';html+='</div><div class="small" style="margin-top:8px">Enter up to '+wcFields+' words or short phrases, then submit them together.</div>';
   }else{
-   html+='<input class="input" id="textResponse" maxlength="160" autocomplete="off" placeholder="'+(session.activity_type==='wordcloud'?'One word or short phrase':'Type your response')+'">';
+   html+='<input class="input" id="textResponse" maxlength="160" autocomplete="off" placeholder="Type your response">';
   }
   html+='<button type="button" class="btn" id="submitBtn">Submit response</button><div class="status" id="status"></div>';
   app.innerHTML=html;
@@ -74,12 +77,13 @@
  function submit(){
   var cfg=session.config||{},limit=Number(cfg.responseLimit||1),value=selected;
   if(limit<99&&used()>=limit){status('You have already submitted the maximum number of responses.',true);return}
-  if(session.activity_type==='wordcloud'||session.activity_type==='open'){var input=document.getElementById('textResponse');value=input?input.value.replace(/^\s+|\s+$/g,''):''}
+  if(session.activity_type==='wordcloud'){var inputs=app.querySelectorAll('.wordResponse'),words=[];for(var wi=0;wi<inputs.length;wi++){var w=inputs[wi].value.replace(/^\s+|\s+$/g,'');if(w)words.push(w)}value=words}else if(session.activity_type==='open'){var input=document.getElementById('textResponse');value=input?input.value.replace(/^\s+|\s+$/g,''):''}
   if(session.activity_type==='rank'){var selects=app.querySelectorAll('.rankSelect'),ranked=[];for(var i=0;i<selects.length;i++)ranked.push({index:i,rank:Number(selects[i].value)});ranked.sort(function(a,b){return a.rank-b.rank});value=[];for(i=0;i<ranked.length;i++)value.push(ranked[i].index)}
-  if(value===null||value===undefined||value===''){status('Choose or enter a response first.',true);return}
+  if(value===null||value===undefined||value===''||(Object.prototype.toString.call(value)==='[object Array]'&&value.length===0)){status('Choose or enter a response first.',true);return}
   var b=document.getElementById('submitBtn');b.disabled=true;status('Submitting…',false);
-  request('presenter_responses','POST',{session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value}}).then(function(){
-   var now=used()+1;setUsed(now);var remaining=limit>=99?99:Math.max(0,limit-now);
+  var payload;if(session.activity_type==='wordcloud'){payload=[];for(var pi=0;pi<value.length;pi++)payload.push({session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value[pi]}})}else{payload={session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value}}}
+  request('presenter_responses','POST',payload).then(function(){
+   var added=session.activity_type==='wordcloud'?value.length:1;var now=used()+added;setUsed(now);var remaining=limit>=99?99:Math.max(0,limit-now);
    app.innerHTML='<div class="done"><h1>Response submitted</h1><p>Your response has been sent to the presentation.</p><div class="small">'+(limit>=99?'Additional responses are allowed.':remaining+' response(s) remaining.')+'</div>'+(limit>=99||remaining>0?'<button type="button" class="btn" id="againBtn">Submit another response</button>':'')+'</div>';
    var again=document.getElementById('againBtn');if(again)again.onclick=renderActivity;
   }).catch(function(err){b.disabled=false;status('Unable to submit. '+err.message,true)});
