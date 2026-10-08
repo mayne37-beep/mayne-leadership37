@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>World in Balance — Student Country Builder</title>
+<style>
+:root{
+  --bg:#eef5fb;--panel:#ffffff;--panel2:#f8fbfe;--text:#183247;--muted:#60788c;
+  --line:#c9d8e5;--blue:#245f91;--blue2:#0f76b9;--gold:#c99a34;--gold2:#f2d486;
+  --green:#2f7a57;--greenbg:#eaf7f0;--amber:#8a651a;--amberbg:#fff7df;--red:#a33d45;--redbg:#fff0f1;
+  --shadow:0 12px 32px rgba(32,66,91,.10);--radius:16px;
+}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eaf3fa 0,#f7fbfe 45%,#eef5fb 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.shell{max-width:1180px;margin:0 auto;padding:22px}.top{background:linear-gradient(135deg,#173e60,#245f91);color:white;border-radius:20px;padding:24px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.top:after{content:"";position:absolute;right:-70px;top:-90px;width:260px;height:260px;border-radius:50%;border:38px solid rgba(255,255,255,.07)}.kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#d8e9f5}.top h1{margin:4px 0 6px;font-size:clamp(26px,4vw,42px);line-height:1.04}.top p{margin:0;max-width:780px;color:#e1edf6}.top-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px;position:relative;z-index:2}.btn{border:1px solid #aac0d3;background:#fff;color:#24465f;border-radius:10px;padding:10px 14px;font-weight:750;min-height:42px}.btn:hover{filter:brightness(.98)}.btn.primary{background:#f1c65e;border-color:#f1c65e;color:#243442}.btn.secondary{background:#eaf4fb;border-color:#bfdaea;color:#245f91}.btn.danger{background:#fff0f1;border-color:#edb8bd;color:#9b3340}.btn:disabled{opacity:.48;cursor:not-allowed}.statusbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.status{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:0 5px 18px rgba(32,66,91,.05)}.status b{display:block;font-size:19px}.status span{font-size:12px;color:var(--muted)}
+.stepper{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:16px 0}.step{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;text-align:left;color:#466278;min-height:66px}.step small{display:block;color:var(--muted);font-weight:650}.step b{font-size:13px}.step.active{border-color:#4b91bf;background:#edf7fd;box-shadow:inset 0 0 0 1px #4b91bf}.step.done{border-color:#9ecdb4;background:#f1faf5}.step.done small{color:#3f7d5c}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}.panel{background:rgba(255,255,255,.98);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}.section{display:none}.section.active{display:block}.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:850;color:var(--blue2)}h2{margin:4px 0 5px;font-size:25px}h3{font-size:17px;margin:18px 0 8px}.sub{color:var(--muted);font-size:14px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}label{font-size:13px;font-weight:750;color:#36556d;display:block;margin:12px 0 5px}input[type=text],input[type=number],textarea,select{width:100%;border:1px solid #b9cddd;background:#fff;border-radius:10px;padding:10px 11px;color:var(--text);outline:none;min-height:42px}textarea{min-height:92px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#3887b9;box-shadow:0 0 0 3px rgba(56,135,185,.13)}.hint{font-size:12px;color:var(--muted);margin-top:5px}.callout{border-left:4px solid var(--gold);background:#fff9e9;border-radius:10px;padding:12px 14px;margin:13px 0}.callout.blue{border-color:var(--blue2);background:#eef8fd}.callout.green{border-color:var(--green);background:var(--greenbg)}.callout.red{border-color:var(--red);background:var(--redbg)}.team-list{display:grid;gap:7px}.team-row{display:grid;grid-template-columns:1fr 44px;gap:7px}.mini{border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 10px}.cap-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:12px}.cap-card{border:1px solid var(--line);border-radius:13px;background:#fbfdff;padding:12px;text-align:center}.cap-card strong{display:block;font-size:12px;margin-bottom:6px}.cap-card input{font-size:22px;text-align:center;font-weight:850;padding:8px}.cap-card .meaning{font-size:11px;color:var(--muted);min-height:48px;margin-top:7px}.pool{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}.die{width:58px;height:58px;border:2px solid #9eb7c9;background:white;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:900;color:#244f70;box-shadow:0 4px 10px rgba(30,60,80,.08)}.poolbox{border:1px solid #d5bd70;background:#fff9e5;border-radius:13px;padding:9px 13px}.poolbox b{font-size:24px;display:block}.meter{height:12px;border-radius:99px;background:#e8eef3;overflow:hidden;border:1px solid #d4e0e9}.meter>span{display:block;height:100%;background:linear-gradient(90deg,#4a8eb9,#68a87d);width:0;transition:width .2s}.allocation-status{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:8px;font-size:13px}.good{color:var(--green);font-weight:800}.warn{color:var(--amber);font-weight:800}.bad{color:var(--red);font-weight:800}.summary-card{border:1px solid var(--line);border-radius:13px;padding:13px;background:#f9fcff;margin-bottom:10px}.summary-card h4{margin:0 0 5px}.caps-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.caps-summary div{background:#eef6fb;border-radius:10px;padding:9px 5px;text-align:center}.caps-summary b{display:block;font-size:20px;color:#245f91}.side{display:flex;flex-direction:column;gap:12px}.side .panel{box-shadow:0 7px 20px rgba(32,66,91,.06);padding:16px}.check{display:grid;grid-template-columns:22px 1fr;gap:8px;margin:8px 0;font-size:13px}.dot{width:18px;height:18px;border-radius:50%;border:2px solid #a9bdcc;margin-top:1px}.check.done .dot{border-color:#4d966d;background:#4d966d;box-shadow:inset 0 0 0 4px white}.divider{height:1px;background:var(--line);margin:14px 0}.nav-actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.nav-actions .right{display:flex;gap:8px}.review-line{display:grid;grid-template-columns:165px 1fr;gap:12px;padding:8px 0;border-bottom:1px solid #edf2f6}.review-line:last-child{border-bottom:0}.review-line b{color:#405e74}.filebox{border:2px dashed #9bb8cb;border-radius:13px;padding:16px;text-align:center;background:#f6fbfe}.print-only{display:none}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#183b55;color:#fff;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.2)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{order:-1}.statusbar{grid-template-columns:repeat(2,1fr)}.stepper{grid-template-columns:repeat(3,1fr)}.cap-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.shell{padding:10px}.top{padding:20px}.grid2,.grid3{grid-template-columns:1fr}.stepper{grid-template-columns:repeat(2,1fr)}.cap-grid{grid-template-columns:1fr}.statusbar{grid-template-columns:1fr 1fr}.review-line{grid-template-columns:1fr;gap:2px}.top-actions .btn{width:100%}.nav-actions{flex-direction:column}.nav-actions .right{flex-direction:column}.nav-actions .btn{width:100%}}
+@media print{
+ body{background:white}.shell{max-width:none;padding:0}.top,.statusbar,.stepper,.side,.nav-actions,.toast{display:none!important}.layout{display:block}.panel{box-shadow:none;border:0;padding:0}.section{display:none!important}.section[data-step="6"]{display:block!important}.screen-only{display:none!important}.print-only{display:block!important}.summary-card,.review-line{break-inside:avoid}.caps-summary div{border:1px solid #bbb;background:white}h2{font-size:24px}.print-header{border-bottom:2px solid #333;margin-bottom:14px;padding-bottom:8px}.print-header h1{margin:0}.print-sign{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:30px}.print-sign div{border-top:1px solid #555;padding-top:5px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="shell" id="app">
+  <header class="top">
+    <div class="kicker">World in Balance • Student Worksheet</div>
+    <h1>Build Your Country</h1>
+    <p>Your team is creating the country you will represent during the simulation. There is no perfect country and no best allocation. The choices you make here become the starting conditions your government will inherit.</p>
+    <div class="top-actions">
+      <button class="btn primary" id="exportTop" disabled>Export Country File</button>
+      <button class="btn" id="printTop">Print Country Sheet</button>
+      <button class="btn" id="saveDraft">Save Draft</button>
+      <button class="btn" id="loadFileBtn">Load Country File</button>
+      <input id="loadFile" type="file" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <div class="statusbar">
+    <div class="status"><b id="nationStatus">Unnamed Nation</b><span>Country</span></div>
+    <div class="status"><b id="memberCount">0</b><span>Team members</span></div>
+    <div class="status"><b id="poolStatus">—</b><span>Capability pool</span></div>
+    <div class="status"><b id="allocationStatus">Not ready</b><span>Export status</span></div>
+  </div>
+
+  <nav class="stepper" id="stepper">
+    <button class="step active" data-go="1"><small>Step 1</small><b>Your Team</b></button>
+    <button class="step" data-go="2"><small>Step 2</small><b>Country Identity</b></button>
+    <button class="step" data-go="3"><small>Step 3</small><b>National Character</b></button>
+    <button class="step" data-go="4"><small>Step 4</small><b>Capability Roll</b></button>
+    <button class="step" data-go="5"><small>Step 5</small><b>Allocate Capability</b></button>
+    <button class="step" data-go="6"><small>Step 6</small><b>Review & Export</b></button>
+  </nav>
+
+  <div class="layout">
+    <main class="panel">
+      <section class="section active" data-step="1">
+        <div class="eyebrow">Step 1</div><h2>Who is your leadership team?</h2>
+        <div class="sub">You are the senior advisers to your country's national leader. Use your real names here so the facilitator can identify your team if needed.</div>
+        <label>Team / table name <span class="sub">(optional)</span></label>
+        <input id="teamName" type="text" placeholder="Example: Table 3 or Blue Team">
+        <h3>Team members</h3>
+        <div class="team-list" id="teamMembers"></div>
+        <div class="toolbar" style="margin-top:10px"><button class="btn secondary" id="addMember">+ Add team member</button></div>
+        <div class="callout blue"><b>Your role in the simulation</b><br>You are not playing assigned characters. You are collectively advising the leader of the country you create. Your own judgment drives what your government does.</div>
+      </section>
+
+      <section class="section" data-step="2">
+        <div class="eyebrow">Step 2</div><h2>Create your country</h2>
+        <div class="sub">Make it distinctive enough that your team feels ownership of it. These details may become relevant later.</div>
+        <div class="grid2">
+          <div><label>Country name *</label><input id="countryName" type="text" placeholder="The Republic of…"></div>
+          <div><label>National leader / title</label><input id="leader" type="text" placeholder="President, Prime Minister, Queen…"></div>
+          <div><label>Form of government *</label><input id="government" type="text" placeholder="Federal republic, constitutional monarchy…"></div>
+          <div><label>Population profile</label><input id="populationProfile" type="text" placeholder="Large urban population, small island nation…"></div>
+        </div>
+        <label>Geography / environment *</label><textarea id="geography" placeholder="Describe the physical setting: island, mountainous, landlocked, coastal, climate, major terrain…"></textarea>
+        <div class="grid2">
+          <div><label>Cultural characteristic</label><input id="culture" type="text" placeholder="A tradition, social norm, or shared identity"></div>
+          <div><label>Signature cuisine</label><input id="cuisine" type="text" placeholder="A dish or food your country is known for"></div>
+          <div><label>Major tourist site</label><input id="touristSite" type="text" placeholder="Landmark, festival, natural wonder…"></div>
+          <div><label>National motto</label><input id="motto" type="text" placeholder="A short phrase that captures your nation"></div>
+        </div>
+        <label>National symbol / flag / emblem description</label><textarea id="emblem" placeholder="Describe it here, or sketch it on your printed country sheet."></textarea>
+      </section>
+
+      <section class="section" data-step="3">
+        <div class="eyebrow">Step 3</div><h2>What does your nation stand for?</h2>
+        <div class="sub">Choose characteristics that matter enough that your leadership team would be reluctant to violate them—even during a serious crisis.</div>
+        <label>Defining characteristic #1 *</label><input id="char1" type="text" placeholder="Example: Strong civil liberties">
+        <label>Defining characteristic #2 *</label><input id="char2" type="text" placeholder="Example: Collective responsibility">
+        <label>What does your government believe it owes its citizens? *</label>
+        <textarea id="owesCitizens" placeholder="What responsibilities does your government believe it has toward the people it governs?"></textarea>
+        <label>What matters most to your country?</label>
+        <textarea id="mattersMost" placeholder="What would your leadership team try hardest to preserve if the country came under severe pressure?"></textarea>
+        <div class="callout"><b>Do not optimize for the game.</b><br>You do not know what will happen next. Build the country your team wants to represent.</div>
+      </section>
+
+      <section class="section" data-step="4">
+        <div class="eyebrow">Step 4</div><h2>Determine your starting capability</h2>
+        <div class="sub">Countries do not begin equally. Roll two six-sided dice. Your national capability pool is <b>10 + the dice total</b>.</div>
+        <div class="pool">
+          <div class="die" id="die1">–</div><div class="die" id="die2">–</div>
+          <div class="poolbox"><span class="sub">Capability pool</span><b id="poolBig">—</b></div>
+        </div>
+        <div class="grid2">
+          <div class="callout blue">
+            <b>Use digital dice</b><br><span class="sub">Have the computer roll for your team.</span><br><br>
+            <button class="btn primary" id="rollDice">Roll 2d6</button>
+          </div>
+          <div class="callout blue">
+            <b>Use physical dice</b><br><span class="sub">If your facilitator gave you dice, enter them here.</span>
+            <div class="grid2"><div><label>Die 1</label><input id="manualDie1" type="number" min="1" max="6"></div><div><label>Die 2</label><input id="manualDie2" type="number" min="1" max="6"></div></div>
+            <button class="btn secondary" id="applyPhysical">Use Physical Roll</button>
+          </div>
+        </div>
+        <div class="callout green"><b>The inequality is intentional.</b><br>A lower pool does not mean your country cannot succeed, and a higher pool does not make your country invulnerable.</div>
+      </section>
+
+      <section class="section" data-step="5">
+        <div class="eyebrow">Step 5</div><h2>Allocate national capability</h2>
+        <div class="sub">Spend the entire pool. Every capability must be at least <b>1</b> and no capability may be higher than <b>6</b>.</div>
+        <div id="noRollWarning" class="callout red">Roll your starting capability in Step 4 before allocating points.</div>
+        <div class="cap-grid" id="capGrid">
+          <div class="cap-card"><strong>Economy</strong><input id="capEconomy" type="number" min="1" max="6" value="1"><div class="meaning">Finance, production, capital, procurement, absorbing economic shocks.</div></div>
+          <div class="cap-card"><strong>Infrastructure</strong><input id="capInfrastructure" type="number" min="1" max="6" value="1"><div class="meaning">Transportation, utilities, communications, logistics, continuity of critical systems.</div></div>
+          <div class="cap-card"><strong>Military</strong><input id="capMilitary" type="number" min="1" max="6" value="1"><div class="meaning">Security forces, border control, emergency deployment, coercive capacity.</div></div>
+          <div class="cap-card"><strong>Institutions</strong><input id="capInstitutions" type="number" min="1" max="6" value="1"><div class="meaning">Government effectiveness, legitimacy, coordination, administration, public confidence.</div></div>
+          <div class="cap-card"><strong>Health</strong><input id="capHealth" type="number" min="1" max="6" value="1"><div class="meaning">Healthcare, public health, medicine, surveillance, surge capacity.</div></div>
+        </div>
+        <div class="allocation-status"><span id="allocText">No capability pool yet.</span><span id="allocRemaining">Remaining: —</span></div>
+        <div class="meter"><span id="allocMeter"></span></div>
+        <div class="toolbar" style="margin-top:12px"><button class="btn secondary" id="spreadEvenly">Spread Points Evenly</button><button class="btn" id="resetCaps">Reset to Minimum</button></div>
+        <div class="callout blue"><b>Capability scores mean:</b> 1 Fragile • 2 Limited • 3 Adequate • 4 Strong • 5 Advanced • 6 Exceptional</div>
+      </section>
+
+      <section class="section" data-step="6">
+        <div class="print-only print-header"><h1 id="printCountryTitle">World in Balance — Country Sheet</h1><div id="printTeam"></div></div>
+        <div class="eyebrow screen-only">Step 6</div><h2>Review your country</h2>
+        <div class="sub screen-only">Check the information below. When everything is complete, export the country file and send it to your facilitator.</div>
+        <div id="review"></div>
+        <div class="filebox screen-only" style="margin-top:16px">
+          <h3 style="margin-top:0">Ready to hand off?</h3>
+          <div id="exportMessage" class="sub">Complete the required fields and capability allocation first.</div>
+          <div class="top-actions" style="justify-content:center;margin-top:12px">
+            <button class="btn primary" id="exportBottom" disabled>Export Country File (.json)</button>
+            <button class="btn secondary" id="printBottom">Print Country Sheet</button>
+          </div>
+        </div>
+        <div class="print-only print-sign"><div>Team representative</div><div>Date</div></div>
+      </section>
+
+      <div class="nav-actions screen-only">
+        <button class="btn" id="prevStep">← Previous</button>
+        <div class="right"><button class="btn secondary" id="saveDraftBottom">Save Draft</button><button class="btn primary" id="nextStep">Next →</button></div>
+      </div>
+    </main>
+
+    <aside class="side">
+      <div class="panel">
+        <div class="eyebrow">Country Readiness</div><h3 style="margin-top:4px">Before you export</h3>
+        <div id="checklist"></div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">Capability Pool</div>
+        <div style="font-size:30px;font-weight:900;color:#245f91" id="sidePool">—</div>
+        <div class="sub">10 + your 2d6 roll</div>
+        <div class="divider"></div>
+        <div class="sub"><b id="sideSpent">0</b> points allocated</div>
+        <div class="sub"><b id="sideRemaining">—</b> points remaining</div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">Important</div>
+        <div class="sub">Your country file contains only the nation information your team enters here. It does not contain simulation answers or hidden facilitator information.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(()=>{
+'use strict';
+const CAPS=['Economy','Infrastructure','Military','Institutions','Health'];
+const capIds={Economy:'capEconomy',Infrastructure:'capInfrastructure',Military:'capMilitary',Institutions:'capInstitutions',Health:'capHealth'};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let step=1;
+let state={
+  type:'world-in-balance-team',version:1,team:{name:'',members:['']},
+  nation:{name:'',leader:'',government:'',geography:'',populationProfile:'',culturalCharacteristic:'',signatureCuisine:'',touristSite:'',motto:'',emblemDescription:'',characteristics:['',''],owesCitizens:'',mattersMost:''},
+  capabilityRoll:{dice:[0,0],pool:0},capabilities:{Economy:1,Infrastructure:1,Military:1,Institutions:1,Health:1},created:new Date().toISOString(),updated:new Date().toISOString()
+};
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2100)}
+function clamp(n,min,max){n=Number(n);return Number.isFinite(n)?Math.max(min,Math.min(max,n)):min}
+function slug(s){return (s||'country').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'country'}
+function download(name,content,type='application/json'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function readForm(){
+ state.team.name=$('#teamName').value.trim();
+ state.team.members=$$('#teamMembers input').map(x=>x.value.trim()).filter(Boolean);
+ state.nation.name=$('#countryName').value.trim();state.nation.leader=$('#leader').value.trim();state.nation.government=$('#government').value.trim();state.nation.populationProfile=$('#populationProfile').value.trim();state.nation.geography=$('#geography').value.trim();state.nation.culturalCharacteristic=$('#culture').value.trim();state.nation.signatureCuisine=$('#cuisine').value.trim();state.nation.touristSite=$('#touristSite').value.trim();state.nation.motto=$('#motto').value.trim();state.nation.emblemDescription=$('#emblem').value.trim();state.nation.characteristics=[$('#char1').value.trim(),$('#char2').value.trim()];state.nation.owesCitizens=$('#owesCitizens').value.trim();state.nation.mattersMost=$('#mattersMost').value.trim();
+ CAPS.forEach(c=>state.capabilities[c]=clamp($('#'+capIds[c]).value,1,6));
+ state.updated=new Date().toISOString();
+}
+function writeForm(){
+ $('#teamName').value=state.team?.name||'';renderMembers(state.team?.members?.length?state.team.members:['']);
+ const n=state.nation||{};$('#countryName').value=n.name||'';$('#leader').value=n.leader||'';$('#government').value=n.government||'';$('#populationProfile').value=n.populationProfile||'';$('#geography').value=n.geography||'';$('#culture').value=n.culturalCharacteristic||'';$('#cuisine').value=n.signatureCuisine||'';$('#touristSite').value=n.touristSite||'';$('#motto').value=n.motto||'';$('#emblem').value=n.emblemDescription||'';$('#char1').value=(n.characteristics||[])[0]||'';$('#char2').value=(n.characteristics||[])[1]||'';$('#owesCitizens').value=n.owesCitizens||'';$('#mattersMost').value=n.mattersMost||'';
+ CAPS.forEach(c=>$('#'+capIds[c]).value=clamp((state.capabilities||{})[c]??1,1,6));renderRoll();refresh();
+}
+function renderMembers(arr){const values=arr&&arr.length?arr:[''];$('#teamMembers').innerHTML=values.map((v,i)=>`<div class="team-row"><input type="text" value="${esc(v)}" placeholder="Team member ${i+1}" data-member><button class="btn danger" type="button" data-remove-member="${i}" aria-label="Remove team member">×</button></div>`).join('');$$('[data-remove-member]').forEach(b=>b.onclick=()=>{const vals=$$('[data-member]').map(x=>x.value);if(vals.length<=1){vals[0]=''}else vals.splice(+b.dataset.removeMember,1);renderMembers(vals);attachLive();refresh();});attachLive();}
+function addMember(){const vals=$$('[data-member]').map(x=>x.value);vals.push('');renderMembers(vals);$('#teamMembers input:last-of-type')?.focus();refresh();}
+function roll(){const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6);setRoll(d1,d2);toast(`Rolled ${d1} + ${d2}. Capability pool: ${10+d1+d2}.`)}
+function setRoll(d1,d2){d1=clamp(d1,1,6);d2=clamp(d2,1,6);state.capabilityRoll={dice:[d1,d2],pool:10+d1+d2};renderRoll();spreadEvenly();refresh();}
+function renderRoll(){const r=state.capabilityRoll||{dice:[0,0],pool:0};$('#die1').textContent=r.dice?.[0]||'–';$('#die2').textContent=r.dice?.[1]||'–';$('#poolBig').textContent=r.pool||'—';$('#poolStatus').textContent=r.pool||'—';$('#sidePool').textContent=r.pool||'—';$('#noRollWarning').style.display=r.pool?'none':'block';}
+function spent(){return CAPS.reduce((s,c)=>s+clamp($('#'+capIds[c]).value,1,6),0)}
+function allocationValid(){if(!state.capabilityRoll?.pool)return false;return spent()===state.capabilityRoll.pool&&CAPS.every(c=>{const v=Number($('#'+capIds[c]).value);return v>=1&&v<=6;});}
+function requiredStatus(){readForm();return {
+  team:state.team.members.length>0,
+  identity:!!(state.nation.name&&state.nation.government&&state.nation.geography),
+  values:!!((state.nation.characteristics||[])[0]&&(state.nation.characteristics||[])[1]&&state.nation.owesCitizens),
+  roll:!!state.capabilityRoll.pool,
+  allocation:allocationValid()
+}}
+function isReady(){const x=requiredStatus();return Object.values(x).every(Boolean)}
+function refresh(){
+ readForm();renderRoll();
+ const s=spent(),p=state.capabilityRoll.pool||0,r=p?s-p:null;
+ $('#sideSpent').textContent=s;$('#sideRemaining').textContent=p?r:'—';$('#nationStatus').textContent=state.nation.name||'Unnamed Nation';$('#memberCount').textContent=state.team.members.length;
+ if(!p){$('#allocText').textContent='No capability pool yet.';$('#allocText').className='warn';$('#allocRemaining').textContent='Remaining: —';$('#allocMeter').style.width='0%';}
+ else{const pct=Math.max(0,Math.min(100,s/p*100));$('#allocMeter').style.width=pct+'%';$('#allocRemaining').textContent=`Remaining: ${r}`;if(r===0&&allocationValid()){$('#allocText').textContent='Allocation complete.';$('#allocText').className='good'}else if(r<0){$('#allocText').textContent='You have spent too many points.';$('#allocText').className='bad'}else{$('#allocText').textContent='Continue allocating your pool.';$('#allocText').className='warn'}}
+ const ready=isReadyInner();$('#allocationStatus').textContent=ready?'Ready to export':'Not ready';$('#allocationStatus').style.color=ready?'#2f7a57':'#8a651a';$('#exportTop').disabled=!ready;$('#exportBottom').disabled=!ready;$('#exportMessage').textContent=ready?'Your country file is ready. Export it and send the JSON file to your facilitator.':'Complete all required country fields, roll your capability pool, and spend the full pool first.';
+ renderChecklist();renderReview();updateSteps();autosave();
+}
+function isReadyInner(){const n=state.nation||{}, members=state.team.members||[];return members.length>0&&n.name&&n.government&&n.geography&&(n.characteristics||[])[0]&&(n.characteristics||[])[1]&&n.owesCitizens&&!!state.capabilityRoll.pool&&spent()===state.capabilityRoll.pool&&CAPS.every(c=>state.capabilities[c]>=1&&state.capabilities[c]<=6)}
+function renderChecklist(){const n=state.nation||{}, items=[['Team member names',(state.team.members||[]).length>0],['Country identity',!!(n.name&&n.government&&n.geography)],['Two defining characteristics',!!((n.characteristics||[])[0]&&(n.characteristics||[])[1])],['Government obligation',!!n.owesCitizens],['Capability roll',!!state.capabilityRoll.pool],['Full capability allocation',allocationValid()]];$('#checklist').innerHTML=items.map(([t,d])=>`<div class="check ${d?'done':''}"><span class="dot"></span><span>${esc(t)}</span></div>`).join('')}
+function renderReview(){const n=state.nation||{}, caps=state.capabilities||{};$('#printCountryTitle').textContent=`World in Balance — ${n.name||'Country Sheet'}`;$('#printTeam').textContent=(state.team.members||[]).length?`Leadership team: ${state.team.members.join(', ')}`:'';const rows=[['Team / table',state.team.name||'—'],['Team members',(state.team.members||[]).join(', ')||'—'],['Country',n.name||'—'],['Leader / title',n.leader||'—'],['Government',n.government||'—'],['Population profile',n.populationProfile||'—'],['Geography',n.geography||'—'],['Culture',n.culturalCharacteristic||'—'],['Signature cuisine',n.signatureCuisine||'—'],['Tourist site',n.touristSite||'—'],['Motto',n.motto||'—'],['National symbol',n.emblemDescription||'—'],['Defining characteristic 1',(n.characteristics||[])[0]||'—'],['Defining characteristic 2',(n.characteristics||[])[1]||'—'],['Government owes citizens',n.owesCitizens||'—'],['What matters most',n.mattersMost||'—']];$('#review').innerHTML=`<div class="summary-card"><h4>Country Identity</h4>${rows.map(([a,b])=>`<div class="review-line"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div><div class="summary-card"><h4>Starting National Capability</h4><div class="review-line"><b>Starting roll</b><span>${state.capabilityRoll.dice?.[0]||'—'} + ${state.capabilityRoll.dice?.[1]||'—'} = ${state.capabilityRoll.dice?.[0]?state.capabilityRoll.dice[0]+state.capabilityRoll.dice[1]:'—'} &nbsp; | &nbsp; Pool: ${state.capabilityRoll.pool||'—'}</span></div><div class="caps-summary">${CAPS.map(c=>`<div><b>${caps[c]??1}</b><span>${c}</span></div>`).join('')}</div></div>`}
+function updateSteps(){const done={1:(state.team.members||[]).length>0,2:!!(state.nation.name&&state.nation.government&&state.nation.geography),3:!!((state.nation.characteristics||[])[0]&&(state.nation.characteristics||[])[1]&&state.nation.owesCitizens),4:!!state.capabilityRoll.pool,5:allocationValid(),6:isReadyInner()};$$('.step').forEach(b=>{const n=+b.dataset.go;b.classList.toggle('active',n===step);b.classList.toggle('done',!!done[n]&&n!==step)});}
+function go(n){readForm();step=Math.max(1,Math.min(6,n));$$('.section').forEach(s=>s.classList.toggle('active',+s.dataset.step===step));updateSteps();$('#prevStep').disabled=step===1;$('#nextStep').style.display=step===6?'none':'inline-block';window.scrollTo({top:0,behavior:'smooth'});}
+function spreadEvenly(){const p=state.capabilityRoll.pool||0;if(!p)return toast('Roll your capability pool first.');let vals={Economy:1,Infrastructure:1,Military:1,Institutions:1,Health:1},left=p-5,i=0;while(left>0&&i<100){const c=CAPS[i%CAPS.length];if(vals[c]<6){vals[c]++;left--}i++}CAPS.forEach(c=>$('#'+capIds[c]).value=vals[c]);refresh()}
+function resetCaps(){CAPS.forEach(c=>$('#'+capIds[c]).value=1);refresh()}
+function exportCountry(){refresh();if(!isReadyInner())return toast('Country is not ready to export yet.');state.type='world-in-balance-team';state.version=1;state.updated=new Date().toISOString();download(`World-in-Balance-${slug(state.nation.name)}.json`,JSON.stringify(state,null,2));toast('Country file exported. Send it to your facilitator.')}
+function saveDraft(){readForm();state.updated=new Date().toISOString();download(`World-in-Balance-${slug(state.nation.name||'draft')}-draft.json`,JSON.stringify(state,null,2));toast('Draft saved as a JSON file.')}
+async function loadFile(f){try{const d=JSON.parse(await f.text());if(!d||(!d.nation&&!d.capabilities))throw new Error('Not a country file');state={...state,...d,team:{name:d.team?.name||'',members:Array.isArray(d.team?.members)?d.team.members:['']},nation:{...state.nation,...(d.nation||{})},capabilityRoll:{dice:Array.isArray(d.capabilityRoll?.dice)?d.capabilityRoll.dice:[0,0],pool:Number(d.capabilityRoll?.pool)||0},capabilities:{...state.capabilities,...(d.capabilities||{})}};writeForm();toast('Country file loaded.')}catch(e){toast('That file could not be loaded as a World in Balance country file.')}}
+function autosave(){try{localStorage.setItem('wib_student_country_v1',JSON.stringify(state))}catch(e){}}
+function restore(){try{const d=JSON.parse(localStorage.getItem('wib_student_country_v1'));if(d&&d.nation){state={...state,...d};return true}}catch(e){}return false}
+function attachLive(){document.querySelectorAll('input,textarea,select').forEach(el=>{if(el.dataset.liveBound)return;el.dataset.liveBound='1';el.addEventListener('input',refresh);el.addEventListener('change',refresh);});}
+$('#addMember').onclick=addMember;$('#rollDice').onclick=roll;$('#applyPhysical').onclick=()=>{const a=Number($('#manualDie1').value),b=Number($('#manualDie2').value);if(!(a>=1&&a<=6&&b>=1&&b<=6))return toast('Enter two die values from 1 through 6.');setRoll(a,b);toast(`Physical roll recorded. Capability pool: ${10+a+b}.`)};$('#spreadEvenly').onclick=spreadEvenly;$('#resetCaps').onclick=resetCaps;
+$$('.step').forEach(b=>b.onclick=()=>go(+b.dataset.go));$('#prevStep').onclick=()=>go(step-1);$('#nextStep').onclick=()=>go(step+1);$('#exportTop').onclick=$('#exportBottom').onclick=exportCountry;$('#saveDraft').onclick=$('#saveDraftBottom').onclick=saveDraft;$('#printTop').onclick=$('#printBottom').onclick=()=>{refresh();go(6);setTimeout(()=>window.print(),80)};$('#loadFileBtn').onclick=()=>$('#loadFile').click();$('#loadFile').onchange=e=>e.target.files[0]&&loadFile(e.target.files[0]);
+if(restore())writeForm();else{renderMembers(['']);writeForm()}attachLive();go(1);refresh();
+})();
+</script>
+</body>
+</html>
