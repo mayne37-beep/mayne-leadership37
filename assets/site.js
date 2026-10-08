@@ -1,0 +1,4 @@
+(()=>{'use strict';const $=s=>document.querySelector(s); const year=$('#year');if(year)year.textContent=new Date().getFullYear();const menu=$('#menu-btn'),nav=$('#nav');
+      menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰';menu.setAttribute('aria-label',open?'Close navigation':'Open navigation')});
+      nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';menu.setAttribute('aria-label','Open navigation')}));
+      })();

@@ -1,0 +1,12 @@
+(()=>{'use strict';const $=s=>document.querySelector(s);const rows=$('#matrix-body');const criteria=['Impact','Feasibility','Sustainability'];
+      function initMatrix(){rows.replaceChildren();for(let i=0;i<3;i++){const tr=document.createElement('tr'),td=document.createElement('td'),name=document.createElement('input');name.type='text';name.value='Option '+String.fromCharCode(65+i);name.maxLength=60;name.setAttribute('aria-label','Name of option '+(i+1));td.append(name);tr.append(td);
+          for(let j=0;j<3;j++){const c=document.createElement('td'),input=document.createElement('input');input.type='number';input.min='1';input.max='5';input.step='1';input.value='3';input.setAttribute('aria-label','Option '+(i+1)+' '+criteria[j]+' score');c.append(input);tr.append(c)}rows.append(tr)}
+        ['impact','feasibility','sustainability'].forEach((key,i)=>$('#weight-'+key).value=[5,3,2][i]);$('#matrix-output').hidden=true;$('#matrix-output').replaceChildren();
+      }
+      $('#reset-matrix').addEventListener('click',initMatrix);
+      $('#calculate').addEventListener('click',()=>{const output=$('#matrix-output');output.replaceChildren();output.hidden=false;const weights=['impact','feasibility','sustainability'].map(key=>Number($('#weight-'+key).value));const error=msg=>{const p=document.createElement('p');p.setAttribute('role','alert');p.textContent=msg;output.append(p)};
+        if(weights.some(v=>!Number.isInteger(v)||v<0||v>10)||weights.every(v=>v===0)){error('Use whole-number weights from 0 to 10, with at least one weight above zero.');return}
+        const ranked=[];for(const tr of rows.rows){const inputs=Array.from(tr.querySelectorAll('input')),name=inputs[0].value.trim(),scores=inputs.slice(1).map(i=>Number(i.value));if(!name||scores.some(n=>!Number.isInteger(n)||n<1||n>5)){error('Name every option and enter whole-number scores from 1 to 5.');return}ranked.push({name,score:scores.reduce((sum,v,i)=>sum+v*weights[i],0)})}
+        ranked.sort((a,b)=>b.score-a.score);const title=document.createElement('strong');title.textContent='Weighted ranking';output.append(title);ranked.forEach((item,i)=>{const row=document.createElement('div');row.className='result-row';const n=document.createElement('span');n.textContent=(i+1)+'. '+item.name;const score=document.createElement('strong');score.textContent=item.score+' / '+(5*weights.reduce((a,b)=>a+b,0));row.append(n,score);output.append(row)});
+      });initMatrix();
+    })();
