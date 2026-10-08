@@ -7,7 +7,7 @@
 <title>Live Response | Mayne Leadership</title>
 <style>
 :root{--navy:#102b4b;--blue:#2767a4;--gold:#e1af4f;--ink:#18344f;--muted:#687d90;--line:#d9e5ee;--bg:#f4f8fc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}.wrap{max-width:620px;margin:0 auto;padding:22px}.brand{text-align:center;color:var(--navy);font-size:13px;font-weight:800;letter-spacing:.1em;margin:12px 0 18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 14px 38px rgba(16,43,75,.08)}h1{font-size:28px;margin:0 0 8px;color:var(--navy)}p{color:var(--muted)}.input{width:100%;padding:14px;border:1.5px solid #c8d8e5;border-radius:10px;font:inherit;color:var(--ink);background:#fff}.btn{width:100%;margin-top:14px;border:0;border-radius:10px;padding:14px;background:var(--blue);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.btn:disabled{opacity:.55}.status{min-height:20px;margin-top:10px;font-size:13px;color:var(--muted)}.status.error{color:#a33}.session{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.05em}.question{font-size:23px;font-weight:800;color:var(--navy);margin:18px 0}.options{display:grid;gap:9px}.option{width:100%;padding:14px;text-align:left;border:2px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-weight:700;font-size:15px}.option.selected{border-color:var(--gold);background:#fff9ec}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale .option{text-align:center;font-size:20px}.ends{display:flex;justify-content:space-between;gap:10px;margin-top:7px;color:var(--muted);font-size:12px}.rank{display:grid;gap:8px}.rankrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px}.rankrow select{padding:8px;border:1px solid var(--line);border-radius:7px}.done{text-align:center;padding:20px 4px}.done h1{margin-bottom:8px}.small{font-size:12px;color:var(--muted)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}.wrap{max-width:620px;margin:0 auto;padding:22px}.brand{text-align:center;color:var(--navy);font-size:13px;font-weight:800;letter-spacing:.1em;margin:12px 0 18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 14px 38px rgba(16,43,75,.08)}h1{font-size:28px;margin:0 0 8px;color:var(--navy)}p{color:var(--muted)}.input{width:100%;padding:14px;border:1.5px solid #c8d8e5;border-radius:10px;font:inherit;color:var(--ink);background:#fff}.btn{width:100%;margin-top:14px;border:0;border-radius:10px;padding:14px;background:var(--blue);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.btn:disabled{opacity:.55}.status{min-height:20px;margin-top:10px;font-size:13px;color:var(--muted)}.status.error{color:#a33}.session{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.05em}.question{font-size:23px;font-weight:800;color:var(--navy);margin:18px 0}.options{display:grid;gap:9px}.option{width:100%;padding:14px;text-align:left;border:2px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-weight:700;font-size:15px}.option.selected{border-color:var(--gold);background:#fff9ec}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale .option{text-align:center;font-size:20px}.ends{display:flex;justify-content:space-between;gap:10px;margin-top:7px;color:var(--muted);font-size:12px}.rank{display:grid;gap:8px}.rankrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px}.rankrow select{padding:8px;border:1px solid var(--line);border-radius:7px}.sortable{display:grid;gap:9px}.sortitem{display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--line);border-radius:12px;background:#fff;touch-action:none;cursor:grab;font-weight:700}.sortitem.dragging{opacity:.5;border-color:var(--gold)}.handle{font-size:22px;color:var(--muted);letter-spacing:-3px}.position{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-size:13px;font-weight:800}.done{text-align:center;padding:20px 4px}.done h1{margin-bottom:8px}.small{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -62,7 +62,7 @@
    var left='',right='';if(session.activity_type==='rating'){left=cfg.low||'';right=cfg.high||''}else{items=cfg.labels||[];left=items[0]||'';right=items[2]||''}
    html+='<div class="ends"><span>'+escapeHtml(left)+'</span><span>'+escapeHtml(right)+'</span></div>';
   }else if(session.activity_type==='rank'){
-   items=cfg.items||[];html+='<div class="rank">';for(i=0;i<items.length;i++){html+='<div class="rankrow"><select class="rankSelect" data-index="'+i+'"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><strong>'+escapeHtml(items[i])+'</strong></div>'}html+='</div><div class="small">1 = highest priority</div>';
+   items=cfg.items||[];html+='<div class="small" style="margin-bottom:9px">Drag the choices into your preferred order. Top = highest priority.</div><div class="sortable" id="rankList">';for(i=0;i<items.length;i++){html+='<div class="sortitem" draggable="true" data-index="'+i+'"><span class="position">'+(i+1)+'</span><span class="handle">☰</span><strong>'+escapeHtml(items[i])+'</strong></div>'}html+='</div>';
   }else if(session.activity_type==='wordcloud'){
    var wcLimit=Number(cfg.responseLimit||1),wcFields=wcLimit>=99?10:wcLimit;
    html+='<div class="options">';for(i=0;i<wcFields;i++)html+='<input class="input wordResponse" maxlength="80" autocomplete="off" placeholder="Word or phrase '+(i+1)+'">';html+='</div><div class="small" style="margin-top:8px">Enter up to '+wcFields+' words or short phrases, then submit them together.</div>';
@@ -72,13 +72,27 @@
   html+='<button type="button" class="btn" id="submitBtn">Submit response</button><div class="status" id="status"></div>';
   app.innerHTML=html;
   var choices=app.querySelectorAll('.choice');for(i=0;i<choices.length;i++){choices[i].onclick=function(){selected=this.getAttribute('data-value');var all=app.querySelectorAll('.choice');for(var j=0;j<all.length;j++)all[j].className='option choice';this.className='option choice selected'}}
+  if(session.activity_type==='rank')initRanking();
   document.getElementById('submitBtn').onclick=submit;
+ }
+ function initRanking(){
+  var list=document.getElementById('rankList');if(!list)return;var dragged=null,touchItem=null,startY=0;
+  function renumber(){var a=list.querySelectorAll('.sortitem');for(var i=0;i<a.length;i++)a[i].querySelector('.position').textContent=i+1}
+  function moveBefore(item,y){var a=list.querySelectorAll('.sortitem:not(.dragging)'),target=null;for(var i=0;i<a.length;i++){var r=a[i].getBoundingClientRect();if(y<r.top+r.height/2){target=a[i];break}}if(target)list.insertBefore(item,target);else list.appendChild(item);renumber()}
+  var a=list.querySelectorAll('.sortitem');for(var i=0;i<a.length;i++){
+   a[i].ondragstart=function(){dragged=this;this.classList.add('dragging')};
+   a[i].ondragend=function(){this.classList.remove('dragging');dragged=null;renumber()};
+   a[i].ondragover=function(e){e.preventDefault();if(dragged)moveBefore(dragged,e.clientY)};
+   a[i].ontouchstart=function(e){touchItem=this;startY=e.touches[0].clientY;this.classList.add('dragging')};
+   a[i].ontouchmove=function(e){if(!touchItem)return;e.preventDefault();moveBefore(touchItem,e.touches[0].clientY)};
+   a[i].ontouchend=function(){if(touchItem)touchItem.classList.remove('dragging');touchItem=null;renumber()};
+  }
  }
  function submit(){
   var cfg=session.config||{},limit=Number(cfg.responseLimit||1),value=selected;
   if(limit<99&&used()>=limit){status('You have already submitted the maximum number of responses.',true);return}
   if(session.activity_type==='wordcloud'){var inputs=app.querySelectorAll('.wordResponse'),words=[];for(var wi=0;wi<inputs.length;wi++){var w=inputs[wi].value.replace(/^\s+|\s+$/g,'');if(w)words.push(w)}value=words}else if(session.activity_type==='open'){var input=document.getElementById('textResponse');value=input?input.value.replace(/^\s+|\s+$/g,''):''}
-  if(session.activity_type==='rank'){var selects=app.querySelectorAll('.rankSelect'),ranked=[];for(var i=0;i<selects.length;i++)ranked.push({index:i,rank:Number(selects[i].value)});ranked.sort(function(a,b){return a.rank-b.rank});value=[];for(i=0;i<ranked.length;i++)value.push(ranked[i].index)}
+  if(session.activity_type==='rank'){var ranked=app.querySelectorAll('#rankList .sortitem');value=[];for(var i=0;i<ranked.length;i++)value.push(Number(ranked[i].getAttribute('data-index')))}
   if(value===null||value===undefined||value===''||(Object.prototype.toString.call(value)==='[object Array]'&&value.length===0)){status('Choose or enter a response first.',true);return}
   var b=document.getElementById('submitBtn');b.disabled=true;status('Submitting…',false);
   var payload;if(session.activity_type==='wordcloud'){payload=[];for(var pi=0;pi<value.length;pi++)payload.push({session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value[pi]}})}else{payload={session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value}}}
