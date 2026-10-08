@@ -35,3 +35,20 @@
 @media(max-width:590px){.page-intro{padding:65px 0 45px}.page-intro h1{font-size:clamp(38px,10vw,50px)}.page-card-grid,.tiles-2{grid-template-columns:1fr}.feature-banner{padding:24px}.page-card{min-height:auto}.page-intro p{font-size:15px}}
 
 [hidden]{display:none!important}
+
+/* Leadership Forge-inspired visual refresh */
+:root{--navy:#132942;--blue:#2563b0;--blue-deep:#174985;--blue-soft:#e8f1ff;--gold:#e1aa49;--muted:#52647b;--line:#dce6f2;--bg:#f7faff;--pale:#eef5ff;--round:24px}
+body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
+.header{background:rgba(248,251,255,.9);border-bottom:1px solid #dce7f3;box-shadow:0 6px 24px rgba(20,55,100,.035)}
+.header-content{min-height:82px}.brand-emblem{transform:none;background:linear-gradient(145deg,#1d5597,#397ed0);box-shadow:0 8px 22px #235d9733}.brand-emblem i{background:#d7eaff}.brand-emblem i:nth-child(3){background:#f3bd5b}.brand-name{letter-spacing:.12em}
+.nav a[aria-current="page"]{color:var(--blue)}.nav .nav-button,.btn.primary{background:linear-gradient(135deg,#1b579d,#337bd1);color:white;box-shadow:0 8px 20px #245fa52a}
+.hero{padding-top:96px;padding-bottom:105px;gap:60px}.hero h1{font-size:clamp(49px,5.8vw,82px);letter-spacing:-.055em}.hero h1 em,.page-intro h1 em,h2 em{color:#2873c4}.hero p{font-size:18px;line-height:1.75}
+.eyebrow,.kicker{letter-spacing:.16em}.eyebrow{background:#eaf3ff;border:1px solid #d4e5f8;border-radius:999px;padding:9px 15px;width:max-content;max-width:100%}
+.journey{background:radial-gradient(circle at 80% 10%,#d8e9ff,transparent 45%),linear-gradient(140deg,#f3f8ff,#eaf3ff 60%,#fff5e8);border:1px solid #cfdef0;box-shadow:0 34px 75px #1d528421}
+.j-card,.page-card{border:1px solid #dce7f5;box-shadow:0 14px 35px #1b4c7c0c;transition:transform .22s ease,box-shadow .22s ease}.page-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px #1b4c7c19}.j-card{box-shadow:0 16px 36px #1c518524}
+.metric-band{background:linear-gradient(90deg,#183f70,#215c9b);color:#fff}.metric-band .metric,.metric-band .metric *{color:#fff}
+.section{padding-top:88px;padding-bottom:88px}.tint{background:#eef5ff}.page-intro{background:radial-gradient(circle at 85% 25%,#dcecff,transparent 45%),linear-gradient(120deg,#f5f9ff,#eaf3ff);border-bottom:1px solid #dbe8f6}
+.page-card,.feature-banner{border-radius:24px}.feature-banner{background:linear-gradient(120deg,#163f70,#2b69aa);color:white}.feature-banner h3,.feature-banner p,.feature-banner .kicker{color:white}.feature-banner .btn.primary{background:#fff;color:#1b579d}
+.btn{border-radius:13px}.btn.secondary:hover,.btn.flat:hover{background:#edf5ff}
+@media(max-width:800px){.hero{padding-top:55px;padding-bottom:65px;gap:35px}.eyebrow{font-size:9px}.section{padding-top:60px;padding-bottom:60px}}
+@media(prefers-reduced-motion:reduce){.page-card,.btn{transition:none}}
