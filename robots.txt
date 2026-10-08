@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /demo-center.html
+Disallow: /booking-demo.html
+Disallow: /amx-decision-challenge-access.html
+Disallow: /amx-decision-challenge-facilitator.html
+Disallow: /world-in-balance-facilitator-access.html
+Disallow: /world-in-balance-facilitator.html
+Sitemap: https://mayneleadership.com/sitemap.xml
