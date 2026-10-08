@@ -177,7 +177,8 @@
 <div class="booking-toolbar"><div class="header-actions"><button class="top-btn" onclick="goToday()">Today</button><button class="top-btn" onclick="openSettings()">⚙ Settings</button><button class="top-btn virtual-action" onclick="startVirtualRequest()">◉ Schedule Virtual</button><button class="top-btn gold" onclick="startPhysicalRequest()">+ Request a Room</button></div></div>
 
 <main>
-  <div class="notice"><span>ⓘ</span><div><strong>Shared scheduling:</strong> classroom availability and reservation requests are connected to the shared calendar. Approved reservations are visible across devices, and requests are routed through the booking workflow.</div></div>\n
+  <div class="notice"><span>ⓘ</span><div><strong>Shared scheduling:</strong> classroom availability and reservation requests are connected to the shared calendar. Approved reservations are visible across devices, and requests are routed through the booking workflow.</div></div>
+
   <div class="tabs">
     <button class="tab active" data-tab="calendar" onclick="switchTab('calendar')">Calendar</button>
     <button class="tab" data-tab="request" onclick="switchTab('request')">Schedule / Request</button>
@@ -226,7 +227,8 @@
         <div class="card-body">
           <form id="bookingForm" onsubmit="submitRequest(event)">
             <div class="form-grid">
-              <div class="field"><label for="requesterName">Requester Name</label><input id="requesterName" type="text" required maxlength="120" autocomplete="name" placeholder="Your full name" /></div>\n              <div class="field"><label for="requesterEmail">Requester Email</label><input id="requesterEmail" type="email" required maxlength="180" autocomplete="email" placeholder="name@example.com" /></div>
+              <div class="field"><label for="requesterName">Requester Name</label><input id="requesterName" type="text" required maxlength="120" autocomplete="name" placeholder="Your full name" /></div>
+              <div class="field"><label for="requesterEmail">Requester Email</label><input id="requesterEmail" type="email" required maxlength="180" autocomplete="email" placeholder="name@example.com" /></div>
               <div class="field full"><label for="classTitle">Class / Event Title</label><input id="classTitle" required maxlength="100" placeholder="Example: Supervisor Leadership Workshop" /></div>
               <div class="field"><label for="bookingType">Booking Category</label><select id="bookingType" required onchange="toggleBookingFields();checkAvailability()"><option value="internal">Internal Class — We Teach</option><option value="external">External Facility Booking</option><option value="virtual">Virtual / Online Class</option></select></div>
               <div class="field"><label for="bookingDate">Date</label><input id="bookingDate" type="date" required /></div>
