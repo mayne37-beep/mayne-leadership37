@@ -1,1 +1,95 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102b4b"><title>Respond | Presenter Studio</title><style>:root{--n:#102b4b;--b:#2767a4;--g:#e1af4f;--line:#d8e4ee}*{box-sizing:border-box}body{margin:0;background:#f3f8fd;color:var(--n);font:16px/1.45 Inter,Segoe UI,Arial,sans-serif}.wrap{max-width:620px;margin:auto;padding:24px}.brand{text-align:center;font-weight:950;letter-spacing:.08em;margin:15px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 16px 40px #17395a14}h1{font-size:30px;margin:0 0 8px}.code{color:#66798b;font-size:13px}.q{font-size:23px;font-weight:900;margin:24px 0 16px}.options{display:grid;gap:10px}.opt{border:2px solid var(--line);background:#fff;border-radius:13px;padding:16px;text-align:left;font-weight:800;color:var(--n)}.opt.sel{border-color:var(--g);background:#fff8e8}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.scale button{font-size:23px;text-align:center}.input{width:100%;border:2px solid var(--line);border-radius:12px;padding:14px;font:inherit}.submit{width:100%;margin-top:16px;border:0;background:var(--b);color:#fff;border-radius:12px;padding:14px;font-weight:900}.done{text-align:center;padding:30px 10px}.done b{display:block;font-size:26px;margin-bottom:8px}.rank{display:grid;gap:8px}.rankrow{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px}.rankrow select{padding:8px;border:1px solid var(--line);border-radius:8px}</style></head><body><div class="wrap"><div class="brand">MAYNE LEADERSHIP · PRESENTER STUDIO</div><div class="card" id="app"><h1>Join a live activity</h1><p>Enter the 6-digit code shown by your instructor.</p><input class="input" id="code" inputmode="numeric" maxlength="6" placeholder="Session code"><button type="button" class="submit" id="join">Join activity</button><div id="joinStatus" style="margin-top:10px;font-size:13px;color:#66798b"></div></div></div><script>(()=>{const SB='https://vteamreihsunsllwcphw.supabase.co',KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud',app=document.getElementById('app');let s=null,val=null;function uid(){if(window.crypto&&crypto.getRandomValues){let a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a).map(x=>x.toString(16)).join('')}return Date.now().toString(36)+Math.random().toString(36).slice(2)}let pid;try{pid=localStorage.getItem('presenter_pid')||uid();localStorage.setItem('presenter_pid',pid)}catch(e){pid=uid()}function countKey(){return 'presenter_count_'+s.id}function used(){return +(localStorage.getItem(countKey())||0)}async function api(path,opt={}){opt.headers=Object.assign({'apikey':KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=representation'},opt.headers||{});let r=await fetch(SB+'/rest/v1/'+path,opt);if(!r.ok)throw new Error(await r.text());let t=await r.text();return t?JSON.parse(t):[]}async function join(code){code=String(code||'').replace(/\D/g,'').slice(0,6);let st=document.getElementById('joinStatus');if(code.length!==6){if(st)st.textContent='Enter the 6-digit code shown on screen.';return}if(st)st.textContent='Joining…';try{let rows=await api('presenter_sessions?code=eq.'+encodeURIComponent(code)+'&is_open=eq.true&select=*');if(!rows.length){if(st)st.textContent='That session is not open. Check the code and try again.';return}s=rows[0];draw()}catch(e){console.error(e);if(st)st.textContent='Could not join the activity. Please try again.'}}function draw(){let cfg=s.config||{},body='';if(s.activity_type==='poll'){body='<div class="options">'+(cfg.options||[]).map((x,i)=>'<button class="opt" data-v="'+i+'">'+esc(x)+'</button>').join('')+'</div>'}else if(s.activity_type==='rating'){body='<div class="scale">'+[1,2,3,4,5].map(x=>'<button class="opt" data-v="'+x+'">'+x+'</button>').join('')+'</div><div style="display:flex;justify-content:space-between;margin-top:8px"><small>'+esc(cfg.low||'')+'</small><small>'+esc(cfg.high||'')+'</small></div>'}else if(s.activity_type==='agreement'){body='<div class="scale">'+[1,2,3,4,5].map(x=>'<button class="opt" data-v="'+x+'">'+x+'</button>').join('')+'</div><div style="display:flex;justify-content:space-between;margin-top:8px"><small>'+esc((cfg.labels||[])[0]||'')+'</small><small>'+esc((cfg.labels||[])[2]||'')+'</small></div>'}else if(s.activity_type==='rank'){body='<div class="rank">'+(cfg.items||[]).map((x,i)=>'<div class="rankrow"><select data-rank="'+i+'">'+[1,2,3,4].map(n=>'<option value="'+n+'">'+n+'</option>').join('')+'</select><b>'+esc(x)+'</b></div>').join('')+'</div><small>1 = highest priority</small>'}else body='<input class="input" id="textval" placeholder="'+(s.activity_type==='wordcloud'?'One word or short phrase':'Type your response')+'">';app.innerHTML='<div class="code">LIVE SESSION · '+s.code+'</div><div class="q">'+esc(s.question)+'</div>'+body+'<button class="submit" id="send">Submit response</button>';app.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{val=b.dataset.v;app.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('sel',x===b))});document.getElementById('send').onclick=send}async function send(){let limit=+((s.config&&s.config.responseLimit)||1);if(limit<99&&used()>=limit){alert('You have already submitted the maximum number of responses for this activity.');return}if(s.activity_type==='rank'){let a=[...app.querySelectorAll('[data-rank]')].map((x,i)=>({i,n:+x.value})).sort((a,b)=>a.n-b.n).map(x=>x.i);val=a}else if(s.activity_type==='wordcloud'||s.activity_type==='open')val=(document.getElementById('textval').value||'').trim();if(val===null||val===''){alert('Choose or enter a response first.');return}let submissionId=pid+'-'+uid();await api('presenter_responses',{method:'POST',body:JSON.stringify({session_id:s.id,participant_id:submissionId,response:{value:val}})});localStorage.setItem(countKey(),String(used()+1));let left=limit>=99?'More responses are allowed.':Math.max(0,limit-used())+' response(s) remaining.';app.innerHTML='<div class="done"><b>Response submitted.</b><span>Your instructor will see the updated results.</span><br><small>'+left+'</small><br><br>'+(limit>=99||used()<limit?'<button class="submit" id="edit">Submit another response</button>':'')</div>';let ed=document.getElementById('edit');if(ed)ed.onclick=()=>{val=null;draw()}}function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}document.getElementById('join').addEventListener('click',()=>join(document.getElementById('code').value));document.getElementById('code').addEventListener('keydown',e=>{if(e.key==='Enter')join(e.target.value)});let m=location.search.match(/[?&](?:code|session)=([0-9]{6})/),q=m&&m[1];if(q){document.getElementById('code').value=q;setTimeout(function(){join(q)},50)}})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102b4b">
+<title>Live Response | Mayne Leadership</title>
+<style>
+:root{--navy:#102b4b;--blue:#2767a4;--gold:#e1af4f;--ink:#18344f;--muted:#687d90;--line:#d9e5ee;--bg:#f4f8fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}.wrap{max-width:620px;margin:0 auto;padding:22px}.brand{text-align:center;color:var(--navy);font-size:13px;font-weight:800;letter-spacing:.1em;margin:12px 0 18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 14px 38px rgba(16,43,75,.08)}h1{font-size:28px;margin:0 0 8px;color:var(--navy)}p{color:var(--muted)}.input{width:100%;padding:14px;border:1.5px solid #c8d8e5;border-radius:10px;font:inherit;color:var(--ink);background:#fff}.btn{width:100%;margin-top:14px;border:0;border-radius:10px;padding:14px;background:var(--blue);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.btn:disabled{opacity:.55}.status{min-height:20px;margin-top:10px;font-size:13px;color:var(--muted)}.status.error{color:#a33}.session{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.05em}.question{font-size:23px;font-weight:800;color:var(--navy);margin:18px 0}.options{display:grid;gap:9px}.option{width:100%;padding:14px;text-align:left;border:2px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-weight:700;font-size:15px}.option.selected{border-color:var(--gold);background:#fff9ec}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale .option{text-align:center;font-size:20px}.ends{display:flex;justify-content:space-between;gap:10px;margin-top:7px;color:var(--muted);font-size:12px}.rank{display:grid;gap:8px}.rankrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px}.rankrow select{padding:8px;border:1px solid var(--line);border-radius:7px}.done{text-align:center;padding:20px 4px}.done h1{margin-bottom:8px}.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="brand">MAYNE LEADERSHIP · PRESENTER STUDIO</div>
+ <div class="card" id="app">
+  <h1>Join a live activity</h1>
+  <p>Enter the 6-digit session code shown by your instructor.</p>
+  <input class="input" id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Session code">
+  <button class="btn" id="joinBtn" type="button">Join activity</button>
+  <div class="status" id="status"></div>
+ </div>
+</div>
+<script>
+(function(){
+ var SUPABASE_URL='https://vteamreihsunsllwcphw.supabase.co';
+ var API_KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
+ var app=document.getElementById('app');
+ var session=null, selected=null;
+ function escapeHtml(v){var d=document.createElement('div');d.textContent=v==null?'':String(v);return d.innerHTML}
+ function randomId(){return Date.now().toString(36)+'-'+Math.random().toString(36).substring(2,12)}
+ function participantId(){try{var p=localStorage.getItem('presenter_pid');if(!p){p=randomId();localStorage.setItem('presenter_pid',p)}return p}catch(e){return randomId()}}
+ var pid=participantId();
+ function countKey(){return 'presenter_count_'+session.id}
+ function used(){try{return Number(localStorage.getItem(countKey())||0)}catch(e){return 0}}
+ function setUsed(n){try{localStorage.setItem(countKey(),String(n))}catch(e){}}
+ function request(path,method,payload){
+  var opts={method:method||'GET',headers:{'apikey':API_KEY,'Content-Type':'application/json','Prefer':'return=representation'}};
+  if(payload!==undefined)opts.body=JSON.stringify(payload);
+  return fetch(SUPABASE_URL+'/rest/v1/'+path,opts).then(function(res){
+   return res.text().then(function(txt){if(!res.ok)throw new Error('Request failed ('+res.status+')');return txt?JSON.parse(txt):[]});
+  });
+ }
+ function status(msg,error){var el=document.getElementById('status');if(el){el.textContent=msg||'';el.className='status'+(error?' error':'')}}
+ function join(code){
+  code=String(code||'').replace(/[^0-9]/g,'').substring(0,6);
+  if(code.length!==6){status('Enter the 6-digit session code.',true);return}
+  var b=document.getElementById('joinBtn');if(b)b.disabled=true;
+  status('Joining activity…',false);
+  request('presenter_sessions?code=eq.'+encodeURIComponent(code)+'&is_open=eq.true&select=*').then(function(rows){
+   if(!rows||!rows.length){status('That session is not open. Check the code and try again.',true);if(b)b.disabled=false;return}
+   session=rows[0];renderActivity();
+  }).catch(function(err){status('Unable to connect to this session. '+err.message,true);if(b)b.disabled=false});
+ }
+ function renderActivity(){
+  selected=null;var cfg=session.config||{},html='<div class="session">LIVE SESSION · '+escapeHtml(session.code)+'</div><div class="question">'+escapeHtml(session.question||'Respond to the prompt')+'</div>';
+  var i,items;
+  if(session.activity_type==='poll'){
+   items=cfg.options||[];html+='<div class="options">';for(i=0;i<items.length;i++)html+='<button type="button" class="option choice" data-value="'+i+'">'+escapeHtml(items[i])+'</button>';html+='</div>';
+  }else if(session.activity_type==='rating'||session.activity_type==='agreement'){
+   html+='<div class="scale">';for(i=1;i<=5;i++)html+='<button type="button" class="option choice" data-value="'+i+'">'+i+'</button>';html+='</div>';
+   var left='',right='';if(session.activity_type==='rating'){left=cfg.low||'';right=cfg.high||''}else{items=cfg.labels||[];left=items[0]||'';right=items[2]||''}
+   html+='<div class="ends"><span>'+escapeHtml(left)+'</span><span>'+escapeHtml(right)+'</span></div>';
+  }else if(session.activity_type==='rank'){
+   items=cfg.items||[];html+='<div class="rank">';for(i=0;i<items.length;i++){html+='<div class="rankrow"><select class="rankSelect" data-index="'+i+'"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><strong>'+escapeHtml(items[i])+'</strong></div>'}html+='</div><div class="small">1 = highest priority</div>';
+  }else{
+   html+='<input class="input" id="textResponse" maxlength="160" autocomplete="off" placeholder="'+(session.activity_type==='wordcloud'?'One word or short phrase':'Type your response')+'">';
+  }
+  html+='<button type="button" class="btn" id="submitBtn">Submit response</button><div class="status" id="status"></div>';
+  app.innerHTML=html;
+  var choices=app.querySelectorAll('.choice');for(i=0;i<choices.length;i++){choices[i].onclick=function(){selected=this.getAttribute('data-value');var all=app.querySelectorAll('.choice');for(var j=0;j<all.length;j++)all[j].className='option choice';this.className='option choice selected'}}
+  document.getElementById('submitBtn').onclick=submit;
+ }
+ function submit(){
+  var cfg=session.config||{},limit=Number(cfg.responseLimit||1),value=selected;
+  if(limit<99&&used()>=limit){status('You have already submitted the maximum number of responses.',true);return}
+  if(session.activity_type==='wordcloud'||session.activity_type==='open'){var input=document.getElementById('textResponse');value=input?input.value.replace(/^\s+|\s+$/g,''):''}
+  if(session.activity_type==='rank'){var selects=app.querySelectorAll('.rankSelect'),ranked=[];for(var i=0;i<selects.length;i++)ranked.push({index:i,rank:Number(selects[i].value)});ranked.sort(function(a,b){return a.rank-b.rank});value=[];for(i=0;i<ranked.length;i++)value.push(ranked[i].index)}
+  if(value===null||value===undefined||value===''){status('Choose or enter a response first.',true);return}
+  var b=document.getElementById('submitBtn');b.disabled=true;status('Submitting…',false);
+  request('presenter_responses','POST',{session_id:session.id,participant_id:pid+'-'+randomId(),response:{value:value}}).then(function(){
+   var now=used()+1;setUsed(now);var remaining=limit>=99?99:Math.max(0,limit-now);
+   app.innerHTML='<div class="done"><h1>Response submitted</h1><p>Your response has been sent to the presentation.</p><div class="small">'+(limit>=99?'Additional responses are allowed.':remaining+' response(s) remaining.')+'</div>'+(limit>=99||remaining>0?'<button type="button" class="btn" id="againBtn">Submit another response</button>':'')+'</div>';
+   var again=document.getElementById('againBtn');if(again)again.onclick=renderActivity;
+  }).catch(function(err){b.disabled=false;status('Unable to submit. '+err.message,true)});
+ }
+ var joinBtn=document.getElementById('joinBtn'),codeInput=document.getElementById('code');
+ joinBtn.onclick=function(){join(codeInput.value)};
+ codeInput.onkeydown=function(e){if((e&&e.key==='Enter')||(e&&e.keyCode===13))join(codeInput.value)};
+ var match=window.location.search.match(/[?&]code=([0-9]{6})/);
+ if(match&&match[1]){codeInput.value=match[1];join(match[1])}
+})();
+</script>
+</body>
+</html>
