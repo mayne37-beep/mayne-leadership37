@@ -76,3 +76,5 @@ body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
 .belief-decor{position:absolute;border:1px solid #ffffffb0;border-radius:50%;width:420px;height:420px;z-index:0}
 .belief-decor-one{right:-270px;top:-270px}.belief-decor-two{left:-300px;bottom:-300px}
 @media(max-width:760px){.belief-showcase{min-height:390px;padding:36px 20px}.believe-sign{width:min(88%,350px)}.believe-sign span{font-size:clamp(42px,11vw,66px)}.belief-showcase-caption{margin-top:36px}}
+
+.brand-logo{display:block;width:54px;height:54px;object-fit:contain;flex-shrink:0}.brand{display:inline-flex;align-items:center;gap:10px}
