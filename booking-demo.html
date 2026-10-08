@@ -346,24 +346,36 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const STORAGE_KEY = 'classroom_booking_manager_v1';
-const SETTINGS_KEY = 'classroom_booking_settings_v1';
+const SUPABASE_URL='https://vteamreihsunsllwcphw.supabase.co';
+const SUPABASE_KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
+const SETTINGS_KEY='classroom_booking_settings_v1';
+let roomRecords=[];
+let managerPin=sessionStorage.getItem('classroom_manager_pin')||'';
 let state = { view:'month', currentDate:new Date(), bookings:[] };
-let settings = {
-  facility:'Classroom Booking Manager',
-  requesters:['Requester 1','Requester 2','Requester 3','Requester 4'],
-  rooms:Array.from({length:10},(_,i)=>`Classroom ${i+1}`)
-};
-
-function load(){
-  try{ const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(Array.isArray(saved)) state.bookings=saved; }catch(e){}
-  state.bookings.forEach(b=>{ if(!b.type) b.type='internal'; if(b.type==='virtual') b.room=null; });
-  try{ const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)); if(s){settings=Object.assign({},settings,s);} }catch(e){}
-  settings.requesters = (settings.requesters||[]).slice(0,4); while(settings.requesters.length<4) settings.requesters.push(`Requester ${settings.requesters.length+1}`);
-  settings.rooms=(settings.rooms||[]).slice(0,10); while(settings.rooms.length<10) settings.rooms.push(`Classroom ${settings.rooms.length+1}`);
+let settings = {facility:'Classroom Booking Manager',requesters:['Requester 1','Requester 2','Requester 3','Requester 4'],rooms:Array.from({length:10},(_,i)=>`Classroom ${i+1}`)};
+async function api(path,options={}){
+ const res=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...options,headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})}});
+ const txt=await res.text(); if(!res.ok){let msg=txt;try{msg=JSON.parse(txt).message||txt}catch{} throw new Error(msg)} return txt?JSON.parse(txt):null;
 }
-function save(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state.bookings)); }catch(e){ console.warn('Browser storage unavailable',e); } }
-function saveSettingsStorage(){ try{ localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings)); }catch(e){ console.warn('Browser storage unavailable',e); } }
+function mapShared(row){
+ const ri=roomRecords.findIndex(r=>r.id===row.room_id);
+ return {id:row.reservation_id||row.id,type:row.booking_type,date:row.reservation_date,start:String(row.start_time).slice(0,5),end:String(row.end_time).slice(0,5),room:ri<0?null:ri,title:row.title||'Reserved',description:row.description||'',organization:row.external_organization||'',virtualPlatform:row.virtual_platform||'',status:(row.status==='rejected'?'denied':row.status)||'approved',requesterName:row.requester_name||'',contact:row.requester_email||'',created:row.created_at||new Date().toISOString(),decisionNote:row.approver_comment||''};
+}
+async function load(){
+ try{
+  roomRecords=await api('rooms?select=id,code,name&active=eq.true&order=code');
+  if(roomRecords.length) settings.rooms=roomRecords.map(r=>r.name);
+  const events=await api('calendar_events?select=*&order=reservation_date.asc,start_time.asc');
+  state.bookings=(events||[]).map(mapShared);
+ }catch(e){console.error(e);toast('Could not connect to the shared calendar.');}
+ try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY));if(s){settings.facility=s.facility||settings.facility;settings.requesters=s.requesters||settings.requesters;}}catch(e){}
+ settings.requesters=(settings.requesters||[]).slice(0,4);while(settings.requesters.length<4)settings.requesters.push(`Requester ${settings.requesters.length+1}`);
+}
+async function refreshShared(){
+ try{const events=await api('calendar_events?select=*&order=reservation_date.asc,start_time.asc');state.bookings=(events||[]).map(mapShared);renderCalendar();renderTodayAvailability();updateStats();}catch(e){console.error(e)}
+}
+function save(){}
+function saveSettingsStorage(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({facility:settings.facility,requesters:settings.requesters}));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function isoLocal(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
 function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
@@ -402,7 +414,7 @@ function switchTab(tab){
   if(tab==='calendar') renderCalendar();
   if(tab==='request'){renderTodayAvailability();checkAvailability()}
   if(tab==='requests') renderRequests();
-  if(tab==='manager') renderManagerQueue();
+  if(tab==='manager') loadManagerRequests();
   if(tab==='rooms') renderRooms();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -490,16 +502,14 @@ function checkAvailability(){
   box.className='availability good';box.innerHTML=`✓ <strong>${esc(settings.rooms[room])} is available</strong> on ${formatDate(date,{weekday:'long',month:'long',day:'numeric'})} from ${formatTime(start)} to ${formatTime(end)}.`;return true
 }
 
-function submitRequest(e){
-  e.preventDefault(); if(!checkAvailability()){toast('Please correct the scheduling issue before submitting.');return}
-  const type=document.getElementById('bookingType').value;
-  const booking={
-    id:uid(), type, requester:Number(document.getElementById('requester').value), contact:document.getElementById('requesterEmail').value.trim(), title:document.getElementById('classTitle').value.trim(),
-    date:document.getElementById('bookingDate').value, room:type==='virtual'?null:Number(document.getElementById('roomSelect').value), start:document.getElementById('startTime').value, end:document.getElementById('endTime').value,
-    organization:type==='external'?document.getElementById('organization').value.trim():'', virtualPlatform:type==='virtual'?document.getElementById('virtualPlatform').value.trim():'',
-    description:document.getElementById('classDescription').value.trim(), status:'pending', created:new Date().toISOString(), decisionNote:''
-  };
-  state.bookings.push(booking);save();updateStats();renderTodayAvailability();showDetail(booking.id);toast(type==='virtual'?'Virtual class submitted for approval.':'Request submitted for building manager approval.');clearBookingForm(false);
+async function submitRequest(e){
+ e.preventDefault();if(!checkAvailability()){toast('Please correct the scheduling issue before submitting.');return}
+ const type=document.getElementById('bookingType').value,ri=Number(document.getElementById('roomSelect').value);
+ const payload={p_requester_name:settings.requesters[Number(document.getElementById('requester').value)]||'Requester',p_requester_email:document.getElementById('requesterEmail').value.trim()||null,p_title:document.getElementById('classTitle').value.trim(),p_description:document.getElementById('classDescription').value.trim()||null,p_booking_type:type,p_reservation_date:document.getElementById('bookingDate').value,p_start_time:document.getElementById('startTime').value,p_end_time:document.getElementById('endTime').value,p_room_id:type==='virtual'?null:(roomRecords[ri]?.id||null),p_external_organization:type==='external'?document.getElementById('organization').value.trim()||null:null,p_virtual_platform:type==='virtual'?document.getElementById('virtualPlatform').value.trim()||null:null};
+ try{const id=await api('rpc/submit_booking_request',{method:'POST',body:JSON.stringify(payload)});localStorage.setItem('last_booking_request',String(id).replaceAll('"',''));toast('Request submitted for manager approval.');clearBookingForm(false);await refreshShared();switchTab('requests');await showRequestStatus(String(id).replaceAll('"',''));}catch(err){toast(err.message||'Request could not be submitted.');}
+}
+async function showRequestStatus(id){
+ try{const rows=await api('rpc/booking_status',{method:'POST',body:JSON.stringify({p_id:id})});if(rows&&rows[0]){const b=mapShared({...rows[0],id:rows[0].id});state.bookings=[b,...state.bookings.filter(x=>x.id!==b.id)];renderRequests();showDetail(b.id);}}catch(e){console.error(e)}
 }
 function clearBookingForm(resetDate=true){document.getElementById('bookingForm').reset();document.getElementById('bookingType').value='internal';document.getElementById('startTime').value='08:00';document.getElementById('endTime').value='09:00';if(resetDate)document.getElementById('bookingDate').value=nextWeekdayISO(new Date());toggleBookingFields();checkAvailability()}
 
@@ -523,16 +533,17 @@ function renderManagerQueue(){
 
 function sortBookings(a,b){return (a.date+a.start).localeCompare(b.date+b.start)}
 
-function approveBooking(id){
-  const b=state.bookings.find(x=>x.id===id);if(!b)return;
-  const conflict=bookingType(b)==='virtual'?null:state.bookings.find(x=>x.id!==id&&bookingType(x)!=='virtual'&&x.status==='approved'&&x.date===b.date&&Number(x.room)===Number(b.room)&&overlaps(b.start,b.end,x.start,x.end));
-  if(conflict){toast('Cannot approve: another approved booking now conflicts with this request.');return}
-  b.status='approved';b.decisionDate=new Date().toISOString();b.decisionNote='Approved by Building Manager';save();closeModal('detailModal');renderManagerQueue();renderCalendar();renderRequests();toast(bookingType(b)==='virtual'?'Approved. The virtual class is now on the calendar.':'Approved. The classroom is now reserved on the calendar.');
+async function managerAction(id,action,note=''){
+ if(!managerPin){managerPin=prompt('Manager PIN:')||'';if(!managerPin)return;sessionStorage.setItem('classroom_manager_pin',managerPin)}
+ try{await api('rpc/manager_booking_action',{method:'POST',body:JSON.stringify({p_id:id,p_action:action,p_note:note||null,p_pin:managerPin})});closeModal('detailModal');toast(action==='approve'?'Approved and added to shared calendar.':'Request denied.');await loadManagerRequests();await refreshShared();renderRequests();}catch(e){if(/pin/i.test(e.message)){managerPin='';sessionStorage.removeItem('classroom_manager_pin')}toast(e.message)}
 }
-function denyBooking(id){
-  const b=state.bookings.find(x=>x.id===id);if(!b)return;const note=prompt('Optional reason for denial:',''); if(note===null)return;b.status='denied';b.decisionDate=new Date().toISOString();b.decisionNote=note||'Denied by Building Manager';save();closeModal('detailModal');renderManagerQueue();renderCalendar();renderRequests();toast(bookingType(b)==='virtual'?'Virtual class request denied.':'Request denied. The room remains available.');
+async function approveBooking(id){await managerAction(id,'approve')}
+async function denyBooking(id){const note=prompt('Optional reason for denial:','');if(note===null)return;await managerAction(id,'reject',note)}
+async function loadManagerRequests(){
+ if(!managerPin){managerPin=prompt('Manager PIN:')||'';if(!managerPin)return false;sessionStorage.setItem('classroom_manager_pin',managerPin)}
+ try{const rows=await api('rpc/manager_requests',{method:'POST',body:JSON.stringify({p_pin:managerPin})});const shared=(rows||[]).map(mapShared);const approved=state.bookings.filter(x=>x.status==='approved');state.bookings=[...shared,...approved.filter(a=>!shared.some(s=>s.id===a.id))];renderManagerQueue();renderRequests();updateStats();return true}catch(e){managerPin='';sessionStorage.removeItem('classroom_manager_pin');toast('Manager access denied.');return false}
 }
-function deleteBooking(id){if(!confirm('Delete this request permanently?'))return;state.bookings=state.bookings.filter(x=>x.id!==id);save();closeModal('detailModal');renderCalendar();renderRequests();renderManagerQueue();toast('Request deleted.');}
+function deleteBooking(id){toast('Shared requests are retained for audit history.');}
 
 function showDetail(id){
   const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=settings.requesters[b.requester]||`Requester ${Number(b.requester)+1}`;
@@ -578,7 +589,7 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 function backdropClose(e,id){if(e.target.id===id)closeModal(id)}
 let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200)}
 
-load();applySettings();document.getElementById('bookingDate').min=todayISO();document.getElementById('bookingDate').value=nextWeekdayISO(new Date());toggleBookingFields();renderCalendar();renderTodayAvailability();renderRooms();updateStats();
+(async()=>{await load();applySettings();document.getElementById('bookingDate').min=todayISO();document.getElementById('bookingDate').value=nextWeekdayISO(new Date());toggleBookingFields();renderCalendar();renderTodayAvailability();renderRooms();updateStats();})();
 </script>
 </body>
 </html>
