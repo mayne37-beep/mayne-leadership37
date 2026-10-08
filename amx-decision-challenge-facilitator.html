@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Decision Challenge | Interactive Exercise</title>
+<style>
+  :root{
+    --navy:#12325b; --blue:#1f5f98; --blue2:#2f78b7; --sky:#eaf4ff; --sky2:#f5f9fd;
+    --gold:#d6a638; --gold2:#f0cd6a; --ink:#183047; --muted:#607487; --line:#d4e0ea;
+    --white:#ffffff; --good:#287a55; --bad:#b64a46; --shadow:0 12px 30px rgba(18,50,91,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:linear-gradient(180deg,#071a2d 0,#0b2743 50%,#0a2037 100%);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.45}
+  button,select,textarea,input{font:inherit}
+  button{cursor:pointer}
+  .app{max-width:1440px;margin:0 auto;min-height:100vh;background:#f3f7fb;box-shadow:0 0 70px rgba(0,0,0,.28)}
+  .hero{position:relative;min-height:300px;padding:42px clamp(22px,5vw,72px);display:flex;align-items:center;overflow:hidden;background:linear-gradient(125deg,#071a2d 0%,#0c3154 55%,#123f68 100%)}
+  .hero::before{content:"";position:absolute;inset:-35% -8% -45% 48%;background:radial-gradient(circle at 48% 50%,transparent 0 15%,rgba(214,166,56,.24) 15.3% 16.1%,transparent 16.4% 29%,rgba(255,255,255,.10) 29.3% 30%,transparent 30.3% 43%,rgba(214,166,56,.13) 43.3% 44.1%,transparent 44.4%),linear-gradient(135deg,transparent 0 47%,rgba(255,255,255,.06) 47.3% 48%,transparent 48.3%);transform:rotate(-7deg);pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:auto 0 0;height:7px;background:linear-gradient(90deg,#d6a638,#f0cd6a 38%,#2f78b7 75%,#163a5f)}
+  .hero-content{position:relative;z-index:1;max-width:880px;color:#fff}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);font-size:.79rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+  .eyebrow::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--gold2);box-shadow:0 0 0 4px rgba(240,205,106,.16)}
+  h1{margin:14px 0 8px;font-size:clamp(2.25rem,5.1vw,4.6rem);line-height:.98;letter-spacing:-.045em}
+  .hero p{margin:0;max-width:720px;font-size:clamp(1rem,1.6vw,1.26rem);color:#e7f0f9}
+  .question{margin-top:17px;display:inline-flex;align-items:center;padding:11px 15px;border-radius:12px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff;font-weight:900;font-size:clamp(1.05rem,2vw,1.35rem)}
+  .hero-meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+  .hero-meta span{display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border-radius:999px;background:rgba(5,21,37,.34);border:1px solid rgba(255,255,255,.14);color:#dce9f4;font-size:.76rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+  .tabs-wrap{position:sticky;top:0;z-index:20;background:rgba(7,26,45,.97);backdrop-filter:blur(10px);border-bottom:1px solid #294a66;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .tabs{max-width:1280px;margin:auto;padding:10px 20px;display:flex;gap:8px;overflow-x:auto}
+  .tab{border:1px solid transparent;background:transparent;color:#c5d5e2;font-weight:800;padding:11px 16px;border-radius:10px;white-space:nowrap}
+  .tab:hover{background:#123957;color:#fff}
+  .tab.active{background:#d6a638;color:#102b45;border-color:#e6c35f;box-shadow:0 5px 14px rgba(0,0,0,.18)}
+  main{max-width:1280px;margin:auto;padding:30px 22px 60px}
+  .panel{display:none;animation:fade .18s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .section-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:22px}
+  .section-head h2{margin:0;color:var(--navy);font-size:clamp(1.7rem,3vw,2.45rem);letter-spacing:-.025em}
+  .section-head p{margin:5px 0 0;color:var(--muted);max-width:780px}
+  .badge{display:inline-flex;align-items:center;gap:7px;background:#fff8e7;border:1px solid #ead6a1;color:#725719;border-radius:999px;padding:7px 10px;font-size:.79rem;font-weight:800;white-space:nowrap}
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 10px;color:var(--navy);font-size:1.16rem}
+  .card p{margin:.35rem 0;color:var(--muted)}
+  .mission-card{background:linear-gradient(135deg,var(--navy),#1d4e7e);color:#fff;border:0;position:relative;overflow:hidden}
+  .mission-card::after{content:"";position:absolute;width:190px;height:190px;border:33px solid rgba(255,255,255,.06);border-radius:50%;right:-65px;top:-70px}
+  .mission-card h3,.mission-card p{color:#fff;position:relative;z-index:1}
+  .mission-card .bigline{font-size:clamp(1.4rem,3vw,2.05rem);font-weight:900;line-height:1.12;max-width:760px;margin:7px 0 0;position:relative;z-index:1}
+  .rules{counter-reset:rules;display:grid;gap:12px;margin-top:14px}
+  .rule{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:flex-start;padding:13px;border-radius:13px;background:#f6fafe;border:1px solid #dde9f3}
+  .rule::before{counter-increment:rules;content:counter(rules);display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--navy);color:#fff;font-weight:900}
+  .rule strong{color:var(--navy)}
+  .choice-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .choice-pill{flex:1 1 155px;min-width:0;border:1px solid var(--line);background:#fff;border-radius:13px;padding:14px}
+  .choice-pill span{display:block;color:var(--muted);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  .choice-pill strong{font-size:1.45rem;color:var(--navy)}
+  .timeline{display:grid;grid-template-columns:repeat(8,minmax(70px,1fr));gap:8px;overflow-x:auto;padding-bottom:4px}
+  .round-chip{min-width:86px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;text-align:center}
+  .round-chip b{display:block;color:var(--navy)}
+  .round-chip small{color:var(--muted);font-size:.72rem}
+  .round-chip.special{background:#fff9e8;border-color:#ead59c}
+  .round-chip.rep{box-shadow:inset 0 3px 0 var(--blue2)}
+  .note{border-left:4px solid var(--gold);background:#fff9e9;padding:14px 16px;border-radius:0 12px 12px 0;color:#5e512f}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:850;padding:10px 14px;border-radius:10px;min-height:42px}
+  .btn:hover{border-color:#9bb6cb;background:#f5f9fc}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+  .btn.gold{background:#fff8e6;border-color:#e8cf91;color:#735615}
+  .btn.danger{color:#963b38;border-color:#e7bebc;background:#fff}
+  #tally{background:linear-gradient(145deg,#09243d,#0e3557);padding:24px;border-radius:22px;border:1px solid #224a69;box-shadow:0 18px 36px rgba(7,26,45,.18)}
+  #tally .section-head h2{color:#fff}
+  #tally .section-head p{color:#c7d8e5}
+  #tally .toolbar .btn:not(.danger){background:#f8fbfd;border-color:#d7e2ea}
+  #tally .toolbar .btn.danger{background:#fff8f8}
+  .scoreboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 18px}
+  .scorebox{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 18px 15px;box-shadow:var(--shadow)}
+  .scorebox::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--blue2)}
+  .scorebox:nth-child(2)::before{background:var(--gold)}
+  .scorebox:nth-child(3)::before{background:#4a7890}
+  .scorebox span{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;font-weight:850;color:var(--muted)}
+  .scorebox strong{display:block;font-size:clamp(1.9rem,4vw,3.25rem);line-height:1;color:var(--navy);margin-top:5px}
+  .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px}
+  th,td{padding:11px 10px;border-bottom:1px solid #e3ebf1;text-align:center;vertical-align:middle}
+  thead th{position:sticky;top:0;z-index:2;background:#123a5d;color:#fff;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;border-bottom-color:#315a7c}
+  tbody tr:last-child td{border-bottom:0}
+  .tally-table tbody tr:nth-child(odd){background:#ffffff}
+  .tally-table tbody tr:nth-child(even){background:#e8f0f7}
+  .tally-table tbody tr.special-round{background:#fff3cf}
+  .tally-table tbody tr:hover{background:#dbe9f4}
+  .tally-table tbody tr.special-round:hover{background:#f8e7ad}
+  .rlabel{font-weight:900;color:var(--navy);font-size:1rem}
+  .modifier{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eef4f8;color:#607487;font-size:.72rem;font-weight:850}
+  .modifier.special{background:#fff4cf;color:#7c5d15}
+  select{min-width:74px;border:1px solid #bfcfdd;background:#fff;color:var(--ink);border-radius:9px;padding:8px 10px;font-weight:850;outline:none}
+  select:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(47,120,183,.24);outline-offset:2px}
+  .num{font-variant-numeric:tabular-nums;font-weight:900}
+  .pos{color:var(--good)} .neg{color:var(--bad)} .zero{color:#748494}
+  .payoff{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .pay{border:1px solid #b9cad8;border-radius:12px;padding:10px;background:#fff;min-width:0;overflow:hidden}
+  .pay code{display:block;color:var(--navy);font-weight:950;font-size:1.08rem;margin-bottom:7px}
+  .pay-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+  .pay-values span{min-width:0;text-align:center;padding:5px 2px;border-radius:7px;background:#eef4f8;white-space:nowrap;overflow:hidden}
+  .pay-values b{display:block;color:#667b8e;font-size:.58rem;line-height:1;text-transform:uppercase;letter-spacing:.03em}
+  .pay-values strong{display:block;color:var(--navy);font-size:.86rem;line-height:1.1;margin-top:3px;font-variant-numeric:tabular-nums}
+
+  .total-points-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .total-toggle{background:#0e3557;color:#fff;border-color:#315b7e}
+  .total-toggle:hover{background:#17486f;color:#fff;border-color:#4d7798}
+  .grand-total{min-width:210px;background:linear-gradient(135deg,#0a2945,#123f68);color:#fff;border:1px solid #365e7d;border-radius:14px;padding:13px 16px;text-align:right;box-shadow:0 9px 22px rgba(7,26,45,.16)}
+  .grand-total[hidden]{display:none}
+  .grand-total span{display:block;color:#cbdbe8;font-size:.7rem;font-weight:850;text-transform:uppercase;letter-spacing:.09em}
+  .grand-total strong{display:block;font-size:2rem;line-height:1;color:#fff;margin-top:5px;font-variant-numeric:tabular-nums}
+  .observer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .obs{border:1px solid var(--line);background:#fff;border-radius:14px;padding:15px}
+  .obs label{display:block;font-weight:850;color:var(--navy);margin-bottom:7px}
+  textarea{width:100%;min-height:112px;resize:vertical;border:1px solid #c4d3df;border-radius:10px;padding:11px;background:#fbfdff;color:var(--ink)}
+  .checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0}
+  .check{display:flex;gap:9px;align-items:flex-start;background:#f7fbfe;border:1px solid #e0eaf2;padding:10px;border-radius:10px;color:#38536d}
+  .check::before{content:"✓";color:var(--good);font-weight:950}
+  .reflection{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:q}
+  .qcard{counter-increment:q;background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;min-height:135px}
+  .qcard::before{content:"0" counter(q);display:block;color:var(--gold);font-size:.78rem;font-weight:950;letter-spacing:.1em;margin-bottom:9px}
+  .qcard strong{color:var(--navy);font-size:1.05rem}
+  .reveal{margin-top:20px;border:2px dashed #b7c9d7;background:linear-gradient(135deg,#f7fbff,#fffaf0);border-radius:18px;padding:20px}
+  .reveal-content{display:none;margin-top:18px}
+  .reveal.open .reveal-content{display:block}
+  .enterprise-board{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+  .enterprise-total{background:linear-gradient(145deg,var(--navy),#1e5487);color:#fff;border-radius:18px;padding:22px;position:relative;overflow:hidden}
+  .enterprise-total small{color:#cfe0ef;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  .enterprise-total .orgscore{font-size:clamp(2.7rem,7vw,5.8rem);font-weight:950;line-height:1;margin:7px 0}
+  .progress{height:12px;background:rgba(255,255,255,.16);border-radius:99px;overflow:hidden}
+  .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffe39d);transition:width .5s ease}
+  .insight{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #e0e8ef}
+  .insight:last-child{border-bottom:0}
+  .insight i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:#eaf4fc;color:var(--navy);font-weight:950}
+  .system-viz{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+  .system-viz svg{width:100%;height:auto;display:block}
+  .answerkey{display:none;margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .answerkey.open{display:block}
+  .footerline{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#728497;font-size:.78rem}
+  .toast{position:fixed;right:20px;bottom:20px;background:#183a60;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 10px 25px rgba(18,50,91,.25);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:99}
+  .toast.show{opacity:1;transform:none}
+  @media(max-width:900px){.g2,.g3,.enterprise-board{grid-template-columns:1fr}.scoreboard,.reflection{grid-template-columns:1fr}.payoff{grid-template-columns:repeat(2,minmax(0,1fr))}.observer-grid,.checklist{grid-template-columns:1fr}.hero{min-height:280px}.section-head{display:block}.badge{margin-top:10px}}
+  @media(max-width:560px){main{padding:22px 14px 50px}.tabs{padding:8px 12px}.hero{padding:32px 20px}.card{padding:17px}.payoff{grid-template-columns:1fr}.scoreboard{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.scorebox{padding:14px 10px}.scorebox strong{font-size:1.8rem}}
+  @media print{.tabs-wrap,.toolbar,.btn,.toast{display:none!important}.panel{display:block!important;break-before:page}.panel:first-of-type{break-before:auto}.hero{min-height:180px}.app{box-shadow:none}.reveal-content,.answerkey{display:block!important}.card,.table-wrap{box-shadow:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">Interactive Team Exercise</span>
+      <h1>The Decision Challenge</h1>
+      <p>Eight rounds. Limited time. One team decision each round. What happens next depends on the choices you make.</p>
+      <div class="question">Your objective: Win as much as you can win.</div>
+      <div class="hero-meta" aria-label="Exercise overview"><span>8 Rounds</span><span>3 Teams</span><span>Timed Decisions</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs-wrap" aria-label="Exercise sections">
+    <div class="tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" data-tab="instructions">Instructions</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="tally">Tally Sheet</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="observer">Observer</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="debrief">Debrief</button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="instructions" class="panel active" role="tabpanel">
+      <div class="section-head">
+        <div><h2>Participant Instructions</h2><p>Read only what is provided here. The facilitator will control the pace and announce when each round begins.</p></div>
+        <span class="badge">8 successive rounds</span>
+      </div>
+
+      <div class="grid g2">
+        <article class="card mission-card">
+          <h3>Your task</h3>
+          <div class="bigline">“Win as much as you can win.”</div>
+          <p>Keep this purpose in mind throughout the entire experience.</p>
+        </article>
+        <article class="card">
+          <h3>Your team controls one choice</h3>
+          <div class="choice-row">
+            <div class="choice-pill"><span>Team 1</span><strong>A or B</strong></div>
+            <div class="choice-pill"><span>Team 2</span><strong>M or N</strong></div>
+            <div class="choice-pill"><span>Team 3</span><strong>X or Y</strong></div>
+          </div>
+          <p style="margin-top:12px">Your result each round depends on the combined three-team pattern.</p>
+        </article>
+      </div>
+
+      <div class="grid g2" style="margin-top:18px">
+        <article class="card">
+          <h3>Three rules</h3>
+          <div class="rules">
+            <div class="rule"><div><strong>No cross-team communication</strong><br><span>You may not confer with people outside your team unless a facilitator gives permission. This includes verbal, nonverbal, and symbolic communication.</span></div></div>
+            <div class="rule"><div><strong>Remain in your assigned area</strong><br><span>Do not leave your team area unless directed or given permission by a facilitator.</span></div></div>
+            <div class="rule"><div><strong>One team decision</strong><br><span>Your team must agree on a single choice for every round.</span></div></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>How the exercise runs</h3>
+          <p><strong>Initial review:</strong> 6 minutes to study the scoring information and discuss strategy.</p>
+          <p><strong>Decision rounds:</strong> generally 3 minutes for your team to decide and record one choice.</p>
+          <p><strong>Representative rounds:</strong> when directed, one representative from each team will receive temporary permission to meet.</p>
+          <div class="note" style="margin-top:14px"><strong>Do not work ahead.</strong> If you have a question about the rules, the facilitator may simply repeat the instructions.</div>
+        </article>
+      </div>
+
+      <article class="card" style="margin-top:18px">
+        <h3>Round map</h3>
+        <div class="timeline" aria-label="Round sequence">
+          <div class="round-chip"><b>1</b><small>Team • 3 min</small></div>
+          <div class="round-chip"><b>2</b><small>Team • 3 min</small></div>
+          <div class="round-chip special rep"><b>3*</b><small>Reps + Team</small></div>
+          <div class="round-chip"><b>4</b><small>Team • 3 min</small></div>
+          <div class="round-chip special"><b>5**</b><small>Team • 3 min</small></div>
+          <div class="round-chip"><b>6</b><small>Team • 3 min</small></div>
+          <div class="round-chip rep"><b>7</b><small>Reps + Team</small></div>
+          <div class="round-chip special rep"><b>8**</b><small>Reps + Team</small></div>
+        </div>
+        <p style="font-size:.82rem;margin-top:10px;color:var(--muted)"><strong>*</strong> Round 3 points are doubled. &nbsp; <strong>**</strong> Rounds 5 and 8 points are squared while retaining the original sign.</p>
+      </article>
+    </section>
+
+    <section id="tally" class="panel" role="tabpanel">
+      <div class="section-head">
+        <div><h2>Interactive Tally Sheet</h2><p>Select each team’s choice. Round scores and cumulative totals calculate automatically. During the exercise, only team totals are displayed.</p></div>
+        <div class="toolbar">
+          <button class="btn" id="exportCsv">Export CSV</button>
+          <button class="btn" id="printBtn">Print</button>
+          <button class="btn danger" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="scoreboard" aria-live="polite">
+        <div class="scorebox"><span>Team 1 cumulative</span><strong id="cum1">0</strong></div>
+        <div class="scorebox"><span>Team 2 cumulative</span><strong id="cum2">0</strong></div>
+        <div class="scorebox"><span>Team 3 cumulative</span><strong id="cum3">0</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="tally-table" aria-label="Decision Challenge tally sheet">
+          <thead>
+            <tr><th>Round</th><th>Round Type</th><th>Team 1<br>A / B</th><th>Team 2<br>M / N</th><th>Team 3<br>X / Y</th><th>Team 1<br>Round</th><th>Team 2<br>Round</th><th>Team 3<br>Round</th><th>Pattern</th></tr>
+          </thead>
+          <tbody id="roundRows"></tbody>
+        </table>
+      </div>
+
+      <div class="grid g2" style="margin-top:18px">
+        <article class="card">
+          <h3>Payoff Key</h3>
+          <div class="payoff" id="payoffKey"></div>
+        </article>
+        <article class="card">
+          <h3>Scoring modifiers</h3>
+          <p><span class="modifier special">Round 3</span> Double each team’s normal payoff.</p>
+          <p><span class="modifier special">Rounds 5 &amp; 8</span> Square the absolute payoff and retain its original positive or negative sign.</p>
+          <div class="note" style="margin-top:14px">The combined pattern determines the payoff. No team can independently control its outcome.</div>
+        </article>
+      </div>
+
+      <div class="total-points-row">
+        <button class="btn total-toggle" id="toggleGrandTotal" type="button" aria-pressed="false">Show Total Points</button>
+        <div class="grand-total" id="grandTotalBox" hidden aria-live="polite">
+          <span>Total Points Scored</span>
+          <strong id="grandTotal">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <section id="observer" class="panel" role="tabpanel">
+      <div class="section-head">
+        <div><h2>Observer Guide</h2><p>The observer watches the group experience without participating in the team’s decisions.</p></div>
+        <span class="badge">Observe the process, not the answer</span>
+      </div>
+
+      <article class="card mission-card">
+        <h3>Observer brief</h3>
+        <p style="font-size:1.03rem;max-width:980px">Place yourself close enough to observe interactions, but do not involve yourself in the activity. Watch who is influential, how decisions are made, how people communicate, and how the group changes over time. You will be asked to provide specific observations during the debrief. If classmates ask what you are doing, you may explain your role.</p>
+      </article>
+
+      <div class="checklist">
+        <div class="check">Decision-making process</div><div class="check">Formal and informal leadership</div>
+        <div class="check">Who influences the group</div><div class="check">Participation and involvement</div>
+        <div class="check">Communication patterns</div><div class="check">Conflict and disagreement</div>
+        <div class="check">Trust and risk behavior</div><div class="check">Reactions to other teams</div>
+      </div>
+
+      <div class="observer-grid">
+        <div class="obs"><label for="obs1">Decision making &amp; influence</label><textarea id="obs1" placeholder="Who shaped decisions? How were choices made? What changed across rounds?"></textarea></div>
+        <div class="obs"><label for="obs2">Communication &amp; participation</label><textarea id="obs2" placeholder="Who spoke? Who stayed quiet? What communication patterns emerged?"></textarea></div>
+        <div class="obs"><label for="obs3">Leadership, trust &amp; conflict</label><textarea id="obs3" placeholder="Note moments of leadership, trust, tension, persuasion, or repair."></textarea></div>
+        <div class="obs"><label for="obs4">Reactions &amp; turning points</label><textarea id="obs4" placeholder="Capture specific comments, emotional reactions, representative-round changes, or key moments."></textarea></div>
+      </div>
+      <div class="toolbar" style="margin-top:14px"><button class="btn" id="clearObserver">Clear Observer Notes</button></div>
+    </section>
+
+    <section id="debrief" class="panel" role="tabpanel">
+      <div class="section-head">
+        <div><h2>Publish &amp; Process</h2><p>Use this section only after Round 8. Keep the teams separated until they have developed their initial responses.</p></div>
+        <span class="badge">Facilitator debrief</span>
+      </div>
+
+      <div class="reflection">
+        <div class="qcard"><strong>How do you see each of the other teams?</strong></div>
+        <div class="qcard"><strong>How do you perceive that each of the other teams sees your team?</strong></div>
+        <div class="qcard"><strong>How do you see your own team?</strong></div>
+      </div>
+
+      <div class="grid g2" style="margin-top:18px">
+        <article class="card">
+          <h3>Processing prompts</h3>
+          <div class="insight"><i>1</i><div><strong>What happened in the organization?</strong><br><span>Who won? Who lost? Where did conflict emerge?</span></div></div>
+          <div class="insight"><i>2</i><div><strong>What did “winning” mean to you?</strong><br><span>Did that definition change during the exercise?</span></div></div>
+          <div class="insight"><i>3</i><div><strong>What risks did you take—or avoid?</strong><br><span>What role did trust play?</span></div></div>
+          <div class="insight"><i>4</i><div><strong>What did competition do to relationships?</strong><br><span>Did your behavior help your team, the organization, or both?</span></div></div>
+        </article>
+        <article class="card">
+          <h3>Transfer to the mission</h3>
+          <div class="insight"><i>A</i><div><strong>Where do silos show up at work?</strong><br><span>Think unit, office, program, function, or directorate.</span></div></div>
+          <div class="insight"><i>B</i><div><strong>When can local success hurt enterprise performance?</strong><br><span>What incentives or measures encourage that behavior?</span></div></div>
+          <div class="insight"><i>C</i><div><strong>What actions build cross-team trust?</strong><br><span>What would make sacrifice or resource-sharing credible?</span></div></div>
+          <div class="insight"><i>D</i><div><strong>What should leaders optimize?</strong><br><span>How do we keep the mission larger than the scoreboard?</span></div></div>
+        </article>
+      </div>
+
+      <div class="reveal" id="enterpriseReveal">
+        <div class="section-head" style="margin:0">
+          <div><h2 style="font-size:1.45rem">Facilitator Reveal: Enterprise View</h2><p>This intentionally exposes the lesson. Do not open until participants have processed their own experience.</p></div>
+          <button class="btn gold" id="revealBtn">Reveal Enterprise Results</button>
+        </div>
+        <div class="reveal-content">
+          <div class="enterprise-board">
+            <div class="enterprise-total">
+              <small>Organization cumulative score</small>
+              <div class="orgscore" id="orgTotal">0</div>
+              <div class="progress" aria-label="Enterprise potential captured"><span id="orgProgress"></span></div>
+              <p><strong id="orgPct">0%</strong> of the theoretical enterprise maximum (98 points)</p>
+            </div>
+            <div class="card" style="box-shadow:none;margin:0">
+              <h3>Team score vs. enterprise score</h3>
+              <p><strong>Team 1:</strong> <span class="num" id="deb1">0</span></p>
+              <p><strong>Team 2:</strong> <span class="num" id="deb2">0</span></p>
+              <p><strong>Team 3:</strong> <span class="num" id="deb3">0</span></p>
+              <p><strong>Organization:</strong> <span class="num" id="debOrg">0</span></p>
+            </div>
+          </div>
+
+          <div class="system-viz" aria-label="Silo to enterprise systems illustration">
+            <svg viewBox="0 0 1100 300" role="img" aria-labelledby="vizTitle vizDesc">
+              <title id="vizTitle">From silo scoreboards to enterprise performance</title>
+              <desc id="vizDesc">Three isolated team circles connect to one larger mission circle, illustrating the shift from local optimization to enterprise thinking.</desc>
+              <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2f78b7"/></marker></defs>
+              <text x="150" y="32" text-anchor="middle" font-size="20" font-weight="800" fill="#12325b">Silo view</text>
+              <circle cx="90" cy="118" r="55" fill="#edf5fb" stroke="#2f78b7" stroke-width="3"/><circle cx="210" cy="118" r="55" fill="#fff8e6" stroke="#d6a638" stroke-width="3"/><circle cx="150" cy="225" r="55" fill="#eef4f7" stroke="#4a7890" stroke-width="3"/>
+              <text x="90" y="113" text-anchor="middle" font-size="16" font-weight="800" fill="#12325b">TEAM 1</text><text x="90" y="137" text-anchor="middle" font-size="14" fill="#607487">my score</text>
+              <text x="210" y="113" text-anchor="middle" font-size="16" font-weight="800" fill="#12325b">TEAM 2</text><text x="210" y="137" text-anchor="middle" font-size="14" fill="#607487">my score</text>
+              <text x="150" y="220" text-anchor="middle" font-size="16" font-weight="800" fill="#12325b">TEAM 3</text><text x="150" y="244" text-anchor="middle" font-size="14" fill="#607487">my score</text>
+              <path d="M330 150 C440 150 455 150 525 150" stroke="#2f78b7" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+              <text x="425" y="126" text-anchor="middle" font-size="16" font-weight="800" fill="#2f78b7">Shift the question</text><text x="425" y="178" text-anchor="middle" font-size="14" fill="#607487">“What helps the whole system win?”</text>
+              <circle cx="780" cy="150" r="120" fill="#12325b"/><circle cx="780" cy="150" r="102" fill="none" stroke="#d6a638" stroke-width="5" stroke-dasharray="15 9"/>
+              <text x="780" y="127" text-anchor="middle" font-size="23" font-weight="900" fill="#fff">ENTERPRISE</text><text x="780" y="157" text-anchor="middle" font-size="18" fill="#dbe8f3">shared mission</text><text x="780" y="188" text-anchor="middle" font-size="15" fill="#dbe8f3">team success + system success</text>
+              <text x="1010" y="105" text-anchor="middle" font-size="15" font-weight="800" fill="#12325b">Leadership test</text><text x="1010" y="132" text-anchor="middle" font-size="14" fill="#607487">Can we accept</text><text x="1010" y="153" text-anchor="middle" font-size="14" fill="#607487">a local tradeoff</text><text x="1010" y="174" text-anchor="middle" font-size="14" fill="#607487">for a larger</text><text x="1010" y="195" text-anchor="middle" font-size="14" fill="#607487">mission gain?</text>
+            </svg>
+          </div>
+
+          <article class="card" style="box-shadow:none;margin-top:18px;border-left:6px solid var(--gold)">
+            <h3>The intended insight</h3>
+            <p style="font-size:1.2rem;color:var(--navy);font-weight:850;margin:0">You can be on the winning team in a losing organization.</p>
+            <p>The leadership challenge is to recognize when local optimization, internal competition, or unit-level incentives are degrading performance across the larger system.</p>
+            <button class="btn" id="answerKeyBtn" style="margin-top:8px">Show 98-Point Enterprise Key</button>
+            <div class="answerkey" id="answerKey">
+              <strong>Maximum organizational cumulative score: 98</strong>
+              <p>Rounds 1, 2, 3, 4, 6, and 7: <strong>AMX</strong>. Round 3 is doubled. Rounds 5 and 8 use one of the +28 enterprise patterns: <strong>BMY, BMX, or BNX</strong>.</p>
+              <p style="margin-bottom:0">This is the deeper lesson: ordinary rounds reward shared moderate gains; squared rounds can require two teams to accept a short-term loss so the enterprise captures a much larger total gain.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="footerline"><span>The Decision Challenge • Interactive classroom exercise</span><span>All entries remain on this device/browser only.</span></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  'use strict';
+  const payoff = {
+    'BMY':[6,-2,-2], 'ANX':[3,3,-2], 'BNY':[-2,-2,-2], 'AMX':[2,2,2],
+    'BMX':[-2,-2,6], 'AMY':[3,-2,3], 'BNX':[-2,6,-2], 'ANY':[-2,3,3]
+  };
+  const roundMeta = [
+    {label:'Team • 3 min', type:'normal'},
+    {label:'Team • 3 min', type:'normal'},
+    {label:'Reps 3 + Team 3', type:'double'},
+    {label:'Team • 3 min', type:'normal'},
+    {label:'Team • 3 min', type:'square'},
+    {label:'Team • 3 min', type:'normal'},
+    {label:'Reps 3 + Team 3', type:'normal'},
+    {label:'Reps 3 + Team 3', type:'square'}
+  ];
+  const storageKey='enterpriseChallengeState_v1';
+  const observerKey='enterpriseChallengeObserver_v1';
+  let selections = Array.from({length:8},()=>['','','']);
+
+  const $=id=>document.getElementById(id);
+  const rowsEl=$('roundRows');
+  const payoffEl=$('payoffKey');
+
+  function format(n){ return n>0 ? '+'+n : String(n); }
+  function signClass(n){ return n>0?'pos':n<0?'neg':'zero'; }
+  function transformed(base,type){
+    if(type==='double') return base.map(v=>v*2);
+    if(type==='square') return base.map(v=>Math.sign(v)*v*v);
+    return [...base];
+  }
+  function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._timer); t._timer=setTimeout(()=>t.classList.remove('show'),1800); }
+  function save(){ try{localStorage.setItem(storageKey,JSON.stringify(selections));}catch(e){} }
+  function load(){
+    try{
+      const s=JSON.parse(localStorage.getItem(storageKey)||'null');
+      if(Array.isArray(s)&&s.length===8) selections=s.map(r=>Array.isArray(r)?r.slice(0,3):['','','']);
+    }catch(e){}
+  }
+  function buildPayoff(){
+    const order=['BMY','ANX','BNY','AMX','BMX','AMY','BNX','ANY'];
+    payoffEl.innerHTML=order.map(p=>`<div class="pay"><code>${p}</code><div class="pay-values"><span><b>T1</b><strong>${format(payoff[p][0])}</strong></span><span><b>T2</b><strong>${format(payoff[p][1])}</strong></span><span><b>T3</b><strong>${format(payoff[p][2])}</strong></span></div></div>`).join('');
+  }
+  function optionsFor(team,selected){
+    const vals=team===0?['A','B']:team===1?['M','N']:['X','Y'];
+    return `<option value="">—</option>${vals.map(v=>`<option value="${v}" ${v===selected?'selected':''}>${v}</option>`).join('')}`;
+  }
+  function buildRows(){
+    rowsEl.innerHTML='';
+    roundMeta.forEach((m,i)=>{
+      const tr=document.createElement('tr');
+      const special=m.type!=='normal';
+      if(special) tr.classList.add('special-round');
+      tr.innerHTML=`
+        <td class="rlabel">${i+1}${m.type==='double'?'*':m.type==='square'?'**':''}</td>
+        <td><span class="modifier ${special?'special':''}">${m.label}</span></td>
+        <td><select aria-label="Round ${i+1} Team 1 choice" data-r="${i}" data-t="0">${optionsFor(0,selections[i][0])}</select></td>
+        <td><select aria-label="Round ${i+1} Team 2 choice" data-r="${i}" data-t="1">${optionsFor(1,selections[i][1])}</select></td>
+        <td><select aria-label="Round ${i+1} Team 3 choice" data-r="${i}" data-t="2">${optionsFor(2,selections[i][2])}</select></td>
+        <td class="num zero" id="s-${i}-0">0</td><td class="num zero" id="s-${i}-1">0</td><td class="num zero" id="s-${i}-2">0</td>
+        <td class="num" id="p-${i}">—</td>`;
+      rowsEl.appendChild(tr);
+    });
+    rowsEl.querySelectorAll('select').forEach(sel=>sel.addEventListener('change',e=>{
+      const r=Number(e.target.dataset.r),t=Number(e.target.dataset.t);
+      selections[r][t]=e.target.value; save(); recalc();
+    }));
+  }
+  function recalc(){
+    const cum=[0,0,0]; let org=0;
+    roundMeta.forEach((m,i)=>{
+      const pattern=selections[i].join('');
+      const valid=pattern.length===3 && payoff[pattern];
+      const scores=valid?transformed(payoff[pattern],m.type):[0,0,0];
+      scores.forEach((v,t)=>{
+        cum[t]+=v; const el=$(`s-${i}-${t}`); el.textContent=valid?format(v):'0'; el.className='num '+signClass(v);
+      });
+      org += scores.reduce((a,b)=>a+b,0);
+      $(`p-${i}`).textContent=valid?pattern:'—';
+    });
+    $('cum1').textContent=cum[0]; $('cum2').textContent=cum[1]; $('cum3').textContent=cum[2]; $('grandTotal').textContent=org;
+    $('deb1').textContent=cum[0]; $('deb2').textContent=cum[1]; $('deb3').textContent=cum[2]; $('debOrg').textContent=org; $('orgTotal').textContent=org;
+    const pct=Math.round((org/98)*100); $('orgPct').textContent=pct+'%'; $('orgProgress').style.width=Math.max(0,Math.min(100,pct))+'%';
+  }
+
+  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true'); $(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:document.querySelector('.tabs-wrap').offsetTop,behavior:'smooth'});
+  }));
+
+  $('resetBtn').addEventListener('click',()=>{
+    if(!confirm('Clear all round choices and scores?')) return;
+    selections=Array.from({length:8},()=>['','','']); save(); buildRows(); recalc();
+    $('grandTotalBox').setAttribute('hidden','');
+    $('toggleGrandTotal').setAttribute('aria-pressed','false');
+    $('toggleGrandTotal').textContent='Show Total Points';
+    toast('Tally sheet reset');
+  });
+  $('printBtn').addEventListener('click',()=>window.print());
+  $('toggleGrandTotal').addEventListener('click',()=>{
+    const box=$('grandTotalBox');
+    const willShow=box.hasAttribute('hidden');
+    if(willShow) box.removeAttribute('hidden'); else box.setAttribute('hidden','');
+    $('toggleGrandTotal').setAttribute('aria-pressed',willShow?'true':'false');
+    $('toggleGrandTotal').textContent=willShow?'Hide Total Points':'Show Total Points';
+    recalc();
+  });
+  $('revealBtn').addEventListener('click',()=>{
+    if(!$('enterpriseReveal').classList.contains('open')){
+      if(!confirm('Reveal the enterprise results and intended lesson? This should happen only after Round 8 and initial participant processing.')) return;
+    }
+    $('enterpriseReveal').classList.toggle('open');
+    $('revealBtn').textContent=$('enterpriseReveal').classList.contains('open')?'Hide Enterprise Results':'Reveal Enterprise Results'; recalc();
+  });
+  $('answerKeyBtn').addEventListener('click',()=>{
+    $('answerKey').classList.toggle('open'); $('answerKeyBtn').textContent=$('answerKey').classList.contains('open')?'Hide 98-Point Enterprise Key':'Show 98-Point Enterprise Key';
+  });
+  $('clearObserver').addEventListener('click',()=>{
+    if(!confirm('Clear all observer notes?')) return;
+    ['obs1','obs2','obs3','obs4'].forEach(id=>$(id).value=''); try{localStorage.removeItem(observerKey)}catch(e){} toast('Observer notes cleared');
+  });
+  ['obs1','obs2','obs3','obs4'].forEach(id=>$(id).addEventListener('input',()=>{
+    const data={}; ['obs1','obs2','obs3','obs4'].forEach(k=>data[k]=$(k).value); try{localStorage.setItem(observerKey,JSON.stringify(data))}catch(e){}
+  }));
+  function loadObserver(){
+    try{const d=JSON.parse(localStorage.getItem(observerKey)||'{}'); ['obs1','obs2','obs3','obs4'].forEach(k=>{if(typeof d[k]==='string')$(k).value=d[k]})}catch(e){}
+  }
+  $('exportCsv').addEventListener('click',()=>{
+    const lines=[['Round','Type','Team 1 Choice','Team 2 Choice','Team 3 Choice','Pattern','Team 1 Score','Team 2 Score','Team 3 Score','Organization Round Total']];
+    roundMeta.forEach((m,i)=>{
+      const pattern=selections[i].join(''); const valid=pattern.length===3&&payoff[pattern]; const sc=valid?transformed(payoff[pattern],m.type):[0,0,0];
+      lines.push([i+1,m.type,...selections[i],valid?pattern:'',...sc,sc.reduce((a,b)=>a+b,0)]);
+    });
+    const csv=lines.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Decision_Challenge_Results.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),500); toast('CSV exported');
+  });
+
+  buildPayoff(); load(); buildRows(); recalc(); loadObserver();
+})();
+</script>
+</body>
+</html>
