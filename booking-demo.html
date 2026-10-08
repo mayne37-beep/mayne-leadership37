@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Classroom Booking Manager</title>
+<style>
+  :root{
+    --navy:#16324f;
+    --navy-2:#224d73;
+    --blue:#4d82ad;
+    --sky:#eaf4fb;
+    --sky-2:#f5f9fc;
+    --gold:#c79a3b;
+    --gold-2:#f3dfaa;
+    --ink:#1d2a35;
+    --muted:#647585;
+    --line:#d9e4ec;
+    --white:#ffffff;
+    --green:#2f7d5b;
+    --green-bg:#eaf7f0;
+    --amber:#a66c12;
+    --amber-bg:#fff5dc;
+    --red:#a94242;
+    --red-bg:#fdecec;
+    --internal:#3777a8;
+    --internal-bg:#e8f2fb;
+    --external:#7652a7;
+    --external-bg:#f0eafa;
+    --virtual:#17867f;
+    --virtual-bg:#e4f7f5;
+    --shadow:0 12px 30px rgba(22,50,79,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef7fc 0%,#f8fbfd 42%,#eef4f8 100%);color:var(--ink);min-height:100vh}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .app{min-height:100vh}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:white;padding:20px 28px;box-shadow:0 4px 18px rgba(18,47,74,.18);position:sticky;top:0;z-index:20}
+  .header-row{max-width:1500px;margin:auto;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .brand{display:flex;gap:14px;align-items:center}
+  .logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#ffeec2,var(--gold));color:var(--navy);font-size:25px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+  .brand h1{font-size:1.3rem;margin:0 0 3px;letter-spacing:.2px}
+  .brand p{margin:0;color:#d9e9f5;font-size:.9rem}
+  .header-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+  .top-btn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;padding:9px 13px;border-radius:10px;font-weight:700}
+  .top-btn:hover{background:rgba(255,255,255,.18)}
+  .top-btn.gold{background:var(--gold);border-color:var(--gold);color:#102942}
+
+  main{max-width:1500px;margin:0 auto;padding:22px 26px 50px}
+  .notice{background:#fff8e7;border:1px solid #ecd8a5;border-left:5px solid var(--gold);padding:12px 15px;border-radius:10px;margin-bottom:16px;font-size:.9rem;display:flex;gap:10px;align-items:flex-start}
+  .notice strong{color:#6d4d0f}
+  .tabs{display:flex;gap:8px;background:white;border:1px solid var(--line);padding:7px;border-radius:14px;box-shadow:var(--shadow);width:max-content;max-width:100%;overflow:auto;margin-bottom:18px}
+  .tab{border:0;background:transparent;color:var(--muted);padding:10px 15px;border-radius:10px;font-weight:800;white-space:nowrap}
+  .tab.active{background:var(--navy);color:white}
+  .panel{display:none}.panel.active{display:block}
+
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:13px;margin-bottom:18px}
+  .stat{background:white;border:1px solid var(--line);border-radius:14px;padding:15px 16px;box-shadow:var(--shadow)}
+  .stat .k{font-size:.78rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.55px}
+  .stat .v{font-size:1.75rem;font-weight:900;color:var(--navy);margin-top:4px}
+  .stat .s{font-size:.8rem;color:var(--muted);margin-top:3px}
+
+  .card{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .card-head h2,.card-head h3{margin:0;color:var(--navy)}
+  .card-head h2{font-size:1.05rem}.card-head h3{font-size:1rem}
+  .card-body{padding:18px}
+
+  .calendar-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:13px}
+  .left-tools,.right-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:white;color:var(--navy);padding:9px 13px;border-radius:10px;font-weight:800;box-shadow:0 2px 7px rgba(22,50,79,.05)}
+  .btn:hover{border-color:#b7cad8;background:#f8fbfd}
+  .btn.primary{background:var(--navy);color:white;border-color:var(--navy)}
+  .btn.gold{background:var(--gold);color:#132e48;border-color:var(--gold)}
+  .btn.green{background:var(--green);color:white;border-color:var(--green)}
+  .btn.red{background:var(--red);color:white;border-color:var(--red)}
+  .btn.virtual{background:var(--virtual);color:white;border-color:var(--virtual)}
+  .btn.small{padding:6px 9px;font-size:.82rem;border-radius:8px}
+  .view-toggle{display:flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:#f6f9fb}
+  .view-toggle button{border:0;background:transparent;padding:7px 11px;border-radius:7px;color:var(--muted);font-weight:800}
+  .view-toggle button.active{background:white;color:var(--navy);box-shadow:0 1px 5px rgba(20,50,75,.12)}
+  .date-title{font-weight:900;font-size:1.08rem;color:var(--navy);min-width:180px;text-align:center}
+  .legend{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin:7px 0 13px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.internal-dot{background:var(--internal)}.external-dot{background:var(--external)}.virtual-dot{background:var(--virtual)}.pending-dot{background:white;border:2px dashed var(--gold)}.closed-dot{background:#b9c4cc}
+
+  .month-wrap{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .month-header,.month-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .month-header div{background:#f1f6f9;padding:9px;text-align:center;border-right:1px solid var(--line);font-size:.78rem;font-weight:900;color:var(--navy);text-transform:uppercase}
+  .month-header div:last-child{border-right:0}
+  .day-cell{min-height:125px;padding:8px;border-right:1px solid var(--line);border-top:1px solid var(--line);background:white;position:relative;overflow:hidden}
+  .day-cell:nth-child(7n){border-right:0}.day-cell.weekend{background:#f6f7f8}.day-cell.other-month{background:#fafcfd;color:#9aabb8}
+  .day-number{font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .today-badge{background:var(--navy);color:white;border-radius:50%;width:24px;height:24px;display:grid;place-items:center}
+  .closed-label{font-size:.68rem;color:#9aa7b2;text-transform:uppercase;letter-spacing:.4px}
+  .event-chip{display:block;width:100%;text-align:left;border:0;border-radius:7px;padding:5px 6px;margin-bottom:4px;font-size:.7rem;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .event-chip{border-left:4px solid transparent}
+  .event-chip.type-internal{background:var(--internal-bg);color:#24577e;border-left-color:var(--internal)}
+  .event-chip.type-external{background:var(--external-bg);color:#5d3e84;border-left-color:var(--external)}
+  .event-chip.type-virtual{background:var(--virtual-bg);color:#116862;border-left-color:var(--virtual)}
+  .event-chip.pending{opacity:.72;outline:1px dashed var(--gold);outline-offset:-1px}
+  .more{font-size:.68rem;color:var(--muted);padding:2px 3px;font-weight:800}
+
+  .week-grid{display:grid;grid-template-columns:70px repeat(5,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:920px}
+  .week-scroll{overflow:auto}
+  .week-grid>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:38px;position:relative}
+  .week-grid>div:nth-child(6n){border-right:0}
+  .week-head{background:#f1f6f9;padding:10px;text-align:center;font-weight:900;color:var(--navy);font-size:.78rem;position:sticky;top:0;z-index:2}
+  .time-label{background:#f9fbfc;padding:9px 6px;text-align:right;color:var(--muted);font-size:.73rem}
+  .slot{background:white;padding:2px;min-height:42px}
+  .slot-event{font-size:.68rem;padding:4px 5px;border-radius:6px;margin:1px;line-height:1.2;cursor:pointer}
+  .slot-event{border-left:3px solid transparent}
+  .slot-event.type-internal{background:var(--internal-bg);border-left-color:var(--internal);color:#24577e}
+  .slot-event.type-external{background:var(--external-bg);border-left-color:var(--external);color:#5d3e84}
+  .slot-event.type-virtual{background:var(--virtual-bg);border-left-color:var(--virtual);color:#116862}
+  .slot-event.pending{opacity:.72;outline:1px dashed var(--gold);outline-offset:-1px}
+
+  .day-view-scroll{overflow:auto}
+  .day-grid{display:grid;grid-template-columns:72px repeat(11,minmax(130px,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:1580px}
+  .day-grid>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:40px}.day-grid>div:nth-child(12n){border-right:0}
+  .room-head{background:#f1f6f9;padding:10px 6px;text-align:center;font-weight:900;color:var(--navy);font-size:.75rem;position:sticky;top:0;z-index:2}
+
+  .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+  label{font-size:.78rem;color:var(--navy);font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+  input,select,textarea{width:100%;border:1px solid #cbd9e3;border-radius:10px;padding:10px 11px;background:white;color:var(--ink);outline:none}
+  input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(77,130,173,.14)}
+  textarea{min-height:105px;resize:vertical}
+  .help{font-size:.75rem;color:var(--muted)}
+  .availability{background:var(--sky);border:1px solid #cce2f1;border-radius:11px;padding:11px 12px;color:#315b7b;font-size:.84rem;line-height:1.5}
+  .availability.good{background:var(--green-bg);border-color:#bfe2cf;color:#265e47}.availability.bad{background:var(--red-bg);border-color:#ecc2c2;color:#853838}.availability.warn{background:var(--amber-bg);border-color:#ead29d;color:#7b5512}
+
+  .request-list{display:flex;flex-direction:column;gap:10px}
+  .request{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start}
+  .request:hover{border-color:#b9cedd}
+  .request h4{margin:0 0 6px;color:var(--navy);font-size:.96rem}.request p{margin:3px 0;color:var(--muted);font-size:.82rem}.request .desc{margin-top:7px;color:#425362}
+  .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.3px}
+  .type-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:900;letter-spacing:.2px}
+  .type-badge.type-internal{background:var(--internal-bg);color:#24577e}.type-badge.type-external{background:var(--external-bg);color:#5d3e84}.type-badge.type-virtual{background:var(--virtual-bg);color:#116862}
+  .hidden{display:none!important}
+  .badge.pending{background:var(--amber-bg);color:#7a5315}.badge.approved{background:var(--green-bg);color:#286348}.badge.denied{background:var(--red-bg);color:#8d3d3d}
+  .request-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .filters select,.filters input{width:auto;min-width:140px;padding:8px 9px}
+  .empty{padding:34px;text-align:center;color:var(--muted)}
+  .empty .big{font-size:2.2rem;opacity:.6;margin-bottom:5px}
+
+  .room-grid{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:10px}
+  .room-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdfe}.room-card strong{color:var(--navy)}.room-card span{display:block;color:var(--muted);font-size:.76rem;margin-top:3px}
+
+  .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(12,27,40,.48);z-index:100;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}
+  .modal{width:min(700px,100%);max-height:90vh;overflow:auto;background:white;border-radius:16px;box-shadow:0 25px 70px rgba(0,0,0,.28)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}.modal-head h3{margin:0;color:var(--navy)}
+  .close{border:0;background:#f2f5f7;border-radius:8px;width:32px;height:32px;font-size:1.2rem;color:var(--muted)}
+  .modal-body{padding:18px}.modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+  .detail-grid{display:grid;grid-template-columns:150px 1fr;gap:8px 13px;font-size:.9rem}.detail-grid .key{font-weight:900;color:var(--navy)}
+  .toast{position:fixed;right:22px;bottom:22px;background:#173650;color:white;border-radius:11px;padding:12px 15px;box-shadow:0 12px 30px rgba(0,0,0,.22);z-index:200;display:none;max-width:360px}.toast.show{display:block;animation:toastin .2s ease-out}@keyframes toastin{from{transform:translateY(8px);opacity:.2}to{transform:none;opacity:1}}
+
+  .manager-note{background:#f7fbfe;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.82rem;color:var(--muted);line-height:1.45}
+  .settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.divider{height:1px;background:var(--line);margin:18px 0}
+  footer{text-align:center;color:#7f909d;font-size:.74rem;padding:22px 10px}
+
+  @media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.room-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:650px){header{padding:16px}.brand p{display:none}main{padding:15px}.stats{grid-template-columns:1fr 1fr}.form-grid,.settings-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.room-grid{grid-template-columns:1fr}.month-header div{font-size:.65rem;padding:7px 2px}.day-cell{min-height:95px;padding:5px}.event-chip{font-size:.62rem}.request{grid-template-columns:1fr}.request-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.detail-grid .key{margin-top:7px}}
+</style>
+</head>
+<body>
+<noscript><div style="padding:24px;font-family:Arial,sans-serif;background:#fff3cd;color:#664d03">This booking manager requires JavaScript. Please open it in Chrome, Edge, Firefox, or Safari with JavaScript enabled.</div></noscript>
+<div class="app">
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <div class="logo">▦</div>
+      <div><h1 id="facilityTitle">Classroom Booking Manager</h1><p>Request, approve, and manage classroom reservations</p></div>
+    </div>
+    <div class="header-actions">
+      <button class="top-btn" onclick="goToday()">Today</button>
+      <button class="top-btn" onclick="openSettings()">⚙ Settings</button>
+      <button class="top-btn" style="background:var(--virtual);border-color:var(--virtual)" onclick="startVirtualRequest()">◉ Schedule Virtual</button>
+      <button class="top-btn gold" onclick="startPhysicalRequest()">+ Request a Room</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="notice"><span>ⓘ</span><div><strong>Standalone browser version:</strong> reservations are saved on this computer in the browser. It is fully functional for demonstration and single-computer use. For four requesters and a building manager using different computers, connect this interface to a shared database such as Supabase, SharePoint, or another approved internal data source.</div></div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="calendar" onclick="switchTab('calendar')">Calendar</button>
+    <button class="tab" data-tab="request" onclick="switchTab('request')">Schedule / Request</button>
+    <button class="tab" data-tab="requests" onclick="switchTab('requests')">My / All Requests</button>
+    <button class="tab" data-tab="manager" onclick="switchTab('manager')">Building Manager</button>
+    <button class="tab" data-tab="rooms" onclick="switchTab('rooms')">Classrooms</button>
+  </div>
+
+  <section class="panel active" id="panel-calendar">
+    <div class="stats">
+      <div class="stat"><div class="k">Approved Bookings</div><div class="v" id="statApproved">0</div><div class="s">Current month</div></div>
+      <div class="stat"><div class="k">Pending Requests</div><div class="v" id="statPending">0</div><div class="s">Awaiting manager action</div></div>
+      <div class="stat"><div class="k">Rooms Available</div><div class="v" id="statRooms">10</div><div class="s">Monday–Friday</div></div>
+      <div class="stat"><div class="k">Operating Hours</div><div class="v" style="font-size:1.35rem">7 AM–7 PM</div><div class="s">12 hours per weekday</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="calendar-toolbar">
+          <div class="left-tools">
+            <button class="btn small" onclick="navigateCalendar(-1)">‹</button>
+            <button class="btn small" onclick="goToday()">Today</button>
+            <button class="btn small" onclick="navigateCalendar(1)">›</button>
+            <div class="date-title" id="dateTitle"></div>
+          </div>
+          <div class="right-tools">
+            <div class="view-toggle">
+              <button data-view="month" class="active" onclick="setView('month')">Month</button>
+              <button data-view="week" onclick="setView('week')">Week</button>
+              <button data-view="day" onclick="setView('day')">Day</button>
+            </div>
+            <button class="btn virtual" onclick="startVirtualRequest()">◉ Schedule Virtual</button>
+            <button class="btn primary" onclick="startPhysicalRequest()">+ New Room Request</button>
+          </div>
+        </div>
+        <div class="legend"><span><i class="dot internal-dot"></i> Internal Class</span><span><i class="dot external-dot"></i> External Facility Booking</span><span><i class="dot virtual-dot"></i> Virtual / Online</span><span><i class="dot pending-dot"></i> Dashed = Pending Approval</span><span><i class="dot closed-dot"></i> Weekend / Closed</span></div>
+        <div id="calendarContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-request">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><h2 id="requestFormTitle">Classroom / Class Scheduling Request</h2><span class="badge pending">Manager Approval Required</span></div>
+        <div class="card-body">
+          <form id="bookingForm" onsubmit="submitRequest(event)">
+            <div class="form-grid">
+              <div class="field"><label for="requester">Requester</label><select id="requester" required></select></div>
+              <div class="field"><label for="requesterEmail">Email / Contact</label><input id="requesterEmail" type="text" placeholder="Optional contact information" /></div>
+              <div class="field full"><label for="classTitle">Class / Event Title</label><input id="classTitle" required maxlength="100" placeholder="Example: Supervisor Leadership Workshop" /></div>
+              <div class="field"><label for="bookingType">Booking Category</label><select id="bookingType" required onchange="toggleBookingFields();checkAvailability()"><option value="internal">Internal Class — We Teach</option><option value="external">External Facility Booking</option><option value="virtual">Virtual / Online Class</option></select></div>
+              <div class="field"><label for="bookingDate">Date</label><input id="bookingDate" type="date" required /></div>
+              <div class="field" id="roomField"><label for="roomSelect">Classroom</label><select id="roomSelect" required></select></div>
+              <div class="field hidden" id="organizationField"><label for="organization">External Organization</label><input id="organization" maxlength="120" placeholder="Organization renting the facility" /></div>
+              <div class="field hidden" id="virtualField"><label for="virtualPlatform">Virtual Platform / Link</label><input id="virtualPlatform" maxlength="180" placeholder="Teams, Zoom, Webex, meeting link, etc." /></div>
+              <div class="field"><label for="startTime">Start Time</label><select id="startTime" required></select></div>
+              <div class="field"><label for="endTime">End Time</label><select id="endTime" required></select></div>
+              <div class="field full"><label for="classDescription">Description / Purpose</label><textarea id="classDescription" maxlength="700" placeholder="Describe the class, meeting, expected use, setup needs, or other relevant information."></textarea></div>
+              <div class="field full"><div id="availabilityBox" class="availability">Choose a weekday, classroom, and time to check availability.</div></div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap">
+              <button type="button" class="btn" onclick="clearBookingForm()">Clear</button>
+              <button type="submit" class="btn gold">Submit for Approval</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Booking Rules</h3></div>
+        <div class="card-body">
+          <div class="availability">
+            <strong>Facility Hours</strong><br>Monday through Friday<br>7:00 AM to 7:00 PM<br><br>
+            <strong>Booking Categories</strong><br><span style="color:var(--internal);font-weight:800">Blue</span> = Internal classes your team teaches. <span style="color:var(--external);font-weight:800">Purple</span> = External organizations using the facility. <span style="color:var(--virtual);font-weight:800">Teal</span> = Virtual / online classes.<br><br>
+            <strong>Conflict Protection</strong><br>Physical-room requests are blocked if they overlap another pending or approved reservation for the same classroom. Virtual classes do not occupy a classroom.<br><br>
+            <strong>Approval Workflow</strong><br>Every request remains pending until the building manager approves it. Once approved, it automatically appears on the calendar in its category color.
+          </div>
+          <div class="divider"></div>
+          <h3 style="margin:0 0 10px;color:var(--navy);font-size:1rem">Today's Availability</h3>
+          <div id="todayAvailability" class="request-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-requests">
+    <div class="card">
+      <div class="card-head">
+        <h2>Reservation Requests</h2>
+        <div class="filters">
+          <select id="requestFilterStatus" onchange="renderRequests()"><option value="all">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option></select>
+          <select id="requestFilterRequester" onchange="renderRequests()"><option value="all">All Requesters</option></select>
+          <select id="requestFilterType" onchange="renderRequests()"><option value="all">All Categories</option><option value="internal">Internal</option><option value="external">External</option><option value="virtual">Virtual</option></select>
+          <input id="requestSearch" oninput="renderRequests()" placeholder="Search class or room" />
+        </div>
+      </div>
+      <div class="card-body"><div id="requestList" class="request-list"></div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-manager">
+    <div class="stats">
+      <div class="stat"><div class="k">Awaiting Approval</div><div class="v" id="mgrPending">0</div><div class="s">Needs manager review</div></div>
+      <div class="stat"><div class="k">Approved This Month</div><div class="v" id="mgrApproved">0</div><div class="s">Rooms + virtual classes</div></div>
+      <div class="stat"><div class="k">Denied</div><div class="v" id="mgrDenied">0</div><div class="s">All time</div></div>
+      <div class="stat"><div class="k">Total Requests</div><div class="v" id="mgrTotal">0</div><div class="s">All time</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Building Manager Approval Queue</h2><div class="filters"><select id="managerFilter" onchange="renderManagerQueue()"><option value="pending">Pending First</option><option value="all">All Requests</option><option value="approved">Approved</option><option value="denied">Denied</option></select><select id="managerTypeFilter" onchange="renderManagerQueue()"><option value="all">All Categories</option><option value="internal">Internal</option><option value="external">External</option><option value="virtual">Virtual</option></select></div></div>
+      <div class="card-body">
+        <div class="manager-note"><strong>Manager action:</strong> Review the requested category, date, location, time, class description, and requester. Selecting <em>Approve & Reserve</em> changes the request to Approved and immediately places it on the calendar. Denied requests do not occupy the room.</div>
+        <div style="height:12px"></div>
+        <div id="managerQueue" class="request-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-rooms">
+    <div class="card">
+      <div class="card-head"><h2>Classrooms</h2><button class="btn small" onclick="openSettings()">Edit Room Names</button></div>
+      <div class="card-body"><div id="roomGrid" class="room-grid"></div></div>
+    </div>
+  </section>
+
+  <footer>Classroom Booking Manager • Browser-based reservation workflow • Data saved locally in this browser</footer>
+</main>
+</div>
+
+<div class="modal-backdrop" id="detailModal" onclick="backdropClose(event,'detailModal')">
+  <div class="modal">
+    <div class="modal-head"><h3>Reservation Details</h3><button class="close" onclick="closeModal('detailModal')">×</button></div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-foot" id="detailFoot"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="settingsModal" onclick="backdropClose(event,'settingsModal')">
+  <div class="modal">
+    <div class="modal-head"><h3>Booking System Settings</h3><button class="close" onclick="closeModal('settingsModal')">×</button></div>
+    <div class="modal-body">
+      <div class="settings-grid">
+        <div class="field full"><label>Facility / System Name</label><input id="settingFacility" /></div>
+        <div class="field full"><label>Four Authorized Requesters</label><div class="help">These can be changed to the names or offices that are allowed to submit requests.</div></div>
+        <div class="field"><input id="req1" placeholder="Requester 1" /></div><div class="field"><input id="req2" placeholder="Requester 2" /></div>
+        <div class="field"><input id="req3" placeholder="Requester 3" /></div><div class="field"><input id="req4" placeholder="Requester 4" /></div>
+      </div>
+      <div class="divider"></div>
+      <label>Classroom Names / Room Numbers</label>
+      <div class="settings-grid" id="roomSettings" style="margin-top:9px"></div>
+      <div class="divider"></div>
+      <div class="manager-note">This standalone HTML does not provide secure user authentication. The manager tab is an interface workflow only. A shared production version should use authenticated accounts and a shared database.</div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('settingsModal')">Cancel</button><button class="btn primary" onclick="saveSettings()">Save Settings</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'classroom_booking_manager_v1';
+const SETTINGS_KEY = 'classroom_booking_settings_v1';
+let state = { view:'month', currentDate:new Date(), bookings:[] };
+let settings = {
+  facility:'Classroom Booking Manager',
+  requesters:['Requester 1','Requester 2','Requester 3','Requester 4'],
+  rooms:Array.from({length:10},(_,i)=>`Classroom ${i+1}`)
+};
+
+function load(){
+  try{ const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(Array.isArray(saved)) state.bookings=saved; }catch(e){}
+  state.bookings.forEach(b=>{ if(!b.type) b.type='internal'; if(b.type==='virtual') b.room=null; });
+  try{ const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)); if(s){settings=Object.assign({},settings,s);} }catch(e){}
+  settings.requesters = (settings.requesters||[]).slice(0,4); while(settings.requesters.length<4) settings.requesters.push(`Requester ${settings.requesters.length+1}`);
+  settings.rooms=(settings.rooms||[]).slice(0,10); while(settings.rooms.length<10) settings.rooms.push(`Classroom ${settings.rooms.length+1}`);
+}
+function save(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state.bookings)); }catch(e){ console.warn('Browser storage unavailable',e); } }
+function saveSettingsStorage(){ try{ localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings)); }catch(e){ console.warn('Browser storage unavailable',e); } }
+function pad(n){return String(n).padStart(2,'0')}
+function isoLocal(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function todayISO(){return isoLocal(new Date())}
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function formatDate(s,opts={weekday:'short',month:'short',day:'numeric',year:'numeric'}){return parseDate(s).toLocaleDateString(undefined,opts)}
+function minToTime(min){let h=Math.floor(min/60),m=min%60,amp=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${pad(m)} ${amp}`}
+function timeToMin(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+function formatTime(t){return minToTime(timeToMin(t))}
+function overlaps(aStart,aEnd,bStart,bEnd){return timeToMin(aStart)<timeToMin(bEnd)&&timeToMin(aEnd)>timeToMin(bStart)}
+function isWeekday(dateStr){const d=parseDate(dateStr).getDay();return d>=1&&d<=5}
+function uid(){return 'REQ-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,5).toUpperCase()}
+
+function bookingType(b){return ['internal','external','virtual'].includes(b.type)?b.type:'internal'}
+function typeLabel(b){return bookingType(b)==='internal'?'Internal Class':bookingType(b)==='external'?'External Facility':'Virtual / Online'}
+function typeBadge(b){return `<span class="type-badge type-${bookingType(b)}">${typeLabel(b)}</span>`}
+function bookingLocation(b){return bookingType(b)==='virtual'?(b.virtualPlatform?`Virtual • ${b.virtualPlatform}`:'Virtual / Online'):(settings.rooms[Number(b.room)]||'Classroom')}
+function eventClasses(b){return `${b.status} type-${bookingType(b)}`}
+
+function initSelects(){
+  const req=document.getElementById('requester'); const filter=document.getElementById('requestFilterRequester');
+  req.innerHTML=settings.requesters.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
+  filter.innerHTML='<option value="all">All Requesters</option>'+settings.requesters.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
+  document.getElementById('roomSelect').innerHTML=settings.rooms.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
+  let times=''; for(let m=420;m<=1140;m+=30) times+=`<option value="${pad(Math.floor(m/60))}:${pad(m%60)}">${minToTime(m)}</option>`;
+  document.getElementById('startTime').innerHTML=times; document.getElementById('endTime').innerHTML=times;
+  document.getElementById('startTime').value='08:00'; document.getElementById('endTime').value='09:00';
+  ['bookingDate','roomSelect','startTime','endTime'].forEach(id=>document.getElementById(id).addEventListener('change',checkAvailability));
+  toggleBookingFields();
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  if(tab==='calendar') renderCalendar();
+  if(tab==='request'){renderTodayAvailability();checkAvailability()}
+  if(tab==='requests') renderRequests();
+  if(tab==='manager') renderManagerQueue();
+  if(tab==='rooms') renderRooms();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setView(v){state.view=v; document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); renderCalendar()}
+function navigateCalendar(dir){
+  const d=new Date(state.currentDate);
+  if(state.view==='month') d.setMonth(d.getMonth()+dir);
+  else if(state.view==='week') d.setDate(d.getDate()+7*dir);
+  else d.setDate(d.getDate()+dir);
+  state.currentDate=d; renderCalendar();
+}
+function goToday(){state.currentDate=new Date();renderCalendar();switchTab('calendar')}
+
+function relevantBookings(dateStr){return state.bookings.filter(b=>b.date===dateStr && (b.status==='approved'||b.status==='pending')).sort((a,b)=>a.start.localeCompare(b.start))}
+function renderCalendar(){
+  updateStats();
+  const c=document.getElementById('calendarContainer');
+  if(state.view==='month') renderMonth(c); else if(state.view==='week') renderWeek(c); else renderDay(c);
+}
+function renderMonth(c){
+  const d=new Date(state.currentDate), y=d.getFullYear(), m=d.getMonth();
+  document.getElementById('dateTitle').textContent=d.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+  const first=new Date(y,m,1), start=new Date(y,m,1-first.getDay());
+  let html='<div class="month-wrap"><div class="month-header">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div>${x}</div>`).join('')+'</div><div class="month-grid">';
+  for(let i=0;i<42;i++){
+    const cd=new Date(start);cd.setDate(start.getDate()+i);const ds=isoLocal(cd);const weekend=[0,6].includes(cd.getDay());const other=cd.getMonth()!==m;const events=relevantBookings(ds);const isToday=ds===todayISO();
+    html+=`<div class="day-cell ${weekend?'weekend':''} ${other?'other-month':''}" ondblclick="quickRequest('${ds}')"><div class="day-number"><span class="${isToday?'today-badge':''}">${cd.getDate()}</span>${weekend?'<span class="closed-label">Closed</span>':''}</div>`;
+    events.slice(0,4).forEach(e=>html+=`<button class="event-chip ${eventClasses(e)}" onclick="showDetail('${e.id}')">${formatTime(e.start)} • ${esc(bookingLocation(e))} • ${esc(e.title)}</button>`);
+    if(events.length>4) html+=`<div class="more">+${events.length-4} more</div>`; html+='</div>';
+  }
+  html+='</div></div>'; c.innerHTML=html;
+}
+function startOfWeek(d){const x=new Date(d); const day=x.getDay(); const diff=(day===0?-6:1-day); x.setDate(x.getDate()+diff); x.setHours(0,0,0,0); return x}
+function renderWeek(c){
+  const monday=startOfWeek(state.currentDate);const friday=new Date(monday);friday.setDate(monday.getDate()+4);
+  document.getElementById('dateTitle').textContent=`${monday.toLocaleDateString(undefined,{month:'short',day:'numeric'})} – ${friday.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}`;
+  let html='<div class="week-scroll"><div class="week-grid"><div class="week-head"></div>';
+  const days=[];for(let i=0;i<5;i++){let d=new Date(monday);d.setDate(monday.getDate()+i);days.push(d);html+=`<div class="week-head">${d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</div>`}
+  for(let min=420;min<1140;min+=60){html+=`<div class="time-label">${minToTime(min)}</div>`;days.forEach(day=>{const ds=isoLocal(day);const ev=relevantBookings(ds).filter(e=>timeToMin(e.start)>=min&&timeToMin(e.start)<min+60);html+=`<div class="slot" ondblclick="quickRequest('${ds}','${pad(Math.floor(min/60))}:00')">`+ev.map(e=>`<div class="slot-event ${eventClasses(e)}" onclick="showDetail('${e.id}')"><b>${formatTime(e.start)}</b> ${esc(bookingLocation(e))}<br>${esc(e.title)}</div>`).join('')+'</div>'});}
+  html+='</div></div>';c.innerHTML=html;
+}
+function renderDay(c){
+  const d=new Date(state.currentDate),ds=isoLocal(d);document.getElementById('dateTitle').textContent=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  if([0,6].includes(d.getDay())){c.innerHTML='<div class="empty"><div class="big">🔒</div><b>Schedule closed</b><br>Class scheduling is available Monday through Friday.</div>';return}
+  let html='<div class="day-view-scroll"><div class="day-grid"><div class="room-head">Time</div>'+settings.rooms.map(r=>`<div class="room-head">${esc(r)}</div>`).join('')+'<div class="room-head" style="background:var(--virtual-bg);color:var(--virtual)">Virtual / Online</div>';
+  for(let min=420;min<1140;min+=60){
+    html+=`<div class="time-label">${minToTime(min)}</div>`;
+    settings.rooms.forEach((r,room)=>{
+      const ev=relevantBookings(ds).filter(e=>bookingType(e)!=='virtual'&&Number(e.room)===room&&timeToMin(e.start)>=min&&timeToMin(e.start)<min+60);
+      html+=`<div class="slot" ondblclick="quickRequest('${ds}','${pad(Math.floor(min/60))}:00',${room})">`+ev.map(e=>`<div class="slot-event ${eventClasses(e)}" onclick="showDetail('${e.id}')"><b>${formatTime(e.start)}–${formatTime(e.end)}</b><br>${esc(e.title)}</div>`).join('')+'</div>';
+    });
+    const virtualEv=relevantBookings(ds).filter(e=>bookingType(e)==='virtual'&&timeToMin(e.start)>=min&&timeToMin(e.start)<min+60);
+    html+=`<div class="slot" ondblclick="quickVirtualRequest('${ds}','${pad(Math.floor(min/60))}:00')">`+virtualEv.map(e=>`<div class="slot-event ${eventClasses(e)}" onclick="showDetail('${e.id}')"><b>${formatTime(e.start)}–${formatTime(e.end)}</b><br>${esc(e.title)}</div>`).join('')+'</div>';
+  }
+  html+='</div></div>';c.innerHTML=html;
+}
+
+function startPhysicalRequest(){switchTab('request');document.getElementById('bookingType').value='internal';toggleBookingFields();checkAvailability()}
+function startVirtualRequest(){switchTab('request');document.getElementById('bookingType').value='virtual';toggleBookingFields();checkAvailability()}
+function quickVirtualRequest(date,start){if(!isWeekday(date))return;startVirtualRequest();document.getElementById('bookingDate').value=date;if(start){document.getElementById('startTime').value=start;let em=timeToMin(start)+60;document.getElementById('endTime').value=`${pad(Math.floor(em/60))}:${pad(em%60)}`}checkAvailability()}
+function quickRequest(date,start,room){
+  if(!isWeekday(date)) return;
+  startPhysicalRequest();document.getElementById('bookingDate').value=date;
+  if(start){document.getElementById('startTime').value=start;let em=timeToMin(start)+60;document.getElementById('endTime').value=`${pad(Math.floor(em/60))}:${pad(em%60)}`}
+  if(room!==undefined)document.getElementById('roomSelect').value=room;checkAvailability();
+}
+function toggleBookingFields(){
+  const type=document.getElementById('bookingType')?.value||'internal';
+  const roomField=document.getElementById('roomField'),orgField=document.getElementById('organizationField'),virtualField=document.getElementById('virtualField'),room=document.getElementById('roomSelect');
+  if(roomField)roomField.classList.toggle('hidden',type==='virtual');
+  if(orgField)orgField.classList.toggle('hidden',type!=='external');
+  if(virtualField)virtualField.classList.toggle('hidden',type!=='virtual');
+  if(room){room.required=type!=='virtual';room.disabled=type==='virtual'}
+  const title=document.getElementById('requestFormTitle');if(title)title.textContent=type==='virtual'?'Virtual / Online Class Scheduling Request':type==='external'?'External Facility Reservation Request':'Internal Classroom Reservation Request';
+}
+
+function checkAvailability(){
+  const box=document.getElementById('availabilityBox'); const date=document.getElementById('bookingDate').value; const type=document.getElementById('bookingType').value; const room=Number(document.getElementById('roomSelect').value); const start=document.getElementById('startTime').value; const end=document.getElementById('endTime').value;
+  if(!date||!start||!end||(type!=='virtual'&&Number.isNaN(room))){box.className='availability';box.textContent=type==='virtual'?'Choose a weekday and time for the virtual class.':'Choose a weekday, classroom, and time to check availability.';return false}
+  if(!isWeekday(date)){box.className='availability bad';box.innerHTML='✕ Scheduling is limited to Monday through Friday.';return false}
+  if(timeToMin(start)<420||timeToMin(end)>1140||timeToMin(start)>=timeToMin(end)){box.className='availability bad';box.innerHTML='✕ Select a valid time between 7:00 AM and 7:00 PM. The end time must be after the start time.';return false}
+  if(type==='virtual'){box.className='availability good';box.innerHTML=`✓ <strong>Virtual / Online</strong> class can be scheduled on ${formatDate(date,{weekday:'long',month:'long',day:'numeric'})} from ${formatTime(start)} to ${formatTime(end)}. It does not occupy a physical classroom.`;return true}
+  const conflicts=state.bookings.filter(b=>bookingType(b)!=='virtual'&&b.date===date&&Number(b.room)===room&&b.status!=='denied'&&overlaps(start,end,b.start,b.end));
+  if(conflicts.length){box.className='availability bad';box.innerHTML=`✕ <strong>${esc(settings.rooms[room])} is not available</strong> during this time. It conflicts with ${conflicts.map(x=>`${formatTime(x.start)}–${formatTime(x.end)} (${x.status})`).join(', ')}.`;return false}
+  box.className='availability good';box.innerHTML=`✓ <strong>${esc(settings.rooms[room])} is available</strong> on ${formatDate(date,{weekday:'long',month:'long',day:'numeric'})} from ${formatTime(start)} to ${formatTime(end)}.`;return true
+}
+
+function submitRequest(e){
+  e.preventDefault(); if(!checkAvailability()){toast('Please correct the scheduling issue before submitting.');return}
+  const type=document.getElementById('bookingType').value;
+  const booking={
+    id:uid(), type, requester:Number(document.getElementById('requester').value), contact:document.getElementById('requesterEmail').value.trim(), title:document.getElementById('classTitle').value.trim(),
+    date:document.getElementById('bookingDate').value, room:type==='virtual'?null:Number(document.getElementById('roomSelect').value), start:document.getElementById('startTime').value, end:document.getElementById('endTime').value,
+    organization:type==='external'?document.getElementById('organization').value.trim():'', virtualPlatform:type==='virtual'?document.getElementById('virtualPlatform').value.trim():'',
+    description:document.getElementById('classDescription').value.trim(), status:'pending', created:new Date().toISOString(), decisionNote:''
+  };
+  state.bookings.push(booking);save();updateStats();renderTodayAvailability();showDetail(booking.id);toast(type==='virtual'?'Virtual class submitted for approval.':'Request submitted for building manager approval.');clearBookingForm(false);
+}
+function clearBookingForm(resetDate=true){document.getElementById('bookingForm').reset();document.getElementById('bookingType').value='internal';document.getElementById('startTime').value='08:00';document.getElementById('endTime').value='09:00';if(resetDate)document.getElementById('bookingDate').value=nextWeekdayISO(new Date());toggleBookingFields();checkAvailability()}
+
+function nextWeekdayISO(d){let x=new Date(d);x.setHours(0,0,0,0);while([0,6].includes(x.getDay()))x.setDate(x.getDate()+1);return isoLocal(x)}
+
+function statusBadge(b){return `<span class="badge ${b.status}">${b.status==='pending'?'Pending Approval':b.status}</span>`}
+function requestCard(b,manager=false){
+  const requester=settings.requesters[b.requester]||`Requester ${Number(b.requester)+1}`;
+  const extra=bookingType(b)==='external'&&b.organization?` • ${esc(b.organization)}`:bookingType(b)==='virtual'&&b.virtualPlatform?` • ${esc(b.virtualPlatform)}`:'';
+  return `<div class="request"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h4>${esc(b.title)}</h4>${typeBadge(b)}${statusBadge(b)}</div><p><b>${formatDate(b.date)}</b> • ${formatTime(b.start)}–${formatTime(b.end)} • <b>${esc(bookingLocation(b))}</b>${extra}</p><p>Requested by ${esc(requester)}${b.contact?` • ${esc(b.contact)}`:''} • ${esc(b.id)}</p>${b.description?`<p class="desc">${esc(b.description)}</p>`:''}${b.decisionNote?`<p class="desc"><b>Manager note:</b> ${esc(b.decisionNote)}</p>`:''}</div><div><div class="request-actions"><button class="btn small" onclick="showDetail('${b.id}')">Details</button>${manager&&b.status==='pending'?`<button class="btn small green" onclick="approveBooking('${b.id}')">Approve & Schedule</button><button class="btn small red" onclick="denyBooking('${b.id}')">Deny</button>`:''}${b.status==='approved'?`<button class="btn small" onclick="downloadICS('${b.id}')">.ics Calendar</button>`:''}</div></div></div>`
+}
+function renderRequests(){
+  const status=document.getElementById('requestFilterStatus').value, requester=document.getElementById('requestFilterRequester').value, type=document.getElementById('requestFilterType').value, q=document.getElementById('requestSearch').value.trim().toLowerCase();
+  let arr=[...state.bookings].sort(sortBookings).filter(b=>status==='all'||b.status===status).filter(b=>requester==='all'||String(b.requester)===requester).filter(b=>type==='all'||bookingType(b)===type).filter(b=>!q||[b.title,b.description,bookingLocation(b),b.organization,b.virtualPlatform,b.id].join(' ').toLowerCase().includes(q));
+  document.getElementById('requestList').innerHTML=arr.length?arr.map(b=>requestCard(b,false)).join(''):'<div class="empty"><div class="big">📭</div>No reservation requests match these filters.</div>';
+}
+function renderManagerQueue(){
+  updateStats();const filter=document.getElementById('managerFilter').value,type=document.getElementById('managerTypeFilter').value;let arr=[...state.bookings].sort((a,b)=>{if(filter==='pending'&&a.status!==b.status)return a.status==='pending'?-1:b.status==='pending'?1:0;return sortBookings(a,b)});if(filter!=='all'&&filter!=='pending')arr=arr.filter(b=>b.status===filter);if(type!=='all')arr=arr.filter(b=>bookingType(b)===type);
+  document.getElementById('managerQueue').innerHTML=arr.length?arr.map(b=>requestCard(b,true)).join(''):'<div class="empty"><div class="big">✓</div>No requests in this queue.</div>';
+}
+
+function sortBookings(a,b){return (a.date+a.start).localeCompare(b.date+b.start)}
+
+function approveBooking(id){
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;
+  const conflict=bookingType(b)==='virtual'?null:state.bookings.find(x=>x.id!==id&&bookingType(x)!=='virtual'&&x.status==='approved'&&x.date===b.date&&Number(x.room)===Number(b.room)&&overlaps(b.start,b.end,x.start,x.end));
+  if(conflict){toast('Cannot approve: another approved booking now conflicts with this request.');return}
+  b.status='approved';b.decisionDate=new Date().toISOString();b.decisionNote='Approved by Building Manager';save();closeModal('detailModal');renderManagerQueue();renderCalendar();renderRequests();toast(bookingType(b)==='virtual'?'Approved. The virtual class is now on the calendar.':'Approved. The classroom is now reserved on the calendar.');
+}
+function denyBooking(id){
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const note=prompt('Optional reason for denial:',''); if(note===null)return;b.status='denied';b.decisionDate=new Date().toISOString();b.decisionNote=note||'Denied by Building Manager';save();closeModal('detailModal');renderManagerQueue();renderCalendar();renderRequests();toast(bookingType(b)==='virtual'?'Virtual class request denied.':'Request denied. The room remains available.');
+}
+function deleteBooking(id){if(!confirm('Delete this request permanently?'))return;state.bookings=state.bookings.filter(x=>x.id!==id);save();closeModal('detailModal');renderCalendar();renderRequests();renderManagerQueue();toast('Request deleted.');}
+
+function showDetail(id){
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=settings.requesters[b.requester]||`Requester ${Number(b.requester)+1}`;
+  const extra=bookingType(b)==='external'?`<div class="key">Organization</div><div>${esc(b.organization||'—')}</div>`:bookingType(b)==='virtual'?`<div class="key">Platform / Link</div><div>${esc(b.virtualPlatform||'—')}</div>`:'';
+  document.getElementById('detailBody').innerHTML=`<div class="detail-grid"><div class="key">Category</div><div>${typeBadge(b)}</div><div class="key">Status</div><div>${statusBadge(b)}</div><div class="key">Request ID</div><div>${esc(b.id)}</div><div class="key">Requester</div><div>${esc(requester)}</div><div class="key">Contact</div><div>${esc(b.contact||'—')}</div><div class="key">Class / Event</div><div><strong>${esc(b.title)}</strong></div><div class="key">Date</div><div>${formatDate(b.date,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</div><div class="key">Time</div><div>${formatTime(b.start)} – ${formatTime(b.end)}</div><div class="key">Location</div><div><strong>${esc(bookingLocation(b))}</strong></div>${extra}<div class="key">Description</div><div>${esc(b.description||'—')}</div><div class="key">Submitted</div><div>${new Date(b.created).toLocaleString()}</div>${b.decisionNote?`<div class="key">Manager Note</div><div>${esc(b.decisionNote)}</div>`:''}</div>`;
+  document.getElementById('detailFoot').innerHTML=`<button class="btn" onclick="printRequest('${b.id}')">Print Request</button>${b.status==='approved'?`<button class="btn" onclick="downloadICS('${b.id}')">Download .ics</button>`:''}${b.status==='pending'?`<button class="btn red" onclick="denyBooking('${b.id}')">Deny</button><button class="btn green" onclick="approveBooking('${b.id}')">Approve & Schedule</button>`:''}<button class="btn" onclick="deleteBooking('${b.id}')">Delete</button><button class="btn primary" onclick="closeModal('detailModal')">Close</button>`;
+  openModal('detailModal');
+}
+
+function printRequest(id){
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=settings.requesters[b.requester]||'';const w=window.open('','_blank','width=800,height=700');w.document.write(`<!doctype html><html><head><title>${esc(b.id)}</title><style>body{font-family:Arial;padding:38px;color:#222}h1{color:#16324f}.line{border-bottom:1px solid #ddd;padding:9px 0}.label{font-weight:bold;color:#16324f}</style></head><body>
+<noscript><div style="padding:24px;font-family:Arial,sans-serif;background:#fff3cd;color:#664d03">This booking manager requires JavaScript. Please open it in Chrome, Edge, Firefox, or Safari with JavaScript enabled.</div></noscript><h1>Classroom / Class Scheduling Request</h1><div class="line"><span class="label">Request ID:</span> ${esc(b.id)}</div><div class="line"><span class="label">Category:</span> ${esc(typeLabel(b))}</div><div class="line"><span class="label">Status:</span> ${esc(b.status.toUpperCase())}</div><div class="line"><span class="label">Requester:</span> ${esc(requester)}</div><div class="line"><span class="label">Class/Event:</span> ${esc(b.title)}</div><div class="line"><span class="label">Date:</span> ${esc(formatDate(b.date))}</div><div class="line"><span class="label">Time:</span> ${esc(formatTime(b.start))} – ${esc(formatTime(b.end))}</div><div class="line"><span class="label">Location:</span> ${esc(bookingLocation(b))}</div>${bookingType(b)==='external'?`<div class="line"><span class="label">Organization:</span> ${esc(b.organization||'—')}</div>`:''}${bookingType(b)==='virtual'?`<div class="line"><span class="label">Platform / Link:</span> ${esc(b.virtualPlatform||'—')}</div>`:''}<div class="line"><span class="label">Description:</span> ${esc(b.description||'—')}</div><div class="line"><span class="label">Manager Note:</span> ${esc(b.decisionNote||'Pending')}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
+}
+
+function downloadICS(id){
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const date=b.date.split('-').join('');const start=b.start.replace(':','')+'00';const end=b.end.replace(':','')+'00';const clean=s=>String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Classroom Booking Manager//EN','BEGIN:VEVENT',`UID:${b.id}@classroom-booking`,`DTSTART:${date}T${start}`,`DTEND:${date}T${end}`,`SUMMARY:${clean(b.title)}`,`LOCATION:${clean(settings.rooms[b.room])}`,`DESCRIPTION:${clean(b.description)}\\nRequester: ${clean(settings.requesters[b.requester])}`,`STATUS:CONFIRMED`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${b.id}-${b.date}.ics`;a.click();URL.revokeObjectURL(url);
+}
+
+function renderTodayAvailability(){
+  const ds=nextWeekdayISO(new Date());const dayBookings=state.bookings.filter(b=>b.date===ds&&b.status!=='denied');
+  const roomsHtml=settings.rooms.map((room,i)=>{const n=dayBookings.filter(b=>bookingType(b)!=='virtual'&&Number(b.room)===i).length;return `<div class="request" style="grid-template-columns:1fr auto;padding:9px 11px"><div><strong style="color:var(--navy);font-size:.84rem">${esc(room)}</strong><p style="margin:2px 0">${formatDate(ds,{weekday:'short',month:'short',day:'numeric'})}</p></div><span class="badge ${n?'pending':'approved'}">${n?n+' scheduled':'Available'}</span></div>`}).join('');const vn=dayBookings.filter(b=>bookingType(b)==='virtual').length;const virtualHtml=`<div class="request" style="grid-template-columns:1fr auto;padding:9px 11px;background:var(--virtual-bg)"><div><strong style="color:var(--virtual);font-size:.84rem">Virtual / Online</strong><p style="margin:2px 0">Does not occupy a classroom</p></div><span class="type-badge type-virtual">${vn} scheduled</span></div>`;document.getElementById('todayAvailability').innerHTML=virtualHtml+roomsHtml;
+}
+function renderRooms(){document.getElementById('roomGrid').innerHTML=settings.rooms.map((r,i)=>`<div class="room-card"><strong>${esc(r)}</strong><span>Room ${i+1} of 10</span><span>Available weekdays, 7:00 AM–7:00 PM</span></div>`).join('')}
+function updateStats(){
+  const cm=state.currentDate.getMonth(),cy=state.currentDate.getFullYear();const isMonth=b=>{const d=parseDate(b.date);return d.getMonth()===cm&&d.getFullYear()===cy};
+  const approved=state.bookings.filter(b=>b.status==='approved'&&isMonth(b)).length,pending=state.bookings.filter(b=>b.status==='pending').length,denied=state.bookings.filter(b=>b.status==='denied').length;
+  document.getElementById('statApproved').textContent=approved;document.getElementById('statPending').textContent=pending;document.getElementById('statRooms').textContent=settings.rooms.length;
+  document.getElementById('mgrPending').textContent=pending;document.getElementById('mgrApproved').textContent=approved;document.getElementById('mgrDenied').textContent=denied;document.getElementById('mgrTotal').textContent=state.bookings.length;
+}
+
+function openSettings(){
+  document.getElementById('settingFacility').value=settings.facility;settings.requesters.forEach((x,i)=>document.getElementById('req'+(i+1)).value=x);
+  document.getElementById('roomSettings').innerHTML=settings.rooms.map((x,i)=>`<div class="field"><input id="roomSet${i}" value="${esc(x)}" placeholder="Classroom ${i+1}" /></div>`).join('');openModal('settingsModal');
+}
+function saveSettings(){
+  settings.facility=document.getElementById('settingFacility').value.trim()||'Classroom Booking Manager';settings.requesters=[1,2,3,4].map(i=>document.getElementById('req'+i).value.trim()||`Requester ${i}`);settings.rooms=settings.rooms.map((_,i)=>document.getElementById('roomSet'+i).value.trim()||`Classroom ${i+1}`);saveSettingsStorage();applySettings();closeModal('settingsModal');renderCalendar();renderRooms();renderRequests();renderManagerQueue();toast('Settings saved.');
+}
+function applySettings(){document.getElementById('facilityTitle').textContent=settings.facility;document.title=settings.facility;initSelects()}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id)}
+let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200)}
+
+load();applySettings();document.getElementById('bookingDate').min=todayISO();document.getElementById('bookingDate').value=nextWeekdayISO(new Date());toggleBookingFields();renderCalendar();renderTodayAvailability();renderRooms();updateStats();
+</script>
+</body>
+</html>
