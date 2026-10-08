@@ -226,8 +226,7 @@
         <div class="card-body">
           <form id="bookingForm" onsubmit="submitRequest(event)">
             <div class="form-grid">
-              <div class="field"><label for="requester">Requester</label><select id="requester" required></select></div>
-              <div class="field"><label for="requesterEmail">Email / Contact</label><input id="requesterEmail" type="text" placeholder="Optional contact information" /></div>
+              <div class="field"><label for="requesterName">Requester Name</label><input id="requesterName" type="text" required maxlength="120" autocomplete="name" placeholder="Your full name" /></div>\n              <div class="field"><label for="requesterEmail">Requester Email</label><input id="requesterEmail" type="email" required maxlength="180" autocomplete="email" placeholder="name@example.com" /></div>
               <div class="field full"><label for="classTitle">Class / Event Title</label><input id="classTitle" required maxlength="100" placeholder="Example: Supervisor Leadership Workshop" /></div>
               <div class="field"><label for="bookingType">Booking Category</label><select id="bookingType" required onchange="toggleBookingFields();checkAvailability()"><option value="internal">Internal Class — We Teach</option><option value="external">External Facility Booking</option><option value="virtual">Virtual / Online Class</option></select></div>
               <div class="field"><label for="bookingDate">Date</label><input id="bookingDate" type="date" required /></div>
@@ -270,7 +269,7 @@
         <h2>Reservation Requests</h2>
         <div class="filters">
           <select id="requestFilterStatus" onchange="renderRequests()"><option value="all">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option></select>
-          <select id="requestFilterRequester" onchange="renderRequests()"><option value="all">All Requesters</option></select>
+          
           <select id="requestFilterType" onchange="renderRequests()"><option value="all">All Categories</option><option value="internal">Internal</option><option value="external">External</option><option value="virtual">Virtual</option></select>
           <input id="requestSearch" oninput="renderRequests()" placeholder="Search class or room" />
         </div>
@@ -303,7 +302,7 @@
     </div>
   </section>
 
-  <footer>Classroom Booking Manager • Browser-based reservation workflow • Data saved locally in this browser</footer>
+  <footer>Classroom Booking Manager • Shared reservation and approval workflow</footer>
 </main>
 </div>
 
@@ -321,15 +320,12 @@
     <div class="modal-body">
       <div class="settings-grid">
         <div class="field full"><label>Facility / System Name</label><input id="settingFacility" /></div>
-        <div class="field full"><label>Four Authorized Requesters</label><div class="help">These can be changed to the names or offices that are allowed to submit requests.</div></div>
-        <div class="field"><input id="req1" placeholder="Requester 1" /></div><div class="field"><input id="req2" placeholder="Requester 2" /></div>
-        <div class="field"><input id="req3" placeholder="Requester 3" /></div><div class="field"><input id="req4" placeholder="Requester 4" /></div>
       </div>
       <div class="divider"></div>
       <label>Classroom Names / Room Numbers</label>
       <div class="settings-grid" id="roomSettings" style="margin-top:9px"></div>
       <div class="divider"></div>
-      <div class="manager-note">This standalone HTML does not provide secure user authentication. The manager tab is an interface workflow only. A shared production version should use authenticated accounts and a shared database.</div>
+      <div class="manager-note">Reservations are stored in the shared calendar. Requesters provide their name and email with each submission so the manager can identify and contact them.</div>
     </div>
     <div class="modal-foot"><button class="btn" onclick="closeModal('settingsModal')">Cancel</button><button class="btn primary" onclick="saveSettings()">Save Settings</button></div>
   </div>
@@ -344,7 +340,7 @@ const SETTINGS_KEY='classroom_booking_settings_v1';
 let roomRecords=[];
 let managerPin=sessionStorage.getItem('classroom_manager_pin')||'';
 let state = { view:'month', currentDate:new Date(), bookings:[] };
-let settings = {facility:'Classroom Booking Manager',requesters:['Requester 1','Requester 2','Requester 3','Requester 4'],rooms:Array.from({length:10},(_,i)=>`Classroom ${i+1}`)};
+let settings = {facility:'Classroom Booking Manager',rooms:Array.from({length:10},(_,i)=>`Classroom ${i+1}`)};
 async function api(path,options={}){
  const res=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...options,headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})}});
  const txt=await res.text(); if(!res.ok){let msg=txt;try{msg=JSON.parse(txt).message||txt}catch{} throw new Error(msg)} return txt?JSON.parse(txt):null;
@@ -360,14 +356,13 @@ async function load(){
   const events=await api('calendar_events?select=*&order=reservation_date.asc,start_time.asc');
   state.bookings=(events||[]).map(mapShared);
  }catch(e){console.error(e);toast('Could not connect to the shared calendar.');}
- try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY));if(s){settings.facility=s.facility||settings.facility;settings.requesters=s.requesters||settings.requesters;}}catch(e){}
- settings.requesters=(settings.requesters||[]).slice(0,4);while(settings.requesters.length<4)settings.requesters.push(`Requester ${settings.requesters.length+1}`);
+ try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY));if(s){settings.facility=s.facility||settings.facility;}}catch(e){}
 }
 async function refreshShared(){
  try{const events=await api('calendar_events?select=*&order=reservation_date.asc,start_time.asc');state.bookings=(events||[]).map(mapShared);renderCalendar();renderTodayAvailability();updateStats();}catch(e){console.error(e)}
 }
 function save(){}
-function saveSettingsStorage(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({facility:settings.facility,requesters:settings.requesters}));}catch(e){}}
+function saveSettingsStorage(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({facility:settings.facility}));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function isoLocal(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
 function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
@@ -388,9 +383,6 @@ function bookingLocation(b){return bookingType(b)==='virtual'?(b.virtualPlatform
 function eventClasses(b){return `${b.status} type-${bookingType(b)}`}
 
 function initSelects(){
-  const req=document.getElementById('requester'); const filter=document.getElementById('requestFilterRequester');
-  req.innerHTML=settings.requesters.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
-  filter.innerHTML='<option value="all">All Requesters</option>'+settings.requesters.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
   document.getElementById('roomSelect').innerHTML=settings.rooms.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');
   let times=''; for(let m=420;m<=1140;m+=30) times+=`<option value="${pad(Math.floor(m/60))}:${pad(m%60)}">${minToTime(m)}</option>`;
   document.getElementById('startTime').innerHTML=times; document.getElementById('endTime').innerHTML=times;
@@ -497,7 +489,7 @@ function checkAvailability(){
 async function submitRequest(e){
  e.preventDefault();if(!checkAvailability()){toast('Please correct the scheduling issue before submitting.');return}
  const type=document.getElementById('bookingType').value,ri=Number(document.getElementById('roomSelect').value);
- const payload={p_requester_name:settings.requesters[Number(document.getElementById('requester').value)]||'Requester',p_requester_email:document.getElementById('requesterEmail').value.trim()||null,p_title:document.getElementById('classTitle').value.trim(),p_description:document.getElementById('classDescription').value.trim()||null,p_booking_type:type,p_reservation_date:document.getElementById('bookingDate').value,p_start_time:document.getElementById('startTime').value,p_end_time:document.getElementById('endTime').value,p_room_id:type==='virtual'?null:(roomRecords[ri]?.id||null),p_external_organization:type==='external'?document.getElementById('organization').value.trim()||null:null,p_virtual_platform:type==='virtual'?document.getElementById('virtualPlatform').value.trim()||null:null};
+ const payload={p_requester_name:document.getElementById('requesterName').value.trim(),p_requester_email:document.getElementById('requesterEmail').value.trim(),p_title:document.getElementById('classTitle').value.trim(),p_description:document.getElementById('classDescription').value.trim()||null,p_booking_type:type,p_reservation_date:document.getElementById('bookingDate').value,p_start_time:document.getElementById('startTime').value,p_end_time:document.getElementById('endTime').value,p_room_id:type==='virtual'?null:(roomRecords[ri]?.id||null),p_external_organization:type==='external'?document.getElementById('organization').value.trim()||null:null,p_virtual_platform:type==='virtual'?document.getElementById('virtualPlatform').value.trim()||null:null};
  try{const id=await api('rpc/submit_booking_request',{method:'POST',body:JSON.stringify(payload)});localStorage.setItem('last_booking_request',String(id).replaceAll('"',''));toast('Request submitted for manager approval.');clearBookingForm(false);await refreshShared();switchTab('requests');await showRequestStatus(String(id).replaceAll('"',''));}catch(err){toast(err.message||'Request could not be submitted.');}
 }
 async function showRequestStatus(id){
@@ -509,13 +501,12 @@ function nextWeekdayISO(d){let x=new Date(d);x.setHours(0,0,0,0);while([0,6].inc
 
 function statusBadge(b){return `<span class="badge ${b.status}">${b.status==='pending'?'Pending Approval':b.status}</span>`}
 function requestCard(b,manager=false){
-  const requester=settings.requesters[b.requester]||`Requester ${Number(b.requester)+1}`;
+  const requester=b.requesterName||'Requester';
   const extra=bookingType(b)==='external'&&b.organization?` • ${esc(b.organization)}`:bookingType(b)==='virtual'&&b.virtualPlatform?` • ${esc(b.virtualPlatform)}`:'';
   return `<div class="request"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h4>${esc(b.title)}</h4>${typeBadge(b)}${statusBadge(b)}</div><p><b>${formatDate(b.date)}</b> • ${formatTime(b.start)}–${formatTime(b.end)} • <b>${esc(bookingLocation(b))}</b>${extra}</p><p>Requested by ${esc(requester)}${b.contact?` • ${esc(b.contact)}`:''} • ${esc(b.id)}</p>${b.description?`<p class="desc">${esc(b.description)}</p>`:''}${b.decisionNote?`<p class="desc"><b>Manager note:</b> ${esc(b.decisionNote)}</p>`:''}</div><div><div class="request-actions"><button class="btn small" onclick="showDetail('${b.id}')">Details</button>${manager&&b.status==='pending'?`<button class="btn small green" onclick="approveBooking('${b.id}')">Approve & Schedule</button><button class="btn small red" onclick="denyBooking('${b.id}')">Deny</button>`:''}${b.status==='approved'?`<button class="btn small" onclick="downloadICS('${b.id}')">.ics Calendar</button>`:''}</div></div></div>`
 }
 function renderRequests(){
-  const status=document.getElementById('requestFilterStatus').value, requester=document.getElementById('requestFilterRequester').value, type=document.getElementById('requestFilterType').value, q=document.getElementById('requestSearch').value.trim().toLowerCase();
-  let arr=[...state.bookings].sort(sortBookings).filter(b=>status==='all'||b.status===status).filter(b=>requester==='all'||String(b.requester)===requester).filter(b=>type==='all'||bookingType(b)===type).filter(b=>!q||[b.title,b.description,bookingLocation(b),b.organization,b.virtualPlatform,b.id].join(' ').toLowerCase().includes(q));
+  const status=document.getElementById('requestFilterStatus').value, type=document.getElementById('requestFilterType').value, q=document.getElementById('requestSearch').value.trim().toLowerCase();\n  let arr=[...state.bookings].sort(sortBookings).filter(b=>status==='all'||b.status===status).filter(b=>type==='all'||bookingType(b)===type).filter(b=>!q||[b.title,b.description,bookingLocation(b),b.organization,b.virtualPlatform,b.id].join(' ').toLowerCase().includes(q));
   document.getElementById('requestList').innerHTML=arr.length?arr.map(b=>requestCard(b,false)).join(''):'<div class="empty"><div class="big">📭</div>No reservation requests match these filters.</div>';
 }
 function renderManagerQueue(){
@@ -538,7 +529,7 @@ async function loadManagerRequests(){
 function deleteBooking(id){toast('Shared requests are retained for audit history.');}
 
 function showDetail(id){
-  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=settings.requesters[b.requester]||`Requester ${Number(b.requester)+1}`;
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=b.requesterName||'Requester';
   const extra=bookingType(b)==='external'?`<div class="key">Organization</div><div>${esc(b.organization||'—')}</div>`:bookingType(b)==='virtual'?`<div class="key">Platform / Link</div><div>${esc(b.virtualPlatform||'—')}</div>`:'';
   document.getElementById('detailBody').innerHTML=`<div class="detail-grid"><div class="key">Category</div><div>${typeBadge(b)}</div><div class="key">Status</div><div>${statusBadge(b)}</div><div class="key">Request ID</div><div>${esc(b.id)}</div><div class="key">Requester</div><div>${esc(requester)}</div><div class="key">Contact</div><div>${esc(b.contact||'—')}</div><div class="key">Class / Event</div><div><strong>${esc(b.title)}</strong></div><div class="key">Date</div><div>${formatDate(b.date,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</div><div class="key">Time</div><div>${formatTime(b.start)} – ${formatTime(b.end)}</div><div class="key">Location</div><div><strong>${esc(bookingLocation(b))}</strong></div>${extra}<div class="key">Description</div><div>${esc(b.description||'—')}</div><div class="key">Submitted</div><div>${new Date(b.created).toLocaleString()}</div>${b.decisionNote?`<div class="key">Manager Note</div><div>${esc(b.decisionNote)}</div>`:''}</div>`;
   document.getElementById('detailFoot').innerHTML=`<button class="btn" onclick="printRequest('${b.id}')">Print Request</button>${b.status==='approved'?`<button class="btn" onclick="downloadICS('${b.id}')">Download .ics</button>`:''}${b.status==='pending'?`<button class="btn red" onclick="denyBooking('${b.id}')">Deny</button><button class="btn green" onclick="approveBooking('${b.id}')">Approve & Schedule</button>`:''}<button class="btn" onclick="deleteBooking('${b.id}')">Delete</button><button class="btn primary" onclick="closeModal('detailModal')">Close</button>`;
@@ -546,7 +537,7 @@ function showDetail(id){
 }
 
 function printRequest(id){
-  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=settings.requesters[b.requester]||'';const w=window.open('','_blank','width=800,height=700');w.document.write(`<!doctype html><html><head><title>${esc(b.id)}</title><style>body{font-family:Arial;padding:38px;color:#222}h1{color:#16324f}.line{border-bottom:1px solid #ddd;padding:9px 0}.label{font-weight:bold;color:#16324f}</style></head><body>
+  const b=state.bookings.find(x=>x.id===id);if(!b)return;const requester=b.requesterName||'';const w=window.open('','_blank','width=800,height=700');w.document.write(`<!doctype html><html><head><title>${esc(b.id)}</title><style>body{font-family:Arial;padding:38px;color:#222}h1{color:#16324f}.line{border-bottom:1px solid #ddd;padding:9px 0}.label{font-weight:bold;color:#16324f}</style></head><body>
 <noscript><div style="padding:24px;font-family:Arial,sans-serif;background:#fff3cd;color:#664d03">This booking manager requires JavaScript. Please open it in Chrome, Edge, Firefox, or Safari with JavaScript enabled.</div></noscript><h1>Classroom / Class Scheduling Request</h1><div class="line"><span class="label">Request ID:</span> ${esc(b.id)}</div><div class="line"><span class="label">Category:</span> ${esc(typeLabel(b))}</div><div class="line"><span class="label">Status:</span> ${esc(b.status.toUpperCase())}</div><div class="line"><span class="label">Requester:</span> ${esc(requester)}</div><div class="line"><span class="label">Class/Event:</span> ${esc(b.title)}</div><div class="line"><span class="label">Date:</span> ${esc(formatDate(b.date))}</div><div class="line"><span class="label">Time:</span> ${esc(formatTime(b.start))} – ${esc(formatTime(b.end))}</div><div class="line"><span class="label">Location:</span> ${esc(bookingLocation(b))}</div>${bookingType(b)==='external'?`<div class="line"><span class="label">Organization:</span> ${esc(b.organization||'—')}</div>`:''}${bookingType(b)==='virtual'?`<div class="line"><span class="label">Platform / Link:</span> ${esc(b.virtualPlatform||'—')}</div>`:''}<div class="line"><span class="label">Description:</span> ${esc(b.description||'—')}</div><div class="line"><span class="label">Manager Note:</span> ${esc(b.decisionNote||'Pending')}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
 }
 
@@ -569,11 +560,11 @@ function updateStats(){
 }
 
 function openSettings(){
-  document.getElementById('settingFacility').value=settings.facility;settings.requesters.forEach((x,i)=>document.getElementById('req'+(i+1)).value=x);
+  document.getElementById('settingFacility').value=settings.facility;
   document.getElementById('roomSettings').innerHTML=settings.rooms.map((x,i)=>`<div class="field"><input id="roomSet${i}" value="${esc(x)}" placeholder="Classroom ${i+1}" /></div>`).join('');openModal('settingsModal');
 }
 function saveSettings(){
-  settings.facility=document.getElementById('settingFacility').value.trim()||'Classroom Booking Manager';settings.requesters=[1,2,3,4].map(i=>document.getElementById('req'+i).value.trim()||`Requester ${i}`);settings.rooms=settings.rooms.map((_,i)=>document.getElementById('roomSet'+i).value.trim()||`Classroom ${i+1}`);saveSettingsStorage();applySettings();closeModal('settingsModal');renderCalendar();renderRooms();renderRequests();renderManagerQueue();toast('Settings saved.');
+  settings.facility=document.getElementById('settingFacility').value.trim()||'Classroom Booking Manager';settings.rooms=settings.rooms.map((_,i)=>document.getElementById('roomSet'+i).value.trim()||`Classroom ${i+1}`);saveSettingsStorage();applySettings();closeModal('settingsModal');renderCalendar();renderRooms();renderRequests();renderManagerQueue();toast('Settings saved.');
 }
 function applySettings(){document.getElementById('facilityTitle').textContent=settings.facility;document.title=settings.facility;initSelects()}
 function openModal(id){document.getElementById(id).classList.add('open')}
