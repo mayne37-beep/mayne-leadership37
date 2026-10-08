@@ -62,3 +62,17 @@ body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
 .belief-big{font-size:clamp(45px,5.2vw,73px);font-weight:950;letter-spacing:-.075em;line-height:.96;margin:43px 0 22px}.belief-big span{display:block;color:#f1bf6d;font-family:Georgia,serif;font-style:italic;font-weight:500;font-size:.64em;letter-spacing:-.055em;margin-top:8px}
 .belief-rule{height:2px;background:linear-gradient(90deg,#f1bf6d,#ffffff20);margin-bottom:18px}.belief-lines{display:grid;gap:14px}.belief-lines div{display:flex;gap:14px;align-items:baseline}.belief-lines span{font-size:10px;font-weight:900;color:#f1bf6d}.belief-lines strong{font-size:14px;font-weight:620;line-height:1.4}.belief-signature{margin-top:auto;padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.16em;font-weight:850;color:#cfe2f4}.belief-signature span{color:#f1bf6d;font-size:23px}
 @media(max-width:780px){.belief-board{min-height:430px}.belief-big{font-size:clamp(47px,10vw,70px)}}@media(max-width:480px){.belief-board{padding:26px 24px;min-height:440px}.belief-big{font-size:52px}.belief-lines strong{font-size:13px}}
+
+/* Homepage Believe showcase — custom CSS illustration, no external imagery */
+.belief-showcase{min-height:460px;position:relative;overflow:hidden;border-radius:30px;background:radial-gradient(circle at 50% 40%,#f0f7ff 0,#d8e9f8 53%,#c4dbec 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 25px 30px;box-shadow:0 22px 60px #244c6e20;isolation:isolate}
+.belief-showcase:before{content:"";position:absolute;inset:17px;border:1px solid #ffffffa8;border-radius:22px;pointer-events:none}
+.believe-sign{position:relative;z-index:2;background:#f3cc44;color:#152f50;width:min(88%,420px);aspect-ratio:1.65;display:flex;align-items:center;justify-content:center;transform:rotate(-4deg);box-shadow:0 14px 2px -6px #9b7629,0 25px 32px #304b6852;clip-path:polygon(0 3%,98% 0,100% 98%,2% 100%);border:1px solid #e2b635}
+.believe-sign:before{content:"";position:absolute;inset:10px;border:2px solid #e7b93580;pointer-events:none}
+.believe-sign span{font-family:Arial,Helvetica,sans-serif;font-size:clamp(43px,5.5vw,80px);font-weight:950;letter-spacing:-.055em;line-height:1;text-shadow:1px 1px 0 #102b48}
+.belief-showcase-caption{position:relative;z-index:2;display:flex;gap:12px;align-items:flex-start;margin-top:48px;max-width:390px;color:#214567}
+.belief-showcase-caption strong{font:700 20px Georgia,serif}
+.belief-showcase-caption p{margin:7px 0 0;font-size:14px;line-height:1.5;color:#4b6780}
+.belief-caption-mark{color:#ba8625;font-size:26px;line-height:1}
+.belief-decor{position:absolute;border:1px solid #ffffffb0;border-radius:50%;width:420px;height:420px;z-index:0}
+.belief-decor-one{right:-270px;top:-270px}.belief-decor-two{left:-300px;bottom:-300px}
+@media(max-width:760px){.belief-showcase{min-height:390px;padding:36px 20px}.believe-sign{width:min(88%,350px)}.believe-sign span{font-size:clamp(42px,11vw,66px)}.belief-showcase-caption{margin-top:36px}}
