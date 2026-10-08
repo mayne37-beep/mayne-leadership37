@@ -204,13 +204,25 @@
             .btn-jump-float { padding: 4px 10px; font-size: 0.85em; }
         }
     </style>
-</head>
-<body data-active-tab="summary-tab">
+<style id="site-integration">
+/* Website visual integration — assessment logic/content intentionally unchanged */
+body{padding:0!important;background:#f5f9fc!important;color:#173958!important;font-family:system-ui,-apple-system,"Segoe UI",sans-serif!important}
+.site-head{background:#fff;border-bottom:1px solid #d9e5ee;position:relative;z-index:300}.site-head-inner{max-width:1180px;margin:auto;padding:10px 22px;display:flex;align-items:center;gap:24px}.site-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#102f4a;font-weight:800;letter-spacing:.02em}.site-brand img{width:48px;height:48px}.site-brand b{color:#b4872e}.site-nav{margin-left:auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap}.site-nav a{color:#31536d;text-decoration:none;font-size:14px;font-weight:650}.site-nav a[aria-current="page"]{color:#0f5f92}.site-nav .contact{background:#0d416b;color:#fff;padding:9px 13px;border-radius:9px}
+.assess-shell{max-width:1180px;margin:30px auto 0;padding:0 20px}.assess-hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#071b33,#0e426f 60%,#12689e);border-radius:25px;padding:36px 40px;color:#fff;box-shadow:0 16px 38px rgba(7,27,51,.16)}.assess-hero:after{content:"8";position:absolute;right:20px;bottom:-75px;font-size:190px;font-weight:900;color:rgba(255,255,255,.05)}.assess-kicker{color:#f2ca68;font-size:12px;font-weight:850;letter-spacing:.15em}.assess-hero h1{position:relative;text-align:left!important;color:#fff!important;font-size:clamp(32px,4.5vw,50px);line-height:1.05;margin:8px 0 10px!important;letter-spacing:-.035em}.assess-hero p{position:relative;max-width:760px;color:#fff;margin:0;line-height:1.6}.assess-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.assess-pill{background:#f7e4aa;color:#203b52;border:1px solid #efd486;border-radius:99px;padding:7px 10px;font-size:11px;font-weight:850}
+.container{max-width:1120px!important;margin:22px auto 60px!important;background:#fff!important;padding:28px!important;border-radius:20px!important;box-shadow:0 8px 28px rgba(23,57,88,.08)!important;border:1px solid #d5e3ed!important;border-top:1px solid #d5e3ed!important}
+.container>h1{display:none}.theme-toggle{top:24px!important;right:28px!important;background:#fff!important;color:#31536d!important;border-color:#c7d9e6!important}
+.tabs{top:0!important;background:#fff!important;border-bottom:1px solid #d5e3ed!important;padding:12px 0 0!important;margin:0 0 28px!important;gap:4px}.tab-btn{color:#60788c!important;border-radius:9px 9px 0 0!important}.tab-btn.active{color:#0f5f92!important;background:#edf6fb!important;border-bottom-color:#d3a743!important}
+.intro h2{color:#123b5c}.intro-subtext,.intro p{color:#60788c!important}.progress-wrapper{background:#f7fafc!important;border-color:#d5e3ed!important;box-shadow:0 5px 14px rgba(23,57,88,.06)!important}.progress-bar,.btn-submit{background:#145f91!important}.question-group{background:#f9fbfd!important;border:1px solid #dce7ef!important;border-left:4px solid #d3a743!important;border-radius:12px!important;box-shadow:none!important}.question-text{color:#173958!important}.options label{background:#fff!important;border-color:#d7e3ec!important;color:#4d687d!important}.options label:has(input[type="radio"]:checked){border-color:#145f91!important;background:#edf6fb!important;color:#0e5887!important;box-shadow:0 3px 10px rgba(20,95,145,.12)!important}.style-card,.summary-card,.type-card,.coaching-questions,.mbti-result-card{border-radius:13px!important;border-color:#d8e5ee!important;box-shadow:0 4px 14px rgba(23,57,88,.05)!important}.deep-dive-section{background:#f1f7fb!important;border-left-color:#d3a743!important;border-radius:14px!important}.deep-dive-section h3,.style-card h4{color:#145f91!important}.btn-reset,.btn-download-chart{border-color:#b8cedd!important;color:#31536d!important}.site-foot{max-width:1120px;margin:0 auto 40px;padding:0 22px;color:#71879a;font-size:13px}
+[data-theme="dark"] body,html[data-theme="dark"] body{background:#f5f9fc!important;color:#173958!important}[data-theme="dark"] .container,[data-theme="dark"] .tabs,[data-theme="dark"] .summary-card,[data-theme="dark"] .style-card,[data-theme="dark"] .type-card,[data-theme="dark"] .coaching-questions,[data-theme="dark"] .mbti-result-card{background:#fff!important;color:#173958!important}[data-theme="dark"] .question-group{background:#f9fbfd!important}[data-theme="dark"] .question-text,[data-theme="dark"] .deep-dive-section h4,[data-theme="dark"] .type-card p strong{color:#173958!important}[data-theme="dark"] .intro p,[data-theme="dark"] .deep-dive-section p,[data-theme="dark"] .type-card p,[data-theme="dark"] .coaching-questions ul{color:#60788c!important}
+@media(max-width:850px){.site-nav{display:none}.site-head-inner{justify-content:center}.assess-shell{margin-top:18px}.assess-hero{padding:28px 24px}.container{margin:16px 14px 40px!important;padding:18px!important}.theme-toggle{position:static!important;margin-bottom:14px!important}.tabs{top:0!important}}
+@media print{.site-head,.assess-shell,.site-foot{display:none!important}}
+</style></head>
+<body data-active-tab="summary-tab"><header class="site-head"><div class="site-head-inner"><a class="site-brand" href="index.html"><img src="assets/jm-leadership-logo.svg" alt=""><span>MAYNE <b>LEADERSHIP</b></span></a><nav class="site-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="learning.html">Learning</a><a href="assessments.html" aria-current="page">Assessments</a><a href="tools.html">Thinking Tools</a><a href="facilitation.html">Classroom Tools</a><a href="booking-demo.html">Classroom Calendar</a><a class="contact" href="contact.html">Get in touch ↗</a></nav></div></header><div class="assess-shell"><section class="assess-hero"><div class="assess-kicker">INDIVIDUAL ASSESSMENT STUDIO</div><h1>Build your leadership profile.</h1><p>Explore eight perspectives on how you think, learn, communicate, work, navigate conflict, and lead. Complete one assessment or build a comprehensive profile across all eight.</p><div class="assess-pills"><span class="assess-pill">8 ASSESSMENTS</span><span class="assess-pill">PRIVATE IN YOUR BROWSER</span><span class="assess-pill">SAVE & RETURN</span><span class="assess-pill">PRINTABLE RESULTS</span></div></section></div>
 
 <button id="backToTopBtn" onclick="scrollToTop()" title="Go to top">↑ Top</button>
 
 <div class="container">
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">Display</button>
     <h1>Leadership & Personality Dashboard</h1>
     
     <div class="tabs">
@@ -1817,5 +1829,5 @@
     });
 </script>
 
-</body>
+<div class="site-foot">These tools are intended for leadership development and self-reflection. Results should be used as prompts for learning rather than diagnostic or employment-selection measures.</div></body>
 </html>
