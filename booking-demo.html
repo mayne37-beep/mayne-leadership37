@@ -36,16 +36,20 @@
   button,input,select,textarea{font:inherit}
   button{cursor:pointer}
   .app{min-height:100vh}
-  header{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:white;padding:20px 28px;box-shadow:0 4px 18px rgba(18,47,74,.18);position:sticky;top:0;z-index:20}
+  .site-header{background:#fff;color:var(--navy);padding:9px 24px;border-bottom:1px solid var(--line);position:relative;z-index:30}
+  .site-header-inner{max-width:1500px;margin:auto;display:flex;align-items:center;gap:22px}
+  .site-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font-weight:900;letter-spacing:.02em}.site-brand img{width:48px;height:48px}.site-brand b{color:#a77c27}
+  .site-nav{margin-left:auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap}.site-nav a{color:#36566e;text-decoration:none;font-size:.86rem;font-weight:750}.site-nav a[aria-current="page"]{color:#0f6094}.site-nav .contact{background:var(--navy);color:#fff;padding:9px 13px;border-radius:9px}
+  .booking-hero{max-width:1500px;margin:24px auto 0;padding:0 26px}.booking-hero-inner{position:relative;overflow:hidden;background:linear-gradient(125deg,#071b33,#0e426f 60%,#12689e);border-radius:24px;padding:32px 36px;color:#fff;box-shadow:0 16px 38px rgba(7,27,51,.15)}.booking-hero-inner:after{content:"▦";position:absolute;right:32px;bottom:-74px;font-size:180px;color:rgba(255,255,255,.06)}.booking-kicker{color:#f3cf76;font-size:.72rem;font-weight:900;letter-spacing:.15em}.booking-hero h1{position:relative;margin:6px 0 5px;font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.025em}.booking-hero p{position:relative;margin:0;color:#fff}.booking-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.booking-pill{background:#f7e4aa;color:#203b52;border:1px solid #efd486;border-radius:99px;padding:6px 10px;font-size:.68rem;font-weight:900}
+  .booking-toolbar{max-width:1500px;margin:14px auto 0;padding:0 26px;display:flex;justify-content:flex-end}.booking-toolbar .header-actions{background:#fff;border:1px solid var(--line);border-radius:13px;padding:7px;box-shadow:var(--shadow)}
+  .top-btn{border:1px solid #c8d9e5!important;background:#fff!important;color:var(--navy)!important;padding:9px 13px;border-radius:9px;font-weight:800}.top-btn:hover{background:#f2f7fa!important}.top-btn.gold{background:var(--gold)!important;border-color:var(--gold)!important;color:#102942!important}
+  .top-btn.virtual-action{background:var(--virtual)!important;border-color:var(--virtual)!important;color:#fff!important}
   .header-row{max-width:1500px;margin:auto;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .brand{display:flex;gap:14px;align-items:center}
   .logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#ffeec2,var(--gold));color:var(--navy);font-size:25px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
   .brand h1{font-size:1.3rem;margin:0 0 3px;letter-spacing:.2px}
   .brand p{margin:0;color:#d9e9f5;font-size:.9rem}
   .header-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-  .top-btn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;padding:9px 13px;border-radius:10px;font-weight:700}
-  .top-btn:hover{background:rgba(255,255,255,.18)}
-  .top-btn.gold{background:var(--gold);border-color:var(--gold);color:#102942}
 
   main{max-width:1500px;margin:0 auto;padding:22px 26px 50px}
   .notice{background:#fff8e7;border:1px solid #ecd8a5;border-left:5px solid var(--gold);padding:12px 15px;border-radius:10px;margin-bottom:16px;font-size:.9rem;display:flex;gap:10px;align-items:flex-start}
@@ -162,30 +166,18 @@
   footer{text-align:center;color:#7f909d;font-size:.74rem;padding:22px 10px}
 
   @media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.room-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:650px){header{padding:16px}.brand p{display:none}main{padding:15px}.stats{grid-template-columns:1fr 1fr}.form-grid,.settings-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.room-grid{grid-template-columns:1fr}.month-header div{font-size:.65rem;padding:7px 2px}.day-cell{min-height:95px;padding:5px}.event-chip{font-size:.62rem}.request{grid-template-columns:1fr}.request-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.detail-grid .key{margin-top:7px}}
+  @media(max-width:900px){.site-nav{display:none}.site-header-inner{justify-content:center}.booking-toolbar{justify-content:center}}@media(max-width:650px){.site-header{padding:10px}.booking-hero{padding:0 15px;margin-top:15px}.booking-hero-inner{padding:26px 22px}.booking-toolbar{padding:0 15px}.booking-toolbar .header-actions{justify-content:center}.brand p{display:none}main{padding:15px}.stats{grid-template-columns:1fr 1fr}.form-grid,.settings-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.room-grid{grid-template-columns:1fr}.month-header div{font-size:.65rem;padding:7px 2px}.day-cell{min-height:95px;padding:5px}.event-chip{font-size:.62rem}.request{grid-template-columns:1fr}.request-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.detail-grid .key{margin-top:7px}}
 </style>
 </head>
 <body>
 <noscript><div style="padding:24px;font-family:Arial,sans-serif;background:#fff3cd;color:#664d03">This booking manager requires JavaScript. Please open it in Chrome, Edge, Firefox, or Safari with JavaScript enabled.</div></noscript>
 <div class="app">
-<header>
-  <div class="header-row">
-    <div class="brand">
-      <div class="logo">▦</div>
-      <div><h1 id="facilityTitle">Classroom Booking Manager</h1><p>Request, approve, and manage classroom reservations</p></div>
-    </div>
-    <div class="header-actions">
-      <button class="top-btn" onclick="goToday()">Today</button>
-      <button class="top-btn" onclick="openSettings()">⚙ Settings</button>
-      <button class="top-btn" style="background:var(--virtual);border-color:var(--virtual)" onclick="startVirtualRequest()">◉ Schedule Virtual</button>
-      <button class="top-btn gold" onclick="startPhysicalRequest()">+ Request a Room</button>
-    </div>
-  </div>
-</header>
+<header class="site-header"><div class="site-header-inner"><a class="site-brand" href="index.html" aria-label="Home"><img src="assets/jm-leadership-logo.svg" alt=""><span>MAYNE <b>LEADERSHIP</b></span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="learning.html">Learning</a><a href="assessments.html">Assessments</a><a href="tools.html">Thinking Tools</a><a href="facilitation.html">Classroom Tools</a><a href="booking-demo.html" aria-current="page">Classroom Calendar</a><a class="contact" href="contact.html">Get in touch ↗</a></nav></div></header>
+<section class="booking-hero"><div class="booking-hero-inner"><div class="booking-kicker">SHARED CLASSROOM CALENDAR</div><h1 id="facilityTitle">Classroom Booking Manager</h1><p>Request classrooms, review shared availability, schedule virtual sessions, and manage reservations from one calendar.</p><div class="booking-pills"><span class="booking-pill">SHARED CALENDAR</span><span class="booking-pill">10 CLASSROOMS</span><span class="booking-pill">REQUEST & APPROVAL WORKFLOW</span><span class="booking-pill">VIRTUAL SCHEDULING</span></div></div></section>
+<div class="booking-toolbar"><div class="header-actions"><button class="top-btn" onclick="goToday()">Today</button><button class="top-btn" onclick="openSettings()">⚙ Settings</button><button class="top-btn virtual-action" onclick="startVirtualRequest()">◉ Schedule Virtual</button><button class="top-btn gold" onclick="startPhysicalRequest()">+ Request a Room</button></div></div>
 
 <main>
-  <div class="notice"><span>ⓘ</span><div><strong>Standalone browser version:</strong> reservations are saved on this computer in the browser. It is fully functional for demonstration and single-computer use. For four requesters and a building manager using different computers, connect this interface to a shared database such as Supabase, SharePoint, or another approved internal data source.</div></div>
-
+  <div class="notice"><span>ⓘ</span><div><strong>Shared scheduling:</strong> classroom availability and reservation requests are connected to the shared calendar. Approved reservations are visible across devices, and requests are routed through the booking workflow.</div></div>\n
   <div class="tabs">
     <button class="tab active" data-tab="calendar" onclick="switchTab('calendar')">Calendar</button>
     <button class="tab" data-tab="request" onclick="switchTab('request')">Schedule / Request</button>
