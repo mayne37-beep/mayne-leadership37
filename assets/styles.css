@@ -52,3 +52,13 @@ body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
 .btn{border-radius:13px}.btn.secondary:hover,.btn.flat:hover{background:#edf5ff}
 @media(max-width:800px){.hero{padding-top:55px;padding-bottom:65px;gap:35px}.eyebrow{font-size:9px}.section{padding-top:60px;padding-bottom:60px}}
 @media(prefers-reduced-motion:reduce){.page-card,.btn{transition:none}}
+
+
+/* People-first homepage belief board */
+.belief-board{position:relative;overflow:hidden;min-height:480px;padding:30px 34px 26px;border-radius:28px;background:#194b7b;color:#fff;box-shadow:0 24px 58px #194b7b24;display:flex;flex-direction:column;isolation:isolate}
+.belief-board:before{content:"";position:absolute;width:360px;height:360px;right:-185px;top:-185px;border:65px solid #ffffff10;border-radius:50%;z-index:-1}
+.belief-board:after{content:"";position:absolute;width:220px;height:220px;left:-160px;bottom:-130px;border:35px solid #f2bb6422;border-radius:50%;z-index:-1}
+.belief-stamp{display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.19em;font-weight:850;color:#d8eafa}.belief-stamp span{font-size:24px;color:#efbd69}
+.belief-big{font-size:clamp(45px,5.2vw,73px);font-weight:950;letter-spacing:-.075em;line-height:.96;margin:43px 0 22px}.belief-big span{display:block;color:#f1bf6d;font-family:Georgia,serif;font-style:italic;font-weight:500;font-size:.64em;letter-spacing:-.055em;margin-top:8px}
+.belief-rule{height:2px;background:linear-gradient(90deg,#f1bf6d,#ffffff20);margin-bottom:18px}.belief-lines{display:grid;gap:14px}.belief-lines div{display:flex;gap:14px;align-items:baseline}.belief-lines span{font-size:10px;font-weight:900;color:#f1bf6d}.belief-lines strong{font-size:14px;font-weight:620;line-height:1.4}.belief-signature{margin-top:auto;padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.16em;font-weight:850;color:#cfe2f4}.belief-signature span{color:#f1bf6d;font-size:23px}
+@media(max-width:780px){.belief-board{min-height:430px}.belief-big{font-size:clamp(47px,10vw,70px)}}@media(max-width:480px){.belief-board{padding:26px 24px;min-height:440px}.belief-big{font-size:52px}.belief-lines strong{font-size:13px}}
