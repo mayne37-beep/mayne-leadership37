@@ -323,7 +323,7 @@ function restore(){
  if(state.boundaryChecked){document.getElementById('boundaryContinue').disabled=false;document.getElementById('boundaryFeedback').classList.add('show')}
  if(state.stockUsed.length>=3)document.getElementById('stocksContinue').disabled=false;
  if(state.trendChoice!==null)document.getElementById('trendContinue').disabled=false;
- state.snapshotSeen.forEach(k=>{const el=document.querySelector('[data-snap="'+k+'"]');if(el)el.classList.add('on')});
+ state.snapshotSeen.forEach(k=>{const el=document.querySelector('[data-snap="'+k+'"]');if(el)el.classList.add('on')});if(state.snapshotSeen.length===2)document.getElementById('snapshotContinue').disabled=false;state.loopsSeen.forEach(k=>{const el=document.querySelector('[data-loop="'+k+'"]');if(el)el.classList.add('on')});if(state.loopsSeen.length===2)document.getElementById('loopsContinue').disabled=false;
  if(state.pressureRun)document.getElementById('pressureContinue').disabled=false;
  if(state.fixSeen){document.getElementById('fixFeedback').classList.add('show');document.getElementById('fixContinue').disabled=false}
  if(state.leverageChecked){document.getElementById('leverageContinue').disabled=false;document.getElementById('leverageFeedback').classList.add('show')}
