@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f9fd"><meta name="robots" content="noindex,nofollow">
+<title>Access Mayne Leadership</title>
+<style>
+:root{color-scheme:light;--ink:#173553;--blue:#2767a4;--gold:#d8a649;--line:#d8e5f0}
+*{box-sizing:border-box}html,body{min-height:100%;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at 12% 14%,#e4f0fc 0%,transparent 50%),radial-gradient(ellipse at 90% 83%,#fff0ca 0%,transparent 40%),#f7fafc;color:var(--ink);display:grid;place-items:center;padding:25px}
+.card{width:min(100%,450px);background:white;border:1px solid var(--line);border-top:5px solid var(--gold);border-radius:22px;padding:clamp(25px,6vw,42px);box-shadow:0 20px 55px #16395716;text-align:center}
+.logo{width:74px;height:74px;object-fit:contain;margin:0 auto 18px;display:block}
+.kicker{font-size:11px;color:#7c622c;letter-spacing:.16em;font-weight:850;margin-bottom:10px}
+h1{font-size:clamp(26px,5vw,34px);letter-spacing:-.03em;margin:0 0 11px}
+p{color:#596f82;line-height:1.5;margin:0 0 26px}
+label{font-size:13px;font-weight:750;display:block;text-align:left;margin:0 0 9px}
+input{font:700 21px/1.4 system-ui;letter-spacing:.22em;width:100%;padding:15px;text-align:center;border:1.5px solid #bfcfdd;border-radius:12px;color:var(--ink);background:#fff}
+input:focus{outline:3px solid #9abde4;border-color:var(--blue)}
+button{cursor:pointer;border:0;border-radius:12px;background:var(--blue);color:white;padding:15px 18px;font-size:16px;font-weight:800;width:100%;margin-top:15px}
+button:hover{background:#164a7c}
+.note{margin:24px 0 0;font-size:12px;color:#73879b}
+.error{display:none;background:#fff1ee;border:1px solid #eac0bb;color:#933b31;border-radius:10px;padding:11px;font-weight:700;margin-bottom:17px}
+</style></head>
+<body><main class="card">
+<img class="logo" src="/assets/jm-leadership-logo.svg" alt="Mayne Leadership logo" width="74" height="74">
+<div class="kicker">PRIVATE ACCESS</div>
+<h1>Welcome to Mayne Leadership</h1>
+<p>Enter your shared access PIN to continue to the website.</p>
+<div class="error" id="error" role="alert">That PIN wasn’t recognized. Please try again.</div>
+<form method="post" action="">
+<label for="pin">8-digit access PIN</label>
+<input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" autocomplete="off" placeholder="••••••••" required autofocus>
+<button type="submit">Unlock website →</button>
+</form>
+<p class="note">Authorized visitors only · Access is remembered for 7 days on this browser.</p>
+</main>
+<script>
+if(new URLSearchParams(location.search).has('error'))document.getElementById('error').style.display='block';
+</script>
+</body></html>
