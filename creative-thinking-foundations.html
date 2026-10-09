@@ -576,7 +576,7 @@ function renderTournament(){
  document.getElementById('tournamentCount').textContent=state.finalists.length+' of 3 finalists selected';const done=state.finalists.length===3;document.getElementById('tournamentContinue').disabled=!done;document.getElementById('tournamentFeedback').classList.toggle('show',done)
 }
 renderTournament();
-document.getElementById('tournamentContinue').onclick=()=>go('winner');
+document.getElementById('tournamentContinue').onclick=()=>{renderWinner();go('winner')};
 
 function renderWinner(){
  const g=document.getElementById('winnerGrid');const clean=state.ideas.map(x=>x.trim());
