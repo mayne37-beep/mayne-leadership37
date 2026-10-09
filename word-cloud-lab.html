@@ -42,7 +42,7 @@ function draw(){
  if(hidden){
   cloud.innerHTML='<div class="emptycloud" style="display:grid;place-items:center;color:'+(dark?'#dceafa':'#8293a3')+'">Results hidden — responses are still being collected.</div>';
  }else if(!words.length){
-  cloud.innerHTML='<div class="emptycloud" style="display:grid;place-items:center;color:'+(dark?'#dceafa':'#8293a3')+'">Waiting for responses…</div>';
+  cloud.replaceChildren();
  }else if(mode==='top'){
   cloud.innerHTML='<div style="width:min(100%,720px);display:grid;align-content:center;gap:10px;min-height:340px">'+words.slice(0,10).map((x,i)=>'<div style="display:flex;align-items:center;gap:12px;color:'+pal[i%pal.length]+'"><b style="font-size:'+Math.max(18,34-i*1.5)+'px;overflow-wrap:anywhere">'+safe(x.w)+'</b><span style="margin-left:auto;font-weight:900">'+x.n+'</span></div>').join('')+'</div>';
  }else{
