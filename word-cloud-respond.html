@@ -13,7 +13,7 @@ fieldset#studentFields{border:0;padding:0;margin:0;min-width:0}.entry-inputs{dis
 
 .ranking-input{counter-reset:rank}.ranking-input li{counter-increment:rank}.ranking-input li::before{content:counter(rank);font-size:13px;font-weight:600;color:#766b93;min-width:16px;text-align:center}.pin-input:focus-visible{outline:3px solid #a5a0ee;outline-offset:3px}.scale-ends span{overflow-wrap:anywhere}
 
-</style>
+.student-countdown{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f2f1fc;border:1px solid #dedbee;border-radius:12px;padding:12px 16px;margin:18px 0 23px;color:#5556b6}.student-countdown[hidden]{display:none}.student-countdown>span{font-size:13px;font-weight:500}.student-countdown>b{font-size:27px;font-variant-numeric:tabular-nums;line-height:1.2;letter-spacing:.04em}.student-countdown.finished{background:#fff5eb;border-color:#f1d7bf;color:#965423}</style>
 </head>
 <body>
 <a class="brand" href="index.html" aria-label="Mayne Leadership homepage"><img src="assets/jm-leadership-logo.svg" alt=""><span>MAYNE<b>LEADERSHIP</b></span></a>
@@ -27,7 +27,7 @@ fieldset#studentFields{border:0;padding:0;margin:0;min-width:0}.entry-inputs{dis
 <p id="instructions" class="session-instructions" hidden></p>
 <div id="notice" class="notice hidden" role="status"><strong id="noticeTitle"></strong><p id="noticeText"></p></div>
 <p id="remaining" class="remaining"></p>
-<form id="responseForm"><fieldset id="studentFields"><div id="inputs"></div></fieldset><button id="submitButton" class="button" type="submit">Submit responses</button></form>
+<div id="studentCountdown" class="student-countdown" hidden><span id="studentCountdownState">Time remaining</span><b id="studentCountdownValue">00:00</b></div><form id="responseForm"><fieldset id="studentFields"><div id="inputs"></div></fieldset><button id="submitButton" class="button" type="submit">Submit responses</button></form>
 <button id="refreshButton" class="button secondary hidden" type="button">Check session again</button>
 </section>
 <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -43,10 +43,11 @@ const ClassroomCore=(()=>{
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const uid=()=>crypto.randomUUID(),num=(v,lo,hi,fallback)=>Number.isFinite(Number(v))?Math.max(lo,Math.min(hi,Number(v))):fallback;
   const item=()=>({id:uid(),label:''});
-  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true};}
+  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true,timerDuration:120,timerAutoClose:false,timerShow:true};}
   function fields(raw){
     const s=defaults();if(Object.hasOwn(types,raw.type))s.type=raw.type;
-    for(const k of ['multiple','percentages','showAverage'])if(typeof raw[k]==='boolean')s[k]=raw[k];
+    for(const k of ['multiple','percentages','showAverage','timerAutoClose','timerShow'])if(typeof raw[k]==='boolean')s[k]=raw[k];
+    s.timerDuration=Math.round(num(raw.timerDuration,1,31536000,120));
     if(['bars','doughnut'].includes(raw.chart))s.chart=raw.chart;if(s.multiple)s.chart='bars';
     for(const k of ['scaleLow','scaleHigh','xLabel','yLabel','xLow','xHigh','yLow','yHigh'])if(typeof raw[k]==='string')s[k]=raw[k].slice(0,80);
     for(const k of ['choices','statements'])if(Array.isArray(raw[k])){const seen=new Set();s[k]=raw[k].slice(0,10).map(x=>{let id=typeof x?.id==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&!['__proto__','constructor','prototype'].includes(x.id)&&!seen.has(x.id)?x.id:uid();seen.add(id);return{id,label:String(x?.label||'').slice(0,160)};});if(!s[k].length)s[k]=[item()];}
@@ -166,6 +167,33 @@ const ClassroomCore=(()=>{
 })();
 
 </script>
+<script id="classroom-countdown-core">
+'use strict';
+const CountdownCore=(()=>{
+  const MAX=31536000;
+  function duration(hours,minutes,seconds){const values=[hours,minutes,seconds].map(v=>v===''?0:Number(v));if(values.some(v=>!Number.isSafeInteger(v)||v<0))throw Error('Enter whole, nonnegative hours, minutes, and seconds.');const total=values[0]*3600+values[1]*60+values[2];if(!Number.isSafeInteger(total)||total<1||total>MAX)throw Error('Enter a duration between 1 second and 8,760 hours.');return total;}
+  function parts(seconds){const n=Math.max(0,Math.round(Number(seconds)||0));return{hours:Math.floor(n/3600),minutes:Math.floor(n%3600/60),seconds:n%60};}
+  function format(seconds){const p=parts(seconds),pad=n=>String(n).padStart(2,'0');return p.hours?p.hours+':'+pad(p.minutes)+':'+pad(p.seconds):pad(p.minutes)+':'+pad(p.seconds);}
+  function remaining(timer,now=Date.now()){if(!timer)return 0;if(timer.state==='running'&&Number.isFinite(Date.parse(timer.deadline)))return Math.max(0,Math.ceil((Date.parse(timer.deadline)-now)/1000));return Math.max(0,Math.ceil(Number(timer.remaining)||0));}
+  function phase(timer,now=Date.now()){return timer?.state==='running'&&!remaining(timer,now)?'finished':timer?.state||'idle';}
+  function closed(timer,now=Date.now()){return Boolean(timer?.auto_close&&phase(timer,now)==='finished');}
+  function reduce(timer,action,options={},now=Date.now()){
+    const durationSeconds=Number(options.duration??timer?.duration??120);if(!Number.isSafeInteger(durationSeconds)||durationSeconds<1||durationSeconds>MAX)throw Error('Enter a valid countdown duration.');
+    const t={state:'idle',duration:durationSeconds,remaining:durationSeconds,deadline:null,auto_close:false,show:true,...timer,duration:durationSeconds};
+    if(options.autoClose!==undefined)t.auto_close=Boolean(options.autoClose);if(options.show!==undefined)t.show=Boolean(options.show);
+    const left=remaining(t,now),state=phase(t,now);
+    if(action==='start'&&state!=='running'){const n=state==='paused'&&left>0?left:t.duration;t.state='running';t.remaining=n;t.deadline=new Date(now+n*1000).toISOString();}
+    else if(action==='pause'){t.state=left>0?'paused':'finished';t.remaining=left;t.deadline=null;}
+    else if(action==='reset'){t.state='idle';t.remaining=t.duration;t.deadline=null;}
+    else if(action==='extend'){const add=Number(options.add);if(!Number.isSafeInteger(add)||add<1||add>MAX||left+add>MAX)throw Error('Enter a valid amount of time to add.');t.remaining=left+add;if(state==='running'||state==='finished'){t.state='running';t.deadline=new Date(now+t.remaining*1000).toISOString();}else{t.state=state;t.deadline=null;}}
+    else if(action==='configure'){if(state==='idle')t.remaining=t.duration;}
+    else if(!['start','pause','reset','extend','configure'].includes(action))throw Error('Unknown countdown control.');
+    return t;
+  }
+  return Object.freeze({MAX,duration,parts,format,remaining,phase,closed,reduce});
+})();
+
+</script>
 <script id="classroom-response-student">
 'use strict';
 (()=>{
@@ -174,7 +202,7 @@ const randomToken=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b
 let identity,legacyParticipant;
 try{identity=JSON.parse(localStorage.getItem('mayne-classroom-participant:v1')||'null');if(!identity||!/^[\da-f-]{36}$/.test(identity.id)||!/^[a-f0-9]{64}$/.test(identity.token)){identity={id:crypto.randomUUID(),token:randomToken()};localStorage.setItem('mayne-classroom-participant:v1',JSON.stringify(identity));}}catch{identity={id:crypto.randomUUID(),token:randomToken()};}
 try{legacyParticipant=localStorage.getItem('mayne-word-cloud-participant:v1');if(!/^[\da-f-]{36}$/.test(legacyParticipant||'')){legacyParticipant=crypto.randomUUID();localStorage.setItem('mayne-word-cloud-participant:v1',legacyParticipant);}}catch{legacyParticipant=crypto.randomUUID();}
-let session=null,currentSlide=null,code='',connecting=false,submitting=false,lastFormKey='',pending=null,generation=0;
+let session=null,currentSlide=null,code='',connecting=false,submitting=false,lastFormKey='',pending=null,generation=0,serverOffset=0,lastTimerClosed=false;
 try{pending=JSON.parse(sessionStorage.getItem('mayne-classroom-pending:v1')||sessionStorage.getItem('mayne-word-cloud-pending:v1')||'null');}catch{}
 function savePending(){try{if(pending)sessionStorage.setItem('mayne-classroom-pending:v1',JSON.stringify(pending));else sessionStorage.removeItem('mayne-classroom-pending:v1');sessionStorage.removeItem('mayne-word-cloud-pending:v1');}catch{}}
 function equalAnswer(a,b){const ordered=v=>Array.isArray(v)?v.map(ordered):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,ordered(v[k])])):v;return JSON.stringify(ordered(a))===JSON.stringify(ordered(b));}
@@ -184,21 +212,24 @@ async function api(name,body){const c=new AbortController(),t=setTimeout(()=>c.a
 function draftAnswer(s){const form=$('responseForm');if(!s)return{};if(s.type==='wordcloud')return{words:[...form.querySelectorAll('.response-input')].map(x=>x.value)};if(s.type==='poll')return{choice_ids:[...form.querySelectorAll('[name="choice"]:checked')].map(x=>x.value)};if(s.type==='open')return{text:form.querySelector('[name="text"]')?.value||''};if(s.type==='scale'){const ratings={};for(const st of s.statements){const el=form.querySelector(`[name="rating_${st.id}"]:checked`);if(el)ratings[st.id]=Number(el.value);}return{ratings};}if(s.type==='ranking')return{order:[...form.querySelectorAll('.ranking-input li')].map(x=>x.dataset.choiceId)};if(s.type==='pin'){const x=form.querySelector('[name="pinX"]')?.value,y=form.querySelector('[name="pinY"]')?.value;return x!==''&&y!==''&&x!==undefined&&y!==undefined?{x:Number(x),y:Number(y)}:{};}return{x:Number(form.querySelector('[name="x"]')?.value),y:Number(form.querySelector('[name="y"]')?.value)};}
 function common(next){$('joinForm').hidden=true;$('responseArea').hidden=false;$('sessionLine').classList.remove('hidden');$('codeDisplay').textContent=next.code.slice(0,3)+' '+next.code.slice(3);$('changeSession').disabled=submitting;}
 function renderClassroom(next){
+ if(next!==session&&Number.isFinite(Date.parse(next.server_now)))serverOffset=Date.parse(next.server_now)-Date.now();
  const prior=session,oldSlide=currentSlide,same=prior?.id===next.id&&prior.active_slide_id===next.active_slide_id&&prior.epoch===next.epoch;
  if(next.slide)currentSlide={...ClassroomCore.defaults(),...next.slide};if(!currentSlide)return;
  const s=currentSlide;session=next;common(next);$('question').textContent=s.question||'Your teacher is preparing this question';$('questionType').textContent=ClassroomCore.types[s.type];$('instructions').textContent=s.info||'';$('instructions').hidden=!s.info;
  const shape={...ClassroomCore.config(s)};delete shape.question;delete shape.info;delete shape.accepting;
  const key=JSON.stringify([next.id,next.active_slide_id,next.epoch,shape]);
  if(key!==lastFormKey){const answer=same?draftAnswer(oldSlide):pending?.code===code&&pending.slide_id===next.active_slide_id&&pending.epoch===next.epoch?pending.answer:next.my_answer||{};$('inputs').innerHTML=ClassroomCore.formFields(s,answer);lastFormKey=key;ClassroomCore.refreshForms(document);if(prior&&!same){pending=null;savePending();status(prior.active_slide_id===next.active_slide_id?'Your teacher cleared this question. You can respond again.':'New question. Your previous answer is saved.');}}
- const open=next.status==='open'&&next.ready,ended=['ended','expired'].includes(next.status);$('responseForm').hidden=ended||!next.ready;$('studentFields').disabled=!open||submitting;$('submitButton').disabled=!open||submitting;$('submitButton').textContent=submitting?'Sending…':next.my_answer?'Update response':'Submit response';$('refreshButton').classList.toggle('hidden',open);$('remaining').hidden=s.type!=='wordcloud'||ended||!next.ready;$('remaining').textContent=`Enter up to ${s.responseLimit} words or phrases. Blank boxes are skipped.`;
+ const timedOut=CountdownCore.closed(next.timer,Date.now()+serverOffset),open=next.status==='open'&&next.ready&&!timedOut,ended=['ended','expired'].includes(next.status);lastTimerClosed=timedOut;$('responseForm').hidden=ended||!next.ready;$('studentFields').disabled=!open||submitting;$('submitButton').disabled=!open||submitting;$('submitButton').textContent=submitting?'Sending…':next.my_answer?'Update response':'Submit response';$('refreshButton').classList.toggle('hidden',open);$('remaining').hidden=s.type!=='wordcloud'||ended||!next.ready;$('remaining').textContent=`Enter up to ${s.responseLimit} words or phrases. Blank boxes are skipped.`;paintStudentTimer();
  if(ended)notice('This session has ended.','Your answers have been saved. Ask your teacher for a new link to join another session.');
  else if(!next.ready)notice('Your teacher is preparing this question.','Keep this page open. The question will appear here when it is ready.');
+ else if(timedOut)notice('Time is up.','Responses for this question are closed. Your draft stays here if your teacher adds more time.');
  else if(!open)notice('Responses are paused.','Keep this page open. Your draft stays here while you wait for your teacher to resume.');
  else if(next.my_answer)notice('Thank you! Your response is saved.','You can update your answer below. Keep this page open for the next question.',true);
  else $('notice').classList.add('hidden');
  if(pending?.code===code&&pending.slide_id===next.active_slide_id&&pending.epoch===next.epoch&&equalAnswer(pending.answer,next.my_answer)){pending=null;savePending();status('Thank you. Your response was received.');}
 }
 function renderLegacy(next){
+ $('studentCountdown').hidden=true;
  const oldEpoch=session?.epoch;session=next;currentSlide=null;common(next);$('question').textContent=next.question;$('questionType').textContent='Word cloud';$('instructions').textContent=next.info||'';$('instructions').hidden=!next.info;
  const remaining=Math.max(0,next.response_limit-next.used),key=[next.id,next.epoch,next.response_limit,next.used].join(':');
  if(key!==lastFormKey){lastFormKey=key;$('inputs').innerHTML=ClassroomCore.formFields({type:'wordcloud',responseLimit:remaining},pending?.code===code&&pending.epoch===next.epoch&&next.used===(pending.beforeUsed||0)?{words:pending.words}:{});}
@@ -207,6 +238,8 @@ function renderLegacy(next){
  if(ended)notice('This session has ended.','Ask your teacher for a new link to join another session.');else if(!open)notice('Responses are paused.','Keep this page open. You can respond when your teacher resumes.');else if(!remaining)notice('Thank you!','All your responses have been received.',true);else if(next.used)notice('Your responses were received.','You can add more responses until you reach the limit.',true);else $('notice').classList.add('hidden');
 }
 const renderSession=next=>code.length===6?renderLegacy(next):renderClassroom(next);
+function paintStudentTimer(){const timer=session?.timer,now=Date.now()+serverOffset,ended=['ended','expired'].includes(session?.status);$('studentCountdown').hidden=!session||code.length===6||!timer||timer.show===false||ended;if(!timer)return;$('studentCountdownValue').textContent=CountdownCore.format(CountdownCore.remaining(timer,now));const state=CountdownCore.phase(timer,now);$('studentCountdownState').textContent=state==='finished'?'Time is up':state==='paused'?'Countdown paused':state==='idle'?'Countdown ready':'Time remaining';$('studentCountdown').classList.toggle('finished',state==='finished');}
+function tickStudentTimer(){if(!session||code.length===6)return;paintStudentTimer();const closed=CountdownCore.closed(session.timer,Date.now()+serverOffset);if(closed!==lastTimerClosed)renderClassroom(session);}
 function snapshotArgs(joinedCode,fresh=false){return joinedCode.length===6?['wc_session_info',{p_code:joinedCode,p_participant_id:legacyParticipant}]:['crs_student_snapshot',{p_code:joinedCode,p_participant_id:identity.id,p_participant_token:identity.token,p_known_revision:fresh?null:session?.revision??null}];}
 async function join(value){
  const nextCode=String(value).replace(/\s/g,'');if(!/^\d{6,7}$/.test(nextCode)){status('Enter the six- or seven-digit session code from your teacher.',true);return;}if(connecting)return;
@@ -219,7 +252,7 @@ async function refresh(fresh=false){
 }
 $('joinForm').addEventListener('submit',e=>{e.preventDefault();join($('codeInput').value);});
 $('responseForm').addEventListener('submit',async e=>{
- e.preventDefault();if(submitting||!session)return;if(session.status!=='open'){status('Wait for your teacher to resume responses.',true);return;}
+ e.preventDefault();if(submitting||!session)return;if(code.length===7&&CountdownCore.closed(session.timer,Date.now()+serverOffset)){status('Time is up. Responses for this question are closed.',true);renderClassroom(session);return;}if(session.status!=='open'){status('Wait for your teacher to resume responses.',true);return;}
  const legacy=code.length===6,s=legacy?{type:'wordcloud',responseLimit:session.response_limit-session.used}:currentSlide;let answer;
  try{answer=ClassroomCore.readForm($('responseForm'),s);}catch(error){status(error.message,true);return;}
  if(legacy){if(!pending||pending.code!==code||pending.epoch!==session.epoch||JSON.stringify(pending.words)!==JSON.stringify(answer.words))pending={code,epoch:session.epoch,words:answer.words,beforeUsed:session.used,request:crypto.randomUUID()};}
@@ -231,10 +264,11 @@ $('responseForm').addEventListener('submit',async e=>{
 });
 $('refreshButton').addEventListener('click',()=>refresh(true));
 $('changeSession').addEventListener('click',()=>{if(submitting)return;generation++;session=null;currentSlide=null;code='';lastFormKey='';pending=null;savePending();$('joinForm').hidden=false;$('responseArea').hidden=true;$('sessionLine').classList.add('hidden');$('question').textContent='Join your classroom';$('questionType').textContent='Classroom Response Studio';status('');history.replaceState(null,'',location.pathname);$('codeInput').value='';$('codeInput').focus();});
-ClassroomCore.wire(document);window.addEventListener('online',()=>refresh(true));document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(true);});setInterval(()=>refresh(),2200);
+ClassroomCore.wire(document);window.addEventListener('online',()=>refresh(true));document.addEventListener('visibilitychange',()=>{if(!document.hidden){tickStudentTimer();refresh(true);}});setInterval(()=>refresh(),2200);setInterval(tickStudentTimer,250);
 const initial=new URL(location.href).searchParams.get('code');if(initial){$('codeInput').value=initial;join(initial);}
 })();
 
 </script>
 </body>
 </html>
+
