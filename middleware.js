@@ -5,6 +5,7 @@ import { next } from '@vercel/functions';
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
   '/presenter-respond.html',
+  '/word-cloud-respond.html',
   '/360-respond.html',
   '/world-in-balance-student.html',
   '/amx-decision-challenge-student.html',
@@ -47,10 +48,16 @@ function hasAccess(req, secret, verifier) {
   return equalHex(pieces[2], signature('v1:' + expiration + ':' + verifier, secret));
 }
 function redirect(path, request, status = 302) {
-  const res = Response.redirect(new URL(path, request.url), status);
-  res.headers.set('Cache-Control', 'no-store, private');
-  res.headers.set('Referrer-Policy', 'no-referrer');
-  return res;
+  // Response.redirect() creates immutable headers in Web/Node runtimes.
+  // Construct a normal redirect response so cache and session cookies are writable.
+  return new Response(null, {
+    status,
+    headers: {
+      Location: new URL(path, request.url).toString(),
+      'Cache-Control': 'no-store, private',
+      'Referrer-Policy': 'no-referrer',
+    },
+  });
 }
 export default async function middleware(request) {
   const url = new URL(request.url);
