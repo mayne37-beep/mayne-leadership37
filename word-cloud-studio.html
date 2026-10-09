@@ -933,8 +933,8 @@ function cloud(s){
   const W=550,H=225,grid=new Uint8Array(W*H),max=selected[0]?.count||1;
   let placed=[],best=[],packingScale=1;
   const density=Math.min(1,Math.sqrt(40/Math.max(1,selected.length)));
-  const preferredLeader=(60+10*Math.log2(max))*density*s.wordScale;
   const keepLeader=selected.length>1&&max>selected[1].count;
+  const preferredLeader=(60+6*Math.log2(max))*s.wordScale*(keepLeader?1:density);
   const responsePhase=selected.reduce((n,w)=>n+w.count,0)*.17;
   let leaderSize=preferredLeader;
   function fits(x,y,w,h){for(let row=y;row<y+h;row++)for(let col=x;col<x+w;col++)if(grid[row*W+col])return false;return true;}
