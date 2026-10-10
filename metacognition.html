@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071c34">
+<meta name="description" content="Full interactive Metacognition course from Mayne Leadership. Think deliberately, invite dissent, and see the system.">
+<title>Metacognition | Full Online Course | Mayne Leadership</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+ --navy:#071c34;--navy2:#0b3154;--blue:#176fa5;--teal:#2b8f92;--gold:#e8b84e;--gold2:#ffdb7a;
+ --ink:#17314d;--muted:#62788c;--line:#d7e4ed;--white:#fff;--ice:#f4faff;--cream:#fff8e8;
+ --mint:#e9f8f5;--lav:#f3f0ff;--coral:#fff1ea;--shadow:0 20px 58px rgba(7,28,52,.12)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f8fbfd;line-height:1.56}
+button,input,textarea,select{font:inherit}button{touch-action:manipulation}
+.flowLocked{display:none!important}.flowReveal{animation:rise .4s ease both}@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flowReveal{animation:none}}
+.top{position:sticky;top:0;z-index:80;background:rgba(7,28,52,.96);backdrop-filter:blur(12px);color:white;border-bottom:1px solid #ffffff18}
+.topin{max-width:1260px;margin:auto;display:flex;align-items:center;gap:18px;padding:10px 20px}.brand{font-weight:950;letter-spacing:.16em;font-size:.74rem;white-space:nowrap}.brand b{color:var(--gold2)}
+.rail{flex:1;display:flex;justify-content:center;gap:4px;overflow:auto;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+.step{font-size:.6rem;letter-spacing:.085em;text-transform:uppercase;color:#8fa9bd;padding:7px 9px;border-bottom:2px solid transparent;white-space:nowrap}.step.on{color:white;border-color:var(--gold2)}
+.home{color:white;text-decoration:none;font-size:.74rem;white-space:nowrap}
+.hero{min-height:89vh;display:grid;place-items:center;position:relative;overflow:hidden;color:white;background:
+ radial-gradient(circle at 78% 22%,rgba(255,219,122,.19),transparent 15%),
+ radial-gradient(circle at 70% 58%,rgba(43,143,146,.29),transparent 24%),
+ linear-gradient(132deg,#041423 0%,#092c4b 52%,#0e628a 100%)}
+.hero:before{content:"";position:absolute;inset:0;background-image:
+ linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
+.rings{position:absolute;right:4%;top:13%;width:min(520px,45vw);height:68%;min-height:430px}
+.ring{position:absolute;border:1px solid #ffffff2b;border-radius:50%;inset:50%;transform:translate(-50%,-50%)}.r1{width:130px;height:130px}.r2{width:260px;height:260px}.r3{width:400px;height:400px}.r4{width:520px;height:520px;border-color:#ffdb7a35}
+.core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:var(--gold2);display:grid;place-items:center;color:var(--navy);font-weight:950;box-shadow:0 0 38px #ffdb7a88}
+.rlabel{position:absolute;font-size:.72rem;font-weight:900;letter-spacing:.12em;color:#d8e9f4}.rl1{left:46%;top:27%}.rl2{left:17%;top:49%}.rl3{right:2%;top:68%}
+.heroCopy{position:relative;z-index:3;width:min(1180px,90%)}.eyebrow{color:#ffdb7a;font-weight:950;letter-spacing:.22em;font-size:.72rem}
+.hero h1{font-size:clamp(3rem,7vw,6.25rem);line-height:.92;max-width:840px;margin:18px 0 22px;letter-spacing:-.055em}.hero p{max-width:700px;font-size:clamp(1rem,2vw,1.22rem);color:#d8e8f2}.gold{color:var(--gold2)}
+.btn{border:0;border-radius:999px;padding:14px 22px;font-weight:950;letter-spacing:.045em;cursor:pointer;background:var(--gold2);color:#17314d;box-shadow:0 10px 25px rgba(0,0,0,.18)}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.34;cursor:not-allowed;transform:none;box-shadow:none}.btn.secondary{background:white;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+.section{padding:88px 22px}.wrap{max-width:1120px;margin:auto}.kicker{font-size:.7rem;letter-spacing:.18em;font-weight:950;color:#996900;text-transform:uppercase}
+h2{font-size:clamp(2rem,4.5vw,3.55rem);line-height:1.04;letter-spacing:-.035em;margin:.55rem 0 1rem}h3{line-height:1.15}.lede{font-size:1.08rem;color:var(--muted);max-width:790px}
+input[type=text],textarea,select,input[type=number]{width:100%;border:1px solid #b9ccd9;border-radius:11px;padding:12px 13px;background:white;color:var(--ink);outline:none}
+input:focus,textarea:focus,select:focus{border-color:#2c86b8;box-shadow:0 0 0 3px rgba(44,134,184,.12)}
+.feedback{display:none;margin-top:16px;padding:16px 18px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px}.feedback.show{display:block}.gate{text-align:center;margin-top:27px}.principle{padding:18px 20px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px;margin-top:22px;font-weight:800}
+.banner{min-height:265px;display:flex;align-items:center;position:relative;overflow:hidden;color:white;background:linear-gradient(120deg,#06182c,#0b365c 58%,#14838c)}
+.banner:before{content:"";position:absolute;width:500px;height:500px;border:72px solid #ffdb7a18;border-radius:50%;right:-160px;top:-220px}.banner:after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--gold2),#70cae0,#5bb6a9)}
+.banner .wrap{position:relative;z-index:2;width:100%}.banner h2{font-size:clamp(2.7rem,7vw,5.2rem);margin:0;letter-spacing:-.05em}.banner p{color:#e1edf4;font-size:1.08rem;margin:.35rem 0 0}
+.roadmap{background:white}.roadGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:24px}.roadCard{padding:24px;border:1px solid var(--line);border-radius:20px;background:#fbfdff}.roadCard.goldCard{background:var(--cream);border-color:#e7d09a}.roadList{display:grid;gap:10px;margin-top:13px}.roadItem{display:flex;gap:11px}.roadItem i{font-style:normal;width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:#e8f5fb;color:#176fa5;font-weight:950}
+.threeQ{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:22px}.qCard{padding:20px;border-radius:18px;border:1px solid var(--line);background:white}.qCard strong{display:block;color:#176fa5;margin-bottom:7px}
+.loop{background:linear-gradient(180deg,#f4faff,#fff)}.loopGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.loopCard{padding:22px;border:1px solid var(--line);border-radius:18px;background:white;cursor:pointer;text-align:left}.loopCard.on{border:2px solid var(--gold);background:#fffaf0}.loopCard strong{display:block;color:#176fa5;font-size:1.12rem}.loopCard p{color:var(--muted);font-size:.9rem}
+.calibration{background:white}.calCard{max-width:760px;margin:25px auto 0;padding:28px;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);background:#fbfdff}.bigQuestion{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:950;line-height:1.1;margin:10px 0 20px}
+.confLine{display:grid;grid-template-columns:70px 1fr 70px;gap:12px;align-items:center;margin:18px 0}.confLine input[type=range]{width:100%}.answerReveal{display:none;padding:18px;border-radius:15px;background:#eef8fd;border:1px solid #c9e1ef;margin-top:18px}.answerReveal.show{display:block}
+.knowledge{background:#fff8e8}.forceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.forceCard{padding:22px;border:1px solid #ead7a8;border-radius:18px;background:white}.forceCard strong{display:block;color:#8e6510;font-size:1.12rem}.ratingRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.ratingRow button{width:40px;height:40px;border-radius:50%;border:1px solid #c9b87c;background:white;cursor:pointer;font-weight:900}.ratingRow button.on{background:var(--navy);color:white;border-color:var(--navy)}
+.closure{background:#eef7fd}.fieldGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.fieldCard{padding:18px;border:1px solid var(--line);border-radius:17px;background:white}.fieldCard label{display:block;color:#176fa5;font-size:.79rem;font-weight:950;margin-bottom:7px}
+.group{background:#071c34;color:white}.group .kicker{color:#ffdb7a}.group .lede{color:#c8dae7}.factorGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.factor{padding:19px;border:1px solid #ffffff25;border-radius:17px;background:#ffffff0a;color:white;cursor:pointer;text-align:left}.factor.on{border:2px solid var(--gold2);background:#ffffff12}.factor strong{display:block;color:#ffdb7a}.factor p{font-size:.84rem;color:#c5d7e4}
+.candor{background:#eef8f6}.moveGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:22px 0}.move{padding:18px 12px;border:1px solid #cce1dc;border-radius:16px;background:white;cursor:pointer;text-align:left}.move.on{border:2px solid var(--teal);background:#effaf8}.move strong{display:block;color:#0f7379}.move p{font-size:.82rem;color:var(--muted)}
+.decision{background:white}.phaseGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:22px 0}.phase{padding:18px 12px;border:1px solid var(--line);border-radius:16px;background:#fbfdff}.phase b{display:block;color:#176fa5}.phase p{font-size:.81rem;color:var(--muted)}
+.groan{background:#fff8e8}.groanTrack{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:22px 0}.groanCell{padding:20px;border-radius:18px;border:1px solid #e7d19a;background:white;text-align:center}.groanCell b{display:block;color:#8c6413}
+.premortem{background:#eef7fd}.premGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:22px}.premCard{padding:18px;border:1px solid var(--line);border-radius:17px;background:white}.premCard label{display:block;color:#176fa5;font-size:.78rem;font-weight:950;margin-bottom:7px}
+.gradient{background:white}.gradGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin:22px 0}.grad{padding:13px 7px;border:1px solid var(--line);border-radius:14px;background:#fbfdff;cursor:pointer;text-align:center;min-height:110px}.grad.on{border:2px solid var(--gold);background:#fffaf0}.grad b{display:block;font-size:1.2rem;color:#176fa5}.grad span{font-size:.72rem}
+.dotvote{background:#f5fbff}.voteOptions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.voteCard{padding:18px;border:1px solid var(--line);border-radius:16px;background:white;cursor:pointer;text-align:left}.voteCard.on{border:2px solid var(--teal);background:#effaf8}.voteCard strong{display:block;color:#0f7379}.voteCard small{color:var(--muted)}
+.case{background:linear-gradient(135deg,#071c34,#0b3c64 58%,#14818b);color:white}.case .kicker{color:#ffdb7a}.case .lede{color:#c9dbe7}.caseFacts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.caseFact{padding:18px;border:1px solid #ffffff26;border-radius:16px;background:#ffffff0a}.caseFact strong{display:block;color:#ffdb7a}.caseFact p{font-size:.86rem;color:#d4e3ec;margin:.4rem 0 0}
+.caseWork{background:#fff}.caseStep{padding:24px;border:1px solid var(--line);border-radius:20px;background:#fbfdff;margin-top:18px}.caseStep h3{margin-top:0}.criteriaPool{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.criterion{border:1px solid #b8ccd9;background:white;padding:10px 13px;border-radius:999px;cursor:pointer;font-weight:850}.criterion.on{background:var(--navy);color:white;border-color:var(--navy)}
+.perspectiveGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:17px 0}.perspective{padding:16px;border:1px solid var(--line);border-radius:15px;background:white;cursor:pointer;text-align:left}.perspective.on{border:2px solid var(--gold);background:#fffaf0}.perspective strong{display:block;color:#176fa5}.perspective p{display:none;font-size:.82rem;color:var(--muted)}.perspective.on p{display:block}
+.optionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.optionCard{padding:16px;border:1px solid var(--line);border-radius:15px;background:white}.optionCard label{display:block;font-size:.76rem;font-weight:950;color:#176fa5;margin-bottom:6px}
+.system{background:#071c34;color:white}.system .kicker{color:#ffdb7a}.system .lede{color:#c9dbe7}.lensGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.lens{padding:20px;border:1px solid #ffffff25;border-radius:17px;background:#ffffff0a;color:white;cursor:pointer;text-align:left}.lens.on{border:2px solid var(--gold2);background:#ffffff12}.lens strong{display:block;color:#ffdb7a}.lens p{font-size:.84rem;color:#c8dae6;display:none}.lens.on p{display:block}
+.videoWrap{margin:24px auto;max-width:850px;aspect-ratio:16/9;border-radius:20px;overflow:hidden;border:1px solid #ffffff25;background:#041423}.videoWrap iframe{width:100%;height:100%;border:0}
+.burden{background:#fff8e8}.burdenGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.burdenCard{padding:18px;border:1px solid #e5d09a;border-radius:17px;background:white}.burdenCard label{display:block;color:#8d6410;font-weight:950;font-size:.78rem;margin-bottom:7px}.burdenCard.full{grid-column:1/-1}
+.stabilize{background:#eef7fd}.stabilizeGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.stab{padding:22px;border:1px solid var(--line);border-radius:18px;background:white}.stab strong{display:block;color:#176fa5;font-size:1.12rem}
+.toolkit{background:white}.toolGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.tool{padding:21px;border:1px solid var(--line);border-radius:18px;background:#fbfdff}.tool strong{display:block;color:#176fa5}.tool ol{padding-left:20px;margin:.6rem 0}.tool li{font-size:.87rem;color:var(--muted);margin:.35rem 0}
+.synthesis{background:linear-gradient(180deg,#f4faff,#fff)}.synthGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.synth{padding:20px;border:1px solid var(--line);border-radius:17px;background:white}.synth b{display:block;color:#176fa5;font-size:1.1rem}
+.final{background:#fff8e8}.finalGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.finalCard{padding:18px;border:1px solid #e4d09c;border-radius:17px;background:white}.finalCard label{display:block;color:#8b6411;font-size:.8rem;font-weight:950;margin-bottom:7px}
+.complete{display:none;background:#071c34;color:white;text-align:center;padding:82px 22px}.complete.show{display:block}.complete h2{font-size:clamp(2.8rem,6vw,5.4rem);margin:.4rem 0}.badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:24px 0}.badges span{padding:9px 12px;border-radius:999px;border:1px solid #ffffff28;background:#ffffff0a;font-size:.72rem;font-weight:900}.sources{font-size:.77rem;color:#b7cad7;max-width:850px;margin:25px auto 0}
+@media(max-width:980px){
+ .rings{opacity:.32;right:-16%}.roadGrid{grid-template-columns:1fr}.threeQ,.loopGrid,.forceGrid,.premGrid,.caseFacts,.toolGrid,.finalGrid{grid-template-columns:1fr 1fr}.factorGrid,.perspectiveGrid,.lensGrid{grid-template-columns:1fr 1fr}.moveGrid,.phaseGrid{grid-template-columns:repeat(2,1fr)}.gradGrid{grid-template-columns:repeat(4,1fr)}.voteOptions{grid-template-columns:1fr 1fr}.fieldGrid,.optionGrid,.burdenGrid,.stabilizeGrid{grid-template-columns:1fr}.burdenCard.full{grid-column:auto}.synthGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+ .topin{gap:9px;padding:9px 12px}.brand{font-size:.62rem}.home{font-size:.66rem}.rail{justify-content:flex-start}
+ .hero{min-height:82vh}.hero h1{font-size:3.05rem}.rings{display:none}.section{padding:68px 18px}
+ .threeQ,.loopGrid,.forceGrid,.premGrid,.caseFacts,.toolGrid,.finalGrid,.factorGrid,.perspectiveGrid,.lensGrid,.moveGrid,.phaseGrid,.gradGrid,.voteOptions,.synthGrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand">MAYNE <b>LEADERSHIP</b></div><nav class="rail" aria-label="Course progress"><span class="step on">Self</span><span class="step">Group</span><span class="step">Case</span><span class="step">System</span><span class="step">Transfer</span></nav><a class="home" href="learning.html">Learning ↗</a></div></header>
+
+<main>
+<section class="hero" id="top" data-flow="0">
+ <div class="rings" aria-hidden="true"><i class="ring r1"></i><i class="ring r2"></i><i class="ring r3"></i><i class="ring r4"></i><div class="core">YOU</div><span class="rlabel rl1">SELF</span><span class="rlabel rl2">GROUP</span><span class="rlabel rl3">SYSTEM</span></div>
+ <div class="heroCopy">
+  <div class="eyebrow">METACOGNITION · FULL ONLINE COURSE</div>
+  <h1>Think about how you <span class="gold">think.</span></h1>
+  <p><strong>Think deliberately. Invite dissent. See the system.</strong></p>
+  <p>Metacognition improves judgment by making assumptions, confidence, social influence, and system effects visible before they harden into decisions.</p>
+  <p style="font-size:.92rem;color:#b9d0df"><strong>Four-hour facilitated-course equivalent</strong> · Full self-paced adaptation · Progress saved on this device</p>
+  <button class="btn" id="begin">BEGIN THE COURSE →</button>
+ </div>
+</section>
+
+<section class="section roadmap" id="roadmap" data-flow="1">
+ <div class="wrap">
+  <div class="kicker">Course Roadmap</div><h2>One discipline. Three levels of thinking.</h2>
+  <p class="lede">Individual assumptions enter group conversations. Group decisions alter systems. System feedback then influences future assumptions. The course moves through all three levels before bringing them back together.</p>
+  <div class="roadGrid">
+   <div class="roadCard">
+    <strong style="font-size:1.18rem">By the end, you can</strong>
+    <div class="roadList">
+     <div class="roadItem"><i>1</i><div>Examine how you form and revise knowledge.</div></div>
+     <div class="roadItem"><i>2</i><div>Use practices that reduce groupthink and widen participation.</div></div>
+     <div class="roadItem"><i>3</i><div>Move a team from divergence to convergence without forcing false consensus.</div></div>
+     <div class="roadItem"><i>4</i><div>Distinguish a visible symptom from an underlying system problem.</div></div>
+     <div class="roadItem"><i>5</i><div>Explain not only what you recommend, but how the thinking arrived there.</div></div>
+    </div>
+   </div>
+   <div class="roadCard goldCard">
+    <div class="kicker">Three recurring questions</div>
+    <div class="threeQ" style="grid-template-columns:1fr">
+     <div class="qCard"><strong>What am I assuming?</strong><span>Make the hidden frame visible.</span></div>
+     <div class="qCard"><strong>Whose voice is missing?</strong><span>Look for social and informational blind spots.</span></div>
+     <div class="qCard"><strong>What system am I changing?</strong><span>Trace consequences beyond the immediate event.</span></div>
+    </div>
+    <button class="btn" id="roadContinue">START WITH SELF →</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="banner" id="selfBanner" data-flow="2"><div class="wrap"><div class="kicker" style="color:#ffdb7a">Level 1 · Self</div><h2>NOTICE YOUR THINKING</h2><p>Pressure rewards speed. Complexity punishes shortcuts. The pause is not indecision; it is quality control.</p></div></section>
+
+<section class="section loop" id="metacognition" data-flow="2">
+ <div class="wrap">
+  <div class="kicker">Thinking About Thinking</div><h2>Awareness without adjustment is observation.</h2>
+  <p class="lede">Metacognition adds regulation: notice what is happening in your reasoning, name what is shaping it, and navigate toward a better next move.</p>
+  <div class="loopGrid" id="loopGrid"></div>
+  <div class="feedback" id="loopFeedback">The purpose is not to eliminate intuition or speed. It is to notice when a fast answer is becoming an untested answer.</div>
+  <div class="gate"><button class="btn" id="loopContinue" disabled>TRY A CALIBRATION CHALLENGE →</button></div>
+ </div>
+</section>
+
+<section class="section calibration" id="calibration" data-flow="3">
+ <div class="wrap">
+  <div class="kicker">Calibration Challenge</div><h2>Confidence is a feeling. Evidence is a reason.</h2>
+  <div class="calCard">
+   <div class="kicker">No searching · No discussion</div>
+   <div class="bigQuestion">Who was the 19th President of the United States?</div>
+   <input type="text" id="calAnswer" placeholder="Write a name—or write “I don't know.”">
+   <div class="confLine"><span>0%</span><input id="confidence" type="range" min="0" max="100" step="5" value="50"><strong id="confValue">50%</strong></div>
+   <button class="btn secondary" id="lockCalibration">LOCK MY ANSWER →</button>
+   <div class="answerReveal" id="answerReveal"><strong>Answer: Rutherford B. Hayes.</strong><p>The point is not trivia. Compare your certainty with the quality of the evidence you actually had.</p></div>
+   <div class="fieldGrid" style="margin-top:18px">
+    <div class="fieldCard"><label>WHAT DID I REMEMBER?</label><textarea id="calRemember" rows="3"></textarea></div>
+    <div class="fieldCard"><label>WHAT EVIDENCE SUPPORTED IT?</label><textarea id="calEvidence" rows="3"></textarea></div>
+    <div class="fieldCard"><label>HOW RELIABLE WAS THAT EVIDENCE?</label><textarea id="calReliable" rows="3"></textarea></div>
+    <div class="fieldCard"><label>WHAT WOULD HAVE CHANGED MY MIND?</label><textarea id="calChange" rows="3"></textarea></div>
+   </div>
+   <div class="feedback" id="calFeedback">Memory can feel vivid and still be wrong. Social confidence can masquerade as factual confidence. Good judgment includes calibration—matching certainty to the evidence available.</div>
+   <div class="gate"><button class="btn" id="calContinue" disabled>EXAMINE HOW KNOWLEDGE FORMS →</button></div>
+  </div>
+ </div>
+</section>
+
+<section class="section knowledge" id="knowledge" data-flow="4">
+ <div class="wrap">
+  <div class="kicker">Evidence · Authority · Closure</div><h2>Three forces shape what we accept as knowledge.</h2>
+  <p class="lede">Think about a current non-sensitive decision. Rate how strongly each force is shaping your judgment right now.</p>
+  <div class="forceGrid">
+   <div class="forceCard"><strong>EVIDENCE</strong><p>What information supports the claim?</p><div class="ratingRow" data-rate="evidenceRate"></div></div>
+   <div class="forceCard"><strong>AUTHORITY</strong><p>Whom or what do I trust in this domain?</p><div class="ratingRow" data-rate="authorityRate"></div></div>
+   <div class="forceCard"><strong>CLOSURE</strong><p>How urgently do I feel I need a settled answer?</p><div class="ratingRow" data-rate="closureRate"></div></div>
+  </div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHICH FORCE MAY BE CARRYING TOO MUCH WEIGHT?</label><textarea id="knowledgeWeight" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT SOURCE OR EVIDENCE SHOULD I CHECK NEXT?</label><textarea id="knowledgeNext" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="knowledgeFeedback">A source can be credible in one domain and weak in another. Urgency can also make the first plausible explanation feel more certain than it deserves.</div>
+  <div class="gate"><button class="btn" id="knowledgeContinue" disabled>RUN A CLOSURE CHECK →</button></div>
+ </div>
+</section>
+
+<section class="section closure" id="closure" data-flow="5">
+ <div class="wrap">
+  <div class="kicker">90-Second Closure Check</div><h2>Separate urgency from evidence.</h2>
+  <p class="lede">This is a private reflection, not a diagnostic score. Need for closure can support timely action; the risk appears when the urge to settle suppresses search, dissent, or revision.</p>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>URGENCY · How quickly do I feel I need an answer?</label><textarea id="clUrgency" rows="4"></textarea></div>
+   <div class="fieldCard"><label>RANGE · How many plausible explanations have I considered?</label><textarea id="clRange" rows="4"></textarea></div>
+   <div class="fieldCard"><label>DISCONFIRMATION · What evidence would prove me wrong?</label><textarea id="clDisconfirm" rows="4"></textarea></div>
+   <div class="fieldCard"><label>PAUSE · What is the cost of waiting—and of deciding now?</label><textarea id="clPause" rows="4"></textarea></div>
+  </div>
+  <div class="principle"><strong>Watch for “seize and freeze”:</strong> accept an answer quickly under uncertainty, then defend it after it becomes familiar.</div>
+  <div class="gate"><button class="btn" id="closureContinue" disabled>REFLECT ON REVISION →</button></div>
+ </div>
+</section>
+
+<section class="section calibration" id="revision" data-flow="6">
+ <div class="wrap">
+  <div class="kicker">Changing Your Mind Is Evidence of Learning</div><h2>Model revision as strength, not inconsistency.</h2>
+  <p class="lede">Think of a belief, judgment, or recommendation you revised.</p>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHAT NEW EVIDENCE APPEARED?</label><textarea id="revEvidence" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHO OR WHAT DID YOU TRUST?</label><textarea id="revTrust" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT MADE REVISION FEEL SAFE?</label><textarea id="revSafe" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT MADE IT DIFFICULT?</label><textarea id="revDifficult" rows="4"></textarea></div>
+  </div>
+  <div class="principle">Leadership signal: <strong>“Here is what changed my mind.”</strong> When leaders explain revision, they teach that evidence can outrank ego.</div>
+  <div class="gate"><button class="btn" id="revisionContinue" disabled>CONTINUE TO GROUP THINKING →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="groupBanner" data-flow="7"><div class="wrap"><div class="kicker" style="color:#ffdb7a">Level 2 · Group</div><h2>INVITE DISSENT</h2><p>A team can contain diverse expertise and still produce narrow thinking if the process makes silence safer than contribution.</p></div></section>
+
+<section class="section group" id="groupthink" data-flow="7">
+ <div class="wrap">
+  <div class="kicker">Groupthink + Silence</div><h2>The absence of disagreement is not proof of agreement.</h2>
+  <p class="lede">Select the two pressures most likely to silence useful thinking in your environment.</p>
+  <div class="factorGrid" id="factorGrid"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHAT DOES SILENCE LOOK LIKE HERE?</label><textarea id="groupSilence" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT LEADER BEHAVIOR COULD MAKE CONTRIBUTION SAFER?</label><textarea id="groupLeader" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="groupFeedback">Groupthink is not healthy teamwork or legitimate consensus. The problem is premature, protected consensus—when concerns stay private, assumptions go untested, alternatives disappear, and risk looks smaller than it is.</div>
+  <div class="gate"><button class="btn" id="groupContinue" disabled>DESIGN FOR CANDOR →</button></div>
+ </div>
+</section>
+
+<section class="section candor" id="candor" data-flow="8">
+ <div class="wrap">
+  <div class="kicker">Leaders Can Design for Candor</div><h2>Let the process carry some of the interpersonal risk.</h2>
+  <p class="lede">Open all five leader moves, then choose one you could add to a recurring meeting.</p>
+  <div class="moveGrid" id="moveGrid"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>THE MOVE I WILL USE</label><select id="candorMove"><option value="">Choose one...</option><option>Think first</option><option>Write first</option><option>Hear all</option><option>Leader last</option><option>Use anonymity</option></select></div>
+   <div class="fieldCard"><label>WHERE WILL I USE IT?</label><textarea id="candorWhere" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="candorFeedback">Psychological safety develops through behavior over time. Structured facilitation can also reduce the immediate cost of speaking up before that culture is fully developed.</div>
+  <div class="gate"><button class="btn" id="candorContinue" disabled>MOVE THROUGH DIVERGENCE + CONVERGENCE →</button></div>
+ </div>
+</section>
+
+<section class="section decision" id="decisionProcess" data-flow="9">
+ <div class="wrap">
+  <div class="kicker">Disciplined Decision Process</div><h2>Make the thinking visible before making it final.</h2>
+  <div class="phaseGrid">
+   <div class="phase"><b>1 · FRAME</b><p>What problem are we solving?</p></div>
+   <div class="phase"><b>2 · DIVERGE</b><p>What else could be true?</p></div>
+   <div class="phase"><b>3 · MAKE SENSE</b><p>What patterns and assumptions matter?</p></div>
+   <div class="phase"><b>4 · CONVERGE</b><p>What best fits our criteria?</p></div>
+   <div class="phase"><b>5 · COMMIT</b><p>Who does what, by when?</p></div>
+  </div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHICH STAGE DOES YOUR TEAM MOST OFTEN SKIP?</label><select id="skipStage"><option value="">Choose...</option><option>Frame</option><option>Diverge</option><option>Make sense</option><option>Converge</option><option>Commit</option></select></div>
+   <div class="fieldCard"><label>WHAT HAPPENS WHEN YOU SKIP IT?</label><textarea id="skipEffect" rows="4"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="decisionContinue" disabled>ENTER THE GROAN ZONE →</button></div>
+ </div>
+</section>
+
+<section class="section groan" id="groan" data-flow="10">
+ <div class="wrap">
+  <div class="kicker">The Groan Zone</div><h2>Productive discomfort is not automatically a process failure.</h2>
+  <div class="groanTrack"><div class="groanCell"><b>DIVERGENCE</b><span>Different frames and possibilities expand.</span></div><div class="groanCell"><b>GROAN ZONE</b><span>Confusion, friction, repetition, integration.</span></div><div class="groanCell"><b>CONVERGENCE</b><span>Shared understanding supports narrowing.</span></div></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHAT DOES THE GROAN ZONE FEEL LIKE ON YOUR TEAM?</label><textarea id="groanFeel" rows="4"></textarea></div>
+   <div class="fieldCard"><label>HOW DO YOU KEEP THE TEAM FROM FORCING A QUICK ANSWER?</label><textarea id="groanLead" rows="4"></textarea></div>
+  </div>
+  <div class="principle">Do not rescue the team from productive discomfort by imposing false consensus. Keep participation equitable, the task clear, and the purpose visible.</div>
+  <div class="gate"><button class="btn" id="groanContinue" disabled>RUN A PREMORTEM →</button></div>
+ </div>
+</section>
+
+<section class="section premortem" id="premortem" data-flow="11">
+ <div class="wrap">
+  <div class="kicker">Premortem</div><h2>Imagine the decision failed six months from now.</h2>
+  <p class="lede">Scenario: your organization launches a new employee-development initiative. Six months later, participation is low and supervisors say it disrupted operations. Generate three plausible reasons before defending the plan.</p>
+  <div class="premGrid">
+   <div class="premCard"><label>FAILURE REASON 1</label><textarea id="pre1" rows="4"></textarea></div>
+   <div class="premCard"><label>FAILURE REASON 2</label><textarea id="pre2" rows="4"></textarea></div>
+   <div class="premCard"><label>FAILURE REASON 3</label><textarea id="pre3" rows="4"></textarea></div>
+  </div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>COMMON THEME</label><textarea id="preTheme" rows="4"></textarea></div>
+   <div class="fieldCard"><label>PREVENTION OR EARLY-DETECTION ACTION</label><textarea id="preAction" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="preFeedback">Premortems legitimize doubt before people become invested in defending the plan. They separate criticism of a plan from criticism of a person.</div>
+  <div class="gate"><button class="btn" id="preContinue" disabled>USE A GRADIENT OF AGREEMENT →</button></div>
+ </div>
+</section>
+
+<section class="section gradient" id="gradient" data-flow="12">
+ <div class="wrap">
+  <div class="kicker">Gradients of Agreement</div><h2>Reveal more than yes or no.</h2>
+  <p class="lede">Imagine the proposed initiative from the premortem is still being considered. Pre-commit to one position before reading anyone else's view.</p>
+  <div class="gradGrid" id="gradGrid"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHY DID YOU CHOOSE THIS POSITION?</label><textarea id="gradWhy" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT COULD MOVE YOU ONE STEP?</label><textarea id="gradMove" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="gradFeedback">Use the rating to open the conversation, not replace it. Hear each person once, begin with outliers, and allow revision after the reasoning is heard.</div>
+  <div class="gate"><button class="btn" id="gradContinue" disabled>SEE WHAT DOT VOTING CAN—AND CANNOT—DO →</button></div>
+ </div>
+</section>
+
+<section class="section dotvote" id="dotvote" data-flow="13">
+ <div class="wrap">
+  <div class="kicker">Dot Voting</div><h2>Prioritize. Do not pretend the vote decided truth.</h2>
+  <p class="lede">Choose two options you would want the team to analyze more deeply. The vote focuses attention; it does not validate the original framing.</p>
+  <div class="voteOptions" id="voteOptions"></div>
+  <div class="feedback" id="voteFeedback">Protect independence by pre-committing before seeing others' votes. After voting, test the leading options against criteria and use gradients of agreement to surface reservations.</div>
+  <div class="gate"><button class="btn" id="voteContinue" disabled>APPLY THE FULL PROCESS TO A CASE →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="caseBanner" data-flow="14"><div class="wrap"><div class="kicker" style="color:#ffdb7a">Integrated Case</div><h2>BIKE TRAIL CONFLICT</h2><p>A visible incident sits inside a crowded, multi-stakeholder system.</p></div></section>
+
+<section class="section case" id="caseIntro" data-flow="14">
+ <div class="wrap">
+  <div class="kicker">Case adapted from a 1993 Washington Post report</div><h2>Do not solve the tack incident alone.</h2>
+  <p class="lede">A heavily used Northern Virginia trail is experiencing repeated safety problems. Hundreds of bicycle tires have reportedly been punctured by deliberately scattered tacks. At the same time, cyclists, runners, walkers, and inline skaters are competing for limited space on a narrow shared path. Users describe collisions, arguments, different expectations about right-of-way, and disagreement about what the trail is for. Authorities respond to visible incidents, but the broader conflict continues.</p>
+  <div class="caseFacts">
+   <div class="caseFact"><strong>VISIBLE EVENT</strong><p>Repeated tacks and large numbers of flat tires create an urgent safety and enforcement problem.</p></div>
+   <div class="caseFact"><strong>RECURRING PATTERN</strong><p>Crowding and conflict among multiple users existed beyond the tack incidents.</p></div>
+   <div class="caseFact"><strong>SYSTEM QUESTION</strong><p>How do design, norms, enforcement, capacity, behavior, and stakeholder expectations interact?</p></div>
+  </div>
+  <div class="gate"><button class="btn" id="caseIntroContinue">FRAME IT INDEPENDENTLY →</button></div>
+ </div>
+</section>
+
+<section class="section caseWork" id="caseFrame" data-flow="15">
+ <div class="wrap">
+  <div class="kicker">Step 1 · Think–Write</div><h2>Frame before the group influences you.</h2>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>PROBLEM · State it in one sentence.</label><textarea id="caseProblem" rows="4"></textarea></div>
+   <div class="fieldCard"><label>STAKEHOLDERS · Who is affected, involved, responsible, or missing?</label><textarea id="caseStakeholders" rows="4"></textarea></div>
+   <div class="fieldCard"><label>EVIDENCE · What facts support your frame?</label><textarea id="caseEvidence" rows="4"></textarea></div>
+   <div class="fieldCard"><label>FIRST SOLUTION + ASSUMPTION · What came to mind first, and what assumption sits beneath it?</label><textarea id="caseFirst" rows="4"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="caseFrameContinue" disabled>HEAR THE OTHER VOICES →</button></div>
+ </div>
+</section>
+
+<section class="section caseWork" id="caseVoices" data-flow="16">
+ <div class="wrap">
+  <div class="kicker">Step 2 · Circle of Voices · Online Adaptation</div><h2>Preserve different frames before combining them.</h2>
+  <p class="lede">Open all four perspectives. Do not decide which is “right” yet. Listen for what each frame makes visible that another could miss.</p>
+  <div class="perspectiveGrid" id="perspectiveGrid"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHICH FRAME OR STAKEHOLDER DID YOU NOT INITIALLY CONSIDER?</label><textarea id="voiceNew" rows="4"></textarea></div>
+   <div class="fieldCard"><label>HOW WOULD YOU REWRITE THE PROBLEM NOW?</label><textarea id="voiceReframe" rows="4"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="caseVoicesContinue" disabled>CONVERGE IN STAGES →</button></div>
+ </div>
+</section>
+
+<section class="section caseWork" id="caseConverge" data-flow="17">
+ <div class="wrap">
+  <div class="kicker">Step 3 · Cluster → Criteria → Vote → Gradient</div><h2>Narrow without erasing the thinking.</h2>
+  <p><strong>Select at least three criteria</strong> for judging a response.</p>
+  <div class="criteriaPool" id="criteriaPool"></div>
+  <h3>Generate four plausible response options.</h3>
+  <div class="optionGrid">
+   <div class="optionCard"><label>OPTION 1</label><textarea id="caseOpt1" rows="3"></textarea></div>
+   <div class="optionCard"><label>OPTION 2</label><textarea id="caseOpt2" rows="3"></textarea></div>
+   <div class="optionCard"><label>OPTION 3</label><textarea id="caseOpt3" rows="3"></textarea></div>
+   <div class="optionCard"><label>OPTION 4</label><textarea id="caseOpt4" rows="3"></textarea></div>
+  </div>
+  <p><strong>Pre-commit to the two options you would analyze further.</strong></p>
+  <div class="voteOptions" id="caseVoteOptions"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>LEADING OPTION · Which option currently leads, and why?</label><textarea id="caseLead" rows="4"></textarea></div>
+   <div class="fieldCard"><label>RESERVATION · What concern remains after narrowing?</label><textarea id="caseReservation" rows="4"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="caseConvergeContinue" disabled>DEBRIEF THE THINKING →</button></div>
+ </div>
+</section>
+
+<section class="section caseWork" id="caseDebrief" data-flow="18">
+ <div class="wrap">
+  <div class="kicker">Step 4 · Debrief the Process</div><h2>Process evidence matters.</h2>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHERE DID YOUR INITIAL FRAME DIFFER FROM YOUR FINAL FRAME?</label><textarea id="debriefFrame" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHICH VOICE, FACT, OR STAKEHOLDER CHANGED THE CONVERSATION?</label><textarea id="debriefVoice" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHEN DID YOU FEEL PRESSURE TO CONVERGE?</label><textarea id="debriefPressure" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT RESERVATION REMAINS?</label><textarea id="debriefReservation" rows="4"></textarea></div>
+  </div>
+  <div class="principle">A decision is stronger when you can explain how alternatives were tested—not only which answer won.</div>
+  <div class="gate"><button class="btn" id="caseDebriefContinue" disabled>STEP INTO THE SYSTEM →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="systemBanner" data-flow="19"><div class="wrap"><div class="kicker" style="color:#ffdb7a">Level 3 · System</div><h2>SEE THE SYSTEM</h2><p>Every fix enters a living system. A useful solution changes the pattern without quietly weakening the system.</p></div></section>
+
+<section class="section system" id="systemLens" data-flow="19">
+ <div class="wrap">
+  <div class="kicker">Systems Lens</div><h2>Watch for the chain, not just the event.</h2>
+  <p class="lede">The original course uses this short systems-thinking cautionary tale. As you watch, capture the original problem, the interventions, the delayed effects, and what the original frame omitted.</p>
+  <div class="videoWrap"><iframe src="https://www.youtube.com/embed/17BP9n6g1F0" title="Systems thinking: a cautionary tale" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>ORIGINAL PROBLEM</label><textarea id="vidProblem" rows="3"></textarea></div>
+   <div class="fieldCard"><label>INTERVENTIONS</label><textarea id="vidInterventions" rows="3"></textarea></div>
+   <div class="fieldCard"><label>DELAYED / UNINTENDED EFFECTS</label><textarea id="vidEffects" rows="3"></textarea></div>
+   <div class="fieldCard"><label>WHAT WAS MISSING FROM THE INITIAL FRAME?</label><textarea id="vidMissing" rows="3"></textarea></div>
+  </div>
+  <h3 style="font-size:1.8rem;margin-top:38px">A systems lens asks different questions.</h3>
+  <div class="lensGrid" id="lensGrid"></div>
+  <div class="gate"><button class="btn" id="systemLensContinue" disabled>MAP SHIFTING THE BURDEN →</button></div>
+ </div>
+</section>
+
+<section class="section burden" id="burden" data-flow="20">
+ <div class="wrap">
+  <div class="kicker">Shifting the Burden</div><h2>Relief now can quietly weaken the real solution.</h2>
+  <p class="lede">Use the bike-trail case—or another non-sensitive workplace issue—to test whether a quick response is masking or weakening a deeper response.</p>
+  <div class="burdenGrid">
+   <div class="burdenCard"><label>PROBLEM SYMPTOM · What is visible and urgent?</label><textarea id="burdenSymptom" rows="4"></textarea></div>
+   <div class="burdenCard"><label>SYMPTOMATIC RESPONSE · What gives immediate relief?</label><textarea id="burdenQuick" rows="4"></textarea></div>
+   <div class="burdenCard"><label>SIDE EFFECT · How might the quick response weaken the system?</label><textarea id="burdenSide" rows="4"></textarea></div>
+   <div class="burdenCard"><label>FUNDAMENTAL RESPONSE · What changes the underlying conditions?</label><textarea id="burdenFund" rows="4"></textarea></div>
+   <div class="burdenCard"><label>SYSTEM CAPACITY / HEALTH · What capability must be preserved or strengthened?</label><textarea id="burdenCapacity" rows="4"></textarea></div>
+   <div class="burdenCard"><label>ASSUMPTION TO CHALLENGE</label><textarea id="burdenAssumption" rows="4"></textarea></div>
+   <div class="burdenCard"><label>SECOND- OR THIRD-ORDER EFFECT</label><textarea id="burdenEffect" rows="4"></textarea></div>
+   <div class="burdenCard"><label>DEVIL'S ADVOCATE · Why might the fundamental response fail?</label><textarea id="burdenDevil" rows="4"></textarea></div>
+   <div class="burdenCard full"><label>EVIDENCE TO MONITOR · What would show the fundamental response is working?</label><textarea id="burdenEvidence" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="burdenFeedback">Shifting the Burden is a hypothesis to test, not proof of causation. Systems thinking without feedback becomes speculation.</div>
+  <div class="gate"><button class="btn" id="burdenContinue" disabled>STABILIZE NOW + BUILD CAPACITY →</button></div>
+ </div>
+</section>
+
+<section class="section stabilize" id="stabilize" data-flow="21">
+ <div class="wrap">
+  <div class="kicker">Systems Leadership</div><h2>The strongest response may combine relief and reform.</h2>
+  <div class="stabilizeGrid">
+   <div class="stab"><strong>STABILIZE NOW</strong><p>Reduce immediate harm and restore safe operations.</p><p><b>Guardrail:</b> do not let emergency relief become the permanent operating model.</p><textarea id="stabNow" rows="4" placeholder="What immediate response is justified?"></textarea></div>
+   <div class="stab"><strong>BUILD CAPACITY</strong><p>Change the conditions that recreate the symptom.</p><p><b>Guardrail:</b> define evidence, ownership, resources, and time horizons.</p><textarea id="stabBuild" rows="4" placeholder="What underlying capacity needs to improve?"></textarea></div>
+  </div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>SUNSET / REVIEW CRITERIA</label><textarea id="stabSunset" rows="4" placeholder="What prevents the temporary response from becoming permanent?"></textarea></div>
+   <div class="fieldCard"><label>OWNER + MEASURE</label><textarea id="stabOwner" rows="4" placeholder="Who owns the transition, and what will they monitor?"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="stabilizeContinue" disabled>OPEN THE COURSE TOOLKIT →</button></div>
+ </div>
+</section>
+
+<section class="section toolkit" id="toolkit" data-flow="22">
+ <div class="wrap">
+  <div class="kicker">Reusable Course Toolkit</div><h2>Make these practices portable.</h2>
+  <div class="toolGrid">
+   <div class="tool"><strong>Disciplined Decision Map</strong><ol><li>Frame</li><li>Diverge</li><li>Make sense</li><li>Converge</li><li>Commit</li></ol><p>At every stage ask: What are we assuming? Whose voice is missing? What would change our mind?</p></div>
+   <div class="tool"><strong>Gradients of Agreement</strong><ol><li>Pre-commit privately</li><li>Reveal together</li><li>Hear each person once</li><li>Begin with outliers</li><li>Allow revision</li></ol><p>Use ratings to open conversation—not replace it.</p></div>
+   <div class="tool"><strong>Shifting-the-Burden Worksheet</strong><ol><li>Problem symptom</li><li>Symptomatic response</li><li>Side effect</li><li>Fundamental response</li><li>System capacity</li></ol><p>Always add evidence to monitor.</p></div>
+  </div>
+  <div class="gate"><button class="btn" id="toolkitContinue">SYNTHESIZE SELF + GROUP + SYSTEM →</button></div>
+ </div>
+</section>
+
+<section class="section synthesis" id="synthesis" data-flow="23">
+ <div class="wrap">
+  <div class="kicker">One Loop Across All Three Levels</div><h2>Notice → Name → Test → Adapt.</h2>
+  <div class="synthGrid">
+   <div class="synth"><b>NOTICE</b><p>What is happening?</p></div>
+   <div class="synth"><b>NAME</b><p>What is shaping it?</p></div>
+   <div class="synth"><b>TEST</b><p>What else could be true?</p></div>
+   <div class="synth"><b>ADAPT</b><p>What will we change?</p></div>
+  </div>
+  <div class="threeQ">
+   <div class="qCard"><strong>SELF</strong><p>Notice confidence. Name evidence, authority, and closure. Test alternatives. Adapt belief.</p></div>
+   <div class="qCard"><strong>GROUP</strong><p>Notice silence. Name hierarchy and pace. Test through divergence and dissent. Adapt process.</p></div>
+   <div class="qCard"><strong>SYSTEM</strong><p>Notice recurrence. Name structure. Test second-order effects. Adapt intervention.</p></div>
+  </div>
+  <div class="gate"><button class="btn" id="synthesisContinue">MAKE YOUR TRANSFER COMMITMENT →</button></div>
+ </div>
+</section>
+
+<section class="section final" id="final" data-flow="24">
+ <div class="wrap">
+  <div class="kicker">Individual Commitment</div><h2>One decision you will think about differently.</h2>
+  <div class="finalGrid">
+   <div class="finalCard"><label>I WILL PAUSE WHEN...</label><textarea id="finalPause" rows="5"></textarea></div>
+   <div class="finalCard"><label>I WILL INVITE A MISSING VOICE BY...</label><textarea id="finalVoice" rows="5"></textarea></div>
+   <div class="finalCard"><label>I WILL TEST A QUICK FIX BY...</label><textarea id="finalQuick" rows="5"></textarea></div>
+  </div>
+  <div class="principle">The quality of leadership decisions depends on the quality of the thinking we make visible. The job is not to eliminate uncertainty. It is to reason responsibly within it.</div>
+  <div class="gate"><button class="btn" id="finish" disabled>COMPLETE METACOGNITION COURSE →</button></div>
+ </div>
+</section>
+
+<section class="complete" id="complete" data-flow="25">
+ <div class="wrap">
+  <div class="kicker" style="color:#ffdb7a">Metacognition · Full Online Course</div>
+  <h2>THINK DELIBERATELY.<br><span class="gold">MAKE THINKING VISIBLE.</span></h2>
+  <p>You examined judgment at the level of self, group, and system—and practiced the tools that keep uncertainty, dissent, evidence, and system effects visible long enough to improve the decision.</p>
+  <div class="badges"><span>SELF ✓</span><span>GROUP ✓</span><span>CASE ✓</span><span>SYSTEM ✓</span><span>TRANSFER ✓</span></div>
+  <button class="btn secondary" id="review">REVIEW FROM THE TOP</button> <button class="btn" id="restart">START OVER</button>
+  <a class="btn" href="critical-thinking-foundations.html" style="display:inline-block;text-decoration:none;margin-top:10px">CONTINUE TO CRITICAL THINKING →</a>
+  <p style="color:#b7cad8;margin-top:18px">Your progress is saved on this device.</p>
+  <div class="sources">Course content is adapted from the Leader Metacognition curriculum and its supporting sources, including groupthink and structured-thinking methods in the Red Team Handbook, Need for Closure research, Gradients of Agreement, the public 1993 bike-trail case used in the source course, and systems-thinking / Shifting-the-Burden material.</div>
+ </div>
+</section>
+</main>
+
+<script>
+const KEY='ml_metacognition_full_v1';
+const defaults={flowStep:0,loop:[],rates:{},lockedCalibration:false,factors:[],moves:[],gradient:null,votes:[],perspectives:[],criteria:[],caseVotes:[],lenses:[],fields:{}};
+let state={...defaults};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');state={...defaults,...s,rates:{...defaults.rates,...(s.rates||{})},fields:{...defaults.fields,...(s.fields||{})}}}catch(e){}
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+function syncFlow(){document.querySelectorAll('[data-flow]').forEach(el=>el.classList.toggle('flowLocked',+el.dataset.flow>state.flowStep))}
+function go(id){const el=document.getElementById(id);if(!el)return;const host=el.matches('[data-flow]')?el:el.closest('[data-flow]');if(host){const n=+host.dataset.flow;if(n>state.flowStep){state.flowStep=n;save();syncFlow();host.classList.add('flowReveal');setTimeout(()=>host.classList.remove('flowReveal'),450)}}requestAnimationFrame(()=>el.scrollIntoView({behavior:'smooth',block:'start'}))}
+function setStage(i){document.querySelectorAll('.step').forEach((s,n)=>s.classList.toggle('on',n<=i))}
+function bindField(id,onChange){const el=document.getElementById(id);if(!el)return;el.value=state.fields[id]||'';const fn=()=>{state.fields[id]=el.value;save();if(onChange)onChange()};el.addEventListener('input',fn);el.addEventListener('change',fn)}
+function filled(ids){return ids.every(id=>(state.fields[id]||'').trim())}
+function gate(btn,ids,extra=true,feedback){const done=filled(ids)&&extra;document.getElementById(btn).disabled=!done;if(feedback)document.getElementById(feedback).classList.toggle('show',done);return done}
+syncFlow();
+document.getElementById('begin').onclick=()=>go('roadmap');document.getElementById('roadContinue').onclick=()=>go('selfBanner');
+
+const loopData=[['NOTICE','What is happening in my reasoning?'],['NAME','Which assumption, emotion, source, or pressure is shaping it?'],['NAVIGATE','What should I test, seek, or change before acting?']];
+function renderLoop(){const g=document.getElementById('loopGrid');g.innerHTML=loopData.map((x,i)=>'<button class="loopCard '+(state.loop.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.loop.includes(i))state.loop.push(i);save();renderLoop()});const done=state.loop.length===3;document.getElementById('loopContinue').disabled=!done;document.getElementById('loopFeedback').classList.toggle('show',done)}
+renderLoop();document.getElementById('loopContinue').onclick=()=>go('calibration');
+
+bindField('calAnswer',syncCal);const conf=document.getElementById('confidence');conf.value=state.fields.confidence||50;document.getElementById('confValue').textContent=conf.value+'%';conf.oninput=()=>{state.fields.confidence=conf.value;document.getElementById('confValue').textContent=conf.value+'%';save()};
+['calRemember','calEvidence','calReliable','calChange'].forEach(id=>bindField(id,syncCal));
+document.getElementById('lockCalibration').onclick=()=>{if((state.fields.calAnswer||'').trim()){state.lockedCalibration=true;save();document.getElementById('answerReveal').classList.add('show');syncCal()}};
+if(state.lockedCalibration)document.getElementById('answerReveal').classList.add('show');
+function syncCal(){gate('calContinue',['calAnswer','calRemember','calEvidence','calReliable','calChange'],state.lockedCalibration,'calFeedback')}
+syncCal();document.getElementById('calContinue').onclick=()=>go('knowledge');
+
+document.querySelectorAll('[data-rate]').forEach(row=>{const key=row.dataset.rate;row.innerHTML=[1,2,3,4,5].map(n=>'<button data-n="'+n+'" class="'+(state.rates[key]===n?'on':'')+'">'+n+'</button>').join('');row.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.rates[key]=+b.dataset.n;save();renderRates();syncKnowledge()})});
+function renderRates(){document.querySelectorAll('[data-rate]').forEach(row=>{const key=row.dataset.rate;row.querySelectorAll('button').forEach(b=>b.classList.toggle('on',state.rates[key]===+b.dataset.n))})}
+renderRates();['knowledgeWeight','knowledgeNext'].forEach(id=>bindField(id,syncKnowledge));function syncKnowledge(){gate('knowledgeContinue',['knowledgeWeight','knowledgeNext'],['evidenceRate','authorityRate','closureRate'].every(k=>state.rates[k]),'knowledgeFeedback')}syncKnowledge();document.getElementById('knowledgeContinue').onclick=()=>go('closure');
+
+const closureFields=['clUrgency','clRange','clDisconfirm','clPause'];closureFields.forEach(id=>bindField(id,syncClosure));function syncClosure(){gate('closureContinue',closureFields)}syncClosure();document.getElementById('closureContinue').onclick=()=>go('revision');
+const revisionFields=['revEvidence','revTrust','revSafe','revDifficult'];revisionFields.forEach(id=>bindField(id,syncRevision));function syncRevision(){gate('revisionContinue',revisionFields)}syncRevision();document.getElementById('revisionContinue').onclick=()=>{setStage(1);go('groupBanner')};
+
+const factorData=[['HIERARCHY','The senior person already decided.'],['BELONGING','I do not want to be the difficult one.'],['PACE','We do not have time to reopen this.'],['DOMINANCE','The loudest voice owns the airtime.']];
+function renderFactors(){const g=document.getElementById('factorGrid');g.innerHTML=factorData.map((x,i)=>'<button class="factor '+(state.factors.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.factors.includes(i))state.factors=state.factors.filter(x=>x!==i);else if(state.factors.length<2)state.factors.push(i);save();renderFactors();syncGroup()})}
+renderFactors();['groupSilence','groupLeader'].forEach(id=>bindField(id,syncGroup));function syncGroup(){gate('groupContinue',['groupSilence','groupLeader'],state.factors.length===2,'groupFeedback')}syncGroup();document.getElementById('groupContinue').onclick=()=>go('candor');
+
+const moveData=[['THINK FIRST','Give quiet time before discussion.'],['WRITE FIRST','Capture views before social influence.'],['HEAR ALL','No one speaks twice until all speak once.'],['LEADER LAST','Delay the leader\'s preference.'],['USE ANONYMITY','Separate ideas from status when needed.']];
+function renderMoves(){const g=document.getElementById('moveGrid');g.innerHTML=moveData.map((x,i)=>'<button class="move '+(state.moves.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.moves.includes(i))state.moves.push(i);save();renderMoves();syncCandor()})}
+renderMoves();['candorMove','candorWhere'].forEach(id=>bindField(id,syncCandor));function syncCandor(){gate('candorContinue',['candorMove','candorWhere'],state.moves.length===5,'candorFeedback')}syncCandor();document.getElementById('candorContinue').onclick=()=>go('decisionProcess');
+
+['skipStage','skipEffect'].forEach(id=>bindField(id,syncDecision));function syncDecision(){gate('decisionContinue',['skipStage','skipEffect'])}syncDecision();document.getElementById('decisionContinue').onclick=()=>go('groan');
+['groanFeel','groanLead'].forEach(id=>bindField(id,syncGroan));function syncGroan(){gate('groanContinue',['groanFeel','groanLead'])}syncGroan();document.getElementById('groanContinue').onclick=()=>go('premortem');
+
+const premFields=['pre1','pre2','pre3','preTheme','preAction'];premFields.forEach(id=>bindField(id,syncPrem));function syncPrem(){gate('preContinue',premFields,true,'preFeedback')}syncPrem();document.getElementById('preContinue').onclick=()=>go('gradient');
+
+const gradData=['Wholehearted endorsement','Agreement with minor point','Support with reservations','Abstain','More discussion needed','Do not like, will support','Serious disagreement','Block / veto if authorized'];
+function renderGrad(){const g=document.getElementById('gradGrid');g.innerHTML=gradData.map((x,i)=>'<button class="grad '+(state.gradient===i?'on':'')+'" data-i="'+i+'"><b>'+(i+1)+'</b><span>'+x+'</span></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.gradient=+b.dataset.i;save();renderGrad();syncGrad()})}
+renderGrad();['gradWhy','gradMove'].forEach(id=>bindField(id,syncGrad));function syncGrad(){gate('gradContinue',['gradWhy','gradMove'],state.gradient!==null,'gradFeedback')}syncGrad();document.getElementById('gradContinue').onclick=()=>go('dotvote');
+
+const voteData=['Pilot in one unit first','Launch to everyone at once','Require supervisor sponsorship','Offer employee-selected formats','Tie participation to real work','Use recognition and visible progress'];
+function renderVotes(){const g=document.getElementById('voteOptions');g.innerHTML=voteData.map((x,i)=>'<button class="voteCard '+(state.votes.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x+'</strong><small>'+(state.votes.includes(i)?'Selected ✓':'Select for deeper analysis')+'</small></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.votes.includes(i))state.votes=state.votes.filter(x=>x!==i);else if(state.votes.length<2)state.votes.push(i);save();renderVotes()});const done=state.votes.length===2;document.getElementById('voteContinue').disabled=!done;document.getElementById('voteFeedback').classList.toggle('show',done)}
+renderVotes();document.getElementById('voteContinue').onclick=()=>{setStage(2);go('caseBanner')};
+document.getElementById('caseIntroContinue').onclick=()=>go('caseFrame');
+
+const caseFrameFields=['caseProblem','caseStakeholders','caseEvidence','caseFirst'];caseFrameFields.forEach(id=>bindField(id,syncCaseFrame));function syncCaseFrame(){gate('caseFrameContinue',caseFrameFields)}syncCaseFrame();document.getElementById('caseFrameContinue').onclick=()=>go('caseVoices');
+
+const perspectiveData=[
+ ['CYCLIST / COMMUTER','Safety, travel time, predictability, right-of-way, and protection from deliberate hazards may dominate this frame.'],
+ ['RUNNER / WALKER','Access, physical safety, speed differentials, and the belief that the trail is shared public space may dominate this frame.'],
+ ['PARK / PUBLIC-SAFETY ROLE','Capacity, enforcement, cleanup, recurring conflict, rules, infrastructure, and feasible stewardship may dominate this frame.'],
+ ['SKATER / RECREATIONAL USER','Access, belonging, skill variation, space needs, and fairness across user groups may dominate this frame.']
+];
+function renderPerspectives(){const g=document.getElementById('perspectiveGrid');g.innerHTML=perspectiveData.map((x,i)=>'<button class="perspective '+(state.perspectives.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.perspectives.includes(i))state.perspectives.push(i);save();renderPerspectives();syncVoices()})}
+renderPerspectives();['voiceNew','voiceReframe'].forEach(id=>bindField(id,syncVoices));function syncVoices(){gate('caseVoicesContinue',['voiceNew','voiceReframe'],state.perspectives.length===4)}syncVoices();document.getElementById('caseVoicesContinue').onclick=()=>go('caseConverge');
+
+const criteriaData=['Safety','Feasibility','Fairness across users','Sustainability','Unintended consequences','Cost / resources','Enforceability','System capacity'];
+function renderCriteria(){const g=document.getElementById('criteriaPool');g.innerHTML=criteriaData.map((x,i)=>'<button class="criterion '+(state.criteria.includes(i)?'on':'')+'" data-i="'+i+'">'+x+'</button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.criteria=state.criteria.includes(i)?state.criteria.filter(x=>x!==i):state.criteria.concat(i);save();renderCriteria();syncCaseConverge()})}
+renderCriteria();
+const optionFields=['caseOpt1','caseOpt2','caseOpt3','caseOpt4'];optionFields.forEach(id=>bindField(id,()=>{renderCaseVotes();syncCaseConverge()}));['caseLead','caseReservation'].forEach(id=>bindField(id,syncCaseConverge));
+function renderCaseVotes(){const g=document.getElementById('caseVoteOptions');g.innerHTML=optionFields.map((id,i)=>'<button class="voteCard '+(state.caseVotes.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+((state.fields[id]||'').trim()||('Option '+(i+1)))+'</strong><small>'+(state.caseVotes.includes(i)?'Selected ✓':'Pre-commit')+'</small></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.caseVotes.includes(i))state.caseVotes=state.caseVotes.filter(x=>x!==i);else if(state.caseVotes.length<2)state.caseVotes.push(i);save();renderCaseVotes();syncCaseConverge()})}
+renderCaseVotes();
+function syncCaseConverge(){gate('caseConvergeContinue',[...optionFields,'caseLead','caseReservation'],state.criteria.length>=3&&state.caseVotes.length===2)}syncCaseConverge();document.getElementById('caseConvergeContinue').onclick=()=>go('caseDebrief');
+
+const debriefFields=['debriefFrame','debriefVoice','debriefPressure','debriefReservation'];debriefFields.forEach(id=>bindField(id,syncDebrief));function syncDebrief(){gate('caseDebriefContinue',debriefFields)}syncDebrief();document.getElementById('caseDebriefContinue').onclick=()=>{setStage(3);go('systemBanner')};
+
+const vidFields=['vidProblem','vidInterventions','vidEffects','vidMissing'];vidFields.forEach(id=>bindField(id,syncSystem));
+const lensData=[['EVENT','What happened?'],['PATTERN','What keeps happening over time?'],['STRUCTURE','What relationships and incentives produce the pattern?'],['MENTAL MODEL','What assumptions keep the structure in place?']];
+function renderLenses(){const g=document.getElementById('lensGrid');g.innerHTML=lensData.map((x,i)=>'<button class="lens '+(state.lenses.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.lenses.includes(i))state.lenses.push(i);save();renderLenses();syncSystem()})}
+renderLenses();function syncSystem(){gate('systemLensContinue',vidFields,state.lenses.length===4)}syncSystem();document.getElementById('systemLensContinue').onclick=()=>go('burden');
+
+const burdenFields=['burdenSymptom','burdenQuick','burdenSide','burdenFund','burdenCapacity','burdenAssumption','burdenEffect','burdenDevil','burdenEvidence'];burdenFields.forEach(id=>bindField(id,syncBurden));function syncBurden(){gate('burdenContinue',burdenFields,true,'burdenFeedback')}syncBurden();document.getElementById('burdenContinue').onclick=()=>go('stabilize');
+
+const stabFields=['stabNow','stabBuild','stabSunset','stabOwner'];stabFields.forEach(id=>bindField(id,syncStab));function syncStab(){gate('stabilizeContinue',stabFields)}syncStab();document.getElementById('stabilizeContinue').onclick=()=>go('toolkit');
+document.getElementById('toolkitContinue').onclick=()=>go('synthesis');document.getElementById('synthesisContinue').onclick=()=>{setStage(4);go('final')};
+
+const finalFields=['finalPause','finalVoice','finalQuick'];finalFields.forEach(id=>bindField(id,syncFinal));function syncFinal(){gate('finish',finalFields)}syncFinal();
+document.getElementById('finish').onclick=()=>{state.flowStep=25;save();syncFlow();document.getElementById('complete').classList.add('show');go('complete')};
+if(state.flowStep>=25)document.getElementById('complete').classList.add('show');
+document.getElementById('review').onclick=()=>document.getElementById('top').scrollIntoView({behavior:'smooth'});
+document.getElementById('restart').onclick=()=>{if(confirm('Start over and clear your saved Metacognition progress?')){localStorage.removeItem(KEY);location.reload()}};
+
+const stageMap=[[2,0],[7,1],[14,2],[19,3],[24,4]];
+window.addEventListener('scroll',()=>{let current=0;stageMap.forEach(([flow,s])=>{const el=document.querySelector('[data-flow="'+flow+'"]');if(el&&el.getBoundingClientRect().top<window.innerHeight*.42)current=s});setStage(current)},{passive:true});
+</script>
+</body>
+</html>
