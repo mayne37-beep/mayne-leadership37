@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#08213f">
-<meta name="description" content="An interactive Creative Thinking Foundations course from Mayne Leadership. Explore, reframe, diverge, connect, develop, converge, and test.">
-<title>Creative Thinking: Foundations | Mayne Leadership</title>
+<meta name="description" content="Full interactive Creative Thinking course from Mayne Leadership. Explore, reframe, diverge, connect, develop, converge, and test.">
+<title>Creative Thinking | Full Online Course | Mayne Leadership</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <style>
 :root{
@@ -154,16 +154,27 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
 .complete h2{font-size:clamp(2.7rem,6vw,5.4rem);margin:.4rem 0}
 .badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:24px 0}
 .badges span{padding:9px 12px;border-radius:999px;border:1px solid #ffffff28;background:#ffffff0a;font-size:.72rem;font-weight:900}
+
+.courseRoadmap{background:white}.roadGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:24px}.roadCard{padding:24px;border:1px solid var(--line);border-radius:20px;background:#fbfdff}.roadCard.goldCard{background:#fff8e8;border-color:#ead39c}.roadList{display:grid;gap:10px;margin-top:14px}.roadItem{display:flex;gap:11px;align-items:flex-start}.roadItem i{font-style:normal;width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:#e7f5ff;color:#0d5e9f;font-weight:950}
+.constraintTeach{margin-top:36px;padding-top:30px;border-top:1px solid var(--line)}.constraintCards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.constraintCard{padding:17px;border:1px solid var(--line);border-radius:16px;background:white}.constraintCard strong{color:#0d5e9f;display:block;margin-bottom:6px}.constraintCard p{font-size:.86rem;color:var(--muted);margin:0}
+.lab{margin-top:25px;padding:22px;border:1px solid var(--line);border-radius:20px;background:#fbfdff}.lab h3{margin:.2rem 0 .6rem}.labTag{display:inline-block;font-size:.66rem;letter-spacing:.1em;font-weight:950;color:#865f08;background:#fff2c9;padding:6px 9px;border-radius:999px}.labGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:15px}.labGrid.three{grid-template-columns:repeat(3,1fr)}.labCard{padding:16px;border:1px solid var(--line);border-radius:15px;background:white}.labCard label{font-weight:900;font-size:.8rem;color:#0d5e9f;display:block;margin-bottom:7px}.lab select{width:100%;border:1px solid #b9cedd;border-radius:10px;padding:11px;background:white;color:var(--ink)}
+.promptShelf{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.promptChip{padding:8px 10px;border-radius:999px;background:#e9f6fd;border:1px solid #c7e2f1;font-size:.78rem;font-weight:850;color:#0d5e9f}
+.twentyGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}.twentyGrid input{width:100%;border:1px solid #b9cedd;border-radius:11px;padding:11px 12px;background:white}
+.toolShelf{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.toolMini{padding:17px;border:1px solid var(--line);border-radius:16px;background:white}.toolMini strong{display:block;color:#0d5e9f}.toolMini p{font-size:.84rem;color:var(--muted);margin:.4rem 0 0}
+.scamperIdeas{display:grid;gap:6px;margin-top:10px}.scamperIdeas textarea{font-size:.78rem;padding:9px;min-height:78px}
+.roundBlock{margin-top:26px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#fbfdff}.roundBlock h3{margin-top:0}.roundBlock.lockedRound{opacity:.42;pointer-events:none}.roundCount{font-size:.8rem;font-weight:900;color:var(--muted);margin-top:8px}
+.capstoneFull{background:linear-gradient(135deg,#071a35,#0b416e 55%,#145f8d);color:white}.capstoneFull .kicker{color:#ffd978}.capstoneFull .lede{color:#c9dce9}.capstoneGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px}.capstoneCard{padding:18px;border:1px solid #ffffff27;border-radius:18px;background:#ffffff0b}.capstoneCard label{display:block;color:#ffd978;font-weight:900;margin-bottom:7px}.capstoneCard textarea{background:#ffffffef}.takeawayGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.takeaway{padding:18px;border:1px solid var(--line);border-radius:16px;background:white}.takeaway strong{display:block;color:#0d5e9f;margin-bottom:6px}
+.attrib{font-size:.78rem;color:var(--muted);margin-top:25px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:900px){
   .rail{justify-content:flex-start}.ideaField{opacity:.35;width:70vw;right:-24%}
-  .challengeGrid,.split,.finalGrid{grid-template-columns:1fr}.compareGrid,.metricGrid,.lensGrid{grid-template-columns:1fr}
-  .toolGrid{grid-template-columns:repeat(2,1fr)}.canvas,.testGrid{grid-template-columns:1fr}.tournament{grid-template-columns:1fr 1fr}
+  .challengeGrid,.split,.finalGrid,.roadGrid{grid-template-columns:1fr}.compareGrid,.metricGrid,.lensGrid{grid-template-columns:1fr}
+  .toolGrid,.constraintCards,.toolShelf,.takeawayGrid{grid-template-columns:repeat(2,1fr)}.canvas,.testGrid,.labGrid,.labGrid.three,.capstoneGrid{grid-template-columns:1fr}.tournament{grid-template-columns:1fr 1fr}
   .processTrack{grid-template-columns:repeat(2,1fr)}.processNode:after{display:none}
 }
 @media(max-width:620px){
   .topin{gap:12px;padding:9px 12px}.brand{font-size:.66rem}.home{font-size:.7rem}
   .hero{min-height:82vh}.hero h1{font-size:3.15rem}.ideaField{display:none}
-  .constraint,.reframeGrid,.questionWall{grid-template-columns:1fr}.toolGrid{grid-template-columns:1fr}.tournament{grid-template-columns:1fr}
+  .constraint,.reframeGrid,.questionWall,.twentyGrid,.constraintCards,.toolShelf,.takeawayGrid{grid-template-columns:1fr}.toolGrid{grid-template-columns:1fr}.tournament{grid-template-columns:1fr}
   .section{padding:68px 18px}
 }
 </style>
@@ -189,12 +200,39 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i>
   </div>
   <div class="heroCopy">
-    <div class="eyebrow">CREATIVE THINKING · FOUNDATIONS</div>
+    <div class="eyebrow">CREATIVE THINKING · FULL ONLINE COURSE</div>
     <h1>See what others <span class="gold">don’t.</span></h1>
     <p class="heroLead">Creative thinking is not about being artistic. It is about deliberately finding possibilities that routine thinking misses.</p>
-    <p>Challenge assumptions. Change the question. Generate more than the obvious answer. Combine ideas. Develop what has promise. Test before you bet everything.</p>
+    <p>Challenge assumptions. Change the question. Generate more than the obvious answer. Combine ideas. Develop what has promise. Test before you bet everything.</p><p style="font-size:.92rem;color:#bcd6e8"><strong>Approx. 2 hours</strong> · Full interactive course · Extended practice labs included · Progress saved on this device</p>
     <button class="btn" id="begin">BEGIN THE JOURNEY →</button>
   </div>
+</section>
+
+
+<section class="section courseRoadmap" id="courseRoadmap" data-flow="1">
+ <div class="wrap">
+  <div class="kicker">Course Roadmap</div><h2>The complete Creative Thinking course.</h2>
+  <p class="lede">This online course follows the full learning sequence: concrete experience, constrained thinking, curiosity, reframing, divergence, connection-making, structured creativity tools, elaboration, convergence, experimentation, and a culminating application.</p>
+  <div class="roadGrid">
+   <div class="roadCard">
+    <strong style="font-size:1.18rem">Learning objectives</strong>
+    <div class="roadList">
+     <div class="roadItem"><i>1</i><div>Explain the role of creative thinking in organizational problem solving.</div></div>
+     <div class="roadItem"><i>2</i><div>Recognize assumptions and habits that constrain creativity.</div></div>
+     <div class="roadItem"><i>3</i><div>Reframe problems to reveal alternative perspectives.</div></div>
+     <div class="roadItem"><i>4</i><div>Generate multiple and diverse solutions using divergent-thinking techniques.</div></div>
+     <div class="roadItem"><i>5</i><div>Apply structured creativity tools to organizational challenges.</div></div>
+     <div class="roadItem"><i>6</i><div>Develop, evaluate, and test creative ideas for practical application.</div></div>
+    </div>
+   </div>
+   <div class="roadCard goldCard">
+    <div class="kicker">Primary Model</div>
+    <h3>Explore → Reframe → Diverge → Connect → Develop → Converge → Test</h3>
+    <p><strong>Core duration:</strong> approximately 2 hours. Optional/alternate activities from the original course are included as practice labs so the full course content is available online.</p>
+    <button class="btn" id="roadmapContinue">BEGIN THE CONCRETE EXPERIENCE →</button>
+   </div>
+  </div>
+ </div>
 </section>
 
 <section class="section challenge" id="openingChallenge" data-flow="1">
@@ -235,6 +273,41 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
       <article class="compareCard"><div class="kicker">Problem Solving</div><div class="bigQ">What will we do?</div><p>Move from understanding the problem to choosing, implementing, and learning from a course of action.</p></article>
     </div>
     <div class="principle">Creativity is not permission to ignore reality. It is permission to search more widely before reality is used to narrow the field.</div>
+<div class="constraintTeach">
+ <div class="kicker">How Thinking Becomes Constrained</div><h2 style="font-size:2.2rem">Efficiency can quietly become a boundary.</h2>
+ <p class="lede">Experience helps us recognize patterns quickly—but the same efficiency can make our thinking predictable. The goal is not to reject experience. It is to notice when familiar thinking has become the only thinking.</p>
+ <div class="constraintCards">
+  <div class="constraintCard"><strong>Mental models</strong><p>Internal pictures of how the world works can become invisible rules.</p></div>
+  <div class="constraintCard"><strong>Assumptions</strong><p>Things treated as true even though they may not have been tested.</p></div>
+  <div class="constraintCard"><strong>Functional fixedness</strong><p>Seeing a tool, process, or role only in its familiar use.</p></div>
+  <div class="constraintCard"><strong>Habit + expertise</strong><p>Past success can narrow the search to approaches we already know.</p></div>
+  <div class="constraintCard"><strong>Organizational norms</strong><p>“That is how we do it here” can become a substitute for examination.</p></div>
+  <div class="constraintCard"><strong>Fear of failure</strong><p>People self-censor before an idea is developed enough to judge fairly.</p></div>
+  <div class="constraintCard"><strong>Premature judgment</strong><p>Evaluation begins before the group has generated meaningful variety.</p></div>
+  <div class="constraintCard"><strong>Group conformity</strong><p>Agreement can feel safer than exploring a different frame.</p></div>
+ </div>
+
+ <div class="lab">
+  <span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>The Assumption Breaker</h3>
+  <p><strong>Challenge:</strong> Employees are not completing required training on time. Identify three assumptions, classify each, then imagine it is no longer true.</p>
+  <div class="labGrid three">
+   <div class="labCard"><label>ASSUMPTION 1</label><textarea id="assume1" rows="3" placeholder="What are we treating as true?"></textarea><select id="assumeType1"><option value="">Classify it…</option><option>Fact</option><option>Requirement</option><option>Habit / belief</option></select><textarea id="assumeIdea1" rows="3" placeholder="If this were no longer true, what new idea becomes possible?"></textarea></div>
+   <div class="labCard"><label>ASSUMPTION 2</label><textarea id="assume2" rows="3" placeholder="What are we treating as true?"></textarea><select id="assumeType2"><option value="">Classify it…</option><option>Fact</option><option>Requirement</option><option>Habit / belief</option></select><textarea id="assumeIdea2" rows="3" placeholder="If this were no longer true, what new idea becomes possible?"></textarea></div>
+   <div class="labCard"><label>ASSUMPTION 3</label><textarea id="assume3" rows="3" placeholder="What are we treating as true?"></textarea><select id="assumeType3"><option value="">Classify it…</option><option>Fact</option><option>Requirement</option><option>Habit / belief</option></select><textarea id="assumeIdea3" rows="3" placeholder="If this were no longer true, what new idea becomes possible?"></textarea></div>
+  </div>
+ </div>
+
+ <div class="lab">
+  <span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>The Constraint Challenge</h3>
+  <p>Improve communication across an organization four times. Notice whether reduced resources merely weaken the idea—or force a different category of thinking.</p>
+  <div class="labGrid">
+   <div class="labCard"><label>VERY LARGE BUDGET</label><textarea id="constraintLarge" rows="3" placeholder="What would you do?"></textarea></div>
+   <div class="labCard"><label>$10,000</label><textarea id="constraint10k" rows="3" placeholder="What changes?"></textarea></div>
+   <div class="labCard"><label>$500</label><textarea id="constraint500" rows="3" placeholder="What changes now?"></textarea></div>
+   <div class="labCard"><label>$0 · NO NEW MEETING · NO MASS EMAIL</label><textarea id="constraintZero" rows="3" placeholder="What behavior, workflow, ownership, or information-flow redesign becomes possible?"></textarea></div>
+  </div>
+ </div>
+</div>
     <div class="gate"><button class="btn" id="definitionContinue">START WITH EXPLORATION →</button></div>
   </div>
 </section>
@@ -248,10 +321,11 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <div class="kicker">Question Storming</div>
     <h2>For a moment, solutions are not allowed.</h2>
     <p class="lede">An organization is seeing declining participation in voluntary professional development. Traditional announcements, reminders, and supervisor encouragement have produced little improvement.</p>
-    <p><strong>Select at least four questions</strong> you would want answered before generating solutions.</p>
-    <div class="questionWall" id="questionWall"></div>
-    <div class="count" id="questionCount">0 selected</div>
-    <div class="feedback" id="questionFeedback">Strong exploration widens what you know before you narrow what you will do. Questions about motivation, access, value, timing, delivery, and stakeholder perspectives can change the entire solution space.</div>
+    <p><strong>Generate five questions before offering a single solution.</strong> Use the prompts as inspiration, but write your own questions.</p>
+    <div class="promptShelf"><span class="promptChip">What are we missing?</span><span class="promptChip">Why is this happening?</span><span class="promptChip">Who experiences this differently?</span><span class="promptChip">What has already been tried?</span><span class="promptChip">What would success look like?</span><span class="promptChip">What if the opposite were true?</span></div>
+    <div class="ideaInputs" id="questionInputs"></div>
+    <div class="count" id="questionCount">0 of 5 questions written</div>
+    <div class="feedback" id="questionFeedback">Strong exploration widens what you know before you narrow what you will do. Curiosity is active investigation—not delay.</div>
     <div class="gate"><button class="btn" id="exploreContinue" disabled>CONTINUE TO REFRAME →</button></div>
   </div>
 </section>
@@ -264,9 +338,13 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
   <div class="wrap">
     <div class="kicker">Change the Question</div>
     <h2>Do not solve the first version of the problem automatically.</h2>
-    <p class="lede"><strong>Original frame:</strong> “How do we get employees to attend training?” Select at least two reframes that open meaningfully different solution paths.</p>
-    <div class="reframeGrid" id="reframeGrid"></div>
+    <p class="lede"><strong>Original frame:</strong> “How do we get employees to attend training?” Create <strong>five different frames</strong> that change where the mind searches for answers.</p>
+    <div class="promptShelf"><span class="promptChip">Motivation</span><span class="promptChip">Delivery</span><span class="promptChip">Workflow</span><span class="promptChip">Value</span><span class="promptChip">Choice</span><span class="promptChip">Access</span><span class="promptChip">Stakeholder perspective</span><span class="promptChip">Reverse framing</span></div>
+    <div class="ideaInputs" id="reframeInputs"></div>
+    <div class="count" id="reframeCount">0 of 5 reframes written</div>
     <div class="feedback" id="reframeFeedback">Reframing is not wordsmithing. A useful reframe changes what counts as a possible solution—for example, shifting from attendance to motivation, from an event to continuous learning, or from organizational delivery to employee pull.</div>
+    <div class="lab"><span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>Eliminate the Process</h3><p>Choose a familiar process. First ask how to improve it. Then ask how the need for the process might be eliminated entirely.</p><div class="labGrid"><div class="labCard"><label>NORMAL IMPROVEMENT</label><textarea id="eliminateImprove" rows="4" placeholder="How could we make the existing process better?"></textarea></div><div class="labCard"><label>ELIMINATE THE NEED</label><textarea id="eliminateNeed" rows="4" placeholder="How could we prevent or redesign the conditions that make this process necessary?"></textarea></div></div></div>
+    <div class="lab"><span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>One Problem — Four Perspectives</h3><p>A new organizational policy is being implemented, but employees are resisting it. What does each perspective care about, fear, and need?</p><div class="labGrid"><div class="labCard"><label>EMPLOYEE</label><textarea id="perspEmployee" rows="4"></textarea></div><div class="labCard"><label>SUPERVISOR</label><textarea id="perspSupervisor" rows="4"></textarea></div><div class="labCard"><label>SENIOR LEADER</label><textarea id="perspLeader" rows="4"></textarea></div><div class="labCard"><label>CUSTOMER / STAKEHOLDER</label><textarea id="perspCustomer" rows="4"></textarea></div></div></div>
     <div class="gate"><button class="btn" id="reframeContinue" disabled>CONTINUE TO DIVERGE →</button></div>
   </div>
 </section>
@@ -295,14 +373,13 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
 
 <section class="section" id="ideaChallenge" data-flow="10">
   <div class="wrap">
-    <div class="kicker">20-Idea Principle · Compressed Practice</div>
+    <div class="kicker">20-Idea Challenge</div>
     <h2>Push beyond your first answer.</h2>
-    <p class="lede">For this online version, generate six distinct ideas for increasing voluntary professional development participation. Do not judge them yet.</p>
-    <div class="ideaInputs" id="divergeInputs">
-      <input placeholder="Idea 1"><input placeholder="Idea 2"><input placeholder="Idea 3"><input placeholder="Idea 4"><input placeholder="Idea 5"><input placeholder="Idea 6">
-    </div>
-    <div class="count" id="ideaCount">0 of 6 ideas entered</div>
-    <div class="feedback" id="ideaFeedback">You have enough material to begin noticing categories, combinations, and surprises. In a live class, this same principle can be extended to a full 20-Idea Challenge.</div>
+    <p class="lede"><strong>Challenge:</strong> How could we improve communication between two organizational units that rarely interact? Generate twenty ideas before evaluating any of them. Short phrases are enough.</p>
+    <div class="twentyGrid" id="divergeInputs"></div>
+    <div class="count" id="ideaCount">0 of 20 ideas entered</div>
+    <div class="feedback" id="ideaFeedback">Now mark the pattern mentally: Which idea is most realistic? Most unusual? Which has the greatest potential if developed? The later ideas often appear only after familiar answers are exhausted.</div>
+    <div class="lab"><span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>$10 / $10,000 / $1 Million</h3><p>Solve the same workplace problem under three radically different resource levels, then combine the strongest elements.</p><div class="labGrid"><div class="labCard"><label>$10 SOLUTION</label><textarea id="money10" rows="3"></textarea></div><div class="labCard"><label>$10,000 SOLUTION</label><textarea id="money10k" rows="3"></textarea></div><div class="labCard"><label>$1 MILLION SOLUTION</label><textarea id="money1m" rows="3"></textarea></div><div class="labCard"><label>HYBRID SOLUTION</label><textarea id="moneyHybrid" rows="3" placeholder="Combine the smartest elements from all three."></textarea></div></div></div>
     <div class="gate"><button class="btn" id="divergeContinue" disabled>CONTINUE TO CONNECT →</button></div>
   </div>
 </section>
@@ -318,6 +395,8 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <p class="lede">Choose an outside environment. Then ask what principles from that environment could transfer to professional development.</p>
     <div class="lensGrid" id="lensGrid"></div>
     <div class="transfer" id="transferBox">Choose a lens to reveal a transfer prompt.</div>
+    <div style="margin-top:12px"><textarea id="connectIdea" rows="4" placeholder="What principle from that outside environment could transfer to this challenge?"></textarea></div>
+    <div class="lab"><span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>Idea Mash-Up</h3><p>Forced connections disrupt predictable associations. Combine a workplace topic with something that appears unrelated, then extract a useful feature or principle.</p><div class="labGrid"><div class="labCard"><label>PAIRING</label><select id="mashPair"><option value="">Choose a pairing…</option><option>Training + Netflix</option><option>Employee recognition + video games</option><option>Communication + airport</option><option>Onboarding + hotel</option><option>Scheduling + emergency room</option></select></div><div class="labCard"><label>WHAT COULD TRANSFER?</label><textarea id="mashIdea" rows="4" placeholder="What unexpected workplace idea emerges?"></textarea></div></div></div>
     <div class="gate"><button class="btn" id="connectContinue" disabled>CONTINUE TO STRUCTURED TOOLS →</button></div>
   </div>
 </section>
@@ -326,10 +405,19 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
   <div class="wrap">
     <div class="kicker">Structured Creativity Tools</div>
     <h2>Structure can stimulate creativity.</h2>
-    <p class="lede">SCAMPER changes the search pattern by deliberately prompting different kinds of transformation. Open all seven prompts.</p>
+    <p class="lede">SCAMPER changes the search pattern by deliberately prompting different kinds of transformation. <strong>Produce at least one idea for every letter.</strong></p>
     <div class="toolGrid" id="scamperGrid"></div>
-    <div class="count" id="scamperCount">0 of 7 explored</div>
-    <div class="feedback" id="scamperFeedback">The point of SCAMPER is not that every prompt produces a great idea. The point is that each prompt sends your attention somewhere ordinary brainstorming might not.</div>
+    <div class="count" id="scamperCount">0 of 7 prompts completed</div>
+    <div class="feedback" id="scamperFeedback">Now identify the two SCAMPER ideas with the most potential. The point is not that every prompt produces a great idea; each prompt changes the search pattern.</div>
+    <div class="toolShelf">
+      <div class="toolMini"><strong>Reverse thinking</strong><p>Design the opposite or worst result, then reverse the conditions.</p></div>
+      <div class="toolMini"><strong>Six Thinking Hats</strong><p>Deliberately shift the mode of attention used to examine an idea.</p></div>
+      <div class="toolMini"><strong>Attribute listing</strong><p>Break a product, service, or process into attributes and alter them one at a time.</p></div>
+      <div class="toolMini"><strong>Morphological analysis</strong><p>Combine different dimensions or features systematically.</p></div>
+      <div class="toolMini"><strong>Constraint removal</strong><p>Temporarily remove a presumed limitation and examine what becomes possible.</p></div>
+      <div class="toolMini"><strong>Worst Possible Idea</strong><p>Generate deliberately bad ideas to expose constructive design principles.</p></div>
+    </div>
+    <div class="lab"><span class="labTag">OPTIONAL / ALTERNATE PRACTICE LAB</span><h3>Worst Possible Idea</h3><p>Design the worst employee onboarding experience you can imagine. Then reverse the failures into useful design principles.</p><div class="labGrid"><div class="labCard"><label>MAKE IT TERRIBLE</label><textarea id="worstIdea" rows="5" placeholder="No instructions? Conflicting guidance? Information overload? Make it intentionally bad."></textarea></div><div class="labCard"><label>REVERSE IT</label><textarea id="worstReverse" rows="5" placeholder="What constructive principles appear when you reverse the failures?"></textarea></div></div></div>
     <div class="gate"><button class="btn" id="scamperContinue" disabled>CONTINUE TO DEVELOP →</button></div>
   </div>
 </section>
@@ -345,9 +433,13 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <p class="lede">Choose one idea from your earlier list and develop it. A vague idea is hard to evaluate; an elaborated idea can be improved, combined, or tested.</p>
     <div class="canvas">
       <div class="canvasCard"><label>THE IDEA</label><textarea id="devIdea" rows="3" placeholder="What is the concept?"></textarea></div>
-      <div class="canvasCard"><label>HOW IT WORKS</label><textarea id="devHow" rows="3" placeholder="What would people actually do?"></textarea></div>
-      <div class="canvasCard"><label>EXPECTED BENEFIT</label><textarea id="devBenefit" rows="3" placeholder="What outcome should improve?"></textarea></div>
+      <div class="canvasCard"><label>WHO USES IT?</label><textarea id="devUser" rows="3" placeholder="Who participates or benefits?"></textarea></div>
+      <div class="canvasCard"><label>WHAT HAPPENS FIRST?</label><textarea id="devFirst" rows="3" placeholder="Describe the first visible step."></textarea></div>
+      <div class="canvasCard"><label>WHAT HAPPENS NEXT?</label><textarea id="devNext" rows="3" placeholder="How does the process continue?"></textarea></div>
+      <div class="canvasCard"><label>RESOURCES REQUIRED</label><textarea id="devResources" rows="3" placeholder="What people, tools, time, or support are needed?"></textarea></div>
+      <div class="canvasCard"><label>BEHAVIOR CHANGE</label><textarea id="devBehavior" rows="3" placeholder="What would people have to do differently?"></textarea></div>
       <div class="canvasCard"><label>BIGGEST BARRIER</label><textarea id="devBarrier" rows="3" placeholder="What could prevent it from working?"></textarea></div>
+      <div class="canvasCard"><label>ASSUMPTION TO TEST</label><textarea id="devAssumption" rows="3" placeholder="What are you assuming about people or the process?"></textarea></div>
     </div>
     <div class="feedback" id="developFeedback">Development turns “interesting” into “understandable.” Once an idea is concrete, you can compare it with alternatives and identify what needs to be tested.</div>
     <div class="gate"><button class="btn" id="developContinue" disabled>CONTINUE TO CONVERGE →</button></div>
@@ -365,6 +457,7 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <p class="lede">Select at least three criteria that matter for this challenge.</p>
     <div class="criteriaPool" id="criteriaPool"></div>
     <div class="feedback" id="criteriaFeedback">Visible criteria make convergence more defensible. Strong teams can also combine useful elements from ideas that do not survive as stand-alone options.</div>
+    <div class="toolShelf"><div class="toolMini"><strong>Decision matrix</strong><p>Score options against explicit weighted criteria.</p></div><div class="toolMini"><strong>Impact–effort grid</strong><p>Compare likely value with the effort required.</p></div><div class="toolMini"><strong>Dot voting</strong><p>Surface preferences quickly—but explain why ideas survived.</p></div><div class="toolMini"><strong>Pros / cons</strong><p>Make tradeoffs visible before commitment.</p></div><div class="toolMini"><strong>Must / should / could</strong><p>Separate essential requirements from desirable features.</p></div><div class="toolMini"><strong>Combine ideas</strong><p>Convergence can create a hybrid rather than crown an unchanged winner.</p></div></div>
     <div class="gate"><button class="btn" id="criteriaContinue" disabled>OPEN THE IDEA TOURNAMENT →</button></div>
   </div>
 </section>
@@ -373,10 +466,12 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
   <div class="wrap">
     <div class="kicker">Idea Tournament</div>
     <h2>Narrow without shutting down too early.</h2>
-    <p class="lede">Your six ideas are carried forward below. Select three finalists. Then you will choose one concept to develop into a small experiment.</p>
-    <div class="tournament" id="tournamentGrid"></div>
-    <div class="count" id="tournamentCount">0 of 3 finalists selected</div>
-    <div class="feedback" id="tournamentFeedback">Before eliminating an idea, ask whether it contains a feature worth preserving. The final concept can be a combination rather than a simple winner.</div>
+    <p class="lede">Carry your 20 ideas into a deliberate convergence sequence. Criteria come before preference, and elimination does not mean useful features must disappear.</p>
+    <div class="roundBlock"><h3>Round 1 · Select 10</h3><div class="tournament" id="round10Grid"></div><div class="roundCount" id="round10Count">0 of 10 selected</div></div>
+    <div class="roundBlock lockedRound" id="round6Block"><h3>Round 2 · Narrow 10 to 6</h3><div class="tournament" id="round6Grid"></div><div class="roundCount" id="round6Count">0 of 6 selected</div></div>
+    <div class="roundBlock lockedRound" id="round3Block"><h3>Round 3 · Narrow 6 to 3 finalists</h3><div class="tournament" id="tournamentGrid"></div><div class="roundCount" id="tournamentCount">0 of 3 finalists selected</div></div>
+    <div class="lab"><h3>Before the final choice</h3><div class="labGrid three"><div class="labCard"><label>WHY DID THESE IDEAS SURVIVE?</label><textarea id="tourWhy" rows="4"></textarea></div><div class="labCard"><label>WHAT VALUABLE ELEMENT MIGHT BE LOST?</label><textarea id="tourLost" rows="4"></textarea></div><div class="labCard"><label>COULD TWO IDEAS BE COMBINED?</label><textarea id="tourCombine" rows="4"></textarea></div></div></div>
+    <div class="feedback" id="tournamentFeedback">Healthy convergence narrows without shutting down thinking too soon. A final concept may combine the strongest elements of several ideas.</div>
     <div class="gate"><button class="btn" id="tournamentContinue" disabled>CHOOSE A FINAL CONCEPT →</button></div>
   </div>
 </section>
@@ -386,6 +481,7 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
     <div class="kicker">Final Concept</div><h2>Which idea has the strongest potential against your criteria?</h2>
     <div class="tournament" id="winnerGrid"></div>
     <div class="feedback" id="winnerFeedback">Selection is not the end of creative thinking. A promising idea is still a hypothesis. The next question is what you need to learn before scaling it.</div>
+    <div class="labGrid"><div class="labCard"><label>WHY THIS CONCEPT?</label><textarea id="winnerWhy" rows="4" placeholder="Explain why it is strongest against the criteria."></textarea></div><div class="labCard"><label>WHAT SHOULD IT BORROW FROM OTHER IDEAS?</label><textarea id="winnerBorrow" rows="4" placeholder="Preserve any useful feature that should survive elimination."></textarea></div></div>
     <div class="gate"><button class="btn" id="winnerContinue" disabled>CONTINUE TO TEST →</button></div>
   </div>
 </section>
@@ -403,7 +499,7 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
       <div class="testCard"><label>ASSUMPTION TO TEST</label><textarea id="testAssumption" rows="3" placeholder="What must be true for this idea to work?"></textarea></div>
       <div class="testCard"><label>SMALLEST USEFUL PILOT</label><textarea id="testPilot" rows="3" placeholder="Who, where, and for how long?"></textarea></div>
       <div class="testCard"><label>EVIDENCE TO COLLECT</label><textarea id="testEvidence" rows="3" placeholder="What will you measure or observe?"></textarea></div>
-      <div class="testCard"><label>CONTINUE / ADJUST / STOP</label><textarea id="testDecision" rows="3" placeholder="What result would change your next move?"></textarea></div>
+      <div class="testCard"><label>RISKS TO CONTROL</label><textarea id="testRisks" rows="3" placeholder="What risk must the pilot limit or monitor?"></textarea></div><div class="testCard"><label>CONTINUE / ADJUST / STOP</label><textarea id="testDecision" rows="3" placeholder="What result would change your next move?"></textarea></div>
     </div>
     <div class="feedback" id="testFeedback">A failed experiment is not automatically a failed effort. If the test produces useful information, it reduces uncertainty and improves the next version.</div>
     <div class="gate"><button class="btn" id="testContinue" disabled>SEE THE FULL MODEL →</button></div>
@@ -425,25 +521,57 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
       <div class="compareCard"><strong>Converge</strong><p>Use criteria to narrow and combine.</p></div>
     </div>
     <div class="principle"><strong>Test:</strong> run a small experiment, learn, and adjust.</div>
-    <div class="gate"><button class="btn" id="modelContinue">FINAL REFLECTION →</button></div>
+    <div class="gate"><button class="btn" id="modelContinue">APPLY THE FULL MODEL →</button></div>
   </div>
 </section>
 
-<section class="section final" id="finalReflection" data-flow="23">
+
+<section class="section capstoneFull" id="creativeCapstone" data-flow="23">
+ <div class="wrap">
+  <div class="kicker">Culminating Creative Thinking Challenge</div><h2>Apply the entire process to one organizational challenge.</h2>
+  <p class="lede">An organization is experiencing declining employee participation in voluntary professional development. Announcements, reminders, and supervisor encouragement have produced little improvement. Leadership wants a fundamentally different approach. Walk through how your thinking changes—not just the final answer.</p>
+  <div class="capstoneGrid">
+   <div class="capstoneCard"><label>1 · EXPLORE</label><textarea id="capExplore" rows="4" placeholder="What do we know? What still needs to be known?"></textarea></div>
+   <div class="capstoneCard"><label>2 · ASSUMPTIONS</label><textarea id="capAssume" rows="4" placeholder="What are we treating as true?"></textarea></div>
+   <div class="capstoneCard"><label>3 · REFRAME TWO WAYS</label><textarea id="capReframe" rows="4" placeholder="Write at least two meaningfully different problem frames."></textarea></div>
+   <div class="capstoneCard"><label>4 · DIVERGE</label><textarea id="capDiverge" rows="4" placeholder="Generate several possibilities without judging them yet."></textarea></div>
+   <div class="capstoneCard"><label>5 · STRUCTURED TOOL</label><textarea id="capTool" rows="4" placeholder="Use SCAMPER, reverse thinking, an analogy, or another deliberate tool."></textarea></div>
+   <div class="capstoneCard"><label>6 · UNUSUAL CONNECTION</label><textarea id="capConnect" rows="4" placeholder="What outside pattern, industry, or concept changes the idea?"></textarea></div>
+   <div class="capstoneCard"><label>7 · DEVELOP</label><textarea id="capDevelop" rows="4" placeholder="Make one idea concrete enough to explain how it works."></textarea></div>
+   <div class="capstoneCard"><label>8 · CONVERGE</label><textarea id="capCriteria" rows="4" placeholder="What explicit criteria make this idea stronger than alternatives?"></textarea></div>
+   <div class="capstoneCard"><label>9 · TEST</label><textarea id="capTest" rows="4" placeholder="What is the smallest useful experiment?"></textarea></div>
+   <div class="capstoneCard"><label>HOW DID YOUR THINKING CHANGE?</label><textarea id="capChange" rows="4" placeholder="What became visible only after using the process?"></textarea></div>
+  </div>
+  <div class="feedback" id="capFeedback">The goal is not a single “correct” solution. The goal is to demonstrate deliberate creative thinking and show how the problem, options, and final concept changed through the process.</div>
+  <div class="gate"><button class="btn" id="capContinue" disabled>KEY TAKEAWAYS →</button></div>
+ </div>
+</section>
+
+<section class="section final" id="finalReflection" data-flow="24">
   <div class="wrap">
-    <div class="kicker">Transfer</div><h2>What will you do differently?</h2>
+    <div class="kicker">Key Takeaways + Transfer</div><h2>What will you do differently?</h2>
+    <div class="takeawayGrid">
+     <div class="takeaway"><strong>Creativity is a discipline.</strong><p>Creative thinking can be practiced deliberately; it is not reserved for people who identify as “creative.”</p></div>
+     <div class="takeaway"><strong>Better questions create better options.</strong><p>The first problem statement is not automatically the most useful one.</p></div>
+     <div class="takeaway"><strong>Generate before you evaluate.</strong><p>Premature judgment reduces fluency, flexibility, and originality.</p></div>
+     <div class="takeaway"><strong>Connections expand the search.</strong><p>Analogies, combinations, and outside perspectives reveal patterns your normal context hides.</p></div>
+     <div class="takeaway"><strong>Criteria before preference.</strong><p>Convergence works best when the standards are visible before a favorite solution takes over.</p></div>
+     <div class="takeaway"><strong>Testing is learning.</strong><p>Small experiments reduce uncertainty before large commitments are made.</p></div>
+    </div>
     <div class="finalGrid">
       <div class="finalCard"><h3>When I get stuck...</h3><p>Which stage will help you most when a team keeps returning to the same answers?</p><textarea id="finalOne" rows="5" placeholder="Write one practical reminder to yourself."></textarea></div>
       <div class="finalCard"><h3>Before I reject an unusual idea...</h3><p>What question could help you separate exploration from evaluation?</p><textarea id="finalTwo" rows="5" placeholder="Write the question you want to use."></textarea></div>
     </div>
-    <div class="principle">Creative thinking is a discipline. Better questions, more alternatives, deliberate connections, explicit criteria, and small experiments can all be practiced.</div>
-    <div class="gate"><button class="btn" id="finishCourse" disabled>COMPLETE CREATIVE THINKING FOUNDATIONS →</button></div>
+    <div class="finalCard" style="margin-top:18px"><h3>Where in your work would a deliberate creative-thinking process add the most value?</h3><textarea id="finalWork" rows="5" placeholder="What real challenge will you approach differently? Which stage do you need most?"></textarea></div>
+    <div class="principle">The next time a team says, “We have already tried everything,” do not immediately search for another answer. First ask whether you are still asking the same question.</div>
+    <div class="attrib">Method note: established methods referenced in this course include SCAMPER, Six Thinking Hats, morphological analysis, Worst Possible Idea, analogical/forced connections, and related divergent-thinking practices. Course-specific activities such as The Impossible Redesign, Assumption Breaker, Reframe It Five Ways, the 20-Idea Challenge, and Idea Tournament are adapted learning exercises built around established creativity research and practice.</div>
+    <div class="gate"><button class="btn" id="finishCourse" disabled>COMPLETE CREATIVE THINKING COURSE →</button></div>
   </div>
 </section>
 
-<section class="complete" id="courseComplete" data-flow="24">
+<section class="complete" id="courseComplete" data-flow="25">
   <div class="wrap">
-    <div class="kicker" style="color:#ffd978">Creative Thinking: Foundations</div>
+    <div class="kicker" style="color:#ffd978">Creative Thinking · Full Online Course</div>
     <h2>SEE MORE.<br><span class="gold">CREATE BETTER OPTIONS.</span></h2>
     <p>You moved through the full creative-thinking cycle: exploration, reframing, divergence, connection, development, convergence, and experimentation.</p>
     <div class="badges"><span>EXPLORE ✓</span><span>REFRAME ✓</span><span>DIVERGE ✓</span><span>CONNECT ✓</span><span>DEVELOP ✓</span><span>CONVERGE ✓</span><span>TEST ✓</span></div>
@@ -454,8 +582,8 @@ linear-gradient(135deg,#eef8ff,#fff8e9);border:1px solid var(--line)}
 </main>
 
 <script>
-const KEY='ml_creative_thinking_v1';
-const defaults={flowStep:0,questions:[],reframes:[],ideas:['','','','','',''],lens:null,scamper:[],criteria:[],finalists:[],winner:null,dev:{},test:{},final:{},opening:['','','']};
+const KEY='ml_creative_thinking_full_v2';
+const defaults={flowStep:0,questionTexts:['','','','',''],reframeTexts:['','','','',''],ideas:Array(20).fill(''),lens:null,connectIdea:'',scamperIdeas:Array(7).fill(''),criteria:[],round10:[],round6:[],finalists:[],winner:null,tournamentReflection:{},winnerReflection:{},dev:{},test:{},cap:{},final:{},opening:['','',''],optional:{}};
 let state={...defaults};
 try{state={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
 const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
@@ -464,7 +592,8 @@ function go(id){const el=document.getElementById(id);if(!el)return;const host=el
 function setStage(i){document.querySelectorAll('.step').forEach((s,n)=>s.classList.toggle('on',n<=i))}
 syncFlow();
 
-document.getElementById('begin').onclick=()=>go('openingChallenge');
+document.getElementById('begin').onclick=()=>go('courseRoadmap');
+document.getElementById('roadmapContinue').onclick=()=>go('openingChallenge');
 ['openIdea1','openIdea2','openIdea3'].forEach((id,i)=>{const el=document.getElementById(id);el.value=state.opening[i]||'';el.oninput=()=>{state.opening[i]=el.value;save()}});
 document.getElementById('openingCheck').onclick=()=>{
   state.opening=['openIdea1','openIdea2','openIdea3'].map(id=>document.getElementById(id).value.trim());save();
@@ -474,46 +603,21 @@ if(state.opening.every(Boolean)){document.getElementById('openingFeedback').clas
 document.getElementById('openingContinue').onclick=()=>go('chapter1');
 document.getElementById('definitionContinue').onclick=()=>{setStage(0);go('exploreBanner')};
 
-const questionData=[
-'What makes employees decide professional development is worth their time?',
-'Who participates now—and what is different about their experience?',
-'What barriers exist besides motivation?',
-'What happens immediately before someone chooses to participate or not?',
-'What forms of learning do employees already choose voluntarily?',
-'What does a supervisor gain or lose when an employee participates?',
-'What would employees say the real problem is?',
-'What evidence do we have that announcements are the actual issue?'
-];
-function renderQuestions(){
- const wall=document.getElementById('questionWall');
- wall.innerHTML=questionData.map((q,i)=>'<button class="qTile '+(state.questions.includes(i)?'on':'')+'" data-i="'+i+'">'+q+'</button>').join('');
- wall.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.questions=state.questions.includes(i)?state.questions.filter(x=>x!==i):state.questions.concat(i);save();renderQuestions()});
- document.getElementById('questionCount').textContent=state.questions.length+' selected';
- const done=state.questions.length>=4;document.getElementById('exploreContinue').disabled=!done;document.getElementById('questionFeedback').classList.toggle('show',done)
-}
-renderQuestions();
+const questionInputs=document.getElementById('questionInputs');
+questionInputs.innerHTML=Array.from({length:5},(_,i)=>'<input id="qgen'+i+'" placeholder="Question '+(i+1)+' — write a question, not a solution">').join('');
+function syncQuestions(){let n=0;for(let i=0;i<5;i++){const el=document.getElementById('qgen'+i);if(!el._wired){el._wired=true;el.value=state.questionTexts[i]||'';el.oninput=()=>{state.questionTexts[i]=el.value;save();syncQuestions()}}if((state.questionTexts[i]||'').trim())n++}document.getElementById('questionCount').textContent=n+' of 5 questions written';const done=n===5;document.getElementById('exploreContinue').disabled=!done;document.getElementById('questionFeedback').classList.toggle('show',done)}
+syncQuestions();
 document.getElementById('exploreContinue').onclick=()=>{setStage(1);go('reframeBanner')};
 
-const reframeData=[
-['Motivation frame','How might we make professional development something employees actively want to participate in?'],
-['Delivery frame','How might employees build these skills without attending traditional training?'],
-['Workflow frame','How might learning become part of normal work instead of an additional event?'],
-['Value frame','How might employees see immediate personal or mission value from development?'],
-['Choice frame','How might employees shape the development experience themselves?'],
-['Access frame','How might we remove friction that makes participation difficult?']
-];
-function renderReframes(){
- const g=document.getElementById('reframeGrid');
- g.innerHTML=reframeData.map((x,i)=>'<button class="reframe '+(state.reframes.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong>'+x[1]+'</button>').join('');
- g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.reframes=state.reframes.includes(i)?state.reframes.filter(x=>x!==i):state.reframes.concat(i);save();renderReframes()});
- const done=state.reframes.length>=2;document.getElementById('reframeContinue').disabled=!done;document.getElementById('reframeFeedback').classList.toggle('show',done)
-}
-renderReframes();
+const reframeInputs=document.getElementById('reframeInputs');
+reframeInputs.innerHTML=Array.from({length:5},(_,i)=>'<textarea id="rgen'+i+'" rows="3" placeholder="Reframe '+(i+1)+' — How might we...?"></textarea>').join('');
+function syncReframes(){let n=0;for(let i=0;i<5;i++){const el=document.getElementById('rgen'+i);if(!el._wired){el._wired=true;el.value=state.reframeTexts[i]||'';el.oninput=()=>{state.reframeTexts[i]=el.value;save();syncReframes()}}if((state.reframeTexts[i]||'').trim())n++}document.getElementById('reframeCount').textContent=n+' of 5 reframes written';const done=n===5;document.getElementById('reframeContinue').disabled=!done;document.getElementById('reframeFeedback').classList.toggle('show',done)}
+syncReframes();
 document.getElementById('reframeContinue').onclick=()=>{setStage(2);go('divergeBanner')};
 
-const divInputs=[...document.querySelectorAll('#divergeInputs input')];
-divInputs.forEach((el,i)=>{el.value=state.ideas[i]||'';el.oninput=()=>{state.ideas[i]=el.value;save();syncIdeas()}});
-function syncIdeas(){const n=state.ideas.filter(x=>x.trim()).length;document.getElementById('ideaCount').textContent=n+' of 6 ideas entered';const done=n===6;document.getElementById('divergeContinue').disabled=!done;document.getElementById('ideaFeedback').classList.toggle('show',done)}
+const divergeHost=document.getElementById('divergeInputs');
+divergeHost.innerHTML=Array.from({length:20},(_,i)=>'<input id="idea'+i+'" placeholder="Idea '+(i+1)+'">').join('');
+function syncIdeas(){let n=0;for(let i=0;i<20;i++){const el=document.getElementById('idea'+i);if(!el._wired){el._wired=true;el.value=state.ideas[i]||'';el.oninput=()=>{state.ideas[i]=el.value;save();syncIdeas()}}if((state.ideas[i]||'').trim())n++}document.getElementById('ideaCount').textContent=n+' of 20 ideas entered';const done=n===20;document.getElementById('divergeContinue').disabled=!done;document.getElementById('ideaFeedback').classList.toggle('show',done)}
 syncIdeas();
 document.getElementById('divergeContinue').onclick=()=>{setStage(3);go('connectBanner')};
 
@@ -529,9 +633,9 @@ function renderLens(){
  const g=document.getElementById('lensGrid');
  g.innerHTML=lensData.map((x,i)=>'<button class="lensCard '+(state.lens===i?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong>Borrow a pattern, not the surface details.</button>').join('');
  g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.lens=+b.dataset.i;save();renderLens()});
- const box=document.getElementById('transferBox');if(state.lens!==null){box.innerHTML='<strong>'+lensData[state.lens][0]+' LENS</strong><p>'+lensData[state.lens][1]+'</p><p>What principle could transfer to voluntary professional development?</p>';document.getElementById('connectContinue').disabled=false}else document.getElementById('connectContinue').disabled=true
+ const box=document.getElementById('transferBox');if(state.lens!==null){box.innerHTML='<strong>'+lensData[state.lens][0]+' LENS</strong><p>'+lensData[state.lens][1]+'</p><p>What principle could transfer to voluntary professional development?</p>'}syncConnect()
 }
-renderLens();
+renderLens();const connectIdeaEl=document.getElementById('connectIdea');connectIdeaEl.value=state.connectIdea||'';connectIdeaEl.oninput=()=>{state.connectIdea=connectIdeaEl.value;save();syncConnect()};function syncConnect(){document.getElementById('connectContinue').disabled=!(state.lens!==null&&(state.connectIdea||'').trim())}syncConnect();
 document.getElementById('connectContinue').onclick=()=>go('scamper');
 
 const scamperData=[
@@ -545,14 +649,14 @@ const scamperData=[
 ];
 function renderScamper(){
  const g=document.getElementById('scamperGrid');
- g.innerHTML=scamperData.map((x,i)=>'<button class="scamper '+(state.scamper.includes(i)?'on':'')+'" data-i="'+i+'"><span class="letter">'+x[0]+'</span><strong>'+x[1]+'</strong><p>'+x[2]+'</p></button>').join('');
- g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.scamper.includes(i))state.scamper.push(i);save();renderScamper()});
- document.getElementById('scamperCount').textContent=state.scamper.length+' of 7 explored';const done=state.scamper.length===7;document.getElementById('scamperContinue').disabled=!done;document.getElementById('scamperFeedback').classList.toggle('show',done)
+ g.innerHTML=scamperData.map((x,i)=>'<div class="scamper '+((state.scamperIdeas[i]||'').trim()?'on':'')+'"><span class="letter">'+x[0]+'</span><strong>'+x[1]+'</strong><p style="display:block">'+x[2]+'</p><div class="scamperIdeas"><textarea id="scIdea'+i+'" placeholder="Write at least one '+x[1].toLowerCase()+' idea...">'+(state.scamperIdeas[i]||'')+'</textarea></div></div>').join('');
+ g.querySelectorAll('textarea').forEach((el,i)=>el.oninput=()=>{state.scamperIdeas[i]=el.value;save();syncScamper()});syncScamper()
 }
+function syncScamper(){const n=state.scamperIdeas.filter(x=>(x||'').trim()).length;document.getElementById('scamperCount').textContent=n+' of 7 prompts completed';const done=n===7;document.getElementById('scamperContinue').disabled=!done;document.getElementById('scamperFeedback').classList.toggle('show',done)}
 renderScamper();
 document.getElementById('scamperContinue').onclick=()=>{setStage(4);go('developBanner')};
 
-const devFields=['devIdea','devHow','devBenefit','devBarrier'];
+const devFields=['devIdea','devUser','devFirst','devNext','devResources','devBehavior','devBarrier','devAssumption'];
 devFields.forEach(id=>{const el=document.getElementById(id);el.value=state.dev[id]||'';el.oninput=()=>{state.dev[id]=el.value;save();syncDev()}});
 function syncDev(){const done=devFields.every(id=>(state.dev[id]||'').trim());document.getElementById('developContinue').disabled=!done;document.getElementById('developFeedback').classList.toggle('show',done)}
 syncDev();
@@ -568,13 +672,32 @@ function renderCriteria(){
 renderCriteria();
 document.getElementById('criteriaContinue').onclick=()=>go('tournament');
 
+function cleanIdeas(){return state.ideas.map((x,i)=>(x||'').trim()||('Idea '+(i+1)))}
+function toggleLimited(arrName,i,max){let a=state[arrName]||[];state[arrName]=a.includes(i)?a.filter(x=>x!==i):(a.length<max?a.concat(i):a);save();renderTournament()}
 function renderTournament(){
- const g=document.getElementById('tournamentGrid');
- const clean=state.ideas.map((x,i)=>x.trim()||('Idea '+(i+1)));
- g.innerHTML=clean.map((x,i)=>'<button class="ideaCard '+(state.finalists.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x+'</strong><small>'+(state.finalists.includes(i)?'Finalist ✓':'Select as finalist')+'</small></button>').join('');
- g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.finalists.includes(i))state.finalists=state.finalists.filter(x=>x!==i);else if(state.finalists.length<3)state.finalists.push(i);save();renderTournament()});
- document.getElementById('tournamentCount').textContent=state.finalists.length+' of 3 finalists selected';const done=state.finalists.length===3;document.getElementById('tournamentContinue').disabled=!done;document.getElementById('tournamentFeedback').classList.toggle('show',done)
+ const ideas=cleanIdeas();
+ const g10=document.getElementById('round10Grid');
+ g10.innerHTML=ideas.map((x,i)=>'<button class="ideaCard '+(state.round10.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x+'</strong><small>'+(state.round10.includes(i)?'Advances ✓':'Select for top 10')+'</small></button>').join('');
+ g10.querySelectorAll('button').forEach(b=>b.onclick=()=>toggleLimited('round10',+b.dataset.i,10));
+ document.getElementById('round10Count').textContent=state.round10.length+' of 10 selected';
+
+ const b6=document.getElementById('round6Block');b6.classList.toggle('lockedRound',state.round10.length!==10);
+ if(state.round10.length===10){
+  const g6=document.getElementById('round6Grid');g6.innerHTML=state.round10.map(i=>'<button class="ideaCard '+(state.round6.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+ideas[i]+'</strong><small>'+(state.round6.includes(i)?'Advances ✓':'Select for top 6')+'</small></button>').join('');
+  g6.querySelectorAll('button').forEach(b=>b.onclick=()=>toggleLimited('round6',+b.dataset.i,6))
+ }
+ document.getElementById('round6Count').textContent=state.round6.length+' of 6 selected';
+
+ const b3=document.getElementById('round3Block');b3.classList.toggle('lockedRound',state.round6.length!==6);
+ if(state.round6.length===6){
+  const g3=document.getElementById('tournamentGrid');g3.innerHTML=state.round6.map(i=>'<button class="ideaCard '+(state.finalists.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+ideas[i]+'</strong><small>'+(state.finalists.includes(i)?'Finalist ✓':'Select as finalist')+'</small></button>').join('');
+  g3.querySelectorAll('button').forEach(b=>b.onclick=()=>toggleLimited('finalists',+b.dataset.i,3))
+ }
+ document.getElementById('tournamentCount').textContent=state.finalists.length+' of 3 finalists selected';syncTournament()
 }
+const tourFields=['tourWhy','tourLost','tourCombine'];
+tourFields.forEach(id=>{const el=document.getElementById(id);el.value=state.tournamentReflection[id]||'';el.oninput=()=>{state.tournamentReflection[id]=el.value;save();syncTournament()}});
+function syncTournament(){const done=state.round10.length===10&&state.round6.length===6&&state.finalists.length===3&&tourFields.every(id=>(state.tournamentReflection[id]||'').trim());document.getElementById('tournamentContinue').disabled=!done;document.getElementById('tournamentFeedback').classList.toggle('show',done)}
 renderTournament();
 document.getElementById('tournamentContinue').onclick=()=>{renderWinner();go('winner')};
 
@@ -582,25 +705,29 @@ function renderWinner(){
  const g=document.getElementById('winnerGrid');const clean=state.ideas.map(x=>x.trim());
  g.innerHTML=state.finalists.map(i=>'<button class="ideaCard '+(state.winner===i?'on':'')+'" data-i="'+i+'"><strong>'+clean[i]+'</strong><small>'+(state.winner===i?'Selected concept ✓':'Compare against your criteria')+'</small></button>').join('');
  g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.winner=+b.dataset.i;save();renderWinner()});
- const done=state.winner!==null;document.getElementById('winnerContinue').disabled=!done;document.getElementById('winnerFeedback').classList.toggle('show',done)
+ const done=state.winner!==null;document.getElementById('winnerFeedback').classList.toggle('show',done);syncWinner()
 }
-renderWinner();
+renderWinner();['winnerWhy','winnerBorrow'].forEach(id=>{const el=document.getElementById(id);el.value=state.winnerReflection[id]||'';el.oninput=()=>{state.winnerReflection[id]=el.value;save();syncWinner()}});function syncWinner(){document.getElementById('winnerContinue').disabled=!(state.winner!==null&&['winnerWhy','winnerBorrow'].every(id=>(state.winnerReflection[id]||'').trim()))}syncWinner();
 document.getElementById('winnerContinue').onclick=()=>{setStage(6);go('testBanner')};
 
-const testFields=['testAssumption','testPilot','testEvidence','testDecision'];
+const testFields=['testAssumption','testPilot','testEvidence','testRisks','testDecision'];
 testFields.forEach(id=>{const el=document.getElementById(id);el.value=state.test[id]||'';el.oninput=()=>{state.test[id]=el.value;save();syncTest()}});
 function syncTest(){const done=testFields.every(id=>(state.test[id]||'').trim());document.getElementById('testContinue').disabled=!done;document.getElementById('testFeedback').classList.toggle('show',done)}
 syncTest();
 document.getElementById('testContinue').onclick=()=>go('model');
-document.getElementById('modelContinue').onclick=()=>go('finalReflection');
+document.getElementById('modelContinue').onclick=()=>go('creativeCapstone');
+const capFields=['capExplore','capAssume','capReframe','capDiverge','capTool','capConnect','capDevelop','capCriteria','capTest','capChange'];capFields.forEach(id=>{const el=document.getElementById(id);el.value=state.cap[id]||'';el.oninput=()=>{state.cap[id]=el.value;save();syncCap()}});function syncCap(){const done=capFields.every(id=>(state.cap[id]||'').trim());document.getElementById('capContinue').disabled=!done;document.getElementById('capFeedback').classList.toggle('show',done)}syncCap();document.getElementById('capContinue').onclick=()=>go('finalReflection');
 
-['finalOne','finalTwo'].forEach(id=>{const el=document.getElementById(id);el.value=state.final[id]||'';el.oninput=()=>{state.final[id]=el.value;save();syncFinal()}});
-function syncFinal(){document.getElementById('finishCourse').disabled=!['finalOne','finalTwo'].every(id=>(state.final[id]||'').trim())}
+['finalOne','finalTwo','finalWork'].forEach(id=>{const el=document.getElementById(id);el.value=state.final[id]||'';el.oninput=()=>{state.final[id]=el.value;save();syncFinal()}});
+function syncFinal(){document.getElementById('finishCourse').disabled=!['finalOne','finalTwo','finalWork'].every(id=>(state.final[id]||'').trim())}
 syncFinal();
-document.getElementById('finishCourse').onclick=()=>{state.flowStep=24;save();syncFlow();document.getElementById('courseComplete').classList.add('show');go('courseComplete')};
-if(state.flowStep>=24)document.getElementById('courseComplete').classList.add('show');
+document.getElementById('finishCourse').onclick=()=>{state.flowStep=25;save();syncFlow();document.getElementById('courseComplete').classList.add('show');go('courseComplete')};
+if(state.flowStep>=25)document.getElementById('courseComplete').classList.add('show');
 document.getElementById('reviewTop').onclick=()=>document.getElementById('top').scrollIntoView({behavior:'smooth'});
 document.getElementById('startOver').onclick=()=>{if(confirm('Start over and clear your saved Creative Thinking progress?')){localStorage.removeItem(KEY);location.reload()}};
+
+const optionalIds=["assume1","assumeType1","assumeIdea1","assume2","assumeType2","assumeIdea2","assume3","assumeType3","assumeIdea3","constraintLarge","constraint10k","constraint500","constraintZero","eliminateImprove","eliminateNeed","perspEmployee","perspSupervisor","perspLeader","perspCustomer","money10","money10k","money1m","moneyHybrid","mashPair","mashIdea","worstIdea","worstReverse"];
+optionalIds.forEach(id=>{const el=document.getElementById(id);if(!el)return;el.value=state.optional[id]||'';el.oninput=()=>{state.optional[id]=el.value;save()};el.onchange=el.oninput});
 
 const stageMap=[
 [4,0],[6,1],[8,2],[11,3],[14,4],[16,5],[20,6]
