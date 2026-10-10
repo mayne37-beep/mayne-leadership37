@@ -190,7 +190,7 @@ textarea,input[type="text"]{width:100%;border:1px solid #b8ccda;border-radius:12
  <div class="wrap"><div class="kicker" style="color:#ffd875">Core Distinction</div><h2>EXPAND THE FRAME</h2><p>Strategic thinking improves action by preventing us from solving the wrong problem quickly.</p></div>
 </section>
 
-<section class="section distinction" id="definition" data-flow="3">
+<section class="section distinction" id="definition" data-flow="2">
  <div class="wrap">
   <div class="kicker">Strategic Thinking Is / Is Not</div><h2>It is more than “thinking big.”</h2>
   <div class="threeGrid">
@@ -283,7 +283,7 @@ textarea,input[type="text"]{width:100%;border:1px solid #b8ccda;border-radius:12
  <div class="wrap"><div class="kicker" style="color:#ffd875">Think Deeper</div><h2>TEST THE STORY</h2><p>Pressure makes certainty feel attractive. Strategic thinkers make assumptions visible enough to examine.</p></div>
 </section>
 
-<section class="section blockers" id="blockers" data-flow="10">
+<section class="section blockers" id="blockers" data-flow="9">
  <div class="wrap">
   <div class="kicker">Strategic-Thinking Blockers</div><h2>Most barriers are habits under pressure.</h2>
   <p class="lede">Select the two blockers most likely to distort a difficult decision.</p>
@@ -335,7 +335,7 @@ textarea,input[type="text"]{width:100%;border:1px solid #b8ccda;border-radius:12
  <div class="wrap"><div class="kicker" style="color:#ffd875">Look Further</div><h2>CONNECT TODAY TO TOMORROW</h2><p>Strategy is not prediction. It is preparing decisions to survive changing conditions.</p></div>
 </section>
 
-<section class="section ewmr" id="ewmr" data-flow="14">
+<section class="section ewmr" id="ewmr" data-flow="13">
  <div class="wrap">
   <div class="kicker">Ends · Ways · Means · Risk</div><h2>If the ends exceed the means, the ways may be a wish.</h2>
   <p class="lede">Use the workload scenario to create a simple strategic check.</p>
@@ -368,7 +368,7 @@ textarea,input[type="text"]{width:100%;border:1px solid #b8ccda;border-radius:12
  <div class="wrap"><div class="kicker" style="color:#ffd875">Lead Broader</div><h2>THINK BEYOND YOUR LANE</h2><p>At the strategic level, almost nothing important happens in isolation.</p></div>
 </section>
 
-<section class="section capstone" id="capstone" data-flow="17">
+<section class="section capstone" id="capstone" data-flow="16">
  <div class="wrap">
   <div class="kicker">Capstone Systems Challenge</div><h2>Map the system before recommending action.</h2>
   <p class="lede">Imagine that workload is rising, experienced employees are retiring, technology modernization is accelerating, partner capacity is uneven, and workforce expectations are changing. Do not solve everything. Build a better strategic picture.</p>
@@ -481,7 +481,7 @@ const blockers=[
 ['Silos & conformity','The frame is built inside one lane and dissent disappears.'],
 ['Certainty hunger','Ambiguity feels unacceptable, so the first plausible explanation hardens too quickly.']
 ];
-function renderBlocks(){const g=document.getElementById('blockGrid');g.innerHTML=blockers.map((x,i)=>'<button class="block '+(state.blockers.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.blockers.includes(i))state.blockers=state.blockers.filter(x=>x!==i);else if(state.blockers.length<2)state.blockers.push(i);save();renderBlocks()});const done=state.blockers.length===2;document.getElementById('blockContinue').disabled=true;document.getElementById('blockFeedback').classList.toggle('show',done)}
+function renderBlocks(){const g=document.getElementById('blockGrid');g.innerHTML=blockers.map((x,i)=>'<button class="block '+(state.blockers.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.blockers.includes(i))state.blockers=state.blockers.filter(x=>x!==i);else if(state.blockers.length<2)state.blockers.push(i);save();renderBlocks()});const done=state.blockers.length===2;document.getElementById('blockContinue').disabled=true;document.getElementById('blockFeedback').classList.toggle('show',done);if(typeof syncRiskLab==='function')syncRiskLab()}
 renderBlocks();
 const biases=[
 ['Confirmation','We search for or favor evidence that supports the preferred view.'],
