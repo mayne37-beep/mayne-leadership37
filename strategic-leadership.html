@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#061b30">
+<meta name="description" content="Full interactive Strategic Leadership course from Mayne Leadership. Shape direction, align systems, influence beyond authority, communicate through complexity, and build trust at scale.">
+<title>Strategic Leadership | Full Online Course | Mayne Leadership</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+ --navy:#061b30;--navy2:#0b3153;--blue:#0c6098;--teal:#148f98;--gold:#e8b84f;--gold2:#ffda7d;
+ --ink:#17304a;--muted:#64798b;--line:#d7e3ec;--white:#fff;--ice:#f5faff;--cream:#fff8e8;
+ --mint:#e9f7f3;--lav:#f2efff;--coral:#fff0e8;--shadow:0 20px 60px rgba(6,27,48,.12)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f8fbfd;line-height:1.55}
+button,input,textarea,select{font:inherit}button{touch-action:manipulation}
+.flowLocked{display:none!important}.flowReveal{animation:rise .42s ease both}@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flowReveal{animation:none}}
+.top{position:sticky;top:0;z-index:80;background:rgba(6,27,48,.96);backdrop-filter:blur(12px);border-bottom:1px solid #ffffff18;color:white}
+.topin{max-width:1260px;margin:auto;display:flex;align-items:center;gap:18px;padding:10px 20px}
+.brand{font-size:.74rem;letter-spacing:.16em;font-weight:950;white-space:nowrap}.brand b{color:var(--gold2)}
+.rail{flex:1;display:flex;justify-content:center;gap:3px;overflow:auto;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+.step{font-size:.59rem;letter-spacing:.08em;text-transform:uppercase;color:#91a9bd;padding:7px 8px;border-bottom:2px solid transparent;white-space:nowrap}.step.on{color:#fff;border-color:var(--gold2)}
+.home{color:white;text-decoration:none;font-size:.74rem;white-space:nowrap}
+.hero{min-height:89vh;display:grid;place-items:center;position:relative;overflow:hidden;color:white;background:
+ radial-gradient(circle at 78% 22%,rgba(255,218,125,.20),transparent 15%),
+ radial-gradient(circle at 71% 59%,rgba(20,143,152,.28),transparent 25%),
+ linear-gradient(132deg,#041423 0%,#082a47 52%,#0c5f86 100%)}
+.hero:before{content:"";position:absolute;inset:0;background:
+ linear-gradient(90deg,transparent 0 8%,rgba(255,255,255,.035) 8.2% 8.4%,transparent 8.6% 100%),
+ linear-gradient(0deg,transparent 0 15%,rgba(255,255,255,.025) 15.2% 15.4%,transparent 15.6% 100%);background-size:120px 90px}
+.arch{position:absolute;right:2%;top:10%;width:min(560px,47vw);height:72%;min-height:430px}
+.arch .tower{position:absolute;bottom:0;border:1px solid #ffffff2a;background:#ffffff09;backdrop-filter:blur(3px)}
+.t1{left:5%;width:18%;height:36%}.t2{left:27%;width:20%;height:55%}.t3{left:51%;width:20%;height:73%}.t4{right:4%;width:20%;height:94%}
+.arch .bridge{position:absolute;left:12%;right:9%;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);box-shadow:0 0 18px rgba(255,218,125,.5)}
+.b1{bottom:31%}.b2{bottom:50%}.b3{bottom:69%}
+.arch .node{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--gold2);box-shadow:0 0 24px var(--gold2)}
+.nd1{left:37%;bottom:49%}.nd2{left:61%;bottom:68%}.nd3{right:13%;bottom:88%}
+.heroCopy{position:relative;z-index:3;width:min(1180px,90%)}.eyebrow{color:#ffda7d;font-weight:950;letter-spacing:.22em;font-size:.72rem}
+.hero h1{font-size:clamp(3rem,7vw,6.2rem);line-height:.92;max-width:830px;margin:18px 0 22px;letter-spacing:-.055em}
+.hero p{max-width:680px;font-size:clamp(1rem,2vw,1.22rem);color:#d9e8f2}.gold{color:var(--gold2)}
+.btn{border:0;border-radius:999px;padding:14px 22px;font-weight:950;letter-spacing:.045em;cursor:pointer;background:var(--gold2);color:#17304a;box-shadow:0 10px 25px rgba(0,0,0,.18)}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.34;cursor:not-allowed;transform:none;box-shadow:none}.btn.secondary{background:white;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+.section{padding:88px 22px}.wrap{max-width:1120px;margin:auto}.kicker{font-size:.7rem;letter-spacing:.18em;font-weight:950;color:#9a6900;text-transform:uppercase}
+h2{font-size:clamp(2rem,4.5vw,3.55rem);line-height:1.04;letter-spacing:-.035em;margin:.55rem 0 1rem}h3{line-height:1.15}.lede{font-size:1.08rem;color:var(--muted);max-width:790px}
+.feedback{display:none;margin-top:16px;padding:16px 18px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px}.feedback.show{display:block}.gate{text-align:center;margin-top:27px}
+.principle{padding:18px 20px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px;margin-top:22px;font-weight:800}
+input[type=text],textarea,select{width:100%;border:1px solid #b8cad7;border-radius:11px;padding:12px 13px;background:white;color:var(--ink);outline:none}
+input:focus,textarea:focus,select:focus{border-color:#2d87b7;box-shadow:0 0 0 3px rgba(45,135,183,.12)}
+.roadmap{background:white}.roadGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:25px}.roadCard{padding:24px;border:1px solid var(--line);border-radius:20px;background:#fbfdff}.roadCard.goldCard{background:var(--cream);border-color:#e7d09a}.roadList{display:grid;gap:10px;margin-top:13px}.roadItem{display:flex;gap:11px}.roadItem i{font-style:normal;display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#e8f5fb;color:#0c6098;font-weight:950}
+.banner{min-height:270px;display:flex;align-items:center;position:relative;overflow:hidden;color:white;background:linear-gradient(120deg,#061729,#0a3458 58%,#11818d)}
+.banner:before{content:"";position:absolute;width:500px;height:500px;border:70px solid #ffda7d18;border-radius:50%;right:-150px;top:-220px}.banner:after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--gold2),#72c7dc,#52b4a8)}
+.banner .wrap{position:relative;z-index:2;width:100%}.banner h2{font-size:clamp(2.7rem,7vw,5.2rem);margin:0;letter-spacing:-.05em}.banner p{color:#e1edf4;font-size:1.08rem;margin:.35rem 0 0}
+.premise{background:linear-gradient(180deg,#f3f9fd,#fff)}.premiseGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.premiseCard{padding:22px;border:1px solid var(--line);border-radius:18px;background:white}.premiseCard strong{display:block;color:#0c6098;font-size:1.15rem;margin-bottom:7px}
+.levelGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}.levelCard{border:1px solid var(--line);background:white;border-radius:17px;padding:19px;cursor:pointer;text-align:left;min-height:170px}.levelCard.on{border:2px solid var(--gold);background:#fffaf0}.levelCard span{font-size:.68rem;letter-spacing:.08em;font-weight:950;color:#0c6098}.levelCard p{font-size:.88rem;color:var(--muted)}
+.transition{background:white}.shiftGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}.shiftCard{padding:20px;border:1px solid var(--line);border-radius:18px;background:#fbfdff}.shiftArrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:900}.shiftArrow span:nth-child(2){color:var(--gold);font-size:1.3rem}.choicePool{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0}.choice{border:1px solid #b7cbd8;background:white;padding:11px 13px;border-radius:999px;cursor:pointer;font-weight:850}.choice.on{background:var(--navy);color:white;border-color:var(--navy)}
+.foundation{background:#fff8e8}.attrGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.attr{background:white;border:1px solid #e7d5a9;border-radius:18px;padding:22px}.attr strong{display:block;color:#8b6414;font-size:1.12rem}.attr p{color:var(--muted);font-size:.9rem}
+.federal{background:white}.ecqGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:22px}.ecq{padding:18px 12px;border:1px solid var(--line);border-radius:16px;background:#fbfdff;cursor:pointer;text-align:left}.ecq.on{border:2px solid var(--teal);background:#effaf8}.ecq strong{display:block;font-size:.86rem}.ecq p{display:none;font-size:.8rem;color:var(--muted)}.ecq.on p{display:block}
+.meta{background:#061b30;color:white}.meta .kicker{color:#ffda7d}.meta .lede{color:#c9dbe7}.metaGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.metaCard{padding:22px;border:1px solid #ffffff25;border-radius:18px;background:#ffffff0a;color:white;text-align:left;cursor:pointer;min-height:190px}.metaCard.on{border:2px solid var(--gold2);background:#ffffff12}.metaCard strong{display:block;color:#ffda7d;margin-bottom:7px}.metaCard p{font-size:.88rem;color:#c7d9e5;display:none}.metaCard.on p{display:block}
+.practice{background:linear-gradient(180deg,#f6fbff,#fff)}.twoCol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.panel{padding:20px;border:1px solid var(--line);border-radius:18px;background:white}.panel label{display:block;color:#0c6098;font-weight:950;font-size:.79rem;margin:0 0 7px}.fieldGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}.fieldCard{padding:17px;border:1px solid var(--line);border-radius:16px;background:white}.fieldCard label{display:block;font-size:.78rem;font-weight:950;color:#0c6098;margin-bottom:7px}
+.team{background:#eef8f6}.checkGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.checkCard{border:1px solid #c7dfdc;background:white;border-radius:16px;padding:17px;cursor:pointer;text-align:left}.checkCard.on{border:2px solid var(--teal);background:#effaf8}.checkCard strong{display:block;color:#0b737a;margin-bottom:5px}.checkCard p{font-size:.84rem;color:var(--muted);margin:0}
+.communication{background:#061b30;color:white}.communication .kicker{color:#ffda7d}.communication .lede{color:#c9dbe7}.audGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:20px}.audCard{padding:15px;border:1px solid #ffffff25;border-radius:16px;background:#ffffff0a}.audCard label{display:block;color:#ffda7d;font-size:.72rem;font-weight:950;margin-bottom:7px}.audCard textarea{background:#ffffffef;min-height:150px}
+.ethics{background:#fff8e8}.ethicalScale{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;margin:24px 0}.ethicalSide{padding:22px;border:1px solid #ead7aa;border-radius:18px;background:white}.ethicalMid{font-size:2rem;color:var(--gold)}
+.architect{background:white}.heroGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.heroCard{padding:22px;border:1px solid var(--line);border-radius:19px;background:#fbfdff}.heroCard strong{display:block;color:#0c6098}
+.influence{background:linear-gradient(135deg,#eef8ff,#f7fffd)}.directionGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.direction{padding:19px;border:1px solid var(--line);border-radius:17px;background:white}.direction b{display:block;color:#0c6098;font-size:1.05rem}
+.case{background:#071c31;color:white}.case .kicker{color:#ffda7d}.case .lede{color:#c8dae6}.caseGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.caseCard{padding:20px;border:1px solid #ffffff27;border-radius:18px;background:#ffffff0b}.caseCard label{display:block;color:#ffda7d;font-weight:950;font-size:.79rem;margin-bottom:7px}.caseCard textarea{background:#ffffffef}
+.failures{background:white}.failGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:22px 0}.fail{padding:18px 12px;border:1px solid var(--line);border-radius:16px;background:#fbfdff;cursor:pointer;text-align:left;min-height:150px}.fail.on{border:2px solid #d7834b;background:#fff4ec}.fail strong{display:block;color:#a1532b}.fail p{font-size:.82rem;color:var(--muted)}
+.dashboard{background:#eef7fd}.dashGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.dashCard{padding:18px;border:1px solid var(--line);border-radius:17px;background:white}.dashCard label{display:block;color:#0c6098;font-size:.8rem;font-weight:950;margin-bottom:7px}.dashCard.full{grid-column:1/-1}
+.capstone{background:linear-gradient(135deg,#06182a,#0a3f65 58%,#11818d);color:white}.capstone .kicker{color:#ffda7d}.capstone .lede{color:#cbdde8}.capGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.capCard{padding:18px;border:1px solid #ffffff27;border-radius:18px;background:#ffffff0b}.capCard label{display:block;color:#ffda7d;font-size:.78rem;font-weight:950;margin-bottom:7px}.capCard textarea{background:#ffffffef}
+.brief{background:#fff8e8}.briefGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.briefCard{padding:18px;border:1px solid #e8d39e;border-radius:18px;background:white}.briefCard label{display:block;color:#8d6511;font-size:.8rem;font-weight:950;margin-bottom:7px}
+.reflection{background:white}.balcony{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}.dance,.bal{padding:22px;border-radius:20px;border:1px solid var(--line)}.dance{background:#fff5ee}.bal{background:#edf8fd}.dance strong{color:#b45c2e}.bal strong{color:#0c6098}.reflectionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}.reflectCard{padding:17px;border:1px solid var(--line);border-radius:16px;background:#fbfdff}.reflectCard label{display:block;color:#0c6098;font-weight:950;font-size:.78rem;margin-bottom:7px}
+.complete{display:none;background:#061b30;color:white;text-align:center;padding:82px 22px}.complete.show{display:block}.complete h2{font-size:clamp(2.8rem,6vw,5.5rem);margin:.4rem 0}.badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:24px 0}.badges span{padding:9px 12px;border-radius:999px;border:1px solid #ffffff27;background:#ffffff0a;font-size:.72rem;font-weight:900}.sources{font-size:.77rem;color:#b6c9d6;max-width:850px;margin:25px auto 0}.sources a{color:#d9e9f3}
+@media(max-width:980px){
+ .arch{opacity:.32;right:-12%}.roadGrid,.twoCol,.heroGrid,.balcony{grid-template-columns:1fr}.premiseGrid,.metaGrid,.attrGrid,.checkGrid{grid-template-columns:1fr 1fr}.levelGrid,.directionGrid{grid-template-columns:1fr 1fr}.ecqGrid,.failGrid{grid-template-columns:repeat(2,1fr)}.audGrid{grid-template-columns:1fr 1fr}.fieldGrid,.dashGrid,.capGrid,.briefGrid,.reflectionGrid,.caseGrid{grid-template-columns:1fr}.dashCard.full{grid-column:auto}.ethicalScale{grid-template-columns:1fr}.ethicalMid{text-align:center}
+}
+@media(max-width:620px){
+ .topin{gap:10px;padding:9px 12px}.brand{font-size:.63rem}.home{font-size:.67rem}.rail{justify-content:flex-start}
+ .hero{min-height:82vh}.hero h1{font-size:3.1rem}.arch{display:none}.section{padding:68px 18px}
+ .premiseGrid,.metaGrid,.attrGrid,.checkGrid,.levelGrid,.directionGrid,.ecqGrid,.failGrid,.audGrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topin">
+  <div class="brand">MAYNE <b>LEADERSHIP</b></div>
+  <nav class="rail" aria-label="Course progress">
+   <span class="step on">Scale</span><span class="step">Agility</span><span class="step">Vision</span><span class="step">Decisions</span><span class="step">Teams</span><span class="step">Communicate</span><span class="step">Ethics</span><span class="step">Align</span>
+  </nav>
+  <a class="home" href="learning.html">Learning ↗</a>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="top" data-flow="0">
+ <div class="arch" aria-hidden="true"><i class="tower t1"></i><i class="tower t2"></i><i class="tower t3"></i><i class="tower t4"></i><i class="bridge b1"></i><i class="bridge b2"></i><i class="bridge b3"></i><i class="node nd1"></i><i class="node nd2"></i><i class="node nd3"></i></div>
+ <div class="heroCopy">
+  <div class="eyebrow">STRATEGIC LEADERSHIP · FULL ONLINE COURSE</div>
+  <h1>Lead beyond your <span class="gold">line of sight.</span></h1>
+  <p><strong>Strategic thinking determines what matters. Strategic leadership mobilizes people around it.</strong></p>
+  <p>Shape direction. Align systems. Build leaders. Influence beyond authority. Communicate through complexity. Protect trust while achieving results.</p>
+  <p style="font-size:.92rem;color:#b9d0df"><strong>Approx. 2 hours</strong> · Interactive self-paced course · Progress saved on this device</p>
+  <button class="btn" id="begin">BEGIN THE COURSE →</button>
+ </div>
+</section>
+
+<section class="section roadmap" id="roadmap" data-flow="1">
+ <div class="wrap">
+  <div class="kicker">Course Roadmap</div><h2>From personal control to organizational alignment.</h2>
+  <p class="lede">Strategic leadership is not a bigger version of direct supervision. As scope expands, leaders increasingly work through vision, priorities, systems, subordinate leaders, relationships, resources, communication, and trust.</p>
+  <div class="roadGrid">
+   <div class="roadCard">
+    <strong style="font-size:1.18rem">What you will practice</strong>
+    <div class="roadList">
+     <div class="roadItem"><i>1</i><div><b>Lead at scale</b><br>Understand how leadership changes from foundation to direct, organizational, and strategic levels.</div></div>
+     <div class="roadItem"><i>2</i><div><b>Use six meta-competencies</b><br>Mental agility, vision, decision shaping, team building, communication, and ethical ambition.</div></div>
+     <div class="roadItem"><i>3</i><div><b>Move from hero to architect</b><br>Create conditions that allow others to make aligned decisions without waiting for you.</div></div>
+     <div class="roadItem"><i>4</i><div><b>Influence without control</b><br>Lead down, up, across, and out when responsibility exceeds formal authority.</div></div>
+     <div class="roadItem"><i>5</i><div><b>Create strategic alignment</b><br>Make intent, priorities, stakeholders, risk, learning rhythm, and leader action visible.</div></div>
+    </div>
+   </div>
+   <div class="roadCard goldCard">
+    <div class="kicker">Operating Idea</div>
+    <h3 style="font-size:1.5rem">See More → Think Deeper → Look Further → Lead Broader</h3>
+    <p>Strategic Thinking improves the quality of understanding. Strategic Leadership asks what you do with that understanding when other people, systems, and organizations must move with you.</p>
+    <button class="btn" id="roadContinue">START WITH SCALE →</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="banner" id="scaleBanner" data-flow="2">
+ <div class="wrap"><div class="kicker" style="color:#ffda7d">Strategic Leadership Premise</div><h2>SHAPE THE CONDITIONS</h2><p>The work shifts from solving tasks to creating clarity, alignment, trust, and systems that preserve intent.</p></div>
+</section>
+
+<section class="section premise" id="premise" data-flow="2">
+ <div class="wrap">
+  <div class="kicker">Big Idea</div><h2>Your method of influence changes as the system grows.</h2>
+  <div class="premiseGrid">
+   <div class="premiseCard"><strong>Personal control → Alignment</strong><p>You cannot personally direct every decision. You create intent, boundaries, priorities, and relationships so others can move together.</p></div>
+   <div class="premiseCard"><strong>Tasks → Conditions</strong><p>The strategic leader increasingly shapes systems, resources, structures, decision rights, incentives, and communication rhythms.</p></div>
+   <div class="premiseCard"><strong>Individual execution → Leader network</strong><p>Success depends on second-level leaders and partners who understand enough intent to act well when you are absent.</p></div>
+  </div>
+  <div class="principle">What works with a small team can fail at scale: personally solving every issue, relying on informal communication, or assuming intent is understood because it was said once.</div>
+
+  <h3 style="font-size:1.8rem;margin-top:38px">Levels of leadership</h3>
+  <p class="lede">Open all four. The same character matters at every level; the application changes.</p>
+  <div class="levelGrid" id="levelGrid"></div>
+  <div class="feedback" id="levelFeedback">Strategic leaders do not outgrow the foundation. Character, competence, self-awareness, and trust become more consequential as scope and indirect influence grow.</div>
+  <div class="gate"><button class="btn" id="premiseContinue" disabled>CONTINUE TO THE LEADERSHIP TRANSITION →</button></div>
+ </div>
+</section>
+
+<section class="section transition" id="transition" data-flow="3">
+ <div class="wrap">
+  <div class="kicker">What Changes as Leaders Move Up?</div><h2>The job moves from doing the work to creating the conditions for the work.</h2>
+  <div class="shiftGrid">
+   <div class="shiftCard"><div class="shiftArrow"><span>Personal influence</span><span>→</span><span>Indirect influence</span></div></div>
+   <div class="shiftCard"><div class="shiftArrow"><span>Immediate outcomes</span><span>→</span><span>Long-term conditions</span></div></div>
+   <div class="shiftCard"><div class="shiftArrow"><span>Control</span><span>→</span><span>Alignment</span></div></div>
+   <div class="shiftCard"><div class="shiftArrow"><span>Answers</span><span>→</span><span>Better questions</span></div></div>
+   <div class="shiftCard"><div class="shiftArrow"><span>Work</span><span>→</span><span>Systems</span></div></div>
+   <div class="shiftCard"><div class="shiftArrow"><span>Personal expertise</span><span>→</span><span>Integrated expertise</span></div></div>
+  </div>
+  <p><strong>Which transition is hardest for strong performers?</strong></p>
+  <div class="choicePool" id="shiftChoices"></div>
+  <textarea id="shiftWhy" rows="4" placeholder="Why is this transition difficult—and what behavior would help?"></textarea>
+  <div class="feedback" id="shiftFeedback">A strength at one level can become a liability at another. Decisiveness can become premature closure; expertise can become over-control; responsiveness can keep the leader permanently on the dance floor.</div>
+  <div class="gate"><button class="btn" id="transitionContinue" disabled>CONTINUE TO LEADERSHIP FOUNDATIONS →</button></div>
+ </div>
+</section>
+
+<section class="section foundation" id="foundation" data-flow="4">
+ <div class="wrap">
+  <div class="kicker">What Leaders Bring · What Leaders Do</div><h2>Strategic scope increases the cost of weak foundations.</h2>
+  <div class="attrGrid">
+   <div class="attr"><strong>Character</strong><p>Values, ethics, discipline, accountability, consistency, and the willingness to place mission and stewardship above ego.</p></div>
+   <div class="attr"><strong>Presence</strong><p>Credibility, resilience, calm under scrutiny, confidence without arrogance, and consistency across audiences.</p></div>
+   <div class="attr"><strong>Intellect</strong><p>Judgment, innovation, mental agility, systems understanding, and the ability to integrate expert advice.</p></div>
+  </div>
+  <div class="principle">Competencies still come down to leading, developing, and achieving—but the scale, time horizon, and indirect nature of influence change dramatically.</div>
+  <div class="gate"><button class="btn" id="foundationContinue">SEE THE FEDERAL LEADERSHIP CONNECTION →</button></div>
+ </div>
+</section>
+
+<section class="section federal" id="federal" data-flow="5">
+ <div class="wrap">
+  <div class="kicker">Federal Leadership Connection</div><h2>Strategic leadership is visible in the current Executive Core Qualifications.</h2>
+  <p class="lede">For federal leaders, OPM's current ECQs connect rule of law, efficiency, merit and competence, leading people, and achieving results. Strategic thinking is explicitly included under Achieving Results.</p>
+  <div class="ecqGrid" id="ecqGrid"></div>
+  <div class="feedback" id="ecqFeedback">The leadership challenge is not simply to move faster. It is to achieve legitimate, effective, accountable outcomes while managing people, resources, technology, risk, and long-term organizational interests.</div>
+  <div class="gate"><button class="btn" id="federalContinue" disabled>OPEN THE SIX META-COMPETENCIES →</button></div>
+ </div>
+</section>
+
+<section class="section meta" id="meta" data-flow="6">
+ <div class="wrap">
+  <div class="kicker">Strategic Leader Meta-Competencies</div><h2>Six behaviors help leaders operate at enterprise scale.</h2>
+  <p class="lede">Open all six. The framework is adapted from strategic-leadership research and translated into practical leader behavior.</p>
+  <div class="metaGrid" id="metaGrid"></div>
+  <div class="gate"><button class="btn" id="metaContinue" disabled>START WITH MENTAL AGILITY →</button></div>
+ </div>
+</section>
+
+<section class="section practice" id="agility" data-flow="7">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 1 · Mental Agility</div><h2>Change altitude without losing judgment.</h2>
+  <p class="lede">Strategic leaders move between details, systems, and future implications. They can hold competing truths long enough to understand them before locking onto an answer.</p>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>THE DETAIL</label><textarea id="agDetail" rows="4" placeholder="What immediate issue is pulling attention?"></textarea></div>
+   <div class="fieldCard"><label>THE SYSTEM</label><textarea id="agSystem" rows="4" placeholder="What larger process, pattern, or dependency surrounds it?"></textarea></div>
+   <div class="fieldCard"><label>THE FUTURE</label><textarea id="agFuture" rows="4" placeholder="What future implication or second-order effect matters?"></textarea></div>
+   <div class="fieldCard"><label>THE BETTER QUESTION</label><textarea id="agQuestion" rows="4" placeholder="What question helps you regain altitude?"></textarea></div>
+  </div>
+  <div class="feedback" id="agFeedback">Mental agility is not knowing everything. It is integrating expertise without becoming trapped in one frame.</div>
+  <div class="gate"><button class="btn" id="agContinue" disabled>CONTINUE TO VISION →</button></div>
+ </div>
+</section>
+
+<section class="section foundation" id="vision" data-flow="8">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 2 · Formulating Vision</div><h2>Vision turns complexity into direction.</h2>
+  <p class="lede">A strategic vision is not a slogan. It describes a desired future condition clearly enough to guide decisions when the leader is absent.</p>
+  <div class="principle"><strong>Weak:</strong> “We need to improve communication.”<br><strong>Stronger:</strong> Describe the future condition, why it matters, and what decisions it should guide.</div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>DESIRED FUTURE CONDITION</label><textarea id="visCondition" rows="4" placeholder="What should be true when this is working well?"></textarea></div>
+   <div class="fieldCard"><label>WHY IT MATTERS</label><textarea id="visWhy" rows="4" placeholder="How does this connect to mission, people, customers, or public value?"></textarea></div>
+   <div class="fieldCard"><label>DECISION GUIDANCE</label><textarea id="visGuide" rows="4" placeholder="What should leaders be able to decide without asking you?"></textarea></div>
+   <div class="fieldCard"><label>ONE-SENTENCE INTENT</label><textarea id="visIntent" rows="4" placeholder="We are creating ___ so that ___."></textarea></div>
+  </div>
+  <div class="feedback" id="visFeedback">The test of vision is not whether it sounds inspiring. The test is whether people can use it to make aligned decisions when you are not in the room.</div>
+  <div class="gate"><button class="btn" id="visContinue" disabled>CONTINUE TO DECISION SHAPING →</button></div>
+ </div>
+</section>
+
+<section class="section practice" id="decisions" data-flow="9">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 3 · Making and Shaping Decisions</div><h2>Sometimes you decide. Sometimes you shape the decision environment.</h2>
+  <p class="lede">Strategic leaders clarify decision rights, frame choices, surface tradeoffs, and make the type of request explicit.</p>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>WHO OWNS THE DECISION?</label><textarea id="decOwner" rows="3"></textarea></div>
+   <div class="fieldCard"><label>WHO MUST PROVIDE INPUT?</label><textarea id="decInput" rows="3"></textarea></div>
+   <div class="fieldCard"><label>WHO MUST EXECUTE?</label><textarea id="decExecute" rows="3"></textarea></div>
+   <div class="fieldCard"><label>WHO BEARS CONSEQUENCES?</label><textarea id="decConsequences" rows="3"></textarea></div>
+   <div class="fieldCard"><label>ENDS</label><textarea id="decEnds" rows="3" placeholder="Desired condition"></textarea></div>
+   <div class="fieldCard"><label>WAYS</label><textarea id="decWays" rows="3" placeholder="Broad approach"></textarea></div>
+   <div class="fieldCard"><label>MEANS</label><textarea id="decMeans" rows="3" placeholder="People, resources, authorities, time"></textarea></div>
+   <div class="fieldCard"><label>RISK</label><textarea id="decRisk" rows="3" placeholder="Friction, tradeoffs, unintended consequences"></textarea></div>
+  </div>
+  <div class="choicePool" id="requestType"></div>
+  <div class="feedback" id="decFeedback">Use explicit language: is this a recommendation, a decision, a request for guidance, or a request for concurrence? Unclear decision rights create delay and shadow decision-making.</div>
+  <div class="gate"><button class="btn" id="decContinue" disabled>CONTINUE TO BUILDING TEAMS →</button></div>
+ </div>
+</section>
+
+<section class="section team" id="teams" data-flow="10">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 4 · Building Successful Teams</div><h2>Strategic teams often include experts you do not command.</h2>
+  <p class="lede">Select the conditions your cross-functional team most needs to strengthen, then design the operating environment around them.</p>
+  <div class="checkGrid" id="teamChecks"></div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>ROLE CLARITY</label><textarea id="teamRoles" rows="3" placeholder="Who owns what?"></textarea></div>
+   <div class="fieldCard"><label>DECISION RIGHTS</label><textarea id="teamRights" rows="3" placeholder="What can this team decide? What must be elevated?"></textarea></div>
+   <div class="fieldCard"><label>OPERATING RHYTHM</label><textarea id="teamRhythm" rows="3" placeholder="How often do we coordinate, decide, learn, and adjust?"></textarea></div>
+   <div class="fieldCard"><label>DISSENT + BAD NEWS</label><textarea id="teamDissent" rows="3" placeholder="How will people surface disagreement, risk, or failure early?"></textarea></div>
+  </div>
+  <div class="feedback" id="teamFeedback">Cross-functional teams exist because no single viewpoint sees the whole system. Trust, clarity, cadence, and psychological safety are operating requirements—not extras.</div>
+  <div class="gate"><button class="btn" id="teamContinue" disabled>CONTINUE TO STRATEGIC COMMUNICATION →</button></div>
+ </div>
+</section>
+
+<section class="section communication" id="communication" data-flow="11">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 5 · Communicating Effectively</div><h2>Same strategy. Different audience needs.</h2>
+  <p class="lede">Choose a hypothetical organizational change. Keep the core truth consistent while changing emphasis, language, and information for five audiences.</p>
+  <select id="commScenario">
+   <option value="">Choose a change...</option>
+   <option>Implement a new workflow</option>
+   <option>Introduce a new technology tool</option>
+   <option>Change a training requirement</option>
+   <option>Redesign a coordination process</option>
+  </select>
+  <div class="audGrid">
+   <div class="audCard"><label>EMPLOYEES · impact + support</label><textarea id="msgEmployees" placeholder="What is changing? Why? How will people be supported?"></textarea></div>
+   <div class="audCard"><label>SUPERVISORS · expectations + resources</label><textarea id="msgSupervisors" placeholder="What do supervisors need to do, know, reinforce, or resource?"></textarea></div>
+   <div class="audCard"><label>OTHER FUNCTION · dependencies</label><textarea id="msgOther" placeholder="What dependencies, handoffs, or coordination matter?"></textarea></div>
+   <div class="audCard"><label>PARTNERS · roles + coordination</label><textarea id="msgPartners" placeholder="What is expected across organizational boundaries?"></textarea></div>
+   <div class="audCard"><label>OVERSIGHT / SENIOR LEADERS · rationale + accountability</label><textarea id="msgOversight" placeholder="What outcome, risk, rationale, and accountability matter?"></textarea></div>
+  </div>
+  <div class="feedback" id="commFeedback"><strong>Strategic communication is disciplined translation.</strong> Adapt the emphasis without changing the integrity of the message. Build feedback loops so the message can travel back as well as out.</div>
+  <div class="gate"><button class="btn" id="commContinue" disabled>CONTINUE TO ETHICAL AMBITION →</button></div>
+ </div>
+</section>
+
+<section class="section ethics" id="ethics" data-flow="12">
+ <div class="wrap">
+  <div class="kicker">Meta-Competency 6 · Ethical Ambition</div><h2>Accomplish the mission without separating results from character.</h2>
+  <p class="lede">Strategic leadership has to hold effectiveness, legality, policy, stewardship, people, risk, accountability, and trust together.</p>
+  <div class="ethicalScale">
+   <div class="ethicalSide"><strong>RESULTS WITHOUT TRUST</strong><p>What happens when a leader achieves the metric but damages credibility, stewardship, or legitimacy?</p><textarea id="ethResults" rows="4"></textarea></div>
+   <div class="ethicalMid">↔</div>
+   <div class="ethicalSide"><strong>PROCESS WITHOUT RESULTS</strong><p>What happens when a leader protects process but cannot create meaningful outcomes?</p><textarea id="ethProcess" rows="4"></textarea></div>
+  </div>
+  <div class="panel"><label>YOUR LEADERSHIP STANDARD</label><textarea id="ethStandard" rows="4" placeholder="What principle should remain true even when pressure is high?"></textarea></div>
+  <div class="feedback" id="ethFeedback">Ethical ambition means pursuing meaningful results while staying grounded in principle. Strategic leaders model the behavior the organization must be able to trust.</div>
+  <div class="gate"><button class="btn" id="ethContinue" disabled>MOVE FROM HERO TO ARCHITECT →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="architectBanner" data-flow="13">
+ <div class="wrap"><div class="kicker" style="color:#ffda7d">The Strategic Leader Transition</div><h2>HERO → ARCHITECT</h2><p>Your value increasingly comes from creating conditions for other people to succeed.</p></div>
+</section>
+
+<section class="section architect" id="architect" data-flow="13">
+ <div class="wrap">
+  <div class="kicker">From Problem Solver to System Builder</div><h2>Where are you still trying to be the hero?</h2>
+  <div class="heroGrid">
+   <div class="heroCard"><strong>STOP BEING THE ONLY PROBLEM SOLVER</strong><textarea id="archStop" rows="4" placeholder="What problem do you keep pulling back to yourself?"></textarea></div>
+   <div class="heroCard"><strong>BUILD A LEADER</strong><textarea id="archLeader" rows="4" placeholder="Who needs enough context, authority, and confidence to decide without you?"></textarea></div>
+   <div class="heroCard"><strong>BUILD A SYSTEM</strong><textarea id="archSystem" rows="4" placeholder="What process, decision right, resource, or rhythm should replace personal rescue?"></textarea></div>
+   <div class="heroCard"><strong>PRESERVE INTENT UNDER PRESSURE</strong><textarea id="archIntent" rows="4" placeholder="What must remain clear when conditions change?"></textarea></div>
+  </div>
+  <div class="feedback" id="archFeedback">Strategic leaders still solve problems. The transition is that their highest value increasingly comes from clarity, systems, leader development, alignment, and conditions that keep working when they are not present.</div>
+  <div class="gate"><button class="btn" id="archContinue" disabled>LEAD UP, ACROSS, AND OUT →</button></div>
+ </div>
+</section>
+
+<section class="section influence" id="influence" data-flow="14">
+ <div class="wrap">
+  <div class="kicker">Influence Without Control</div><h2>Responsibility often extends beyond formal authority.</h2>
+  <div class="directionGrid">
+   <div class="direction"><b>LEAD DOWN</b><p>Create clarity, resources, trust, development, and accountability.</p></div>
+   <div class="direction"><b>LEAD UP</b><p>Frame issues, surface risk, provide options, and improve senior leaders' understanding.</p></div>
+   <div class="direction"><b>LEAD ACROSS</b><p>Build coalitions, shared understanding, agreements, and reciprocal trust with peers.</p></div>
+   <div class="direction"><b>LEAD OUT</b><p>Coordinate with partners, customers, stakeholders, communities, and external systems.</p></div>
+  </div>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>AN OUTCOME YOU OWN BUT DO NOT FULLY CONTROL</label><textarea id="infOutcome" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHO MUST YOU INFLUENCE?</label><textarea id="infWho" rows="4"></textarea></div>
+   <div class="fieldCard"><label>WHAT GIVES YOU CREDIBILITY?</label><textarea id="infCred" rows="4" placeholder="Relationships, evidence, timing, expertise, reliability..."></textarea></div>
+   <div class="fieldCard"><label>WHAT RELATIONSHIP SHOULD EXIST BEFORE THE CRISIS?</label><textarea id="infBefore" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="infFeedback"><strong>Unity of effort without unity of command</strong> is strategic leadership terrain. Authority helps, but alignment also depends on relationships, credibility, timing, evidence, shared purpose, and trust.</div>
+  <div class="gate"><button class="btn" id="infContinue" disabled>OPEN THE UNITY-OF-EFFORT CASE →</button></div>
+ </div>
+</section>
+
+<section class="section case" id="caseStudy" data-flow="15">
+ <div class="wrap">
+  <div class="kicker">Public Federal Case · Admiral Thad Allen</div><h2>Leading a complex system under scrutiny.</h2>
+  <p class="lede">During the Deepwater Horizon response, Admiral Thad Allen served as National Incident Commander. The environment included federal agencies, state and local governments, private industry, scientific experts, elected officials, affected communities, media, and the public. No single leader commanded the entire system.</p>
+  <div class="caseGrid">
+   <div class="caseCard"><label>WHO DOES THE LEADER ACTUALLY COMMAND?</label><textarea id="caseCommand" rows="4"></textarea></div>
+   <div class="caseCard"><label>WHO MUST THE LEADER INFLUENCE?</label><textarea id="caseInfluence" rows="4"></textarea></div>
+   <div class="caseCard"><label>WHAT DEFINITIONS OF SUCCESS MAY COMPETE?</label><textarea id="caseSuccess" rows="4"></textarea></div>
+   <div class="caseCard"><label>WHAT SHOULD BE CENTRALIZED?</label><textarea id="caseCentral" rows="4"></textarea></div>
+   <div class="caseCard"><label>WHAT SHOULD BE DELEGATED?</label><textarea id="caseDelegate" rows="4"></textarea></div>
+   <div class="caseCard"><label>WHAT IF OPERATIONS IMPROVE BUT TRUST COLLAPSES?</label><textarea id="caseTrust" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="caseFeedback">Strategic leadership is not only command. It is integration: aligning stakeholders with different authorities, information, incentives, risks, and definitions of success.</div>
+  <div class="gate"><button class="btn" id="caseContinue" disabled>BRING IT BACK TO YOUR ORGANIZATION →</button></div>
+ </div>
+</section>
+
+<section class="section influence" id="application" data-flow="16">
+ <div class="wrap">
+  <div class="kicker">Application</div><h2>Where do you need unity of effort without full control?</h2>
+  <p class="lede">Think of cross-functional initiatives, technology implementation, workforce development, training, policy, legal coordination, headquarters-field relationships, or partner work.</p>
+  <div class="fieldGrid">
+   <div class="fieldCard"><label>THE SHARED OUTCOME</label><textarea id="appOutcome" rows="4"></textarea></div>
+   <div class="fieldCard"><label>BOUNDARIES / SILOS INVOLVED</label><textarea id="appBoundaries" rows="4"></textarea></div>
+   <div class="fieldCard"><label>COMPETING PRIORITIES</label><textarea id="appPriorities" rows="4"></textarea></div>
+   <div class="fieldCard"><label>RELATIONSHIP TO BUILD NOW</label><textarea id="appRelationship" rows="4"></textarea></div>
+  </div>
+  <div class="gate"><button class="btn" id="appContinue" disabled>IDENTIFY FAILURE MODES →</button></div>
+ </div>
+</section>
+
+<section class="section failures" id="failures" data-flow="17">
+ <div class="wrap">
+  <div class="kicker">Strategic Leadership Failure Modes</div><h2>Strategic failure can look like leadership activity.</h2>
+  <p class="lede">Select the two failure modes that create the most risk in your environment.</p>
+  <div class="failGrid" id="failGrid"></div>
+  <div class="panel"><label>COUNTERMEASURE</label><textarea id="failCounter" rows="4" placeholder="What practical leader tool or behavior would reduce these risks?"></textarea></div>
+  <div class="feedback" id="failFeedback">Meetings, taskers, slide decks, and messages are not alignment by themselves. Ask whether decisions are clearer, roles are understood, risk is visible, feedback is flowing, and people know what matters most.</div>
+  <div class="gate"><button class="btn" id="failContinue" disabled>BUILD THE ALIGNMENT DASHBOARD →</button></div>
+ </div>
+</section>
+
+<section class="section dashboard" id="dashboard" data-flow="18">
+ <div class="wrap">
+  <div class="kicker">Leader Tool · Strategic Alignment Dashboard</div><h2>Alignment must be visible before it can be managed.</h2>
+  <p class="lede">Use a real or hypothetical initiative. Could every stakeholder state the same intent, priorities, risks, and next learning point?</p>
+  <div class="dashGrid">
+   <div class="dashCard full"><label>INTENT · What condition are we creating?</label><textarea id="dashIntent" rows="3"></textarea></div>
+   <div class="dashCard"><label>TOP THREE PRIORITIES</label><textarea id="dashPriorities" rows="4"></textarea></div>
+   <div class="dashCard"><label>STAKEHOLDERS</label><textarea id="dashStakeholders" rows="4"></textarea></div>
+   <div class="dashCard"><label>RESOURCES / MEANS</label><textarea id="dashResources" rows="4"></textarea></div>
+   <div class="dashCard"><label>STRATEGIC RISKS</label><textarea id="dashRisks" rows="4"></textarea></div>
+   <div class="dashCard"><label>MEASURES / EVIDENCE</label><textarea id="dashMeasures" rows="4"></textarea></div>
+   <div class="dashCard"><label>LEARNING RHYTHM · When do we review and adjust?</label><textarea id="dashRhythm" rows="4"></textarea></div>
+   <div class="dashCard full"><label>LEADER ACTIONS</label><textarea id="dashActions" rows="4" placeholder="What must leaders reinforce, resource, decide, communicate, or remove?"></textarea></div>
+  </div>
+  <div class="feedback" id="dashFeedback">If different stakeholders carry different assumptions about intent, priorities, risk, or decision timing, alignment is weaker than it appears.</div>
+  <div class="gate"><button class="btn" id="dashContinue" disabled>ENTER PROJECT CONVERGENCE →</button></div>
+ </div>
+</section>
+
+<section class="section capstone" id="capstone" data-flow="19">
+ <div class="wrap">
+  <div class="kicker">Capstone · Project Convergence</div><h2>Lead a three-year enterprise modernization effort.</h2>
+  <p class="lede">A fictional organization is implementing a major modernization effort affecting people, policy, technology, training, field operations, headquarters, and external partners. Existing mission work must continue. Resources are limited, trust varies, timelines compete, and success depends on adoption—not merely deployment.</p>
+  <div class="capGrid">
+   <div class="capCard"><label>1 · ONE-SENTENCE STRATEGIC INTENT</label><textarea id="capIntent" rows="4" placeholder="We are doing ___ so that ___."></textarea></div>
+   <div class="capCard"><label>2 · THREE PRIORITIES — NO MORE THAN THREE</label><textarea id="capPriorities" rows="4"></textarea></div>
+   <div class="capCard"><label>3 · STAKEHOLDER MAP</label><textarea id="capStakeholders" rows="5" placeholder="Who approves? Supports? Implements? Must understand? Must be consulted?"></textarea></div>
+   <div class="capCard"><label>4 · STRATEGIC RISKS</label><textarea id="capRisks" rows="5" placeholder="Mission, people, legal/policy, technology, resources, trust..."></textarea></div>
+   <div class="capCard"><label>5A · LEADERS MUST START</label><textarea id="capStart" rows="4"></textarea></div>
+   <div class="capCard"><label>5B · LEADERS MUST STOP</label><textarea id="capStop" rows="4"></textarea></div>
+   <div class="capCard"><label>5C · LEADERS MUST CONTINUE</label><textarea id="capContinueField" rows="4"></textarea></div>
+   <div class="capCard"><label>ASSUMPTION THAT COULD EMBARRASS THE STRATEGY</label><textarea id="capAssumption" rows="4"></textarea></div>
+  </div>
+  <div class="feedback" id="capFeedback">The job is not to create a technical implementation plan. The job is to create strategic alignment: clear intent, disciplined priorities, visible stakeholders and risk, and leader behavior that supports adoption.</div>
+  <div class="gate"><button class="btn" id="capContinue" disabled>BUILD THE 2-MINUTE SENIOR-LEADER BRIEF →</button></div>
+ </div>
+</section>
+
+<section class="section brief" id="brief" data-flow="20">
+ <div class="wrap">
+  <div class="kicker">Senior-Leader Brief Template</div><h2>Brief the thinking—not just the recommendation.</h2>
+  <p class="lede">Your brief should make the desired condition, the things that must hold, the strategic risks, and the decision needed immediately visible.</p>
+  <div class="briefGrid">
+   <div class="briefCard"><label>INTENT · desired condition + why it matters</label><textarea id="briefIntent" rows="4"></textarea></div>
+   <div class="briefCard"><label>PRIORITIES · the three things that must hold</label><textarea id="briefPriorities" rows="4"></textarea></div>
+   <div class="briefCard"><label>RISKS · what could fail + how we will learn</label><textarea id="briefRisks" rows="4"></textarea></div>
+   <div class="briefCard"><label>DECISION NEEDED · what do you need from leadership now?</label><textarea id="briefDecision" rows="4"></textarea></div>
+  </div>
+  <div class="principle">If the brief becomes too tactical, ask: <strong>What strategic condition are we trying to create?</strong> If it becomes too abstract, ask: <strong>What decision or leader action is required now?</strong></div>
+  <div class="gate"><button class="btn" id="briefContinue" disabled>FINAL REFLECTION →</button></div>
+ </div>
+</section>
+
+<section class="section reflection" id="reflection" data-flow="21">
+ <div class="wrap">
+  <div class="kicker">Final Reflection · Balcony and Dance Floor</div><h2>Strategic leaders move between action and perspective.</h2>
+  <div class="balcony">
+   <div class="dance"><strong>DANCE FLOOR</strong><h3>What problem is consuming your attention?</h3><textarea id="refDance" rows="5" placeholder="Name the immediate issue."></textarea></div>
+   <div class="bal"><strong>BALCONY</strong><h3>What becomes visible when you gain altitude?</h3><textarea id="refBalcony" rows="5" placeholder="What is connected? What created it? What reinforces it?"></textarea></div>
+  </div>
+  <div class="reflectionGrid">
+   <div class="reflectCard"><label>WHO SEES THIS DIFFERENTLY?</label><textarea id="refWho" rows="4"></textarea></div>
+   <div class="reflectCard"><label>WHAT HAPPENS IF NOTHING CHANGES?</label><textarea id="refNothing" rows="4"></textarea></div>
+   <div class="reflectCard"><label>WHAT HAPPENS IF YOU SOLVE IT?</label><textarea id="refSolve" rows="4"></textarea></div>
+   <div class="reflectCard"><label>WHAT FUTURE PROBLEM COULD TODAY'S SOLUTION CREATE?</label><textarea id="refFuture" rows="4"></textarea></div>
+   <div class="reflectCard" style="grid-column:1/-1"><label>WHAT CONVERSATION SHOULD YOU BE HAVING THAT YOU ARE CURRENTLY NOT HAVING?</label><textarea id="refConversation" rows="5"></textarea></div>
+  </div>
+  <div class="principle"><strong>See More → Think Deeper → Look Further → Lead Broader.</strong> Strategic leadership is the discipline of turning better understanding into aligned action through people, systems, relationships, and trust.</div>
+  <div class="gate"><button class="btn" id="finish" disabled>COMPLETE STRATEGIC LEADERSHIP COURSE →</button></div>
+ </div>
+</section>
+
+<section class="complete" id="complete" data-flow="22">
+ <div class="wrap">
+  <div class="kicker" style="color:#ffda7d">Strategic Leadership · Full Online Course</div>
+  <h2>ALIGN THE SYSTEM.<br><span class="gold">ENABLE THE PEOPLE.</span></h2>
+  <p>You practiced leading at scale through agility, vision, decision shaping, team building, communication, ethical ambition, influence, and strategic alignment.</p>
+  <div class="badges"><span>SCALE ✓</span><span>AGILITY ✓</span><span>VISION ✓</span><span>DECISIONS ✓</span><span>TEAMS ✓</span><span>COMMUNICATION ✓</span><span>ETHICS ✓</span><span>ALIGNMENT ✓</span></div>
+  <button class="btn secondary" id="review">REVIEW FROM THE TOP</button> <button class="btn" id="restart">START OVER</button>
+  <p style="color:#b7cbd8;margin-top:18px">Your progress is saved on this device.</p>
+  <div class="sources">Course framework source notes include the Mayne Leadership Strategic Thinking & Strategic Leadership course; current OPM Executive Core Qualifications; strategic-leadership research reflected in the U.S. Army War College meta-competency framework; and the public U.S. Coast Guard history of Admiral Thad Allen's national incident leadership.</div>
+ </div>
+</section>
+</main>
+
+<script>
+const KEY='ml_strategic_leadership_full_v1';
+const defaults={
+ flowStep:0,levels:[],shift:null,shiftWhy:'',ecqs:[],metas:[],teamChecks:[],requestType:null,failures:[],
+ fields:{}
+};
+let state={...defaults};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'{}');state={...defaults,...saved,fields:{...defaults.fields,...(saved.fields||{})}}}catch(e){}
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+function syncFlow(){document.querySelectorAll('[data-flow]').forEach(el=>el.classList.toggle('flowLocked',+el.dataset.flow>state.flowStep))}
+function go(id){const el=document.getElementById(id);if(!el)return;const host=el.matches('[data-flow]')?el:el.closest('[data-flow]');if(host){const n=+host.dataset.flow;if(n>state.flowStep){state.flowStep=n;save();syncFlow();host.classList.add('flowReveal');setTimeout(()=>host.classList.remove('flowReveal'),500)}}requestAnimationFrame(()=>el.scrollIntoView({behavior:'smooth',block:'start'}))}
+function setStage(i){document.querySelectorAll('.step').forEach((s,n)=>s.classList.toggle('on',n<=i))}
+function bindField(id,onChange){const el=document.getElementById(id);if(!el)return;el.value=state.fields[id]||'';const fn=()=>{state.fields[id]=el.value;save();if(onChange)onChange()};el.addEventListener('input',fn);el.addEventListener('change',fn)}
+function filled(ids){return ids.every(id=>(state.fields[id]||'').trim())}
+function gate(btnId,ids,extra=true,feedbackId){const done=filled(ids)&&extra;document.getElementById(btnId).disabled=!done;if(feedbackId)document.getElementById(feedbackId).classList.toggle('show',done);return done}
+syncFlow();
+
+document.getElementById('begin').onclick=()=>go('roadmap');
+document.getElementById('roadContinue').onclick=()=>go('scaleBanner');
+
+const levelData=[
+ ['FOUNDATION','Character · competence · trust','Self-awareness, ethics, credibility, competence, and trust support every other level.'],
+ ['DIRECT','Teams + individuals','Influence is immediate and personal; leaders can often see the work and interact directly.'],
+ ['ORGANIZATIONAL','Systems + organizations','Influence travels through processes, resources, subordinate leaders, structures, and competing priorities.'],
+ ['STRATEGIC','Enterprise + environment','Direction, external relationships, long-term conditions, resource tradeoffs, and indirect influence dominate.']
+];
+function renderLevels(){const g=document.getElementById('levelGrid');g.innerHTML=levelData.map((x,i)=>'<button class="levelCard '+(state.levels.includes(i)?'on':'')+'" data-i="'+i+'"><span>'+x[0]+'</span><h3>'+x[1]+'</h3><p>'+x[2]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.levels.includes(i))state.levels.push(i);save();renderLevels()});const done=state.levels.length===4;document.getElementById('premiseContinue').disabled=!done;document.getElementById('levelFeedback').classList.toggle('show',done)}
+renderLevels();document.getElementById('premiseContinue').onclick=()=>{setStage(0);go('transition')};
+
+const shifts=['Personal → indirect influence','Immediate → long-term','Control → alignment','Answers → better questions','Work → systems','Expertise → integration'];
+function renderShifts(){const g=document.getElementById('shiftChoices');g.innerHTML=shifts.map((x,i)=>'<button class="choice '+(state.shift===i?'on':'')+'" data-i="'+i+'">'+x+'</button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.shift=+b.dataset.i;save();renderShifts();syncShift()})}
+renderShifts();bindField('shiftWhy',syncShift);
+function syncShift(){const done=state.shift!==null&&(state.fields.shiftWhy||'').trim();document.getElementById('transitionContinue').disabled=!done;document.getElementById('shiftFeedback').classList.toggle('show',!!done)}
+syncShift();document.getElementById('transitionContinue').onclick=()=>go('foundation');
+document.getElementById('foundationContinue').onclick=()=>go('federal');
+
+const ecqs=[
+ ['Rule of Law + Founding Principles','Uphold constitutional government, rule of law, and service to the American people.'],
+ ['Driving Efficiency','Strategically manage resources, budget, process, and technology to improve efficiency.'],
+ ['Merit + Competence','Demonstrate technical competence, problem solving, agility, resilience, and exceptional-quality work.'],
+ ['Leading People','Inspire people toward mission and goals while building a high-performance, high-accountability culture.'],
+ ['Achieving Results','Translate strategy into action, innovate, think strategically, and align results to organizational goals.']
+];
+function renderEcqs(){const g=document.getElementById('ecqGrid');g.innerHTML=ecqs.map((x,i)=>'<button class="ecq '+(state.ecqs.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.ecqs.includes(i))state.ecqs.push(i);save();renderEcqs()});const done=state.ecqs.length===5;document.getElementById('federalContinue').disabled=!done;document.getElementById('ecqFeedback').classList.toggle('show',done)}
+renderEcqs();document.getElementById('federalContinue').onclick=()=>go('meta');
+
+const metaData=[
+ ['Mental Agility','Move between details, systems, and future implications; hold competing truths long enough to understand them.'],
+ ['Vision','Describe a desired future condition and make intent clear enough to guide decisions when you are absent.'],
+ ['Decision Shaping','Clarify decision ownership, frame options, surface tradeoffs, and improve the quality of the decision environment.'],
+ ['Team Building','Build trust, clarity, roles, rhythm, and psychological safety across functions and boundaries.'],
+ ['Communication','Translate complexity through layers and audiences without hiding risk or changing the core truth.'],
+ ['Ethical Ambition','Achieve meaningful results with integrity, stewardship, accountability, and long-term legitimacy.']
+];
+function renderMeta(){const g=document.getElementById('metaGrid');g.innerHTML=metaData.map((x,i)=>'<button class="metaCard '+(state.metas.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.metas.includes(i))state.metas.push(i);save();renderMeta()});document.getElementById('metaContinue').disabled=state.metas.length<6}
+renderMeta();document.getElementById('metaContinue').onclick=()=>{setStage(1);go('agility')};
+
+const agilityFields=['agDetail','agSystem','agFuture','agQuestion'];agilityFields.forEach(id=>bindField(id,syncAgility));function syncAgility(){gate('agContinue',agilityFields,true,'agFeedback')}syncAgility();document.getElementById('agContinue').onclick=()=>{setStage(2);go('vision')};
+
+const visionFields=['visCondition','visWhy','visGuide','visIntent'];visionFields.forEach(id=>bindField(id,syncVision));function syncVision(){gate('visContinue',visionFields,true,'visFeedback')}syncVision();document.getElementById('visContinue').onclick=()=>{setStage(3);go('decisions')};
+
+const decisionFields=['decOwner','decInput','decExecute','decConsequences','decEnds','decWays','decMeans','decRisk'];decisionFields.forEach(id=>bindField(id,syncDecisions));
+const requestTypes=['Recommendation','Decision','Request for guidance','Request for concurrence'];
+function renderRequest(){const g=document.getElementById('requestType');g.innerHTML=requestTypes.map((x,i)=>'<button class="choice '+(state.requestType===i?'on':'')+'" data-i="'+i+'">'+x+'</button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.requestType=+b.dataset.i;save();renderRequest();syncDecisions()})}
+renderRequest();function syncDecisions(){gate('decContinue',decisionFields,state.requestType!==null,'decFeedback')}syncDecisions();document.getElementById('decContinue').onclick=()=>{setStage(4);go('teams')};
+
+const teamData=[
+ ['Trust','People believe commitments will be honored and difficult information can be surfaced.'],
+ ['Role clarity','Members understand ownership, boundaries, handoffs, and dependencies.'],
+ ['Decision authority','The team knows what it can decide and what must be elevated.'],
+ ['Operating rhythm','The team has a predictable cadence for coordination, decisions, learning, and adjustment.'],
+ ['Constructive dissent','Experts can challenge assumptions without becoming disloyal or defensive.'],
+ ['Shared purpose','Different functions can explain the same outcome and why their contribution matters.']
+];
+function renderTeamChecks(){const g=document.getElementById('teamChecks');g.innerHTML=teamData.map((x,i)=>'<button class="checkCard '+(state.teamChecks.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.teamChecks=state.teamChecks.includes(i)?state.teamChecks.filter(x=>x!==i):state.teamChecks.concat(i);save();renderTeamChecks();syncTeam()})}
+renderTeamChecks();
+const teamFields=['teamRoles','teamRights','teamRhythm','teamDissent'];teamFields.forEach(id=>bindField(id,syncTeam));function syncTeam(){gate('teamContinue',teamFields,state.teamChecks.length>=2,'teamFeedback')}syncTeam();document.getElementById('teamContinue').onclick=()=>{setStage(5);go('communication')};
+
+const commFields=['commScenario','msgEmployees','msgSupervisors','msgOther','msgPartners','msgOversight'];commFields.forEach(id=>bindField(id,syncComm));function syncComm(){gate('commContinue',commFields,true,'commFeedback')}syncComm();document.getElementById('commContinue').onclick=()=>{setStage(6);go('ethics')};
+
+const ethicsFields=['ethResults','ethProcess','ethStandard'];ethicsFields.forEach(id=>bindField(id,syncEthics));function syncEthics(){gate('ethContinue',ethicsFields,true,'ethFeedback')}syncEthics();document.getElementById('ethContinue').onclick=()=>{setStage(7);go('architectBanner')};
+
+const archFields=['archStop','archLeader','archSystem','archIntent'];archFields.forEach(id=>bindField(id,syncArch));function syncArch(){gate('archContinue',archFields,true,'archFeedback')}syncArch();document.getElementById('archContinue').onclick=()=>go('influence');
+
+const infFields=['infOutcome','infWho','infCred','infBefore'];infFields.forEach(id=>bindField(id,syncInf));function syncInf(){gate('infContinue',infFields,true,'infFeedback')}syncInf();document.getElementById('infContinue').onclick=()=>go('caseStudy');
+
+const caseFields=['caseCommand','caseInfluence','caseSuccess','caseCentral','caseDelegate','caseTrust'];caseFields.forEach(id=>bindField(id,syncCase));function syncCase(){gate('caseContinue',caseFields,true,'caseFeedback')}syncCase();document.getElementById('caseContinue').onclick=()=>go('application');
+
+const appFields=['appOutcome','appBoundaries','appPriorities','appRelationship'];appFields.forEach(id=>bindField(id,syncApp));function syncApp(){gate('appContinue',appFields)}syncApp();document.getElementById('appContinue').onclick=()=>go('failures');
+
+const failData=[
+ ['More meetings','More activity without clearer decisions, ownership, or information flow.'],
+ ['Vision without means','A direction is announced without resources, accountability, or a credible path.'],
+ ['Delegation without intent','Work moves downward but people lack context to make aligned decisions.'],
+ ['Communication without feedback','Messages move outward but leaders do not learn what was understood, missed, or resisted.'],
+ ['Speed without learning','The organization moves quickly but repeats errors because reflection and adjustment disappear.']
+];
+function renderFailures(){const g=document.getElementById('failGrid');g.innerHTML=failData.map((x,i)=>'<button class="fail '+(state.failures.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.failures.includes(i))state.failures=state.failures.filter(x=>x!==i);else if(state.failures.length<2)state.failures.push(i);save();renderFailures();syncFail()})}
+renderFailures();bindField('failCounter',syncFail);function syncFail(){gate('failContinue',['failCounter'],state.failures.length===2,'failFeedback')}syncFail();document.getElementById('failContinue').onclick=()=>{setStage(7);go('dashboard')};
+
+const dashFields=['dashIntent','dashPriorities','dashStakeholders','dashResources','dashRisks','dashMeasures','dashRhythm','dashActions'];dashFields.forEach(id=>bindField(id,syncDash));function syncDash(){gate('dashContinue',dashFields,true,'dashFeedback')}syncDash();document.getElementById('dashContinue').onclick=()=>go('capstone');
+
+const capFields=['capIntent','capPriorities','capStakeholders','capRisks','capStart','capStop','capContinueField','capAssumption'];capFields.forEach(id=>bindField(id,syncCap));function syncCap(){gate('capContinue',capFields,true,'capFeedback')}syncCap();document.getElementById('capContinue').onclick=()=>go('brief');
+
+const briefFields=['briefIntent','briefPriorities','briefRisks','briefDecision'];briefFields.forEach(id=>bindField(id,syncBrief));function syncBrief(){gate('briefContinue',briefFields)}syncBrief();document.getElementById('briefContinue').onclick=()=>go('reflection');
+
+const refFields=['refDance','refBalcony','refWho','refNothing','refSolve','refFuture','refConversation'];refFields.forEach(id=>bindField(id,syncRef));function syncRef(){gate('finish',refFields)}syncRef();
+document.getElementById('finish').onclick=()=>{state.flowStep=22;save();syncFlow();document.getElementById('complete').classList.add('show');go('complete')};
+if(state.flowStep>=22)document.getElementById('complete').classList.add('show');
+document.getElementById('review').onclick=()=>document.getElementById('top').scrollIntoView({behavior:'smooth'});
+document.getElementById('restart').onclick=()=>{if(confirm('Start over and clear your saved Strategic Leadership progress?')){localStorage.removeItem(KEY);location.reload()}};
+
+const stageMap=[[2,0],[7,1],[8,2],[9,3],[10,4],[11,5],[12,6],[18,7]];
+window.addEventListener('scroll',()=>{let current=0;stageMap.forEach(([flow,s])=>{const el=document.querySelector('[data-flow="'+flow+'"]');if(el&&el.getBoundingClientRect().top<window.innerHeight*.42)current=s});setStage(current)},{passive:true});
+</script>
+</body>
+</html>
