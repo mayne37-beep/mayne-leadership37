@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#061a2f">
+<meta name="description" content="Interactive Strategic Thinking Foundations course from Mayne Leadership. See more, think deeper, look further, and lead broader.">
+<title>Strategic Thinking: Foundations | Mayne Leadership</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --navy:#061a2f;--deep:#0a2948;--blue:#0e5f99;--sky:#e7f5ff;--gold:#e8b64d;--gold2:#ffd875;
+  --ink:#172e46;--muted:#617488;--line:#d8e4ed;--white:#fff;--cream:#fff8e8;--ice:#f4faff;
+  --green:#dff5ec;--lav:#f1efff;--coral:#fff0e8;--shadow:0 22px 60px rgba(6,26,47,.12)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f8fbfd;line-height:1.55}
+button,input,textarea{font:inherit}button{touch-action:manipulation}
+.flowLocked{display:none!important}.flowReveal{animation:rise .42s ease both}@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flowReveal{animation:none}}
+.top{position:sticky;top:0;z-index:60;background:rgba(6,26,47,.96);backdrop-filter:blur(12px);color:white;border-bottom:1px solid #ffffff18}
+.topin{max-width:1240px;margin:auto;display:flex;align-items:center;gap:22px;padding:10px 22px}
+.brand{font-weight:900;letter-spacing:.16em;font-size:.76rem;white-space:nowrap}.brand b{color:var(--gold2)}
+.rail{flex:1;display:flex;justify-content:center;gap:4px;overflow:auto;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+.step{font-size:.61rem;letter-spacing:.085em;text-transform:uppercase;color:#8da7bc;padding:7px 9px;border-bottom:2px solid transparent;white-space:nowrap}.step.on{color:white;border-color:var(--gold2)}
+.home{color:white;text-decoration:none;font-size:.76rem;white-space:nowrap}
+.hero{min-height:88vh;display:grid;place-items:center;position:relative;overflow:hidden;color:white;background:
+radial-gradient(circle at 76% 25%,rgba(255,216,117,.2),transparent 16%),
+radial-gradient(circle at 68% 64%,rgba(36,138,194,.28),transparent 23%),
+linear-gradient(130deg,#041425 0%,#082844 47%,#0e5f91 100%)}
+.hero:before{content:"";position:absolute;inset:0;background:
+linear-gradient(115deg,transparent 0 55%,rgba(255,255,255,.035) 56% 57%,transparent 58%),
+repeating-linear-gradient(0deg,transparent 0 43px,rgba(255,255,255,.025) 44px)}
+.horizon{position:absolute;right:3%;top:14%;width:min(530px,47vw);height:65%;min-height:420px}
+.horizon .line{position:absolute;left:5%;right:5%;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.l1{top:22%}.l2{top:48%;opacity:.65}.l3{top:75%;opacity:.35}
+.orbit{position:absolute;border:1px solid rgba(255,255,255,.2);border-radius:50%}
+.o1{width:390px;height:390px;right:2%;top:10%}.o2{width:280px;height:280px;right:13%;top:23%}.o3{width:160px;height:160px;right:25%;top:38%}
+.focus{position:absolute;right:37%;top:48%;width:18px;height:18px;border-radius:50%;background:var(--gold2);box-shadow:0 0 35px var(--gold2)}
+.heroCopy{position:relative;z-index:3;width:min(1180px,90%)}
+.eyebrow{color:#ffd875;font-weight:900;letter-spacing:.22em;font-size:.73rem}.hero h1{font-size:clamp(3.1rem,7vw,6.35rem);line-height:.93;max-width:810px;margin:18px 0 22px;letter-spacing:-.055em}
+.hero p{max-width:650px;font-size:clamp(1rem,2vw,1.24rem);color:#d8e7f3}.gold{color:var(--gold2)}
+.btn{border:0;border-radius:999px;padding:14px 22px;font-weight:900;letter-spacing:.05em;cursor:pointer;background:var(--gold2);color:#183149;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.secondary{background:white;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+.section{padding:88px 22px}.wrap{max-width:1100px;margin:auto}
+.kicker{font-size:.7rem;letter-spacing:.18em;font-weight:900;color:#a66f00;text-transform:uppercase}
+h2{font-size:clamp(2rem,4.6vw,3.55rem);line-height:1.04;letter-spacing:-.035em;margin:.5rem 0 1rem}h3{line-height:1.15}
+.lede{font-size:1.1rem;color:var(--muted);max-width:770px}
+.challenge{background:linear-gradient(135deg,#fff 0%,#eef8ff 55%,#fff8e9 100%)}
+.challengeGrid{display:grid;grid-template-columns:.92fr 1.08fr;gap:42px;align-items:start}
+.caseBox{background:white;border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:var(--shadow)}
+.fact{padding:14px 16px;border-radius:14px;background:#f0f7fc;margin:9px 0;font-weight:800}.fact.hiddenFact{display:none}.fact.show{display:block;animation:rise .35s ease}
+.choiceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.choice{padding:16px;border:1px solid #b9cddd;border-radius:14px;background:white;cursor:pointer;font-weight:850}.choice.on{border:2px solid var(--gold);background:#fff9e9}
+.feedback{display:none;margin-top:16px;padding:16px 18px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px}.feedback.show{display:block}
+.gate{text-align:center;margin-top:26px}
+.banner{min-height:270px;display:flex;align-items:center;color:white;position:relative;overflow:hidden;background:linear-gradient(120deg,#05172a,#0a3559 58%,#116c9f)}
+.banner:before{content:"";position:absolute;width:500px;height:500px;border:72px solid rgba(255,216,117,.12);border-radius:50%;right:-150px;top:-215px}
+.banner:after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--gold2),#77cde9,#8c82d8)}
+.banner .wrap{position:relative;z-index:2;width:100%}.banner h2{font-size:clamp(2.7rem,7vw,5.4rem);margin:0;letter-spacing:-.05em}.banner p{font-size:1.1rem;color:#e4f1f9;margin:.35rem 0 0}
+.distinction{background:white}.threeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.card{padding:24px;border-radius:19px;border:1px solid var(--line);background:white;box-shadow:0 9px 26px rgba(6,26,47,.06)}
+.card b{display:block;font-size:1.05rem;color:#0d5b91;margin-bottom:7px}.card strong{font-size:1.2rem}
+.principle{margin-top:24px;padding:18px 20px;border-left:4px solid var(--gold);background:#fff7df;border-radius:8px;font-weight:800}
+.levels{background:linear-gradient(180deg,#f2f9fe,#fff)}
+.levelTrack{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:26px}
+.level{padding:22px;border-radius:18px;border:1px solid var(--line);background:white;cursor:pointer;text-align:left;min-height:160px}.level.on{border:2px solid var(--gold);background:#fffaf0}
+.level span{display:block;font-size:.73rem;font-weight:900;letter-spacing:.08em;color:#0c5c91}.level p{color:var(--muted);font-size:.9rem}
+.mindset{background:#071d34;color:white}.mindset .kicker{color:#ffd875}.mindset .lede{color:#cbdce9}
+.mindGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.mindCard{padding:23px;border:1px solid #ffffff25;border-radius:18px;background:#ffffff0a;cursor:pointer;color:white;text-align:left;min-height:190px}.mindCard.on{border:2px solid var(--gold2);background:#ffffff12}
+.mindCard strong{display:block;color:#ffd875;margin-bottom:8px}.mindCard p{color:#cbdce9;font-size:.91rem}
+.competencies{background:#fbfdff}
+.compGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:25px}
+.comp{padding:22px;border:1px solid var(--line);border-radius:18px;background:white;cursor:pointer;text-align:left;min-height:200px}.comp.on{border:2px solid var(--gold);background:#fffaf0}
+.comp .num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e7f5ff;color:#0d5b91;font-weight:950}.comp strong{display:block;font-size:1.12rem;margin:14px 0 6px}.comp p{color:var(--muted);font-size:.9rem;display:none}.comp.on p{display:block}
+.enablers{background:linear-gradient(135deg,#fff8e9,#fff)}
+.pillGrid{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}.pillBtn{border:1px solid #dbc995;background:white;border-radius:999px;padding:11px 14px;cursor:pointer;font-weight:850}.pillBtn.on{background:var(--navy);color:white;border-color:var(--navy)}
+.self{background:#eef7fd}
+.scaleGrid{display:grid;gap:13px;margin-top:22px}.scaleItem{background:white;border:1px solid var(--line);border-radius:16px;padding:18px}.scaleBtns{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}.scaleBtns button{width:40px;height:40px;border-radius:50%;border:1px solid #b6cad8;background:white;cursor:pointer;font-weight:900}.scaleBtns button.on{background:var(--navy);color:white;border-color:var(--navy)}
+.blockers{background:white}.blockGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}.block{padding:20px;border:1px solid var(--line);border-radius:17px;background:#fff;cursor:pointer;text-align:left;min-height:170px}.block.on{border:2px solid #d27b44;background:#fff4ec}
+.ladder{background:linear-gradient(180deg,#f7fbff,#fff)}
+.ladderGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:24px 0}.rung{padding:16px 8px;border-radius:14px;background:white;border:1px solid var(--line);text-align:center;font-size:.72rem;font-weight:900;cursor:pointer}.rung.on{background:#071d34;color:white;border-color:#071d34}
+.assumption{background:#071d34;color:white}.assumption .kicker{color:#ffd875}.assumption .lede{color:#cbdce9}
+.statementBox{background:#ffffff0b;border:1px solid #ffffff25;border-radius:20px;padding:24px;margin-top:24px}
+.statement{font-size:1.3rem;font-weight:850;color:white}
+textarea,input[type="text"]{width:100%;border:1px solid #b8ccda;border-radius:12px;padding:13px 14px;outline:none;color:var(--ink);background:white}.assumption textarea{margin-top:10px}
+.ewmr{background:#fff8e8}.ewmrGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:23px}.ewCard{background:white;border:1px solid #e1cf9b;border-radius:18px;padding:19px}.ewCard label{display:block;font-weight:900;color:#7f5c0b;margin-bottom:8px}
+.ripple{background:#eef7fd}.rippleRow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:23px}.rippleCard{background:white;border:1px solid var(--line);border-radius:18px;padding:20px}.rippleCard b{display:block;color:#0d5b91;margin-bottom:8px}
+.capstone{background:linear-gradient(135deg,#05172a,#0c426e 60%,#176d9b);color:white}.capstone .kicker{color:#ffd875}.capstone .lede{color:#cbdce9}
+.capGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:23px}.capCard{padding:20px;border:1px solid #ffffff26;border-radius:18px;background:#ffffff0a}.capCard label{display:block;color:#ffd875;font-weight:900;margin-bottom:8px}
+.capCard textarea{background:#ffffffef}
+.debrief{background:white}.fourQ{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:24px 0}.qCard{padding:21px;border:1px solid var(--line);border-radius:18px;background:#fbfdff}.qCard strong{display:block;color:#0d5b91;margin-bottom:8px}
+.complete{display:none;background:#061a2f;color:white;text-align:center;padding:80px 22px}.complete.show{display:block}.complete h2{font-size:clamp(2.8rem,6vw,5.5rem);margin:.4rem 0}
+.badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:24px 0}.badges span{padding:9px 12px;border:1px solid #ffffff25;border-radius:999px;background:#ffffff0a;font-size:.72rem;font-weight:900}
+@media(max-width:900px){
+ .horizon{opacity:.3;right:-15%}.challengeGrid{grid-template-columns:1fr}.threeGrid,.compGrid{grid-template-columns:1fr 1fr}.mindGrid,.levelTrack,.blockGrid{grid-template-columns:1fr 1fr}.ladderGrid{grid-template-columns:repeat(4,1fr)}.ewmrGrid,.capGrid,.fourQ{grid-template-columns:1fr}.rippleRow{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+ .topin{gap:10px;padding:9px 12px}.brand{font-size:.64rem}.home{font-size:.68rem}.rail{justify-content:flex-start}
+ .hero{min-height:82vh}.hero h1{font-size:3.15rem}.horizon{display:none}.section{padding:68px 18px}
+ .choiceGrid,.threeGrid,.compGrid,.mindGrid,.levelTrack,.blockGrid{grid-template-columns:1fr}.ladderGrid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topin">
+  <div class="brand">MAYNE <b>LEADERSHIP</b></div>
+  <nav class="rail" aria-label="Course progress">
+   <span class="step on">See More</span><span class="step">Think Deeper</span><span class="step">Look Further</span><span class="step">Lead Broader</span>
+  </nav>
+  <a class="home" href="learning.html">Learning ↗</a>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="top" data-flow="0">
+ <div class="horizon" aria-hidden="true"><i class="line l1"></i><i class="line l2"></i><i class="line l3"></i><i class="orbit o1"></i><i class="orbit o2"></i><i class="orbit o3"></i><i class="focus"></i></div>
+ <div class="heroCopy">
+  <div class="eyebrow">STRATEGIC THINKING · FOUNDATIONS</div>
+  <h1>See beyond the <span class="gold">visible problem.</span></h1>
+  <p>Strategic thinking changes the frame. It expands the time horizon, widens the stakeholder view, tests assumptions, and considers the consequences of action before the system makes them visible.</p>
+  <p><strong>See More → Think Deeper → Look Further → Lead Broader.</strong></p>
+  <button class="btn" id="begin">BEGIN THE JOURNEY →</button>
+ </div>
+</section>
+
+<section class="section challenge" id="opening" data-flow="1">
+ <div class="wrap challengeGrid">
+  <div>
+   <div class="kicker">Opening Challenge</div>
+   <h2>One decision. Ten consequences.</h2>
+   <p class="lede">A regional office faces a <strong>35% workload increase</strong>. Temporary resources are authorized. Leaders are considering shifting personnel away from training and long-term initiatives to meet the immediate demand.</p>
+   <p><strong>What is your first judgment?</strong></p>
+   <div class="choiceGrid" id="openingChoices">
+    <button class="choice" data-i="0">Good decision</button>
+    <button class="choice" data-i="1">Bad decision</button>
+    <button class="choice" data-i="2">Not enough information</button>
+   </div>
+  </div>
+  <div class="caseBox">
+   <h3>Now widen the frame.</h3>
+   <div class="fact hiddenFact" id="f1">Training completion is already below target.</div>
+   <div class="fact hiddenFact" id="f2">Overtime is rising and experienced supervisors are nearing retirement.</div>
+   <div class="fact hiddenFact" id="f3">A major technology modernization begins in four months.</div>
+   <div class="fact hiddenFact" id="f4">Senior leadership has requested additional performance information.</div>
+   <div class="gate"><button class="btn secondary" id="revealFact" disabled>REVEAL MORE INFORMATION →</button></div>
+   <div class="feedback" id="openingFeedback"><strong>Did the problem change—or did your understanding change?</strong> Strategic thinking often begins when we recognize that our first frame was too small.</div>
+   <div class="gate"><button class="btn" id="openingContinue" disabled>CONTINUE →</button></div>
+  </div>
+ </div>
+</section>
+
+<section class="banner" id="definitionBanner" data-flow="2">
+ <div class="wrap"><div class="kicker" style="color:#ffd875">Core Distinction</div><h2>EXPAND THE FRAME</h2><p>Strategic thinking improves action by preventing us from solving the wrong problem quickly.</p></div>
+</section>
+
+<section class="section distinction" id="definition" data-flow="3">
+ <div class="wrap">
+  <div class="kicker">Strategic Thinking Is / Is Not</div><h2>It is more than “thinking big.”</h2>
+  <div class="threeGrid">
+   <div class="card"><b>IT IS</b><strong>Seeing relationships</strong><p>Look for assumptions, trends, stakeholders, dependencies, consequences, choices, and future conditions.</p></div>
+   <div class="card"><b>IT IS NOT</b><strong>Vague forecasting</strong><p>It is not jargon, endless brainstorming, or pretending to predict the distant future with certainty.</p></div>
+   <div class="card"><b>ANY LEVEL</b><strong>A practice, not a position</strong><p>You can think strategically without holding a “strategic” title. The behavior begins with how you frame decisions.</p></div>
+  </div>
+  <div class="principle">Tactical thinking asks: “How do we solve today’s visible problem?” Strategic thinking also asks: “What created it, what else is connected, where are we trying to go, and what might happen next?”</div>
+  <div class="gate"><button class="btn" id="definitionContinue">EXPAND THE LEVELS →</button></div>
+ </div>
+</section>
+
+<section class="section levels" id="levels" data-flow="4">
+ <div class="wrap">
+  <div class="kicker">Scope · Time · Complexity</div><h2>The question changes as the level expands.</h2>
+  <p class="lede">Open all four levels. Notice how the same staffing issue becomes a different problem depending on the horizon.</p>
+  <div class="levelTrack" id="levelTrack"></div>
+  <div class="feedback" id="levelsFeedback">As scope and time horizon expand, influence becomes more indirect. Strategic thinking therefore requires more relationships, more uncertainty, and more attention to system effects.</div>
+  <div class="gate"><button class="btn" id="levelsContinue" disabled>BUILD THE STRATEGIC MINDSET →</button></div>
+ </div>
+</section>
+
+<section class="section mindset" id="mindset" data-flow="5">
+ <div class="wrap">
+  <div class="kicker">The Strategic Mindset</div><h2>Four habits organize the whole course.</h2>
+  <p class="lede">Open each element to see the question it contributes.</p>
+  <div class="mindGrid" id="mindGrid"></div>
+  <div class="gate"><button class="btn" id="mindContinue" disabled>OPEN THE SIX COMPETENCIES →</button></div>
+ </div>
+</section>
+
+<section class="section competencies" id="competencies" data-flow="6">
+ <div class="wrap">
+  <div class="kicker">Framework</div><h2>Six trainable strategic-thinking competencies.</h2>
+  <p class="lede">These are habits—not personality traits. Open all six.</p>
+  <div class="compGrid" id="compGrid"></div>
+  <div class="feedback" id="compFeedback">The competencies are strongest when used together: gather broadly, learn and update, test the logic, create alternatives, connect past-present-future, and examine the system.</div>
+  <div class="gate"><button class="btn" id="compContinue" disabled>CONTINUE TO ENABLERS →</button></div>
+ </div>
+</section>
+
+<section class="section enablers" id="enablers" data-flow="7">
+ <div class="wrap">
+  <div class="kicker">What Makes the Competencies Work</div><h2>Good tools still fail without good habits.</h2>
+  <p class="lede">Select the three enablers you believe are most difficult to sustain when pressure is high.</p>
+  <div class="pillGrid" id="enablerGrid"></div>
+  <div class="feedback" id="enablerFeedback">Strategic thinking is not purely cognitive. Curiosity, collaboration, communication, courage, emotional regulation, ethical reasoning, and self-awareness determine whether good questions actually get asked.</div>
+  <div class="gate"><button class="btn" id="enablerContinue" disabled>CHECK YOUR OWN HABITS →</button></div>
+ </div>
+</section>
+
+<section class="section self" id="diagnostic" data-flow="8">
+ <div class="wrap">
+  <div class="kicker">Self-Diagnostic</div><h2>Where is your strategic-thinking edge—and blind spot?</h2>
+  <p class="lede">Rate each statement from 1 (rarely) to 5 (consistently). Your scores stay on this device.</p>
+  <div class="scaleGrid" id="scaleGrid"></div>
+  <div class="feedback" id="diagFeedback">The number is less important than the pattern. Look for one behavior to practice deliberately rather than trying to “be more strategic” in the abstract.</div>
+  <div class="gate"><button class="btn" id="diagContinue" disabled>CONTINUE TO THINK DEEPER →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="deeperBanner" data-flow="9">
+ <div class="wrap"><div class="kicker" style="color:#ffd875">Think Deeper</div><h2>TEST THE STORY</h2><p>Pressure makes certainty feel attractive. Strategic thinkers make assumptions visible enough to examine.</p></div>
+</section>
+
+<section class="section blockers" id="blockers" data-flow="10">
+ <div class="wrap">
+  <div class="kicker">Strategic-Thinking Blockers</div><h2>Most barriers are habits under pressure.</h2>
+  <p class="lede">Select the two blockers most likely to distort a difficult decision.</p>
+  <div class="blockGrid" id="blockGrid"></div>
+  <div class="feedback" id="blockFeedback">Strong leaders often overuse strengths that made them successful: expertise becomes rigidity, responsiveness becomes tactical gravity, decisiveness becomes premature closure, and loyalty becomes conformity.</div>
+  <div class="gate"><button class="btn" id="blockContinue" disabled>WALK BACK DOWN THE LADDER →</button></div>
+ </div>
+</section>
+
+<section class="section ladder" id="ladder" data-flow="11">
+ <div class="wrap">
+  <div class="kicker">Ladder of Inference</div><h2>Where did we stop knowing and start interpreting?</h2>
+  <p class="lede">Click the point where judgment starts to move away from observable facts.</p>
+  <div class="ladderGrid" id="ladderGrid"></div>
+  <div class="feedback" id="ladderFeedback"></div>
+  <div class="gate"><button class="btn" id="ladderContinue" disabled>TEST AN ASSUMPTION →</button></div>
+ </div>
+</section>
+
+<section class="section assumption" id="assumptions" data-flow="12">
+ <div class="wrap">
+  <div class="kicker">What Did You Just Assume?</div><h2>Turn a conclusion back into a testable assumption.</h2>
+  <div class="statementBox">
+   <div class="statement">“Employees are resisting because they do not like change.”</div>
+   <p>What hidden assumption is embedded in that statement?</p>
+   <textarea id="assumptionText" rows="4" placeholder="Name the hidden assumption..."></textarea>
+   <p>What evidence would confirm or challenge it?</p>
+   <textarea id="evidenceText" rows="4" placeholder="Name one useful piece of evidence..."></textarea>
+  </div>
+  <div class="feedback" id="assumptionFeedback">Assumptions are not automatically bad. <strong>Untested assumptions are dangerous.</strong> The strategic habit is to make them visible before they become conclusions, beliefs, and action.</div>
+  <div class="gate"><button class="btn" id="assumptionContinue" disabled>LOOK FURTHER →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="furtherBanner" data-flow="13">
+ <div class="wrap"><div class="kicker" style="color:#ffd875">Look Further</div><h2>CONNECT TODAY TO TOMORROW</h2><p>Strategy is not prediction. It is preparing decisions to survive changing conditions.</p></div>
+</section>
+
+<section class="section ewmr" id="ewmr" data-flow="14">
+ <div class="wrap">
+  <div class="kicker">Ends · Ways · Means · Risk</div><h2>If the ends exceed the means, the ways may be a wish.</h2>
+  <p class="lede">Use the workload scenario to create a simple strategic check.</p>
+  <div class="ewmrGrid">
+   <div class="ewCard"><label>ENDS · Desired condition</label><textarea id="ends" rows="4" placeholder="What condition are we trying to create?"></textarea></div>
+   <div class="ewCard"><label>WAYS · Broad approach</label><textarea id="ways" rows="4" placeholder="What broad approach could move us there?"></textarea></div>
+   <div class="ewCard"><label>MEANS · Resources and authorities</label><textarea id="means" rows="4" placeholder="People, time, money, authorities, technology, partnerships..."></textarea></div>
+   <div class="ewCard"><label>RISK · Friction and consequences</label><textarea id="risk" rows="4" placeholder="What could fail or what harm could the approach create?"></textarea></div>
+  </div>
+  <div class="feedback" id="ewmrFeedback">A strategy becomes more credible when the desired condition, approach, resources, and risk are visible together rather than discussed as separate ideas.</div>
+  <div class="gate"><button class="btn" id="ewmrContinue" disabled>TRACE THE RIPPLE EFFECTS →</button></div>
+ </div>
+</section>
+
+<section class="section ripple" id="ripple" data-flow="15">
+ <div class="wrap">
+  <div class="kicker">Thinking in Time</div><h2>Strategic decisions create ripples.</h2>
+  <p class="lede">Choose a proposed decision—such as shifting personnel away from training—and identify what happens next.</p>
+  <div class="rippleRow">
+   <div class="rippleCard"><b>FIRST-ORDER EFFECT</b><p>The immediate result.</p><textarea id="r1" rows="5" placeholder="What changes immediately?"></textarea></div>
+   <div class="rippleCard"><b>SECOND-ORDER EFFECT</b><p>What happens because of that result?</p><textarea id="r2" rows="5" placeholder="What consequence follows?"></textarea></div>
+   <div class="rippleCard"><b>THIRD-ORDER EFFECT</b><p>How might the broader system respond?</p><textarea id="r3" rows="5" placeholder="What changes later or elsewhere?"></textarea></div>
+  </div>
+  <div class="feedback" id="rippleFeedback">Thinking in time connects <strong>Then → Now → Next</strong>. It helps leaders use history without being trapped by it and consider future effects without pretending the future is certain.</div>
+  <div class="gate"><button class="btn" id="rippleContinue" disabled>LEAD BROADER →</button></div>
+ </div>
+</section>
+
+<section class="banner" id="broaderBanner" data-flow="16">
+ <div class="wrap"><div class="kicker" style="color:#ffd875">Lead Broader</div><h2>THINK BEYOND YOUR LANE</h2><p>At the strategic level, almost nothing important happens in isolation.</p></div>
+</section>
+
+<section class="section capstone" id="capstone" data-flow="17">
+ <div class="wrap">
+  <div class="kicker">Capstone Systems Challenge</div><h2>Map the system before recommending action.</h2>
+  <p class="lede">Imagine that workload is rising, experienced employees are retiring, technology modernization is accelerating, partner capacity is uneven, and workforce expectations are changing. Do not solve everything. Build a better strategic picture.</p>
+  <div class="capGrid">
+   <div class="capCard"><label>3 CRITICAL CONNECTIONS</label><textarea id="connections" rows="5" placeholder="What variables, groups, or systems are strongly connected?"></textarea></div>
+   <div class="capCard"><label>2 ASSUMPTIONS</label><textarea id="assumptions2" rows="5" placeholder="What are leaders treating as true that needs testing?"></textarea></div>
+   <div class="capCard"><label>1 STRATEGIC RISK + 1 OPPORTUNITY</label><textarea id="riskOpp" rows="5" placeholder="What could worsen? What could be leveraged?"></textarea></div>
+   <div class="capCard"><label>1 SENIOR-LEADER QUESTION</label><textarea id="leaderQ" rows="5" placeholder="What question would improve the decision before action?"></textarea></div>
+  </div>
+  <div class="feedback" id="capFeedback">The purpose of strategic thinking is not to produce a perfect map. It is to understand enough of the system to ask better questions, make better tradeoffs, and anticipate where action may create pressure elsewhere.</div>
+  <div class="gate"><button class="btn" id="capContinue" disabled>FINAL DEBRIEF →</button></div>
+ </div>
+</section>
+
+<section class="section debrief" id="debrief" data-flow="18">
+ <div class="wrap">
+  <div class="kicker">Strategic Thinking Is a Practice Rhythm</div><h2>Four questions to carry into the next decision.</h2>
+  <div class="fourQ">
+   <div class="qCard"><strong>SEE MORE</strong><p>Whose perspective or information is missing?</p><textarea id="dq1" rows="4" placeholder="Your reminder..."></textarea></div>
+   <div class="qCard"><strong>THINK DEEPER</strong><p>What assumption or causal story needs testing?</p><textarea id="dq2" rows="4" placeholder="Your reminder..."></textarea></div>
+   <div class="qCard"><strong>LOOK FURTHER</strong><p>What second- or third-order effect matters?</p><textarea id="dq3" rows="4" placeholder="Your reminder..."></textarea></div>
+   <div class="qCard"><strong>LEAD BROADER</strong><p>Who must understand, contribute, or align?</p><textarea id="dq4" rows="4" placeholder="Your reminder..."></textarea></div>
+  </div>
+  <div class="principle">Strategic thinking expands the frame before it narrows the answer.</div>
+  <div class="gate"><button class="btn" id="finishCourse" disabled>COMPLETE STRATEGIC THINKING FOUNDATIONS →</button></div>
+ </div>
+</section>
+
+<section class="complete" id="complete" data-flow="19">
+ <div class="wrap">
+  <div class="kicker" style="color:#ffd875">Strategic Thinking: Foundations</div>
+  <h2>SEE MORE.<br><span class="gold">THINK FURTHER.</span></h2>
+  <p>You practiced the habits that widen perspective, test assumptions, connect time horizons, expose risk, and reveal system consequences before action.</p>
+  <div class="badges"><span>SEE MORE ✓</span><span>THINK DEEPER ✓</span><span>LOOK FURTHER ✓</span><span>LEAD BROADER ✓</span></div>
+  <button class="btn secondary" id="reviewTop">REVIEW FROM THE TOP</button> <button class="btn" id="startOver">START OVER</button>
+  <p style="color:#bcd0df;margin-top:18px">Your progress is saved on this device.</p>
+ </div>
+</section>
+</main>
+
+<script>
+const KEY='ml_strategic_thinking_v1';
+const defaults={flowStep:0,opening:null,facts:0,levels:[],mind:[],comp:[],enablers:[],diag:{},blockers:[],ladder:null,assumption:'',evidence:'',ewmr:{},ripple:{},cap:{},debrief:{}};
+let state={...defaults};try{state={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+function syncFlow(){document.querySelectorAll('[data-flow]').forEach(el=>el.classList.toggle('flowLocked',+el.dataset.flow>state.flowStep))}
+function go(id){const el=document.getElementById(id);if(!el)return;const host=el.matches('[data-flow]')?el:el.closest('[data-flow]');if(host){const n=+host.dataset.flow;if(n>state.flowStep){state.flowStep=n;save();syncFlow();host.classList.add('flowReveal');setTimeout(()=>host.classList.remove('flowReveal'),500)}}requestAnimationFrame(()=>el.scrollIntoView({behavior:'smooth',block:'start'}))}
+function stage(i){document.querySelectorAll('.step').forEach((s,n)=>s.classList.toggle('on',n<=i))}
+syncFlow();
+
+document.getElementById('begin').onclick=()=>go('opening');
+const openingBtns=[...document.querySelectorAll('#openingChoices .choice')];
+openingBtns.forEach((b,i)=>b.onclick=()=>{state.opening=i;save();openingBtns.forEach((x,n)=>x.classList.toggle('on',n===i));document.getElementById('revealFact').disabled=false});
+if(state.opening!==null){openingBtns[state.opening]?.classList.add('on');document.getElementById('revealFact').disabled=false}
+function renderFacts(){for(let i=1;i<=4;i++)document.getElementById('f'+i).classList.toggle('show',i<=state.facts);document.getElementById('openingFeedback').classList.toggle('show',state.facts===4);document.getElementById('openingContinue').disabled=state.facts<4;document.getElementById('revealFact').textContent=state.facts>=4?'ALL INFORMATION REVEALED':'REVEAL MORE INFORMATION →';document.getElementById('revealFact').disabled=state.opening===null||state.facts>=4}
+renderFacts();
+document.getElementById('revealFact').onclick=()=>{if(state.facts<4)state.facts++;save();renderFacts()};
+document.getElementById('openingContinue').onclick=()=>go('definitionBanner');
+document.getElementById('definitionContinue').onclick=()=>go('levels');
+
+const levels=[
+['IMMEDIATE','Task or incident','Who covers today’s requirement?'],
+['DIRECT','People and team','How does the team adjust workload without creating avoidable failure?'],
+['ORGANIZATIONAL','Systems and resources','Is the staffing model, training pipeline, and process sustainable?'],
+['STRATEGIC','Enterprise and future conditions','What future capability must be built, and what tradeoffs today shape it?']
+];
+function renderLevels(){const g=document.getElementById('levelTrack');g.innerHTML=levels.map((x,i)=>'<button class="level '+(state.levels.includes(i)?'on':'')+'" data-i="'+i+'"><span>'+x[0]+'</span><strong>'+x[1]+'</strong><p>'+x[2]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.levels.includes(i))state.levels.push(i);save();renderLevels()});const done=state.levels.length===4;document.getElementById('levelsContinue').disabled=!done;document.getElementById('levelsFeedback').classList.toggle('show',done)}
+renderLevels();document.getElementById('levelsContinue').onclick=()=>{stage(0);go('mindset')};
+
+const minds=[
+['SEE MORE','Gather perspectives and evidence.','Whose information is missing? What are we not seeing?'],
+['THINK DEEPER','Challenge assumptions and causality.','What would have to be true for this recommendation to work?'],
+['LOOK FURTHER','Anticipate consequences and future conditions.','What happens next—and what happens because of that?'],
+['LEAD BROADER','Align beyond your immediate control.','Who must understand, contribute, or change behavior?']
+];
+function renderMind(){const g=document.getElementById('mindGrid');g.innerHTML=minds.map((x,i)=>'<button class="mindCard '+(state.mind.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><b>'+x[1]+'</b><p>'+x[2]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.mind.includes(i))state.mind.push(i);save();renderMind()});document.getElementById('mindContinue').disabled=state.mind.length<4}
+renderMind();document.getElementById('mindContinue').onclick=()=>go('competencies');
+
+const comps=[
+['Information Gathering','Scan broadly before deciding narrowly. Seek facts, perspectives, constraints, and dissenting information.'],
+['Learning','Update the mental model. Treat feedback as information and build reflection into routine work.'],
+['Critical Thinking','Challenge assumptions and causal claims. Distinguish causes from symptoms and consequences.'],
+['Innovative Thinking','Create multiple ways before choosing one. Reframe constraints and generate disciplined alternatives.'],
+['Thinking in Time','Connect Then → Now → Next. Use history, current conditions, and plausible futures together.'],
+['Systems Thinking','Look for dependencies, bottlenecks, incentives, feedback, and unintended effects.']
+];
+function renderComp(){const g=document.getElementById('compGrid');g.innerHTML=comps.map((x,i)=>'<button class="comp '+(state.comp.includes(i)?'on':'')+'" data-i="'+i+'"><span class="num">0'+(i+1)+'</span><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!state.comp.includes(i))state.comp.push(i);save();renderComp()});const done=state.comp.length===6;document.getElementById('compContinue').disabled=!done;document.getElementById('compFeedback').classList.toggle('show',done)}
+renderComp();document.getElementById('compContinue').onclick=()=>go('enablers');
+
+const enablers=['Broad knowledge','Collaboration','Communication','Moral courage','Emotional regulation','Ethical reasoning','Self-awareness'];
+function renderEnablers(){const g=document.getElementById('enablerGrid');g.innerHTML=enablers.map((x,i)=>'<button class="pillBtn '+(state.enablers.includes(i)?'on':'')+'" data-i="'+i+'">'+x+'</button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.enablers.includes(i))state.enablers=state.enablers.filter(x=>x!==i);else if(state.enablers.length<3)state.enablers.push(i);save();renderEnablers()});const done=state.enablers.length===3;document.getElementById('enablerContinue').disabled=!done;document.getElementById('enablerFeedback').classList.toggle('show',done)}
+renderEnablers();document.getElementById('enablerContinue').onclick=()=>go('diagnostic');
+
+const diagItems=[
+'I seek information that contradicts my first position.',
+'I separate facts from interpretation and assumptions.',
+'I intentionally invite dissenting views.',
+'I consider second- and third-order effects.',
+'I can explain how my team’s work connects to broader outcomes.',
+'I revise my view when new evidence changes the picture.'
+];
+function renderDiag(){const g=document.getElementById('scaleGrid');g.innerHTML=diagItems.map((q,i)=>'<div class="scaleItem"><strong>'+q+'</strong><div class="scaleBtns">'+[1,2,3,4,5].map(n=>'<button class="'+(state.diag[i]===n?'on':'')+'" data-q="'+i+'" data-n="'+n+'">'+n+'</button>').join('')+'</div></div>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.diag[b.dataset.q]=+b.dataset.n;save();renderDiag()});const done=Object.keys(state.diag).length===diagItems.length;document.getElementById('diagContinue').disabled=!done;document.getElementById('diagFeedback').classList.toggle('show',done)}
+renderDiag();document.getElementById('diagContinue').onclick=()=>{stage(1);go('deeperBanner')};
+
+const blockers=[
+['Expertise trap','Past success becomes the only lens for the next problem.'],
+['Tactical gravity','Urgency consumes all attention and pushes long-term conditions out of view.'],
+['Silos & conformity','The frame is built inside one lane and dissent disappears.'],
+['Certainty hunger','Ambiguity feels unacceptable, so the first plausible explanation hardens too quickly.']
+];
+function renderBlocks(){const g=document.getElementById('blockGrid');g.innerHTML=blockers.map((x,i)=>'<button class="block '+(state.blockers.includes(i)?'on':'')+'" data-i="'+i+'"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(state.blockers.includes(i))state.blockers=state.blockers.filter(x=>x!==i);else if(state.blockers.length<2)state.blockers.push(i);save();renderBlocks()});const done=state.blockers.length===2;document.getElementById('blockContinue').disabled=!done;document.getElementById('blockFeedback').classList.toggle('show',done)}
+renderBlocks();document.getElementById('blockContinue').onclick=()=>go('ladder');
+
+const rungs=['Observable data','Selected data','Meaning','Assumptions','Conclusions','Beliefs','Action'];
+function renderLadder(){const g=document.getElementById('ladderGrid');g.innerHTML=rungs.map((x,i)=>'<button class="rung '+(state.ladder===i?'on':'')+'" data-i="'+i+'">'+x+'</button>').join('');g.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.ladder=+b.dataset.i;save();renderLadder();const fb=document.getElementById('ladderFeedback');fb.classList.add('show');fb.innerHTML=state.ladder>=2?'<strong>Yes.</strong> Meaning is where interpretation begins to enter. Strategic thinkers can still make judgments—they simply make the move from data to interpretation visible enough to test.':'<strong>Not quite.</strong> Observable and selected data are still evidence. Interpretation begins when we assign meaning.';document.getElementById('ladderContinue').disabled=false})}
+renderLadder();if(state.ladder!==null){document.getElementById('ladderContinue').disabled=false}
+document.getElementById('ladderContinue').onclick=()=>go('assumptions');
+
+['assumptionText','evidenceText'].forEach((id,i)=>{const el=document.getElementById(id);el.value=i?state.evidence:state.assumption;el.oninput=()=>{if(i)state.evidence=el.value;else state.assumption=el.value;save();syncAssumption()}});
+function syncAssumption(){const done=state.assumption.trim()&&state.evidence.trim();document.getElementById('assumptionContinue').disabled=!done;document.getElementById('assumptionFeedback').classList.toggle('show',!!done)}
+syncAssumption();document.getElementById('assumptionContinue').onclick=()=>{stage(2);go('furtherBanner')};
+
+const ewmrIds=['ends','ways','means','risk'];
+ewmrIds.forEach(id=>{const el=document.getElementById(id);el.value=state.ewmr[id]||'';el.oninput=()=>{state.ewmr[id]=el.value;save();syncEwmr()}});
+function syncEwmr(){const done=ewmrIds.every(id=>(state.ewmr[id]||'').trim());document.getElementById('ewmrContinue').disabled=!done;document.getElementById('ewmrFeedback').classList.toggle('show',!!done)}
+syncEwmr();document.getElementById('ewmrContinue').onclick=()=>go('ripple');
+
+['r1','r2','r3'].forEach(id=>{const el=document.getElementById(id);el.value=state.ripple[id]||'';el.oninput=()=>{state.ripple[id]=el.value;save();syncRipple()}});
+function syncRipple(){const done=['r1','r2','r3'].every(id=>(state.ripple[id]||'').trim());document.getElementById('rippleContinue').disabled=!done;document.getElementById('rippleFeedback').classList.toggle('show',!!done)}
+syncRipple();document.getElementById('rippleContinue').onclick=()=>{stage(3);go('broaderBanner')};
+
+const capIds=['connections','assumptions2','riskOpp','leaderQ'];
+capIds.forEach(id=>{const el=document.getElementById(id);el.value=state.cap[id]||'';el.oninput=()=>{state.cap[id]=el.value;save();syncCap()}});
+function syncCap(){const done=capIds.every(id=>(state.cap[id]||'').trim());document.getElementById('capContinue').disabled=!done;document.getElementById('capFeedback').classList.toggle('show',!!done)}
+syncCap();document.getElementById('capContinue').onclick=()=>go('debrief');
+
+const dqIds=['dq1','dq2','dq3','dq4'];
+dqIds.forEach(id=>{const el=document.getElementById(id);el.value=state.debrief[id]||'';el.oninput=()=>{state.debrief[id]=el.value;save();syncDebrief()}});
+function syncDebrief(){document.getElementById('finishCourse').disabled=!dqIds.every(id=>(state.debrief[id]||'').trim())}
+syncDebrief();
+document.getElementById('finishCourse').onclick=()=>{state.flowStep=19;save();syncFlow();document.getElementById('complete').classList.add('show');go('complete')};
+if(state.flowStep>=19)document.getElementById('complete').classList.add('show');
+document.getElementById('reviewTop').onclick=()=>document.getElementById('top').scrollIntoView({behavior:'smooth'});
+document.getElementById('startOver').onclick=()=>{if(confirm('Start over and clear your saved Strategic Thinking progress?')){localStorage.removeItem(KEY);location.reload()}};
+
+const stageMap=[[5,0],[9,1],[13,2],[16,3]];
+window.addEventListener('scroll',()=>{let current=0;stageMap.forEach(([flow,s])=>{const el=document.querySelector('[data-flow="'+flow+'"]');if(el&&el.getBoundingClientRect().top<window.innerHeight*.42)current=s});stage(current)},{passive:true});
+</script>
+</body>
+</html>
