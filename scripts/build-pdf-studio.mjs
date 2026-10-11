@@ -30,3 +30,6 @@ await copyFile(path.join(coreDir,'LICENSE'),path.join(licenseDir,'tesseract-core
 await copyFile(require.resolve('pdf-lib/LICENSE.md'),path.join(licenseDir,'pdf-lib-MIT.txt'));
 console.log('PDF Studio built; existing pages preserved; PDF and OCR engines served from this site.');
 await buildWordConverter(root,out);
+
+await build({entryPoints:[path.join(root,'src','lesson-export.js')],outfile:path.join(out,'assets','lesson-export.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
+console.log('Lesson Studio export runtime built.');

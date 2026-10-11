@@ -57,3 +57,17 @@ The build serves the engine from this site's `/assets/word-engine/` directory, w
 Modern browsers with cross-origin isolation, workers, and shared WebAssembly memory are required. The first conversion downloads the office runtime; processing needs substantially more browser memory than a simple text-only conversion. Unsupported browsers receive an explicit message. The converter produces a download even if PDF preview is unavailable.
 
 Engine source and licensing links are included in `assets/word-converter-NOTICES.txt`. JSZip's license is copied into the build; existing PDF preview licenses remain available.
+
+## Lesson Authoring Studio
+
+Open `lesson-studio.html` from Learning or Classroom Tools. The studio has 37 block types, form-based content and design controls, lesson and block reordering, block templates, media uploads, audio recording, learner preview, and course version history. Scrolling learner courses use `lesson-player.html?course=<id>`. Published courses appear automatically in the Learning library.
+
+Drafts and uploaded media use the existing Supabase project through a server-only, scoped gateway. `supabase/lesson_authoring.sql` creates private, RLS-enabled tables and a narrow RPC gateway. Its plaintext credential lives only in the production `LESSON_STUDIO_GATEWAY_KEY` environment variable; the database stores its hash. No service-role key or site access secret is exposed to browsers. The API independently verifies the existing signed PIN cookie and the origin of writes. Everyone with the shared site PIN can author shared courses.
+
+Saving uses version checks to protect concurrent edits. Up to 20 recent draft versions are retained. Published content is a separate snapshot: saving a draft does not update the learner version until Publish is selected. IndexedDB provides device draft recovery for interrupted saves. Media upload supports up to 20 MB per file; images are optimized to at most 1600 pixels on their longest side. Course content is limited to 3.5 MB, with uploaded media kept separately.
+
+Exports include editable JSON with uploaded assets, self-contained HTML, web ZIP, SCORM 1.2, and SCORM 2004 4th Edition packages. SCORM exports are single-SCO packages with completion, scores, and compact LMS resume data. Test packages in the target LMS before formal delivery. External videos, embeds, and custom external assets still need connectivity. Very large SCORM 1.2 courses can exceed its resume-data capacity. Reflections and ratings stay in each learner’s browser and can be downloaded as notes. Outside an LMS there is no centralized learner reporting.
+
+Existing static lesson text/images can be copied into editable blocks. Existing scripted tools can be embedded and retain their own editing controls; their custom source code is not automatically converted into studio forms. Proprietary Articulate AI, content libraries, Review 360, localization, native Rise project import, xAPI, and cmi5 are not included. Embedded sites may reject framing, and custom code requires an accessibility review by its author.
+
+Verified: all block renderers and authoring forms; autosave and draft recovery logic; knowledge checks, quiz scoring, branching, sorting, gates, reflections, and course completion; exported HTML execution; both SCORM manifest formats and mock LMS initialization/reporting; signed-cookie verification; and the live database draft/save/publish gateway. Full browser visual QA and a target-LMS conformance test were not available.
