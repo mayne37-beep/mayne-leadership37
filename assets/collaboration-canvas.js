@@ -104,7 +104,7 @@ if(was.type==='item'){if(was.moved){const o=getObj(was.id);save();enqueue('put',
 if(was.type==='stroke'){const o=getObj(was.id);if(o){if(o.points.length<2)o.points.push([o.x+1,o.y+1]);selected=o.id;render();save();enqueue('put',{item:o})}}
 }
 function patchSelected(changes){const o=getObj(selected);if(!o)return;before();Object.assign(o,changes);const cleaned=cleanItem(o);Object.assign(o,cleaned);render();save();enqueue('put',{item:o})}
-function deleteSelected(){if(!selected)return;const id=selected;before();board.items=board.items.filter(o=>o.id!==id&&!(o.type==='connector'&&(o.from===id||o.to===id)));selected=null;render();save();enqueue('remove',{id});for(const o of board.items.filter(o=>o.type==='connector'&&(o.from===id||o.to===id)))enqueue('remove',{id:o.id})}
+function deleteSelected(){if(!selected)return;const id=selected;const dependent=board.items.filter(o=>o.type==='connector'&&(o.from===id||o.to===id)).map(o=>o.id);before();board.items=board.items.filter(o=>o.id!==id&&!dependent.includes(o.id));selected=null;render();save();enqueue('remove',{id});dependent.forEach(linkId=>enqueue('remove',{id:linkId}))}
 function duplicateSelected(){const o=getObj(selected);if(!o||['connector','stroke'].includes(o.type))return;add({...serial(o),id:makeId(),x:o.x+34,y:o.y+34,votes:0})}
 function undo(){if(room){toast('Undo is unavailable in live mode to protect other participants’ work.');return}if(!history.length)return;future.push(serial(board));board=cleanState(history.pop());selected=null;render();save()}
 function redo(){if(room)return;if(!future.length)return;history.push(serial(board));board=cleanState(future.pop());selected=null;render();save()}
