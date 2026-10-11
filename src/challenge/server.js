@@ -38,7 +38,10 @@ export function settings(value={}){
  if(!['classic','team','accuracy','challenge','practice','discussion'].includes(s.mode))throw Error('Choose a supported mode.');
  if(!['shared','speed','joined'].includes(s.tieRule))throw Error('Choose a supported tie rule.');
  if(!['auto','manual'].includes(s.teamAssignment)||!['average','sum'].includes(s.teamScoring))throw Error('Invalid team settings.');
- for(const [key,min,max] of [['teams',2,20],['retentionDays',1,3650],['questionTime',0,86400]]){s[key]=Number(s[key]);if(!Number.isFinite(s[key])||s[key]<min||s[key]>max)throw Error('Invalid '+key+'.');}
+ for(const k of ['teams','retentionDays','nicknameMin','nicknameMax'])if(!Number.isInteger(Number(s[k])))throw Error(k+' must be a whole number.');
+ if(typeof s.nicknamePrompt!=='string'||!s.nicknamePrompt.trim()||s.nicknamePrompt.length>120)throw Error('Enter a nickname prompt of 1–120 characters.');
+ if(Number(s.nicknameMin)>Number(s.nicknameMax))throw Error('Minimum nickname length cannot exceed its maximum.');
+ for(const [key,min,max] of [['nicknameMin',1,40],['nicknameMax',1,40],['teams',2,20],['retentionDays',1,3650],['questionTime',0,86400]]){s[key]=Number(s[key]);if(!Number.isFinite(s[key])||s[key]<min||s[key]>max)throw Error('Invalid '+key+'.');}
  if(['accuracy','challenge','practice'].includes(s.mode))s.speed=false;
  if(s.mode==='discussion'){s.leaderboard=false;s.speed=false;}
  return s;
