@@ -6,17 +6,38 @@
   "scripts": {
     "build": "node scripts/build-pdf-studio.mjs",
     "check:pdf": "node scripts/check-pdf-studio.mjs",
-    "check:word": "node scripts/check-word-converter.mjs"
+    "check:word": "node scripts/check-word-converter.mjs",
+    "test:challenge": "node --test tests/challenge/model.test.mjs",
+    "test:challenge:backend": "node tests/challenge/backend.mjs",
+    "test:challenge:advanced": "node tests/challenge/advanced.mjs",
+    "test:challenge:browser": "node tests/challenge/browser.mjs",
+    "test:challenge:load": "node tests/challenge/load.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
     "@matbee/libreoffice-converter": "2.7.2",
+    "@supabase/supabase-js": "2.108.0",
     "@vercel/functions": "3.9.9",
+    "dompurify": "3.4.16",
+    "exceljs": "4.4.0",
     "jszip": "3.10.1",
     "pdf-lib": "1.17.1",
+    "qrcode": "1.5.4",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "sanitize-html": "2.18.0",
     "tesseract.js": "7.0.0"
   },
   "devDependencies": {
-    "esbuild": "0.25.12"
+    "esbuild": "0.25.12",
+    "https-proxy-agent": "7.0.6",
+    "playwright": "1.62.1",
+    "supabase": "2.54.11",
+    "ws": "8.22.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "11.1.1"
+    }
   }
 }

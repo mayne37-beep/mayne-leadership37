@@ -33,3 +33,6 @@ await buildWordConverter(root,out);
 
 await build({entryPoints:[path.join(root,'src','lesson-export.js')],outfile:path.join(out,'assets','lesson-export.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
 console.log('Lesson Studio export runtime built.');
+
+await build({entryPoints:[path.join(root,'src','challenge','App.jsx')],outfile:path.join(out,'assets','challenge-app.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
+console.log('Leadership Challenge Studio built.');

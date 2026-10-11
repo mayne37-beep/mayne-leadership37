@@ -4,6 +4,15 @@ import { next } from '@vercel/functions';
 // Exact student entry pages remain publicly available by design.
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
+  '/challenge-join.html',
+  '/api/challenge',
+  '/assets/challenge-app.js',
+  '/assets/challenge-studio.css',
+  '/assets/challenge-evidence.svg',
+  '/assets/challenge-team-0.svg',
+  '/assets/challenge-team-1.svg',
+  '/assets/challenge-team-2.svg',
+  '/assets/challenge-team-3.svg',
   '/presenter-respond.html',
   '/word-cloud-respond.html',
   '/360-respond.html',

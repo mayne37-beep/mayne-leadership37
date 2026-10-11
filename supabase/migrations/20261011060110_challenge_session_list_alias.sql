@@ -1,0 +1,2 @@
+do $$ declare definition text; begin select pg_get_functiondef('ml_challenge.gateway(text,uuid,text,jsonb)'::regprocedure) into definition; definition:=replace(definition,'session_id=s.id and not kicked)) order by created_at desc),''[]'') into result from ml_challenge.sessions s where owner=p_owner','session_id=listed.id and not kicked)) order by created_at desc),''[]'') into result from ml_challenge.sessions listed where owner=p_owner'); execute definition; end $$;
+notify pgrst,'reload schema';

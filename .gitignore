@@ -2,3 +2,8 @@ node_modules/
 public/
 .vercel/
 tmp/
+
+.lcs-env.json
+
+.lcs-qa.json
+supabase/.temp/

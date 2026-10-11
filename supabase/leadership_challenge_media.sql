@@ -1,0 +1,5 @@
+-- Media lives with the existing instructor Auth project.
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('leadership-challenge','leadership-challenge',true,52428800,array['image/jpeg','image/png','image/webp','image/gif','audio/mpeg','audio/wav','audio/ogg','audio/webm','video/mp4','video/webm']) on conflict(id) do nothing;
+create policy lcs_media_insert on storage.objects for insert to authenticated with check(bucket_id='leadership-challenge' and (storage.foldername(name))[1]=(select auth.uid())::text and exists(select 1 from public.ml360_admins where user_id=(select auth.uid())));
+create policy lcs_media_select on storage.objects for select to authenticated using(bucket_id='leadership-challenge' and (storage.foldername(name))[1]=(select auth.uid())::text);
+create policy lcs_media_delete on storage.objects for delete to authenticated using(bucket_id='leadership-challenge' and (storage.foldername(name))[1]=(select auth.uid())::text and exists(select 1 from public.ml360_admins where user_id=(select auth.uid())));
