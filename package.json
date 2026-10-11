@@ -3,7 +3,17 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pdf-studio.mjs",
+    "check:pdf": "node scripts/check-pdf-studio.mjs"
+  },
   "dependencies": {
-    "@vercel/functions": "3.9.9"
+    "@vercel/functions": "3.9.9",
+    "@embedpdf/pdfium": "2.15.1",
+    "pdf-lib": "1.17.1",
+    "tesseract.js": "7.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
   }
 }

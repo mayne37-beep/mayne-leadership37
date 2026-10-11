@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { PdfStudioEngine } from '../assets/pdf-studio-engine.js';
+const require=createRequire(import.meta.url);
+const engine=await PdfStudioEngine.create(await readFile(require.resolve('@embedpdf/pdfium/pdfium.wasm')));
+const pass=label=>console.log('PASS '+label);
+try {
+  const external=await PDFDocument.create(),page=external.addPage([612,792]),font=await external.embedFont(StandardFonts.Helvetica);
+  page.drawText('Original text',{x:54,y:700,size:18,font});page.drawText('Sensitive 123-45-6789',{x:54,y:640,size:14,font});
+  engine.load(await external.save());const text=engine.objects(0).find(o=>o.text==='Original text');
+  engine.replaceText(0,text,'Updated text',{size:20});engine.load(engine.save());
+  assert.ok(engine.pageText(0).includes('Updated text'));assert.ok(!engine.pageText(0).includes('Original text'));pass('existing text replacement survives save and reopen');
+  engine.redact(0,[50,631,300,655]);engine.load(engine.save());assert.ok(!engine.pageText(0).includes('123-45-6789'));pass('redaction removes the original text');
+  engine.createField(0,[54,400,300,430],'Name');engine.fillField(0,engine.annotations(0).find(a=>a.name==='Name'),'Josh');
+  engine.createField(0,[54,350,74,370],'Ready',2);engine.fillField(0,engine.annotations(0).find(a=>a.name==='Ready'),true);
+  engine.load(engine.save());assert.equal(engine.annotations(0).find(a=>a.name==='Name').value,'Josh');assert.equal(engine.annotations(0).find(a=>a.name==='Ready').checked,true);
+  let parsed=await PDFDocument.load(engine.save());assert.equal(parsed.getForm().getTextField('Name').getText(),'Josh');assert.equal(parsed.getForm().getCheckBox('Ready').isChecked(),true);pass('logical and displayed form values agree');
+  const extracted=await engine.extract([0]);parsed=await PDFDocument.load(extracted);assert.equal(parsed.getForm().getTextField('Name').getText(),'Josh');pass('extraction retains the form tree');
+  await engine.duplicatePage(0);assert.equal(engine.info().count,2);assert.equal(engine.annotations(1).find(a=>a.name==='Name_2').value,'Josh');pass('duplicate form fields get independent names');
+  await engine.removeAnnotation(0,engine.annotations(0).find(a=>a.name==='Ready'));
+  parsed=await PDFDocument.load(engine.save());assert.equal(parsed.getForm().getFieldMaybe('Ready'),undefined);assert.equal(parsed.getPage(0).node.Annots().size(),1);pass('field deletion clears both the field tree and widget');
+  await engine.flatten(0);parsed=await PDFDocument.load(engine.save());assert.equal(parsed.getForm().getFieldMaybe('Name'),undefined);assert.equal(parsed.getForm().getTextField('Name_2').getText(),'Josh');assert.equal(engine.annotations(0).length,0);pass('flatten preserves fields on other pages');
+  await engine.merge(extracted);assert.equal(engine.info().count,3);assert.equal(engine.annotations(2).find(a=>a.name==='Name').value,'Josh');pass('merged form fields remain valid and editable');
+  engine.movePage(2,0);engine.rotate(0);assert.equal(engine.size(0).rotation,1);const pt=engine.devicePoint(0,120,70,792,612);assert.deepEqual(engine.screenPoint(0,...pt,792,612),[120,70]);pass('page move, rotation, and pointer coordinates');
+  engine.setPassword('verification-password');const locked=engine.save();const copy=new PdfStudioEngine(engine.p);assert.throws(()=>copy.load(locked),/password/);copy.load(locked,'verification-password');copy.removePassword();const clear=copy.save();copy.load(clear);assert.equal(copy.info().encrypted,false);copy.close();pass('password protection and removal');
+  const render=engine.render(0,1);assert.equal(render.rgba.length,render.width*render.height*4);assert.ok(render.rgba.some(v=>v!==255));pass('edited document renders');
+} finally {engine.close();}
+console.log('PDF Studio checks passed.');
