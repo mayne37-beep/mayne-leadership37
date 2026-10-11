@@ -1,6 +1,6 @@
 import {randomBytes,createHash} from 'node:crypto';
 import sanitizeHtml from 'sanitize-html';
-import {createClient} from '@supabase/supabase-js';
+import {GoTrueClient} from '@supabase/auth-js';
 import {AUTH_URL,AUTH_KEY,LIVE_URL,LIVE_KEY,DEFAULTS,validateGame,safeMedia} from '../src/challenge/model.js';
 export const config={maxDuration:30};
 const studentActions=new Set(['lookup','join','student-snapshot','submit','student-next','retry']);
@@ -8,7 +8,7 @@ const instructorActions=new Set(['games','game-create','game-get','game-save','g
 const TOKEN_COOKIE='__Host-lcs-player';
 const verifiedInstructors=new Map();
 const verifyingInstructors=new Map();
-const identity=createClient(AUTH_URL,AUTH_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{fetch:(url,options)=>fetch(url,{...options,signal:AbortSignal.timeout(12000)})}});
+const identity=new GoTrueClient({url:AUTH_URL+'/auth/v1',headers:{apikey:AUTH_KEY},persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,fetch:(url,options)=>fetch(url,{...options,signal:AbortSignal.timeout(12000)})});
 
 async function verifyInstructor(auth){
  const hash=createHash('sha256').update(auth).digest('hex');
@@ -16,7 +16,7 @@ async function verifyInstructor(auth){
  if(cached&&cached.until>Date.now())return cached.owner;
  if(verifyingInstructors.has(hash))return verifyingInstructors.get(hash);
  const work=(async()=>{
-  const {data:verified,error}=await identity.auth.getClaims(auth.slice(7));
+  const {data:verified,error}=await identity.getClaims(auth.slice(7));
   const claims=verified?.claims;
   if(error?.status>=500||error?.name==='AuthRetryableFetchError')throw Object.assign(Error('Identity service unavailable'),{name:'TimeoutError'});
   if(error||!claims||claims.iss!==AUTH_URL+'/auth/v1'||claims.aud!=='authenticated'||claims.role!=='authenticated'||!claims.sub||!Number.isFinite(claims.exp))throw Object.assign(Error('Your login expired. Sign in again.'),{status:401});

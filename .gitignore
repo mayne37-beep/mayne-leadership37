@@ -6,4 +6,5 @@ tmp/
 .lcs-env.json
 
 .lcs-qa.json
+.lcs-preview.json
 supabase/.temp/

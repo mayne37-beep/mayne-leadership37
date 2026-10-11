@@ -7,7 +7,7 @@ export async function api(action,payload={},instructor=true){
  const headers={'Content-Type':'application/json'};
  if(instructor){const {data}=await auth.auth.getSession();if(!data.session)throw Error('Sign in with your instructor account.');headers.Authorization='Bearer '+data.session.access_token;}
  const response=await fetch('/api/challenge',{method:'POST',credentials:'same-origin',headers,body:JSON.stringify({action,payload})});
- const result=await response.json();if(!response.ok)throw Error(result.error||'Request failed ('+response.status+').');return result;
+ let result;try{result=await response.json();}catch{throw Error('Service temporarily unavailable ('+response.status+'). Reconnect and retry.');}if(!response.ok)throw Error(result.error||'Request failed ('+response.status+').');return result;
 }
 export async function uploadMedia(file){
  if(!file)return '';if(file.size>50*1024*1024)throw Error('Upload a file smaller than 50 MB.');
