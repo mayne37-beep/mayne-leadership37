@@ -36,7 +36,8 @@ function field(label,path,type='text',opts={}){const val=fieldsValue(editingObje
  else if(type==='select')control='<select data-field="'+esc(path)+'">'+(opts.options||[]).map(o=>{const value=typeof o==='string'?o:o.value,label=typeof o==='string'?o:o.label;return '<option value="'+esc(value)+'" '+(String(value)===String(val)?'selected':'')+'>'+esc(label)+'</option>';}).join('')+'</select>';
  else if(type==='checkbox')return '<label class="checkbox-field"><input type="checkbox" data-field="'+esc(path)+'" '+(val?'checked':'')+'><span>'+esc(label)+'</span></label>';
  else control='<input data-field="'+esc(path)+'" type="'+type+'" value="'+esc(val)+'" '+(opts.min!==undefined?'min="'+opts.min+'"':'')+' '+(opts.max!==undefined?'max="'+opts.max+'"':'')+'>';
- return '<label class="field"><span>'+esc(label)+'</span>'+control+(opts.help?'<small>'+esc(opts.help)+'</small>':'')+'</label>';
+ const wrapper=type==='rich'?'div':'label';
+ return '<'+wrapper+' class="field"><span>'+esc(label)+'</span>'+control+(opts.help?'<small>'+esc(opts.help)+'</small>':'')+'</'+wrapper+'>';
 }
 function mediaField(label,path,kind='image'){
  const value=fieldsValue(editingObject(),path)||'';
