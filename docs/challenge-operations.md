@@ -2,7 +2,7 @@
 
 ## Existing integration
 
-The static Mayne Leadership site remains intact. React is bundled by the existing esbuild build into `public/assets/challenge-app.js`. `facilitation.html` adds the Classroom Tools card. `api/challenge.js` is a Vercel Node function. The exact public joining page and API are exceptions to the existing website PIN middleware; instructor pages still require the site PIN and instructor authentication.
+The static Mayne Leadership site remains intact. React is bundled by the existing esbuild build into `public/assets/challenge-app.js`. `facilitation.html` adds the Classroom Tools card. `api/challenge.js` is a Vercel Node function loading a private esbuild server bundle in `dist/challenge-server.mjs`. This bundle resolves mixed CommonJS/ESM dependencies for the existing hosting loader and is never placed in the public output directory. The exact public joining page and API are exceptions to the existing website PIN middleware; instructor pages still require the site PIN and instructor authentication.
 
 Instructor authentication uses the existing Mayne Leadership 360 Supabase project (`oxgbhrhpgvtolbasxzjj`) and `public.ml360_admins`. Content and gameplay use the existing classroom project (`vteamreihsunsllwcphw`) in the isolated `ml_challenge` schema. Media uses the first project's `leadership-challenge` Storage bucket. Existing schemas and services are preserved.
 
