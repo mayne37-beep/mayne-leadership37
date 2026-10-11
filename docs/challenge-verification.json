@@ -1,0 +1,395 @@
+{
+  "verifiedDate": "2026-10-11",
+  "liveUrl": "https://www.mayneleadership.com/challenge-studio.html",
+  "testedProductionCommit": "2c1973d5f6a2a14a8c768688dc7e691e5b04b369",
+  "backend": {
+    "base": "https://mayne-leadership37-eo0e8400k-mayne37-9673.vercel.app",
+    "checks": [
+      "Real Supabase instructor password login",
+      "Create, save, and publish all 13 formats",
+      "Concurrent draft version protection",
+      "Three independent guest devices join and appear in lobby",
+      "Guest cannot host or bypass the database gateway",
+      "13-format gameplay, exact-once answers, invalid-value rejection, reveal, leaderboard, podium completion",
+      "Persisted report agrees with official scoring; unanswered players score zero",
+      "Secure same-browser reconnection restores original identity and score",
+      "Reopen and edit game; historic session retains its original questions",
+      "Edited game hosts again with balanced team allocation",
+      "Self-paced immediate feedback, completion, and per-browser attempt limits",
+      "Anonymous report omits individual-level records"
+    ]
+  },
+  "productionBrowser": {
+    "base": "https://www.mayneleadership.com",
+    "verified": [
+      "Instructor signs in through the real UI",
+      "Saved instructor defaults apply to a new question",
+      "Form-based editor autosaves and publishes a valid question",
+      "Host generates a PIN, QR image, and correct direct link",
+      "Two separate mobile browser contexts join the instructor lobby",
+      "Interrupted host page resumes the same PIN and participants",
+      "Both mobile browsers receive authoritative questions over Realtime",
+      "Disconnected browser restores its accepted answer securely",
+      "Correct and incorrect feedback, official scores, and leaderboard agree",
+      "Final podium, saved report, CSV, and Excel exports verified",
+      "Reopened game edits publish and run in a new session on the same phone",
+      "Mobile width and absence of browser runtime errors verified"
+    ],
+    "realtimeBroadcasts": 9,
+    "errors": []
+  },
+  "productionAdvanced": {
+    "base": "https://www.mayneleadership.com",
+    "checks": [
+      "Dashboard lists and instructor settings round-trip through persistent storage",
+      "A signed-in instructor cannot read or host another instructor\u2019s game",
+      "CSV, Excel and portable JSON imports preserve actual examples and reject unsupported content",
+      "Question library, archive and restore use saved database records",
+      "Instructor name prompts and length requirements are enforced by the backend",
+      "Manual teams, locked joining and removal are enforced for separate guest identities",
+      "Pause freezes the authoritative timer, rejects answers and resumes with a later deadline",
+      "Double points, multi-select partial credit and wrong-choice penalties produce official team averages",
+      "Case-insensitive text matching and one-time manual grading update scores and reports",
+      "Highlighted discussion responses and live polls persist without points and retain aggregate reports",
+      "Server deadlines close unanswered questions, reject late responses and complete the delivery",
+      "Anonymous participation removes entered nicknames and supports grading without individual reports",
+      "Classic speed points and consecutive-correct bonuses match official server response times",
+      "Real instructor image upload, public classroom media and owned-media deletion use Supabase Storage"
+    ]
+  },
+  "productionLoad": {
+    "base": "https://www.mayneleadership.com",
+    "participants": 100,
+    "webSockets": 100,
+    "questions": 25,
+    "rounds": [
+      {
+        "question": 1,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 3090,
+          "p95Ms": 3106,
+          "maxMs": 3108
+        },
+        "accepted": 100
+      },
+      {
+        "question": 2,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 350,
+          "p95Ms": 363,
+          "maxMs": 372
+        },
+        "accepted": 100
+      },
+      {
+        "question": 3,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 260,
+          "p95Ms": 272,
+          "maxMs": 273
+        },
+        "accepted": 100
+      },
+      {
+        "question": 4,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 655,
+          "p95Ms": 673,
+          "maxMs": 674
+        },
+        "accepted": 100
+      },
+      {
+        "question": 5,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 251,
+          "p95Ms": 275,
+          "maxMs": 276
+        },
+        "accepted": 100
+      },
+      {
+        "question": 6,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 237,
+          "p95Ms": 249,
+          "maxMs": 256
+        },
+        "accepted": 100
+      },
+      {
+        "question": 7,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 254,
+          "p95Ms": 269,
+          "maxMs": 280
+        },
+        "accepted": 100
+      },
+      {
+        "question": 8,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 293,
+          "p95Ms": 326,
+          "maxMs": 329
+        },
+        "accepted": 100
+      },
+      {
+        "question": 9,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 231,
+          "p95Ms": 255,
+          "maxMs": 256
+        },
+        "accepted": 100
+      },
+      {
+        "question": 10,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 300,
+          "p95Ms": 326,
+          "maxMs": 327
+        },
+        "accepted": 100
+      },
+      {
+        "question": 11,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 242,
+          "p95Ms": 255,
+          "maxMs": 256
+        },
+        "accepted": 100
+      },
+      {
+        "question": 12,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 268,
+          "p95Ms": 290,
+          "maxMs": 293
+        },
+        "accepted": 100
+      },
+      {
+        "question": 13,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 237,
+          "p95Ms": 250,
+          "maxMs": 258
+        },
+        "accepted": 100
+      },
+      {
+        "question": 14,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 230,
+          "p95Ms": 256,
+          "maxMs": 257
+        },
+        "accepted": 100
+      },
+      {
+        "question": 15,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 232,
+          "p95Ms": 268,
+          "maxMs": 269
+        },
+        "accepted": 100
+      },
+      {
+        "question": 16,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 230,
+          "p95Ms": 251,
+          "maxMs": 251
+        },
+        "accepted": 100
+      },
+      {
+        "question": 17,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 685,
+          "p95Ms": 699,
+          "maxMs": 700
+        },
+        "accepted": 100
+      },
+      {
+        "question": 18,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 241,
+          "p95Ms": 265,
+          "maxMs": 268
+        },
+        "accepted": 100
+      },
+      {
+        "question": 19,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 260,
+          "p95Ms": 272,
+          "maxMs": 276
+        },
+        "accepted": 100
+      },
+      {
+        "question": 20,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 209,
+          "p95Ms": 233,
+          "maxMs": 234
+        },
+        "accepted": 100
+      },
+      {
+        "question": 21,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 256,
+          "p95Ms": 277,
+          "maxMs": 282
+        },
+        "accepted": 100
+      },
+      {
+        "question": 22,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 287,
+          "p95Ms": 316,
+          "maxMs": 317
+        },
+        "accepted": 100
+      },
+      {
+        "question": 23,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 236,
+          "p95Ms": 247,
+          "maxMs": 262
+        },
+        "accepted": 100
+      },
+      {
+        "question": 24,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 252,
+          "p95Ms": 265,
+          "maxMs": 277
+        },
+        "accepted": 100
+      },
+      {
+        "question": 25,
+        "broadcast": {
+          "count": 100,
+          "p50Ms": 257,
+          "p95Ms": 271,
+          "maxMs": 278
+        },
+        "accepted": 100
+      }
+    ],
+    "broadcast": {
+      "count": 2500,
+      "p50Ms": 251,
+      "p95Ms": 692,
+      "maxMs": 3108
+    },
+    "requests": {
+      "game-create": {
+        "count": 1,
+        "p50Ms": 4429,
+        "p95Ms": 4429,
+        "maxMs": 4429
+      },
+      "game-publish": {
+        "count": 1,
+        "p50Ms": 536,
+        "p95Ms": 536,
+        "maxMs": 536
+      },
+      "host": {
+        "count": 1,
+        "p50Ms": 359,
+        "p95Ms": 359,
+        "maxMs": 359
+      },
+      "join": {
+        "count": 100,
+        "p50Ms": 5278,
+        "p95Ms": 7066,
+        "maxMs": 7218
+      },
+      "control": {
+        "count": 50,
+        "p50Ms": 324,
+        "p95Ms": 909,
+        "maxMs": 3127
+      },
+      "student-snapshot": {
+        "count": 2500,
+        "p50Ms": 512,
+        "p95Ms": 6478,
+        "maxMs": 9130
+      },
+      "submit": {
+        "count": 2500,
+        "p50Ms": 486,
+        "p95Ms": 3671,
+        "maxMs": 6344
+      },
+      "report": {
+        "count": 1,
+        "p50Ms": 618,
+        "p95Ms": 618,
+        "maxMs": 618
+      }
+    },
+    "accepted": 2500,
+    "correct": 1250,
+    "incorrect": 1250,
+    "capacityClaim": "Tested 100; configured safety cap 150. No claim of unlimited capacity."
+  },
+  "existingSiteChecks": [
+    "Classroom Tools integration card",
+    "Existing website PIN protection",
+    "PDF Studio regression suite",
+    "Word-to-PDF regression suite",
+    "Lesson Studio production API",
+    "360 and Presenter Studio pages"
+  ],
+  "scopeNotes": [
+    "100 concurrent participants verified; configured cap 150, capacity beyond 100 not claimed.",
+    "100 HTTP joins run concurrently. WebSocket handshakes use groups of 20, then all 100 connections remain simultaneously active for all 25 rounds.",
+    "An initial connection burst exceeded the test runner subscription timeout. The successful runner allows 45 seconds for connection setup.",
+    "Timings include the external testing proxy and Vercel/Supabase network.",
+    "Automated browser contexts cover desktop and mobile viewports; no physical-device farm or full screen-reader audit.",
+    "Self-paced identity and attempt limits are per secure browser cookie.",
+    "Media references are public resources; portable exports preserve references."
+  ]
+}
