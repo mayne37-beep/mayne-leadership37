@@ -5,6 +5,9 @@ import { next } from '@vercel/functions';
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
   '/challenge-join.html',
+  '/collaboration-join.html',
+  '/assets/collaboration-canvas.css',
+  '/assets/collaboration-canvas.js',
   '/api/challenge',
   '/assets/challenge-app.js',
   '/assets/challenge-studio.css',
