@@ -60,7 +60,7 @@ export function newBlock(type){
  if(['mcq','msq'].includes(type)){b.title='What would you do?';b.options=[{id:uid(),text:'Gather evidence',correct:true,feedback:'A useful first step.'},{id:uid(),text:'Assume you know the answer',correct:false,feedback:'Check your assumptions first.'}];b.feedbackCorrect='Well done. Use the feedback to reinforce the concept.';b.feedbackIncorrect='Review the explanation and try again.';b.required=true;}
  if(type==='fill'){b.title='Complete the statement.';b.answers='evidence|facts';b.feedbackCorrect='Correct.';b.feedbackIncorrect='Try again.';b.required=true;}
  if(type==='matching'){b.pairs=[{id:uid(),left:'Evidence',right:'Information supporting a claim'},{id:uid(),left:'Assumption',right:'An idea treated as true without verification'}];b.required=true;}
- if(type==='quiz'){b.questions=[newBlock('mcq'),newBlock('fill')];b.passScore=80;b.randomize=false;b.maxAttempts=0;b.required=true;}
+ if(type==='quiz'){b.questions=[newBlock('mcq'),newBlock('fill')];b.passScore=80;b.scorePolicy='best';b.randomize=false;b.maxAttempts=0;b.required=true;}
  if(type==='reflection')b.title='How will you use this in your work?';
  if(type==='survey'){b.title='How confident do you feel?';b.minLabel='Not confident';b.maxLabel='Very confident';b.scale=5;}
  if(type==='chart'){b.variant='bar';b.items=[{id:uid(),title:'Clarity',value:65},{id:uid(),title:'Trust',value:80},{id:uid(),title:'Alignment',value:55}];}

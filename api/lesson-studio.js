@@ -40,6 +40,7 @@ export default async function handler(req,res){
       if(data.code==='P0002')return send(404,{error:'The course or file is unavailable.'});
       return send(400,{error:['23505','22P02'].includes(data.code)?'Invalid or duplicate record.':'Unable to complete this action.'});
     }
+    if(data?.conflict)return send(409,{error:'This course changed in another tab or device. Export your draft, then reload the latest version.'});
     if(action==='asset'){
       const bytes=Buffer.from(data.data,'base64');
       res.setHeader('Content-Type',data.mime);res.setHeader('Accept-Ranges','bytes');
