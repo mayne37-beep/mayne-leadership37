@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { createRequire } from 'node:module';
+import { buildWordConverter } from './build-word-converter.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const out=path.join(root,'public');
 await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
@@ -28,3 +29,4 @@ await copyFile(require.resolve('tesseract.js/LICENSE.md'),path.join(licenseDir,'
 await copyFile(path.join(coreDir,'LICENSE'),path.join(licenseDir,'tesseract-core-Apache-2.0.txt'));
 await copyFile(require.resolve('pdf-lib/LICENSE.md'),path.join(licenseDir,'pdf-lib-MIT.txt'));
 console.log('PDF Studio built; existing pages preserved; PDF and OCR engines served from this site.');
+await buildWordConverter(root,out);

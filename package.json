@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-pdf-studio.mjs",
-    "check:pdf": "node scripts/check-pdf-studio.mjs"
+    "check:pdf": "node scripts/check-pdf-studio.mjs",
+    "check:word": "node scripts/check-word-converter.mjs"
   },
   "dependencies": {
-    "@vercel/functions": "3.9.9",
     "@embedpdf/pdfium": "2.15.1",
+    "@matbee/libreoffice-converter": "2.7.2",
+    "@vercel/functions": "3.9.9",
+    "jszip": "3.10.1",
     "pdf-lib": "1.17.1",
     "tesseract.js": "7.0.0"
   },

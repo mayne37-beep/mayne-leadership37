@@ -7,6 +7,7 @@ The website is deployed from `mayne37-beep/mayne-leadership37` to the existing V
 ```sh
 npm ci
 npm run check:pdf
+npm run check:word
 npm run build
 ```
 
@@ -37,3 +38,22 @@ Standard form trees are preserved for merging, extracting, and duplicating unenc
 Modern browsers with WebAssembly and HTML canvas are required. File opening is limited to 50 MB; undo history is limited to 30 changes or 64 MB. Very large pages have a rendering pixel limit.
 
 Native PDF processing, independent PDF parsing, rendered PDF output, OCR recognition, and application DOM interactions were checked. A full browser layout and interaction pass was unavailable in the build environment.
+
+## Word to PDF
+
+Open `word-to-pdf.html` from its own card in Classroom Tools. The converter accepts Microsoft Word `.docx` and legacy `.doc` files up to 25 MB, creates native selectable PDF output, previews pages, and downloads a new PDF. High-quality image export and PDF/A-2b archive export are available. Password-protected documents need an unprotected copy. Custom fonts and advanced Word features can differ from Microsoft Word, so review the preview.
+
+Conversion uses the pinned `@matbee/libreoffice-converter` 2.7.2 LibreOffice WebAssembly engine in a dedicated browser worker. No document conversion API, upload, account, conversion-service key, or document storage is used. Engine startup is on demand. Clear document releases the worker and all current document references. Cancelling a conversion terminates its worker and ignores late results.
+
+The build serves the engine from this site's `/assets/word-engine/` directory, with Brotli-compressed runtime binaries. `vercel.json` sets the required `Content-Encoding`/`Content-Type` headers on those binaries and enables cross-origin isolation only for the converter and its runtime. The existing PIN policy and publicly accessible student routes remain unchanged.
+
+- `src/word-converter-core.js`: bounded DOCX validation, PDF options, filenames, and a real two-page Word sample.
+- `src/word-converter-client.js`: cancellable worker protocol with bounded initialization and conversion timeouts.
+- `src/word-to-pdf-app.js`: file selection, conversion, preview navigation, and download.
+- `src/word-converter-preview.js`: native PDF page rendering and selectable page text.
+- `scripts/build-word-converter.mjs`: app bundles and compressed self-hosted engine assets.
+- `scripts/check-word-converter.mjs`: real DOCX/DOC conversion, native PDF text/page checks, and PDF/A metadata checks. An optional DOCX path checks an independent two-page portrait/landscape fixture and writes its PDF beside the fixture.
+
+Modern browsers with cross-origin isolation, workers, and shared WebAssembly memory are required. The first conversion downloads the office runtime; processing needs substantially more browser memory than a simple text-only conversion. Unsupported browsers receive an explicit message. The converter produces a download even if PDF preview is unavailable.
+
+Engine source and licensing links are included in `assets/word-converter-NOTICES.txt`. JSZip's license is copied into the build; existing PDF preview licenses remain available.
