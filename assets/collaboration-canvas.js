@@ -202,7 +202,7 @@ function select(id,{append=false}={}){
  if(!append){selectedIds=new Set(id?[id]:[]);}
  else if(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);}
  selected=selectedIds.size?[...selectedIds].at(-1):null;
- $('.item').forEach(el=>el.classList.toggle('selected',selectedIds.has(el.dataset.id)));
+ $$('.item').forEach(el=>el.classList.toggle('selected',selectedIds.has(el.dataset.id)));
  renderWires();renderInspector();updateSelectionStatus();
 }
 function updateSelectionStatus(){const v=$('#multi-status');if(v)v.textContent=selectedIds.size>1?selectedIds.size+' selected · Shift-click to add':'Shift-click to multi-select · Shift-drag empty canvas for area select'}
@@ -247,7 +247,7 @@ function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagati
 }
 if(tool==='connector'){if(!connectFrom){connectFrom=id;select(id);announce('Now click the second object to connect')}else if(connectFrom!==id){add({id:makeId(),type:'connector',from:connectFrom,to:id,text:'',color:COLORS[5],x:0,y:0,w:60,h:35});connectFrom=null;setTool('select')}return}
 if(tool==='pan'||spaceDown){startPan(e);return}
-if(peers.length>1){$('.item').forEach(el=>el.classList.toggle('selected',selectedIds.has(el.dataset.id)));renderInspector();updateSelectionStatus();}
+if(peers.length>1){$$('.item').forEach(el=>el.classList.toggle('selected',selectedIds.has(el.dataset.id)));renderInspector();updateSelectionStatus();}
 else if(!(selectedIds.size>1&&selectedIds.has(id)))select(id);if(tool!=='select')return;before();const p=worldPoint(e);dragging={type:'item',id,dx:p.x-obj.x,dy:p.y-obj.y,moved:false,starts:selectedObjects().map(o=>({id:o.id,x:o.x,y:o.y})),sx:p.x,sy:p.y};$('#canvas-viewport').setPointerCapture(e.pointerId)}
 function startPan(e,{rightButton=false}={}){
  dragging={type:'pan',sx:e.clientX,sy:e.clientY,x:pan.x,y:pan.y,rightButton,moved:false};
