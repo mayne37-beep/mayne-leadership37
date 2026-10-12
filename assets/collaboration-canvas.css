@@ -11,3 +11,19 @@
 .inline-editor-actions button{border-radius:8px;padding:7px 9px;font-size:11px;font-weight:800;border:1px solid #d2e1ea;background:#f4f8fb;color:#2d5b7b;cursor:pointer}
 .inline-editor-actions .inline-editor-done{background:#1c659e;color:white;border-color:#1c659e}
 @media(max-width:760px){.inline-editor-tip{display:none}.inline-editor-actions{top:calc(100% + 7px)}}
+
+/* A real text input remains inside every sticky note, label, shape and frame.
+   The grab handle is reserved for movement; typing never captures canvas drag events. */
+.item .canvas-text-input{display:block;position:relative;z-index:1;box-sizing:border-box;width:100%;height:100%;min-height:0;min-width:0;margin:0;padding:15px;border:0!important;border-radius:inherit;background:transparent!important;color:inherit;font:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;text-align:inherit;letter-spacing:inherit;white-space:pre-wrap;overflow:auto;overflow-wrap:anywhere;resize:none;outline:none!important;box-shadow:none!important;cursor:text;pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important;touch-action:auto;caret-color:#135f9e;scrollbar-width:thin}
+.item .canvas-text-input:focus{box-shadow:inset 0 0 0 2px #246da9!important;background:rgba(255,255,255,.16)!important}
+.item .canvas-text-input::placeholder{color:#607c91;opacity:.7}
+.item.text .canvas-text-input{padding:5px;font-size:21px;font-weight:760}
+.item.frame .canvas-text-input{height:72px;padding:12px 18px;font-size:16px;font-weight:850}
+.item.shape .canvas-text-input,.item.ellipse .canvas-text-input{text-align:center}
+.item.ellipse .canvas-text-input{padding:30% 16% 10%}
+.item .canvas-move-handle{position:absolute;right:-12px;top:-17px;z-index:5;border:1px solid #9cc3dd;background:#fff;color:#205c8d;box-shadow:0 3px 10px #20496130;border-radius:8px;display:grid;place-items:center;width:31px;height:31px;padding:0;font-family:system-ui,sans-serif;font-size:21px;font-weight:800;cursor:grab;opacity:.55;pointer-events:auto!important;touch-action:none}
+.item:hover .canvas-move-handle,.item.selected .canvas-move-handle,.item:focus-within .canvas-move-handle{opacity:1}
+.item .canvas-move-handle:active{cursor:grabbing}
+.item.image .canvas-move-handle{right:5px;top:5px}
+.item:focus-within{outline:3px solid #2c75ac;outline-offset:3px}
+@media(hover:none){.item .canvas-move-handle{opacity:1}}
