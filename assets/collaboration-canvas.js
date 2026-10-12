@@ -19,7 +19,7 @@ const makeId=()=>'i'+crypto.randomUUID().replace(/-/g,'').slice(0,21);
 const blank=()=>({stage:0,items:[],prompts:STEPS.map(s=>s[2])});
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
-let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,inlineEditing=null;
+let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null;
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
 const localStore=(key,data)=>{try{localStorage.setItem(key,JSON.stringify(data));return true}catch{return false}};
@@ -49,7 +49,7 @@ try{const d=await rpc(action,payload);version=Number(d.version)||version;setStat
 catch(e){setStatus('⚠ Could not sync changes');toast('Changes could not sync: '+e.message+'. Export your board as a backup.')}
 finally{pending--;}
 });}
-async function refresh(){if(!room||refreshing||pending||dragging||inlineEditing||document.hidden)return;refreshing=true;try{const d=await rpc('get');if(Number(d.version)!==version){version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;if(selected&&!getObj(selected))selected=null;render();setStatus('● Live · synchronized')}}catch{setStatus('⚠ Connection interrupted')}finally{refreshing=false}}
+async function refresh(){if(!room||refreshing||pending||dragging||editingInput||document.hidden)return;refreshing=true;try{const d=await rpc('get');if(Number(d.version)!==version){version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;if(selected&&!getObj(selected))selected=null;render();setStatus('● Live · synchronized')}}catch{setStatus('⚠ Connection interrupted')}finally{refreshing=false}}
 function roomUI(){const live=!!room;$('#board-mode').textContent=live?'● Live shared canvas':'◌ Personal workspace';$('#board-mode').classList.toggle('connected',live);$('#room-info').textContent=live?(room.role==='owner'?'Instructor is hosting · invitation enabled':'Joined as a participant · edits sync automatically'):'Private draft · autosaved locally';$('#host-room').hidden=live||entry==='guest';$('#share-board').hidden=!live||room?.role!=='owner';$('#board-title').readOnly=room?.role==='guest'||entry==='guest';$('#stage-prompt').readOnly=room?.role==='guest'||entry==='guest';updateUndo()}
 function saveRoom(){if(room?.role==='owner')localStore(ROOM_KEY,{id:room.id,secret:room.secret,guest:room.guest})}
 async function hostRoom(){if(room)return;try{setStatus('Creating live board…');const d=await rpc('create',{name:title,state:board});room={id:d.id,secret:d.owner,guest:d.guest,role:'owner'};version=Number(d.version);saveRoom();roomUI();setStatus('● Live board created');toast('Live session ready! Copy the student join link.')}catch(e){setStatus('● Personal draft · saved locally');toast('Unable to start live session: '+e.message)}}
@@ -74,79 +74,72 @@ for(const o of board.items){if(o.type==='connector'){const a=getObj(o.from),b=ge
 if(o.type==='stroke'&&o.points?.length){const path=pathNode('polyline',{points:o.points.map(p=>p.join(',')).join(' '),stroke:'#205f97','stroke-width':selected===o.id?7:4,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'});path.style.pointerEvents='stroke';path.addEventListener('pointerdown',e=>{e.stopPropagation();select(o.id)});svg.appendChild(path);}}
 }
 
-// Directly edit any text-bearing canvas object. The object itself is the editor.
+// Each canvas object owns a native textarea: text is editable on the FIRST click.
 function startInlineEdit(id,{selectAll=false}={}){
- const obj=getObj(id);
- if(!canEditText(obj))return;
- if(inlineEditing?.id===id){inlineEditing.editor.focus();return}
- finishInlineEdit(true);
- select(id);
- const el=Array.from($('.item')).find(node=>node.dataset.id===id);
- if(!el)return;
- const editor=elementNode('textarea','inline-text-editor');
- editor.value=obj.text;
- editor.maxLength=5000;
- editor.spellcheck=true;
- editor.setAttribute('aria-label','Edit '+(obj.type==='note'?'sticky note':obj.type==='text'?'text box':obj.type==='frame'?'group heading':'shape label')+' directly on the canvas');
- editor.setAttribute('aria-multiline','true');
- const actions=elementNode('div','inline-editor-actions');
- const hint=elementNode('span','inline-editor-tip');hint.textContent='Enter: new line · Ctrl+Enter: done · Esc: cancel';
- const done=elementNode('button','inline-editor-done');done.type='button';done.textContent='✓ Done';
- const cancel=elementNode('button','inline-editor-cancel');cancel.type='button';cancel.textContent='Cancel';
- actions.append(hint,done,cancel);
- // Keep focus in the editor when the save/cancel controls are clicked.
- actions.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()});
- done.addEventListener('click',e=>{e.stopPropagation();finishInlineEdit(true)});
- cancel.addEventListener('click',e=>{e.stopPropagation();finishInlineEdit(false)});
- editor.addEventListener('pointerdown',e=>e.stopPropagation());
- editor.addEventListener('click',e=>e.stopPropagation());
- editor.addEventListener('keydown',e=>{
-  e.stopPropagation();
-  if(e.key==='Escape'){e.preventDefault();finishInlineEdit(false)}
-  else if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();finishInlineEdit(true)}
- });
- editor.addEventListener('blur',()=>{if(inlineEditing?.id===id)finishInlineEdit(true)});
- el.classList.add('editing');
- el.append(editor,actions);
- inlineEditing={id,editor,el,original:obj.text};
- announce('Editing directly on the canvas · Ctrl+Enter to save · Esc to cancel');
- editor.focus();
- if(selectAll)editor.select();
- else editor.setSelectionRange(editor.value.length,editor.value.length);
+ const obj=getObj(id);if(!canEditText(obj))return;
+ const input=Array.from($$('.canvas-text-input')).find(el=>el.dataset.id===id);
+ if(!input)return;
+ input.focus({preventScroll:true});select(id);if(selectAll)input.select();
 }
-function finishInlineEdit(commit=true){
- const active=inlineEditing;
- if(!active)return;
- // Clear first: removing an editor triggers blur, which must never commit twice.
- inlineEditing=null;
- const obj=getObj(active.id);
- const newText=active.editor.value.slice(0,5000);
- active.editor.remove();
- active.el.querySelector('.inline-editor-actions')?.remove();
- active.el.classList.remove('editing');
- if(commit&&obj&&newText!==active.original){
-  before();
-  obj.text=newText;
-  active.el.querySelector('.item-content').textContent=obj.text;
-  save();
-  enqueue('put',{item:obj});
-  announce('Text saved on the canvas');
- }else if(!commit){announce('Editing canceled')}
- renderInspector();
+function finishInlineEdit(){
+ if(!editingInput)return;
+ const edit=editingInput;editingInput=null;clearTimeout(textSyncTimer);textSyncTimer=null;
+ const obj=getObj(edit.id);if(edit.dirty&&obj){save();enqueue('put',{item:serial(obj)});}
+}
+function activateCanvasInput(id){
+ if(editingInput?.id===id)return;
+ finishInlineEdit();editingInput={id,dirty:false};select(id);
+}
+function writeCanvasInput(e,id){
+ const item=getObj(id);if(!item)return;
+ if(!editingInput||editingInput.id!==id)activateCanvasInput(id);
+ if(!editingInput.dirty){before();editingInput.dirty=true;}
+ item.text=e.target.value.slice(0,5000);
+ if(selected===id&&document.activeElement!==$('#object-text'))$('#object-text').value=item.text;
+ save();
+ if(room){
+  clearTimeout(textSyncTimer);
+  textSyncTimer=setTimeout(()=>{
+   const obj=getObj(id);
+   if(obj){enqueue('put',{item:serial(obj)});if(editingInput?.id===id)editingInput.dirty=false;}
+  },650);
+ }
+}
+function canvasInput(id,item){
+ const input=elementNode('textarea','canvas-text-input');
+ input.dataset.id=id;input.value=item.text;input.maxLength=5000;input.rows=1;input.spellcheck=true;
+ input.placeholder=item.type==='note'?'Type your idea…':item.type==='frame'?'Group title…':'Click and type…';
+ input.setAttribute('aria-label','Edit '+({note:'sticky note',text:'text box',shape:'rectangle',ellipse:'circle',frame:'group title'}[item.type]||'object')+' directly');
+ input.addEventListener('pointerdown',e=>e.stopPropagation());
+ input.addEventListener('click',e=>e.stopPropagation());
+ input.addEventListener('focus',()=>activateCanvasInput(id));
+ input.addEventListener('input',e=>writeCanvasInput(e,id));
+ input.addEventListener('blur',()=>{if(editingInput?.id===id)finishInlineEdit();});
+ input.addEventListener('keydown',e=>{
+  e.stopPropagation();
+  if(e.key==='Escape'||(e.key==='Enter'&&(e.ctrlKey||e.metaKey))){e.preventDefault();input.blur();}
+ });
+ return input;
 }
 
 function render(){finishInlineEdit(true);const parent=$('#canvas-items');parent.replaceChildren();board.items.forEach((o,i)=>{if(o.type==='connector'||o.type==='stroke')return;const el=elementNode('div','item '+o.type+(selected===o.id?' selected':''));el.dataset.id=o.id;el.style.cssText='left:'+o.x+'px;top:'+o.y+'px;width:'+o.w+'px;height:'+o.h+'px;z-index:'+(o.type==='frame'?0:i+1)+';';
 if(o.type==='image'){if(o.src){const img=elementNode('img');img.src=o.src;img.alt=o.text||'Uploaded image';img.draggable=false;el.appendChild(img)}}
-else{if(['note','shape','ellipse'].includes(o.type))el.style.backgroundColor=o.color;const content=elementNode('div','item-content');content.textContent=o.text;el.appendChild(content)}
+else{if(['note','shape','ellipse'].includes(o.type))el.style.backgroundColor=o.color;if(canEditText(o))el.appendChild(canvasInput(o.id,o));else{const content=elementNode('div','item-content');content.textContent=o.text;el.appendChild(content)}}
 if(o.votes&&o.type!=='frame'){const badge=elementNode('span','vote-count');badge.textContent=String(o.votes);el.appendChild(badge)}
-el.title=canEditText(o)?'Click to edit text · drag to move':'Drag to move';el.addEventListener('pointerdown',event=>onObjectDown(event,o.id));el.addEventListener('dblclick',event=>{event.stopPropagation();if(canEditText(o))startInlineEdit(o.id)});parent.appendChild(el)});
+el.title=canEditText(o)?'Click inside to type. Use the move handle to drag.':'Use the move handle to drag.';
+const move=elementNode('button','canvas-move-handle');move.type='button';move.textContent='⠿';
+move.setAttribute('aria-label','Move '+(o.text||o.type).slice(0,55));move.title='Drag this handle to move the object';
+move.addEventListener('pointerdown',e=>{e.preventDefault();onObjectDown(e,o.id)});
+el.appendChild(move);
+el.addEventListener('pointerdown',event=>{if(event.target===el)onObjectDown(event,o.id)});
+parent.appendChild(el)});
 renderWires();statusCount();renderInspector();renderStages();updateUndo()}
 function select(id){selected=id;$$('.item').forEach(el=>el.classList.toggle('selected',el.dataset.id===id));renderWires();renderInspector()}
 function renderInspector(){const item=getObj(selected);$('#inspector').hidden=!item;$('#inspector-empty').hidden=!!item;if(!item)return;$('#selected-type').textContent={note:'Sticky note',text:'Text',shape:'Rectangle',ellipse:'Circle',frame:'Group frame',image:'Image',connector:'Connector',stroke:'Freehand line'}[item.type]||'Object';
-if(document.activeElement!==$('#object-text'))$('#object-text').value=item.text;$('#object-width').value=item.w;$('#object-height').value=item.h;$('#object-help').textContent=item.type==='connector'?'Connectors automatically follow their linked objects.':item.type==='stroke'?'Pen lines can be removed or moved through their settings.':'Click this object to edit its text directly, or drag it to move. The side panel is optional.';$('#edit-inline').hidden=!canEditText(item);
+if(document.activeElement!==$('#object-text'))$('#object-text').value=item.text;$('#object-width').value=item.w;$('#object-height').value=item.h;$('#object-help').textContent=item.type==='connector'?'Connectors automatically follow their linked objects.':item.type==='stroke'?'Pen lines can be removed or moved through their settings.':'Click into the text field on the object and type. Drag ⠿ to move the object. Side panel editing is optional.';$('#edit-inline').hidden=!canEditText(item);
 $('#object-text').disabled=['connector','stroke','image'].includes(item.type);$('#object-width').disabled=['connector','stroke'].includes(item.type);$('#object-height').disabled=['connector','stroke'].includes(item.type);
 const sw=$('#color-swatches');sw.replaceChildren();COLORS.forEach(color=>{const b=elementNode('button');b.type='button';b.title=color;b.style.backgroundColor=color;b.className=color===item.color?'active':'';b.addEventListener('click',()=>patchSelected({color}));sw.appendChild(b)})}
-function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagation();if(inlineEditing?.id===id){inlineEditing.editor.focus();return}finishInlineEdit(true);const obj=getObj(id);if(!obj)return;if(tool==='text'&&canEditText(obj)){startInlineEdit(id);return}if(tool==='vote'){before();obj.votes=(obj.votes||0)+1;render();save();enqueue('put',{item:obj});announce('Vote added');return}
+function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagation();if(editingInput?.id===id)finishInlineEdit();finishInlineEdit(true);const obj=getObj(id);if(!obj)return;if(tool==='text'&&canEditText(obj)){startInlineEdit(id);return}if(tool==='vote'){before();obj.votes=(obj.votes||0)+1;render();save();enqueue('put',{item:obj});announce('Vote added');return}
 if(tool==='connector'){if(!connectFrom){connectFrom=id;select(id);announce('Now click the second object to connect')}else if(connectFrom!==id){add({id:makeId(),type:'connector',from:connectFrom,to:id,text:'',color:COLORS[5],x:0,y:0,w:60,h:35});connectFrom=null;setTool('select')}return}
 if(tool==='pan'||spaceDown){startPan(e);return}
 select(id);if(tool!=='select')return;before();const p=worldPoint(e);dragging={type:'item',id,dx:p.x-obj.x,dy:p.y-obj.y,moved:false};$('#canvas-viewport').setPointerCapture(e.pointerId)}
@@ -163,7 +156,7 @@ if(dragging.type==='pan'){pan.x=dragging.x+e.clientX-dragging.sx;pan.y=dragging.
 if(dragging.type==='item'){const o=getObj(dragging.id);if(!o)return;const p=worldPoint(e);const x=Math.max(-100,Math.min(4500,Math.round((p.x-dragging.dx)/10)*10)),y=Math.max(-100,Math.min(3150,Math.round((p.y-dragging.dy)/10)*10));if(x!==o.x||y!==o.y)dragging.moved=true;o.x=x;o.y=y;const node=$('.item[data-id="'+o.id+'"]');if(node){node.style.left=x+'px';node.style.top=y+'px'}renderWires();return}
 if(dragging.type==='stroke'){const o=getObj(dragging.id);if(o&&o.points.length<1000){const p=worldPoint(e),last=o.points[o.points.length-1];if(Math.hypot(p.x-last[0],p.y-last[1])>5){o.points.push([p.x,p.y]);renderWires()}}}}
 function onPointerUp(e){if(!dragging)return;const was=dragging;dragging=null;$('#canvas-viewport').classList.remove('dragging');try{$('#canvas-viewport').releasePointerCapture(e.pointerId)}catch{}
-if(was.type==='item'){if(was.moved){const o=getObj(was.id);save();enqueue('put',{item:o});announce('Object moved')}else{if(!room&&history.length){history.pop();updateUndo()}if(canEditText(getObj(was.id)))startInlineEdit(was.id)}}
+if(was.type==='item'){if(was.moved){const o=getObj(was.id);save();enqueue('put',{item:o});announce('Object moved')}else{if(!room&&history.length){history.pop();updateUndo()}}}
 if(was.type==='stroke'){const o=getObj(was.id);if(o){if(o.points.length<2)o.points.push([o.x+1,o.y+1]);selected=o.id;render();save();enqueue('put',{item:o})}}
 }
 function patchSelected(changes){const o=getObj(selected);if(!o)return;before();Object.assign(o,changes);const cleaned=cleanItem(o);Object.assign(o,cleaned);render();save();enqueue('put',{item:o})}
