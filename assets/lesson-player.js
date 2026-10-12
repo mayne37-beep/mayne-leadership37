@@ -12,7 +12,27 @@ export function safeHTML(v){
  function clean(parent){for(const el of [...parent.children]){if(!tags.has(el.tagName)){if(['SCRIPT','STYLE','IFRAME','OBJECT','SVG','MATH','FORM','INPUT'].includes(el.tagName)){el.remove();continue;}clean(el);el.replaceWith(...el.childNodes);continue;}for(const attr of [...el.attributes]){if(el.tagName==='A'&&attr.name==='href'){const u=safeURL(attr.value);if(u)el.setAttribute('href',u);else el.removeAttribute('href');}else el.removeAttribute(attr.name);}if(el.tagName==='A'){el.target='_blank';el.rel='noopener noreferrer';}clean(el);}}
  clean(doc.body);return doc.body.innerHTML;
 }
-function videoSource(url){const s=safeURL(url,true);try{const u=new URL(s);if(u.hostname==='youtu.be')return {embed:'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(u.pathname.slice(1))};if(['www.youtube.com','youtube.com','www.youtube-nocookie.com'].includes(u.hostname)){const id=u.searchParams.get('v')||u.pathname.split('/').pop();if(/^[\w-]{11}$/.test(id))return {embed:'https://www.youtube-nocookie.com/embed/'+id};}if(['vimeo.com','www.vimeo.com','player.vimeo.com'].includes(u.hostname)){const id=u.pathname.split('/').pop();if(/^\d+$/.test(id))return {embed:'https://player.vimeo.com/video/'+id};}}catch{}return {file:s};}
+export function videoSource(url){
+ const s=safeURL(url,true);
+ try{
+  const u=new URL(s);
+  const youtube=u.hostname==='youtu.be'||['www.youtube.com','youtube.com','www.youtube-nocookie.com'].includes(u.hostname);
+  if(youtube){
+   const id=u.hostname==='youtu.be'?u.pathname.slice(1):u.searchParams.get('v')||u.pathname.split('/').pop();
+   if(/^[\w-]{11}$/.test(id)){
+    const params=new URLSearchParams();
+    for(const [target,value] of [['start',u.searchParams.get('start')||u.searchParams.get('t')],['end',u.searchParams.get('end')]]){
+     if(/^\d+s?$/.test(value||''))params.set(target,String(parseInt(value,10)));
+    }
+    return {embed:'https://www.youtube-nocookie.com/embed/'+id+(params.size?'?'+params:'')};
+   }
+  }
+  if(['vimeo.com','www.vimeo.com','player.vimeo.com'].includes(u.hostname)){
+   const id=u.pathname.split('/').pop();if(/^\d+$/.test(id))return {embed:'https://player.vimeo.com/video/'+id};
+  }
+ }catch{}
+ return {file:s};
+}
 function color(v,fallback='#176599'){return /^#[a-f\d]{6}$/i.test(v||'')?v:fallback;}
 
 /* Shared color themes; kept in the player so standalone HTML and SCORM exports work. */

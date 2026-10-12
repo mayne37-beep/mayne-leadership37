@@ -1,0 +1,4999 @@
+{
+  "schemaVersion": 1,
+  "id": "17d9507c-6947-4f7c-aef0-aa38a538fc30",
+  "title": "Creative Thinking",
+  "description": "Editable version of the complete Mayne Leadership Creative Thinking course, including its original explanations, practice activities, application, and reflection prompts.",
+  "author": "Joshua Mayne",
+  "cover": "",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "455b0f0b-1526-4fce-ad5c-4a75c9615352",
+      "title": "Introduction and Impossible Redesign",
+      "description": "",
+      "blocks": [
+        {
+          "id": "249bf5b0-2139-49ac-a524-cdeeda9e96be",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"ideaNode n1\">QUESTION<small>What are we assuming?</small></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e3cf1ca9-066a-42f1-acaf-73980ec36f0f",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"ideaNode n2\">REFRAME<small>What else could this mean?</small></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "15bac52c-131a-4d95-abb5-d434e611be33",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"ideaNode n3\">CONNECT<small>Where else has this been solved?</small></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6052a363-53f0-404e-a719-4e033414abf7",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"ideaNode n4\">TEST<small>What is the smallest useful experiment?</small></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dc528e5e-7e96-4036-a42d-87ebf4af62b0",
+          "type": "heading",
+          "title": "See what others don’t.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "24de8366-8453-4897-a8aa-376e13e6d607",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"heroLead\">Creative thinking is not about being artistic. It is about deliberately finding possibilities that routine thinking misses.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f3bb4d84-56d5-4f63-acb6-127c59b9092a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Challenge assumptions. Change the question. Generate more than the obvious answer. Combine ideas. Develop what has promise. Test before you bet everything.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "315c16b2-bad3-467b-a41c-4f6197269e68",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"font-size:.92rem;color:#bcd6e8\"><strong>Approx. 2 hours</strong> &#xb7; Full interactive course &#xb7; Extended practice labs included &#xb7; Progress saved on this device</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8ef76ba1-5624-465f-af2d-ecd18ae5d5e6",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "5b37cf34-b8a1-4221-a916-2e29a4ac772a",
+          "type": "heading",
+          "title": "The complete Creative Thinking course.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "56b9e1b8-307e-4971-af93-1c635386fa0e",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">This online course follows the full learning sequence: concrete experience, constrained thinking, curiosity, reframing, divergence, connection-making, structured creativity tools, elaboration, convergence, experimentation, and a culminating application.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5424c05b-6f66-43fd-a600-a3becfe38b77",
+          "type": "text",
+          "title": "",
+          "body": "<p>Learning objectives</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "214f231c-8483-4029-abbb-63cf39916c64",
+          "type": "text",
+          "title": "",
+          "body": "<p>1</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9c61ebb3-ede6-406c-afa8-effbd59d867e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Explain the role of creative thinking in organizational problem solving.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4369a7e0-941f-46e9-a040-0085fe15891d",
+          "type": "text",
+          "title": "",
+          "body": "<p>2</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "08299488-bb61-4a22-a30c-a31ee4cfa375",
+          "type": "text",
+          "title": "",
+          "body": "<p>Recognize assumptions and habits that constrain creativity.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f78b38bc-fa15-4a66-a005-c18406729aeb",
+          "type": "text",
+          "title": "",
+          "body": "<p>3</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0b7c9c5b-7d50-44e8-a92f-38c228479c08",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reframe problems to reveal alternative perspectives.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c2fc8de0-dab9-4257-a082-1993b0970937",
+          "type": "text",
+          "title": "",
+          "body": "<p>4</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "36f0607e-8aa3-454b-a8ad-ba76148b8d5b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate multiple and diverse solutions using divergent-thinking techniques.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "79f51a2f-2dae-400a-ac6e-8168f714ce06",
+          "type": "text",
+          "title": "",
+          "body": "<p>5</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "99c767f6-38fe-4e0d-ad0a-f3e7ac3877eb",
+          "type": "text",
+          "title": "",
+          "body": "<p>Apply structured creativity tools to organizational challenges.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "32612015-f33d-4e47-a960-3af9b4c46678",
+          "type": "text",
+          "title": "",
+          "body": "<p>6</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "728d97d9-82e4-4f27-a9db-adc4eb6639b6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Develop, evaluate, and test creative ideas for practical application.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "231a3eda-a742-4d0a-a99e-344c388ad076",
+          "type": "heading",
+          "title": "Explore → Reframe → Diverge → Connect → Develop → Converge → Test",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "28bc6f69-d954-4b54-ab02-f44da0ed3553",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Core duration:</strong> approximately 2 hours. Optional/alternate activities from the original course are included as practice labs so the full course content is available online.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "61c0e145-0e70-448a-a811-8c11c87b8d91",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7578c13b-ec7e-4655-a7bc-4c999f3b0462",
+          "type": "heading",
+          "title": "The Impossible Redesign",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b353d49b-5b6c-4666-a561-d61530bf71be",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Your team has been told that, for one week, it cannot use traditional meetings. You still have to coordinate work, make decisions, solve problems, and keep people informed.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "347d6662-deb6-4cfb-aea0-7d080430a2a3",
+          "type": "text",
+          "title": "",
+          "body": "<p>NO MEETINGS</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a7e4d450-cd19-43a6-a16b-6dc70b243764",
+          "type": "text",
+          "title": "",
+          "body": "<p>NO EXTRA STAFF</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "12ae1eb9-ef7b-402c-a3c5-1eff9e1f73d6",
+          "type": "text",
+          "title": "",
+          "body": "<p>NO MISSED WORK</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "83628b59-3e4d-48df-afd9-48b3b3489519",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Do not try to improve the meeting. Redesign how coordination happens without one.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "276c250f-c865-4c24-a357-7e7b5905d59f",
+          "type": "heading",
+          "title": "Generate three different ways your team could operate.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ea170472-473b-44f9-a292-e80240b5bca4",
+          "type": "reflection",
+          "title": "Generate three different ways your team could operate.",
+          "body": "<p>Idea 1</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a7596a07-0e21-49e2-afbf-92fd98fbef45",
+          "type": "reflection",
+          "title": "Generate three different ways your team could operate.",
+          "body": "<p>Idea 2</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "53af3dc7-a48a-40db-acc0-dab7312ab545",
+          "type": "reflection",
+          "title": "Generate three different ways your team could operate.",
+          "body": "<p>Idea 3</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "586ccd56-0135-4fe0-a024-75dd43043ecc",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"openingFeedback\"><strong>Notice what just happened.</strong> The constraint forced you away from incremental improvement and toward redesign. You already began exploring, reframing, diverging, connecting, developing, converging, and testing&#x2014;before seeing the model.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d5cb2ff4-0319-41b7-a01d-422cfbfc1218",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "9a37c7fd-f981-409d-a966-e63964b0836b",
+      "title": "Foundations and Assumptions",
+      "description": "",
+      "blocks": [
+        {
+          "id": "48b62fd4-411d-495b-a1bd-d38a5e96e910",
+          "type": "heading",
+          "title": "WHAT COULD WE DO?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8976981d-7343-4850-aeda-9f9105d61274",
+          "type": "text",
+          "title": "",
+          "body": "<p>Purposeful creativity expands the field before judgment narrows it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5a688ae4-f845-4567-a5ed-dd11e9932412",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"stageDots\"><span>Explore</span><span>Reframe</span><span>Diverge</span><span>Connect</span><span>Develop</span><span>Converge</span><span>Test</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "52f73579-9e35-4f49-afc9-585d3c695297",
+          "type": "heading",
+          "title": "Creative thinking has a specific job.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e875e9d0-d9a1-495b-a5b1-5f9d4cc46e49",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Good problem solving uses several modes of thought. Creativity expands possibilities; critical thinking evaluates them; decision-making commits to action.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d4ab47a7-f8ce-496c-a13d-f856c20bffbc",
+          "type": "text",
+          "title": "",
+          "body": "<p>What could we do?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ccbf2c27-a665-402a-a583-f1963e9bef67",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate alternatives, challenge constraints, combine ideas, and find possibilities beyond the first answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0450c76e-87a7-41b8-a094-9ca36368d9c6",
+          "type": "text",
+          "title": "",
+          "body": "<p>What should we do?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a2a60033-7574-430d-aaad-0d24cd72d916",
+          "type": "text",
+          "title": "",
+          "body": "<p>Examine evidence, assumptions, logic, tradeoffs, and the quality of the options in front of you.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e01e331b-c7b4-46fe-a1fb-048396c8c382",
+          "type": "text",
+          "title": "",
+          "body": "<p>What will we do?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d248e4c0-f3ad-42bd-a256-b9f1337389d0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Move from understanding the problem to choosing, implementing, and learning from a course of action.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "601ed06a-70a2-4b63-a97d-cd40b1381ebe",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Creativity is not permission to ignore reality. It is permission to search more widely before reality is used to narrow the field.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "259ff699-e7d8-40ce-a0a3-d165356d632a",
+          "type": "text",
+          "title": "",
+          "body": "<p>CREATIVITY VS. INNOVATION</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "41ab91ae-2530-465f-a8a2-88cae54c28f7",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Creativity</strong> generates and develops useful possibilities. <strong>Innovation</strong> turns a promising idea into something implemented, adopted, or producing value.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "383b68e2-d601-44ac-adc6-abbd5720f0df",
+          "type": "text",
+          "title": "",
+          "body": "<p>“I&#39;M NOT CREATIVE”</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b9284a6e-90f0-46ff-a768-3b85a513b9db",
+          "type": "text",
+          "title": "",
+          "body": "<p>Creative thinking is not a personality label or artistic talent. Questioning, reframing, divergence, connection-making, elaboration, convergence, and testing are learnable behaviors.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bb08fed1-de53-4826-a4fe-641f3d99af18",
+          "type": "heading",
+          "title": "Efficiency can quietly become a boundary.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ca80755e-4906-4490-a4dd-e7d636f1d024",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Experience helps us recognize patterns quickly&#x2014;but the same efficiency can make our thinking predictable. The goal is not to reject experience. It is to notice when familiar thinking has become the only thinking.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "667c7e5d-d7ae-46f1-ab30-9e6ac2597fb7",
+          "type": "text",
+          "title": "",
+          "body": "<p>Mental models</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f86cae3c-30db-4053-a1d9-0b1873f8adb1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Internal pictures of how the world works can become invisible rules.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "38aab0e8-8e32-4c25-ac6e-87c5bdf972c5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Assumptions</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d3c426ff-8641-497b-a1e3-dc8446e3f899",
+          "type": "text",
+          "title": "",
+          "body": "<p>Things treated as true even though they may not have been tested.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "79e3fdf9-bc36-48f1-a7f4-a2c61b566009",
+          "type": "text",
+          "title": "",
+          "body": "<p>Functional fixedness</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0496cc69-45ae-4d2e-a6c1-15767b0cff6f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Seeing a tool, process, or role only in its familiar use.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ee1c6d34-a3be-4835-a0c6-7f152496cd2c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Habit + expertise</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0c99b78b-9bb8-4bab-a03d-91e8a142d182",
+          "type": "text",
+          "title": "",
+          "body": "<p>Past success can narrow the search to approaches we already know.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f1e41a7d-1da2-4f73-aa28-d276355bd370",
+          "type": "text",
+          "title": "",
+          "body": "<p>Organizational norms</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2c3ba6c8-fc99-4114-a14b-de7e266709d8",
+          "type": "text",
+          "title": "",
+          "body": "<p>&#x201c;That is how we do it here&#x201d; can become a substitute for examination.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "010b5d66-56be-4e5c-ac86-bec017516e6d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Fear of failure</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f69fadfc-6193-4e81-a190-d3a85c480c22",
+          "type": "text",
+          "title": "",
+          "body": "<p>People self-censor before an idea is developed enough to judge fairly.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8617cc16-a75f-4a76-a6b3-a36658d4d2cb",
+          "type": "text",
+          "title": "",
+          "body": "<p>Premature judgment</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d6bcf977-ab3e-4009-ad73-a07883d1edfc",
+          "type": "text",
+          "title": "",
+          "body": "<p>Evaluation begins before the group has generated meaningful variety.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "646bf567-0ca3-47ac-ac0a-e564668cdd13",
+          "type": "text",
+          "title": "",
+          "body": "<p>Group conformity</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0fc7abde-3698-44cc-a79e-4fd649abe126",
+          "type": "text",
+          "title": "",
+          "body": "<p>Agreement can feel safer than exploring a different frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3ced2874-c839-409c-a900-44fe13984374",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "31796b18-611b-4a43-aec3-08997b372b2b",
+          "type": "heading",
+          "title": "The Assumption Breaker",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7a6977bc-ea30-44e1-ad68-d2c7db6f4802",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Challenge:</strong> Employees are not completing required training on time. Identify three assumptions, classify each, then imagine it is no longer true.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "09b0f1ed-5d1a-406d-a555-0b5eb8916584",
+          "type": "reflection",
+          "title": "ASSUMPTION 1",
+          "body": "<p>What are we treating as true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bf9d4873-bbfe-46ca-a934-45a29c50c7b3",
+          "type": "reflection",
+          "title": "ASSUMPTION 1",
+          "body": "<ul><li>Fact</li><li>Requirement</li><li>Habit / belief</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c7dc73bc-b742-4a8f-a914-9291237f1cad",
+          "type": "reflection",
+          "title": "ASSUMPTION 1",
+          "body": "<p>If this were no longer true, what new idea becomes possible?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0248f05a-86b8-45ca-a62d-c67b06e6b5f5",
+          "type": "reflection",
+          "title": "ASSUMPTION 2",
+          "body": "<p>What are we treating as true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9a00247d-030e-417c-a97e-326c03610bec",
+          "type": "reflection",
+          "title": "ASSUMPTION 2",
+          "body": "<ul><li>Fact</li><li>Requirement</li><li>Habit / belief</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5dba68a9-03c3-413d-a048-e45374995b61",
+          "type": "reflection",
+          "title": "ASSUMPTION 2",
+          "body": "<p>If this were no longer true, what new idea becomes possible?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6afd755a-c23b-4770-a027-a025d3e54386",
+          "type": "reflection",
+          "title": "ASSUMPTION 3",
+          "body": "<p>What are we treating as true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9392ba44-cf08-42ac-a2d3-a2d3b4280155",
+          "type": "reflection",
+          "title": "ASSUMPTION 3",
+          "body": "<ul><li>Fact</li><li>Requirement</li><li>Habit / belief</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "61ee5601-7a1e-47e2-a22e-baf3c2ba14e2",
+          "type": "reflection",
+          "title": "ASSUMPTION 3",
+          "body": "<p>If this were no longer true, what new idea becomes possible?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d758f0f6-2ddf-47aa-a9db-e3813f940b3d",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10cc2991-ad49-4ee1-abfa-ffaf2f107daf",
+          "type": "heading",
+          "title": "The Constraint Challenge",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e741d42f-1a9d-4c94-aa24-1ec12f50e59c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Improve communication across an organization four times. Notice whether reduced resources merely weaken the idea&#x2014;or force a different category of thinking.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c95f4908-23de-42fa-a788-8f7c7065d9eb",
+          "type": "reflection",
+          "title": "VERY LARGE BUDGET",
+          "body": "<p>What would you do?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f16b172e-bc84-4caf-a739-19ac0956baa3",
+          "type": "reflection",
+          "title": "$10,000",
+          "body": "<p>What changes?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a272059e-bda6-4d8d-a7c8-534971240e1a",
+          "type": "reflection",
+          "title": "$500",
+          "body": "<p>What changes now?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c310f648-199c-43d1-a88d-6e88a2e45282",
+          "type": "reflection",
+          "title": "$0 · NO NEW MEETING · NO MASS EMAIL",
+          "body": "<p>What behavior, workflow, ownership, or information-flow redesign becomes possible?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f0ca3be8-55f2-4f52-a409-c3109b6ca1a9",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "77a285f1-bf29-4c70-a996-e3c272ce45cf",
+      "title": "Explore",
+      "description": "",
+      "blocks": [
+        {
+          "id": "260691a0-09aa-4fec-a0f5-3b1b4962a1d9",
+          "type": "heading",
+          "title": "EXPLORE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "664b6e94-74eb-4439-a874-90c83e1875aa",
+          "type": "text",
+          "title": "",
+          "body": "<p>Investigate before you solve. Curiosity changes the quality of the problem you are trying to fix.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f223f57f-b110-473a-ae22-4c28967880c5",
+          "type": "heading",
+          "title": "For a moment, solutions are not allowed.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "27336e15-ec9f-4f9b-ac35-e9b7ac93b158",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">An organization is seeing declining participation in voluntary professional development. Traditional announcements, reminders, and supervisor encouragement have produced little improvement.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d112f2d5-e126-4258-aabb-4e1fbc13aaac",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Generate five questions before offering a single solution.</strong> Use the prompts as inspiration, but write your own questions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b65f7139-21be-4ec0-a40e-f305a0dc2dff",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"promptShelf\"><span class=\"promptChip\">What are we missing?</span><span class=\"promptChip\">Why is this happening?</span><span class=\"promptChip\">Who experiences this differently?</span><span class=\"promptChip\">What has already been tried?</span><span class=\"promptChip\">What would success look like?</span><span class=\"promptChip\">What if the opposite were true?</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e204142b-5e3e-416c-ac0e-bf3b7dc38b11",
+          "type": "reflection",
+          "title": "Explore: Question 1",
+          "body": "<p>Write a question, not a solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "127ca4b6-b526-465a-afb2-db1ed606ee0c",
+          "type": "reflection",
+          "title": "Explore: Question 2",
+          "body": "<p>Write a question, not a solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e67a685c-53be-4c47-a296-3d93d5dc8ee6",
+          "type": "reflection",
+          "title": "Explore: Question 3",
+          "body": "<p>Write a question, not a solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d267a591-fb22-4ff9-accc-a35de40ebfb7",
+          "type": "reflection",
+          "title": "Explore: Question 4",
+          "body": "<p>Write a question, not a solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "eb80c8fb-1773-4ade-aaa4-f86e915465a5",
+          "type": "reflection",
+          "title": "Explore: Question 5",
+          "body": "<p>Write a question, not a solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "dd1123f2-4fb8-4b30-a90a-128c31b030c1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strong exploration widens what you know before you narrow what you will do. Curiosity is active investigation—not delay.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7abb302e-c87a-4dd1-ae9f-b7845806c3ef",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "e912f545-465f-4d8a-af26-6f7d49be7d5f",
+      "title": "Reframe",
+      "description": "",
+      "blocks": [
+        {
+          "id": "8ccbb8ba-86b5-406a-af74-34a38e077c1e",
+          "type": "heading",
+          "title": "REFRAME",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5d255ff4-90ce-4b02-a96c-b214d63c0793",
+          "type": "text",
+          "title": "",
+          "body": "<p>The way a problem is stated determines where the mind searches for answers.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f0c068d4-7731-4135-a827-92662bc6465c",
+          "type": "heading",
+          "title": "Do not solve the first version of the problem automatically.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f119fa2b-582f-4b78-a9b0-5583e64ba59e",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\"><strong>Original frame:</strong> &#x201c;How do we get employees to attend training?&#x201d; Create <strong>five different frames</strong> that change where the mind searches for answers.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "945b069e-7329-4c58-a2fe-7d4bc1ce1557",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"promptShelf\"><span class=\"promptChip\">Motivation</span><span class=\"promptChip\">Delivery</span><span class=\"promptChip\">Workflow</span><span class=\"promptChip\">Value</span><span class=\"promptChip\">Choice</span><span class=\"promptChip\">Access</span><span class=\"promptChip\">Stakeholder perspective</span><span class=\"promptChip\">Reverse framing</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ec856cfa-f168-46c3-a473-e1a23e8c8bcd",
+          "type": "reflection",
+          "title": "Reframe 1",
+          "body": "<p>How might we…? Create a meaningfully different problem frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "82690bfa-2b69-4d40-a1ed-bd7d354e269e",
+          "type": "reflection",
+          "title": "Reframe 2",
+          "body": "<p>How might we…? Create a meaningfully different problem frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3ff4c185-0545-42dc-a29a-00ea0f7f0bd3",
+          "type": "reflection",
+          "title": "Reframe 3",
+          "body": "<p>How might we…? Create a meaningfully different problem frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1fda7e9e-f5a3-4e10-ad64-78ceb0c50fac",
+          "type": "reflection",
+          "title": "Reframe 4",
+          "body": "<p>How might we…? Create a meaningfully different problem frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "cd0141a0-5258-47a5-a561-cadfa4d69f98",
+          "type": "reflection",
+          "title": "Reframe 5",
+          "body": "<p>How might we…? Create a meaningfully different problem frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2580ecb0-9226-487f-a965-4bf2b1c880c3",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reframing is not wordsmithing. A useful reframe changes what counts as a possible solution—for example, shifting from attendance to motivation, from an event to continuous learning, or from organizational delivery to employee pull.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6071bb38-5e8b-45a5-a5b0-87a3f28470ed",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "48d000d1-123c-4ca1-ab24-388aaca90259",
+          "type": "heading",
+          "title": "Eliminate the Process",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "94b816ff-ed30-4ac9-ad80-64320202c627",
+          "type": "text",
+          "title": "",
+          "body": "<p>Choose a familiar process. First ask how to improve it. Then ask how the need for the process might be eliminated entirely.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8f56a10a-5a80-46e0-a260-59dbd7da6fe8",
+          "type": "reflection",
+          "title": "NORMAL IMPROVEMENT",
+          "body": "<p>How could we make the existing process better?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "64dfebb4-0b7c-41e8-a63a-6164f2e258f4",
+          "type": "reflection",
+          "title": "ELIMINATE THE NEED",
+          "body": "<p>How could we prevent or redesign the conditions that make this process necessary?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f48c3bde-7a48-4896-a215-04ae5203d80f",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ff096261-e4e9-4e19-ab20-c30567167fd2",
+          "type": "heading",
+          "title": "One Problem — Four Perspectives",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b17cc032-3c24-42e1-a81f-23e99ea8075c",
+          "type": "text",
+          "title": "",
+          "body": "<p>A new organizational policy is being implemented, but employees are resisting it. What does each perspective care about, fear, and need?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0b0017e0-e9c1-4f17-a5e2-a1e8bbe3d5a5",
+          "type": "reflection",
+          "title": "EMPLOYEE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "13498bc1-225b-4b08-a8bf-b6e3c9e92a2e",
+          "type": "reflection",
+          "title": "SUPERVISOR",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c8f3e64d-1642-4558-a95f-cdccc9881058",
+          "type": "reflection",
+          "title": "SENIOR LEADER",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "92bbe716-ea5a-435e-a708-b08f7fe8043a",
+          "type": "reflection",
+          "title": "CUSTOMER / STAKEHOLDER",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "aab49c4c-b71a-4b37-a8af-aac2d9bbcf95",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "eda21b8b-8049-4d67-aba9-b632c26c7cd1",
+      "title": "Diverge",
+      "description": "",
+      "blocks": [
+        {
+          "id": "75241358-72a3-46d1-accd-87999e894832",
+          "type": "heading",
+          "title": "DIVERGE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e1081585-fca1-4fb8-af6f-519e3d52d3fa",
+          "type": "text",
+          "title": "",
+          "body": "<p>Separate idea generation from evaluation long enough to get beyond the obvious.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8b524058-c0f0-4657-ae0a-cd65e5943d5c",
+          "type": "heading",
+          "title": "Quantity creates room for quality.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e49d6016-4a9f-4687-ae84-f80398994eda",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">The first few ideas are often familiar because memory retrieves what is easiest to access. Deliberate divergence pushes past that first layer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a7ca45e7-9124-48c8-a65a-82efcea792c6",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"metricCard\"><b>Fluency</b><span>How many ideas can you generate?</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "16ccd14d-1679-491b-a0a5-4e2852a2bb1f",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"metricCard\"><b>Flexibility</b><span>How many different categories can you explore?</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "eeab4220-9be7-445b-a0b3-7dca0ed107c4",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"metricCard\"><b>Originality</b><span>How different are the ideas from the obvious response?</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6bd3702e-a2df-45bd-a735-823487623de5",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"divergeVisual\" aria-label=\"Ideas spreading outward from a central point\">\n      <i class=\"ray r1\"></i><i class=\"ray r2\"></i><i class=\"ray r3\"></i><i class=\"ray r4\"></i><i class=\"ray r5\"></i><i class=\"ray r6\"></i><i class=\"ray r7\"></i><i class=\"ray r8\"></i>\n      <span class=\"bubble b1\">A</span><span class=\"bubble b2\">B</span><span class=\"bubble b3\">C</span><span class=\"bubble b4\">D</span><span class=\"bubble b5\">E</span><span class=\"bubble b6\">F</span><span class=\"bubble b7\">G</span><span class=\"bubble b8\">H</span>\n    </div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6e846b66-4512-41ac-a024-3bdfacef84e7",
+          "type": "heading",
+          "title": "Push beyond your first answer.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "36495ca9-743c-4dc9-a16e-0ad57b1ae04a",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\"><strong>Challenge:</strong> How could we improve communication between two organizational units that rarely interact? Generate twenty ideas before evaluating any of them. Short phrases are enough.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "40812557-4730-4749-adac-fcdc721685c9",
+          "type": "reflection",
+          "title": "Diverge: Idea 1",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3fb28beb-f5e9-49cc-aa8b-6f9ecc2e375f",
+          "type": "reflection",
+          "title": "Diverge: Idea 2",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "bb91bbee-8b89-44f0-a2e4-df4f6f696cd9",
+          "type": "reflection",
+          "title": "Diverge: Idea 3",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3845ff41-77bc-4911-afed-3df818da594c",
+          "type": "reflection",
+          "title": "Diverge: Idea 4",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a0d14d97-e114-4ec0-a292-28aa5014dbcf",
+          "type": "reflection",
+          "title": "Diverge: Idea 5",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e2ba8592-68f7-4965-a111-3712338d5340",
+          "type": "reflection",
+          "title": "Diverge: Idea 6",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0cb78ee3-53f9-413c-ad95-e7dfcebcace6",
+          "type": "reflection",
+          "title": "Diverge: Idea 7",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5cfe6afd-c521-4c2e-ac4e-1aad68ee3919",
+          "type": "reflection",
+          "title": "Diverge: Idea 8",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6e9fa803-f7c6-4c81-ae98-d0f81b04a6da",
+          "type": "reflection",
+          "title": "Diverge: Idea 9",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "72ff33be-9984-4444-a0d7-5eb05948034c",
+          "type": "reflection",
+          "title": "Diverge: Idea 10",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "25ba88a7-8080-48fe-adee-d6305a11eae4",
+          "type": "reflection",
+          "title": "Diverge: Idea 11",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4cd41768-04f1-452a-a053-ea64ee3aa136",
+          "type": "reflection",
+          "title": "Diverge: Idea 12",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f89e0a79-b9fb-4f09-aaac-1f55723e6c0e",
+          "type": "reflection",
+          "title": "Diverge: Idea 13",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "673e9af6-62f1-4a8f-a58d-f6302c48300a",
+          "type": "reflection",
+          "title": "Diverge: Idea 14",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5138507a-1094-413d-af29-d7d80630f5df",
+          "type": "reflection",
+          "title": "Diverge: Idea 15",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "10cb7271-18ad-4a33-ab3b-071100cd82db",
+          "type": "reflection",
+          "title": "Diverge: Idea 16",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "df8230df-861a-4481-a20c-e639ec3b616d",
+          "type": "reflection",
+          "title": "Diverge: Idea 17",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "05bbb8a3-0425-472f-a326-4b67cb88adea",
+          "type": "reflection",
+          "title": "Diverge: Idea 18",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "7040b5d1-6df0-4a58-a988-5110077f1f7c",
+          "type": "reflection",
+          "title": "Diverge: Idea 19",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "49ef6e0c-86ae-4503-a761-ddbc21391666",
+          "type": "reflection",
+          "title": "Diverge: Idea 20",
+          "body": "<p>Generate another possibility before judging the ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b8bacbcf-37b4-495a-aa5a-8661293f7fff",
+          "type": "text",
+          "title": "",
+          "body": "<p>Now mark the pattern mentally: Which idea is most realistic? Most unusual? Which has the greatest potential if developed? The later ideas often appear only after familiar answers are exhausted.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f2af2e89-9aac-49ff-a011-ec888b0b6596",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3b3f8237-b3dd-48c1-aebd-d5d54df5d4da",
+          "type": "heading",
+          "title": "$10 / $10,000 / $1 Million",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "191b07db-91dd-4d0d-af5e-cb7fadff183b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Solve the same workplace problem under three radically different resource levels, then combine the strongest elements.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "aa2a4d94-3937-45b4-a1d6-fc0402fd2633",
+          "type": "reflection",
+          "title": "$10 SOLUTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bed64bbe-e6c2-4cdc-a4c8-cd3ec2d09c4d",
+          "type": "reflection",
+          "title": "$10,000 SOLUTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6e8f625a-3d2e-4aef-a510-d1f8d904f02a",
+          "type": "reflection",
+          "title": "$1 MILLION SOLUTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9921a760-a53b-4ace-a5f5-331dd2213e69",
+          "type": "reflection",
+          "title": "HYBRID SOLUTION",
+          "body": "<p>Combine the smartest elements from all three.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6cedac7b-2581-4e04-a5dd-7841603a1e1c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "0338f9fc-b528-4e44-a1ca-3185ef60f529",
+      "title": "Connect and SCAMPER",
+      "description": "",
+      "blocks": [
+        {
+          "id": "a4c0fe20-73c1-4495-a00b-8bca18c72f5b",
+          "type": "heading",
+          "title": "CONNECT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "426a04a5-7ffe-42e4-a74c-2b9502f8ac0d",
+          "type": "text",
+          "title": "",
+          "body": "<p>New ideas often come from combining existing ideas, borrowing patterns, or changing the source of inspiration.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "45b885d3-c17f-4146-aa54-7c396d206530",
+          "type": "heading",
+          "title": "Where else has a version of this problem been solved?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "75655767-7b0a-4121-a452-0ee61d2b8f5f",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Choose an outside environment. Then ask what principles from that environment could transfer to professional development.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ec2ca179-9f66-4cc9-a5b5-0fd00c8e2a03",
+          "type": "tabs",
+          "title": "Borrow a principle from another environment",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "07f3f21a-1173-4d87-ae2b-e445baadd82f",
+              "title": "AIRPORT",
+              "text": "<p>How do airports move many people through a predictable sequence with visible wayfinding and timed transitions?</p>",
+              "image": ""
+            },
+            {
+              "id": "f3e0510e-e423-49c6-ab4d-f45553bb2599",
+              "title": "HOTEL",
+              "text": "<p>How do hotels personalize service while using repeatable systems behind the scenes?</p>",
+              "image": ""
+            },
+            {
+              "id": "a89efafa-fd37-4bd4-ab90-02dbb43a4e06",
+              "title": "RETAIL",
+              "text": "<p>How do high-volume retailers reduce friction and make choices easy to see?</p>",
+              "image": ""
+            },
+            {
+              "id": "32206f26-ea35-4dca-ab1c-4203f5cfdc77",
+              "title": "EMERGENCY ROOM",
+              "text": "<p>How do emergency departments triage competing needs when not everything can happen at once?</p>",
+              "image": ""
+            },
+            {
+              "id": "b50f3db9-3f6d-46a9-a142-b72d5c35c1cc",
+              "title": "KINDERGARTEN",
+              "text": "<p>How do young learners use short cycles, visible progress, play, and immediate feedback?</p>",
+              "image": ""
+            },
+            {
+              "id": "76eb1400-f6f6-4052-ac98-8b68eceae477",
+              "title": "SPORTS TEAM",
+              "text": "<p>How do teams build skill through practice, coaching, repetition, and rapid feedback?</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "afc8f57b-fa5c-4a5e-aa3e-711f7e8746d3",
+          "type": "reflection",
+          "title": "What principle from that outside environment could transfer to this challenge?",
+          "body": "<p>What principle from that outside environment could transfer to this challenge?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "021042a0-2ca5-4464-afd9-d7bed3566f49",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "82f839ff-bc0f-4bbd-a24b-fb114c0f8d90",
+          "type": "heading",
+          "title": "Idea Mash-Up",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "57efa75f-7887-49be-a118-e3a595e0ce15",
+          "type": "text",
+          "title": "",
+          "body": "<p>Forced connections disrupt predictable associations. Combine a workplace topic with something that appears unrelated, then extract a useful feature or principle.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b09ce4c2-beb1-43d5-af26-924bca082d78",
+          "type": "reflection",
+          "title": "PAIRING",
+          "body": "<ul><li>Training + Netflix</li><li>Employee recognition + video games</li><li>Communication + airport</li><li>Onboarding + hotel</li><li>Scheduling + emergency room</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "38eeb58a-9d36-44f5-a02e-13ab67731f37",
+          "type": "reflection",
+          "title": "WHAT COULD TRANSFER?",
+          "body": "<p>What unexpected workplace idea emerges?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9e555480-bc61-4471-ac71-50bcef160aad",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "e8d4f8c0-c663-43bd-a26a-f383e37c528b",
+          "type": "heading",
+          "title": "Structure can stimulate creativity.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d9fa65c2-2de0-4fc0-a9e9-1ecb18dda2dd",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">SCAMPER changes the search pattern by deliberately prompting different kinds of transformation. <strong>Produce at least one idea for every letter.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2402c303-2bf1-464b-a332-06ef205e07e9",
+          "type": "reflection",
+          "title": "S · Substitute",
+          "body": "<p>What could we replace?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "52b907c8-2732-4574-a821-4880c267cb8c",
+          "type": "reflection",
+          "title": "C · Combine",
+          "body": "<p>What could we put together?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "738e0ae2-1759-49ff-a20f-f6f35b9289b2",
+          "type": "reflection",
+          "title": "A · Adapt",
+          "body": "<p>What could we borrow or modify from somewhere else?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1543cd72-000c-4529-a6ec-697680ab70eb",
+          "type": "reflection",
+          "title": "M · Modify",
+          "body": "<p>What could we increase, decrease, simplify, magnify, or change?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "15abfae8-a4f8-4bb6-aa9f-b5cd05c452a1",
+          "type": "reflection",
+          "title": "P · Put to another use",
+          "body": "<p>What existing resource could serve a different purpose?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "792e06c2-3e8a-4b35-a84a-c4a32b6ac4ec",
+          "type": "reflection",
+          "title": "E · Eliminate",
+          "body": "<p>What step, approval, handoff, or requirement could disappear?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8bddedf8-b8c8-487d-ade5-69ffaabeeac2",
+          "type": "reflection",
+          "title": "R · Reverse / Rearrange",
+          "body": "<p>What happens if we change the order or reverse who initiates the process?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f5e93668-81d6-4650-a952-d74eb9b88402",
+          "type": "text",
+          "title": "",
+          "body": "<p>Now identify the two SCAMPER ideas with the most potential. The point is not that every prompt produces a great idea; each prompt changes the search pattern.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "40d5f822-c096-442d-a985-751db3be97da",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reverse thinking</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9f45d5e1-0638-4cf3-a016-79189f15dcfa",
+          "type": "text",
+          "title": "",
+          "body": "<p>Design the opposite or worst result, then reverse the conditions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "02010111-7a8b-474e-aa13-4615a0b70510",
+          "type": "text",
+          "title": "",
+          "body": "<p>Six Thinking Hats</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b851d3d1-8c7d-4fd3-aa9d-11b6477c3280",
+          "type": "text",
+          "title": "",
+          "body": "<p>Deliberately shift the mode of attention used to examine an idea.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "dec103fc-09bd-409e-a11c-340002c7d38b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Attribute listing</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "edfe2af9-8a31-436d-aa15-e7a5d6b73633",
+          "type": "text",
+          "title": "",
+          "body": "<p>Break a product, service, or process into attributes and alter them one at a time.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "936196aa-8fff-4f1d-ab24-49e3c6b8b4be",
+          "type": "text",
+          "title": "",
+          "body": "<p>Morphological analysis</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "19676f3c-f3f2-455e-a71a-3dab228416e1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Combine different dimensions or features systematically.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "223aaab3-f8b7-4ecf-acf9-24e65697700c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Constraint removal</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "895ab66a-b144-48cf-a887-5d4d6786702d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Temporarily remove a presumed limitation and examine what becomes possible.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b7c74020-325e-4964-aebf-39380ba5d786",
+          "type": "text",
+          "title": "",
+          "body": "<p>Worst Possible Idea</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e21b9b9d-8a0c-4ad2-adf0-d6dd0aa7d75d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate deliberately bad ideas to expose constructive design principles.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9cdf5c6b-3ea6-401b-a440-026e70d18c2f",
+          "type": "text",
+          "title": "",
+          "body": "<p>OPTIONAL / ALTERNATE PRACTICE LAB</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5c787a19-415a-4a32-ae6e-180c0837e26b",
+          "type": "heading",
+          "title": "Worst Possible Idea",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "eec9ab92-bdc8-4be3-a550-a8195062b03b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Design the worst employee onboarding experience you can imagine. Then reverse the failures into useful design principles.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bd0427ae-5629-492b-a9cc-294d664a48af",
+          "type": "reflection",
+          "title": "MAKE IT TERRIBLE",
+          "body": "<p>No instructions? Conflicting guidance? Information overload? Make it intentionally bad.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8b4def4b-5174-4df2-ac75-a01c508ac995",
+          "type": "reflection",
+          "title": "REVERSE IT",
+          "body": "<p>What constructive principles appear when you reverse the failures?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "71273f41-5301-48fa-a3e0-0a445794f7b1",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "9d1ea9bf-06ca-46cc-a6df-0ed5f522c515",
+      "title": "Develop",
+      "description": "",
+      "blocks": [
+        {
+          "id": "ffa7609c-24d8-47c5-a56f-8b5eab6e475a",
+          "type": "heading",
+          "title": "DEVELOP",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c2098fc5-5684-47e6-a158-e63dfb2da21f",
+          "type": "text",
+          "title": "",
+          "body": "<p>An idea becomes useful when you can explain how it would actually work.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d0d947f5-5e93-40a5-a454-fece1b1cc227",
+          "type": "heading",
+          "title": "Make one idea concrete enough to examine.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "36b08fd1-6ed8-444b-aebc-31fd80a3c7e7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Choose one idea from your earlier list and develop it. A vague idea is hard to evaluate; an elaborated idea can be improved, combined, or tested.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ef5883ec-0cd7-4771-ac74-0fc564cbf618",
+          "type": "reflection",
+          "title": "THE IDEA",
+          "body": "<p>What is the concept?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2f8533d8-2a7a-4b7c-a383-0c8169b602d2",
+          "type": "reflection",
+          "title": "WHO USES IT?",
+          "body": "<p>Who participates or benefits?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "41ac25ad-7e25-4134-ad90-a52b0cd3f441",
+          "type": "reflection",
+          "title": "WHAT HAPPENS FIRST?",
+          "body": "<p>Describe the first visible step.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5cfdef08-3f62-466a-a11b-192d85d4db88",
+          "type": "reflection",
+          "title": "WHAT HAPPENS NEXT?",
+          "body": "<p>How does the process continue?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "64d0909c-f3a1-4d95-aa83-252b0ed56bc3",
+          "type": "reflection",
+          "title": "RESOURCES REQUIRED",
+          "body": "<p>What people, tools, time, or support are needed?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a1d22939-134e-4daa-a5e1-3d592afb4fcb",
+          "type": "reflection",
+          "title": "BEHAVIOR CHANGE",
+          "body": "<p>What would people have to do differently?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3c7670e2-7698-43da-a86e-865f9d178890",
+          "type": "reflection",
+          "title": "BIGGEST BARRIER",
+          "body": "<p>What could prevent it from working?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2ed776ba-e49d-43a1-adf7-858880a76889",
+          "type": "reflection",
+          "title": "ASSUMPTION TO TEST",
+          "body": "<p>What are you assuming about people or the process?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ebd990a6-1f6b-4397-ad03-618e69bd96d2",
+          "type": "text",
+          "title": "",
+          "body": "<p>Development turns “interesting” into “understandable.” Once an idea is concrete, you can compare it with alternatives and identify what needs to be tested.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "002390e2-a348-4da0-a78b-47681d47e487",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "719138af-c38e-43c5-ac42-02df8d4d8760",
+      "title": "Converge and Idea Tournament",
+      "description": "",
+      "blocks": [
+        {
+          "id": "2baf774e-dda0-4ffe-a5a1-f72d01d6ee45",
+          "type": "heading",
+          "title": "CONVERGE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "31f13dc1-1da5-41e0-adae-84a3f6479fad",
+          "type": "text",
+          "title": "",
+          "body": "<p>Narrow deliberately. Criteria should shape selection before preference takes over.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c809e0fb-e4a8-479b-a6b0-170a9c123969",
+          "type": "heading",
+          "title": "Choose how you will judge ideas before choosing the idea.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "93ddb15a-f6b0-460f-a7d1-873401835076",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select at least three criteria that matter for this challenge.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "85dd5f8c-01df-4883-a6b4-93716fbca890",
+          "type": "reflection",
+          "title": "Choose five criteria before narrowing ideas",
+          "body": "<p>Choose five criteria, explain their importance, and carry them into the tournament.</p><ul><li>Mission impact</li><li>Effectiveness</li><li>Feasibility</li><li>Time</li><li>Cost</li><li>Risk</li><li>Stakeholder acceptance</li><li>Policy / legal fit</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d2cb4777-153f-4e4e-ae67-db82f7158eba",
+          "type": "text",
+          "title": "",
+          "body": "<p>Visible criteria make convergence more defensible. Strong teams can also combine useful elements from ideas that do not survive as stand-alone options.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "145acf06-cef8-4fb7-aa28-c1f573a08a80",
+          "type": "text",
+          "title": "",
+          "body": "<p>Decision matrix</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5428cd4b-c621-4ddf-ac88-bcc9cb3ebab5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Score options against explicit weighted criteria.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6a200192-7307-4d07-aa6f-023881a8aff3",
+          "type": "text",
+          "title": "",
+          "body": "<p>Impact–effort grid</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ed69799f-e08b-44ff-a1ed-27dccac7c103",
+          "type": "text",
+          "title": "",
+          "body": "<p>Compare likely value with the effort required.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "46d4834e-040f-4f29-a317-674f8627400f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Dot voting</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "051824d5-9811-4d84-a165-976642db5633",
+          "type": "text",
+          "title": "",
+          "body": "<p>Surface preferences quickly&#x2014;but explain why ideas survived.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e45bb1db-5b3b-4ee8-afae-bd8c9f79490c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Pros / cons</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a6a30f8e-fa21-4fff-a4f6-6e7073f024a2",
+          "type": "text",
+          "title": "",
+          "body": "<p>Make tradeoffs visible before commitment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3a14589a-eaf0-44f2-af59-3ffafa9baffc",
+          "type": "text",
+          "title": "",
+          "body": "<p>Must / should / could</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1cfd80ef-0c35-4576-a51d-1da7dd966d0a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Separate essential requirements from desirable features.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7bd5dd4d-3e67-465c-aae2-233038235c83",
+          "type": "text",
+          "title": "",
+          "body": "<p>Combine ideas</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ef920e0c-960e-4852-a09e-a79700f477f4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Convergence can create a hybrid rather than crown an unchanged winner.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7c3121a0-981b-4a46-abb9-5a411c2c821a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "b42e261f-7926-4f9f-a8f7-7a8250267749",
+          "type": "heading",
+          "title": "Narrow without shutting down too early.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6721da05-04e1-4cea-affb-601002d35c08",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Carry your 20 ideas into a deliberate convergence sequence. Criteria come before preference, and elimination does not mean useful features must disappear.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "4b990e91-a40c-4e0f-aa90-799b5098c532",
+          "type": "heading",
+          "title": "Round 1 · Select 10",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "303c2035-b868-4899-aaa8-32aa7ab29f3e",
+          "type": "reflection",
+          "title": "Tournament: Select 10",
+          "body": "<p>Review your 20 ideas. List the 10 you want to carry forward.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0a0467d2-4727-470b-a3f0-30698eca84aa",
+          "type": "text",
+          "title": "",
+          "body": "<p>0 of 10 selected</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4cc61386-c5fb-416f-ac51-cb7ec2da5575",
+          "type": "heading",
+          "title": "Round 2 · Narrow 10 to 6",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "47e6dbc6-f034-4458-aa56-0df8468d2022",
+          "type": "reflection",
+          "title": "Tournament: Select 6",
+          "body": "<p>From your 10 selected ideas, choose six and record why they survived.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4db9145e-5b40-488e-ab74-2477aac968e9",
+          "type": "text",
+          "title": "",
+          "body": "<p>0 of 6 selected</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5ae82abc-3aa8-480b-aef8-466918ac5e7b",
+          "type": "heading",
+          "title": "Round 3 · Narrow 6 to 3 finalists",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dde95409-9e99-4f9e-a31b-485ccac9ea69",
+          "type": "reflection",
+          "title": "Tournament: Select 3",
+          "body": "<p>Choose three finalists using your criteria.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "de89fd9a-9a9c-48b0-a8c5-b4baee6ff7fd",
+          "type": "text",
+          "title": "",
+          "body": "<p>0 of 3 finalists selected</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0898c57e-0c06-48b3-ace6-5abed4579030",
+          "type": "heading",
+          "title": "Before the final choice",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "65105a9b-8221-4c93-a0de-6c41f600afed",
+          "type": "reflection",
+          "title": "WHY DID THESE IDEAS SURVIVE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "29f7497c-e925-4ff6-a318-4d0a65cfd552",
+          "type": "reflection",
+          "title": "WHAT VALUABLE ELEMENT MIGHT BE LOST?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "183cd839-12fe-4c80-a7dc-70dc1d8ed30f",
+          "type": "reflection",
+          "title": "COULD TWO IDEAS BE COMBINED?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a048ed45-027d-4e12-a6eb-8bdc954185e8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Healthy convergence narrows without shutting down thinking too soon. A final concept may combine the strongest elements of several ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0e7fbc09-331a-4c99-a535-0d1aa4fa1008",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "b20e7efa-af76-4007-a3ce-bd5edb99618b",
+          "type": "heading",
+          "title": "Which idea has the strongest potential against your criteria?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "af8cef89-c207-4280-a43d-59ee8801e02b",
+          "type": "reflection",
+          "title": "Tournament: Select 1",
+          "body": "<p>Choose the concept with the strongest potential against your criteria.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9c2ca3d6-c4ce-4d23-a737-329db65789fc",
+          "type": "text",
+          "title": "",
+          "body": "<p>Selection is not the end of creative thinking. A promising idea is still a hypothesis. The next question is what you need to learn before scaling it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3e291a41-4613-44e1-ab22-c55d857663ca",
+          "type": "reflection",
+          "title": "WHY THIS CONCEPT?",
+          "body": "<p>Explain why it is strongest against the criteria.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "df120a36-54a8-485f-acf1-8fe08034855f",
+          "type": "reflection",
+          "title": "WHAT SHOULD IT BORROW FROM OTHER IDEAS?",
+          "body": "<p>Preserve any useful feature that should survive elimination.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ca021a83-1147-4938-ae1c-22f13569f738",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "27b08f17-74ea-4994-a73a-0605854682d5",
+      "title": "Test",
+      "description": "",
+      "blocks": [
+        {
+          "id": "51631421-700a-42aa-a6c6-d36476c22e72",
+          "type": "heading",
+          "title": "TEST",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a32225cd-edb0-453a-ab05-ac9a6108ce01",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reduce the cost of learning. Test the idea before defending it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "becf7cd0-2e60-4afd-ab45-fccfeabd4ad5",
+          "type": "heading",
+          "title": "What is the smallest test that would teach you something useful?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bb6dc46f-6b14-4607-a536-3d8a1a5ae1f7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Do not launch organization-wide. Build a low-risk pilot with clear learning criteria.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "70e5a845-1aa3-44fa-abb1-7420fd571288",
+          "type": "reflection",
+          "title": "ASSUMPTION TO TEST",
+          "body": "<p>What must be true for this idea to work?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6653eb00-8613-4560-a528-744abfac41e4",
+          "type": "reflection",
+          "title": "SMALLEST USEFUL PILOT",
+          "body": "<p>Who, where, and for how long?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b05a89d4-95cb-4556-a86f-81ec70b70b6f",
+          "type": "reflection",
+          "title": "EVIDENCE TO COLLECT",
+          "body": "<p>What will you measure or observe?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "bc1dfabb-c235-47b9-a137-0e59e67f2562",
+          "type": "reflection",
+          "title": "RISKS TO CONTROL",
+          "body": "<p>What risk must the pilot limit or monitor?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3b7fc151-bbc3-44d7-ac9e-9b1062af3d83",
+          "type": "reflection",
+          "title": "CONTINUE / ADJUST / STOP",
+          "body": "<p>What result would change your next move?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6949d962-746c-4410-ac12-d6330aee042c",
+          "type": "text",
+          "title": "",
+          "body": "<p>A failed experiment is not automatically a failed effort. If the test produces useful information, it reduces uncertainty and improves the next version.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4c803675-b252-4405-a733-bb41ef6aaf18",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "f95de277-bb9f-4086-a1cf-6949895684ef",
+          "type": "heading",
+          "title": "A repeatable process—not a bag of tricks.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3c9a125c-b629-4d62-ab90-44419ab8c80f",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">You do not need every tool every time. The value is recognizing what kind of thinking the situation needs next.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b11d24cc-2808-4c90-a69d-5533060a9403",
+          "type": "text",
+          "title": "",
+          "body": "<p>EXPLORE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3e5481fa-9e9c-4179-a836-0aee41adb8cd",
+          "type": "text",
+          "title": "",
+          "body": "<p>REFRAME</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "82502dc9-ed52-49e5-a150-93a6355c4626",
+          "type": "text",
+          "title": "",
+          "body": "<p>DIVERGE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f0bbe038-0a99-4523-ac4c-57bc3dcff5b9",
+          "type": "text",
+          "title": "",
+          "body": "<p>CONNECT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "298e3bfa-ee70-44e9-a7d8-b924eff1c9c6",
+          "type": "text",
+          "title": "",
+          "body": "<p>DEVELOP</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9c0e0eb8-581d-4133-aca1-002d01c3314b",
+          "type": "text",
+          "title": "",
+          "body": "<p>CONVERGE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1139047d-26b0-4ccd-a165-8e85bc868a05",
+          "type": "text",
+          "title": "",
+          "body": "<p>TEST</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "36605a58-1672-49a0-a5c9-2f3fb0acdf6b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Explore</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7ae2f75f-4537-4372-a110-a6f60e196c9e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Understand before solving.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e5392d9a-18a1-4317-ae4f-f19ce640d4ff",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reframe</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "006bb936-0453-4d3a-aaa3-9be4d7b91f76",
+          "type": "text",
+          "title": "",
+          "body": "<p>Test whether you are asking the most useful question.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9d8e3463-8b76-4668-a41d-950a224da3a6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Diverge</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6e50ce28-ee27-4152-ad11-1c7a4f8de2a1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate enough possibilities to move beyond the obvious.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bff5b0d2-ef19-4037-a0ed-7797b3cf45d4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Connect</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d9097067-2352-4692-a7ac-f0dd2a0a1591",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use analogies, combinations, and outside perspectives.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0f672465-ec5b-4197-a567-679f6c1ee5e4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Develop</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0a1c744d-79a1-4b62-af13-b08d897e2751",
+          "type": "text",
+          "title": "",
+          "body": "<p>Make promising ideas concrete.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3d0d0c9c-6f14-4b66-ac1f-e80301d53e13",
+          "type": "text",
+          "title": "",
+          "body": "<p>Converge</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "42278e0a-626e-4105-a557-f8cfa8260d70",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use criteria to narrow and combine.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7e83eef0-d71d-4bc3-a49a-a5669eae61d9",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\"><strong>Test:</strong> run a small experiment, learn, and adjust.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6ca5e2f4-933e-4f6a-a8a7-03ea2732e405",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "f783ddaf-b46a-47b7-a302-287ae66158a8",
+      "title": "Full-Process Capstone",
+      "description": "",
+      "blocks": [
+        {
+          "id": "7ebdc045-21f2-4ac3-a69a-33f82efb5e30",
+          "type": "heading",
+          "title": "Apply the entire process to one organizational challenge.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dc3c92a7-47d1-4240-a60a-5c5f36dda760",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">An organization is experiencing declining employee participation in voluntary professional development. Announcements, reminders, and supervisor encouragement have produced little improvement. Leadership wants a fundamentally different approach. Walk through how your thinking changes&#x2014;not just the final answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f05c00f1-b406-46f6-a581-3566281cd0fc",
+          "type": "reflection",
+          "title": "1 · EXPLORE",
+          "body": "<p>What do we know? What still needs to be known?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3b018090-8a9e-460e-aced-9a1067deca4b",
+          "type": "reflection",
+          "title": "2 · ASSUMPTIONS",
+          "body": "<p>What are we treating as true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "595b298b-91d5-46dd-a949-7c3ef4344aa0",
+          "type": "reflection",
+          "title": "3 · REFRAME TWO WAYS",
+          "body": "<p>Write at least two meaningfully different problem frames.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d0605cd6-7a5e-4a40-a2f6-3811f3c5b262",
+          "type": "reflection",
+          "title": "4 · DIVERGE",
+          "body": "<p>Generate several possibilities without judging them yet.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2ca4f20b-6878-48e1-a85c-91940819fa26",
+          "type": "reflection",
+          "title": "5 · STRUCTURED TOOL",
+          "body": "<p>Use SCAMPER, reverse thinking, an analogy, or another deliberate tool.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "28cfd628-011a-4ba6-a83d-adf836df1e48",
+          "type": "reflection",
+          "title": "6 · UNUSUAL CONNECTION",
+          "body": "<p>What outside pattern, industry, or concept changes the idea?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0fe5fce5-f655-4720-aed0-527ad1d1019c",
+          "type": "reflection",
+          "title": "7 · DEVELOP",
+          "body": "<p>Make one idea concrete enough to explain how it works.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "38b52755-55d9-4853-a02a-49026c22b5dd",
+          "type": "reflection",
+          "title": "8 · CONVERGE",
+          "body": "<p>What explicit criteria make this idea stronger than alternatives?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5bbca96c-bc8e-4104-ae04-0533b859a66f",
+          "type": "reflection",
+          "title": "9 · TEST",
+          "body": "<p>What is the smallest useful experiment?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "664314ab-086f-4ac1-a6fc-0ee5e3c710c9",
+          "type": "reflection",
+          "title": "HOW DID YOUR THINKING CHANGE?",
+          "body": "<p>What became visible only after using the process?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0706f81b-dc43-49f6-a5c3-82004e604589",
+          "type": "text",
+          "title": "",
+          "body": "<p>The goal is not a single “correct” solution. The goal is to demonstrate deliberate creative thinking and show how the problem, options, and final concept changed through the process.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a1ac69b4-16a3-4648-a45b-c52da53c23f3",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "c5cc3eb1-b01a-4d5b-ab80-11466bf4fb76",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "115b2fae-eacf-43b8-a687-0a6e7f714f28",
+          "type": "heading",
+          "title": "What will you do differently?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b7274a76-2421-49b9-ab92-da211c4ca303",
+          "type": "text",
+          "title": "",
+          "body": "<p>Creativity is a discipline.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "00289bc2-3af3-432e-a840-5a6ab4c95564",
+          "type": "text",
+          "title": "",
+          "body": "<p>Creative thinking can be practiced deliberately; it is not reserved for people who identify as &#x201c;creative.&#x201d;</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7005b2c4-5b06-432a-a37a-6c3e9e0478ab",
+          "type": "text",
+          "title": "",
+          "body": "<p>Better questions create better options.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "99e32d72-3340-4ef1-abd2-1a9f9ee1ba1f",
+          "type": "text",
+          "title": "",
+          "body": "<p>The first problem statement is not automatically the most useful one.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ce2e469e-89f1-48e9-a225-8939379cb506",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate before you evaluate.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "add38a6b-3d4b-465e-ad5a-7f70d7941c09",
+          "type": "text",
+          "title": "",
+          "body": "<p>Premature judgment reduces fluency, flexibility, and originality.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "4b975f00-006d-4e9c-a93e-a2e62f3f22fd",
+          "type": "text",
+          "title": "",
+          "body": "<p>Connections expand the search.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3adb52fb-d4ba-43cb-a90d-e05e1c27971f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Analogies, combinations, and outside perspectives reveal patterns your normal context hides.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "37a88150-c43d-4897-ab29-27ae12bc289c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Criteria before preference.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8a3a4c79-6748-4c22-ac36-1059949d16f5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Convergence works best when the standards are visible before a favorite solution takes over.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "fcb909fb-b4af-4944-a6d9-0b23eaca6935",
+          "type": "text",
+          "title": "",
+          "body": "<p>Testing is learning.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c57118c8-09d6-40ce-ad9b-4429e6d49095",
+          "type": "text",
+          "title": "",
+          "body": "<p>Small experiments reduce uncertainty before large commitments are made.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8fa48b52-77d3-4875-a6f4-2bf92c71ff47",
+          "type": "heading",
+          "title": "When I get stuck...",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "44f82cf8-5d3c-40b1-a276-58bd51b90b10",
+          "type": "text",
+          "title": "",
+          "body": "<p>Which stage will help you most when a team keeps returning to the same answers?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3b7a5a21-4c20-414b-a56e-5029fff97728",
+          "type": "reflection",
+          "title": "When I get stuck...",
+          "body": "<p>Write one practical reminder to yourself.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "127f2d7a-2392-4d53-a74e-de9003ef9899",
+          "type": "heading",
+          "title": "Before I reject an unusual idea...",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10b84d29-482f-4d02-ac3b-4c1330e0ee1e",
+          "type": "text",
+          "title": "",
+          "body": "<p>What question could help you separate exploration from evaluation?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "42a4be86-d4d0-414c-a400-c7ecd3b2fae7",
+          "type": "reflection",
+          "title": "Before I reject an unusual idea...",
+          "body": "<p>Write the question you want to use.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d6ad0909-3eae-4e48-a4a1-0c9b50c2e19b",
+          "type": "heading",
+          "title": "Where in your work would a deliberate creative-thinking process add the most value?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "11f1f2b2-fb9a-485b-a31c-94fa554a7da9",
+          "type": "reflection",
+          "title": "Where in your work would a deliberate creative-thinking process add the most value?",
+          "body": "<p>What real challenge will you approach differently? Which stage do you need most?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9fa36bbd-e039-466e-ac70-19262c9fdc7b",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">The next time a team says, &#x201c;We have already tried everything,&#x201d; do not immediately search for another answer. First ask whether you are still asking the same question.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "516ddc45-c95b-4b5d-a8d5-d8f9176bd3a2",
+          "type": "text",
+          "title": "",
+          "body": "<p>Method note: established methods referenced in this course include SCAMPER, Six Thinking Hats, morphological analysis, Worst Possible Idea, analogical/forced connections, and related divergent-thinking practices. Course-specific activities such as The Impossible Redesign, Assumption Breaker, Reframe It Five Ways, the 20-Idea Challenge, and Idea Tournament are adapted learning exercises built around established creativity research and practice.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7cf1f6e7-75a1-46c0-a990-53499595c96f",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "3883a743-fee8-44eb-a75b-ea3c0427ebd5",
+          "type": "heading",
+          "title": "SEE MORE. CREATE BETTER OPTIONS.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "52d71067-69a2-4646-ab26-d6d17634d8d4",
+          "type": "text",
+          "title": "",
+          "body": "<p>You moved through the full creative-thinking cycle: exploration, reframing, divergence, connection, development, convergence, and experimentation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b4630a28-40fe-4cdc-a537-83954fb7cad4",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"color:#bfd3e2;margin-top:18px\">Your progress is saved on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        }
+      ]
+    }
+  ]
+}

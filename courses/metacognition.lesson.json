@@ -1,0 +1,3765 @@
+{
+  "schemaVersion": 1,
+  "id": "2ab0a5d0-ad9e-4f47-aad8-bd2117911d08",
+  "title": "Metacognition",
+  "description": "Editable version of the complete Mayne Leadership Metacognition course, including its original explanations, practice activities, application, and reflection prompts.",
+  "author": "Joshua Mayne",
+  "cover": "",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "d77b71b2-11ee-45ab-a4ed-52b6e9ea6e91",
+      "title": "Introduction",
+      "description": "",
+      "blocks": [
+        {
+          "id": "14c42680-5719-473d-a166-3cd2f6e1a726",
+          "type": "text",
+          "title": "",
+          "body": "<p>YOU</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "247f5541-68fc-48c0-a0dc-5269364a6ed7",
+          "type": "text",
+          "title": "",
+          "body": "<p>SELF</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "be80be3d-a46c-4da3-a558-ddab9eccec15",
+          "type": "text",
+          "title": "",
+          "body": "<p>GROUP</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0ef6c668-a8f5-4fb1-a713-ac1536b379c7",
+          "type": "text",
+          "title": "",
+          "body": "<p>SYSTEM</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1f98f612-5cf4-4416-a051-e4deef5038bd",
+          "type": "heading",
+          "title": "Think about how you think.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "edec7377-2039-450d-a631-faa9f51327c7",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Think deliberately. Invite dissent. See the system.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d5371f0b-279a-4218-ada5-857fcd95a031",
+          "type": "text",
+          "title": "",
+          "body": "<p>Metacognition improves judgment by making assumptions, confidence, social influence, and system effects visible before they harden into decisions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "80455fb4-3bc5-487b-af7d-5a824a1f67a6",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"font-size:.92rem;color:#b9d0df\"><strong>Four-hour facilitated-course equivalent</strong> &#xb7; Full self-paced adaptation &#xb7; Progress saved on this device</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "292eeea1-1e80-42ae-a723-8e5beb696c8d",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "78ded8f8-b18a-40a0-ad1f-664dd44fb374",
+          "type": "heading",
+          "title": "One discipline. Three levels of thinking.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fc76fb49-ccb7-43dc-a20f-ad2ec7f6eec2",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Individual assumptions enter group conversations. Group decisions alter systems. System feedback then influences future assumptions. The course moves through all three levels before bringing them back together.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2ee31fab-e489-498a-a4a6-44ce0e719ee0",
+          "type": "text",
+          "title": "",
+          "body": "<p>By the end, you can</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3ce9a1c9-6ce1-4367-a6c9-099c5cf660cf",
+          "type": "text",
+          "title": "",
+          "body": "<p>1</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "809b26fc-6528-4cb5-a5ea-f6a911ae3ae7",
+          "type": "text",
+          "title": "",
+          "body": "<p>Examine how you form and revise knowledge.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2a8e8f87-c07f-4872-abd0-7970d5674bfc",
+          "type": "text",
+          "title": "",
+          "body": "<p>2</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "13f9e4a8-5545-47c8-a498-04db1ffc0971",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use practices that reduce groupthink and widen participation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "05e87057-4e9c-4c5f-a62f-1e2725060a32",
+          "type": "text",
+          "title": "",
+          "body": "<p>3</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ab27957d-9166-44bd-aafa-439b017ca6ad",
+          "type": "text",
+          "title": "",
+          "body": "<p>Move a team from divergence to convergence without forcing false consensus.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3cd8e535-e393-49d1-ad99-8de3b0e83239",
+          "type": "text",
+          "title": "",
+          "body": "<p>4</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c6fd479c-e2bc-4db5-add6-22a4e2a9165e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Distinguish a visible symptom from an underlying system problem.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e18e4c8e-e173-48b7-a24d-8ba5b51b34b7",
+          "type": "text",
+          "title": "",
+          "body": "<p>5</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "37d41bf8-d659-49b2-a540-e504e1b46502",
+          "type": "text",
+          "title": "",
+          "body": "<p>Explain not only what you recommend, but how the thinking arrived there.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "302c570d-04d7-4496-abec-5a2e1facb308",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"qCard\"><strong>What am I assuming?</strong><span>Make the hidden frame visible.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ec43cfa3-e358-46dc-a55c-2fbe6206b507",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"qCard\"><strong>Whose voice is missing?</strong><span>Look for social and informational blind spots.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d9cf9128-0b4b-4043-a4ed-8e4c10999ff6",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"qCard\"><strong>What system am I changing?</strong><span>Trace consequences beyond the immediate event.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ab8e7e39-2efb-4a00-ab2d-4fab0cfaa52a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "e4092a23-3bda-4c2b-aef1-f3cf65df80e4",
+      "title": "Notice Your Thinking",
+      "description": "",
+      "blocks": [
+        {
+          "id": "6e09a148-e318-4123-ac60-c8cd281e08c2",
+          "type": "heading",
+          "title": "NOTICE YOUR THINKING",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6beb245a-c8a0-4557-a648-e6839c03997c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Pressure rewards speed. Complexity punishes shortcuts. The pause is not indecision; it is quality control.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "78e7d17d-49a9-44ef-a1cd-a87eac2100d2",
+          "type": "heading",
+          "title": "Awareness without adjustment is observation.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ee59eea5-6740-4a02-a46f-16175b039f25",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Metacognition adds regulation: notice what is happening in your reasoning, name what is shaping it, and navigate toward a better next move.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8cb07452-b367-475d-a821-a65732ac0b72",
+          "type": "process",
+          "title": "Notice → Name → Navigate",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "2b5f570e-30bc-4970-a816-b21724897d0a",
+              "title": "NOTICE",
+              "text": "<p>What is happening in my reasoning?</p>",
+              "image": ""
+            },
+            {
+              "id": "963a062c-7515-4b09-af26-c7cd55bf4069",
+              "title": "NAME",
+              "text": "<p>Which assumption, emotion, source, or pressure is shaping it?</p>",
+              "image": ""
+            },
+            {
+              "id": "c5aa49b8-b195-4134-ac80-f3110cacb82c",
+              "title": "NAVIGATE",
+              "text": "<p>What should I test, seek, or change before acting?</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "0a8dbbe1-047d-4630-ac4e-7eee41dadc82",
+          "type": "text",
+          "title": "",
+          "body": "<p>The purpose is not to eliminate intuition or speed. It is to notice when a fast answer is becoming an untested answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6fbdf2dc-3b98-4f25-ab60-c94e43ec9795",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7ddb2d6a-9b22-4bda-a64b-0a43a678f7b0",
+          "type": "heading",
+          "title": "Confidence is a feeling. Evidence is a reason.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b787fd61-e7d2-4bd5-a502-d41701f25ebe",
+          "type": "text",
+          "title": "",
+          "body": "<p>Who was the 19th President of the United States?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6438786e-95c4-48f0-a620-cc8f97efe44e",
+          "type": "reflection",
+          "title": "Write a name—or write “I don't know.”",
+          "body": "<p>Write a name—or write “I don&#39;t know.”</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e97f014a-0306-467f-a123-7d1d3d54eb63",
+          "type": "text",
+          "title": "",
+          "body": "<p>0%</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0fd57042-bd93-43ec-a92f-db497bff3fc1",
+          "type": "reflection",
+          "title": "Calibrate your confidence",
+          "body": "<p>Record your confidence as a percentage from 0 to 100 before revealing the answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4635bbd3-3c84-4a58-afcc-69d3bfb1b840",
+          "type": "continue",
+          "title": "Reveal the answer",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "349a466b-dbfd-4383-a857-a5cca6cc8bca",
+          "type": "accordion",
+          "title": "Check your calibration",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "993f39b1-4610-410e-ad84-e9229f741dc4",
+              "title": "Answer and debrief",
+              "text": "<div class=\"answerReveal\" id=\"answerReveal\"><strong>Answer: Rutherford B. Hayes.</strong><p>The point is not trivia. Compare your certainty with the quality of the evidence you actually had.</p></div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "a2107b7f-4b05-4a21-ad29-3a241c1ace50",
+          "type": "reflection",
+          "title": "WHAT DID I REMEMBER?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "502d2960-146a-4bff-a09f-22dee6fda66a",
+          "type": "reflection",
+          "title": "WHAT EVIDENCE SUPPORTED IT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ff3f3abd-1e3b-4cb2-a9bf-5610a4e030ea",
+          "type": "reflection",
+          "title": "HOW RELIABLE WAS THAT EVIDENCE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "87f0983b-432a-4051-a9f6-f84f3da7f370",
+          "type": "reflection",
+          "title": "WHAT WOULD HAVE CHANGED MY MIND?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "465c09a1-c1ac-4736-a3af-9ac973c02f48",
+          "type": "text",
+          "title": "",
+          "body": "<p>Memory can feel vivid and still be wrong. Social confidence can masquerade as factual confidence. Good judgment includes calibration—matching certainty to the evidence available.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0869ddaf-da4b-4476-ad0e-ae0ee0c83966",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "bff915df-2685-4b53-a160-65c98be34b14",
+          "type": "heading",
+          "title": "Three forces shape what we accept as knowledge.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6644160d-16c4-48f6-a8b7-ef2a9e6f20c5",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Think about a current non-sensitive decision. Rate how strongly each force is shaping your judgment right now.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3f014082-cc57-4aee-a35e-61504c451fd7",
+          "type": "text",
+          "title": "",
+          "body": "<p>EVIDENCE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "de54cacb-f462-486a-ad0e-6fe5b4fae217",
+          "type": "text",
+          "title": "",
+          "body": "<p>What information supports the claim?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0fec5064-7531-42ec-ab32-fbb8862135e5",
+          "type": "survey",
+          "title": "EVIDENCE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Low influence",
+          "maxLabel": "High influence",
+          "scale": 5
+        },
+        {
+          "id": "be1a2554-f4cc-4043-affd-e19db94c76fc",
+          "type": "text",
+          "title": "",
+          "body": "<p>AUTHORITY</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2dce5d9c-289f-486f-a490-fb1bda093047",
+          "type": "text",
+          "title": "",
+          "body": "<p>Whom or what do I trust in this domain?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f834f08e-b90c-4eb8-adce-ab2607ff3940",
+          "type": "survey",
+          "title": "AUTHORITY",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Low influence",
+          "maxLabel": "High influence",
+          "scale": 5
+        },
+        {
+          "id": "0176f98e-8dd2-47ff-a38c-b5b89a1fb476",
+          "type": "text",
+          "title": "",
+          "body": "<p>CLOSURE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "606e2339-a7b3-49f2-a218-e08b937d0e94",
+          "type": "text",
+          "title": "",
+          "body": "<p>How urgently do I feel I need a settled answer?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f61944fa-f5c0-4e76-a16f-df1a30f4a024",
+          "type": "survey",
+          "title": "CLOSURE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Low influence",
+          "maxLabel": "High influence",
+          "scale": 5
+        },
+        {
+          "id": "8f59db85-0a83-4146-acfc-f4d45d22a805",
+          "type": "reflection",
+          "title": "WHICH FORCE MAY BE CARRYING TOO MUCH WEIGHT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6d6ead70-199e-406b-ad75-fc86f31abf60",
+          "type": "reflection",
+          "title": "WHAT SOURCE OR EVIDENCE SHOULD I CHECK NEXT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9cdcaa6d-0624-4977-a315-1119f78deffb",
+          "type": "text",
+          "title": "",
+          "body": "<p>A source can be credible in one domain and weak in another. Urgency can also make the first plausible explanation feel more certain than it deserves.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "651051a6-ce1d-437a-ad8c-e5733301befd",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4f81ad9f-001e-4fd2-a947-030c44ff8449",
+          "type": "heading",
+          "title": "Separate urgency from evidence.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "726afecb-8ee7-4806-adf1-f6539694041a",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">This is a private reflection, not a diagnostic score. Need for closure can support timely action; the risk appears when the urge to settle suppresses search, dissent, or revision.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8f412335-7de3-4f2b-a723-e57bcafdd039",
+          "type": "reflection",
+          "title": "URGENCY · How quickly do I feel I need an answer?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "00a8a195-2849-4911-a0ca-66e4c95cd45f",
+          "type": "reflection",
+          "title": "RANGE · How many plausible explanations have I considered?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ed54b358-7aa1-46db-a672-d7d421dd9ca4",
+          "type": "reflection",
+          "title": "DISCONFIRMATION · What evidence would prove me wrong?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "57c9e9fd-b49a-44d9-a7f5-c9bc37636e51",
+          "type": "reflection",
+          "title": "PAUSE · What is the cost of waiting—and of deciding now?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "bf150ce1-7430-438a-a589-472c2548b4c2",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\"><strong>Watch for &#x201c;seize and freeze&#x201d;:</strong> accept an answer quickly under uncertainty, then defend it after it becomes familiar.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dca20302-efd9-4caf-a2c8-456b8a54ecbd",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "46d12688-26ce-4e34-a53e-35ee631688e3",
+          "type": "heading",
+          "title": "Model revision as strength, not inconsistency.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "37e2412c-1e95-4de5-a11f-9eebdcf08cac",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Think of a belief, judgment, or recommendation you revised.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "75bb4e49-9abe-4182-a8c8-946e59a2eab7",
+          "type": "reflection",
+          "title": "WHAT NEW EVIDENCE APPEARED?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0c63aede-b2bc-4ff2-a045-f1febbeb8050",
+          "type": "reflection",
+          "title": "WHO OR WHAT DID YOU TRUST?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ce9bad03-ba88-4f66-a063-1cacd36894c2",
+          "type": "reflection",
+          "title": "WHAT MADE REVISION FEEL SAFE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0df907c1-66e9-4c5c-a791-bdb28aa9df3d",
+          "type": "reflection",
+          "title": "WHAT MADE IT DIFFICULT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1c20ad7e-84b1-4e9f-aae9-a5180eb1bdbf",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Leadership signal: <strong>&#x201c;Here is what changed my mind.&#x201d;</strong> When leaders explain revision, they teach that evidence can outrank ego.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b7fa6afe-3a5f-4f3d-a6de-828081c70dc5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "0b88623c-1b64-442a-a8fd-67a56f802977",
+      "title": "Invite Dissent and Guide the Group",
+      "description": "",
+      "blocks": [
+        {
+          "id": "67e5cdbf-3053-46e6-a524-61fec5ac0d6d",
+          "type": "heading",
+          "title": "INVITE DISSENT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "73749c89-b4c2-41a7-a4fc-e57b3a0c653c",
+          "type": "text",
+          "title": "",
+          "body": "<p>A team can contain diverse expertise and still produce narrow thinking if the process makes silence safer than contribution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d05ab8fa-30dd-4ff6-a6ae-a7d283838a6f",
+          "type": "heading",
+          "title": "The absence of disagreement is not proof of agreement.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "61ba365e-d541-4cb6-a150-26b11f7dec2a",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select the two pressures most likely to silence useful thinking in your environment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8759282c-d176-4e6d-a6be-4c7c119402b0",
+          "type": "reflection",
+          "title": "Two influences suppressing dissent",
+          "body": "<p>Choose two influences relevant to your team.</p><ul><li>HIERARCHY — The senior person already decided.</li><li>BELONGING — I do not want to be the difficult one.</li><li>PACE — We do not have time to reopen this.</li><li>DOMINANCE — The loudest voice owns the airtime.</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "915180cc-e57c-4d57-aa38-c9fee25cf053",
+          "type": "reflection",
+          "title": "WHAT DOES SILENCE LOOK LIKE HERE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "18e5c52e-f8c8-406c-ad76-5dfc76700c3f",
+          "type": "reflection",
+          "title": "WHAT LEADER BEHAVIOR COULD MAKE CONTRIBUTION SAFER?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "25e69fba-84c1-494f-ab12-7e1b1d3fdc75",
+          "type": "text",
+          "title": "",
+          "body": "<p>Groupthink is not healthy teamwork or legitimate consensus. The problem is premature, protected consensus—when concerns stay private, assumptions go untested, alternatives disappear, and risk looks smaller than it is.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8725fd9b-6cbf-4539-a426-80725ea5f3f3",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "86c5f901-4ff1-42fe-a0df-68fd09ea6ba9",
+          "type": "heading",
+          "title": "Let the process carry some of the interpersonal risk.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "558e764e-bc2b-4e12-ab30-749de766b6af",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open all five leader moves, then choose one you could add to a recurring meeting.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "15e9ce9a-2bbf-4ea1-af1d-2250db160912",
+          "type": "tabs",
+          "title": "Make candor safer",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "b6f5a18d-1475-402a-a971-43fde7eac4b7",
+              "title": "THINK FIRST",
+              "text": "<p>Give quiet time before discussion.</p>",
+              "image": ""
+            },
+            {
+              "id": "95db167f-7fb3-4656-ae73-2630c661194c",
+              "title": "WRITE FIRST",
+              "text": "<p>Capture views before social influence.</p>",
+              "image": ""
+            },
+            {
+              "id": "c227134a-3fbd-413e-a01f-98e0bcb7969d",
+              "title": "HEAR ALL",
+              "text": "<p>No one speaks twice until all speak once.</p>",
+              "image": ""
+            },
+            {
+              "id": "ce1e5895-de3e-4d0a-a083-e4576f3255b0",
+              "title": "LEADER LAST",
+              "text": "<p>Delay the leader&#39;s preference.</p>",
+              "image": ""
+            },
+            {
+              "id": "593d5b5d-98e2-4360-a983-0768b0125ee4",
+              "title": "USE ANONYMITY",
+              "text": "<p>Separate ideas from status when needed.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "3370ac12-e10d-4dd9-afd1-1350ffbffebd",
+          "type": "reflection",
+          "title": "THE MOVE I WILL USE",
+          "body": "<ul><li>Think first</li><li>Write first</li><li>Hear all</li><li>Leader last</li><li>Use anonymity</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d47c5aa8-3418-42ab-aa8d-702c5dd13b57",
+          "type": "reflection",
+          "title": "WHERE WILL I USE IT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2f185fd0-932a-429f-ac8f-c8400c085db0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Psychological safety develops through behavior over time. Structured facilitation can also reduce the immediate cost of speaking up before that culture is fully developed.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d70a6b41-9b5d-405b-aed9-25e301a48e23",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "b45415e4-34d2-41f8-a933-962236b787e1",
+          "type": "heading",
+          "title": "Make the thinking visible before making it final.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "79ee078c-0a56-47f1-af45-fbc1d21f09eb",
+          "type": "text",
+          "title": "",
+          "body": "<p>1 · FRAME</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1701f263-22dd-49b0-a7bf-327faf1535f6",
+          "type": "text",
+          "title": "",
+          "body": "<p>What problem are we solving?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d8e95f3c-a46d-4d9b-af0b-59eaec495f64",
+          "type": "text",
+          "title": "",
+          "body": "<p>2 · DIVERGE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1afefe58-8b73-4344-aff1-51eb7e4fe17d",
+          "type": "text",
+          "title": "",
+          "body": "<p>What else could be true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "40c9f4bd-9cec-40f0-a8dd-459cd091f661",
+          "type": "text",
+          "title": "",
+          "body": "<p>3 · MAKE SENSE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5634947f-ab32-4047-ab94-e2bc737452d4",
+          "type": "text",
+          "title": "",
+          "body": "<p>What patterns and assumptions matter?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "27d4713b-387e-407d-a5ef-ac6f2de83de1",
+          "type": "text",
+          "title": "",
+          "body": "<p>4 · CONVERGE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4d4089f5-045c-469f-a152-9a6e147fe0bc",
+          "type": "text",
+          "title": "",
+          "body": "<p>What best fits our criteria?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "fde94026-b2a8-4f90-a8a1-62c6b5e9de47",
+          "type": "text",
+          "title": "",
+          "body": "<p>5 · COMMIT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a409cfc6-735b-4a2f-a8b1-6636975d1f78",
+          "type": "text",
+          "title": "",
+          "body": "<p>Who does what, by when?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8cdade89-c764-4bb3-a213-eb22fa19a6c7",
+          "type": "reflection",
+          "title": "WHICH STAGE DOES YOUR TEAM MOST OFTEN SKIP?",
+          "body": "<ul><li>Frame</li><li>Diverge</li><li>Make sense</li><li>Converge</li><li>Commit</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "498a1266-6ac4-4eb1-aff5-6a8ffc555d9a",
+          "type": "reflection",
+          "title": "WHAT HAPPENS WHEN YOU SKIP IT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b977f3df-a9ab-4370-a992-f8a0e5b1cf7c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "2716e070-6be2-4566-a0fd-69495a346756",
+          "type": "heading",
+          "title": "Productive discomfort is not automatically a process failure.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "00ab6177-054c-46ce-a921-1e664e12c1e3",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"groanCell\"><b>DIVERGENCE</b><span>Different frames and possibilities expand.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "229b99e7-2aa5-4044-a066-f346b64022f2",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"groanCell\"><b>GROAN ZONE</b><span>Confusion, friction, repetition, integration.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9e1c88d6-5435-4e52-a14e-f454d3bd90fc",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"groanCell\"><b>CONVERGENCE</b><span>Shared understanding supports narrowing.</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "39bacb9d-b4cf-4103-ac2e-03debe946f0e",
+          "type": "reflection",
+          "title": "WHAT DOES THE GROAN ZONE FEEL LIKE ON YOUR TEAM?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8d922088-a4a4-42ae-a053-149d267439cc",
+          "type": "reflection",
+          "title": "HOW DO YOU KEEP THE TEAM FROM FORCING A QUICK ANSWER?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "11434553-cc55-4bea-a629-d3f2c2ea418d",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Do not rescue the team from productive discomfort by imposing false consensus. Keep participation equitable, the task clear, and the purpose visible.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c9b11f2f-82ed-400a-a195-60d456bc3e24",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7b9c3458-180f-4f77-a4ee-d75e1baee427",
+          "type": "heading",
+          "title": "Imagine the decision failed six months from now.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "76c3ede9-fe4e-45b8-af15-da4e234a11b8",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Scenario: your organization launches a new employee-development initiative. Six months later, participation is low and supervisors say it disrupted operations. Generate three plausible reasons before defending the plan.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2a49cb65-972f-4ff5-ade2-5ce6de90a21d",
+          "type": "reflection",
+          "title": "FAILURE REASON 1",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "43ef46d3-0625-4903-a487-b315543e3be0",
+          "type": "reflection",
+          "title": "FAILURE REASON 2",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2100a837-1c8d-4624-ae08-34a6296375d8",
+          "type": "reflection",
+          "title": "FAILURE REASON 3",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "0dfe1f6b-2914-4a6c-ae63-282f22df6edd",
+          "type": "reflection",
+          "title": "COMMON THEME",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "44ca3f63-6c5e-44f9-a5e7-6722f3a517c5",
+          "type": "reflection",
+          "title": "PREVENTION OR EARLY-DETECTION ACTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e0e77322-bb76-4ca7-aec5-f1433616c214",
+          "type": "text",
+          "title": "",
+          "body": "<p>Premortems legitimize doubt before people become invested in defending the plan. They separate criticism of a plan from criticism of a person.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "88588976-2080-4a90-a4f3-53b38e7fdbcd",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "61707698-3cae-4281-a557-a4eeda9b838b",
+          "type": "heading",
+          "title": "Reveal more than yes or no.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3001cc7a-a654-43d8-aab4-74eeab2ce3b7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Imagine the proposed initiative from the premortem is still being considered. Pre-commit to one position before reading anyone else&apos;s view.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "83e0ccd4-54c9-4612-a93c-70538f833de5",
+          "type": "reflection",
+          "title": "Your gradient of agreement",
+          "body": "<p>Choose a position from 1 to 8. The rating opens conversation; it does not replace it.</p><ul><li>Wholehearted endorsement</li><li>Agreement with minor point</li><li>Support with reservations</li><li>Abstain</li><li>More discussion needed</li><li>Do not like, will support</li><li>Serious disagreement</li><li>Block / veto if authorized</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8efa2068-77ba-47ba-abbc-d351b51366db",
+          "type": "reflection",
+          "title": "WHY DID YOU CHOOSE THIS POSITION?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "babc76ff-0bdd-4c57-aadb-fdc1341bdd14",
+          "type": "reflection",
+          "title": "WHAT COULD MOVE YOU ONE STEP?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3135ce4a-f40f-42bd-af1b-38fe1ad76c60",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use the rating to open the conversation, not replace it. Hear each person once, begin with outliers, and allow revision after the reasoning is heard.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cdc72adc-99fb-4746-ab9a-7aa1009d7632",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "9c9499a8-a080-40c0-acce-a27dd6262aa3",
+          "type": "heading",
+          "title": "Prioritize. Do not pretend the vote decided truth.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10c10ef3-8411-44b1-a0bc-24cc4c9a1ba6",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Choose two options you would want the team to analyze more deeply. The vote focuses attention; it does not validate the original framing.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2178cc7b-0995-4b8d-ac60-fcac14f9fbea",
+          "type": "reflection",
+          "title": "Prioritize two options",
+          "body": "<p>Choose two options for deeper analysis. Voting does not establish truth.</p><ul><li>Pilot in one unit first</li><li>Launch to everyone at once</li><li>Require supervisor sponsorship</li><li>Offer employee-selected formats</li><li>Tie participation to real work</li><li>Use recognition and visible progress</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6792c991-2e95-4a9f-ac3c-b1c34ca82260",
+          "type": "text",
+          "title": "",
+          "body": "<p>Protect independence by pre-committing before seeing others&#39; votes. After voting, test the leading options against criteria and use gradients of agreement to surface reservations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "41ac3e6e-4afe-45e9-ac76-ea1f4ceb1bea",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "e3fb9d17-bc80-4833-a25f-408a1997762c",
+      "title": "Application: Bike Trail Conflict",
+      "description": "",
+      "blocks": [
+        {
+          "id": "adbd6fe2-b104-4200-ab35-08df8a26f0f1",
+          "type": "heading",
+          "title": "BIKE TRAIL CONFLICT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "eec1b644-59ad-4aa8-a45a-0861853a8041",
+          "type": "text",
+          "title": "",
+          "body": "<p>A visible incident sits inside a crowded, multi-stakeholder system.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "cb45c7b9-095d-4b8d-a805-1a092905c7c0",
+          "type": "heading",
+          "title": "Do not solve the tack incident alone.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5b9c688f-81a7-4e8d-a3e6-426dd6f39fd7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">A heavily used Northern Virginia trail is experiencing repeated safety problems. Hundreds of bicycle tires have reportedly been punctured by deliberately scattered tacks. At the same time, cyclists, runners, walkers, and inline skaters are competing for limited space on a narrow shared path. Users describe collisions, arguments, different expectations about right-of-way, and disagreement about what the trail is for. Authorities respond to visible incidents, but the broader conflict continues.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "87d3174c-8b2a-426b-ad50-638a4a9abbc8",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"caseFacts\">\n   <div class=\"caseFact\"><strong>VISIBLE EVENT</strong><p>Repeated tacks and large numbers of flat tires create an urgent safety and enforcement problem.</p></div>\n   <div class=\"caseFact\"><strong>RECURRING PATTERN</strong><p>Crowding and conflict among multiple users existed beyond the tack incidents.</p></div>\n   <div class=\"caseFact\"><strong>SYSTEM QUESTION</strong><p>How do design, norms, enforcement, capacity, behavior, and stakeholder expectations interact?</p></div>\n  </div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2d560d9e-4d4d-44cd-a69c-abeb2ef1658a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "25a61967-128c-4922-a908-a4bb62ca8bf6",
+          "type": "heading",
+          "title": "Frame before the group influences you.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3b56cd37-7ea4-4e48-a48a-c83caad2c2c1",
+          "type": "reflection",
+          "title": "PROBLEM · State it in one sentence.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a0c8a432-9243-40ee-a475-f0e85a9258d7",
+          "type": "reflection",
+          "title": "STAKEHOLDERS · Who is affected, involved, responsible, or missing?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8add7599-714a-4f3a-a343-d79414b75ed5",
+          "type": "reflection",
+          "title": "EVIDENCE · What facts support your frame?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ca839ee3-ab7c-4521-a80e-972e8445552d",
+          "type": "reflection",
+          "title": "FIRST SOLUTION + ASSUMPTION · What came to mind first, and what assumption sits beneath it?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2cfe44fd-950c-423c-a199-304474200eb7",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "5523c251-a389-432f-ac2c-3bb7076b89bc",
+          "type": "heading",
+          "title": "Preserve different frames before combining them.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "75637b68-2666-4826-aa7b-063141046984",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open all four perspectives. Do not decide which is &#x201c;right&#x201d; yet. Listen for what each frame makes visible that another could miss.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2a0d51e4-cb9c-42c0-afb2-5f50ff36d1d8",
+          "type": "tabs",
+          "title": "Preserve different stakeholder frames",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "01ac8a03-10d4-4f18-a9f5-2f15a442a879",
+              "title": "CYCLIST / COMMUTER",
+              "text": "<p>Safety, travel time, predictability, right-of-way, and protection from deliberate hazards may dominate this frame.</p>",
+              "image": ""
+            },
+            {
+              "id": "bac0d75a-4bc9-4239-ae3e-beb28acbfa07",
+              "title": "RUNNER / WALKER",
+              "text": "<p>Access, physical safety, speed differentials, and the belief that the trail is shared public space may dominate this frame.</p>",
+              "image": ""
+            },
+            {
+              "id": "056b3bfd-fa6a-4a39-a7fa-1eb48e76bf8d",
+              "title": "PARK / PUBLIC-SAFETY ROLE",
+              "text": "<p>Capacity, enforcement, cleanup, recurring conflict, rules, infrastructure, and feasible stewardship may dominate this frame.</p>",
+              "image": ""
+            },
+            {
+              "id": "5f2ddf8e-43e7-48ec-aede-b9bd207a2ce3",
+              "title": "SKATER / RECREATIONAL USER",
+              "text": "<p>Access, belonging, skill variation, space needs, and fairness across user groups may dominate this frame.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "c5734cd2-f18c-4d35-afc9-10a02b92190e",
+          "type": "reflection",
+          "title": "WHICH FRAME OR STAKEHOLDER DID YOU NOT INITIALLY CONSIDER?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "fdb33421-9d35-467f-ad31-c838dff9cf3d",
+          "type": "reflection",
+          "title": "HOW WOULD YOU REWRITE THE PROBLEM NOW?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2b8201e8-f7cb-4e0e-a837-6225dc9cc09f",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "12a37ffe-bdbd-411a-afe4-a9175da95b6d",
+          "type": "heading",
+          "title": "Narrow without erasing the thinking.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d854fa36-70f3-4e2d-a7ed-12c48f00aed0",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Select at least three criteria</strong> for judging a response.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "1a6e667a-c774-4af2-a0e4-30dbe6fb1567",
+          "type": "reflection",
+          "title": "Criteria for the trail case",
+          "body": "<p>Select at least three criteria and explain their importance.</p><ul><li>Safety</li><li>Feasibility</li><li>Fairness across users</li><li>Sustainability</li><li>Unintended consequences</li><li>Cost / resources</li><li>Enforceability</li><li>System capacity</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5aecbbfe-0386-40ad-a808-f019e3c165bf",
+          "type": "heading",
+          "title": "Generate four plausible response options.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8b3c85c4-c94e-4b23-a763-3ee52fe24581",
+          "type": "reflection",
+          "title": "OPTION 1",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e43079a4-0e65-4484-af95-f193c4d64d9b",
+          "type": "reflection",
+          "title": "OPTION 2",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1e51b978-d730-432b-aafa-1c4abfe5ce2e",
+          "type": "reflection",
+          "title": "OPTION 3",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "63554703-a6a7-4267-a09d-752ec3a5b904",
+          "type": "reflection",
+          "title": "OPTION 4",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3e9f1ebb-8a8c-4a5d-a26a-3c79ee32adda",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Pre-commit to the two options you would analyze further.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f98607a8-791e-4ad6-aa38-b6a75663b774",
+          "type": "reflection",
+          "title": "Pre-commit to two response options",
+          "body": "<p>Refer to the four options you generated. Record your two leading options before hearing other views.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d8c0fc6d-5e86-4ca5-ae1f-ff5335258a6c",
+          "type": "reflection",
+          "title": "LEADING OPTION · Which option currently leads, and why?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e5ef7251-8c70-4981-a793-fb1c96d74801",
+          "type": "reflection",
+          "title": "RESERVATION · What concern remains after narrowing?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b638636a-df9c-4ec2-a7dc-505bb6ed4d46",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "91f3a788-2f17-497d-a0c9-f869b14b99aa",
+          "type": "heading",
+          "title": "Process evidence matters.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "548d0fdc-1731-4b98-af14-d04e58b3e983",
+          "type": "reflection",
+          "title": "WHERE DID YOUR INITIAL FRAME DIFFER FROM YOUR FINAL FRAME?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e1db1e1a-563b-43f4-a5b1-98586cf739c5",
+          "type": "reflection",
+          "title": "WHICH VOICE, FACT, OR STAKEHOLDER CHANGED THE CONVERSATION?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e5f004e0-78bc-4efa-a1dd-059eae5eefb8",
+          "type": "reflection",
+          "title": "WHEN DID YOU FEEL PRESSURE TO CONVERGE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8cf4c863-d9fa-4553-aba2-893ff7e807b1",
+          "type": "reflection",
+          "title": "WHAT RESERVATION REMAINS?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c8eb22e4-cd7e-4f45-a416-5d4120f20bd7",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">A decision is stronger when you can explain how alternatives were tested&#x2014;not only which answer won.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "acdfb0c5-b3e0-45a0-a1a8-e1cbbf4ac252",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "51da7536-f21f-4c21-a74b-7e03602ee43e",
+      "title": "See the System",
+      "description": "",
+      "blocks": [
+        {
+          "id": "f313ff31-ec52-479c-a561-79c018da4fae",
+          "type": "heading",
+          "title": "SEE THE SYSTEM",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "639f5cf2-6a3b-4b4b-af20-a704e1ead1c6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Every fix enters a living system. A useful solution changes the pattern without quietly weakening the system.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "67757d6f-1f30-4a17-ab2b-d5d10daf3ca9",
+          "type": "heading",
+          "title": "Watch for the chain, not just the event.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "55b25c5b-1f6b-4388-aa79-48de0ea90c24",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">The original course uses this short systems-thinking cautionary tale. As you watch, capture the original problem, the interventions, the delayed effects, and what the original frame omitted.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3bc52211-abc5-4d28-ad97-eab3dfefd914",
+          "type": "video",
+          "title": "Systems thinking: a cautionary tale",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "url": "https://www.youtube.com/embed/17BP9n6g1F0",
+          "caption": "Imported from the original course. External video requires internet access.",
+          "height": 420
+        },
+        {
+          "id": "1d0fb8d1-c672-4d8f-abe5-24bb6160b7c4",
+          "type": "reflection",
+          "title": "ORIGINAL PROBLEM",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c1350fe4-06b0-4aff-ab57-4931fa8585cc",
+          "type": "reflection",
+          "title": "INTERVENTIONS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "532eded0-e568-41b9-a41e-47cb38113657",
+          "type": "reflection",
+          "title": "DELAYED / UNINTENDED EFFECTS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "54ba1802-cad0-45bf-af5d-2791e0c5c230",
+          "type": "reflection",
+          "title": "WHAT WAS MISSING FROM THE INITIAL FRAME?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c9f3ef96-3e0d-4737-ac80-78aa104384af",
+          "type": "heading",
+          "title": "A systems lens asks different questions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "73170e82-f6c9-4ba3-a691-323a65f5755c",
+          "type": "process",
+          "title": "A systems lens",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "2eba2a51-6003-4d78-ad76-d08ebadf24db",
+              "title": "EVENT",
+              "text": "<p>What happened?</p>",
+              "image": ""
+            },
+            {
+              "id": "b8f24a23-bc75-4356-a432-a177bd274101",
+              "title": "PATTERN",
+              "text": "<p>What keeps happening over time?</p>",
+              "image": ""
+            },
+            {
+              "id": "706e107a-265f-43d0-a813-42415150bf05",
+              "title": "STRUCTURE",
+              "text": "<p>What relationships and incentives produce the pattern?</p>",
+              "image": ""
+            },
+            {
+              "id": "66839d48-ea5e-4206-ab52-e0a64269b574",
+              "title": "MENTAL MODEL",
+              "text": "<p>What assumptions keep the structure in place?</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "a7faf526-4a38-4653-aa07-ec4613c9be22",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "8c968c50-0fe4-4832-a495-b740c184bb75",
+          "type": "heading",
+          "title": "Relief now can quietly weaken the real solution.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f6a3fb1c-198e-476e-a56f-66ea15237ac9",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Use the bike-trail case&#x2014;or another non-sensitive workplace issue&#x2014;to test whether a quick response is masking or weakening a deeper response.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a06e268a-36b9-4a48-ac20-4ed0e961372a",
+          "type": "reflection",
+          "title": "PROBLEM SYMPTOM · What is visible and urgent?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b03ea085-517f-4b8c-afd2-702cafad23a8",
+          "type": "reflection",
+          "title": "SYMPTOMATIC RESPONSE · What gives immediate relief?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5bc47b69-5d6f-4a3b-ab36-2a15f1c049c9",
+          "type": "reflection",
+          "title": "SIDE EFFECT · How might the quick response weaken the system?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "381eb62c-592d-4f3a-a5eb-d1ad868db157",
+          "type": "reflection",
+          "title": "FUNDAMENTAL RESPONSE · What changes the underlying conditions?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8dfec035-200d-4213-aefa-d7fd77c59ba2",
+          "type": "reflection",
+          "title": "SYSTEM CAPACITY / HEALTH · What capability must be preserved or strengthened?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c486b886-c35f-4b44-ae5a-f0b02fd9b9f3",
+          "type": "reflection",
+          "title": "ASSUMPTION TO CHALLENGE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e0173114-42e4-4e1b-a374-f5ff7b882881",
+          "type": "reflection",
+          "title": "SECOND- OR THIRD-ORDER EFFECT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9b7169c1-2e04-46dd-acbe-f04c89c1637d",
+          "type": "reflection",
+          "title": "DEVIL'S ADVOCATE · Why might the fundamental response fail?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2c04ff7f-9e6b-449d-ae80-bcd7e48b4a25",
+          "type": "reflection",
+          "title": "EVIDENCE TO MONITOR · What would show the fundamental response is working?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b05cf4a6-1204-43ef-a635-1a6ea99ba6d5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Shifting the Burden is a hypothesis to test, not proof of causation. Systems thinking without feedback becomes speculation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "02124018-c72f-4937-a448-6ec443023826",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "9a9b39d7-a40d-4a00-a108-82213cb2fbca",
+          "type": "heading",
+          "title": "The strongest response may combine relief and reform.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dd55b75a-1b5b-4a2e-a943-07bd4d1492a8",
+          "type": "text",
+          "title": "",
+          "body": "<p>STABILIZE NOW</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6cabcf3e-b17c-47eb-aa1d-0cbca702efa6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reduce immediate harm and restore safe operations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5a985bf2-6ee4-4bf7-acef-575a44f8d173",
+          "type": "text",
+          "title": "",
+          "body": "<p><b>Guardrail:</b> do not let emergency relief become the permanent operating model.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bf37c451-58c2-415f-a353-1aa3250de10a",
+          "type": "reflection",
+          "title": "STABILIZE NOW",
+          "body": "<p>What immediate response is justified?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "7a223bd5-7147-4184-a883-407af27cb875",
+          "type": "text",
+          "title": "",
+          "body": "<p>BUILD CAPACITY</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "499a5aca-2888-46b5-a9d8-bee1d3b0fea0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Change the conditions that recreate the symptom.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9d4dc675-eba8-47aa-a737-d3d8f44e2157",
+          "type": "text",
+          "title": "",
+          "body": "<p><b>Guardrail:</b> define evidence, ownership, resources, and time horizons.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "63fef454-9d23-472a-a6a9-2300cb96b7f2",
+          "type": "reflection",
+          "title": "BUILD CAPACITY",
+          "body": "<p>What underlying capacity needs to improve?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5bf33265-52c8-449c-a803-e5caa046eb97",
+          "type": "reflection",
+          "title": "SUNSET / REVIEW CRITERIA",
+          "body": "<p>What prevents the temporary response from becoming permanent?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1dfb5133-3641-4821-ae72-248683f22d9a",
+          "type": "reflection",
+          "title": "OWNER + MEASURE",
+          "body": "<p>Who owns the transition, and what will they monitor?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f75ed63f-6e78-4115-af6e-9eefee88c07f",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "89e7927b-bc37-477e-a3e2-835cdfb2b4c1",
+      "title": "Portable Toolkit and Synthesis",
+      "description": "",
+      "blocks": [
+        {
+          "id": "e039e1eb-a53d-4ce4-a879-0b5f72ea92af",
+          "type": "heading",
+          "title": "Make these practices portable.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ac6f50af-a625-46a1-af0b-d9fd40a9480c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Disciplined Decision Map</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "12ca77b0-cf1c-477b-a5f8-87b825843d49",
+          "type": "text",
+          "title": "",
+          "body": "<ol><li>Frame</li><li>Diverge</li><li>Make sense</li><li>Converge</li><li>Commit</li></ol>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c233edf1-2c3e-4b80-a179-995373068276",
+          "type": "text",
+          "title": "",
+          "body": "<p>At every stage ask: What are we assuming? Whose voice is missing? What would change our mind?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "24bd9b58-bc0a-49db-a9ac-e787f9d04f0a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Gradients of Agreement</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "62dc94d1-511d-47d6-a65a-31a933c68faf",
+          "type": "text",
+          "title": "",
+          "body": "<ol><li>Pre-commit privately</li><li>Reveal together</li><li>Hear each person once</li><li>Begin with outliers</li><li>Allow revision</li></ol>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "83b20474-9be6-41bb-acba-c354129c16f8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use ratings to open conversation&#x2014;not replace it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a68a336b-0dca-46f3-a8c3-99646d50a490",
+          "type": "text",
+          "title": "",
+          "body": "<p>Shifting-the-Burden Worksheet</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b23f28a8-61c4-42e9-a93b-12b2d6702167",
+          "type": "text",
+          "title": "",
+          "body": "<ol><li>Problem symptom</li><li>Symptomatic response</li><li>Side effect</li><li>Fundamental response</li><li>System capacity</li></ol>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0d7b2546-2c4c-4a64-a5f7-76229eb221e8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Always add evidence to monitor.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "767db60e-e753-4f03-a06e-61c86c68db87",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "8b9bdf1d-e6a9-40e5-a4b7-e7f65d01ddfd",
+          "type": "heading",
+          "title": "Notice → Name → Test → Adapt.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5e0ee28d-8044-4e86-ae9b-2e19e204fbb5",
+          "type": "text",
+          "title": "",
+          "body": "<p>NOTICE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f86a64f8-dd01-43f1-a86d-ca838c51ca49",
+          "type": "text",
+          "title": "",
+          "body": "<p>What is happening?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7ffca1f6-81df-434c-a2dc-03c7c10c7e75",
+          "type": "text",
+          "title": "",
+          "body": "<p>NAME</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10e94e4b-98ff-4116-a08b-f78ef0ae8925",
+          "type": "text",
+          "title": "",
+          "body": "<p>What is shaping it?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3da9b825-99a6-4611-ae4e-3f51c579fb6a",
+          "type": "text",
+          "title": "",
+          "body": "<p>TEST</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "092423d8-0afa-4880-a3af-bafc428d4e71",
+          "type": "text",
+          "title": "",
+          "body": "<p>What else could be true?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9bb584a1-c4d7-4b0b-a1d8-81091e7475c8",
+          "type": "text",
+          "title": "",
+          "body": "<p>ADAPT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8b4a5b1b-48f2-44de-ad6a-88139471db98",
+          "type": "text",
+          "title": "",
+          "body": "<p>What will we change?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c269353a-eb92-4c4f-adaf-8fd8b4ba9324",
+          "type": "text",
+          "title": "",
+          "body": "<p>SELF</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1f5d4c88-b055-4f93-a799-37601928de18",
+          "type": "text",
+          "title": "",
+          "body": "<p>Notice confidence. Name evidence, authority, and closure. Test alternatives. Adapt belief.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b20b3734-59f0-4784-a270-4237872d9048",
+          "type": "text",
+          "title": "",
+          "body": "<p>GROUP</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b71955f6-0afa-459f-ab63-e472d0abb83d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Notice silence. Name hierarchy and pace. Test through divergence and dissent. Adapt process.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6b33edc5-ad2a-4ee8-a301-29e39fb988c4",
+          "type": "text",
+          "title": "",
+          "body": "<p>SYSTEM</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f44e6d66-5ec2-4b04-af00-b7b155360c70",
+          "type": "text",
+          "title": "",
+          "body": "<p>Notice recurrence. Name structure. Test second-order effects. Adapt intervention.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ce32ec1c-c909-447f-a79a-a9f90b81bce8",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "5328572b-9a36-426f-ade7-88ec26cc5caa",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "11491f8b-65d1-414e-a4b6-bf3ac242b294",
+          "type": "heading",
+          "title": "One decision you will think about differently.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fde0f003-7590-4e3d-a45c-c9fb9dbad2a8",
+          "type": "reflection",
+          "title": "I WILL PAUSE WHEN...",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "adea35f1-e017-4e59-a50c-55e6898d3d2c",
+          "type": "reflection",
+          "title": "I WILL INVITE A MISSING VOICE BY...",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e1204902-1dba-4cd5-a37f-ca6142a4e9e5",
+          "type": "reflection",
+          "title": "I WILL TEST A QUICK FIX BY...",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b5ef1159-e06d-42e2-a9c7-a5e358cc651f",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">The quality of leadership decisions depends on the quality of the thinking we make visible. The job is not to eliminate uncertainty. It is to reason responsibly within it.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "22b057cf-a533-4272-adcd-ba2a0f29f3a1",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "6db138a7-50b9-427c-a81d-908e8c9c45be",
+          "type": "heading",
+          "title": "THINK DELIBERATELY. MAKE THINKING VISIBLE.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10abe4ca-e70c-485f-abd8-cb28f58a0419",
+          "type": "text",
+          "title": "",
+          "body": "<p>You examined judgment at the level of self, group, and system&#x2014;and practiced the tools that keep uncertainty, dissent, evidence, and system effects visible long enough to improve the decision.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "21b95c6e-9613-410e-a092-e8bea627b496",
+          "type": "text",
+          "title": "",
+          "body": "<p>CONTINUE TO CRITICAL THINKING →</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "31aaf445-025d-4fe0-a339-22993d17e11d",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"color:#b7cad8;margin-top:18px\">Your progress is saved on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b5b7d13d-7f73-41ba-abca-f44810607def",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"sources\">Course content is adapted from the Leader Metacognition curriculum and its supporting sources, including groupthink and structured-thinking methods in the Red Team Handbook, Need for Closure research, Gradients of Agreement, the public 1993 bike-trail case used in the source course, and systems-thinking / Shifting-the-Burden material.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        }
+      ]
+    }
+  ]
+}

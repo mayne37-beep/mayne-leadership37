@@ -1,0 +1,3447 @@
+{
+  "schemaVersion": 1,
+  "id": "be171a6e-abf4-411c-aa1a-b2e3a26a2001",
+  "title": "Strategic Leadership",
+  "description": "Editable version of the complete Mayne Leadership Strategic Leadership course, including its original explanations, practice activities, application, and reflection prompts.",
+  "author": "Joshua Mayne",
+  "cover": "",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "a8efe448-223c-4a27-ae04-27086285f6f0",
+      "title": "Introduction",
+      "description": "",
+      "blocks": [
+        {
+          "id": "bcb86ca5-baeb-4f99-a5a9-d34877c57894",
+          "type": "heading",
+          "title": "Lead beyond your line of sight.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7da43b8e-e188-48c2-a17d-9c57d7e3c1a9",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Strategic thinking determines what matters. Strategic leadership mobilizes people around it.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b52da10d-4629-441f-aba0-427919cdc2c0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Shape direction. Align systems. Build leaders. Influence beyond authority. Communicate through complexity. Protect trust while achieving results.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "fc4d058a-cd7d-49b7-ab23-18961ab91612",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"font-size:.92rem;color:#b9d0df\"><strong>Approx. 2 hours</strong> &#xb7; Interactive self-paced course &#xb7; Progress saved on this device</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a93b9670-de1a-45e7-a724-4ea298e71020",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "518d7bad-a157-4fc5-a34f-d62d642f5566",
+          "type": "heading",
+          "title": "From personal control to organizational alignment.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "86672178-38ac-4bf8-a8a3-937f8505fc82",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Strategic leadership is not a bigger version of direct supervision. As scope expands, leaders increasingly work through vision, priorities, systems, subordinate leaders, relationships, resources, communication, and trust.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "cec2f189-6a22-467a-ac37-add9c4776ded",
+          "type": "text",
+          "title": "",
+          "body": "<p>What you will practice</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0ca48dd0-81b1-48fe-abd9-3bf6c70f7977",
+          "type": "text",
+          "title": "",
+          "body": "<p>1</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "19df4e3b-f9ca-4066-a0a4-e1538b0d6d5a",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Lead at scale</b><br> Understand how leadership changes from foundation to direct, organizational, and strategic levels.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2f86ec59-96d3-4875-aec7-9f2cc1e97fa5",
+          "type": "text",
+          "title": "",
+          "body": "<p>2</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4ab1ad9d-55fe-4be4-a327-d7c9226368d2",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Use six meta-competencies</b><br> Mental agility, vision, decision shaping, team building, communication, and ethical ambition.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "88fe0d75-7efb-4f7c-a448-7ac3e9c0a698",
+          "type": "text",
+          "title": "",
+          "body": "<p>3</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9fc0082f-4af7-478e-a998-02661e602be5",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Move from hero to architect</b><br> Create conditions that allow others to make aligned decisions without waiting for you.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9ab3a3a9-fd73-472e-ae2b-4208017d1bbb",
+          "type": "text",
+          "title": "",
+          "body": "<p>4</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0c5b95db-c92c-49d0-ab93-d03da002809b",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Influence without control</b><br> Lead down, up, across, and out when responsibility exceeds formal authority.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5e16b9e4-762e-4cd9-a978-6a6ef638bd0a",
+          "type": "text",
+          "title": "",
+          "body": "<p>5</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5c4c1193-8377-4ece-a32f-a6b5cfe7f679",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Create strategic alignment</b><br> Make intent, priorities, stakeholders, risk, learning rhythm, and leader action visible.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "75d16855-339e-4f3d-a123-747ed92b536b",
+          "type": "heading",
+          "title": "See More → Think Deeper → Look Further → Lead Broader",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0051dd3d-e087-485d-aeed-22fe0bfb9377",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic Thinking improves the quality of understanding. Strategic Leadership asks what you do with that understanding when other people, systems, and organizations must move with you.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e08943c3-4901-4cfa-a8b6-9a1f3ed5b0dd",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "0bed1ec7-e516-4756-a66a-71c23b989726",
+      "title": "Leadership at Scale",
+      "description": "",
+      "blocks": [
+        {
+          "id": "e795bfb9-a848-47b3-a1e9-bd905d403b05",
+          "type": "heading",
+          "title": "SHAPE THE CONDITIONS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "17c74a3e-de68-43d3-a543-821730445373",
+          "type": "text",
+          "title": "",
+          "body": "<p>The work shifts from solving tasks to creating clarity, alignment, trust, and systems that preserve intent.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d2875841-23fa-457b-a557-1548bf736028",
+          "type": "heading",
+          "title": "Your method of influence changes as the system grows.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8534a260-25dc-4473-a6b0-b231c6efcf52",
+          "type": "text",
+          "title": "",
+          "body": "<p>Personal control → Alignment</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5c8d0bcf-8506-4b2b-ae28-5f0a4af081db",
+          "type": "text",
+          "title": "",
+          "body": "<p>You cannot personally direct every decision. You create intent, boundaries, priorities, and relationships so others can move together.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8dd1afa2-f5ec-4214-a269-7e0d50df76b0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Tasks → Conditions</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bbe003b4-a9d6-49a7-a02a-73123c9534fa",
+          "type": "text",
+          "title": "",
+          "body": "<p>The strategic leader increasingly shapes systems, resources, structures, decision rights, incentives, and communication rhythms.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f06324b1-4040-4b4d-a59d-87c6b21caef1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Individual execution → Leader network</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7047e134-812e-466d-afaa-8f7008e30a34",
+          "type": "text",
+          "title": "",
+          "body": "<p>Success depends on second-level leaders and partners who understand enough intent to act well when you are absent.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "48d7d3eb-a02c-48e8-a706-06dd337a87c4",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">What works with a small team can fail at scale: personally solving every issue, relying on informal communication, or assuming intent is understood because it was said once.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "efc2dd01-a0ed-489e-a775-77f8f823e56b",
+          "type": "heading",
+          "title": "Levels of leadership",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "26537764-77e3-4a6b-a482-9332a1b7c52d",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open all four. The same character matters at every level; the application changes.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b1c9d6f1-54bb-4f0b-ae70-edb5710d338b",
+          "type": "process",
+          "title": "Leadership levels",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "642aaaff-c6f4-45d2-ac9b-0f5495fdfb80",
+              "title": "FOUNDATION",
+              "text": "<p>Character · competence · trust — Self-awareness, ethics, credibility, competence, and trust support every other level.</p>",
+              "image": ""
+            },
+            {
+              "id": "7a2e9095-dedf-483a-a468-09033d00a3b3",
+              "title": "DIRECT",
+              "text": "<p>Teams + individuals — Influence is immediate and personal; leaders can often see the work and interact directly.</p>",
+              "image": ""
+            },
+            {
+              "id": "7f11b4b7-25dd-47ee-a75b-1e1ea26bf52e",
+              "title": "ORGANIZATIONAL",
+              "text": "<p>Systems + organizations — Influence travels through processes, resources, subordinate leaders, structures, and competing priorities.</p>",
+              "image": ""
+            },
+            {
+              "id": "ae402def-f6a9-41c3-a73f-f88dac56ae09",
+              "title": "STRATEGIC",
+              "text": "<p>Enterprise + environment — Direction, external relationships, long-term conditions, resource tradeoffs, and indirect influence dominate.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "6d795c3e-5d38-47b3-ac21-ec2291f7cb84",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "700d2cef-a03d-4c65-a7ff-3e02a733c431",
+          "type": "heading",
+          "title": "The job moves from doing the work to creating the conditions for the work.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "24ab2fe0-4138-436b-a5b4-90067a6f4f8f",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Personal influence</span><span>&#x2192;</span><span>Indirect influence</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4b68570b-1b8c-4b08-a080-55afc35f9f1d",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Immediate outcomes</span><span>&#x2192;</span><span>Long-term conditions</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9bb28441-6cc7-42df-a039-887e18b83d6c",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Control</span><span>&#x2192;</span><span>Alignment</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2acd2c69-4947-472d-ac7c-213968c16455",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Answers</span><span>&#x2192;</span><span>Better questions</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "91a9fc09-7242-4922-a1f0-247bf81ea030",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Work</span><span>&#x2192;</span><span>Systems</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1a58cc1e-108e-4980-a90d-8c9fb8570674",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"shiftArrow\"><span>Personal expertise</span><span>&#x2192;</span><span>Integrated expertise</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d0c534f7-4f1f-4a64-aa5a-6ce702923684",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Which transition is hardest for strong performers?</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a679cd89-b099-4aa6-a225-3bfa9e84472a",
+          "type": "reflection",
+          "title": "Your most difficult leadership transition",
+          "body": "<p>Select the transition you find most difficult.</p><ul><li>Personal → indirect influence</li><li>Immediate → long-term</li><li>Control → alignment</li><li>Answers → better questions</li><li>Work → systems</li><li>Expertise → integration</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "3d164e34-1076-43f0-ae4f-1d2e9143f35a",
+          "type": "reflection",
+          "title": "Why is this transition difficult—and what behavior would help?",
+          "body": "<p>Why is this transition difficult—and what behavior would help?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "fba0d6ef-7f1c-4eab-a9ce-f5b0c55b779b",
+          "type": "text",
+          "title": "",
+          "body": "<p>A strength at one level can become a liability at another. Decisiveness can become premature closure; expertise can become over-control; responsiveness can keep the leader permanently on the dance floor.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "57fed56a-df8e-4f13-ad7c-14457504edf5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "75518ce7-748f-441c-aa84-735b1c0e9d11",
+          "type": "heading",
+          "title": "Strategic scope increases the cost of weak foundations.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cc87e892-7e14-4a78-a4cf-d9426c61830f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Character</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "22296026-e7e0-4a10-a228-fc1c3e91213a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Values, ethics, discipline, accountability, consistency, and the willingness to place mission and stewardship above ego.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b634af96-c419-4d18-a6ad-0e157840c5c8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Presence</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d4613da0-ea8a-4e89-a219-520f3249c53e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Credibility, resilience, calm under scrutiny, confidence without arrogance, and consistency across audiences.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f41bbad6-6fdf-4996-a9db-55aca8c25d81",
+          "type": "text",
+          "title": "",
+          "body": "<p>Intellect</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5052e8d9-b93d-4df0-af44-d03f86a6d120",
+          "type": "text",
+          "title": "",
+          "body": "<p>Judgment, innovation, mental agility, systems understanding, and the ability to integrate expert advice.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b02d387e-f084-499e-a840-8816c17fccce",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Competencies still come down to leading, developing, and achieving&#x2014;but the scale, time horizon, and indirect nature of influence change dramatically.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d45e5e89-2bb7-4301-a017-231f4ffe22cf",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "ba2f37d5-a3cd-4817-a02a-d1372b873bcb",
+          "type": "heading",
+          "title": "Strategic leadership is visible in the current Executive Core Qualifications.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "591c61c4-a239-44cb-ac4b-d59699b5e790",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">For federal leaders, OPM&apos;s current ECQs connect rule of law, efficiency, merit and competence, leading people, and achieving results. Strategic thinking is explicitly included under Achieving Results.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f26b8207-e150-46dc-a5c3-a2e1ce587da1",
+          "type": "tabs",
+          "title": "Executive Core Qualifications",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "07319613-9cea-48c2-a047-235c4d34512c",
+              "title": "Rule of Law + Founding Principles",
+              "text": "<p>Uphold constitutional government, rule of law, and service to the American people.</p>",
+              "image": ""
+            },
+            {
+              "id": "87a177e8-d84a-40e7-a0e5-5807461f1ee5",
+              "title": "Driving Efficiency",
+              "text": "<p>Strategically manage resources, budget, process, and technology to improve efficiency.</p>",
+              "image": ""
+            },
+            {
+              "id": "d27fde9b-ce9b-4f02-a8fc-91cce7ce698f",
+              "title": "Merit + Competence",
+              "text": "<p>Demonstrate technical competence, problem solving, agility, resilience, and exceptional-quality work.</p>",
+              "image": ""
+            },
+            {
+              "id": "b43f3530-47cd-42f5-a248-0a4dc6d46368",
+              "title": "Leading People",
+              "text": "<p>Inspire people toward mission and goals while building a high-performance, high-accountability culture.</p>",
+              "image": ""
+            },
+            {
+              "id": "a2e1977d-4304-48b2-a0a2-35d8ff472936",
+              "title": "Achieving Results",
+              "text": "<p>Translate strategy into action, innovate, think strategically, and align results to organizational goals.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "773622a1-36f0-4d9c-a267-3d825e0df01c",
+          "type": "text",
+          "title": "",
+          "body": "<p>The leadership challenge is not simply to move faster. It is to achieve legitimate, effective, accountable outcomes while managing people, resources, technology, risk, and long-term organizational interests.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "12a2f934-018e-4562-a2c5-2eb2ee92ac38",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "cb8b589a-3021-4e00-a66a-3aa6c93c6517",
+          "type": "heading",
+          "title": "Six behaviors help leaders operate at enterprise scale.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "44339e04-4267-4f6d-a0db-a1debd5fef06",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open all six. The framework is adapted from strategic-leadership research and translated into practical leader behavior.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "4355a6e2-bd84-4394-a821-93058aacb1c4",
+          "type": "tabs",
+          "title": "Six strategic-leader behaviors",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "85b10511-1f8e-4abe-ad0c-fe1b2b998244",
+              "title": "Mental Agility",
+              "text": "<p>Move between details, systems, and future implications; hold competing truths long enough to understand them.</p>",
+              "image": ""
+            },
+            {
+              "id": "e350c11a-e7fa-4423-a9c6-dbb7a29898bf",
+              "title": "Vision",
+              "text": "<p>Describe a desired future condition and make intent clear enough to guide decisions when you are absent.</p>",
+              "image": ""
+            },
+            {
+              "id": "d8338ca6-d8d9-43c4-a660-58a98c9e1d15",
+              "title": "Decision Shaping",
+              "text": "<p>Clarify decision ownership, frame options, surface tradeoffs, and improve the quality of the decision environment.</p>",
+              "image": ""
+            },
+            {
+              "id": "217620d8-e843-489b-a981-d1f133b37ba3",
+              "title": "Team Building",
+              "text": "<p>Build trust, clarity, roles, rhythm, and psychological safety across functions and boundaries.</p>",
+              "image": ""
+            },
+            {
+              "id": "af4ddd76-cca0-4e88-a22e-ccad4c535aff",
+              "title": "Communication",
+              "text": "<p>Translate complexity through layers and audiences without hiding risk or changing the core truth.</p>",
+              "image": ""
+            },
+            {
+              "id": "3b60c171-9a1b-4e32-a57a-ad9462454fe0",
+              "title": "Ethical Ambition",
+              "text": "<p>Achieve meaningful results with integrity, stewardship, accountability, and long-term legitimacy.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "25875736-4474-4386-a62e-c709f711494f",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "dc9fb485-b9bc-4e49-a083-936643c15871",
+      "title": "Mental Agility",
+      "description": "",
+      "blocks": [
+        {
+          "id": "ce127752-05f9-40ef-a961-3aed21495291",
+          "type": "heading",
+          "title": "Change altitude without losing judgment.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "350c2412-e165-448b-a42c-3c25991f3d7b",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Strategic leaders move between details, systems, and future implications. They can hold competing truths long enough to understand them before locking onto an answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6abc8ff5-3860-4a36-a878-25c12bb2f528",
+          "type": "reflection",
+          "title": "THE DETAIL",
+          "body": "<p>What immediate issue is pulling attention?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "461b805e-dd4d-48b7-a4a1-d45f095fafa5",
+          "type": "reflection",
+          "title": "THE SYSTEM",
+          "body": "<p>What larger process, pattern, or dependency surrounds it?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f150240e-68dc-4dee-a6a8-d7f34abba8da",
+          "type": "reflection",
+          "title": "THE FUTURE",
+          "body": "<p>What future implication or second-order effect matters?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9ffd0bd8-9893-4a55-a5e9-2e1dafbe5931",
+          "type": "reflection",
+          "title": "THE BETTER QUESTION",
+          "body": "<p>What question helps you regain altitude?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "7da2d716-3d19-4cae-a777-fefa03624fbb",
+          "type": "text",
+          "title": "",
+          "body": "<p>Mental agility is not knowing everything. It is integrating expertise without becoming trapped in one frame.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "17f14984-cece-48dc-a26f-032ad09c632c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "40ccc6d6-0c1e-47dc-a983-da1b6a042b82",
+      "title": "Vision and Intent",
+      "description": "",
+      "blocks": [
+        {
+          "id": "56393aab-e428-4251-a311-608b7d3c08f0",
+          "type": "heading",
+          "title": "Vision turns complexity into direction.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5ed75f99-8294-4945-a56d-1030aae4016b",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">A strategic vision is not a slogan. It describes a desired future condition clearly enough to guide decisions when the leader is absent.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "319bf494-7b53-4672-ad5b-8b61f9e0de14",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\"><strong>Weak:</strong> &#x201c;We need to improve communication.&#x201d;<br> <strong>Stronger:</strong> Describe the future condition, why it matters, and what decisions it should guide.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "caf56550-11c7-4b23-a204-b83f5b8325cf",
+          "type": "reflection",
+          "title": "DESIRED FUTURE CONDITION",
+          "body": "<p>What should be true when this is working well?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "be982e54-c78b-4884-aceb-8a227989c857",
+          "type": "reflection",
+          "title": "WHY IT MATTERS",
+          "body": "<p>How does this connect to mission, people, customers, or public value?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8e248991-c3ee-49e3-ae32-20568aeb1950",
+          "type": "reflection",
+          "title": "DECISION GUIDANCE",
+          "body": "<p>What should leaders be able to decide without asking you?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "36977ca5-e6c9-4893-a691-11031bf10ab3",
+          "type": "reflection",
+          "title": "ONE-SENTENCE INTENT",
+          "body": "<p>We are creating ___ so that ___.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e28b3ca0-bb99-4c0c-aaf5-d4cf5df37ac5",
+          "type": "text",
+          "title": "",
+          "body": "<p>The test of vision is not whether it sounds inspiring. The test is whether people can use it to make aligned decisions when you are not in the room.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9d2471f9-d98a-4047-ac0c-eb594f646ac5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "8dc3cc50-0475-4032-a42a-2435fd712166",
+      "title": "Decision Shaping",
+      "description": "",
+      "blocks": [
+        {
+          "id": "626c14f0-60ff-418a-a8ec-494f1a47cb3e",
+          "type": "heading",
+          "title": "Sometimes you decide. Sometimes you shape the decision environment.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "37829156-9291-4c92-af99-ba88a6634fa4",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Strategic leaders clarify decision rights, frame choices, surface tradeoffs, and make the type of request explicit.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a686a6e2-6566-46c9-a321-6872ab7598c1",
+          "type": "reflection",
+          "title": "WHO OWNS THE DECISION?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9a95bd3d-c9c7-425b-aad3-e2d5464d5ee5",
+          "type": "reflection",
+          "title": "WHO MUST PROVIDE INPUT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4af92169-ab90-41d3-a190-c7d874111da3",
+          "type": "reflection",
+          "title": "WHO MUST EXECUTE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ae6995a3-f650-437e-ada5-11a52aef2f8d",
+          "type": "reflection",
+          "title": "WHO BEARS CONSEQUENCES?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8990a80e-bfde-4717-a991-56750d8d234a",
+          "type": "reflection",
+          "title": "ENDS",
+          "body": "<p>Desired condition</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c96f5960-80cb-4081-aecd-ccc987c52fe4",
+          "type": "reflection",
+          "title": "WAYS",
+          "body": "<p>Broad approach</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "670a9f6e-65ee-4752-a4a3-2c56e8e817ab",
+          "type": "reflection",
+          "title": "MEANS",
+          "body": "<p>People, resources, authorities, time</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "929ded98-b537-43d2-a6f4-b45e4f9261c8",
+          "type": "reflection",
+          "title": "RISK",
+          "body": "<p>Friction, tradeoffs, unintended consequences</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "bed6dce5-ab1c-4bb2-abcc-664524435356",
+          "type": "reflection",
+          "title": "What are you asking leadership for?",
+          "body": "<p>Choose the type of request you are preparing.</p><ul><li>Recommendation</li><li>Decision</li><li>Request for guidance</li><li>Request for concurrence</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "aa88eb15-5d94-432a-a32d-64cfc16b01b7",
+          "type": "text",
+          "title": "",
+          "body": "<p>Use explicit language: is this a recommendation, a decision, a request for guidance, or a request for concurrence? Unclear decision rights create delay and shadow decision-making.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "39345748-3da0-4837-a625-b1234ec838af",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "e4aaa097-c6cf-474f-a4fe-e41d35458d16",
+      "title": "Strategic Teams",
+      "description": "",
+      "blocks": [
+        {
+          "id": "e0651d10-0f1d-4782-aa97-79a10a902ff4",
+          "type": "heading",
+          "title": "Strategic teams often include experts you do not command.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e5fd4716-e463-46af-a976-0b69a84e3c2a",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select the conditions your cross-functional team most needs to strengthen, then design the operating environment around them.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6b1729fe-e6fe-4640-a731-7fd7075e5222",
+          "type": "reflection",
+          "title": "Two strategic-team conditions",
+          "body": "<p>Identify at least two conditions that most need attention.</p><ul><li>Trust — People believe commitments will be honored and difficult information can be surfaced.</li><li>Role clarity — Members understand ownership, boundaries, handoffs, and dependencies.</li><li>Decision authority — The team knows what it can decide and what must be elevated.</li><li>Operating rhythm — The team has a predictable cadence for coordination, decisions, learning, and adjustment.</li><li>Constructive dissent — Experts can challenge assumptions without becoming disloyal or defensive.</li><li>Shared purpose — Different functions can explain the same outcome and why their contribution matters.</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1a4380df-8182-458a-a6a7-11a62ca9ad8d",
+          "type": "reflection",
+          "title": "ROLE CLARITY",
+          "body": "<p>Who owns what?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c0db3bc7-1817-45ea-aa55-32e11f642b49",
+          "type": "reflection",
+          "title": "DECISION RIGHTS",
+          "body": "<p>What can this team decide? What must be elevated?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "df85358c-edc8-42d4-ab36-255c37c944f5",
+          "type": "reflection",
+          "title": "OPERATING RHYTHM",
+          "body": "<p>How often do we coordinate, decide, learn, and adjust?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "fcf0974c-6de4-486b-a022-494c1b713ede",
+          "type": "reflection",
+          "title": "DISSENT + BAD NEWS",
+          "body": "<p>How will people surface disagreement, risk, or failure early?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "59ee87aa-90c5-4c7d-aa29-cf3c28778157",
+          "type": "text",
+          "title": "",
+          "body": "<p>Cross-functional teams exist because no single viewpoint sees the whole system. Trust, clarity, cadence, and psychological safety are operating requirements—not extras.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7c75b3a9-ff83-4316-aa17-862fb6d39297",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "48a9fd20-a125-442a-a185-cb2c0d84ad4a",
+      "title": "Strategic Communication",
+      "description": "",
+      "blocks": [
+        {
+          "id": "51a718a5-005c-4372-a3a9-4772f9b46f47",
+          "type": "heading",
+          "title": "Same strategy. Different audience needs.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1d1f25e8-d116-4f40-a79e-85c97ebfa077",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Choose a hypothetical organizational change. Keep the core truth consistent while changing emphasis, language, and information for five audiences.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5445c5c7-bd62-4548-a396-31134174a27f",
+          "type": "reflection",
+          "title": "commScenario",
+          "body": "<ul><li>Implement a new workflow</li><li>Introduce a new technology tool</li><li>Change a training requirement</li><li>Redesign a coordination process</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f5af6fe4-d47f-4acb-a405-90a0bcf0c543",
+          "type": "reflection",
+          "title": "EMPLOYEES · impact + support",
+          "body": "<p>What is changing? Why? How will people be supported?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "45391616-ed1c-4e96-af48-7682c4936a75",
+          "type": "reflection",
+          "title": "SUPERVISORS · expectations + resources",
+          "body": "<p>What do supervisors need to do, know, reinforce, or resource?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "aaec046e-dcdc-495c-a6dd-78a768ab0d75",
+          "type": "reflection",
+          "title": "OTHER FUNCTION · dependencies",
+          "body": "<p>What dependencies, handoffs, or coordination matter?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ce1c1a88-7914-4c45-acff-c34cb41749c2",
+          "type": "reflection",
+          "title": "PARTNERS · roles + coordination",
+          "body": "<p>What is expected across organizational boundaries?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ccfead16-e57f-436c-a8f9-04af1abbaa22",
+          "type": "reflection",
+          "title": "OVERSIGHT / SENIOR LEADERS · rationale + accountability",
+          "body": "<p>What outcome, risk, rationale, and accountability matter?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "764b8cbc-0a47-4876-adbf-330ccfc3953f",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"commFeedback\"><strong>Strategic communication is disciplined translation.</strong> Adapt the emphasis without changing the integrity of the message. Build feedback loops so the message can travel back as well as out.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5bb342be-0de4-4a83-a085-e3440a53f5fc",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "7bccdd8c-bda6-4faf-a23b-3a225dc2f14e",
+      "title": "Ethical Ambition",
+      "description": "",
+      "blocks": [
+        {
+          "id": "c47ef4de-384c-4e5d-a11f-321765b63f9a",
+          "type": "heading",
+          "title": "Accomplish the mission without separating results from character.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "edcbf47f-5c11-4a60-a22f-4ee309014b0c",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Strategic leadership has to hold effectiveness, legality, policy, stewardship, people, risk, accountability, and trust together.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "eb3916bc-939d-43a4-ac17-cf4f53e97280",
+          "type": "text",
+          "title": "",
+          "body": "<p>RESULTS WITHOUT TRUST</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7c00761d-6ac2-41bf-af97-c3b3ed56caaf",
+          "type": "text",
+          "title": "",
+          "body": "<p>What happens when a leader achieves the metric but damages credibility, stewardship, or legitimacy?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5991c4e7-8829-4459-ab9b-b4e8800ead78",
+          "type": "reflection",
+          "title": "RESULTS WITHOUT TRUST",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "466710e6-97e1-4789-a7e0-d45bb0f867a5",
+          "type": "text",
+          "title": "",
+          "body": "<p>↔</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ff86e183-23f0-4e49-a33a-28140dce9c7a",
+          "type": "text",
+          "title": "",
+          "body": "<p>PROCESS WITHOUT RESULTS</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "67b48fb0-ac4e-4acd-a45e-fb0826cf72be",
+          "type": "text",
+          "title": "",
+          "body": "<p>What happens when a leader protects process but cannot create meaningful outcomes?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c39dd816-2d19-417f-ad5c-b2e50c8ffef1",
+          "type": "reflection",
+          "title": "PROCESS WITHOUT RESULTS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ee465836-92b0-48e4-aeb3-bb4cedf79876",
+          "type": "reflection",
+          "title": "YOUR LEADERSHIP STANDARD",
+          "body": "<p>What principle should remain true even when pressure is high?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1ee396fb-db3d-42be-a91e-497175dc8cd3",
+          "type": "text",
+          "title": "",
+          "body": "<p>Ethical ambition means pursuing meaningful results while staying grounded in principle. Strategic leaders model the behavior the organization must be able to trust.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "910f4fee-1d5d-4170-a7d4-2af142c5aa73",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "a1e455ec-3c3a-4433-a3b9-d44b9d63ffbd",
+      "title": "Hero to Architect: Influence and Application",
+      "description": "",
+      "blocks": [
+        {
+          "id": "911156c6-3c57-4f96-a627-c68afc042b56",
+          "type": "heading",
+          "title": "HERO → ARCHITECT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "066a8f7f-14c7-4be6-ae86-6f3a0d3c76fd",
+          "type": "text",
+          "title": "",
+          "body": "<p>Your value increasingly comes from creating conditions for other people to succeed.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "efb23550-a37f-4e30-a35d-b1b272961d26",
+          "type": "heading",
+          "title": "Where are you still trying to be the hero?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "63989ff2-8bd6-4400-a1c8-d3d533bd2a7f",
+          "type": "text",
+          "title": "",
+          "body": "<p>STOP BEING THE ONLY PROBLEM SOLVER</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "19d72095-02ad-457c-a1df-21fdb7ab89f6",
+          "type": "reflection",
+          "title": "STOP BEING THE ONLY PROBLEM SOLVER",
+          "body": "<p>What problem do you keep pulling back to yourself?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d1919a78-e665-4814-a9c6-858c1884b819",
+          "type": "text",
+          "title": "",
+          "body": "<p>BUILD A LEADER</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e22adbeb-f18a-4616-a7b1-2ccdf34c07fe",
+          "type": "reflection",
+          "title": "BUILD A LEADER",
+          "body": "<p>Who needs enough context, authority, and confidence to decide without you?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a1d2c19e-e3de-4133-a83a-5395899cb5d8",
+          "type": "text",
+          "title": "",
+          "body": "<p>BUILD A SYSTEM</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "24181d4e-1d18-4fc6-a711-6c89ddbe2bb2",
+          "type": "reflection",
+          "title": "BUILD A SYSTEM",
+          "body": "<p>What process, decision right, resource, or rhythm should replace personal rescue?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ec2245ee-203f-4464-a381-ce4ae9ef9cf8",
+          "type": "text",
+          "title": "",
+          "body": "<p>PRESERVE INTENT UNDER PRESSURE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0a8eb495-98cc-442f-a373-d2e67a264597",
+          "type": "reflection",
+          "title": "PRESERVE INTENT UNDER PRESSURE",
+          "body": "<p>What must remain clear when conditions change?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d9543e4b-8d80-49b1-a388-fe64bbcc5ddb",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic leaders still solve problems. The transition is that their highest value increasingly comes from clarity, systems, leader development, alignment, and conditions that keep working when they are not present.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "302d5ba9-3107-432d-a119-1b7ceb1e7410",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "20cf73e1-e5c9-42fd-a92d-cbcefa214678",
+          "type": "heading",
+          "title": "Responsibility often extends beyond formal authority.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8a7b6aa1-ab21-48fd-a283-363e458b3f51",
+          "type": "text",
+          "title": "",
+          "body": "<p>LEAD DOWN</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6c9ab902-6e14-4564-a49c-d78eecacdc62",
+          "type": "text",
+          "title": "",
+          "body": "<p>Create clarity, resources, trust, development, and accountability.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c5eb0234-fa0e-472c-a2c1-74be8cdb668f",
+          "type": "text",
+          "title": "",
+          "body": "<p>LEAD UP</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e8848a29-fdb1-4e4b-aa7a-f8ef3cc98a8b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Frame issues, surface risk, provide options, and improve senior leaders&apos; understanding.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bb297ce3-9d17-47de-a2f2-c5e1724ee574",
+          "type": "text",
+          "title": "",
+          "body": "<p>LEAD ACROSS</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "14735aba-3127-44b1-acbe-acd7657c0337",
+          "type": "text",
+          "title": "",
+          "body": "<p>Build coalitions, shared understanding, agreements, and reciprocal trust with peers.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3bac4dd2-164f-4396-a1e4-0550a975326c",
+          "type": "text",
+          "title": "",
+          "body": "<p>LEAD OUT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f0e5a23f-82ba-4dff-a9c8-279b0af36857",
+          "type": "text",
+          "title": "",
+          "body": "<p>Coordinate with partners, customers, stakeholders, communities, and external systems.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "925910cf-c962-4661-a691-99cee6122d22",
+          "type": "reflection",
+          "title": "AN OUTCOME YOU OWN BUT DO NOT FULLY CONTROL",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "7e9c8ef1-5be0-4037-a0f4-780d95f0c684",
+          "type": "reflection",
+          "title": "WHO MUST YOU INFLUENCE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ddf8cb1e-893a-4932-a336-481329192931",
+          "type": "reflection",
+          "title": "WHAT GIVES YOU CREDIBILITY?",
+          "body": "<p>Relationships, evidence, timing, expertise, reliability...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6c937a8f-e762-4951-a6e2-a30f2d103b35",
+          "type": "reflection",
+          "title": "WHAT RELATIONSHIP SHOULD EXIST BEFORE THE CRISIS?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "251430c1-a025-469d-a500-f11915bf4737",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"infFeedback\"><strong>Unity of effort without unity of command</strong> is strategic leadership terrain. Authority helps, but alignment also depends on relationships, credibility, timing, evidence, shared purpose, and trust.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ebcda36f-d5b7-4982-aa6c-674a68450cec",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4f04ed5d-2377-4be0-a801-b555f0644f5b",
+          "type": "heading",
+          "title": "Leading a complex system under scrutiny.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f6f6f9b5-47ed-4e9c-aee7-1986355d5233",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">During the Deepwater Horizon response, Admiral Thad Allen served as National Incident Commander. The environment included federal agencies, state and local governments, private industry, scientific experts, elected officials, affected communities, media, and the public. No single leader commanded the entire system.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b82e3d1b-0db7-486e-a7b5-2a989bcce69c",
+          "type": "reflection",
+          "title": "WHO DOES THE LEADER ACTUALLY COMMAND?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b537c281-1911-495d-ac4b-53991fddcffe",
+          "type": "reflection",
+          "title": "WHO MUST THE LEADER INFLUENCE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ab1931a7-727d-4738-a01c-74d89ee60941",
+          "type": "reflection",
+          "title": "WHAT DEFINITIONS OF SUCCESS MAY COMPETE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ca3faec0-a1cd-4370-a29a-60aee3667db5",
+          "type": "reflection",
+          "title": "WHAT SHOULD BE CENTRALIZED?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "05c3dabd-41ac-4ced-a0c5-f059ce4fd95b",
+          "type": "reflection",
+          "title": "WHAT SHOULD BE DELEGATED?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d06e2d98-09dc-493f-a89d-ede8151de5c9",
+          "type": "reflection",
+          "title": "WHAT IF OPERATIONS IMPROVE BUT TRUST COLLAPSES?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2e12fb13-c5a0-479f-a049-f3383382221c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic leadership is not only command. It is integration: aligning stakeholders with different authorities, information, incentives, risks, and definitions of success.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4f2b7fc7-408d-4ef0-a018-44e538d85f79",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "81b90092-2588-4106-af95-611f50b07bf3",
+          "type": "heading",
+          "title": "Where do you need unity of effort without full control?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cc37031f-36c5-4c9e-a860-6860c87632af",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Think of cross-functional initiatives, technology implementation, workforce development, training, policy, legal coordination, headquarters-field relationships, or partner work.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "52630bf1-a685-4912-a350-158a8568552a",
+          "type": "reflection",
+          "title": "THE SHARED OUTCOME",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c5a60abe-0da3-4f6e-a0a9-3fa842eeb1ed",
+          "type": "reflection",
+          "title": "BOUNDARIES / SILOS INVOLVED",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "42c05316-d6a3-4f7f-ad44-4623c0035655",
+          "type": "reflection",
+          "title": "COMPETING PRIORITIES",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d2c2a953-ff4a-4aca-aabc-b4e2bd9cc4f1",
+          "type": "reflection",
+          "title": "RELATIONSHIP TO BUILD NOW",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6123477e-6498-4afb-a71a-4536446e87e6",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "91b5e4f0-676c-45cc-ac44-cc5ee2554377",
+          "type": "heading",
+          "title": "Strategic failure can look like leadership activity.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c073e52b-c0d2-4c5a-a195-89511abbc8c5",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select the two failure modes that create the most risk in your environment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c30ebda2-a564-4d41-aa13-e0dbd07b6a43",
+          "type": "reflection",
+          "title": "Two strategic leadership failure risks",
+          "body": "<p>Choose two failure patterns most relevant to your situation.</p><ul><li>More meetings — More activity without clearer decisions, ownership, or information flow.</li><li>Vision without means — A direction is announced without resources, accountability, or a credible path.</li><li>Delegation without intent — Work moves downward but people lack context to make aligned decisions.</li><li>Communication without feedback — Messages move outward but leaders do not learn what was understood, missed, or resisted.</li><li>Speed without learning — The organization moves quickly but repeats errors because reflection and adjustment disappear.</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "dd0866b7-1710-4d70-a9d6-e6184ab35062",
+          "type": "reflection",
+          "title": "COUNTERMEASURE",
+          "body": "<p>What practical leader tool or behavior would reduce these risks?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d0cf0810-57e4-408b-a32e-066f98552110",
+          "type": "text",
+          "title": "",
+          "body": "<p>Meetings, taskers, slide decks, and messages are not alignment by themselves. Ask whether decisions are clearer, roles are understood, risk is visible, feedback is flowing, and people know what matters most.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5eea2310-3c9b-4d67-a411-16021cfdc563",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "4cf984b2-3574-4acb-ab2c-50b92e8ad6dd",
+      "title": "Strategic Alignment Dashboard",
+      "description": "",
+      "blocks": [
+        {
+          "id": "22586c35-e35e-4c15-a75f-8b49da22b8c6",
+          "type": "heading",
+          "title": "Alignment must be visible before it can be managed.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3fb739b4-2bf9-4c62-a285-c2f43bf49b52",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Use a real or hypothetical initiative. Could every stakeholder state the same intent, priorities, risks, and next learning point?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2e30db2f-b837-4ab1-a392-bcf6525c7b91",
+          "type": "reflection",
+          "title": "INTENT · What condition are we creating?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "307255a3-5342-4afc-a93a-03cb4484aa81",
+          "type": "reflection",
+          "title": "TOP THREE PRIORITIES",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6702d932-2ab8-4827-a80a-d18e730dccf5",
+          "type": "reflection",
+          "title": "STAKEHOLDERS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "86d70172-d273-4b4e-a267-fe4b544b72f8",
+          "type": "reflection",
+          "title": "RESOURCES / MEANS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "93c22aa4-b55c-4e35-ad11-1c1fb7fb63aa",
+          "type": "reflection",
+          "title": "STRATEGIC RISKS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "7633ac9b-ce97-4fd5-aa10-874b3e6d1063",
+          "type": "reflection",
+          "title": "MEASURES / EVIDENCE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "833ec10c-0f5f-4833-ad83-97cf28ff4d5c",
+          "type": "reflection",
+          "title": "LEARNING RHYTHM · When do we review and adjust?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b1bf67bc-6e08-47e5-a6b6-73b2aa135f1b",
+          "type": "reflection",
+          "title": "LEADER ACTIONS",
+          "body": "<p>What must leaders reinforce, resource, decide, communicate, or remove?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4a415221-a34b-4e09-af84-fc53dca4feba",
+          "type": "text",
+          "title": "",
+          "body": "<p>If different stakeholders carry different assumptions about intent, priorities, risk, or decision timing, alignment is weaker than it appears.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "010d2675-342e-4919-a564-2ed5163b8dbc",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "04c43a45-b0b1-4163-a8e8-1d93c93de102",
+      "title": "Modernization Capstone and Brief",
+      "description": "",
+      "blocks": [
+        {
+          "id": "14e3a8bf-3481-4b5a-aeba-b1188f9f4aa3",
+          "type": "heading",
+          "title": "Lead a three-year enterprise modernization effort.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "933f4c2e-1bc4-41bd-a9ad-85e617b605e7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">A fictional organization is implementing a major modernization effort affecting people, policy, technology, training, field operations, headquarters, and external partners. Existing mission work must continue. Resources are limited, trust varies, timelines compete, and success depends on adoption&#x2014;not merely deployment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "b146dd04-43f0-40e1-a33f-c1eb13b0a17c",
+          "type": "reflection",
+          "title": "1 · ONE-SENTENCE STRATEGIC INTENT",
+          "body": "<p>We are doing ___ so that ___.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "e05cd345-7603-4643-a675-470656dfe4b5",
+          "type": "reflection",
+          "title": "2 · THREE PRIORITIES — NO MORE THAN THREE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1dbd2065-755d-4e2b-aabc-7a13c5931c22",
+          "type": "reflection",
+          "title": "3 · STAKEHOLDER MAP",
+          "body": "<p>Who approves? Supports? Implements? Must understand? Must be consulted?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "709c187e-1c35-49aa-ae66-aa72d009a4c6",
+          "type": "reflection",
+          "title": "4 · STRATEGIC RISKS",
+          "body": "<p>Mission, people, legal/policy, technology, resources, trust...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "cc27e69a-2f53-45b5-a83c-24a8498d0251",
+          "type": "reflection",
+          "title": "5A · LEADERS MUST START",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d558acf4-96b2-45cb-aa4c-218bd8b21fbe",
+          "type": "reflection",
+          "title": "5B · LEADERS MUST STOP",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "733b3267-a6cf-46cd-a1a2-995f7e76c9ba",
+          "type": "reflection",
+          "title": "5C · LEADERS MUST CONTINUE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2799ea8e-1e05-4658-aa39-413053b7e4be",
+          "type": "reflection",
+          "title": "ASSUMPTION THAT COULD EMBARRASS THE STRATEGY",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "67cc097d-988e-411b-ad6d-3916658b29ac",
+          "type": "text",
+          "title": "",
+          "body": "<p>The job is not to create a technical implementation plan. The job is to create strategic alignment: clear intent, disciplined priorities, visible stakeholders and risk, and leader behavior that supports adoption.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fee5cad2-ab2d-483e-aed8-6e8c4b02f5c0",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4da8b1fe-512e-4d83-ae57-01404c9c1c51",
+          "type": "heading",
+          "title": "Brief the thinking—not just the recommendation.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "513d8911-358d-4f02-a368-296070420b56",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Your brief should make the desired condition, the things that must hold, the strategic risks, and the decision needed immediately visible.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9c782bf7-3cae-48b2-ae18-67ba819d84ca",
+          "type": "reflection",
+          "title": "INTENT · desired condition + why it matters",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "20711c51-9661-46d0-a613-0fafdf48fb51",
+          "type": "reflection",
+          "title": "PRIORITIES · the three things that must hold",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6028ed50-0d9c-49b6-ae88-f6260a1ff86c",
+          "type": "reflection",
+          "title": "RISKS · what could fail + how we will learn",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "61c0e82b-910e-4786-ad16-6fbc3606b54c",
+          "type": "reflection",
+          "title": "DECISION NEEDED · what do you need from leadership now?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "da4a59f1-b201-4423-a12a-5dc125b7c0c3",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">If the brief becomes too tactical, ask: <strong>What strategic condition are we trying to create?</strong> If it becomes too abstract, ask: <strong>What decision or leader action is required now?</strong></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "aa4a685c-815b-4858-a418-4795cb412821",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "cd1f7db8-300a-444f-a1e7-b789ef764cbd",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "be1d2cda-800d-4a7e-a66e-bc80b7d33a1d",
+          "type": "heading",
+          "title": "Strategic leaders move between action and perspective.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f7993682-67de-4bc9-af29-f06479ab343d",
+          "type": "text",
+          "title": "",
+          "body": "<p>DANCE FLOOR</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "681b5b10-99ae-42b1-a503-22fa3764bd96",
+          "type": "heading",
+          "title": "What problem is consuming your attention?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5c510862-c4b7-4d4c-aabb-859da49d8f46",
+          "type": "reflection",
+          "title": "What problem is consuming your attention?",
+          "body": "<p>Name the immediate issue.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "45beccd2-4233-483d-a91d-35c243088159",
+          "type": "text",
+          "title": "",
+          "body": "<p>BALCONY</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "783fa660-12ba-4af1-a49e-b2f45d03d810",
+          "type": "heading",
+          "title": "What becomes visible when you gain altitude?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4828fc9a-3902-45a7-a639-ccebe334cf5b",
+          "type": "reflection",
+          "title": "What becomes visible when you gain altitude?",
+          "body": "<p>What is connected? What created it? What reinforces it?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "fe9b769d-88a5-4d4a-ad0a-50c59b76261b",
+          "type": "reflection",
+          "title": "WHO SEES THIS DIFFERENTLY?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "516db971-a0b7-4a18-a1d7-6352eb0c9695",
+          "type": "reflection",
+          "title": "WHAT HAPPENS IF NOTHING CHANGES?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f4701d76-2451-4624-a9b2-1d170113f66a",
+          "type": "reflection",
+          "title": "WHAT HAPPENS IF YOU SOLVE IT?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c84b1b91-e1db-4391-a043-899c66be80af",
+          "type": "reflection",
+          "title": "WHAT FUTURE PROBLEM COULD TODAY'S SOLUTION CREATE?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "67361870-059f-48cc-aa58-832a677e7cfb",
+          "type": "reflection",
+          "title": "WHAT CONVERSATION SHOULD YOU BE HAVING THAT YOU ARE CURRENTLY NOT HAVING?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "d67364ab-4096-4230-ad57-cae6eacad1a6",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\"><strong>See More &#x2192; Think Deeper &#x2192; Look Further &#x2192; Lead Broader.</strong> Strategic leadership is the discipline of turning better understanding into aligned action through people, systems, relationships, and trust.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c2e2be47-f244-4cef-afd0-43b9aefbf901",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "91b2c54c-8b32-4a77-a1b7-17cc3fcbc3f7",
+          "type": "heading",
+          "title": "ALIGN THE SYSTEM. ENABLE THE PEOPLE.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6715927c-2769-4dc5-a685-689b1d5bccd1",
+          "type": "text",
+          "title": "",
+          "body": "<p>You practiced leading at scale through agility, vision, decision shaping, team building, communication, ethical ambition, influence, and strategic alignment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "4d4492c7-b27f-47d3-acae-2b52e794a606",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"color:#b7cbd8;margin-top:18px\">Your progress is saved on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "38ac6bba-d053-47b4-a441-31f76bae6055",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"sources\">Source notes: course framework adapted from the Mayne Leadership Strategic Thinking &amp; Strategic Leadership curriculum. Federal leadership connection: <a href=\"https://www.opm.gov/policy-data-oversight/senior-executive-service/executive-core-qualifications/\" target=\"_blank\" rel=\"noopener\">OPM Executive Core Qualifications</a>. Public case background: <a href=\"https://www.history.uscg.mil/Browse-by-Topic/Notable-People/All/Article/1762857/admiral-thad-w-allen/\" target=\"_blank\" rel=\"noopener\">U.S. Coast Guard history of Admiral Thad W. Allen</a>. Strategic-leader meta-competencies are adapted from U.S. Army War College strategic-leadership research.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        }
+      ]
+    }
+  ]
+}

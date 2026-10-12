@@ -1,0 +1,4279 @@
+{
+  "schemaVersion": 1,
+  "id": "7507ea46-2f2b-496a-abd4-6cd833875069",
+  "title": "Systems Thinking: Foundations",
+  "description": "Editable version of the complete Mayne Leadership Systems Thinking: Foundations course, including its original explanations, practice activities, application, and reflection prompts.",
+  "author": "Joshua Mayne",
+  "cover": "",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "801123b6-0599-4de9-ad15-e2bd34bcacad",
+      "title": "The Productivity Mystery",
+      "description": "",
+      "blocks": [
+        {
+          "id": "5b235e63-87c5-4327-af3a-e6efb6ea3e2d",
+          "type": "heading",
+          "title": "Stop chasing events. See the system.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f970e2e0-5b0e-4e35-aa71-df025fa39c4e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Systems thinking helps us understand how parts, relationships, patterns, feedback, delays, assumptions, and consequences interact to produce results over time.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "73c77e35-c60e-471c-a002-76dfe48c1957",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "1e40cb24-33cc-4769-a6b8-7a99ef6e166b",
+          "type": "heading",
+          "title": "The Productivity Mystery",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dafc7ba1-6b46-4780-ad29-3719491aa45d",
+          "type": "text",
+          "title": "",
+          "body": "<p>An executive message arrives: &#x201c;Unit performance has dropped 18%. The backlog is growing and employees are working more overtime. Productivity is the problem. We need people to work faster.&#x201d;</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "434e5b0c-a19f-4a34-a743-17cd95ac0b0d",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"metricRow\"><div class=\"metric\"><strong>&#x2212;18%</strong>Performance</div><div class=\"metric\"><strong>+26%</strong>Backlog</div><div class=\"metric\"><strong>+31%</strong>Overtime</div><div class=\"metric\"><strong>+19%</strong>Errors</div><div class=\"metric\"><strong>&#x2193;</strong>Morale</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "18af465e-8c07-48f1-a0d3-cd346bc9d511",
+          "type": "heading",
+          "title": "What is the primary cause right now?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cf6dab98-59c7-4f35-a544-d8623a3ab7d7",
+          "type": "mcq",
+          "title": "What is the primary cause right now?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "3fcc4a43-ad60-4a15-a6f9-6d08b0bfb436",
+              "text": "Low motivation",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "ab09ce5e-3f62-4a87-ae57-b47c9ee88ec8",
+              "text": "Insufficient staffing",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "f2dce6ee-4a1b-4fe2-aafc-741ef4d6693d",
+              "text": "Inefficient process",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "f1b9f63a-5b27-4fec-a236-21467e3c8706",
+              "text": "Not enough information yet",
+              "correct": true,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Good systems thinking begins with restraint. Several explanations are plausible. The visible event does not yet tell us what structure is producing the behavior.",
+          "feedbackIncorrect": "Good systems thinking begins with restraint. Several explanations are plausible. The visible event does not yet tell us what structure is producing the behavior. The strongest answer is: Not enough information yet",
+          "completion": "attempt"
+        },
+        {
+          "id": "3450fb15-4822-4943-a337-57fb0f6e78aa",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback darkFeedback\" id=\"openingFeedback\"><strong>Good systems thinking begins with restraint.</strong><br> Several explanations are plausible. The visible event does not yet tell us what structure is producing the behavior.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "517737ca-190a-45b0-a015-b4dd1d7ab8d1",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "9567124f-f9b6-4ea6-a0ab-0f8d6314a2ac",
+      "title": "Parts, Connections, Purpose, and Boundary",
+      "description": "",
+      "blocks": [
+        {
+          "id": "0aec9e73-f673-4e27-ac48-f7947fe210da",
+          "type": "heading",
+          "title": "WHAT IS A SYSTEM?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dc043a4a-6288-4f0b-a152-30703bdf6076",
+          "type": "text",
+          "title": "",
+          "body": "<p>Start at the lowest level: parts, connections, purpose, and boundary.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "68365169-879f-4fce-afef-57c68d82e81f",
+          "type": "heading",
+          "title": "Linear thinking looks for a cause. Systems thinking looks for a structure.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "69f9f3a7-cd1c-47de-a1c7-81b03677d8fe",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"systemEquation\"><div class=\"eqBox\">A</div><div class=\"eqSign\">&#x2192;</div><div class=\"eqBox\">B</div><div class=\"eqSign\">vs.</div><div class=\"eqBox\">A web of relationships changing over time</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "84958b55-9bcb-44c5-a184-c5cb0ca53282",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Linear thinking</strong> can be useful for simple problems. It becomes risky when causes interact, accumulate, feed back, or arrive after delays.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2f01fd7c-96d1-42e3-a8f5-7a9bc91e92d7",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Core shift: Ask &#x201c;What caused this?&#x201d; when the problem is simple. Ask &#x201c;What relationships are producing this behavior over time?&#x201d; when the problem is systemic.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ce52d270-0ce1-4de4-a6ff-66160d1ddb16",
+          "type": "heading",
+          "title": "A system is more than a collection of things.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0bc61c3c-9ffe-4180-af46-31de37904d9d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Select each card and move horizontally. All three must be explored.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6854f4ee-067a-46c7-a903-c2f521bc6794",
+          "type": "tabs",
+          "title": "Parts, connections, and purpose",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "d9f5531d-265e-4ce1-a4a1-46cd7ba65b71",
+              "title": "PARTS",
+              "text": "<p>The people, resources, processes, information, rules, tools, and other elements that exist inside the system.</p>",
+              "image": ""
+            },
+            {
+              "id": "66129d72-5206-4712-a0c0-ddece233bf53",
+              "title": "CONNECTIONS",
+              "text": "<p>The relationships among the parts. Connections determine how changes move through the system and how one part affects another.</p>",
+              "image": ""
+            },
+            {
+              "id": "f7753377-c634-4c64-a156-af3cf14d1b70",
+              "title": "PURPOSE",
+              "text": "<p>What the system actually produces or is organized to accomplish. A system can produce outcomes nobody explicitly intended.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "d3b2cd90-a5f7-432a-aa25-da1464494aaa",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "2d466daa-46a1-49cf-a1d3-a1823d53e484",
+          "type": "heading",
+          "title": "What belongs inside the system you are studying?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b0fcf07a-60a7-49ca-a126-20324c921c2c",
+          "type": "text",
+          "title": "",
+          "body": "<p>A useful boundary includes variables that materially influence the outcome. Too narrow hides causes. Too broad adds noise.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "082540e1-5b5c-45da-a105-83ebd3f17086",
+          "type": "msq",
+          "title": "Set a useful system boundary",
+          "body": "<p>Include variables that can materially influence the outcome; exclude noise.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "c7347421-47ec-49f5-a84b-c9f5b9008a12",
+              "text": "Staffing",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "0aedba8c-bb81-4493-a634-b811ddbdb1ef",
+              "text": "Training",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "8949a1ba-3369-4e43-aa76-bf159f1ac1c1",
+              "text": "Quality / rework",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "b001eab8-9e07-4ede-aa80-0dec70358f47",
+              "text": "Supervision",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "2e6573d7-943c-4c0f-acf2-a59ecea4f0cc",
+              "text": "Incoming demand",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "fc557427-6f09-4925-ad94-09de5350af6e",
+              "text": "Technology / process",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "23b86ebe-49d0-4115-a434-777ebf4ba6a0",
+              "text": "Weather in another region",
+              "correct": false,
+              "feedback": "This is outside the initial analytical boundary."
+            },
+            {
+              "id": "29f5b6c8-0395-4997-a6b2-dd0a2c1d9363",
+              "text": "Logo redesign",
+              "correct": false,
+              "feedback": "This is outside the initial analytical boundary."
+            }
+          ],
+          "feedbackCorrect": "Strong boundary.",
+          "feedbackIncorrect": "Review which variables can materially affect the outcome.",
+          "completion": "attempt"
+        },
+        {
+          "id": "5c19e727-f44f-40eb-aacc-e9fca32b50f5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7a3bbc78-5063-4edf-a804-f793f968da86",
+          "type": "heading",
+          "title": "Can you see the basic system?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "26e97e17-75e2-4a43-ae58-7ba43d7ad37c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Complete all four questions to unlock the next chapter.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "540e7dd3-a0c2-47dc-a00a-27ca270d8e4c",
+          "type": "quiz",
+          "title": "Checkpoint 1",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "8451146a-ed25-443f-ae6d-64cd311aa352",
+              "type": "mcq",
+              "title": "A system is best understood as…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "e7434f7b-7d4f-4df5-aa7b-e0f64c6a3c79",
+                  "text": "A list of parts",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "3b098cb7-3d7c-4bce-a554-f0c8e3b5caf6",
+                  "text": "Parts, connections, and a purpose",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "6e827952-8c0a-4712-a677-ce36c24b0ecc",
+                  "text": "One event and its cause",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Parts, connections, and a purpose",
+              "feedbackIncorrect": "The strongest answer is: Parts, connections, and a purpose",
+              "completion": "attempt"
+            },
+            {
+              "id": "180f3ca7-f77f-466b-abdd-ff57989d32d1",
+              "type": "mcq",
+              "title": "A weak system boundary can be harmful because…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "bfdc625c-9ef5-4064-ab3c-393a4f3bf080",
+                  "text": "It always includes too much data",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "b0c13bb6-3e11-4414-a398-af1f097347a9",
+                  "text": "It can hide important causes or add irrelevant noise",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "05d5afaf-9e2f-4adb-a706-c41a85543cc0",
+                  "text": "It removes all uncertainty",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. It can hide important causes or add irrelevant noise",
+              "feedbackIncorrect": "The strongest answer is: It can hide important causes or add irrelevant noise",
+              "completion": "attempt"
+            },
+            {
+              "id": "9937238c-1282-4d46-af65-42acfec19d7d",
+              "type": "mcq",
+              "title": "Systems thinking is most useful when…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "c19c662d-f2fa-413d-a717-d3f24ab4597e",
+                  "text": "Causes interact and behavior changes over time",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "a4a9bae7-065f-49fa-af81-a2d2dcfebc4c",
+                  "text": "A single mechanical cause is obvious",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "3b1d624b-b593-4e24-ab0a-a12fd3634571",
+                  "text": "No relationships exist",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Causes interact and behavior changes over time",
+              "feedbackIncorrect": "The strongest answer is: Causes interact and behavior changes over time",
+              "completion": "attempt"
+            },
+            {
+              "id": "645fd739-c1d3-4233-ae55-79791d004254",
+              "type": "mcq",
+              "title": "The purpose of a system is best inferred from…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "a49ab9d0-8a9d-49cf-a93b-9382c534d4ca",
+                  "text": "Only its mission statement",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "bb1812c2-557e-45ae-a146-cd0b98fa4646",
+                  "text": "What it repeatedly produces",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "9231c18a-3fcf-4742-ab5a-9b1a88bba896",
+                  "text": "What one person intended",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. What it repeatedly produces",
+              "feedbackIncorrect": "The strongest answer is: What it repeatedly produces",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "a07b5e0b-ab28-40c0-a29e-ed704d6fdaf7",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "30ba3bea-40da-4e15-a33f-0272d72d9728",
+      "title": "Inputs, Outputs, Stocks, and Flows",
+      "description": "",
+      "blocks": [
+        {
+          "id": "f05fc2ba-d077-42e0-a973-fe19311a7d9a",
+          "type": "heading",
+          "title": "SYSTEMS PRODUCE RESULTS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "47d9b529-0ce0-49a5-a5de-5cf4e7c7a331",
+          "type": "text",
+          "title": "",
+          "body": "<p>Inputs move through processes, producing outputs and outcomes.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "595b5225-2bf8-4789-a548-d73fd3c2c305",
+          "type": "heading",
+          "title": "Input → Process → Output → Outcome",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b5806e72-d6db-4033-a950-b32a96d1c15c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Explore all four. The distinctions matter because improving output does not always improve the outcome.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a3b4c353-6a0b-4501-ae9b-a512e28710f2",
+          "type": "process",
+          "title": "Input → Process → Output → Outcome",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "5c012a4e-f740-42da-a51a-18d9ea9f898f",
+              "title": "INPUT",
+              "text": "<p>What enters the system: demand, people, information, resources, policy, technology, and constraints.</p>",
+              "image": ""
+            },
+            {
+              "id": "f062efad-e36a-4920-a473-44687f3fc249",
+              "title": "PROCESS",
+              "text": "<p>What the system does with those inputs: routing, decisions, handoffs, approvals, work, and quality checks.</p>",
+              "image": ""
+            },
+            {
+              "id": "c331f375-f85c-43a8-a15e-208aea27143f",
+              "title": "OUTPUT",
+              "text": "<p>What is produced immediately: cases completed, products delivered, reports finished, calls answered.</p>",
+              "image": ""
+            },
+            {
+              "id": "7c2156cf-98d6-4bed-a173-0e9cb5fd1155",
+              "title": "OUTCOME",
+              "text": "<p>The larger result or effect: quality, timeliness, readiness, trust, mission impact, or sustained performance.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "6e3892fa-a0a4-4240-a52c-8cee3adcff38",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "bfa505be-0c82-4528-a4bc-e967705c5cec",
+          "type": "heading",
+          "title": "Stocks and flows explain why “more output” can still leave a growing problem.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a7fbe329-063a-4a6f-a8d5-628789c4dbde",
+          "type": "text",
+          "title": "",
+          "body": "<p>A stock is something that accumulates. In this case, backlog. It changes according to what flows in and what flows out.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d288563f-14f4-4d7c-a676-6da855fdcbe4",
+          "type": "table",
+          "title": "Starting stock and flows",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "rows": "Variable | Value\nBacklog | 100\nInflow (new work + rework) | 25\nOutflow (completed work) | 18"
+        },
+        {
+          "id": "a695f4f9-61b5-4df3-ace0-a1508ecd7d24",
+          "type": "reflection",
+          "title": "Run the backlog calculation",
+          "body": "<p>Start with backlog 100. Add 10 incoming items, complete 10, then add 5 rework items. Record backlog after each change. Which changes increase demand?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c54bb96e-0252-46d3-a215-4882f84de7f6",
+          "type": "accordion",
+          "title": "Check your calculation",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "items": [
+            {
+              "id": "0cad10f0-23a1-4443-aae5-0f8194195e95",
+              "title": "Worked example",
+              "text": "<p>100 + 10 = 110; 110 − 10 = 100; 100 + 5 = 105. Backlog can grow even while output improves when total inflow exceeds outflow.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "93f758be-53b4-48b9-a94b-4c33229f5806",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "37c82311-e86c-40cc-ac17-5e286da9dc17",
+          "type": "heading",
+          "title": "Rework is demand the system creates for itself.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "28ba7dcf-962b-49d1-ac15-98f40080b434",
+          "type": "text",
+          "title": "",
+          "body": "<p>Flip all three cards.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "095d8594-c9b8-41c7-a9f2-b653fff73c13",
+          "type": "flashcards",
+          "title": "Rework and hidden inflow",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "8e7d7223-69ec-4521-a7f4-38dcbf7bbcdd",
+              "front": "New work is visible.",
+              "back": "Leaders usually notice incoming demand because it arrives as obvious new work.",
+              "image": ""
+            },
+            {
+              "id": "a6a436dc-b89d-4211-a173-ef1974aa1c7b",
+              "front": "Rework can hide.",
+              "back": "Errors create work that re-enters the system looking like more demand.",
+              "image": ""
+            },
+            {
+              "id": "334b92bd-d5f5-4bf0-a91d-4bddb454a050",
+              "front": "Speed can create demand.",
+              "back": "If faster work lowers quality, hidden inflow can increase even while visible output rises.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "df666fb3-de61-4a29-a23a-e13825fe9a27",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "f29c040a-9047-4108-a143-a755bf7ecb7a",
+          "type": "heading",
+          "title": "Can you follow what the system is producing?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e4fb1966-bdd1-4cce-ad28-3445a89fdaa0",
+          "type": "quiz",
+          "title": "Checkpoint 2",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "f06f19e2-4c78-4687-a7a8-bcfc173da0da",
+              "type": "mcq",
+              "title": "A backlog is a…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "5d97479d-e993-454d-a53a-19c53dda157f",
+                  "text": "Stock",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "bbaf83c0-9545-428d-a388-5bc816c40892",
+                  "text": "Flow",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "e6b96b51-4032-4466-a85e-2e0b90565467",
+                  "text": "Mental model",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Stock",
+              "feedbackIncorrect": "The strongest answer is: Stock",
+              "completion": "attempt"
+            },
+            {
+              "id": "44f1eb16-2c50-4cc3-a60a-b6c547c582d1",
+              "type": "mcq",
+              "title": "Backlog grows when…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "c51904b2-df61-4a9a-a008-be1b90be4ac1",
+                  "text": "Outflow exceeds inflow",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "9fc37fab-e45c-463e-aa75-9ddb77cb8149",
+                  "text": "Net inflow exceeds outflow",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "05c1e3f7-fa3a-40ec-a17e-2e9265e56d0e",
+                  "text": "A leader talks about it",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Net inflow exceeds outflow",
+              "feedbackIncorrect": "The strongest answer is: Net inflow exceeds outflow",
+              "completion": "attempt"
+            },
+            {
+              "id": "56a57452-9cd7-4089-a940-d3fc3fc2a055",
+              "type": "mcq",
+              "title": "Rework matters because…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "294b5724-f3d2-42d4-aa24-ef30094c3e02",
+                  "text": "It is hidden demand the system creates for itself",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "099ec1fe-3984-4737-aaef-7ce36da7770e",
+                  "text": "It is always visible as a separate queue",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "3879bc85-0ba7-45e9-a236-a67e21ab2851",
+                  "text": "It only affects morale",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. It is hidden demand the system creates for itself",
+              "feedbackIncorrect": "The strongest answer is: It is hidden demand the system creates for itself",
+              "completion": "attempt"
+            },
+            {
+              "id": "a80303c0-159a-4b6a-a520-bfa53bd6903a",
+              "type": "mcq",
+              "title": "An outcome differs from an output because…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "20ee06b1-7eba-440d-a17f-5e51359b7f12",
+                  "text": "Outcome describes the larger result or effect",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "dbb991c1-593b-44df-a35c-2aa24852fd9e",
+                  "text": "Outcome is always faster",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "10418c98-51b2-40b5-a73c-4e61a4641369",
+                  "text": "There is no difference",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Outcome describes the larger result or effect",
+              "feedbackIncorrect": "The strongest answer is: Outcome describes the larger result or effect",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "b7738ea4-f4a2-4949-a037-bfa272f85db5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "794ed2d4-d002-423e-a7a7-d3c3bf0e1473",
+      "title": "Events, Patterns, Structures, and Mental Models",
+      "description": "",
+      "blocks": [
+        {
+          "id": "3e78efca-abc4-462c-ada1-a74afcd575ae",
+          "type": "heading",
+          "title": "LOOK BELOW THE EVENT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8140fab0-75c4-470e-aabb-c8f9ea219eab",
+          "type": "text",
+          "title": "",
+          "body": "<p>Events are visible. Patterns, structures, and mental models sit underneath.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8e3daa2a-8f7f-442e-ac9a-75cd52815041",
+          "type": "heading",
+          "title": "Click downward through the system.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a086ff49-479b-499d-a503-4ab89c8696d8",
+          "type": "process",
+          "title": "The iceberg model",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "ff12777b-5c41-4e46-a92b-e308c5562c77",
+              "title": "EVENTS",
+              "text": "<p>What happened? Example: backlog increased 26%.</p>",
+              "image": ""
+            },
+            {
+              "id": "76b9f61b-1598-48ba-a5f2-2f93e8980f29",
+              "title": "PATTERNS",
+              "text": "<p>What keeps happening? Example: errors rise after overtime spikes.</p>",
+              "image": ""
+            },
+            {
+              "id": "152ac436-7bf0-4bff-a76d-852b418b02da",
+              "title": "STRUCTURES",
+              "text": "<p>What relationships create the pattern? Example: coaching, quality checks, incentives, handoffs, staffing, and process design.</p>",
+              "image": ""
+            },
+            {
+              "id": "e6c9969c-4423-49dd-af6e-aa74a06c9e85",
+              "title": "MENTAL MODELS",
+              "text": "<p>What assumptions help create or sustain the structure? Example: “Busy means productive.”</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "2eca8a1d-e218-4c34-a0ef-87152094ebda",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "6822c5b3-3e7f-4b5b-ae3d-bede32df72d6",
+          "type": "heading",
+          "title": "Sort the evidence.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ae5df9be-f5ae-4a6d-ae78-8e08798c7b71",
+          "type": "text",
+          "title": "",
+          "body": "<p>Classify each statement as an event, pattern, structure, or mental model.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "44c8659d-15d0-4dfe-a252-c161d6d09d8b",
+          "type": "sorting",
+          "title": "Classify the evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "categories": [
+            "Event",
+            "Pattern",
+            "Structure",
+            "Mental Model"
+          ],
+          "items": [
+            {
+              "id": "661a5d41-c6ce-4b55-a987-4111dcfcf93c",
+              "title": "Backlog increased 26% this quarter",
+              "category": "Event"
+            },
+            {
+              "id": "ec47e623-effa-4e4f-aff5-df61f388c475",
+              "title": "Errors rise after each overtime surge",
+              "category": "Pattern"
+            },
+            {
+              "id": "c3af985d-1cd0-4199-aa9a-094cefdd6de3",
+              "title": "Supervisors lose coaching time when escalations rise",
+              "category": "Structure"
+            },
+            {
+              "id": "b6a70b69-8484-4cad-a6bd-f6920f06bda3",
+              "title": "“Training is time away from real work”",
+              "category": "Mental Model"
+            },
+            {
+              "id": "fd93703e-9e6a-457b-aace-62cf299ae162",
+              "title": "Turnover rises months after morale falls",
+              "category": "Pattern"
+            },
+            {
+              "id": "c098602f-0ca5-4a87-ad91-e561c94a2f25",
+              "title": "Leadership raised production targets last month",
+              "category": "Event"
+            },
+            {
+              "id": "0f266738-1ecd-4abd-a7b7-ec467ab34657",
+              "title": "Duplicate approvals slow routing",
+              "category": "Structure"
+            },
+            {
+              "id": "c68dca71-a718-4b27-a89d-44d930314501",
+              "title": "“More pressure creates more output”",
+              "category": "Mental Model"
+            }
+          ],
+          "completion": "attempt"
+        },
+        {
+          "id": "dffe65b7-47af-4025-ade2-ba091d7dc956",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "61ae34da-0d7b-4453-a50a-7432e210086d",
+          "type": "heading",
+          "title": "Snapshots tell you where you are. Trends help you ask why.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4a595b14-878c-4a9c-abcb-72080482e71f",
+          "type": "custom",
+          "title": "Illustrative trend chart",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "html": "<svg class=\"trendSvg\" viewBox=\"0 0 760 300\" aria-label=\"Illustrative trend chart\"><line x1=\"55\" y1=\"245\" x2=\"725\" y2=\"245\" stroke=\"#9aaebe\" stroke-width=\"2\"/><line x1=\"55\" y1=\"35\" x2=\"55\" y2=\"245\" stroke=\"#9aaebe\" stroke-width=\"2\"/>\n<polyline points=\"60,180 170,170 280,145 390,125 500,95 610,78 720,60\" fill=\"none\" stroke=\"#0d4f8b\" stroke-width=\"6\"/>\n<polyline points=\"60,205 170,190 280,165 390,135 500,112 610,92 720,70\" fill=\"none\" stroke=\"#c65d4b\" stroke-width=\"6\"/>\n<polyline points=\"60,215 170,212 280,205 390,184 500,155 610,130 720,105\" fill=\"none\" stroke=\"#e7b642\" stroke-width=\"6\"/>\n<polyline points=\"60,80 170,92 280,115 390,145 500,170 610,195 720,215\" fill=\"none\" stroke=\"#0a7d8c\" stroke-width=\"6\"/></svg>",
+          "css": "body{margin:0;padding:16px;font-family:system-ui;background:#fff;color:#17344B}svg{width:100%;height:auto;max-height:380px}",
+          "js": "",
+          "height": 380
+        },
+        {
+          "id": "40641ff2-b246-4e11-a0f5-d02bbd9d68a5",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"legend\"><span><i class=\"dot a\"></i>Backlog</span><span><i class=\"dot b\"></i>Overtime</span><span><i class=\"dot c\"></i>Errors</span><span><i class=\"dot d\"></i>Morale</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "02a22b90-f3f9-4f91-a68d-519d5c113867",
+          "type": "heading",
+          "title": "What changed first?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "544ee0af-0353-4809-aeb2-a063d55ef241",
+          "type": "mcq",
+          "title": "What changed first?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "b245cd54-1857-4c92-af94-0c885bff17db",
+              "text": "Errors",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "982378d3-215f-4499-a950-472dbc84dbc7",
+              "text": "Overtime",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "c3c90b49-6a3c-426a-abcf-ebc4901e5e88",
+              "text": "Morale",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Overtime",
+          "feedbackIncorrect": "The strongest answer is: Overtime",
+          "completion": "attempt"
+        },
+        {
+          "id": "bf129c8d-8b44-4db4-a719-2d376a7ce418",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "517b1d85-43bf-4363-a878-364c9ec26054",
+          "type": "heading",
+          "title": "Snapshot or trend?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "45085675-aead-42a5-ae8d-388eb982bfbd",
+          "type": "flashcards",
+          "title": "Explore each concept",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "58ca53e7-c04c-4fc4-ab86-22c74b6149dd",
+              "front": "Snapshot",
+              "back": "“Backlog is 1,250 today.” Useful for current status. Weak for understanding what is producing the condition.",
+              "image": ""
+            },
+            {
+              "id": "24d47371-1108-47a0-a8ce-2aeb06c252fe",
+              "front": "Trend",
+              "back": "“Backlog rises after overtime and rework rise.” Useful for identifying sequence, possible feedback, and delays.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "d5cccb35-af39-4093-a86b-eff5a8e66135",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "71c6028b-1b59-4cf8-ac97-8a4152ddf423",
+          "type": "heading",
+          "title": "Can you move below the event?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b99682e8-dc96-4f4d-ae1d-964dc74daec5",
+          "type": "quiz",
+          "title": "Checkpoint 3",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "28794cc7-e349-49f3-a458-206a897c61df",
+              "type": "mcq",
+              "title": "Which is an event?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "454ab7f5-6d5d-4613-a24f-88dde11cde17",
+                  "text": "Backlog increased 26% this quarter",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "f5e671c8-0234-4b9a-a705-1b08e889563f",
+                  "text": "Errors rise after every overtime surge",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "ff2a621b-8daf-4875-abc4-152ce239f670",
+                  "text": "Supervisors lose coaching time during escalations",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Backlog increased 26% this quarter",
+              "feedbackIncorrect": "The strongest answer is: Backlog increased 26% this quarter",
+              "completion": "attempt"
+            },
+            {
+              "id": "7e258936-f7e8-4ddc-a120-911791550b86",
+              "type": "mcq",
+              "title": "Which is a pattern?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "27d8f971-4770-4476-a772-53881de78657",
+                  "text": "One error occurred Tuesday",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "d9b12f4b-daee-4756-abde-a412b4b44e02",
+                  "text": "Errors repeatedly rise after overtime spikes",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "be22050d-f016-4ded-aae5-fc3577f35945",
+                  "text": "Training policy exists",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Errors repeatedly rise after overtime spikes",
+              "feedbackIncorrect": "The strongest answer is: Errors repeatedly rise after overtime spikes",
+              "completion": "attempt"
+            },
+            {
+              "id": "83e98fef-6b3d-4cb3-abcc-7fb0e19680f8",
+              "type": "mcq",
+              "title": "Which is a mental model?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "438538f9-6fcb-4ac0-a706-1b3e63ce914f",
+                  "text": "“Busy means productive.”",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "23aff738-75e7-498f-a9e7-5003b8d0378a",
+                  "text": "Backlog is 1,250 today",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "54406545-cdc8-4f15-a572-f1437b51dd10",
+                  "text": "Overtime rose last month",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. “Busy means productive.”",
+              "feedbackIncorrect": "The strongest answer is: “Busy means productive.”",
+              "completion": "attempt"
+            },
+            {
+              "id": "7fb3d71c-2650-4750-a504-9cefb54b7c81",
+              "type": "mcq",
+              "title": "A trend is useful because it can show…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "f2186f1e-f168-478e-a5d7-4756464a088e",
+                  "text": "Sequence and timing",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "753237c5-e210-4647-aec6-3995a535bb56",
+                  "text": "Proof of causation by itself",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "d93c8cbe-2ec6-46e4-a5b4-3917b633dc32",
+                  "text": "Only today’s status",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Sequence and timing",
+              "feedbackIncorrect": "The strongest answer is: Sequence and timing",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "581c6b11-49e1-4907-a8db-a6dd4190fc44",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "7e3629a3-0f00-4483-a90d-49d6f9ff5926",
+      "title": "Feedback, Polarity, and Delays",
+      "description": "",
+      "blocks": [
+        {
+          "id": "7dc969e9-d776-49b2-a1fb-5a13f451e38e",
+          "type": "heading",
+          "title": "CONNECTIONS CREATE BEHAVIOR",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "11699046-de23-40f0-a2ec-56cc57cae72a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Polarity, feedback, delays, and indicators reveal how the system moves.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8659141a-40de-463a-a2c5-b9ae7c07d3f6",
+          "type": "heading",
+          "title": "“+” and “−” describe direction—not good or bad.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "41083633-3c43-4b49-aa17-abdd4d42f19f",
+          "type": "text",
+          "title": "",
+          "body": "<p>If the first variable increases, what tends to happen to the second, all else equal?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3d3c82f2-8a3d-41e3-a113-de28741eddd6",
+          "type": "matching",
+          "title": "Match each relationship to its polarity",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "pairs": [
+            {
+              "id": "72a431cf-9a1c-4939-adfe-2d51b41dfc6c",
+              "left": "Errors → Rework",
+              "right": "+"
+            },
+            {
+              "id": "c2cacb0d-dd84-4952-a485-d8b3a1aa261c",
+              "left": "Coaching → Proficiency",
+              "right": "+"
+            },
+            {
+              "id": "1560883f-057a-459f-a061-f45dcaa4fd28",
+              "left": "Proficiency → Processing Time",
+              "right": "−"
+            },
+            {
+              "id": "48841c15-bf7c-40e9-a800-0ab491112921",
+              "left": "Capacity → Backlog",
+              "right": "−"
+            },
+            {
+              "id": "adb043fb-82c8-40ee-aa93-0b7d3d727a28",
+              "left": "Overtime → Fatigue",
+              "right": "+"
+            }
+          ],
+          "completion": "attempt",
+          "feedbackCorrect": "Same direction is +; opposite direction is −.",
+          "feedbackIncorrect": "Polarity describes direction, not good or bad."
+        },
+        {
+          "id": "581d7ba2-30a4-477e-a00e-95426b5336ca",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "088b47f1-ffb6-45bf-a984-b641fe582c98",
+          "type": "heading",
+          "title": "When cause comes back around.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b33b5224-975e-4435-ad2e-b74614b67b4f",
+          "type": "flashcards",
+          "title": "Explore each concept",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "387993f7-67c6-4943-ae5b-0c615db41f67",
+              "front": "Reinforcing Loop",
+              "back": "Amplifies change. Growth can create more growth; decline can create more decline.",
+              "image": ""
+            },
+            {
+              "id": "9bedcce6-47a0-471c-a2ab-6e44d368045c",
+              "front": "Balancing Loop",
+              "back": "Counteracts change. Pushes the system toward a target, limit, or equilibrium.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "cd7dca36-da96-49c9-a926-a45ef8b68eff",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "fa5313ef-9db2-4878-a14d-7f9bd3b56996",
+          "type": "heading",
+          "title": "Run the pressure spiral.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "79739fc4-4fbf-4a91-a94f-4ee5b51c7f02",
+          "type": "text",
+          "title": "",
+          "body": "<p>Watch how an attempt to increase output can feed the original problem.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c546b244-383d-4608-a83c-27ccc9c31cc1",
+          "type": "process",
+          "title": "Follow the sequence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "ecfd37e7-9ead-4ebc-a3ab-e44060ef225f",
+              "title": "Backlog",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "33d183f5-8bea-48a6-aa38-4702d7508f02",
+              "title": "Overtime",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "92cd62af-e55f-4115-aa64-ece69493e4f7",
+              "title": "Fatigue",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "d6d24536-4d44-4a05-a715-1079ced8f371",
+              "title": "Errors",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "54e0877e-deba-4910-a48d-38845fa16e91",
+              "title": "Rework",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "1b2ce77c-ac51-4168-a1db-f55c250d2cab",
+              "title": "Workload",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "510a75e0-3412-43e5-afc8-7979bf2123a2",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "c7a9ac45-7cd2-4823-ac69-bccc93c4c8f2",
+          "type": "heading",
+          "title": "Cause and effect can be separated by time.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "71bb6fa0-cfdc-4aca-a1df-5ed37e7bb6aa",
+          "type": "text",
+          "title": "",
+          "body": "<p>Advance through the hiring example. Interventions can look weak before their effects have had time to arrive.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0d1b98cf-e91f-413a-a9e9-ca15d7cb2809",
+          "type": "timeline",
+          "title": "Hiring takes time to produce capacity",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "4862ed20-a3ca-45e1-a88b-b06c61248041",
+              "title": "Month 0",
+              "text": "<p>Hire approved — No new capacity yet.</p>",
+              "image": ""
+            },
+            {
+              "id": "95ef7d51-27b5-41f1-a07e-70ecc9bf210e",
+              "title": "Month 1",
+              "text": "<p>Training load ↑ — Experienced staff pulled from work.</p>",
+              "image": ""
+            },
+            {
+              "id": "f6ae64dc-b4a8-4edc-a4fe-47510d799f53",
+              "title": "Month 2",
+              "text": "<p>Capacity dips — Intervention can look weak.</p>",
+              "image": ""
+            },
+            {
+              "id": "0ceb7205-7963-4a82-a682-d6de226960a8",
+              "title": "Month 4",
+              "text": "<p>Proficiency ↑ — New staff become more independent.</p>",
+              "image": ""
+            },
+            {
+              "id": "ba682902-fb20-4792-ae1f-5c5e1a1ebb80",
+              "title": "Month 6",
+              "text": "<p>Backlog responds — Capacity finally increases.</p>",
+              "image": ""
+            },
+            {
+              "id": "7d4833c7-fdb8-4fea-a267-304c01e4d731",
+              "title": "Lesson",
+              "text": "<p>Do not overcorrect — Define expected delay and monitor leading indicators.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "f614d874-f73d-44bb-a9eb-4130b1bb7e16",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "cf925329-fb3a-4f9b-af60-78521136080e",
+          "type": "heading",
+          "title": "Leading indicators warn. Lagging indicators confirm.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "50eb7e8b-dcf5-4b38-acd4-bd204ae1b0bb",
+          "type": "sorting",
+          "title": "Leading or lagging indicator?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "categories": [
+            "Leading",
+            "Lagging"
+          ],
+          "items": [
+            {
+              "id": "923f0c41-ffc1-45f1-a379-688529cf80f1",
+              "title": "Coaching hours",
+              "category": "Leading"
+            },
+            {
+              "id": "ef6cfb7d-3319-4805-ae72-5b28e0ceddd5",
+              "title": "Overtime hours",
+              "category": "Leading"
+            },
+            {
+              "id": "acd09c88-e30c-4348-acd8-5eb72b0d85a6",
+              "title": "Weekly error rate",
+              "category": "Leading"
+            },
+            {
+              "id": "a1e26ca4-44a0-44ef-adcc-263345ba0c30",
+              "title": "Quarter-end backlog",
+              "category": "Lagging"
+            },
+            {
+              "id": "af5e9c2d-dbf9-40af-aaba-7b6b704ba2c5",
+              "title": "Annual turnover",
+              "category": "Lagging"
+            },
+            {
+              "id": "7ceb59c0-0b07-4fea-a0c9-e6ca2473b4ee",
+              "title": "Last quarter cycle time",
+              "category": "Lagging"
+            }
+          ],
+          "completion": "attempt"
+        },
+        {
+          "id": "869dc9b5-2ffe-4ba6-aaff-d425b7453810",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "625e944a-7be3-4120-ae9a-8a15375b4c86",
+          "type": "heading",
+          "title": "Can you read system dynamics?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "07422ccd-5cf9-49c7-af11-8d2d0a5ae997",
+          "type": "quiz",
+          "title": "Checkpoint 4",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "ca1618b1-c0db-4af9-ae5d-5caaa7961b4d",
+              "type": "mcq",
+              "title": "A “+” causal link means…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "918399c6-e912-41f0-a284-888a93acd6e4",
+                  "text": "The relationship is good",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "c00dc835-c1e1-4ea3-a77d-2c78c46bd3ef",
+                  "text": "Variables tend to move in the same direction",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "b6fba507-1e56-44f6-a76c-f7d145a484cc",
+                  "text": "The first variable always doubles the second",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Variables tend to move in the same direction",
+              "feedbackIncorrect": "The strongest answer is: Variables tend to move in the same direction",
+              "completion": "attempt"
+            },
+            {
+              "id": "d2515b2a-ab79-4cdc-a02f-ba6788520fe5",
+              "type": "mcq",
+              "title": "A reinforcing loop…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "da3d5a6e-2e82-43cd-ac1e-6a3bef5a25cf",
+                  "text": "Amplifies change",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "99882b6a-981c-447f-af7b-d7a8a39b922e",
+                  "text": "Always fixes a problem",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "8710916d-af28-4007-aa81-d1299505ffd9",
+                  "text": "Eliminates delays",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Amplifies change",
+              "feedbackIncorrect": "The strongest answer is: Amplifies change",
+              "completion": "attempt"
+            },
+            {
+              "id": "4802683b-9d75-4c41-a2a6-157c4e4c5476",
+              "type": "mcq",
+              "title": "A balancing loop…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "57840d99-b9e6-4fb4-a783-b4d2e0ecc8aa",
+                  "text": "Pushes toward a target or limit",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "877d3e49-7c78-4f25-a467-0ebb17568de2",
+                  "text": "Always increases growth",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "09a1abdd-f19a-4918-a727-46621e23a4c6",
+                  "text": "Means the system is stable forever",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Pushes toward a target or limit",
+              "feedbackIncorrect": "The strongest answer is: Pushes toward a target or limit",
+              "completion": "attempt"
+            },
+            {
+              "id": "fabee24d-946e-4f70-a93d-8c22c23d9783",
+              "type": "mcq",
+              "title": "A delay matters because…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "6ccf6a07-ac1e-476c-a10b-3e61b7546860",
+                  "text": "Leaders may judge an intervention before its effect could appear",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "823ef157-0601-4645-ab2f-593f0fa9255a",
+                  "text": "It proves an intervention failed",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "cb3ff8dd-5b6c-4618-a3ab-8083184ac70f",
+                  "text": "It removes feedback",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Leaders may judge an intervention before its effect could appear",
+              "feedbackIncorrect": "The strongest answer is: Leaders may judge an intervention before its effect could appear",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "8a43dd8e-5907-49d8-a0ab-244664a82d83",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "15b89d8f-98bd-4660-a67a-e3cd7e2c8649",
+      "title": "Archetypes and Leverage",
+      "description": "",
+      "blocks": [
+        {
+          "id": "873197b1-aea4-49b4-ac23-c26da35c30fc",
+          "type": "heading",
+          "title": "WHY FIXES CAN MAKE THINGS WORSE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a23bd31f-0c53-457d-abbf-9480686f67fa",
+          "type": "text",
+          "title": "",
+          "body": "<p>Recurring structures create familiar traps&#x2014;and reveal leverage.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6615e91b-ba4b-4148-a7b0-0940cac472b4",
+          "type": "heading",
+          "title": "Three recurring structures worth recognizing.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "92b5a12a-8d2b-4d96-ade4-a3c89a2ac5f6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Select all three cards.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d64b3fbe-eb96-4ae0-a4e0-bc6ae5278a46",
+          "type": "tabs",
+          "title": "Recurring system archetypes",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "3f514696-0267-4796-aeba-abb950e8de56",
+              "title": "Fixes That Fail",
+              "text": "<p>A quick fix relieves a symptom but creates delayed consequences that recreate or worsen the problem.</p>",
+              "image": ""
+            },
+            {
+              "id": "82eed9e8-c473-462d-a1c1-db7042b7745c",
+              "title": "Shifting the Burden",
+              "text": "<p>A symptomatic solution reduces pressure to invest in the deeper capability or structural fix.</p>",
+              "image": ""
+            },
+            {
+              "id": "cd324969-646c-4211-a08b-9a85da208192",
+              "title": "Limits to Growth",
+              "text": "<p>Initial success slows or reverses because a limiting constraint becomes dominant.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "4a709d61-140e-4a0c-a270-e6e32e5a170b",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "907a09c9-a375-4578-a589-fe8726b45a3f",
+          "type": "heading",
+          "title": "Short-term relief can create delayed harm.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0b494c4d-bc94-4c88-adbc-c6c28d979b21",
+          "type": "process",
+          "title": "Follow the sequence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "f53c95a6-dff0-472f-ae6d-eef111e7320d",
+              "title": "Backlog",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "32230ebc-2237-40a9-a441-52ae620c9141",
+              "title": "Overtime",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "5eca965c-b969-41ff-a2da-02ec655f16d0",
+              "title": "Output ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "2c147e38-9644-404f-ad21-62381c1b1c47",
+              "title": "Relief",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "ff1527e7-2bb0-4c4e-a6dd-cf5cc8e3564e",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"fixFeedback\"><strong>Delayed consequence:</strong> fatigue &#x2192; errors &#x2192; rework &#x2192; backlog. The fix is attractive because relief arrives before the harm.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7f32967b-4671-4852-a3f2-1865c16e9f38",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "5baf2677-3f3f-47d8-a6ed-918fcbff70a0",
+          "type": "heading",
+          "title": "Symptom relief can reduce pressure to build the deeper capability.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "503a7ad9-7fc8-4858-a4ef-5f172b84ff29",
+          "type": "heading",
+          "title": "Symptomatic path",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8e51590b-39ed-4546-a52f-68a90aea2a29",
+          "type": "text",
+          "title": "",
+          "body": "<p>Overtime / quotas</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "279e9835-089c-4422-a4ba-9faf30eeb1d5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Fast relief, but dependence grows.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "01602813-0336-4b18-a7ef-7733ec666199",
+          "type": "heading",
+          "title": "Fundamental path",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4f64207b-4545-4ec3-a369-c816bae1be29",
+          "type": "text",
+          "title": "",
+          "body": "<p>Capability + process improvement</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "eebab7f2-6297-4e1f-aca2-82ac591cc913",
+          "type": "text",
+          "title": "",
+          "body": "<p>Slower relief, but structural improvement.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "217b1437-d395-45c2-a6a3-6896b3a48ee1",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Warning sign: the more the organization relies on the quick-relief path, the less urgency it feels to strengthen the fundamental solution.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ab809155-b765-44ba-ab65-7986284c52b7",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7e974d52-0948-4a07-a0a1-0e0a00396aa3",
+          "type": "heading",
+          "title": "Success can expose the constraint that eventually slows success.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "65ed5607-1c66-4303-a6d5-0f2e28713427",
+          "type": "heading",
+          "title": "Growth engine",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "841400bc-1600-4156-a9ea-acc733413039",
+          "type": "text",
+          "title": "",
+          "body": "<p>Better tools or staffing increase throughput.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "eefe3d0a-6898-408e-a356-158ca3bd9fe2",
+          "type": "heading",
+          "title": "Limiting condition",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f20b0f24-085a-456e-aa05-23a4b5fa5780",
+          "type": "text",
+          "title": "",
+          "body": "<p>Supervisor capacity, approvals, training load, or quality review becomes dominant.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "770eee11-c8eb-47cc-a22b-bda3b5d3fe0d",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Leverage question: What constraint must be relieved for improvement to continue?</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9a739a0b-b93a-4827-aea9-f14c041a2023",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "f2757569-38e1-4547-af12-b7ad0d814b62",
+          "type": "heading",
+          "title": "The system also contains assumptions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fc3aa8b7-3894-43d8-ae4a-ea62b91d1571",
+          "type": "text",
+          "title": "",
+          "body": "<p>Flip all four cards and look for the behavior each belief may produce.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "aaf8870c-2e7b-4b41-a7a3-73c529ca402b",
+          "type": "flashcards",
+          "title": "Mental models and their effects",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "c5962386-621c-4402-a813-ae6d26ff3787",
+              "front": "“Busy means productive.”",
+              "back": "May reward visible activity over actual outcomes.",
+              "image": ""
+            },
+            {
+              "id": "fa1e5d7c-6cc6-49d5-ad6e-dee3043c25e5",
+              "front": "“Training is time away from real work.”",
+              "back": "May underinvest in future capability and increase dependence on experienced staff.",
+              "image": ""
+            },
+            {
+              "id": "f5ddce7c-d723-4628-ad66-218c356fc15b",
+              "front": "“Errors are individual failures.”",
+              "back": "May hide process, workload, incentive, and quality-system causes.",
+              "image": ""
+            },
+            {
+              "id": "1709c1f8-8eb0-45a4-a3a0-ba22b2d85961",
+              "front": "“If output is low, raise the quota.”",
+              "back": "May increase pace while creating fatigue, errors, and rework.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "0614716b-43c0-4d1f-a59d-692584a13762",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "c0083c78-be4a-4811-ae2a-dcbbde9bcacf",
+          "type": "heading",
+          "title": "Good intent does not prevent system effects.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1e4332d9-1095-429b-a96e-5979db1740f1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Keep asking: &#x201c;And then what?&#x201d;</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "953813fd-bfbf-4781-adeb-70ae4efb95d9",
+          "type": "process",
+          "title": "Follow the sequence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "fd015822-363c-460c-a2a9-2ac52eb95b67",
+              "title": "Quota ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "3e9f16a1-e5d5-4cd0-a56a-53ba545a6935",
+              "title": "Pace ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "da9adc6d-a648-4d74-a510-63ca393bde73",
+              "title": "Fatigue ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "2758b344-6980-44c4-a625-9087dcadf86f",
+              "title": "Errors ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "bc4c6cf2-f202-4b4e-aa01-c6b6e7e96e4e",
+              "title": "Rework ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            },
+            {
+              "id": "85adb4bf-7624-4965-a8d5-df4e8d76b149",
+              "title": "Backlog ↑",
+              "text": "<p>Consider how this change affects the next step in the sequence.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "05a8ab4a-ead6-418b-a961-c1a596fc4dfa",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "60bd830d-f7cd-4c1c-a96e-013854adcd8c",
+          "type": "heading",
+          "title": "Choose interventions that change the structure—not just the pressure.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "25be6a8d-c4e1-470a-a83a-3add7eabecac",
+          "type": "text",
+          "title": "",
+          "body": "<p>Select the two interventions you believe have the highest structural leverage.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "727bcc98-4b68-4ed8-a6bb-35ea87b5517d",
+          "type": "reflection",
+          "title": "Choose two interventions with structural leverage",
+          "body": "<p>Choose two interventions, explain their leverage, and identify any tradeoff.</p><ul><li>Remove duplicate approvals — Structural</li><li>Protect coaching time — Capability</li><li>Move quality checks earlier — Prevention</li><li>Hire additional staff — Capacity</li><li>Increase overtime — Symptom relief</li><li>Raise production quotas — Pressure</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "211ea3bc-7108-4e46-ac90-356d462860b8",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "c4016a15-d7ae-4a58-af83-bcad028c0732",
+          "type": "heading",
+          "title": "Can you recognize traps and leverage?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ba837385-a4d9-4657-a3ee-b6d44bc8a49d",
+          "type": "quiz",
+          "title": "Checkpoint 5",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "70411929-e693-41a3-a81a-05895ca90a8d",
+              "type": "mcq",
+              "title": "Fixes That Fail describes…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "b28c8881-1dac-4d01-a1a8-701f0004e6f1",
+                  "text": "A quick fix with delayed consequences that recreate the problem",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "69bbcf02-a205-41ee-a9f0-18e2695137a1",
+                  "text": "A permanent structural solution",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "15234e7c-5812-4c07-a584-f695f101989a",
+                  "text": "No feedback",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. A quick fix with delayed consequences that recreate the problem",
+              "feedbackIncorrect": "The strongest answer is: A quick fix with delayed consequences that recreate the problem",
+              "completion": "attempt"
+            },
+            {
+              "id": "71391db7-4787-4745-a303-535c1d0cc180",
+              "type": "mcq",
+              "title": "Shifting the Burden occurs when…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "6cdbcab1-3d1d-41e8-ad90-905e364c127a",
+                  "text": "Symptom relief weakens investment in a fundamental solution",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "727a6f35-2ac5-478d-a07d-7190f72d962a",
+                  "text": "A system has no quick fix",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "b616361c-b8f5-4b46-a995-768a8a4c48e4",
+                  "text": "All interventions are structural",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Symptom relief weakens investment in a fundamental solution",
+              "feedbackIncorrect": "The strongest answer is: Symptom relief weakens investment in a fundamental solution",
+              "completion": "attempt"
+            },
+            {
+              "id": "77db0bb1-dc8d-4306-a106-6a45e8aff63a",
+              "type": "mcq",
+              "title": "A leverage point is strongest when it…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "d5a38ff6-5632-4fc3-a592-1db46ceba047",
+                  "text": "Changes a recurring structure, rule, information flow, incentive, or mental model",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "32a9797d-604f-403b-a16e-a394368364af",
+                  "text": "Adds more pressure to the same structure",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "f3393b62-3c81-4832-aa8e-782c0bf6c36c",
+                  "text": "Only produces faster visible activity",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. Changes a recurring structure, rule, information flow, incentive, or mental model",
+              "feedbackIncorrect": "The strongest answer is: Changes a recurring structure, rule, information flow, incentive, or mental model",
+              "completion": "attempt"
+            },
+            {
+              "id": "98074d1f-3cd7-4963-a02c-e68216352032",
+              "type": "mcq",
+              "title": "Emergence reminds leaders that…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "5c271469-60da-4f66-a30a-16d070b154a2",
+                  "text": "System-level outcomes can arise from interactions even when nobody intended them",
+                  "correct": true,
+                  "feedback": ""
+                },
+                {
+                  "id": "44671593-a979-40d4-a223-3d9714339c45",
+                  "text": "Intent guarantees outcomes",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "60416400-5846-471d-ac14-610c2973e656",
+                  "text": "One person always controls the result",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "Strong choice. System-level outcomes can arise from interactions even when nobody intended them",
+              "feedbackIncorrect": "The strongest answer is: System-level outcomes can arise from interactions even when nobody intended them",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "55e6ca5d-2089-46ee-a14d-9ee90b543335",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "ffc84e2f-93e1-414e-a080-33760010d4f7",
+      "title": "Application: Build the System Story",
+      "description": "",
+      "blocks": [
+        {
+          "id": "7c03b7ad-a47b-4470-a835-bdb841460461",
+          "type": "heading",
+          "title": "THINK LIKE A SYSTEMS THINKER",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d0dae35e-3f44-45fa-a60c-26e01a9c03af",
+          "type": "text",
+          "title": "",
+          "body": "<p>Return to the Productivity Mystery and build the system story one layer at a time.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "50b342f3-47f4-42e6-acf7-b7ebc3857a44",
+          "type": "heading",
+          "title": "Same problem. Better questions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cec76832-46a4-4dcf-a138-f12394dc71c3",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Original message:</strong> &#x201c;Performance is down. Backlog is growing. Overtime is up. People need to work faster.&#x201d;</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "4e1655c1-32c4-400b-a981-0c92b917472b",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"caseFacts\"><div class=\"caseFact\"><strong>&#x2212;18%</strong>Performance</div><div class=\"caseFact\"><strong>+26%</strong>Backlog</div><div class=\"caseFact\"><strong>+31%</strong>Overtime</div><div class=\"caseFact\"><strong>+19%</strong>Errors</div><div class=\"caseFact\"><strong>&#x2193;</strong>Morale</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4025b317-9e58-4620-a117-bd712e029477",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "031dd372-804c-45ab-afa1-1067f0138578",
+          "type": "heading",
+          "title": "DEFINE THE SYSTEM",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d5e2c096-d986-4d4f-a8a3-1aeb4192edc8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Do not start with &#x201c;employees need to work faster.&#x201d; Start by naming the system whose behavior you need to understand.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "efe10046-ae0d-4161-ac4b-e5ed8841f10c",
+          "type": "heading",
+          "title": "Best starting frame?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4a497ae8-92a3-4775-a170-9a8dca3bb376",
+          "type": "mcq",
+          "title": "Best starting frame?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "6b0016fe-daa7-4675-ade8-ba2b21306709",
+              "text": "Employee motivation",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "4580a068-a0f8-4280-ac2d-d3c0c367ee70",
+              "text": "The unit's work-processing system and the conditions affecting throughput, quality, and backlog",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "85dca069-2e02-4f06-ae6a-3e096eae4e67",
+              "text": "Overtime policy only",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. The unit's work-processing system and the conditions affecting throughput, quality, and backlog",
+          "feedbackIncorrect": "The strongest answer is: The unit's work-processing system and the conditions affecting throughput, quality, and backlog",
+          "completion": "attempt"
+        },
+        {
+          "id": "0e574144-7ed0-489a-a0df-3cb9303a1533",
+          "type": "heading",
+          "title": "SET THE BOUNDARY",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "196252ab-ef22-4c68-a899-03b7a5adccde",
+          "type": "text",
+          "title": "",
+          "body": "<p>Include what can materially influence the behavior. Exclude noise.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c2e17d4e-34db-4cff-a909-edf363ec79d6",
+          "type": "heading",
+          "title": "Which belongs inside the initial analysis?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1d545156-4c39-49c1-abc8-7e8285c790d3",
+          "type": "msq",
+          "title": "Set a useful system boundary",
+          "body": "<p>Include variables that can materially influence the outcome; exclude noise.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "bbcc3969-74ab-4ecd-a019-a2a546d1b0d5",
+              "text": "Staffing",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "3ac0cc60-32cf-47f4-ade6-0889b32c84f5",
+              "text": "Training",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "de4b4a7f-87df-45bf-acac-7791cfd1bc56",
+              "text": "Quality / rework",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "3fd5bc5c-5465-4a02-a41a-ef63b2d3f34f",
+              "text": "Supervision",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "93e62dac-963a-4a43-a223-89737e999d4d",
+              "text": "Incoming demand",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "55247e63-e28e-4a9f-ab46-70c06c73bf53",
+              "text": "Technology / process",
+              "correct": true,
+              "feedback": "This can materially affect the work-processing system."
+            },
+            {
+              "id": "ae3dd082-d1c5-4f78-aa13-e85b3d74ffc2",
+              "text": "Logo redesign",
+              "correct": false,
+              "feedback": "This is outside the initial analytical boundary."
+            },
+            {
+              "id": "949f3780-8557-4f94-a069-d32529e529c8",
+              "text": "Weather elsewhere",
+              "correct": false,
+              "feedback": "This is outside the initial analytical boundary."
+            }
+          ],
+          "feedbackCorrect": "Strong boundary.",
+          "feedbackIncorrect": "Review which variables can materially affect the outcome.",
+          "completion": "attempt"
+        },
+        {
+          "id": "1bba09b2-78ca-4b56-af48-36af4801373d",
+          "type": "heading",
+          "title": "IDENTIFY THE PARTS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "26ad4764-4676-4945-a33b-1cd4c033d2cc",
+          "type": "text",
+          "title": "",
+          "body": "<p>Parts matter, but the system is not the parts alone.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "13f29315-b227-4dce-a083-162ead6d08e4",
+          "type": "heading",
+          "title": "Which set best captures the important parts?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fb1e7257-bf45-4595-a213-aaddbcf4edd5",
+          "type": "mcq",
+          "title": "Which set best captures the important parts?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "6b049a24-acf3-4584-a935-cc5c3df9bfbb",
+              "text": "Backlog only",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "87b9db47-973b-4672-a0a2-825629df7922",
+              "text": "Incoming demand, staffing, supervision, coaching, process steps, quality checks, backlog, rework, and capacity",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "9b4b2efa-8e69-4f5c-acc0-8fd8219c0801",
+              "text": "Employee attitudes only",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Incoming demand, staffing, supervision, coaching, process steps, quality checks, backlog, rework, and capacity",
+          "feedbackIncorrect": "The strongest answer is: Incoming demand, staffing, supervision, coaching, process steps, quality checks, backlog, rework, and capacity",
+          "completion": "attempt"
+        },
+        {
+          "id": "6cb2272d-9cad-45f0-afbc-212d6e67c085",
+          "type": "heading",
+          "title": "MAP CONNECTIONS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "65db5fa4-b7d2-4b77-a68b-0e2ebe5f32fc",
+          "type": "text",
+          "title": "",
+          "body": "<p>Ask how one variable tends to change another.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "6ad60aa3-9e40-437b-adcf-46d0135f26af",
+          "type": "heading",
+          "title": "If overtime increases, fatigue tends to…",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "944976ba-0fca-4bcd-a81b-03d00998088b",
+          "type": "mcq",
+          "title": "If overtime increases, fatigue tends to…",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "113ca0b3-f85e-4cb3-a9bf-feab17665bdd",
+              "text": "Increase (+)",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "8ae0cd88-1a18-4cf7-aba3-e576664574bc",
+              "text": "Decrease (−)",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Increase (+)",
+          "feedbackIncorrect": "The strongest answer is: Increase (+)",
+          "completion": "attempt"
+        },
+        {
+          "id": "87ab43d0-4be7-4d9f-a317-d8f0ea3181e2",
+          "type": "heading",
+          "title": "LOOK FOR PATTERNS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "48fa5999-1387-462d-a81a-03826bcd037e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Sequence matters.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a499517d-4275-437b-a0b0-473af6b3d51c",
+          "type": "heading",
+          "title": "Which pattern deserves attention?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ba437fd5-5111-4423-a046-962a5fe348ee",
+          "type": "mcq",
+          "title": "Which pattern deserves attention?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "687b3a17-58c3-460e-a3d7-2457fdf560f9",
+              "text": "A single high-backlog day",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "5c2d2a66-d63f-4d0b-aea8-dd717962d77c",
+              "text": "Overtime rises, then errors and rework rise later, followed by more backlog",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "e1a1abff-ef42-427a-ad8e-169e055fad6c",
+              "text": "One supervisor's opinion",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Overtime rises, then errors and rework rise later, followed by more backlog",
+          "feedbackIncorrect": "The strongest answer is: Overtime rises, then errors and rework rise later, followed by more backlog",
+          "completion": "attempt"
+        },
+        {
+          "id": "7975c243-0563-4632-ab21-1bc65f06815c",
+          "type": "heading",
+          "title": "FIND FEEDBACK & DELAYS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a4353683-011f-4969-a8db-e4db29b6ab05",
+          "type": "text",
+          "title": "",
+          "body": "<p>Look for consequences that eventually return to the original condition.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f5f342ce-8cb5-41be-ae19-f1b1570561d1",
+          "type": "heading",
+          "title": "Which story best describes the pressure spiral?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f098c9ce-3bc8-4cec-af0a-8c89f23f2664",
+          "type": "mcq",
+          "title": "Which story best describes the pressure spiral?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "0746bafc-2e59-4111-ad2a-f00b46ff51e9",
+              "text": "Backlog → overtime → fatigue → errors → rework → more workload → backlog",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "21dd62b0-fbdb-4974-ace0-f6db672a689b",
+              "text": "Backlog → overtime → immediate permanent capacity gain",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "d781fab6-de60-4dfe-abca-af83edc0bfa3",
+              "text": "Errors → no downstream effect",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Backlog → overtime → fatigue → errors → rework → more workload → backlog",
+          "feedbackIncorrect": "The strongest answer is: Backlog → overtime → fatigue → errors → rework → more workload → backlog",
+          "completion": "attempt"
+        },
+        {
+          "id": "4bb5a88b-c559-4bdc-a666-845b0536c79f",
+          "type": "heading",
+          "title": "SURFACE THE MENTAL MODEL",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "72246b6e-1904-4775-af6b-a0974efb8cca",
+          "type": "text",
+          "title": "",
+          "body": "<p>Assumptions can help create the structure leaders are trying to fix.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "16c5544d-15a0-40f3-a5ce-e8cd9d36b06e",
+          "type": "heading",
+          "title": "Which assumption could reinforce the problem?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c0242928-6bb5-4260-a298-153ddb001f8e",
+          "type": "mcq",
+          "title": "Which assumption could reinforce the problem?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "a5562a88-9d32-44d7-a6cb-3be5d87469ac",
+              "text": "Quality matters.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "0edb5b8b-78bc-477e-a24b-174fadbf8b52",
+              "text": "“Training and coaching are time away from real work.”",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "cdb59978-dcc9-4db2-af51-2f218c2d41fd",
+              "text": "Data should be reviewed.",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. “Training and coaching are time away from real work.”",
+          "feedbackIncorrect": "The strongest answer is: “Training and coaching are time away from real work.”",
+          "completion": "attempt"
+        },
+        {
+          "id": "29494ba9-3517-4c85-a18f-69abe20cd8dd",
+          "type": "heading",
+          "title": "ANTICIPATE CONSEQUENCES",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "78154f03-99fe-4a9c-a6eb-c8fc402f4a73",
+          "type": "text",
+          "title": "",
+          "body": "<p>Do not stop at the immediate result.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ef5f0ae3-9065-456a-a038-bdb79bc7ad7c",
+          "type": "heading",
+          "title": "If leadership raises quotas, what should you ask next?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "65ffccc5-256f-4388-a0f5-8cb9b8183150",
+          "type": "mcq",
+          "title": "If leadership raises quotas, what should you ask next?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "199833b8-82c0-4e2f-a804-256c120ff969",
+              "text": "Will output rise tomorrow?",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "855a5827-5e5b-4131-aeb4-ebba37de9029",
+              "text": "What changes next in pace, fatigue, errors, rework, supervision, and backlog—and when?",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "6b069fc5-cfbe-4c7c-a494-22299ec116c5",
+              "text": "Who supports the quota?",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. What changes next in pace, fatigue, errors, rework, supervision, and backlog—and when?",
+          "feedbackIncorrect": "The strongest answer is: What changes next in pace, fatigue, errors, rework, supervision, and backlog—and when?",
+          "completion": "attempt"
+        },
+        {
+          "id": "cef10cb6-873d-4aff-a12c-b306c2d34985",
+          "type": "heading",
+          "title": "CHOOSE LEVERAGE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "40124b99-ac76-49db-a763-401947a34e78",
+          "type": "text",
+          "title": "",
+          "body": "<p>Change the structure, not just the pressure.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f9081753-9fc8-4979-a1bc-36becda07f65",
+          "type": "heading",
+          "title": "Select the strongest structural response.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b07a0d80-3920-4f65-af59-a3eb1d387146",
+          "type": "mcq",
+          "title": "Select the strongest structural response.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "430f19c8-5952-43c1-af27-5254a6867d17",
+              "text": "Increase overtime",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "623e66fa-9c20-4b01-ac88-9b77a9a4be26",
+              "text": "Raise quotas",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "cf464f0d-5d61-4096-a61b-90bce1d3204f",
+              "text": "Remove duplicate approvals, protect coaching time, and move quality checks earlier",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "2a656d04-0f74-4a8b-a0a7-b9c5ffaa401b",
+              "text": "Send more reminders",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong choice. Remove duplicate approvals, protect coaching time, and move quality checks earlier",
+          "feedbackIncorrect": "The strongest answer is: Remove duplicate approvals, protect coaching time, and move quality checks earlier",
+          "completion": "attempt"
+        }
+      ]
+    },
+    {
+      "id": "bfc86a38-d033-4ebb-a6a4-f97c1f05d792",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "34d0ec5a-cd1e-4b79-a264-4fa3720f4630",
+          "type": "heading",
+          "title": "What changed in your thinking?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6217a969-e1b9-498e-a0c3-0a25b4e10940",
+          "type": "heading",
+          "title": "What did we think?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8405bbbb-5922-4de5-ac2a-86d1ed50ec27",
+          "type": "heading",
+          "title": "What did we discover?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3f067eea-7487-4bb8-a76f-95f0a40ffc3b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Patterns, structures, feedback, delays, assumptions, and leverage changed the explanation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ad7a61df-a6cd-4690-affe-f621c6632c12",
+          "type": "reflection",
+          "title": "What is one systems-thinking question you want to use before your next intervention?",
+          "body": "<p>What is one systems-thinking question you want to use before your next intervention?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a1dc6b6b-6862-49d7-a451-421f7478b9e1",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Systems thinking does not promise perfect prediction. It improves the quality of the questions leaders ask before they intervene.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "82971196-f043-479d-a712-b13dd92a2a39",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "47be04dc-a428-4e1b-a606-4ddc80650cee",
+          "type": "heading",
+          "title": "SEE THE SYSTEM. THEN ACT.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "999addc9-b9cd-42c0-af11-e1738aa51cdc",
+          "type": "text",
+          "title": "",
+          "body": "<p>You can now move from events to patterns, structures, feedback, delays, mental models, consequences, and leverage.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "07e8d297-1c58-401f-ae8a-585d1a53c7ab",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"color:#c7d7e5\">Your progress is saved on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        }
+      ]
+    }
+  ]
+}

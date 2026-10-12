@@ -1,0 +1,2992 @@
+{
+  "schemaVersion": 1,
+  "id": "c75eba75-70e0-45d8-ac0c-6e7b0fd0a544",
+  "title": "Strategic Thinking",
+  "description": "Editable version of the complete Mayne Leadership Strategic Thinking course, including its original explanations, practice activities, application, and reflection prompts.",
+  "author": "Joshua Mayne",
+  "cover": "",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "b0054fb9-474d-4070-aff8-5c598501298b",
+      "title": "Introduction and Opening Challenge",
+      "description": "",
+      "blocks": [
+        {
+          "id": "5f5ef2d7-9b92-410c-af3d-cfe39cdf5d1f",
+          "type": "heading",
+          "title": "See beyond the visible problem.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9be789e9-aaec-4413-a1ff-2ac62a8c439f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic thinking changes the frame. It expands the time horizon, widens the stakeholder view, tests assumptions, and considers the consequences of action before the system makes them visible.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "76f0d72f-79b6-40f9-a555-e7b4b0646acb",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>See More &#x2192; Think Deeper &#x2192; Look Further &#x2192; Lead Broader.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "be8c1298-7c9a-48c9-afed-ad545cecde1c",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"font-size:.92rem;color:#aec6d9\"><strong>Approx. 2 hours</strong> &#xb7; Interactive self-paced course &#xb7; Progress saved on this device</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "5281ea93-f109-4042-a1d1-cf732a929ddc",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "30bd11c3-157e-4c57-a85a-77722bc768c9",
+          "type": "heading",
+          "title": "The complete Strategic Thinking course.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "88809eee-e630-4445-adb5-42ba4ad722d4",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">This online version follows the full two-hour Strategic Thinking module: first expand the frame, then build the six competencies, examine the habits that enable or block strategic judgment, test assumptions, connect decisions through time, and finish with a systems capstone.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ade2fd2b-e81d-48ca-a9de-735f95387c9e",
+          "type": "text",
+          "title": "",
+          "body": "<p>What you will practice</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "46bd436a-a412-4323-ac37-8d4c5098dfc2",
+          "type": "text",
+          "title": "",
+          "body": "<p>1</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fa4fff23-4f04-4dff-abb4-1845a8c5dcf6",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Expand the frame</b><br> Move beyond the visible problem and identify what else is connected.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c3529bf0-9c10-47d9-a7dc-25d11edf09bd",
+          "type": "text",
+          "title": "",
+          "body": "<p>2</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "27dae8c5-4d1d-4f2f-a960-36a5fc9a9d87",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Use six competencies</b><br> Information gathering, learning, critical thinking, innovative thinking, thinking in time, and systems thinking.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e0dbcbce-6877-4b67-ad04-53d6e3ee4cef",
+          "type": "text",
+          "title": "",
+          "body": "<p>3</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "66f9bcfd-403a-4fa6-a83b-a8416f3ea26f",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Protect judgment</b><br> Recognize blockers, cognitive biases, fallacies, assumptions, and the Ladder of Inference.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "22f7961b-e96e-4c74-a93a-0698683b8a6d",
+          "type": "text",
+          "title": "",
+          "body": "<p>4</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4438c0af-03e4-4d62-ac42-8cf432f93c8b",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Test strategy</b><br> Use Ends&#x2013;Ways&#x2013;Means&#x2013;Risk and first-, second-, and third-order effects.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "20c23390-85f9-4d72-af0b-5211925387ae",
+          "type": "text",
+          "title": "",
+          "body": "<p>5</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "51d424c4-740d-4c95-a1ca-9becfdd552c1",
+          "type": "note",
+          "title": "",
+          "body": "<div><b>Integrate the system</b><br> Finish with a strategic systems challenge and personal transfer plan.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4887a3aa-a30f-46f6-a202-7e2e299bd341",
+          "type": "heading",
+          "title": "Better problem framing before solution jumping.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f522aebf-4216-47ef-ad42-57d095914705",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic thinking is not just a larger version of tactical thinking. It changes the time horizon, number of stakeholders, amount of ambiguity, and consequences of being wrong.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "1173a9b3-2ec9-4382-a631-268ff09df16a",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Approx. 2 hours</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e707d7d8-c8fe-4697-a175-1fb0c0d6b062",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "61827ed2-4a76-4a76-a0f0-15df456b1666",
+          "type": "heading",
+          "title": "One decision. Ten consequences.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "96af9321-da08-4d3f-a483-fe12b72b6fe7",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">A regional office faces a <strong>35% workload increase</strong>. Temporary resources are authorized. Leaders are considering shifting personnel away from training and long-term initiatives to meet the immediate demand.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3334b03e-855c-453c-acbe-d4335289cfaf",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>What is your first judgment?</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "956268f5-7420-4f47-a56a-084f79e2e3bb",
+          "type": "reflection",
+          "title": "Now widen the frame.",
+          "body": "<p>Choose the option or options that best fit your situation and explain your reasoning.</p><ul><li>Good decision</li><li>Bad decision</li><li>Not enough information</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "96ba65ae-5831-4797-ad4f-9132eea3fb62",
+          "type": "heading",
+          "title": "Now widen the frame.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d46b858d-490e-4cd9-a86c-e7311572e4c3",
+          "type": "accordion",
+          "title": "Additional evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "099187ba-1fe9-4afb-a4a1-c899ec460546",
+              "title": "Reveal information 1",
+              "text": "<div class=\"fact hiddenFact\" id=\"f1\">Training completion is already below target.</div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "710e9e66-5c0c-4496-a995-ae51c9438ff0",
+          "type": "accordion",
+          "title": "Additional evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "ebaafe11-d71d-41d7-ae42-395222fc23a0",
+              "title": "Reveal information 2",
+              "text": "<div class=\"fact hiddenFact\" id=\"f2\">Overtime is rising and experienced supervisors are nearing retirement.</div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "f162d0b4-aa30-45bc-af76-772557ba9c01",
+          "type": "accordion",
+          "title": "Additional evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "baaaf267-524d-49a4-a258-2b240b50f344",
+              "title": "Reveal information 3",
+              "text": "<div class=\"fact hiddenFact\" id=\"f3\">A major technology modernization begins in four months.</div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "79a62236-05fb-42ae-a4b1-33b2ff3781ce",
+          "type": "accordion",
+          "title": "Additional evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "6104f3d7-e6e7-46da-ad24-c27d72723ab2",
+              "title": "Reveal information 4",
+              "text": "<div class=\"fact hiddenFact\" id=\"f4\">Senior leadership has requested additional performance information.</div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "78d1aec7-1394-43b5-a7b9-60a4a9a8102c",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"openingFeedback\"><strong>Did the problem change&#x2014;or did your understanding change?</strong> Strategic thinking often begins when we recognize that our first frame was too small.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bad081cd-7d60-478b-afbf-0473896dc227",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "37611b35-0c0b-4c16-afb1-f5cffd560c02",
+      "title": "Expand the Frame",
+      "description": "",
+      "blocks": [
+        {
+          "id": "dbb1c5d8-c1eb-4f38-a3dd-d56ed6384044",
+          "type": "heading",
+          "title": "EXPAND THE FRAME",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "33ac4011-2444-41b4-a0e0-9c9e6752f2f5",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic thinking improves action by preventing us from solving the wrong problem quickly.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9936b751-200e-4206-a7d9-7d29bea1f4ba",
+          "type": "heading",
+          "title": "It is more than “thinking big.”",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d67e4857-fec1-4ca8-a25f-2ca72d4f4011",
+          "type": "text",
+          "title": "",
+          "body": "<p>IT IS</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ef0f4cd7-108c-4420-a22a-f27bb2015f49",
+          "type": "text",
+          "title": "",
+          "body": "<p>Seeing relationships</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e0e07d4d-ed76-422f-a09c-fa9db9cedd05",
+          "type": "text",
+          "title": "",
+          "body": "<p>Look for assumptions, trends, stakeholders, dependencies, consequences, choices, and future conditions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "e9feb7e7-3f8c-4a55-a84c-5eb84c9199f6",
+          "type": "text",
+          "title": "",
+          "body": "<p>IT IS NOT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e7324c32-7506-4f6c-a17a-79765a88e78e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Vague forecasting</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c02d0f92-c1ca-40ab-a3cb-41d5a328253f",
+          "type": "text",
+          "title": "",
+          "body": "<p>It is not jargon, endless brainstorming, or pretending to predict the distant future with certainty.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "28aee573-3ca1-4287-a0a6-bf3e9d4cfe5d",
+          "type": "text",
+          "title": "",
+          "body": "<p>ANY LEVEL</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fcd32679-8560-4ac1-ab33-81cad8fe4b81",
+          "type": "text",
+          "title": "",
+          "body": "<p>A practice, not a position</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f574499b-08e8-44bc-ac1e-aa55c4fe40d2",
+          "type": "text",
+          "title": "",
+          "body": "<p>You can think strategically without holding a &#x201c;strategic&#x201d; title. The behavior begins with how you frame decisions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "88a6c8f2-4992-4e13-a874-a2ca1d1dba84",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Tactical thinking asks: &#x201c;How do we solve today&#x2019;s visible problem?&#x201d; Strategic thinking also asks: &#x201c;What created it, what else is connected, where are we trying to go, and what might happen next?&#x201d;</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7f408a40-e36f-4499-adf3-599fa751ac21",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "c5a26959-0f41-4b2d-a33c-05dcafd63bd5",
+          "type": "heading",
+          "title": "The question changes as the level expands.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "59a2a991-9e8d-4f09-a2b3-7014ee5214fb",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open all four levels. Notice how the same staffing issue becomes a different problem depending on the horizon.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "10fe6946-7bc2-4dd3-aae4-733f535e5c63",
+          "type": "process",
+          "title": "Levels of thinking",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "79dbebd9-9c97-4bf2-a146-8d8fe9c8c485",
+              "title": "IMMEDIATE",
+              "text": "<p>Task or incident — Who covers today’s requirement?</p>",
+              "image": ""
+            },
+            {
+              "id": "b5157ca9-0984-4e2d-a583-d820c43df087",
+              "title": "DIRECT",
+              "text": "<p>People and team — How does the team adjust workload without creating avoidable failure?</p>",
+              "image": ""
+            },
+            {
+              "id": "447849d9-c41f-4284-ab0c-74ba4a61a494",
+              "title": "ORGANIZATIONAL",
+              "text": "<p>Systems and resources — Is the staffing model, training pipeline, and process sustainable?</p>",
+              "image": ""
+            },
+            {
+              "id": "7e2c10b4-ad9a-4af3-a4af-8eb0e9eaaaa7",
+              "title": "STRATEGIC",
+              "text": "<p>Enterprise and future conditions — What future capability must be built, and what tradeoffs today shape it?</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "705401f0-b234-497e-ab67-3e5625eafaea",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "de3ecab2-1168-4143-a1f2-dfc0e7ea7bc2",
+          "type": "heading",
+          "title": "Almost nothing important happens in isolation.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "28bc6a35-a26e-40f2-a426-2f5cfb564039",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">A decision made in one part of an organization can create pressure, opportunity, delay, or unintended effects somewhere else. Strategic thinkers look for these connections before choosing action.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c020fa2c-5390-463d-a3e0-459f65aa97f2",
+          "type": "text",
+          "title": "",
+          "body": "<p>Mission / Operations</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9d8e6119-61db-48a7-a096-f2e619039a86",
+          "type": "text",
+          "title": "",
+          "body": "<p>Workforce</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a1db523c-230f-4b8b-a7d1-82c058591965",
+          "type": "text",
+          "title": "",
+          "body": "<p>Training &amp; Learning</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bb1f0f54-3b9a-4415-ad78-ac2069b7262f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Legal / Policy</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2016bbc7-3c2a-4a3d-a9b8-9085565ee8af",
+          "type": "text",
+          "title": "",
+          "body": "<p>Technology</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "15077772-b9ce-4dea-a17b-c91f6548791f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Resources / Budget</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ec0f2e47-41a8-4d5f-a49a-4273c7a1bb1f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Partners</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a605cb73-03c9-45f5-a1b5-47f22daccdb4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Customers / Public</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "232c9862-0f99-4199-a2fc-0b36bfd9e01e",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Ask: <strong>Where have you seen one part of a system make a decision that created pressure somewhere else?</strong></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3037c981-2af6-4ea6-a847-a04798f75990",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "c22bea30-9966-4b1a-ad7c-e89ec555fc6e",
+      "title": "Strategic Habits and Competencies",
+      "description": "",
+      "blocks": [
+        {
+          "id": "db4d02f0-c7e0-4688-a78e-1c33fd0adacb",
+          "type": "heading",
+          "title": "Four habits organize the whole course.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7ffecdab-774a-4de7-a598-8b229b20e7ca",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Open each element to see the question it contributes.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "12a29d3a-1ed8-40c0-a127-e4f1b4a1cc90",
+          "type": "tabs",
+          "title": "Four strategic habits",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "6f228488-cc78-48ed-a467-6fa232c0311b",
+              "title": "SEE MORE",
+              "text": "<p>Gather perspectives and evidence. — Whose information is missing? What are we not seeing?</p>",
+              "image": ""
+            },
+            {
+              "id": "c30c6e42-0767-4f54-ab15-f1162c94572e",
+              "title": "THINK DEEPER",
+              "text": "<p>Challenge assumptions and causality. — What would have to be true for this recommendation to work?</p>",
+              "image": ""
+            },
+            {
+              "id": "9e9dc2a1-ad09-4ea1-a810-8eadebada2fa",
+              "title": "LOOK FURTHER",
+              "text": "<p>Anticipate consequences and future conditions. — What happens next—and what happens because of that?</p>",
+              "image": ""
+            },
+            {
+              "id": "f9d138fe-c384-4c86-a8b4-94bfad1b5fb3",
+              "title": "LEAD BROADER",
+              "text": "<p>Align beyond your immediate control. — Who must understand, contribute, or change behavior?</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "baa9dded-7a7d-4b61-a8b3-0d911cb1133c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "2dc5caf8-719d-4c73-a488-48a05457ad18",
+          "type": "heading",
+          "title": "Six trainable strategic-thinking competencies.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "077a729e-fe66-43f6-a915-a13c7b82a11f",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">These are habits&#x2014;not personality traits. Open all six.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9face7e5-aaa1-4e18-acee-1ac691c2cfe6",
+          "type": "tabs",
+          "title": "Six strategic-thinking competencies",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "477f64c1-7dbe-4544-a170-566d5e04a7fd",
+              "title": "Information Gathering",
+              "text": "<p>Scan broadly before deciding narrowly. Seek facts, perspectives, constraints, and dissenting information.</p>",
+              "image": ""
+            },
+            {
+              "id": "ba8473c8-42ba-48e7-a1f3-390e13ad7770",
+              "title": "Learning",
+              "text": "<p>Update the mental model. Treat feedback as information and build reflection into routine work.</p>",
+              "image": ""
+            },
+            {
+              "id": "ca757bb6-5a67-4c9b-aa50-943336d0dc7f",
+              "title": "Critical Thinking",
+              "text": "<p>Challenge assumptions and causal claims. Distinguish causes from symptoms and consequences.</p>",
+              "image": ""
+            },
+            {
+              "id": "67b8efa5-a808-4dd5-a459-0e2229f43532",
+              "title": "Innovative Thinking",
+              "text": "<p>Create multiple ways before choosing one. Reframe constraints and generate disciplined alternatives.</p>",
+              "image": ""
+            },
+            {
+              "id": "3c66f204-4446-47e6-a03b-ffb80352606b",
+              "title": "Thinking in Time",
+              "text": "<p>Connect Then → Now → Next. Use history, current conditions, and plausible futures together.</p>",
+              "image": ""
+            },
+            {
+              "id": "74a8f02a-8d74-4c3c-a5bc-238bc53fffa3",
+              "title": "Systems Thinking",
+              "text": "<p>Look for dependencies, bottlenecks, incentives, feedback, and unintended effects.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "5f42e590-8f49-4e55-a07c-9343479f281c",
+          "type": "text",
+          "title": "",
+          "body": "<p>The competencies are strongest when used together: gather broadly, learn and update, test the logic, create alternatives, connect past-present-future, and examine the system.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1cf2d88f-150e-488c-a908-b4cb55600a25",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "67af66ae-30cd-4ea1-afa0-dabcf4f8a7ad",
+          "type": "heading",
+          "title": "Good tools still fail without good habits.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0bc9cb3d-9631-4859-acc6-98236eb5b6f4",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select the three enablers you believe are most difficult to sustain when pressure is high.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "299e3624-70ab-4e7e-a74f-f6ba53bddeaa",
+          "type": "text",
+          "title": "",
+          "body": "<p>BROAD KNOWLEDGE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "112e3ac0-e5a6-47ae-aaad-a9e2dd048312",
+          "type": "heading",
+          "title": "Build range outside your lane.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ab18af5f-5e8a-4620-acd3-879af1dc6f46",
+          "type": "text",
+          "title": "",
+          "body": "<p>You do not need to be an expert in everything. You need enough range to recognize dependencies and ask intelligent questions about people, policy, law, technology, resources, partners, and other functions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f25965af-5cc7-4d6b-a95b-06aabec2bf48",
+          "type": "text",
+          "title": "",
+          "body": "<p>COLLABORATION + COMMUNICATION</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3d308d68-0237-446b-a564-57322f7fab50",
+          "type": "heading",
+          "title": "Think with others.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "53a2fffb-214f-42bc-a246-f0af53da732c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Collaboration is more than passing tasks between groups. It means jointly making sense of the problem. Communication then turns complexity into usable meaning without hiding important tradeoffs.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "34a1d008-f1b7-4a91-ae9e-ebf7c769616f",
+          "type": "text",
+          "title": "",
+          "body": "<p>COURAGE + REGULATION + ETHICS</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b18e187c-ae64-4057-aba5-8ac11ff4512d",
+          "type": "heading",
+          "title": "Stay principled under pressure.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4d7f3100-e4d9-4eee-a5a5-d7a94c6642ce",
+          "type": "text",
+          "title": "",
+          "body": "<p>Moral courage helps leaders say what needs to be heard. Emotional regulation keeps thinking open when challenged. Ethical reasoning asks &#x201c;should we?&#x201d; along with &#x201c;can we?&#x201d;</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3931114d-fa34-4527-a230-6cd17e8a2267",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Now choose the three enablers you believe are hardest to sustain under pressure.</strong></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f261d044-7e13-4eb7-a8a7-dbae65fec79b",
+          "type": "reflection",
+          "title": "Three habits to strengthen",
+          "body": "<p>Choose three enablers you most need to strengthen and explain how you will practice them.</p><ul><li>Broad knowledge</li><li>Collaboration</li><li>Communication</li><li>Moral courage</li><li>Emotional regulation</li><li>Ethical reasoning</li><li>Self-awareness</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8172cd20-fd09-4bea-a5ad-69d73ac9561f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategic thinking is not purely cognitive. Curiosity, collaboration, communication, courage, emotional regulation, ethical reasoning, and self-awareness determine whether good questions actually get asked.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b3f70a81-4644-4ef5-a0d1-da7dcc05c216",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "f3d7406c-12bb-4e49-a29f-f832c6409986",
+          "type": "heading",
+          "title": "Where is your strategic-thinking edge—and blind spot?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b27b5af0-274b-45d3-a015-e87ad1ab0b0c",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Rate each statement from 1 (rarely) to 5 (consistently). Your scores stay on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9fc808f7-7c4e-43c4-a4a5-caa6f5a89481",
+          "type": "survey",
+          "title": "I seek information that contradicts my first position.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "f44d5075-9687-4ad2-a627-81830c0fe094",
+          "type": "survey",
+          "title": "I separate facts from interpretation and assumptions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "dbb1d0dc-f786-4826-a77a-ed51a5a7c4c6",
+          "type": "survey",
+          "title": "I intentionally invite dissenting views.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "f0849cae-7402-4842-a5be-8aa08d0fa75c",
+          "type": "survey",
+          "title": "I consider second- and third-order effects.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "0bbb3a3a-b511-4040-a8ab-051817e178f0",
+          "type": "survey",
+          "title": "I can explain how my team’s work connects to broader outcomes.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "6c48096d-a01f-4182-aa32-cc801b0bab55",
+          "type": "survey",
+          "title": "I revise my view when new evidence changes the picture.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Rarely",
+          "maxLabel": "Consistently",
+          "scale": 5
+        },
+        {
+          "id": "5fc0a472-2a57-49b9-a188-88197cec69e7",
+          "type": "reflection",
+          "title": "ONE STRENGTH",
+          "body": "<p>Which behavior is already a strength?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "59b887d8-4bd0-4f99-ae84-2619f0a300e8",
+          "type": "reflection",
+          "title": "ONE BLIND SPOT",
+          "body": "<p>Where might others see a gap you miss?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "07eeb205-5e60-4505-af5c-31671243cfd3",
+          "type": "reflection",
+          "title": "ONE PRACTICE TARGET",
+          "body": "<p>What behavior will you deliberately practice?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a02f684e-1ffc-414d-a4da-693ac66850aa",
+          "type": "text",
+          "title": "",
+          "body": "<p>The number is less important than the pattern. The goal is to identify one behavior to practice deliberately rather than trying to “be more strategic” in the abstract.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "afa92524-39d3-4982-afe0-c021a8796d37",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "d8e61c99-960e-4c5d-aacd-894c612f7dda",
+      "title": "Test the Story",
+      "description": "",
+      "blocks": [
+        {
+          "id": "e54f416e-303e-438f-a0e3-566c15bfbbe3",
+          "type": "heading",
+          "title": "TEST THE STORY",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5d8ad740-e712-44cf-a36b-de394c60be4f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Pressure makes certainty feel attractive. Strategic thinkers make assumptions visible enough to examine.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "2966d836-2c7e-4cf2-ad48-f03219df3291",
+          "type": "heading",
+          "title": "Most barriers are habits under pressure.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8ce487ee-563b-41e9-aabb-464bd5a450e9",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Select the two blockers most likely to distort a difficult decision.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0bade7b3-b0c5-4ef0-ac83-2616d77f17fc",
+          "type": "reflection",
+          "title": "Two strategic-thinking barriers",
+          "body": "<p>Choose two barriers most relevant to your work and explain what you will do about them.</p><ul><li>Expertise trap — Past success becomes the only lens for the next problem.</li><li>Tactical gravity — Urgency consumes all attention and pushes long-term conditions out of view.</li><li>Silos &amp; conformity — The frame is built inside one lane and dissent disappears.</li><li>Certainty hunger — Ambiguity feels unacceptable, so the first plausible explanation hardens too quickly.</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2099d833-4754-4960-a90d-1b3fd70b3ad0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strong leaders often overuse strengths that made them successful: expertise becomes rigidity, responsiveness becomes tactical gravity, decisiveness becomes premature closure, and loyalty becomes conformity.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7125fd2f-0bfb-45f5-a81a-eb1cd01d809b",
+          "type": "heading",
+          "title": "Cognitive biases",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "093124f8-29bc-45ed-aec3-b8ac0e5dad7e",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Bias is rarely obvious while it is happening. Select at least one that you want to watch for in your own decisions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "ab66f62e-22a7-4e70-af7e-680653d8f386",
+          "type": "flashcards",
+          "title": "Recognize cognitive biases",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "f2eceeaa-6fd8-405c-ae50-fa09a85bdaf8",
+              "front": "Confirmation",
+              "back": "We search for or favor evidence that supports the preferred view.",
+              "image": ""
+            },
+            {
+              "id": "759706f8-c489-489f-ab34-199e32a721b6",
+              "front": "Anchoring",
+              "back": "The first number, explanation, or proposal shapes later judgment.",
+              "image": ""
+            },
+            {
+              "id": "cba2c704-6ed6-4c6b-a5e6-73ab713b1c85",
+              "front": "Availability",
+              "back": "Recent or vivid examples feel more common or important than they may be.",
+              "image": ""
+            },
+            {
+              "id": "35d6e899-0172-4220-a31f-ece8db12b7df",
+              "front": "Status quo",
+              "back": "The familiar option feels safer simply because it is familiar.",
+              "image": ""
+            },
+            {
+              "id": "1ba77e04-caa6-410d-a1b2-c04fc4a12b0c",
+              "front": "Sunk cost",
+              "back": "Past investment keeps us committed even when conditions have changed.",
+              "image": ""
+            },
+            {
+              "id": "c0f48249-5e9c-46a4-ac31-30fdb9f088cc",
+              "front": "Groupthink",
+              "back": "Harmony and belonging crowd out examination or dissent.",
+              "image": ""
+            },
+            {
+              "id": "2aff7db9-bdaf-49db-a302-fa64b916c9a2",
+              "front": "Framing",
+              "back": "The way a problem is presented changes which options seem reasonable.",
+              "image": ""
+            },
+            {
+              "id": "6077ed19-047f-4fc0-a6b2-7b4120a354cd",
+              "front": "Outcome bias",
+              "back": "We judge the quality of a decision mainly by how it turned out.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "f5809998-4456-4730-a880-131b9741cacb",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"riskNote\" id=\"biasNote\"><strong>Countermeasure:</strong> Name the bias before it names the decision. Deliberately seek disconfirming evidence, alternate frames, or an outside perspective.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "279dfd6b-412d-4026-a201-1c58fdf6f67e",
+          "type": "heading",
+          "title": "Logical fallacies",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "168c013e-e1bd-47e5-ae6b-cd03441fbc66",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Fallacies can make weak reasoning sound stronger than it is. Select at least one you want to catch in meetings, briefings, or written recommendations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "bdf5e07c-3b57-483c-a835-bbcf4307d791",
+          "type": "flashcards",
+          "title": "Recognize logical fallacies",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "ccd84c77-5d27-476c-af19-3f7e1e77e7e9",
+              "front": "False dilemma",
+              "back": "Two choices are presented as if no other alternatives exist.",
+              "image": ""
+            },
+            {
+              "id": "5dc12fff-408b-4ed7-aae0-245080790b75",
+              "front": "Hasty generalization",
+              "back": "A limited example becomes a broad conclusion.",
+              "image": ""
+            },
+            {
+              "id": "c5e79a23-2c90-42aa-ad31-19b8e7abc04e",
+              "front": "Post hoc",
+              "back": "Because B followed A, we assume A caused B.",
+              "image": ""
+            },
+            {
+              "id": "e34b09b9-1c5f-474b-a247-2d1b62e58630",
+              "front": "Appeal to authority",
+              "back": "A claim is treated as sound mainly because an authority said it.",
+              "image": ""
+            },
+            {
+              "id": "59e77c41-fddc-4e88-af2f-51738eb50573",
+              "front": "Straw man",
+              "back": "An opposing view is weakened or distorted before being rejected.",
+              "image": ""
+            },
+            {
+              "id": "86cdbe54-5383-4d80-abe1-0aec1c4df2f6",
+              "front": "Slippery slope",
+              "back": "One change is treated as inevitably leading to an extreme outcome.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "d20da0d7-ac37-432c-aaec-53f41f1621fd",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"riskNote\" id=\"fallacyNote\"><strong>Countermeasure:</strong> Slow the argument down and test the actual claim. Ask what evidence supports it, what alternatives exist, and whether the conclusion follows from the premise.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "123894e4-66a7-4fa0-a9fd-dd557ed99c99",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "44a7a332-bafd-43ed-a423-61012bb63c82",
+          "type": "heading",
+          "title": "Where did we stop knowing and start interpreting?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "54283044-c801-4b6e-a4e2-9648dc6fce21",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Click the point where judgment starts to move away from observable facts.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7eceded6-7a36-4c61-a2ca-f7d666a843e3",
+          "type": "process",
+          "title": "Ladder of inference",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "cf4be8f2-e05a-486a-a6ae-0d9ae04da837",
+              "title": "Observable data",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "3de8f2b4-3a69-4aa0-a3a5-b89eeee3ba26",
+              "title": "Selected data",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "d2f2fe17-86d0-4426-a26c-3755bbb866b7",
+              "title": "Meaning",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "19230ab8-0c85-4170-a4fa-f916dad3c0ac",
+              "title": "Assumptions",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "4a1a812f-8b54-42ed-a801-57a3182b5a40",
+              "title": "Conclusions",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "eb448583-fb75-4f45-a80a-447b37a8ff2c",
+              "title": "Beliefs",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            },
+            {
+              "id": "a3aa81e9-994e-4115-a627-3a7942a27a8b",
+              "title": "Action",
+              "text": "<p>Consider how this applies to your work.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "03a9bd18-e406-47a2-aae7-79b0fb8d2cf7",
+          "type": "mcq",
+          "title": "Where does interpretation begin?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "80d57d4e-b456-4b1b-a7e9-3660d740a123",
+              "text": "Observable data",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "91a5be4d-f053-402a-aa7c-833352fead71",
+              "text": "Selected data",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "6f5d52bc-916b-457e-a065-e943f44695ad",
+              "text": "Meaning",
+              "correct": true,
+              "feedback": ""
+            },
+            {
+              "id": "536e767e-8787-4951-a732-2a07785e5104",
+              "text": "Assumptions",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "1bb3b8dc-e197-4c1b-aa71-8f3d6785151c",
+              "text": "Conclusions",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "89d29fce-018c-4934-ab71-f42bdb98c0ef",
+              "text": "Beliefs",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "ac434ae5-1fe0-4bc6-a3d6-a3c99e968cb7",
+              "text": "Action",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Meaning is where interpretation begins to enter. Make the move from data to interpretation visible enough to test.",
+          "feedbackIncorrect": "Meaning is where interpretation begins to enter. Make the move from data to interpretation visible enough to test. The strongest answer is: Meaning",
+          "completion": "attempt"
+        },
+        {
+          "id": "ce62a07e-a6f6-4ec4-a263-33f31b2f4571",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "5e3f9332-1721-4251-a370-885717030cb0",
+          "type": "heading",
+          "title": "Turn a conclusion back into a testable assumption.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7a4b2f74-43eb-4b39-a041-70a99d6421a9",
+          "type": "text",
+          "title": "",
+          "body": "<p>“Employees are resisting because they do not like change.”</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e3cf8fa6-eb1d-405b-a4d5-1b46b4df189d",
+          "type": "text",
+          "title": "",
+          "body": "<p>What hidden assumption is embedded in that statement?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "f2d4522e-b0da-4fe9-a9b1-08263cff25df",
+          "type": "reflection",
+          "title": "Name the hidden assumption...",
+          "body": "<p>Name the hidden assumption...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5ce59d38-6139-4437-a2ad-85d7c78dcf14",
+          "type": "text",
+          "title": "",
+          "body": "<p>What evidence would confirm or challenge it?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "0e268da8-f5fd-42e9-af88-4c5ddf17f4a9",
+          "type": "reflection",
+          "title": "Name one useful piece of evidence...",
+          "body": "<p>Name one useful piece of evidence...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5f884438-8a43-43b5-aaf4-de8ed14046f6",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"assumptionFeedback\">Assumptions are not automatically bad. <strong>Untested assumptions are dangerous.</strong> The strategic habit is to make them visible before they become conclusions, beliefs, and action.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3cab85a3-a4bc-45d3-a6ac-bf2e9bbd36f6",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "46595d38-3970-4dd1-a6d8-7edc892d9023",
+      "title": "Connect Today to Tomorrow",
+      "description": "",
+      "blocks": [
+        {
+          "id": "11bafca1-1da5-472f-abed-f392037df497",
+          "type": "heading",
+          "title": "CONNECT TODAY TO TOMORROW",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4597cc89-1883-495d-a14a-3493f8040ae8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strategy is not prediction. It is preparing decisions to survive changing conditions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3095dc6d-2f13-4326-a424-bc122a138348",
+          "type": "heading",
+          "title": "If the ends exceed the means, the ways may be a wish.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b5cc527f-d3b2-4778-a7c7-80ca45ffd1ff",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Use the workload scenario to create a simple strategic check.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "d9204441-5cf1-46f9-aeaa-8ddf51a22805",
+          "type": "reflection",
+          "title": "ENDS · Desired condition",
+          "body": "<p>What condition are we trying to create?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "79f66d08-1d98-47f2-a469-a318d803ce25",
+          "type": "reflection",
+          "title": "WAYS · Broad approach",
+          "body": "<p>What broad approach could move us there?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "dcb5787c-180a-47c6-a2aa-659f1f4bc51c",
+          "type": "reflection",
+          "title": "MEANS · Resources and authorities",
+          "body": "<p>People, time, money, authorities, technology, partnerships...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "afe69003-ebee-4b5d-aff3-4a001bb94ca2",
+          "type": "reflection",
+          "title": "RISK · Friction and consequences",
+          "body": "<p>What could fail or what harm could the approach create?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "5ad9e709-f486-47b6-a4ab-79c9a4dfc5f3",
+          "type": "text",
+          "title": "",
+          "body": "<p>A strategy becomes more credible when the desired condition, approach, resources, and risk are visible together rather than discussed as separate ideas.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8d58c17d-0d25-4d06-a7e1-3aa00bafb9cf",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "1cc92926-8fc5-4114-ae5f-47094381aa6e",
+          "type": "heading",
+          "title": "Strategic decisions create ripples.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c1b05b83-b825-47e9-a524-ca96c4ef68fe",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Choose a proposed decision&#x2014;such as shifting personnel away from training&#x2014;and identify what happens next.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "a661a654-f397-4b97-a693-236ceb2cde15",
+          "type": "text",
+          "title": "",
+          "body": "<p>FIRST-ORDER EFFECT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "aff567e1-9c65-4fa7-a04b-4cc916ca0de9",
+          "type": "text",
+          "title": "",
+          "body": "<p>The immediate result.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "abba41a3-200b-4dab-a4f7-5ba084d1f967",
+          "type": "reflection",
+          "title": "What changes immediately?",
+          "body": "<p>What changes immediately?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "2c31822d-6db8-47e3-add0-7708f933ade5",
+          "type": "text",
+          "title": "",
+          "body": "<p>SECOND-ORDER EFFECT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9514c2c8-bb06-491c-abc7-558c12548bbd",
+          "type": "text",
+          "title": "",
+          "body": "<p>What happens because of that result?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9a062756-980f-4a95-a11e-4b70d3b799cf",
+          "type": "reflection",
+          "title": "What consequence follows?",
+          "body": "<p>What consequence follows?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "01765bf0-d898-4b4c-a2b3-c40cfc295c96",
+          "type": "text",
+          "title": "",
+          "body": "<p>THIRD-ORDER EFFECT</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "947a18ce-5b3f-49bf-a79f-f1f7a5c74908",
+          "type": "text",
+          "title": "",
+          "body": "<p>How might the broader system respond?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "954f0053-2f33-437f-a546-cb1d49bde313",
+          "type": "reflection",
+          "title": "What changes later or elsewhere?",
+          "body": "<p>What changes later or elsewhere?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ef87c796-c742-4723-aa99-f510071c2db2",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"feedback\" id=\"rippleFeedback\">Thinking in time connects <strong>Then &#x2192; Now &#x2192; Next</strong>. It helps leaders use history without being trapped by it and consider future effects without pretending the future is certain.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a3a5eb69-81c6-4659-acb7-3f5044aee97c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "403d8d53-4e5e-4dae-a364-54b63c7efdf7",
+      "title": "Think Beyond Your Lane",
+      "description": "",
+      "blocks": [
+        {
+          "id": "78db4dcb-db70-493b-a1a0-eadce929f294",
+          "type": "heading",
+          "title": "THINK BEYOND YOUR LANE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "efffacb8-98da-4600-a750-d801160545ef",
+          "type": "text",
+          "title": "",
+          "body": "<p>At the strategic level, almost nothing important happens in isolation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "c3f29cc8-36bf-4608-a727-0c4b8d13d1f6",
+          "type": "heading",
+          "title": "Map the system before recommending action.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "77dbf443-b2d6-4613-a4c2-cbfcb96eba59",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"lede\">Imagine that workload is rising, experienced employees are retiring, technology modernization is accelerating, partner capacity is uneven, and workforce expectations are changing. Do not solve everything. Build a better strategic picture.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "9c0d6621-362c-47da-a14a-113004b1329b",
+          "type": "reflection",
+          "title": "3 CRITICAL CONNECTIONS",
+          "body": "<p>What variables, groups, or systems are strongly connected?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "de0d49e7-1c5a-41db-a0ef-97008ececa6f",
+          "type": "reflection",
+          "title": "2 ASSUMPTIONS",
+          "body": "<p>What are leaders treating as true that needs testing?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "068bbfe5-8a2b-4594-a130-1961e9b83a50",
+          "type": "reflection",
+          "title": "2 SECOND-ORDER EFFECTS",
+          "body": "<p>What happens because of the immediate effects?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "1c16d5a6-d5ac-4fda-a5d6-09628e562bb9",
+          "type": "reflection",
+          "title": "1 STRATEGIC RISK + 1 OPPORTUNITY",
+          "body": "<p>What could worsen? What could be leveraged?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "07c147c6-011c-4cc3-af26-a365eaae7fa0",
+          "type": "reflection",
+          "title": "1 SENIOR-LEADER QUESTION",
+          "body": "<p>What question would improve the decision before action?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "4510136a-8360-4088-acd8-ffabf41fa378",
+          "type": "text",
+          "title": "",
+          "body": "<p>The purpose of strategic thinking is not to produce a perfect map. It is to understand enough of the system to ask better questions, make better tradeoffs, and anticipate where action may create pressure elsewhere.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "58a52c41-6970-4fb5-a7b7-71fc1287401c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "6cda7fad-0923-47f7-ae47-35bff763f658",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "607b2841-e568-48ac-a7db-690b1b41aca8",
+          "type": "heading",
+          "title": "Four questions to carry into the next decision.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "967cfabe-6ff3-47ac-a76e-d7d715d0c5ce",
+          "type": "text",
+          "title": "",
+          "body": "<p>SEE MORE</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b618b8c8-1b3c-4df7-abd6-7fb452024564",
+          "type": "text",
+          "title": "",
+          "body": "<p>Whose perspective or information is missing?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "3bef15fb-93b1-4e75-a01f-bdb84770adb9",
+          "type": "reflection",
+          "title": "SEE MORE",
+          "body": "<p>Your reminder...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "f08c1e6c-406f-4bda-a8a5-2ecea5f1ee15",
+          "type": "text",
+          "title": "",
+          "body": "<p>THINK DEEPER</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b15e9612-24cc-4adf-aba0-055409e1ce47",
+          "type": "text",
+          "title": "",
+          "body": "<p>What assumption or causal story needs testing?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "dfac8bd3-8a9e-413d-a107-155dd55c573e",
+          "type": "reflection",
+          "title": "THINK DEEPER",
+          "body": "<p>Your reminder...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6bf08ae0-45ba-491a-ae72-9c46b54881ab",
+          "type": "text",
+          "title": "",
+          "body": "<p>LOOK FURTHER</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "71804cef-e23a-4598-a25b-79544f568297",
+          "type": "text",
+          "title": "",
+          "body": "<p>What second- or third-order effect matters?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "7f86e642-c67b-4a95-ab07-803718063369",
+          "type": "reflection",
+          "title": "LOOK FURTHER",
+          "body": "<p>Your reminder...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "8cde240f-9c3f-4f7d-a755-2548e2b3047b",
+          "type": "text",
+          "title": "",
+          "body": "<p>LEAD BROADER</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "100e25a4-e9ae-4337-a9d6-5961d2d78e5d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Who must understand, contribute, or align?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "8bb5ad05-36bd-4209-a2c2-0efa49445590",
+          "type": "reflection",
+          "title": "LEAD BROADER",
+          "body": "<p>Your reminder...</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "6ab4aafa-a863-46a9-aaf6-aa100ba73f10",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Strategic thinking expands the frame before it narrows the answer.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0b853833-192a-494c-ad83-88059a6b600e",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "cc98aa8f-71c5-427b-af40-4d24589837b7",
+          "type": "heading",
+          "title": "SEE MORE. THINK FURTHER.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6c1a207f-2850-42a5-a8a2-3ee4a3ba1b22",
+          "type": "text",
+          "title": "",
+          "body": "<p>You practiced the habits that widen perspective, test assumptions, connect time horizons, expose risk, and reveal system consequences before action.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        },
+        {
+          "id": "19d98e50-aa4e-4de8-a568-89650f45e2be",
+          "type": "text",
+          "title": "",
+          "body": "<p>CONTINUE TO STRATEGIC LEADERSHIP →</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5f59fef0-ca0a-4f9a-a2eb-8f00ad434b8a",
+          "type": "text",
+          "title": "",
+          "body": "<p style=\"color:#bcd0df;margin-top:18px\">Your progress is saved on this device.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "attribution": ""
+        }
+      ]
+    }
+  ]
+}

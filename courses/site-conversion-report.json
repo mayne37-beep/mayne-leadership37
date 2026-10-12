@@ -1,0 +1,83 @@
+[
+  {
+    "slug": "creative-thinking-foundations",
+    "id": "17d9507c-6947-4f7c-aef0-aa38a538fc30",
+    "title": "Creative Thinking",
+    "lessons": 11,
+    "blocks": 340,
+    "convertedStaticFields": 62,
+    "generatedContainers": 10,
+    "adaptations": [
+      "Idea tournament selections are recorded in native reflection blocks; learners refer to their earlier idea notes."
+    ],
+    "source": "creative-thinking-foundations.html",
+    "status": "draft"
+  },
+  {
+    "slug": "systems-thinking-foundations",
+    "id": "7507ea46-2f2b-496a-abd4-6cd833875069",
+    "title": "Systems Thinking: Foundations",
+    "lessons": 8,
+    "blocks": 184,
+    "convertedStaticFields": 1,
+    "generatedContainers": 18,
+    "adaptations": [
+      "Backlog manipulation becomes a guided calculation activity; animated feedback chains become native process blocks.",
+      "Original vector diagram retained in an editable custom HTML block."
+    ],
+    "source": "systems-thinking-foundations.html",
+    "status": "draft"
+  },
+  {
+    "slug": "strategic-thinking-foundations",
+    "id": "c75eba75-70e0-45d8-ac0c-6e7b0fd0a544",
+    "title": "Strategic Thinking",
+    "lessons": 7,
+    "blocks": 181,
+    "convertedStaticFields": 21,
+    "generatedContainers": 9,
+    "adaptations": [],
+    "source": "strategic-thinking-foundations.html",
+    "status": "draft"
+  },
+  {
+    "slug": "strategic-leadership",
+    "id": "be171a6e-abf4-411c-aa1a-b2e3a26a2001",
+    "title": "Strategic Leadership",
+    "lessons": 12,
+    "blocks": 227,
+    "convertedStaticFields": 76,
+    "generatedContainers": 7,
+    "adaptations": [],
+    "source": "strategic-leadership.html",
+    "status": "draft"
+  },
+  {
+    "slug": "metacognition",
+    "id": "2ab0a5d0-ad9e-4f47-aad8-bd2117911d08",
+    "title": "Metacognition",
+    "lessons": 7,
+    "blocks": 249,
+    "convertedStaticFields": 67,
+    "generatedContainers": 9,
+    "adaptations": [
+      "Dot voting, gradients, criteria selection, and confidence percentages become native written or rating activities."
+    ],
+    "source": "metacognition.html",
+    "status": "draft"
+  },
+  {
+    "slug": "leading-like-lasso",
+    "id": "1c1f2fb1-42d6-4f4a-a3b3-001e35c62f73",
+    "title": "Leading Like Lasso",
+    "lessons": 30,
+    "blocks": 512,
+    "convertedStaticFields": 0,
+    "generatedContainers": 0,
+    "adaptations": [
+      "All 30 scene lessons and embedded clip selections preserved; existing missing and companion-clip notices retained."
+    ],
+    "source": "leading-like-lasso.html",
+    "status": "draft"
+  }
+]
