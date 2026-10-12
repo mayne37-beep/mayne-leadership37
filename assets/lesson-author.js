@@ -116,7 +116,7 @@ function applyPalette(scope,palette,id='custom'){
  remember(true);
  if(scope==='course')Object.assign(obj,palette,{preset:id});
  else obj.theme={...palette,preset:id};
- if(scope==='block'&&id!=='custom')obj.background=palette.surface;
+ if(scope==='block')obj.useThemeSurface=true;
  changed();const host=byId('content-panel'),scroll=host.scrollTop;renderPanel();host.scrollTop=scroll;
 }
 function bindThemeStudio(host){
