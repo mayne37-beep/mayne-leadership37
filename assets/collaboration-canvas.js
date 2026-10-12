@@ -19,7 +19,7 @@ const makeId=()=>'i'+crypto.randomUUID().replace(/-/g,'').slice(0,21);
 const blank=()=>({stage:0,items:[],prompts:STEPS.map(s=>s[2])});
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
-let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null;
+let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null,lastNonPanTool='select';
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
 const localStore=(key,data)=>{try{localStorage.setItem(key,JSON.stringify(data));return true}catch{return false}};
@@ -63,7 +63,7 @@ function clampZoom(value){return Math.min(2.5,Math.max(.25,Math.round(value*100)
 function applyView(){$('#canvas-world').style.transform='translate('+pan.x+'px,'+pan.y+'px) scale('+zoom+')';$('#zoom-level').textContent=Math.round(zoom*100)+'%'}
 function zoomTo(z,cx,cy){const v=$('#canvas-viewport').getBoundingClientRect(),x=cx??v.width/2,y=cy??v.height/2, wx=(x-pan.x)/zoom,wy=(y-pan.y)/zoom;zoom=clampZoom(z);pan={x:x-wx*zoom,y:y-wy*zoom};applyView()}
 function fitView(){if(!board.items.length){zoom=.76;const rect=$('#canvas-viewport').getBoundingClientRect();pan={x:rect.width/2-1800*zoom,y:rect.height/2-1200*zoom};applyView();return}const shapes=board.items.filter(o=>!['connector','stroke'].includes(o.type));if(!shapes.length)return;const minX=Math.min(...shapes.map(o=>o.x))-110,maxX=Math.max(...shapes.map(o=>o.x+o.w))+110,minY=Math.min(...shapes.map(o=>o.y))-110,maxY=Math.max(...shapes.map(o=>o.y+o.h))+110;const r=$('#canvas-viewport').getBoundingClientRect();zoom=clampZoom(Math.min(r.width/(maxX-minX),r.height/(maxY-minY),1.4));pan={x:(r.width-(maxX-minX)*zoom)/2-minX*zoom,y:(r.height-(maxY-minY)*zoom)/2-minY*zoom};applyView()}
-function setTool(next){finishInlineEdit(true);tool=next;connectFrom=null;$$('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===next));$('#canvas-viewport').classList.toggle('pan',next==='pan');$('#canvas-viewport').classList.toggle('draw',['stroke','connector'].includes(next));announce(next==='connector'?'Click two objects to connect them':next==='vote'?'Click an idea to add a vote':next==='image'?'Click the board to position an image':'Tool: '+next)}
+function setTool(next){finishInlineEdit();if(next!=='pan')lastNonPanTool=next;tool=next;connectFrom=null;$$('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===next));$('#canvas-viewport').classList.toggle('pan',next==='pan');$('#canvas-viewport').classList.toggle('draw',['stroke','connector'].includes(next));announce(next==='connector'?'Click two objects to connect them':next==='vote'?'Click an idea to add a vote':next==='image'?'Click the board to position an image':'Tool: '+next)}
 function add(item){if(board.items.length>=MAX_ITEMS){toast('Canvas limit reached. Export or remove some objects.');return}before();board.items.push(cleanItem(item));selected=item.id;render();save();enqueue('put',{item:getObj(selected)})}
 function addType(type,p=viewportCenter()){const id=makeId();const defaults={note:[215,150,'New idea',COLORS[0]],text:[235,80,'Double-click to edit',COLORS[5]],shape:[230,135,'Editable shape',COLORS[1]],ellipse:[180,160,'Idea',COLORS[2]],frame:[430,300,'Group or theme',COLORS[5]]};const [w,h,text,color]=defaults[type]||defaults.note;add({id,type,x:Math.round(p.x-w/2),y:Math.round(p.y-h/2),w,h,text,color,votes:0});setTool('select');startInlineEdit(id,{selectAll:true})}
 function elementNode(tag,cls){const node=document.createElement(tag);if(cls)node.className=cls;return node}
@@ -143,7 +143,27 @@ function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagati
 if(tool==='connector'){if(!connectFrom){connectFrom=id;select(id);announce('Now click the second object to connect')}else if(connectFrom!==id){add({id:makeId(),type:'connector',from:connectFrom,to:id,text:'',color:COLORS[5],x:0,y:0,w:60,h:35});connectFrom=null;setTool('select')}return}
 if(tool==='pan'||spaceDown){startPan(e);return}
 select(id);if(tool!=='select')return;before();const p=worldPoint(e);dragging={type:'item',id,dx:p.x-obj.x,dy:p.y-obj.y,moved:false};$('#canvas-viewport').setPointerCapture(e.pointerId)}
-function startPan(e){dragging={type:'pan',sx:e.clientX,sy:e.clientY,x:pan.x,y:pan.y};$('#canvas-viewport').setPointerCapture(e.pointerId);$('#canvas-viewport').classList.add('dragging')}
+function startPan(e,{rightButton=false}={}){
+ dragging={type:'pan',sx:e.clientX,sy:e.clientY,x:pan.x,y:pan.y,rightButton,moved:false};
+ const viewport=$('#canvas-viewport');
+ viewport.setPointerCapture(e.pointerId);
+ viewport.classList.add('dragging');
+ viewport.classList.toggle('right-panning',rightButton);
+}
+function rightPanStart(e){
+ // Right-click on the board, including shape borders and move handles,
+ // is a shortcut for panning. Never hijack an actual text editor or UI button.
+ if(e.pointerType!=='mouse'||e.button!==2)return;
+ if(e.target.closest('.zoom-control,.empty-guide,.canvas-text-input,input,textarea,select,[contenteditable],.inline-editor-actions'))return;
+ if(dragging)return;
+ e.preventDefault();e.stopPropagation();
+ finishInlineEdit();
+ startPan(e,{rightButton:true});
+}
+function rightPanToggle(){
+ setTool(tool==='pan'?lastNonPanTool:'pan');
+ announce(tool==='pan'?'Pan mode: drag to navigate · right-click again to restore your last tool':'Restored '+tool+' tool');
+}
 function onCanvasDown(e){if(e.target.closest('.zoom-control,.empty-guide'))return;if(e.button!==0&&e.button!==1)return;finishInlineEdit(true);
 if(e.button===1||tool==='pan'||spaceDown){startPan(e);return}
 const point=worldPoint(e);
@@ -152,10 +172,11 @@ if(tool==='image'){imagePoint=point;$('#image-input').click();return}
 if(['note','text','shape','ellipse','frame'].includes(tool)){addType(tool,point);return}
 select(null)}
 function onPointerMove(e){if(!dragging)return;
-if(dragging.type==='pan'){pan.x=dragging.x+e.clientX-dragging.sx;pan.y=dragging.y+e.clientY-dragging.sy;applyView();return}
+if(dragging.type==='pan'){const dx=e.clientX-dragging.sx,dy=e.clientY-dragging.sy;if(Math.hypot(dx,dy)>5)dragging.moved=true;pan.x=dragging.x+dx;pan.y=dragging.y+dy;applyView();return}
 if(dragging.type==='item'){const o=getObj(dragging.id);if(!o)return;const p=worldPoint(e);const x=Math.max(-100,Math.min(4500,Math.round((p.x-dragging.dx)/10)*10)),y=Math.max(-100,Math.min(3150,Math.round((p.y-dragging.dy)/10)*10));if(x!==o.x||y!==o.y)dragging.moved=true;o.x=x;o.y=y;const node=$('.item[data-id="'+o.id+'"]');if(node){node.style.left=x+'px';node.style.top=y+'px'}renderWires();return}
 if(dragging.type==='stroke'){const o=getObj(dragging.id);if(o&&o.points.length<1000){const p=worldPoint(e),last=o.points[o.points.length-1];if(Math.hypot(p.x-last[0],p.y-last[1])>5){o.points.push([p.x,p.y]);renderWires()}}}}
-function onPointerUp(e){if(!dragging)return;const was=dragging;dragging=null;$('#canvas-viewport').classList.remove('dragging');try{$('#canvas-viewport').releasePointerCapture(e.pointerId)}catch{}
+function onPointerUp(e){if(!dragging)return;const was=dragging;dragging=null;$('#canvas-viewport').classList.remove('dragging','right-panning');try{$('#canvas-viewport').releasePointerCapture(e.pointerId)}catch{}
+if(was.type==='pan'&&was.rightButton&&!was.moved&&e.type==='pointerup')rightPanToggle();
 if(was.type==='item'){if(was.moved){const o=getObj(was.id);save();enqueue('put',{item:o});announce('Object moved')}else{if(!room&&history.length){history.pop();updateUndo()}}}
 if(was.type==='stroke'){const o=getObj(was.id);if(o){if(o.points.length<2)o.points.push([o.x+1,o.y+1]);selected=o.id;render();save();enqueue('put',{item:o})}}
 }
@@ -188,7 +209,17 @@ function summary(){const lines=[title,'Stage: '+STEPS[board.stage][0],'Question:
 function timerRender(){$('#timer-display').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':'+String(timerLeft%60).padStart(2,'0')}
 function timerStart(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;$('#timer-start').textContent='Resume';return}if(timerLeft<=0)timerLeft=Math.max(1,Math.min(180,Number($('#timer-minutes').value)||5))*60;$('#timer-start').textContent='Pause';timerInterval=setInterval(()=>{timerLeft--;timerRender();if(timerLeft<=0){clearInterval(timerInterval);timerInterval=null;$('#timer-start').textContent='Start';$('.timer').classList.add('finished');toast('Facilitation time is up!')}},1000)}
 function bind(){
-$('#canvas-viewport').addEventListener('pointerdown',onCanvasDown);$('#canvas-viewport').addEventListener('pointermove',onPointerMove);$('#canvas-viewport').addEventListener('pointerup',onPointerUp);$('#canvas-viewport').addEventListener('pointercancel',onPointerUp);
+const viewport=$('#canvas-viewport');
+viewport.addEventListener('pointerdown',rightPanStart,{capture:true});
+viewport.addEventListener('pointerdown',onCanvasDown);
+viewport.addEventListener('pointermove',onPointerMove);
+viewport.addEventListener('pointerup',onPointerUp);
+viewport.addEventListener('pointercancel',onPointerUp);
+viewport.addEventListener('contextmenu',e=>{
+ if(e.target.closest('.zoom-control,.empty-guide,.canvas-text-input,input,textarea,select,[contenteditable],.inline-editor-actions'))return;
+ e.preventDefault();
+});
+viewport.addEventListener('auxclick',e=>{if(e.button===2&&!e.target.closest('input,textarea,select,[contenteditable]'))e.preventDefault()});
 $('#canvas-viewport').addEventListener('wheel',e=>{e.preventDefault();const r=$('#canvas-viewport').getBoundingClientRect();zoomTo(zoom*(e.deltaY>0?.9:1.1),e.clientX-r.left,e.clientY-r.top)},{passive:false});
 $$('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 $('#empty-start').addEventListener('click',()=>addType('note'));$('#zoom-in').addEventListener('click',()=>zoomTo(zoom*1.2));$('#zoom-out').addEventListener('click',()=>zoomTo(zoom/1.2));$('#zoom-fit').addEventListener('click',fitView);
