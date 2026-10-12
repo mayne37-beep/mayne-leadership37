@@ -20,7 +20,7 @@ const blank=()=>({stage:0,items:[],settings:{locked:false,votingOpen:true,votesP
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
 let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null,lastNonPanTool='select';
-let selectedIds=new Set(),copiedItems=[],library=localRead('ml.canvas.library.v2')||[],facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
+let selectedIds=new Set(),copiedItems=[],library=[],facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
 const activeIds=()=>selectedIds.size?[...selectedIds]:selected?[selected]:[];
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
@@ -534,7 +534,7 @@ $('#copy-summary').addEventListener('click',()=>copyText(summary()));$('#timer-s
 window.addEventListener('keydown',e=>{const editing=e.target.closest('input,textarea,select,[contenteditable]');if(e.code==='Space'&&!editing){spaceDown=true;e.preventDefault()}if(editing)return;const key=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&key==='z'){e.preventDefault();undo()}else if((e.ctrlKey||e.metaKey)&&key==='y'){e.preventDefault();redo()}else if(key==='delete'||key==='backspace'){e.preventDefault();deleteSelected()}else if(!e.ctrlKey&&!e.metaKey){const shortcuts={v:'select',h:'pan',n:'note',t:'text',r:'shape',e:'ellipse',f:'frame',c:'connector',p:'stroke'};if(shortcuts[key])setTool(shortcuts[key])}});
 window.addEventListener('keyup',e=>{if(e.code==='Space')spaceDown=false});window.addEventListener('blur',()=>{spaceDown=false});window.addEventListener('beforeunload',()=>{finishInlineEdit(true);saveLocal()});
 }
-async function init(){bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
+async function init(){library=localRead('ml.canvas.library.v2')||[];bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
 render();requestAnimationFrame(fitView);timerRender();roomUI();if(entry==='guest'){const p=new URLSearchParams(location.hash.slice(1));const id=p.get('id'),token=p.get('token');if(/^[0-9a-f-]{36}$/i.test(id||'')&&/^[0-9a-f-]{36}$/i.test(token||''))await joinRoom(id,token);else{setStatus('Invitation required');toast('Open the invitation link provided by your instructor.')}}else await restoreRoom();setInterval(refresh,1900);
 }
 init().catch(e=>{setStatus('⚠ Canvas startup error');toast(e.message)});
