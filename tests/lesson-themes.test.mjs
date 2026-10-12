@@ -31,7 +31,7 @@ test('lesson palette overrides its course, individual block overrides lesson',()
  Object.assign(course.theme,THEME_PRESETS[0].palette);
  const lesson=course.lessons[0];
  lesson.theme={...THEME_PRESETS[4].palette,preset:'coastal-teal'};
- const block=newBlock('text');
+ const block=newBlock('divider');
  block.design.background=THEME_PRESETS[2].palette.surface;
  block.design.theme={...THEME_PRESETS[2].palette,preset:'warm-leadership'};
  lesson.blocks.push(block);
@@ -43,6 +43,10 @@ test('lesson palette overrides its course, individual block overrides lesson',()
  assert.match(themed,/--highlight:#A6A86E/);
  assert.match(themed,/--block-bg:#FFFFFF/);
  assert.deepEqual(JSON.parse(JSON.stringify(course)).lessons[0].theme,lesson.theme);
+});
+
+test('legacy backgrounds keep explicit colors and defaults inherit the new palette surface',()=>{
+ const old=newCourse();const normal=newBlock('divider'),custom=newBlock('divider');delete normal.design.useThemeSurface;delete custom.design.useThemeSurface;custom.design.background='#DDEEFF';old.lessons[0].blocks=[normal,custom];const loaded=normalizeCourse(old);assert.equal(loaded.lessons[0].blocks[0].design.useThemeSurface,true);assert.equal(loaded.lessons[0].blocks[1].design.useThemeSurface,false);const parent=resolveTheme(THEME_PRESETS[4].palette);assert.match(blockHTML(loaded.lessons[0].blocks[0],parent),/--block-bg:#FFFFFF/);assert.match(blockHTML(loaded.lessons[0].blocks[1],parent),/--block-bg:#DDEEFF/);
 });
 
 test('resetting lesson and block overrides restores inherited colors',()=>{
