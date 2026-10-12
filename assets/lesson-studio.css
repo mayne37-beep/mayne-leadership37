@@ -74,3 +74,13 @@
 .course-player .question-option,.course-player .scenario-choice,.course-player .sort-card{color:var(--ink);background:var(--surface)}
 .course-player .course-complete{background:var(--surface);border-top:4px solid var(--highlight)}
 .course-player .course-complete h2{color:var(--ink)}
+
+/* Show inherited lesson and individual block colors directly on the authoring canvas. */
+.editor-canvas .block-snapshot .lesson-block{color:var(--ink);background:var(--block-bg,var(--surface));}
+.editor-canvas .block-snapshot .lesson-block h2,.editor-canvas .block-snapshot .lesson-block h3{color:var(--ink)}
+.editor-canvas .block-snapshot .note-block,.editor-canvas .block-snapshot .flashcard-face,.editor-canvas .block-snapshot .scenario-wrap,.editor-canvas .block-snapshot .question-block{background:color-mix(in srgb,var(--secondary) 10%,var(--surface));color:var(--ink)}
+.editor-canvas .block-snapshot .quote-block{border-top-color:var(--highlight)}
+.editor-canvas .block-snapshot .flashcard-face{border-color:var(--secondary)}
+.editor-canvas .lesson-heading h1{color:var(--ink)}
+.editor-canvas .lesson-heading .eyebrow{color:var(--secondary)}
+.editor-canvas .lesson-heading p{color:var(--muted-ink)}
