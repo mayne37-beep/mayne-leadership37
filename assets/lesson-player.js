@@ -88,7 +88,7 @@ export function blockHTML(b,inheritedTheme=null){
  default:content=rich(b.body);
  }
  const bt=resolveTheme(inheritedTheme||{},b.design?.theme);
- return '<section class="lesson-block '+esc(b.design?.width||'standard')+'" data-block="'+esc(b.id)+'" style="'+themeVars(bt)+'--block-bg:'+color(b.design?.background,bt.surface)+';--block-pad:'+Math.min(100,Math.max(0,Number(b.design?.padding)||0))+'px;--block-align:'+(['left','center','right'].includes(b.design?.align)?b.design.align:'left')+'"><div class="block-inner">'+heading+content+'</div></section>';
+ return '<section class="lesson-block '+esc(b.design?.width||'standard')+'" data-block="'+esc(b.id)+'" style="'+themeVars(bt)+'--block-bg:'+(b.design?.useThemeSurface===true?bt.surface:color(b.design?.background,bt.surface))+';--block-pad:'+Math.min(100,Math.max(0,Number(b.design?.padding)||0))+'px;--block-align:'+(['left','center','right'].includes(b.design?.align)?b.design.align:'left')+'"><div class="block-inner">'+heading+content+'</div></section>';
 }
 export function mountCourse(root,course,options={}){
  const c=course;const preview=!!options.preview;const storageKey='ml-learner-'+c.id+'-'+(c.updatedAt||'1')+'-'+(options.storageSuffix||'');
