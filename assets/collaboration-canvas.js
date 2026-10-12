@@ -337,7 +337,7 @@ function timerStart(){if(timerInterval){clearInterval(timerInterval);timerInterv
 /* Classroom identity, presence and privacy-aware brainstorming. */
 async function classRPC(endpoint,action,extra={}){
  if(!room)throw Error('Live session required');
- const response=await fetch(endpoint,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',apikey:PUBLIC_KEY},body:JSON.stringify({p_action:action,p_board:room.id,p_secret:room.secret,p_client:clientId,p_name:displayName,p_idea:extra.idea||null}),signal:AbortSignal.timeout(15000)});
+ const response=await fetch(endpoint,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',apikey:PUBLIC_KEY},body:JSON.stringify(endpoint===PRESENCE_API?{p_action:action,p_board:room.id,p_secret:room.secret,p_client:clientId,p_name:displayName}:{p_action:action,p_board:room.id,p_secret:room.secret,p_client:clientId,p_idea:extra.idea||null}),signal:AbortSignal.timeout(15000)});
  const data=await response.json().catch(()=>({}));
  if(!response.ok)throw Error(data.message||'Classroom request failed');
  return data;
