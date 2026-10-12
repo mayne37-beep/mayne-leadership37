@@ -14,8 +14,39 @@ export function safeHTML(v){
 }
 function videoSource(url){const s=safeURL(url,true);try{const u=new URL(s);if(u.hostname==='youtu.be')return {embed:'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(u.pathname.slice(1))};if(['www.youtube.com','youtube.com','www.youtube-nocookie.com'].includes(u.hostname)){const id=u.searchParams.get('v')||u.pathname.split('/').pop();if(/^[\w-]{11}$/.test(id))return {embed:'https://www.youtube-nocookie.com/embed/'+id};}if(['vimeo.com','www.vimeo.com','player.vimeo.com'].includes(u.hostname)){const id=u.pathname.split('/').pop();if(/^\d+$/.test(id))return {embed:'https://player.vimeo.com/video/'+id};}}catch{}return {file:s};}
 function color(v,fallback='#176599'){return /^#[a-f\d]{6}$/i.test(v||'')?v:fallback;}
+
+/* Shared color themes; kept in the player so standalone HTML and SCORM exports work. */
+export const THEME_PRESETS = [
+ {id:'executive-blue',name:'Executive Blue',palette:{accent:'#173B63',secondary:'#3377A7',highlight:'#D6AD60',background:'#DCEBF6',surface:'#FFFFFF',ink:'#17344B',muted:'#52697B',heading:'#173B63',callout:'#E7F1F8'}},
+ {id:'modern-professional',name:'Modern Professional',palette:{accent:'#283F55',secondary:'#6D91A9',highlight:'#83ACA1',background:'#E7EDF1',surface:'#FFFFFF',ink:'#283F55',muted:'#617481',heading:'#283F55',callout:'#E6EEF1'}},
+ {id:'warm-leadership',name:'Warm Leadership',palette:{accent:'#72523C',secondary:'#C9A77F',highlight:'#A6A86E',background:'#F4EBDC',surface:'#FFFFFF',ink:'#43372E',muted:'#75675A',heading:'#5F4634',callout:'#F8F0E4'}},
+ {id:'slate-gold',name:'Slate & Gold',palette:{accent:'#313F51',secondary:'#667788',highlight:'#C8A052',background:'#E9EEF2',surface:'#FFFFFF',ink:'#263544',muted:'#657384',heading:'#313F51',callout:'#F0F3F5'}},
+ {id:'coastal-teal',name:'Coastal Teal',palette:{accent:'#145C65',secondary:'#4C9CA0',highlight:'#E0B56D',background:'#DDF1F0',surface:'#FFFFFF',ink:'#183F44',muted:'#5A7679',heading:'#145C65',callout:'#E8F4F1'}},
+ {id:'minimal-light',name:'Minimal Light',palette:{accent:'#527EB1',secondary:'#9DA9B4',highlight:'#9CAFC1',background:'#F3F5F7',surface:'#FFFFFF',ink:'#303944',muted:'#677582',heading:'#303944',callout:'#EEF3F8'}}
+];
+export const THEME_COLOR_FIELDS = [
+ ['accent','Primary / buttons'],['secondary','Secondary'],['highlight','Highlights'],['background','Page background'],
+ ['surface','Content cards'],['heading','Headings'],['ink','Body text'],['muted','Supporting text'],['callout','Callouts']
+];
+const DEFAULT_THEME_COLORS = {accent:'#176599',secondary:'#3377A7',highlight:'#C59A43',background:'#FFFFFF',surface:'#FFFFFF',heading:'#20364A',ink:'#20364A',muted:'#52697B',callout:'#EDF5FB'};
+export function resolveTheme(base={},override=null){
+ const combined={...DEFAULT_THEME_COLORS,...(base||{}),...(override||{})};
+ const result={};for(const key of Object.keys(DEFAULT_THEME_COLORS))result[key]=color(combined[key],DEFAULT_THEME_COLORS[key]);
+ if(!(base?.heading||override?.heading))result.heading=result.ink;
+ result.font=(override?.font||base?.font)==='serif'?'serif':'sans';
+ return result;
+}
+function onAccent(hex){
+ const channels=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));
+ return .2126*channels[0]+.7152*channels[1]+.0722*channels[2]>.18?'#172C3B':'#FFFFFF';
+}
+export function themeVars(theme){
+ const t=resolveTheme(theme);
+ return '--accent:'+t.accent+';--secondary:'+t.secondary+';--highlight:'+t.highlight+';--course-bg:'+t.background+';--surface:'+t.surface+';--heading:'+t.heading+';--ink:'+t.ink+';--muted-ink:'+t.muted+';--callout-bg:'+t.callout+';--on-accent:'+onAccent(t.accent)+';';
+}
+
 function shuffled(items){return [...items].map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);}
-export function blockHTML(b){
+export function blockHTML(b,inheritedTheme=null){
  const rich=v=>'<div class="rich">'+safeHTML(v)+'</div>';
  const img=(u,a='',cl='lesson-image')=>safeURL(u,true)?'<img class="'+cl+'" src="'+esc(safeURL(u,true))+'" alt="'+esc(a)+'" loading="lazy">':'<div class="missing-media">Add an image in the content panel</div>';
  const heading=b.title&& !['heading','mcq','msq','fill','quiz','continue','divider','spacer','quote'].includes(b.type)?'<h2>'+esc(b.title)+'</h2>':'';
@@ -57,7 +88,8 @@ export function blockHTML(b){
  case 'continue':content='<div class="continue-wrap"><button data-continue>'+esc(b.title||'Continue')+'</button><small class="gate-message"></small></div>';break;
  default:content=rich(b.body);
  }
- return '<section class="lesson-block '+esc(b.design?.width||'standard')+'" data-block="'+esc(b.id)+'" style="--block-bg:'+color(b.design?.background,'#ffffff')+';--block-pad:'+Math.min(100,Math.max(0,Number(b.design?.padding)||0))+'px;--block-align:'+(['left','center','right'].includes(b.design?.align)?b.design.align:'left')+'"><div class="block-inner">'+heading+content+'</div></section>';
+ const bt=resolveTheme(inheritedTheme||{},b.design?.theme);
+ return '<section class="lesson-block '+esc(b.design?.width||'standard')+'" data-block="'+esc(b.id)+'" style="'+themeVars(bt)+'--block-bg:'+(b.design?.useThemeSurface===true?bt.surface:color(b.design?.background,bt.surface))+';--block-pad:'+Math.min(100,Math.max(0,Number(b.design?.padding)||0))+'px;--block-align:'+(['left','center','right'].includes(b.design?.align)?b.design.align:'left')+'"><div class="block-inner">'+heading+content+'</div></section>';
 }
 export function mountCourse(root,course,options={}){
  const c=course;const preview=!!options.preview;const storageKey='ml-learner-'+c.id+'-'+(c.updatedAt||'1')+'-'+(options.storageSuffix||'');
@@ -142,7 +174,7 @@ export function mountCourse(root,course,options={}){
  }
  function notes(){let text=c.title+'\n'+(c.author||'')+'\n\n';for(const n of Object.values(state.notes))text+=n.title+'\n'+n.text+'\n\n';for(const n of Object.values(state.ratings))text+=n.title+'\nRating: '+n.value+' / '+n.scale+'\n\n';const url=URL.createObjectURL(new Blob([text],{type:'text/plain'}));const a=document.createElement('a');a.href=url;a.download='Leadership_course_notes.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
  function draw(){
-  const l=c.lessons[state.lesson];root.innerHTML='<div class="course-player '+(c.theme?.font==='serif'?'serif':'')+'" style="--accent:'+color(c.theme?.accent)+';--course-bg:'+color(c.theme?.background,'#fff')+'"><header class="player-header"><button data-menu aria-label="Toggle lesson navigation">☰</button><span class="player-title">'+esc(c.title)+'</span><button data-notes>Download notes ↓</button><button data-print>Print</button></header>'+(c.settings?.showProgress===false?'':'<div class="progress-track"><div class="progress-fill"></div></div>')+'<div class="player-layout"><nav class="player-nav" aria-label="Course lessons"><h3>Course outline</h3>'+c.lessons.map((lesson,n)=>'<button data-lesson="'+n+'" class="'+(n===state.lesson?'current':'')+'" '+(c.settings?.navigation==='restricted'&&n>0&&!state.completed.includes(c.lessons[n-1].id)?'disabled':'')+'><span>'+String(n+1).padStart(2,'0')+'</span><span>'+esc(lesson.title)+'</span><span class="check"></span></button>').join('')+'<p class="course-summary"></p></nav><div class="player-main">'+(state.lesson===0?'<section class="course-hero '+(!c.cover?'no-cover':'')+'"><div><span class="eyebrow">MAYNE LEADERSHIP · LEARNING</span><h1>'+esc(c.title)+'</h1><p>'+esc(c.description)+'</p><span class="author">'+esc(c.author)+'</span></div>'+(c.cover?'<img src="'+esc(safeURL(c.cover,true))+'" alt="Course cover">':'')+'</section>':'')+'<div class="learner-lesson-header"><span class="eyebrow">LESSON '+(state.lesson+1)+' OF '+c.lessons.length+'</span><h2>'+esc(l.title)+'</h2><p>'+esc(l.description)+'</p></div><div class="lesson-blocks">'+l.blocks.map(blockHTML).join('')+'</div><footer class="lesson-footer"><button data-previous '+(!state.lesson?'disabled':'')+'>← Previous lesson</button><small class="lesson-status"></small><button class="primary next-lesson">'+(state.lesson===c.lessons.length-1?'Complete course ✓':'Complete & next lesson →')+'</button></footer><div data-completion></div></div></div></div>';
+  const l=c.lessons[state.lesson],activeTheme=resolveTheme(c.theme,l.theme);root.innerHTML='<div class="course-player '+(activeTheme.font==='serif'?'serif':'')+'" style="'+themeVars(activeTheme)+'"><header class="player-header"><button data-menu aria-label="Toggle lesson navigation">☰</button><span class="player-title">'+esc(c.title)+'</span><button data-notes>Download notes ↓</button><button data-print>Print</button></header>'+(c.settings?.showProgress===false?'':'<div class="progress-track"><div class="progress-fill"></div></div>')+'<div class="player-layout"><nav class="player-nav" aria-label="Course lessons"><h3>Course outline</h3>'+c.lessons.map((lesson,n)=>'<button data-lesson="'+n+'" class="'+(n===state.lesson?'current':'')+'" '+(c.settings?.navigation==='restricted'&&n>0&&!state.completed.includes(c.lessons[n-1].id)?'disabled':'')+'><span>'+String(n+1).padStart(2,'0')+'</span><span>'+esc(lesson.title)+'</span><span class="check"></span></button>').join('')+'<p class="course-summary"></p></nav><div class="player-main">'+(state.lesson===0?'<section class="course-hero '+(!c.cover?'no-cover':'')+'"><div><span class="eyebrow">MAYNE LEADERSHIP · LEARNING</span><h1>'+esc(c.title)+'</h1><p>'+esc(c.description)+'</p><span class="author">'+esc(c.author)+'</span></div>'+(c.cover?'<img src="'+esc(safeURL(c.cover,true))+'" alt="Course cover">':'')+'</section>':'')+'<div class="learner-lesson-header"><span class="eyebrow">LESSON '+(state.lesson+1)+' OF '+c.lessons.length+'</span><h2>'+esc(l.title)+'</h2><p>'+esc(l.description)+'</p></div><div class="lesson-blocks">'+l.blocks.map(b=>blockHTML(b,activeTheme)).join('')+'</div><footer class="lesson-footer"><button data-previous '+(!state.lesson?'disabled':'')+'>← Previous lesson</button><small class="lesson-status"></small><button class="primary next-lesson">'+(state.lesson===c.lessons.length-1?'Complete course ✓':'Complete & next lesson →')+'</button></footer><div data-completion></div></div></div></div>';
   root.querySelector('[data-menu]').onclick=()=>{root.querySelector('.player-nav').classList.toggle('show');if(window.innerWidth>960)root.querySelector('.course-player').classList.toggle('player-nav-hidden');};
   root.querySelector('[data-notes]').onclick=notes;root.querySelector('[data-print]').onclick=()=>window.print();
   root.querySelectorAll('[data-lesson]').forEach(btn=>btn.onclick=()=>go(Number(btn.dataset.lesson)));

@@ -41,7 +41,7 @@ export const CATALOG=[
 ].map(([type,label,category,icon,hint])=>({type,label,category,icon,hint}));
 export const meta=t=>CATALOG.find(x=>x.type===t)||CATALOG[1];
 export function newBlock(type){
- const b={id:uid(),type,title:meta(type).label,body:'',design:{background:'#ffffff',padding:36,width:'standard',align:'left'},required:false};
+ const b={id:uid(),type,title:meta(type).label,body:'',design:{background:'#ffffff',useThemeSurface:true,padding:36,width:'standard',align:'left'},required:false};
  const item=(title,text)=>({id:uid(),title,text,image:''});
  if(['accordion','tabs','process','timeline'].includes(type))b.items=[item('First idea','Add your explanation here.'),item('Second idea','Add another explanation.')];
  if(type==='flashcards')b.items=[{id:uid(),front:'Key concept',back:'Explain the concept here.',image:''},{id:uid(),front:'Put it into practice',back:'Describe an example here.',image:''}];
@@ -93,7 +93,7 @@ export function normalizeCourse(data){
  const known=new Set(CATALOG.map(x=>x.type));const ids=new Set();
  const fixId=o=>{if(typeof o.id!=='string'||ids.has(o.id)||!/^[a-f0-9-]{36}$/i.test(o.id))o.id=uid();ids.add(o.id);};
  const d=clone(data);fixId(d);d.theme={...newCourse().theme,...d.theme};d.settings={...newCourse().settings,...d.settings};
- for(const l of d.lessons){fixId(l);if(!Array.isArray(l.blocks)||l.blocks.length>500)throw Error('Invalid lesson blocks.');for(const b of l.blocks){if(!known.has(b.type))throw Error('Unsupported block: '+b.type);fixId(b);b.design={...newBlock(b.type).design,...b.design};if(b.type==='scenario'&&(!Array.isArray(b.nodes)||!b.nodes.length))throw Error('A scenario needs at least one scene.');}}
+ for(const l of d.lessons){fixId(l);if(!Array.isArray(l.blocks)||l.blocks.length>500)throw Error('Invalid lesson blocks.');for(const b of l.blocks){if(!known.has(b.type))throw Error('Unsupported block: '+b.type);fixId(b);const legacyMode=b.design?.useThemeSurface;b.design={...newBlock(b.type).design,...b.design};if(legacyMode===undefined)b.design.useThemeSurface=(String(b.design.background||'').toLowerCase()==='#ffffff');if(b.type==='scenario'&&(!Array.isArray(b.nodes)||!b.nodes.length))throw Error('A scenario needs at least one scene.');}}
  return d;
 }
 export function validatePublish(c){
