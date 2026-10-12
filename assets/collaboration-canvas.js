@@ -1,6 +1,8 @@
 (()=>{'use strict';
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const API='https://vteamreihsunsllwcphw.supabase.co/rest/v1/rpc/ml_canvas_board_rpc';
+const PRESENCE_API='https://vteamreihsunsllwcphw.supabase.co/rest/v1/rpc/ml_canvas_participants_rpc';
+const BRAINSTORM_API='https://vteamreihsunsllwcphw.supabase.co/rest/v1/rpc/ml_canvas_brainstorm_rpc';
 const PUBLIC_KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
 const DRAFT_KEY='ml.collab.canvas.draft.v1', ROOM_KEY='ml.collab.canvas.owner.v1';
 const COLORS=['#fff2ab','#d8edff','#dcf6e7','#fbe1ea','#eee5fc','#ffffff','#f4d5bc'];
@@ -16,18 +18,18 @@ const MAX_ITEMS=600, LOCAL_MAX=1450000;
 const safeColor=c=>COLORS.includes(c)?c:COLORS[0];
 const serial=obj=>JSON.parse(JSON.stringify(obj));
 const makeId=()=>'i'+crypto.randomUUID().replace(/-/g,'').slice(0,21);
-const blank=()=>({stage:0,items:[],settings:{locked:false,votingOpen:true,votesPerPerson:3,follow:false,focus:null},prompts:STEPS.map(s=>s[2])});
+const blank=()=>({stage:0,items:[],settings:{locked:false,votingOpen:true,votesPerPerson:3,follow:false,focus:null,brainstormOpen:false},prompts:STEPS.map(s=>s[2])});
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
 let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null,lastNonPanTool='select';
-let selectedIds=new Set(),copiedItems=[],library=[],voterId=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
+let selectedIds=new Set(),copiedItems=[],library=[],voterId=null,clientId=null,displayName='Participant',presenceInterval=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
 const activeIds=()=>selectedIds.size?[...selectedIds]:selected?[selected]:[];
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
 const localStore=(key,data)=>{try{localStorage.setItem(key,JSON.stringify(data));return true}catch{return false}};
 const localRead=key=>{try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}};
 const getObj=id=>board.items.find(o=>o.id===id);
-const cleanSettings=v=>({locked:v?.locked===true,votingOpen:v?.votingOpen!==false,votesPerPerson:Math.max(1,Math.min(10,Number(v?.votesPerPerson)||3)),follow:v?.follow===true,focus:v?.focus||null});
+const cleanSettings=v=>({locked:v?.locked===true,votingOpen:v?.votingOpen!==false,votesPerPerson:Math.max(1,Math.min(10,Number(v?.votesPerPerson)||3)),follow:v?.follow===true,focus:v?.focus||null,brainstormOpen:v?.brainstormOpen===true});
 const editable=o=>!o?.locked&&!(room?.role==='guest'&&board.settings?.locked);
 const cleanItem=o=>{if(!o||typeof o!=='object'||!['note','text','shape','ellipse','frame','image','connector','stroke'].includes(o.type))return null;
 const n=(v,def,min,max)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Math.round(Number(v)))):def;
@@ -56,9 +58,9 @@ finally{pending--;}
 async function refresh(){if(!room||refreshing||pending||dragging||editingInput||document.hidden)return;refreshing=true;try{const d=await rpc('get');if(Number(d.version)!==version){version=Number(d.version);board=cleanState(d.state);if(room?.role==='guest'&&board.settings?.follow&&board.settings.focus){const focus=board.settings.focus;zoom=clampZoom(focus.zoom);pan={x:Number(focus.x)||0,y:Number(focus.y)||0};applyView();}title=String(d.name||title);$('#board-title').value=title;if(selected&&!getObj(selected))selected=null;render();setStatus('● Live · synchronized')}}catch{setStatus('⚠ Connection interrupted')}finally{refreshing=false}}
 function roomUI(){const live=!!room;$('#board-mode').textContent=live?'● Live shared canvas':'◌ Personal workspace';$('#board-mode').classList.toggle('connected',live);$('#room-info').textContent=live?(room.role==='owner'?'Instructor is hosting · invitation enabled':'Joined as a participant · edits sync automatically'):'Private draft · autosaved locally';$('#host-room').hidden=live||entry==='guest';$('#share-board').hidden=!live||room?.role!=='owner';$('#board-title').readOnly=room?.role==='guest'||entry==='guest';$('#stage-prompt').readOnly=room?.role==='guest'||entry==='guest';updateUndo()}
 function saveRoom(){if(room?.role==='owner')localStore(ROOM_KEY,{id:room.id,secret:room.secret,guest:room.guest})}
-async function hostRoom(){if(room)return;try{setStatus('Creating live board…');const d=await rpc('create',{name:title,state:board});room={id:d.id,secret:d.owner,guest:d.guest,role:'owner'};version=Number(d.version);saveRoom();roomUI();setStatus('● Live board created');toast('Live session ready! Copy the student join link.')}catch(e){setStatus('● Personal draft · saved locally');toast('Unable to start live session: '+e.message)}}
-async function joinRoom(id,secret){room={id,secret,role:'guest'};roomUI();setStatus('Connecting to class…');try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();roomUI();setStatus('● Connected to classroom')}catch(e){room=null;roomUI();setStatus('⚠ Join link unavailable');toast('Unable to join: '+e.message)}}
-async function restoreRoom(){const saved=localRead(ROOM_KEY);if(!saved?.id||!saved?.secret)return;room={id:saved.id,secret:saved.secret,guest:saved.guest,role:'owner'};roomUI();try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();setStatus('● Live · synchronized')}catch(e){room=null;roomUI();setStatus('● Saved on this device');toast('Could not reopen live board: '+e.message)}}
+async function hostRoom(){if(room)return;try{setStatus('Creating live board…');const d=await rpc('create',{name:title,state:board});room={id:d.id,secret:d.owner,guest:d.guest,role:'owner'};version=Number(d.version);saveRoom();roomUI();setStatus('● Live board created');startPresence();toast('Live session ready! Copy the student join link.')}catch(e){setStatus('● Personal draft · saved locally');toast('Unable to start live session: '+e.message)}}
+async function joinRoom(id,secret){room={id,secret,role:'guest'};roomUI();setStatus('Connecting to class…');try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();roomUI();setStatus('● Connected to classroom');startPresence()}catch(e){room=null;roomUI();setStatus('⚠ Join link unavailable');toast('Unable to join: '+e.message)}}
+async function restoreRoom(){const saved=localRead(ROOM_KEY);if(!saved?.id||!saved?.secret)return;room={id:saved.id,secret:saved.secret,guest:saved.guest,role:'owner'};roomUI();try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();setStatus('● Live · synchronized');startPresence()}catch(e){room=null;roomUI();setStatus('● Saved on this device');toast('Could not reopen live board: '+e.message)}}
 function inviteLink(){const p=new URLSearchParams({id:room.id,token:room.guest});return location.origin+'/collaboration-join.html#'+p.toString()}
 async function copyText(text){try{await navigator.clipboard.writeText(text);toast('Copied to clipboard')}catch{window.prompt('Copy this text:',text)}}
 function worldPoint(e){const rect=$('#canvas-viewport').getBoundingClientRect();return {x:Math.round((e.clientX-rect.left-pan.x)/zoom),y:Math.round((e.clientY-rect.top-pan.y)/zoom)}}
@@ -331,6 +333,63 @@ function summary(){const lines=[title,'Stage: '+STEPS[board.stage][0],'Question:
 function timerRender(){$('#timer-display').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':'+String(timerLeft%60).padStart(2,'0')}
 function timerStart(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;$('#timer-start').textContent='Resume';return}if(timerLeft<=0)timerLeft=Math.max(1,Math.min(180,Number($('#timer-minutes').value)||5))*60;$('#timer-start').textContent='Pause';timerInterval=setInterval(()=>{timerLeft--;timerRender();if(timerLeft<=0){clearInterval(timerInterval);timerInterval=null;$('#timer-start').textContent='Start';$('.timer').classList.add('finished');toast('Facilitation time is up!')}},1000)}
 
+
+/* Classroom identity, presence and privacy-aware brainstorming. */
+async function classRPC(endpoint,action,extra={}){
+ if(!room)throw Error('Live session required');
+ const response=await fetch(endpoint,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',apikey:PUBLIC_KEY},body:JSON.stringify({p_action:action,p_board:room.id,p_secret:room.secret,p_client:clientId,p_name:displayName,p_idea:extra.idea||null}),signal:AbortSignal.timeout(15000)});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.message||'Classroom request failed');
+ return data;
+}
+function startPresence(){
+ if(!room)return;
+ if(!clientId){clientId=localRead('ml.canvas.client.v1')||crypto.randomUUID();localStore('ml.canvas.client.v1',clientId)}
+ const existing=localRead('ml.canvas.display-name.v1');
+ if(room.role==='owner')displayName='Instructor';
+ else if(existing)displayName=String(existing).slice(0,60);
+ else{displayName=String(prompt('Display name for this whiteboard:','Participant')||'Participant').trim().slice(0,60)||'Participant';localStore('ml.canvas.display-name.v1',displayName)}
+ classRPC(PRESENCE_API,'pulse').catch(e=>toast('Attendance unavailable: '+e.message));
+ if(!presenceInterval)presenceInterval=setInterval(()=>{if(room)classRPC(PRESENCE_API,'pulse').catch(()=>{});},25000);
+}
+async function getParticipants(){if(room?.role!=='owner')throw Error('Instructor access required');return (await classRPC(PRESENCE_API,'list')).participants||[];}
+async function viewParticipants(){
+ try{
+ const data=await getParticipants(),root=$('#pro-panel-content'),box=elementNode('div','pro-results'),heading=elementNode('strong');
+ heading.textContent='Connected participants: '+data.length;box.appendChild(heading);
+ for(const p of data){const line=elementNode('p','pro-explain');line.textContent=p.name+' · '+new Date(p.last_seen).toLocaleTimeString();box.appendChild(line)}
+ root.appendChild(box);
+ }catch(e){toast(e.message)}
+}
+async function exportAttendance(){
+ try{const people=await getParticipants();const esc=v=>'"'+String(v||'').replaceAll('"','""')+'"';saveReport('canvas-attendance.csv','text/csv;charset=utf-8',['Name,Last seen',...people.map(p=>esc(p.name)+','+esc(p.last_seen))].join('\r\n'))}
+ catch(e){toast(e.message)}
+}
+async function submitPrivateIdea(){
+ const input=$('#private-idea-text'),idea=input?.value.trim();if(!idea)return toast('Write an idea first');
+ if(!board.settings?.brainstormOpen)return toast('Private brainstorming is not open');
+ try{const d=await classRPC(BRAINSTORM_API,'submit',{idea});input.value='';toast('Privately submitted ('+d.my_ideas+' ideas sent)')}
+ catch(e){toast(e.message)}
+}
+async function listPrivateIdeas(){
+ if(room?.role!=='owner')return toast('Instructor access required');
+ try{const data=await classRPC(BRAINSTORM_API,'list'),root=$('#pro-panel-content'),box=elementNode('div','pro-results'),h=elementNode('strong');
+ h.textContent='Private submissions: '+data.count;box.appendChild(h);
+ for(const idea of data.ideas){const p=elementNode('p','pro-private-idea');p.textContent=idea.text;const by=elementNode('small');by.textContent='From: '+idea.name;box.append(p,by)}
+ root.appendChild(box);
+ }catch(e){toast(e.message)}
+}
+async function revealPrivateIdeas(){
+ if(room?.role!=='owner')return toast('Instructor access required');
+ if(!confirm('Publish all submitted private ideas to the shared board?'))return;
+ try{const data=await classRPC(BRAINSTORM_API,'reveal');version=-1;await refresh();toast(data.published+' ideas published')}
+ catch(e){toast(e.message)}
+}
+async function clearPrivateIdeas(){
+ if(room?.role!=='owner'||!confirm('Delete unrevealed brainstorm ideas?'))return;
+ try{await classRPC(BRAINSTORM_API,'clear');toast('Private submissions cleared')}catch(e){toast(e.message)}
+}
+
 /* Collaboration Canvas Pro: a compact command center atop the existing canvas. */
 function notifySelection(){updateSelectionStatus();$('#pro-selection-count').textContent=selectedIds.size+' selected';}
 function setBoardMode(name){$('#pro-panel').hidden=false;$('#pro-panel-title').textContent=name;$('#pro-panel-content').replaceChildren();return $('#pro-panel-content')}
@@ -352,13 +411,22 @@ function openProPanel(name){
  }else if(name==='facilitator'){
   proHeader(container,'Manage this session','Classroom switches are saved with live boards. Participant access is controlled by the board settings.');
   const settings=board.settings||cleanSettings();
-  for(const [key,label] of [['locked','Lock participant editing'],['votingOpen','Voting open'],['follow','Follow instructor view']]){
+  for(const [key,label] of [['locked','Lock participant editing'],['votingOpen','Voting open'],['follow','Follow instructor view'],['brainstormOpen','Accept private brainstorm ideas']]){
    const lab=elementNode('label','pro-check');const input=elementNode('input');input.type='checkbox';input.checked=!!settings[key];input.dataset.setting=key;lab.append(input,document.createTextNode(label));container.appendChild(lab);
   }
-  const cap=elementNode('label','pro-check');cap.textContent='Votes per participant (honor system until unique student identity is implemented): ';
+  const cap=elementNode('label','pro-check');cap.textContent='Votes per browser identity (server-enforced): ';
   const num=elementNode('input');num.type='number';num.min=1;num.max=10;num.value=settings.votesPerPerson||3;num.dataset.setting='votesPerPerson';num.style.width='64px';cap.appendChild(num);container.appendChild(cap);
-  proActions(container,[[['Copy student join link','invite'],['Focus on this view','focus'],['Clear presenter focus','unfocus']],[['Create breakout workspace','breakout'],['Reset voting counters','reset-votes'],['Export results','action-report']]]);
-  const note=elementNode('p','pro-explain');note.textContent='Participant names, secure vote identity, automatic breakout-room joining, and private brainstorming require additional identity and server controls.';container.appendChild(note);
+  proActions(container,[[['Copy student join link','invite'],['Focus on this view','focus'],['Clear presenter focus','unfocus']],[['List participants','participants'],['Export attendance','attendance']],[['Create breakout workspace','breakout'],['View private idea inbox','list-private'],['Reveal private ideas','reveal-private']],[['Reset voting counters','reset-votes'],['Export results','action-report']]]);
+  const note=elementNode('p','pro-explain');note.textContent='Classroom names are self-reported and votes are capped per browser identity. Private ideas stay hidden from students until revealed.';container.appendChild(note);
+ }else if(name==='brainstorm'){
+ proHeader(container,'Private brainstorming','Submit privately now; the instructor decides when to reveal ideas.');
+ if(!room){const note=elementNode('p','pro-explain');note.textContent='Join or host a live session first.';container.appendChild(note);}
+ else{
+  const input=elementNode('textarea');input.id='private-idea-text';input.rows=4;input.maxLength=500;input.style.width='100%';input.placeholder='Write a private idea (max 500 characters)…';input.disabled=!board.settings?.brainstormOpen;container.appendChild(input);
+  proActions(container,[[['Submit private idea','submit-private']]]);
+  if(room.role==='owner')proActions(container,[[['View pending ideas','list-private'],['Reveal on board','reveal-private'],['Clear inbox','clear-private']]]);
+  if(!board.settings?.brainstormOpen){const note=elementNode('p','pro-explain');note.textContent='The instructor has not opened private brainstorming.';container.appendChild(note);}
+ }
  }else if(name==='tools'){
   proHeader(container,'Templates that move thinking forward','Insert these as editable objects anywhere on your current board.');
   proActions(container,[[['5 Whys','tpl-whys'],['Stakeholders','tpl-stakeholders'],['Force Field','tpl-force']],[['Six Thinking Hats','tpl-hats'],['Decision Matrix','tpl-decision'],['Systems Map','tpl-system']],[['Gradients of Agreement','tpl-gradients'],['Action Plan','tpl-action'],['Retrospective','tpl-retrospective']],[['PESTLE','tpl-pestle'],['Fishbone','tpl-fishbone'],['Team Breakout','tpl-breakout']]]);
@@ -463,6 +531,12 @@ function printReport(){
  pop.document.close();pop.document.getElementById('content').textContent=reportText();
 }
 function handlePro(action){
+ if(action==='submit-private')return submitPrivateIdea();
+ if(action==='participants')return viewParticipants();
+ if(action==='attendance')return exportAttendance();
+ if(action==='list-private')return listPrivateIdeas();
+ if(action==='reveal-private')return revealPrivateIdeas();
+ if(action==='clear-private')return clearPrivateIdeas();
  if(action==='save-board')return boardStore();
  if(action==='save-copy')return boardCopy();
  if(action==='load-board')return loadLibraryBoard();
