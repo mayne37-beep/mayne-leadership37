@@ -418,6 +418,12 @@ function openProPanel(name){
   const num=elementNode('input');num.type='number';num.min=1;num.max=10;num.value=settings.votesPerPerson||3;num.dataset.setting='votesPerPerson';num.style.width='64px';cap.appendChild(num);container.appendChild(cap);
   proActions(container,[[['Copy student join link','invite'],['Focus on this view','focus'],['Clear presenter focus','unfocus']],[['List participants','participants'],['Export attendance','attendance']],[['Create breakout workspace','breakout'],['View private idea inbox','list-private'],['Reveal private ideas','reveal-private']],[['Reset voting counters','reset-votes'],['Export results','action-report']]]);
   const note=elementNode('p','pro-explain');note.textContent='Classroom names are self-reported and votes are capped per browser identity. Private ideas stay hidden from students until revealed.';container.appendChild(note);
+  if(room?.role==='owner'&&room.guest&&typeof QRCode==='function'){
+    const box=elementNode('div','canvas-qr');const h=elementNode('strong');h.textContent='Scan to join the classroom';const target=elementNode('div');box.append(h,target);container.appendChild(box);
+    try{new QRCode(target,{text:inviteLink(),width:186,height:186,correctLevel:QRCode.CorrectLevel.M})}
+    catch{box.append(document.createTextNode('Use Copy Join Link if QR creation fails.'))}
+  }
+
  }else if(name==='brainstorm'){
  proHeader(container,'Private brainstorming','Submit privately now; the instructor decides when to reveal ideas.');
  if(!room){const note=elementNode('p','pro-explain');note.textContent='Join or host a live session first.';container.appendChild(note);}
