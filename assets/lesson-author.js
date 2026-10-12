@@ -77,6 +77,7 @@ function blockFields(b){let html='';
  if(b.type==='spacer')html+=field('Height (pixels)','height','number',{min:10,max:300});
  if(b.type==='code')html+=field('Source code','code','code',{rows:12});
  if(b.type==='custom')html+=field('HTML','html','code',{rows:10})+field('CSS','css','code',{rows:8})+field('JavaScript','js','code',{rows:8})+field('Frame height','height','number',{min:120,max:2000})+'<p class="panel-info">Custom code runs in an isolated frame. It cannot access the authoring page or its saved courses.</p>';
+ if(['mcq','msq','fill','matching','sorting'].includes(b.type))html+=field('Completion rule','completion','select',{options:[{value:'correct',label:'Correct answer required'},{value:'attempt',label:'Answer submitted / feedback reviewed'}]});
  if(!['continue','spacer','divider'].includes(b.type))html+=field('Require completion / review','required','checkbox');
  html+=field('Instructor notes (hidden from learners)','notes','textarea');return html;
 }
@@ -298,3 +299,6 @@ window.addEventListener('beforeunload',e=>{if(dirty){backup();e.preventDefault()
 window.addEventListener('keydown',e=>{if(!course||e.target.closest('input,textarea,[contenteditable]'))return;if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo(e.shiftKey);}if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();flush().catch(error);}});
 window.addEventListener('online',()=>{if(course&&dirty)flush().catch(error);});
 await library();
+
+const requestedCourse=new URLSearchParams(location.search).get('course');
+if(requestedCourse && /^[a-f0-9-]{36}$/i.test(requestedCourse))await openCourse(requestedCourse).catch(error);
