@@ -75,3 +75,6 @@
 .item.locked .canvas-move-handle{opacity:.4;cursor:not-allowed}
 .item.locked .canvas-resize-handle{display:none}
 @media(max-width:850px){.pro-toolbar #multi-status{display:none}.pro-toolbar{gap:4px}.pro-toolbar button{padding:7px 9px;font-size:11px}.pro-panel{top:170px}}
+
+.canvas-qr{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:14px;background:#f1f7fc;border:1px solid #d5e5f0;border-radius:12px;padding:14px}
+.canvas-qr strong{font-size:12px}.canvas-qr img,.canvas-qr canvas{border:8px solid white;border-radius:6px}
