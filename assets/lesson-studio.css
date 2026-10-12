@@ -84,3 +84,10 @@
 .editor-canvas .lesson-heading h1{color:var(--ink)}
 .editor-canvas .lesson-heading .eyebrow{color:var(--secondary)}
 .editor-canvas .lesson-heading p{color:var(--muted-ink)}
+
+.theme-preview-card strong{color:var(--heading)}
+.theme-preview-accent{background:var(--callout-bg);border-radius:4px;padding:5px 8px;border-bottom:2px solid var(--highlight)}
+.course-player .course-hero h1,.course-player .learner-lesson-header h2,.course-player .lesson-block h2,.course-player .lesson-block h3{color:var(--heading)}
+.course-player .note-block{background:var(--callout-bg);color:var(--ink)}
+.editor-canvas .block-snapshot .lesson-block h2,.editor-canvas .block-snapshot .lesson-block h3,.editor-canvas .lesson-heading h1{color:var(--heading)}
+.editor-canvas .block-snapshot .note-block{background:var(--callout-bg)}
