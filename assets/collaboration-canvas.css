@@ -30,3 +30,24 @@
 
 /* Right mouse drag pans across the canvas without interfering with the active drawing tool. */
 #canvas-viewport.right-panning,#canvas-viewport.right-panning *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
+
+/* Direct visual resizing: eight grab handles, editable text remains untouched. */
+.item .canvas-resize-handle{position:absolute;display:block;width:20px;height:20px;z-index:8;
+ margin:0;padding:0;border:2px solid #2674ab;border-radius:6px;
+ background:#fff;box-shadow:0 2px 8px #123c5940;appearance:none;-webkit-appearance:none;
+ opacity:0;visibility:hidden;pointer-events:none;touch-action:none}
+.item.selected .canvas-resize-handle,.item:focus-within .canvas-resize-handle{opacity:1;visibility:visible;pointer-events:auto}
+.item .canvas-resize-handle:hover,.item .canvas-resize-handle:focus-visible{background:#dcedfa;border-color:#0b568f;box-shadow:0 0 0 4px #c8e5fa,0 3px 9px #194c7040}
+.item .resize-nw{left:-11px;top:-11px;cursor:nwse-resize}
+.item .resize-n{left:calc(50% - 10px);top:-11px;cursor:ns-resize}
+.item .resize-ne{right:-11px;top:-11px;cursor:nesw-resize}
+.item .resize-e{right:-11px;top:calc(50% - 10px);cursor:ew-resize}
+.item .resize-se{right:-11px;bottom:-11px;cursor:nwse-resize}
+.item .resize-s{left:calc(50% - 10px);bottom:-11px;cursor:ns-resize}
+.item .resize-sw{left:-11px;bottom:-11px;cursor:nesw-resize}
+.item .resize-w{left:-11px;top:calc(50% - 10px);cursor:ew-resize}
+.item.image{overflow:visible}
+.item.image img{border-radius:12px}
+#canvas-viewport.resizing{cursor:default}
+#canvas-viewport.resizing *{user-select:none!important;-webkit-user-select:none!important}
+@media(hover:none){.item.selected .canvas-resize-handle{width:24px;height:24px}}
