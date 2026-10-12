@@ -22,7 +22,7 @@ const blank=()=>({stage:0,items:[],settings:{locked:false,votingOpen:true,votesP
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
 let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null,lastNonPanTool='select';
-let selectedIds=new Set(),copiedItems=[],library=[],voterId=null,clientId=null,displayName='Participant',presenceInterval=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
+let selectedIds=new Set(),copiedItems=[],library=[],breakoutRooms=[],voterId=null,clientId=null,displayName='Participant',presenceInterval=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
 const activeIds=()=>selectedIds.size?[...selectedIds]:selected?[selected]:[];
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
@@ -404,6 +404,77 @@ async function clearPrivateIdeas(){
  try{await classRPC(BRAINSTORM_API,'clear');toast('Private submissions cleared')}catch(e){toast(e.message)}
 }
 
+
+/* Separate breakout rooms: independent shared canvases, team invitations,
+   instructor switching and intentional merge back to the main board. */
+function selectedBreakout(){return breakoutRooms.find(b=>b.id===$('#breakout-picker')?.value)}
+function persistBreakouts(){localStore('ml.canvas.breakout.rooms.v1',breakoutRooms)}
+function breakoutInvite(b){const args=new URLSearchParams({id:b.id,token:b.guest});return location.origin+'/collaboration-join.html#'+args.toString()}
+async function createBreakoutRoom(){
+ if(room?.role!=='owner')return toast('Start an instructor live session before creating team rooms');
+ const raw=window.prompt('Name this breakout group:','Team '+(breakoutRooms.length+1));if(!raw)return;
+ const name=raw.trim().slice(0,60);if(!name)return;
+ try{
+  const b=blank();
+  b.items=[cleanItem({id:makeId(),type:'frame',x:1080,y:790,w:1100,h:740,text:'BREAKOUT · '+name,color:COLORS[5]})];
+  const created=await rpc('create',{name:title+' · '+name,state:b},null);
+  breakoutRooms.push({id:created.id,owner:created.owner,guest:created.guest,name,main:room.id,merged:[]});
+  persistBreakouts();openProPanel('facilitator');
+  await copyText(breakoutInvite(breakoutRooms.at(-1)));
+  toast('Separate '+name+' room created. Team invitation link copied.');
+ }catch(e){toast('Unable to create breakout: '+e.message)}
+}
+function copyBreakoutLink(){const b=selectedBreakout();return b?copyText(breakoutInvite(b)):toast('Create a breakout first')}
+async function switchInstructorRoom(destination){
+ if(!destination?.id||!destination.secret)return;
+ try{
+  finishInlineEdit();
+  const data=await rpc('get',{},destination);
+  room={...destination,role:'owner'};version=Number(data.version);board=cleanState(data.state);title=String(data.name||title);
+  $('#board-title').value=title;selected=null;selectedIds.clear();history=[];future=[];saveRoom();roomUI();render();fitView();startPresence();closeBoardMode();
+  toast('Opened '+title);
+ }catch(e){toast('Cannot open board: '+e.message)}
+}
+async function openBreakoutRoom(){
+ if(room?.role!=='owner')return toast('Instructor only');
+ const b=selectedBreakout();if(!b)return toast('Choose a breakout room first');
+ const remembered=localRead('ml.canvas.breakout.main.v1');
+ if(!remembered||remembered.id!==b.main){const main={id:room.id,secret:room.secret,guest:room.guest};if(room.id===b.main)localStore('ml.canvas.breakout.main.v1',main);}
+ await switchInstructorRoom({id:b.id,secret:b.owner,guest:b.guest});
+}
+async function returnFromBreakout(){
+ const main=localRead('ml.canvas.breakout.main.v1');
+ if(!main)return toast('The main room is not saved on this device');
+ await switchInstructorRoom(main);
+}
+async function mergeBreakoutRoom(){
+ if(room?.role!=='owner')return toast('Instructor only');
+ const b=selectedBreakout();if(!b)return toast('Select a breakout first');
+ if(room.id!==b.main)return toast('Return to the main classroom board before merging');
+ try{
+  const result=await rpc('get',{}, {id:b.id,secret:b.owner,role:'owner'});
+  const source=cleanState(result.state).items.filter(o=>o.type!=='frame');
+  const merged=new Set(b.merged||[]);
+  const additions=source.filter(o=>!merged.has(o.id));
+  if(!additions.length)return toast('No new breakout content to merge');
+  if(board.items.length+additions.length>MAX_ITEMS)return toast('Not enough room for those objects');
+  const sourceX=Math.min(...additions.map(o=>o.x)),sourceY=Math.min(...additions.map(o=>o.y));
+  const p=viewportCenter(),dx=p.x-sourceX,dy=p.y-sourceY,map=new Map();
+  additions.forEach(o=>map.set(o.id,makeId()));
+  const copies=additions.map(o=>{
+   const clone=serial(o);clone.id=map.get(o.id);clone.group='';
+   clone.x=Math.round(Math.min(4400,Math.max(0,o.x+dx)));
+   clone.y=Math.round(Math.min(3000,Math.max(0,o.y+dy)));
+   if(clone.type==='stroke')clone.points=clone.points.map(([x,y])=>[x+dx,y+dy]);
+   if(clone.type==='connector'){clone.from=map.get(clone.from)||'';clone.to=map.get(clone.to)||'';}
+   return cleanItem(clone);
+  }).filter(o=>o.type!=='connector'||(o.from&&o.to));
+  before();board.items.push(...copies);selectedIds=new Set(copies.map(o=>o.id));selected=copies.at(-1)?.id||null;render();persistItems(copies);
+  b.merged=[...merged,...additions.map(o=>o.id)];persistBreakouts();
+  toast('Merged '+copies.length+' objects from '+b.name+' to the main board');
+ }catch(e){toast('Merge unsuccessful: '+e.message)}
+}
+
 /* Collaboration Canvas Pro: a compact command center atop the existing canvas. */
 function notifySelection(){updateSelectionStatus();$('#pro-selection-count').textContent=selectedIds.size+' selected';}
 function setBoardMode(name){$('#pro-panel').hidden=false;$('#pro-panel-title').textContent=name;$('#pro-panel-content').replaceChildren();return $('#pro-panel-content')}
@@ -431,7 +502,10 @@ function openProPanel(name){
   }
   const cap=elementNode('label','pro-check');cap.textContent='Votes per browser identity (server-enforced): ';
   const num=elementNode('input');num.type='number';num.min=1;num.max=10;num.value=settings.votesPerPerson||3;num.dataset.setting='votesPerPerson';num.style.width='64px';cap.appendChild(num);container.appendChild(cap);
-  proActions(container,[[['Copy student join link','invite'],['Focus on this view','focus'],['Clear presenter focus','unfocus']],[['List participants','participants'],['Export attendance','attendance']],[['Create breakout workspace','breakout'],['View private idea inbox','list-private'],['Reveal private ideas','reveal-private']],[['Reset voting counters','reset-votes'],['Export results','action-report']]]);
+  proActions(container,[[['Copy student join link','invite'],['Focus on this view','focus'],['Clear presenter focus','unfocus']],[['List participants','participants'],['Export attendance','attendance']],[['New breakout room','new-breakout'],['Copy team join link','breakout-link'],['Open team board','breakout-open']],[['Return to main room','breakout-return'],['Merge team ideas','breakout-merge'],['Add team area here','breakout']],[['View private idea inbox','list-private'],['Reveal private ideas','reveal-private']],[['Reset voting counters','reset-votes'],['Export results','action-report']]]);
+ const teamPicker=elementNode('select');teamPicker.id='breakout-picker';teamPicker.setAttribute('aria-label','Choose breakout room');
+ for(const record of breakoutRooms){const opt=elementNode('option');opt.value=record.id;opt.textContent=record.name;teamPicker.appendChild(opt)}
+ container.appendChild(teamPicker);
   const note=elementNode('p','pro-explain');note.textContent='Classroom names are self-reported and votes are capped per browser identity. Private ideas stay hidden from students until revealed.';container.appendChild(note);
   if(room?.role==='owner'&&room.guest&&typeof QRCode==='function'){
     const box=elementNode('div','canvas-qr');const h=elementNode('strong');h.textContent='Scan to join the classroom';const target=elementNode('div');box.append(h,target);container.appendChild(box);
@@ -552,6 +626,11 @@ function printReport(){
  pop.document.close();pop.document.getElementById('content').textContent=reportText();
 }
 function handlePro(action){
+ if(action==='new-breakout')return createBreakoutRoom();
+ if(action==='breakout-link')return copyBreakoutLink();
+ if(action==='breakout-open')return openBreakoutRoom();
+ if(action==='breakout-return')return returnFromBreakout();
+ if(action==='breakout-merge')return mergeBreakoutRoom();
  if(action==='submit-private')return submitPrivateIdea();
  if(action==='participants')return viewParticipants();
  if(action==='attendance')return exportAttendance();
@@ -636,7 +715,7 @@ $('#copy-summary').addEventListener('click',()=>copyText(summary()));$('#timer-s
 window.addEventListener('keydown',e=>{const editing=e.target.closest('input,textarea,select,[contenteditable]');if(e.code==='Space'&&!editing){spaceDown=true;e.preventDefault()}if(editing)return;const key=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&key==='z'){e.preventDefault();undo()}else if((e.ctrlKey||e.metaKey)&&key==='y'){e.preventDefault();redo()}else if(key==='delete'||key==='backspace'){e.preventDefault();deleteSelected()}else if(!e.ctrlKey&&!e.metaKey){const shortcuts={v:'select',h:'pan',n:'note',t:'text',r:'shape',e:'ellipse',f:'frame',c:'connector',p:'stroke'};if(shortcuts[key])setTool(shortcuts[key])}});
 window.addEventListener('keyup',e=>{if(e.code==='Space')spaceDown=false});window.addEventListener('blur',()=>{spaceDown=false});window.addEventListener('beforeunload',()=>{finishInlineEdit(true);saveLocal()});
 }
-async function init(){library=localRead('ml.canvas.library.v2')||[];voterId=localRead('ml.canvas.voter.v2')||crypto.randomUUID();localStore('ml.canvas.voter.v2',voterId);bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
+async function init(){library=localRead('ml.canvas.library.v2')||[];breakoutRooms=localRead('ml.canvas.breakout.rooms.v1')||[];voterId=localRead('ml.canvas.voter.v2')||crypto.randomUUID();localStore('ml.canvas.voter.v2',voterId);bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
 render();requestAnimationFrame(fitView);timerRender();roomUI();if(entry==='guest'){const p=new URLSearchParams(location.hash.slice(1));const id=p.get('id'),token=p.get('token');if(/^[0-9a-f-]{36}$/i.test(id||'')&&/^[0-9a-f-]{36}$/i.test(token||''))await joinRoom(id,token);else{setStatus('Invitation required');toast('Open the invitation link provided by your instructor.')}}else await restoreRoom();setInterval(refresh,1900);
 }
 init().catch(e=>{setStatus('⚠ Canvas startup error');toast(e.message)});
