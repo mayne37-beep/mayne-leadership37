@@ -7,7 +7,7 @@ import {newCourse,newBlock,normalizeCourse} from '../assets/lesson-model.js';
 
 test('all six coordinated palettes have valid colors and readable button text',()=>{
  assert.equal(THEME_PRESETS.length,6);
- assert.equal(THEME_COLOR_FIELDS.length,7);
+ assert.equal(THEME_COLOR_FIELDS.length,9);
  for(const preset of THEME_PRESETS){
   for(const [key] of THEME_COLOR_FIELDS)assert.match(preset.palette[key],/^#[a-f0-9]{6}$/i,preset.name+' '+key);
   const css=themeVars(preset.palette);
