@@ -234,7 +234,7 @@ if(dragging.type==='resize'){
  if(['x','y','w','h'].every(k=>dims[k]===o[k]))return;
  if(!dragging.snapshot){before();dragging.snapshot=true;}
  Object.assign(o,dims);dragging.moved=true;
- const el=Array.from($('.item')).find(node=>node.dataset.id===o.id);
+ const el=$('.item').find(node=>node.dataset.id===o.id);
  if(el){el.style.left=o.x+'px';el.style.top=o.y+'px';el.style.width=o.w+'px';el.style.height=o.h+'px';}
  const wi=$('#object-width'),hi=$('#object-height');if(selected===o.id){wi.value=o.w;hi.value=o.h;}
  renderWires();
