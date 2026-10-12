@@ -12,7 +12,27 @@ export function safeHTML(v){
  function clean(parent){for(const el of [...parent.children]){if(!tags.has(el.tagName)){if(['SCRIPT','STYLE','IFRAME','OBJECT','SVG','MATH','FORM','INPUT'].includes(el.tagName)){el.remove();continue;}clean(el);el.replaceWith(...el.childNodes);continue;}for(const attr of [...el.attributes]){if(el.tagName==='A'&&attr.name==='href'){const u=safeURL(attr.value);if(u)el.setAttribute('href',u);else el.removeAttribute('href');}else el.removeAttribute(attr.name);}if(el.tagName==='A'){el.target='_blank';el.rel='noopener noreferrer';}clean(el);}}
  clean(doc.body);return doc.body.innerHTML;
 }
-function videoSource(url){const s=safeURL(url,true);try{const u=new URL(s);if(u.hostname==='youtu.be')return {embed:'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(u.pathname.slice(1))};if(['www.youtube.com','youtube.com','www.youtube-nocookie.com'].includes(u.hostname)){const id=u.searchParams.get('v')||u.pathname.split('/').pop();if(/^[\w-]{11}$/.test(id))return {embed:'https://www.youtube-nocookie.com/embed/'+id};}if(['vimeo.com','www.vimeo.com','player.vimeo.com'].includes(u.hostname)){const id=u.pathname.split('/').pop();if(/^\d+$/.test(id))return {embed:'https://player.vimeo.com/video/'+id};}}catch{}return {file:s};}
+export function videoSource(url){
+ const s=safeURL(url,true);
+ try{
+  const u=new URL(s);
+  const youtube=u.hostname==='youtu.be'||['www.youtube.com','youtube.com','www.youtube-nocookie.com'].includes(u.hostname);
+  if(youtube){
+   const id=u.hostname==='youtu.be'?u.pathname.slice(1):u.searchParams.get('v')||u.pathname.split('/').pop();
+   if(/^[\w-]{11}$/.test(id)){
+    const params=new URLSearchParams();
+    for(const [target,value] of [['start',u.searchParams.get('start')||u.searchParams.get('t')],['end',u.searchParams.get('end')]]){
+     if(/^\d+s?$/.test(value||''))params.set(target,String(parseInt(value,10)));
+    }
+    return {embed:'https://www.youtube-nocookie.com/embed/'+id+(params.size?'?'+params:'')};
+   }
+  }
+  if(['vimeo.com','www.vimeo.com','player.vimeo.com'].includes(u.hostname)){
+   const id=u.pathname.split('/').pop();if(/^\d+$/.test(id))return {embed:'https://player.vimeo.com/video/'+id};
+  }
+ }catch{}
+ return {file:s};
+}
 function color(v,fallback='#176599'){return /^#[a-f\d]{6}$/i.test(v||'')?v:fallback;}
 
 /* Shared color themes; kept in the player so standalone HTML and SCORM exports work. */
@@ -150,8 +170,8 @@ export function mountCourse(root,course,options={}){
   if(b.type==='sorting'){let selections={};let picked=null;const redraw=()=>{const card=(i,n)=>'<button class="sort-card '+(picked===n?'selected':'')+'" draggable="true" data-sort-item="'+n+'">'+esc(i.title)+'</button>';el.querySelector('.sort-pool').innerHTML=b.items.map((i,n)=>selections[n]===undefined?card(i,n):'').join('');el.querySelector('.sort-categories').innerHTML=b.categories.map((cat,n)=>'<div class="sort-target" tabindex="0" role="button" aria-label="Place selected card in '+esc(cat)+'" data-category="'+n+'"><h4>'+esc(cat)+'</h4>'+b.items.map((i,j)=>selections[j]===cat?card(i,j):'').join('')+'</div>').join('');
     el.querySelectorAll('[data-sort-item]').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();const n=Number(btn.dataset.sortItem);if(selections[n]!==undefined){delete selections[n];picked=n;}else picked=n;redraw();};btn.ondragstart=e=>{picked=Number(btn.dataset.sortItem);e.dataTransfer.setData('text/plain',String(picked));};});
     el.querySelectorAll('[data-category]').forEach(target=>{const place=()=>{if(picked===null)return;selections[picked]=b.categories[Number(target.dataset.category)];picked=null;redraw();};target.onclick=place;target.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();place();}};target.ondragover=e=>e.preventDefault();target.ondrop=e=>{e.preventDefault();const n=Number(e.dataTransfer.getData('text/plain'));if(Number.isInteger(n)&&n>=0&&n<b.items.length)picked=n;place();};});};redraw();
-   el.querySelector('[data-check-sort]').onclick=()=>{const count=b.items.filter((i,n)=>selections[n]===i.category).length;feedback(el.querySelector('.sort-feedback'),count===b.items.length?'All items are in the correct categories.':count+' of '+b.items.length+' items are correct. Move items and try again.',count===b.items.length);if(count===b.items.length)mark(b.id);};el.querySelector('[data-reset-sort]').onclick=()=>{selections={};picked=null;redraw();el.querySelector('.sort-feedback').innerHTML='';};}
-  if(['mcq','msq','fill','matching'].includes(b.type))bindQuestion(el.querySelector('[data-question]'),b,ok=>{if(ok)mark(b.id);});
+   el.querySelector('[data-check-sort]').onclick=()=>{const count=b.items.filter((i,n)=>selections[n]===i.category).length;feedback(el.querySelector('.sort-feedback'),count===b.items.length?'All items are in the correct categories.':count+' of '+b.items.length+' items are correct. Move items and try again.',count===b.items.length);if(count===b.items.length||(b.completion==='attempt'&&Object.keys(selections).length===b.items.length))mark(b.id);};el.querySelector('[data-reset-sort]').onclick=()=>{selections={};picked=null;redraw();el.querySelector('.sort-feedback').innerHTML='';};}
+  if(['mcq','msq','fill','matching'].includes(b.type))bindQuestion(el.querySelector('[data-question]'),b,ok=>{if(ok||b.completion==='attempt')mark(b.id);});
   if(b.type==='quiz'){const host=el.querySelector('[data-quiz]');const render=()=>{const max=Number(b.maxAttempts)||0;const attempts=state.quizAttempts[b.id]||0;const questions=b.randomize?shuffled(b.questions):b.questions;let answers={};
     const summary=()=>{const score=Math.round(Object.values(answers).filter(Boolean).length/questions.length*100);const pass=score>=(Number(b.passScore??80));state.scores[b.id]=b.scorePolicy==='last'?score:Math.max(state.scores[b.id]??0,score);state.quizAttempts[b.id]=attempts+1;const recordedPass=state.scores[b.id]>=Number(b.passScore??80);if(recordedPass||c.settings?.requirePass===false)mark(b.id);else state.done=state.done.filter(id=>id!==b.id);save();host.innerHTML='<div class="quiz-summary"><div class="step-label">'+(pass?'QUIZ PASSED':'KEEP LEARNING')+'</div><div class="quiz-score">'+score+'%</div><p>Recorded score: '+state.scores[b.id]+'% ('+(b.scorePolicy==='last'?'latest attempt':'best attempt')+'). Passing score: '+Number(b.passScore)+'%. Attempt '+(attempts+1)+(max?' of '+max:'')+'.</p>'+(max&&attempts+1>=max?'<p>No attempts remaining in this browser for this course version.</p>':'<button data-retake>Retake quiz</button>')+'</div>';host.querySelector('[data-retake]')?.addEventListener('click',render);};
     if(max&&attempts>=max){host.innerHTML='<div class="quiz-summary"><p>Attempts used: '+attempts+'. Last score: '+(state.scores[b.id]??0)+'%.</p></div>';return;}

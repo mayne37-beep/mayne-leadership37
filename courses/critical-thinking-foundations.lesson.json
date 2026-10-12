@@ -1,0 +1,5228 @@
+{
+  "schemaVersion": 1,
+  "id": "3444cca8-d0d1-42e9-a30a-5857adafa036",
+  "title": "Critical Thinking: Foundations",
+  "description": "A six-chapter guided course on disciplined reasoning, thinking traps, the eight-step process, tool selection, Project Relay, and personal transfer.",
+  "author": "Joshua Mayne",
+  "cover": "/assets/ct-hero.jpg",
+  "theme": {
+    "accent": "#173B63",
+    "background": "#DCEBF6",
+    "font": "sans",
+    "coverStyle": "split",
+    "preset": "executive-blue",
+    "secondary": "#3377A7",
+    "highlight": "#D6AD60",
+    "surface": "#FFFFFF",
+    "ink": "#17344B",
+    "muted": "#52697B",
+    "heading": "#173B63",
+    "callout": "#E7F1F8"
+  },
+  "settings": {
+    "navigation": "restricted",
+    "showProgress": true,
+    "requirePass": false,
+    "resume": true
+  },
+  "lessons": [
+    {
+      "id": "9ce4bdee-67ee-4e8e-ae1b-14d16c47c360",
+      "title": "Foundations",
+      "description": "",
+      "blocks": [
+        {
+          "id": "d7a2a591-ebfa-42f6-a27d-ead0160bd55e",
+          "type": "heading",
+          "title": "Better thinking begins before better decisions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e939ce1a-5cab-486a-aa04-5a8a1051b116",
+          "type": "text",
+          "title": "",
+          "body": "<p>Every day, we interpret information, make assumptions, solve problems, and make decisions. <span class=\"gold\">The question isn&apos;t whether you think. The question is how well you examine your thinking before acting on it.</span></p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3ecf760b-27d6-4906-ab90-0f59dcd6ebdb",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "7811b151-a11c-4323-ac1e-31c574ecff17",
+          "type": "heading",
+          "title": "What should happen next?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fb9c6b72-745e-493d-a09e-5f5522192eb1",
+          "type": "text",
+          "title": "",
+          "body": "<p>Your team has missed the same performance target for three consecutive months.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "706e018f-89ba-4a03-aea4-9d7ebfad365e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Several employees say the problem is inadequate training. A supervisor agrees and recommends mandatory refresher training.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6b82ca51-64fc-4076-a821-7e27cc977839",
+          "type": "mcq",
+          "title": "What should happen next?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "75ec0e42-8266-46c7-a345-f341e9cb67f4",
+              "text": "A. Schedule refresher training.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "57209e1f-fa48-436f-aa27-e1889ceb9f26",
+              "text": "B. Determine why employees aren't applying their training.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "00682892-cfa9-4e78-ab83-478c61458cd4",
+              "text": "C. Gather additional evidence before defining the problem.",
+              "correct": true,
+              "feedback": "There isn't enough information yet. The pressure to solve a problem often arrives before we've adequately defined it. Critical thinking helps us resist that pressure."
+            },
+            {
+              "id": "ca9db57d-c5a7-47d3-a3b5-9002994c4a82",
+              "text": "D. Ask management what solution they prefer.",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "There isn't enough information yet. The pressure to solve a problem often arrives before we've adequately defined it. Critical thinking helps us resist that pressure.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. There isn't enough information yet. The pressure to solve a problem often arrives before we've adequately defined it. Critical thinking helps us resist that pressure.",
+          "completion": "attempt"
+        },
+        {
+          "id": "c77ce84f-28ca-46ae-a6e8-fc49acede065",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "e100d5e2-6a65-4aa0-a102-884b2a8c6af2",
+          "type": "image",
+          "title": "Foundations",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "image": "/assets/ct-foundations-banner.jpg",
+          "alt": "Critical Thinking Foundations banner.",
+          "caption": ""
+        },
+        {
+          "id": "edbf00cf-7d95-40ac-a2e3-ee2fbc898c50",
+          "type": "heading",
+          "title": "FOUNDATIONS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f29f487d-7f3e-49ee-a978-6ece848106c0",
+          "type": "text",
+          "title": "",
+          "body": "<p>Before improving your thinking, understand what critical thinking actually is.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "26e7912b-31f0-4d78-a8c4-d3c20c2012d8",
+          "type": "image",
+          "title": "Critical thinking",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "image": "/assets/ct-definition.jpg",
+          "alt": "Visual illustration for examining thinking.",
+          "caption": ""
+        },
+        {
+          "id": "f655424b-e78d-4d51-a25b-1cd37184ea7b",
+          "type": "heading",
+          "title": "Disciplined thinking used to improve the quality of our judgments and decisions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "907c24cb-339e-4fbe-a029-cc70207cd88f",
+          "type": "text",
+          "title": "",
+          "body": "<p>It requires us to deliberately examine:</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "150bd8c7-0150-4690-acdc-028c195c8897",
+          "type": "text",
+          "title": "",
+          "body": "<ul class=\"questions\"><li>What do I know?</li><li>How do I know it?</li><li>What am I assuming?</li><li>What else could explain this?</li><li>Does the evidence support my conclusion?</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "84648dd8-2963-4aeb-a510-de5126ae2302",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Critical thinking isn&apos;t about thinking more. It&apos;s about thinking better.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8e3bfeac-105d-4aeb-a705-68ca27ace54a",
+          "type": "heading",
+          "title": "Four habits strengthen critical thinking.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4dd5e84b-a90d-4809-ad7e-f8c7ea0b0c17",
+          "type": "text",
+          "title": "",
+          "body": "<p>Open each concept. All four must be explored before you continue.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "977e5ace-2242-4350-a327-d51352f62400",
+          "type": "flashcards",
+          "title": "Four habits",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "958ef1e5-62aa-43dc-a660-a9c57c58dc46",
+              "front": "Disciplined",
+              "back": "Thinking deliberately rather than simply reacting.",
+              "image": ""
+            },
+            {
+              "id": "dbdde544-0d55-42b2-aa61-ae14e86be060",
+              "front": "Evidence-Based",
+              "back": "Distinguishing what is known from what is believed or assumed.",
+              "image": ""
+            },
+            {
+              "id": "96b2f2cc-2967-49a8-a482-52d0832acd2d",
+              "front": "Questioning",
+              "back": "Testing explanations, assumptions, and your own reasoning.",
+              "image": ""
+            },
+            {
+              "id": "5e84545b-591c-4c3c-a3ed-ef8715644eee",
+              "front": "Purposeful",
+              "back": "Thinking toward an informed judgment, decision, or action.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "cb2b87ce-78d5-455f-a421-5050846439f7",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "6fe4417c-6201-4992-aa12-60bd826e3bab",
+          "type": "heading",
+          "title": "Good reasoning is often confused with other behaviors.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "98a36a1c-6bcd-41b9-a678-fb689afece2d",
+          "type": "text",
+          "title": "",
+          "body": "<p>Open all six cards to reveal the distinction.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2d5a1ed9-c92a-47d8-af41-0ce1f47cf839",
+          "type": "flashcards",
+          "title": "Critical thinking is not…",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "0c8f6fa4-8d49-41b8-a51f-413daab4e687",
+              "front": "Being Negative",
+              "back": "Finding fault isn't the same as examining reasoning.",
+              "image": ""
+            },
+            {
+              "id": "b882086e-dea9-4ad1-a4e4-dca12e6c0c6a",
+              "front": "Arguing",
+              "back": "Winning an argument doesn't necessarily mean reaching a sound conclusion.",
+              "image": ""
+            },
+            {
+              "id": "884c4638-7daa-40b1-ac38-ef2d63d3a1a0",
+              "front": "Overthinking",
+              "back": "More analysis doesn't automatically produce better analysis.",
+              "image": ""
+            },
+            {
+              "id": "12880cfc-23b0-436e-a406-c509603aeb34",
+              "front": "Eliminating Intuition",
+              "back": "Experience can provide useful signals; it simply shouldn't escape examination.",
+              "image": ""
+            },
+            {
+              "id": "21dfaaac-66fa-417c-a7ff-f6a0487f993b",
+              "front": "Finding the One Right Tool",
+              "back": "A tool can structure thinking. It cannot think for you.",
+              "image": ""
+            },
+            {
+              "id": "72e205c6-f098-477b-af66-a2f7bf85142e",
+              "front": "Being the Smartest Person",
+              "back": "Expertise helps, but expertise can also create assumptions and blind spots.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "80c91375-8130-4fe6-abcd-fb1f1d97a33d",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "b55ff47f-51ce-47ca-a19b-4a5026fb0fc5",
+          "type": "heading",
+          "title": "When are you most likely to stop examining your thinking?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f528174a-7834-49c6-a3a1-1e87bd5db314",
+          "type": "text",
+          "title": "",
+          "body": "<p>There is no right answer. Choose the tendency you most want to watch for.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bf01675d-33e3-45a4-a45f-34fe8b028deb",
+          "type": "reflection",
+          "title": "When are you most likely to stop examining your thinking?",
+          "body": "<p>Choose the tendency you most want to watch for and explain why.</p><ul><li>When I'm rushed</li><li>When I'm confident</li><li>When I have experience</li><li>When others agree with me</li><li>When I've already chosen a solution</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9bbca5c1-b2d0-4786-a6f3-cc9338b7a41b",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "9a9472e3-1974-40e7-ab08-122e19fe5fac",
+          "type": "heading",
+          "title": "You've established the baseline.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "29d776b7-abd3-43c9-a147-fe1c65fddded",
+          "type": "text",
+          "title": "",
+          "body": "<p>Next: why capable people still fall into predictable thinking traps.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "638e1ee6-caf6-4fc3-ac08-61723aa9c1e0",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "4a4dc904-26f5-4988-a90a-adbea8e73c29",
+      "title": "Barriers to Clear Thinking",
+      "description": "",
+      "blocks": [
+        {
+          "id": "d9177641-98c6-4532-ac97-426a0e8319e1",
+          "type": "heading",
+          "title": "BARRIERS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9f584acf-7fba-44a4-a63f-d801c363d66c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Good people can make poor decisions for perfectly understandable reasons.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b495b356-e1b7-4365-a0b8-11888be0d978",
+          "type": "heading",
+          "title": "Thinking shortcuts are useful—until they aren't.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c1066b12-06d9-46da-ab86-78072bcafddd",
+          "type": "text",
+          "title": "",
+          "body": "<p>Human thinking relies on shortcuts. That&apos;s usually useful. We recognize patterns, draw on experience, and make thousands of judgments without consciously analyzing each one.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7df7e795-6ec5-4ef8-a97e-374b4f1c5dba",
+          "type": "text",
+          "title": "",
+          "body": "<p>But efficiency has a cost. Under pressure, uncertainty, emotion, or familiarity, a useful shortcut can become a thinking trap.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "53d7df5d-7031-4f2f-af6b-483ce2803c14",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Critical thinkers don&apos;t eliminate these tendencies. They learn to notice them.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bf634655-eeda-4886-a5a4-49360f4249ca",
+          "type": "heading",
+          "title": "Six traps worth recognizing.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d7002838-d8e1-4c31-a5b4-c9bdb847d612",
+          "type": "text",
+          "title": "",
+          "body": "<p>Open each one. The goal is not memorizing labels&#x2014;it is recognizing what the trap looks like in your own reasoning.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6ddde088-14af-48e9-a7cc-fd34b0311bde",
+          "type": "flashcards",
+          "title": "Six thinking traps",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "91ddac42-e96b-4ee2-a421-b0b1f08b117c",
+              "front": "Confirmation Bias",
+              "back": "We favor information that supports what we already believe and discount evidence that challenges it.",
+              "image": ""
+            },
+            {
+              "id": "d6f46a9a-ea6f-4aec-a472-ac601c8329d6",
+              "front": "Anchoring",
+              "back": "Early information becomes a reference point and can influence later judgment more than it deserves.",
+              "image": ""
+            },
+            {
+              "id": "12597a83-526d-4559-a37d-c4f7d1c75358",
+              "front": "Availability",
+              "back": "Recent, vivid, or memorable information feels more important or more common than it may actually be.",
+              "image": ""
+            },
+            {
+              "id": "fe1ef7c6-6cbb-4d52-a9c9-c4d6211d039f",
+              "front": "Groupthink",
+              "back": "The desire for agreement or cohesion suppresses questions, alternatives, and constructive disagreement.",
+              "image": ""
+            },
+            {
+              "id": "f994892b-ae09-49d2-a863-a0bd4649e2f4",
+              "front": "Premature Closure",
+              "back": "We stop searching once we find an explanation that seems good enough—even when important questions remain.",
+              "image": ""
+            },
+            {
+              "id": "60067a50-146f-4cb1-a49a-9f4889d595cf",
+              "front": "Overconfidence",
+              "back": "Our confidence in a conclusion exceeds the quality or completeness of the evidence supporting it.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "730d9265-09e9-4590-a6c9-402b8a45ea3d",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "c8fed97e-ea97-452a-a90c-3d1bb4e0e466",
+          "type": "heading",
+          "title": "Recognize the trap in context.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "dbe4a459-4679-47e9-a862-8bded610d506",
+          "type": "mcq",
+          "title": "Thinking trap 1",
+          "body": "<p>An experienced manager recognizes a familiar pattern and immediately favors the explanation that worked last time. New data points in another direction, but she dismisses it as an exception.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "f3cf7cfa-5b64-45cc-a126-a1ea0df05e04",
+              "text": "Anchoring",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "6beffb28-9390-4a72-a14c-9f38f49185a7",
+              "text": "Confirmation Bias",
+              "correct": true,
+              "feedback": "Confirmation bias. Experience created an initial explanation, and contradictory evidence was discounted rather than examined."
+            },
+            {
+              "id": "0adcdd76-02e7-4017-a715-fcea98d7ea07",
+              "text": "Groupthink",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "6c0b5050-03a2-4d0a-afb4-aa7674756e4f",
+              "text": "Availability",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Confirmation bias. Experience created an initial explanation, and contradictory evidence was discounted rather than examined.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Confirmation bias. Experience created an initial explanation, and contradictory evidence was discounted rather than examined.",
+          "completion": "attempt"
+        },
+        {
+          "id": "6b7b8ab1-4ddd-471a-a582-53e515559f10",
+          "type": "mcq",
+          "title": "Thinking trap 2",
+          "body": "<p>The first estimate discussed in a planning meeting is $250,000. Every later estimate is debated mainly in relation to that original number, even though no one knows how it was calculated.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "aaf78420-1f76-4dee-ad01-4ad161b96a22",
+              "text": "Anchoring",
+              "correct": true,
+              "feedback": "Anchoring. The first number became the reference point before its quality was established."
+            },
+            {
+              "id": "271225c8-4530-489d-a599-505b2025da06",
+              "text": "Overconfidence",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "b437229b-e5c9-4756-a49a-06e861ba5e57",
+              "text": "Premature Closure",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "1061c463-6d1d-4526-acfc-37d28974f080",
+              "text": "Groupthink",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Anchoring. The first number became the reference point before its quality was established.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Anchoring. The first number became the reference point before its quality was established.",
+          "completion": "attempt"
+        },
+        {
+          "id": "aaf23f4c-2b02-4ccf-a1dc-bef5f3b24cfd",
+          "type": "mcq",
+          "title": "Thinking trap 3",
+          "body": "<p>After two highly visible incidents this month, a team concludes the problem is rapidly increasing, even though the annual data shows no meaningful change.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "8bdf59dc-758e-45db-afe3-ba25fa8f5bbf",
+              "text": "Availability",
+              "correct": true,
+              "feedback": "Availability. Recent, vivid events are receiving more weight than the broader evidence."
+            },
+            {
+              "id": "0e88163e-20dd-4966-a3aa-38e318aaba60",
+              "text": "Confirmation Bias",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "ca1021cd-8493-48c8-a4b9-ca9cae5dd951",
+              "text": "Groupthink",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "16c3f5e8-fa4f-468e-ad40-c7c6635f538e",
+              "text": "Overconfidence",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Availability. Recent, vivid events are receiving more weight than the broader evidence.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Availability. Recent, vivid events are receiving more weight than the broader evidence.",
+          "completion": "attempt"
+        },
+        {
+          "id": "425822b9-7db7-48c7-ae4f-fbe6a8cd9efd",
+          "type": "mcq",
+          "title": "Thinking trap 4",
+          "body": "<p>A team quickly agrees on a solution proposed by its respected leader. Several members have concerns but decide raising them would only slow the meeting down.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "b145897d-e0cc-4516-a082-7f372ce7a33b",
+              "text": "Premature Closure",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "dae43340-ee33-4343-ad80-ca15473b0572",
+              "text": "Anchoring",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "72a16893-6265-4bf2-abf0-92013da0d926",
+              "text": "Groupthink",
+              "correct": true,
+              "feedback": "Groupthink. The pressure for cohesion is suppressing constructive challenge."
+            },
+            {
+              "id": "b85e12a3-44e8-4e76-aaf6-9ed6e7822770",
+              "text": "Availability",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Groupthink. The pressure for cohesion is suppressing constructive challenge.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Groupthink. The pressure for cohesion is suppressing constructive challenge.",
+          "completion": "attempt"
+        },
+        {
+          "id": "ff620103-b54e-402d-a26b-ecc21d506992",
+          "type": "heading",
+          "title": "Not every barrier has a psychological label.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6442e23c-d567-4184-a679-33ba72599739",
+          "type": "text",
+          "title": "",
+          "body": "<p>The environment around us can make disciplined thinking harder. Open each factor.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d28002d2-f3e8-4237-a2dc-064e1213faf9",
+          "type": "flashcards",
+          "title": "Environmental barriers",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "06700112-a5a8-44af-a1a5-5afecf502b7a",
+              "front": "TIME PRESSURE",
+              "back": "Urgency can push us toward the first workable explanation rather than the best-supported one.",
+              "image": ""
+            },
+            {
+              "id": "43aa2dee-b84b-4fb5-a5c0-fe4ea366ddac",
+              "front": "EMOTION",
+              "back": "Strong emotion can narrow attention and change which evidence feels important.",
+              "image": ""
+            },
+            {
+              "id": "cbb0e257-0c44-4a84-ac1f-560ef91500b1",
+              "front": "AUTHORITY",
+              "back": "Rank or expertise can discourage people from testing assumptions or voicing contradictory evidence.",
+              "image": ""
+            },
+            {
+              "id": "1f506c83-b36b-4314-a099-531427495626",
+              "front": "GROUP PRESSURE",
+              "back": "Social costs can make agreement easier than constructive challenge.",
+              "image": ""
+            },
+            {
+              "id": "ed6e2e25-63ed-4463-a947-920041c12ca5",
+              "front": "INFORMATION OVERLOAD",
+              "back": "More information is not always better; volume can hide relevance and weaken prioritization.",
+              "image": ""
+            },
+            {
+              "id": "41103fab-eea4-44f6-af0d-62a708fa84a2",
+              "front": "EXPERIENCE",
+              "back": "Experience accelerates pattern recognition, but familiar patterns can cause us to overlook what is different this time.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "c588cb6c-89ae-48f0-a6d0-a6c8704b0352",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "033d68b3-432e-47fe-a493-f66f2eaf963b",
+          "type": "heading",
+          "title": "Before unlocking the process, check your understanding.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "def7dc4d-08af-4641-af96-0d30aadb7954",
+          "type": "text",
+          "title": "",
+          "body": "<p>Complete all five questions. A perfect score isn&apos;t required; the feedback is part of the learning.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "36443731-66f5-4bee-a253-4ae040c0aa0f",
+          "type": "quiz",
+          "title": "Foundations Checkpoint",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "9eb6219a-96d7-4ba1-a90d-5582533c7283",
+              "type": "mcq",
+              "title": "Critical thinking is best described as…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "5016542c-6e16-4404-ac53-8b3a1b92ba58",
+                  "text": "Finding weaknesses in other people's ideas",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "1f5991a5-1751-4c87-ac59-4b8c34514dc7",
+                  "text": "Disciplined thinking that improves judgments and decisions",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Disciplined thinking that improves judgments and decisions"
+                },
+                {
+                  "id": "e143383f-da91-4e4f-ab4f-d9579acbd354",
+                  "text": "Using a formal tool for every problem",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Disciplined thinking that improves judgments and decisions",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Disciplined thinking that improves judgments and decisions",
+              "completion": "attempt"
+            },
+            {
+              "id": "ba6441d8-74ce-4a7e-aea7-8c1cf22e79ad",
+              "type": "mcq",
+              "title": "Which statement is an inference?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "b0e314f9-6c8a-476e-a2ea-028e5bd9f966",
+                  "text": "Error rates rose 12% last quarter",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "c60f0d4b-99cf-4ada-a4a0-4cfc25b37380",
+                  "text": "Three interviews were completed",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "02f77826-84fb-4cfb-ac4b-0b66e9e2a961",
+                  "text": "The team is probably resisting the change",
+                  "correct": true,
+                  "feedback": "The strongest answer is: The team is probably resisting the change"
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: The team is probably resisting the change",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: The team is probably resisting the change",
+              "completion": "attempt"
+            },
+            {
+              "id": "5833c68e-02d9-4192-a9bc-75ebe8e837fe",
+              "type": "mcq",
+              "title": "A vivid recent incident causes a leader to overestimate how often a problem occurs. This is…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "11f9479c-c278-49ba-afce-aba16f14a002",
+                  "text": "Availability",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Availability"
+                },
+                {
+                  "id": "8447359f-7cef-4736-a9be-7dcf5a0d9a3a",
+                  "text": "Anchoring",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "86255f8a-eaa9-4f9e-afda-a9a39194a7d5",
+                  "text": "Groupthink",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Availability",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Availability",
+              "completion": "attempt"
+            },
+            {
+              "id": "5205ed15-88b2-4cd9-a203-eaa2d345a997",
+              "type": "mcq",
+              "title": "Which response best counters confirmation bias?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "32b059ab-2480-40bf-a4e1-bdf0a1effe00",
+                  "text": "Look for more support for your preferred explanation",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "8d5c8bd1-ce92-48fc-afa3-5105d3a3fce8",
+                  "text": "Ask what evidence would contradict your explanation",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Ask what evidence would contradict your explanation"
+                },
+                {
+                  "id": "ced7a6ea-e611-47d9-a0f1-35d611e834e9",
+                  "text": "Wait until everyone agrees",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Ask what evidence would contradict your explanation",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Ask what evidence would contradict your explanation",
+              "completion": "attempt"
+            },
+            {
+              "id": "8dc8f45b-71cf-4186-aede-1e9fabfe357f",
+              "type": "mcq",
+              "title": "Which statement about experience is strongest?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "d8c268c7-bb8c-4809-aec5-fea4ec656e64",
+                  "text": "Experience eliminates the need for deliberate analysis",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "3d3cb61a-3645-4664-a101-61d055feba42",
+                  "text": "Experience is a liability and should be ignored",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "4f6eaace-2551-4d85-a70c-da9eadd5236e",
+                  "text": "Experience can accelerate judgment but can also create blind spots",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Experience can accelerate judgment but can also create blind spots"
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Experience can accelerate judgment but can also create blind spots",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Experience can accelerate judgment but can also create blind spots",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "2be09ea4-39bf-4c4c-a752-3fd598a847df",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "31d10cb0-4936-42c4-ac1f-e90efc4d84c3",
+      "title": "The Critical Thinking Process",
+      "description": "",
+      "blocks": [
+        {
+          "id": "cb156bec-765f-450d-a51b-b8d673c33b60",
+          "type": "heading",
+          "title": "PROCESS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c65c232f-16cf-49e2-ac60-840827ee7b1c",
+          "type": "text",
+          "title": "",
+          "body": "<p>A disciplined path from uncertainty to defensible judgment.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "afde087d-5488-4474-a14f-17a1de0360fd",
+          "type": "heading",
+          "title": "Structure your thinking without turning it into a rigid formula.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "03e56c3e-8408-400d-ae69-0a0f457a0f6b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Critical thinking is iterative. New information may send you backward. A question may change how you define the problem. Analysis may reveal an unknown that requires more evidence.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e6f822c2-db81-4719-a42f-63245fa658e5",
+          "type": "process",
+          "title": "The eight-step journey",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "edb8904e-9d7b-4f1b-af65-81ae520b4b65",
+              "title": "DEFINE",
+              "text": "Clarify the actual problem before attempting to solve it.",
+              "image": ""
+            },
+            {
+              "id": "49bb7c5f-d290-4ecc-aea8-fe765453e91e",
+              "title": "UNDERSTAND",
+              "text": "Separate what is known from what is inferred and what is still unknown.",
+              "image": ""
+            },
+            {
+              "id": "5fedd0db-cf74-4ff3-a4da-489c116fdf4d",
+              "title": "QUESTION",
+              "text": "Test the situation and your own reasoning with deliberate questions.",
+              "image": ""
+            },
+            {
+              "id": "7bbd8570-7461-457a-a250-2ca36b37ccf2",
+              "title": "ANALYZE",
+              "text": "Break the situation apart, then reconnect the pieces to understand meaning.",
+              "image": ""
+            },
+            {
+              "id": "15d6d032-8487-42fb-ab52-67e634b3ff99",
+              "title": "EXPLORE",
+              "text": "Generate multiple explanations and possibilities before committing.",
+              "image": ""
+            },
+            {
+              "id": "3e910491-196b-4105-a783-8af48332ef70",
+              "title": "EVALUATE",
+              "text": "Use criteria and evidence to compare alternatives and tradeoffs.",
+              "image": ""
+            },
+            {
+              "id": "ec03b6e4-4eef-4bf9-a0da-f9421cb8267a",
+              "title": "DECIDE",
+              "text": "Make a defensible judgment and communicate how it was reached.",
+              "image": ""
+            },
+            {
+              "id": "809952c3-8232-4c31-a593-08024e1dc631",
+              "title": "REFLECT",
+              "text": "Examine the result and your own reasoning so the next decision improves.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "96f58b5e-8dc1-4caa-ae59-c47f957a74b1",
+          "type": "heading",
+          "title": "DEFINE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8544b798-8959-4c8a-a699-a342a2bf25be",
+          "type": "heading",
+          "title": "Problem or symptom?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c5b495c9-ce6c-401d-a49d-501c64dbf433",
+          "type": "text",
+          "title": "",
+          "body": "<p>Solving the wrong problem efficiently is still solving the wrong problem.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "04e08316-fe17-42a1-ae6e-0cb218cc04b8",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">A useful problem statement describes the gap without embedding an assumed cause or preferred solution.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cc03624a-af6e-47b3-a40c-84565392ca17",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"equation\"><div class=\"eq\">OBSERVED CONDITION</div><div class=\"neq\">&#x2260;</div><div class=\"eq\">ASSUMED CAUSE</div><div class=\"neq\">&#x2260;</div><div class=\"eq\">PREFERRED SOLUTION</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c8706092-9b12-4e02-aa99-8f3a42efdf85",
+          "type": "heading",
+          "title": "“Employees need more training.” What is it?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "07f79cb2-c990-406d-aa34-ee1d134b3cb9",
+          "type": "mcq",
+          "title": "“Employees need more training.” What is it?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "cdc4ed5a-0eaf-4fa0-ae3c-0f10db7d64a2",
+              "text": "Problem statement",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "5f896e4f-c90e-4b07-a34d-702789370a89",
+              "text": "Cause",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "97849a56-5c52-4636-af46-515bda518035",
+              "text": "Solution disguised as a problem",
+              "correct": true,
+              "feedback": "Correct: “Employees need more training” already assumes both the cause and the remedy. A more neutral statement would describe the performance gap itself."
+            }
+          ],
+          "feedbackCorrect": "Correct: “Employees need more training” already assumes both the cause and the remedy. A more neutral statement would describe the performance gap itself.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Correct: “Employees need more training” already assumes both the cause and the remedy. A more neutral statement would describe the performance gap itself.",
+          "completion": "attempt"
+        },
+        {
+          "id": "d0969fae-b09c-4fc0-abbd-87b1a2efe624",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "6d635008-3a4d-4be6-a860-7afc4db742c0",
+          "type": "heading",
+          "title": "UNDERSTAND",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "90d38f2d-fb82-483d-ae36-bc2e6ccfc555",
+          "type": "heading",
+          "title": "Facts, inferences, and unknowns.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a226efc9-e8d4-46e1-a21d-5fa01d9c4bd2",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>FACT</strong> &#x2014; supported by evidence.<br> <strong>INFERENCE</strong> &#x2014; an interpretation or conclusion.<br> <strong>UNKNOWN</strong> &#x2014; information that is missing.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "21da7fd3-d863-4f14-a578-7fb486fe19d8",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">An inference isn&apos;t necessarily wrong. The danger comes when we forget that an inference is an inference.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fcadc40a-655a-4acb-ae62-f5887cfe14be",
+          "type": "heading",
+          "title": "Sort the evidence.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "34f761c6-72e5-47fc-ac27-2a173b483a1d",
+          "type": "sorting",
+          "title": "Sort the evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "categories": [
+            "Fact",
+            "Inference",
+            "Unknown"
+          ],
+          "items": [
+            {
+              "id": "a011282f-6f01-4a22-a6d8-59e0b9c578d9",
+              "title": "Error rates rose 12% last quarter.",
+              "category": "Fact"
+            },
+            {
+              "id": "248b4f64-22aa-4bd3-ae25-b1d56782a832",
+              "title": "The team does not care about quality.",
+              "category": "Inference"
+            },
+            {
+              "id": "ce711f3d-13b3-405b-af07-d3444b33bc65",
+              "title": "Three customer complaints were documented.",
+              "category": "Fact"
+            },
+            {
+              "id": "5d595487-9309-4517-a385-9aa6d10d4b66",
+              "title": "The new procedure is probably too complicated.",
+              "category": "Inference"
+            },
+            {
+              "id": "9ccc89fe-b240-4e22-a365-35eb4af6e038",
+              "title": "How often supervisors observe the process.",
+              "category": "Unknown"
+            },
+            {
+              "id": "81f99b55-dbba-479d-aa80-6c7e15a3fbab",
+              "title": "Whether the errors occur on every shift.",
+              "category": "Unknown"
+            }
+          ],
+          "completion": "attempt"
+        },
+        {
+          "id": "1d832886-6a1c-4bbe-a9e5-6d27c4993066",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "413edda5-e324-403c-aa69-4cdbf0eb6a9d",
+          "type": "heading",
+          "title": "QUESTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "27f616d7-0913-4d7e-a469-715cb80e0076",
+          "type": "heading",
+          "title": "Better questions produce better examination.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "60482893-3e23-4cdf-a18e-4aff997f6df5",
+          "type": "text",
+          "title": "",
+          "body": "<p>The quality of your answers is limited by the quality of your questions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d861b868-eb5a-4509-ab06-4d023eb4216d",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"questionWall\"><div class=\"questionTile\">What evidence supports this?</div><div class=\"questionTile\">What evidence contradicts it?</div><div class=\"questionTile\">What am I assuming?</div><div class=\"questionTile\">Whose perspective is missing?</div><div class=\"questionTile\">What else might explain this?</div><div class=\"questionTile\">What would change my mind?</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "29c9126a-ebe7-4b31-a648-1a44f41e895e",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "9aef79c4-eb58-49ec-afdc-3ad9f3f4d7cd",
+          "type": "heading",
+          "title": "Critical thinkers interrogate the situation—and themselves.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "45207bcd-d0ff-40c9-a9be-2ad234f8d755",
+          "type": "heading",
+          "title": "OUTWARD",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1b74fb69-356e-4bb7-a365-7694cf48943f",
+          "type": "text",
+          "title": "",
+          "body": "<p>Examine the problem, evidence, stakeholders, patterns, constraints, and competing explanations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c9016ab1-dc67-4a0d-a396-75c70ec40a0b",
+          "type": "heading",
+          "title": "INWARD",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "34693dba-6276-402f-a9f5-1eebbfd37eb4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Examine your assumptions, preferences, confidence, experience, and reasons for believing what you believe.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7296d915-bb63-4002-ade3-1b769b1650d6",
+          "type": "reflection",
+          "title": "What assumption would you most want someone to challenge?",
+          "body": "<p>Capture your thought here…</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "9bd0ca93-9af3-4dab-a67b-61ab73ca00a1",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "a1ac074b-3325-4cf8-af98-09e65db4945c",
+          "type": "heading",
+          "title": "ANALYZE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "178bfb89-2448-40ad-adb0-048f6ead88a6",
+          "type": "heading",
+          "title": "Analysis moves in two directions.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bfb53b85-c034-426d-afea-40de10a4230f",
+          "type": "text",
+          "title": "",
+          "body": "<p>First, break the situation apart. Then put the pieces back together to understand what they mean as a whole.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d0654b02-c97d-474b-a9ab-b7de973103a8",
+          "type": "heading",
+          "title": "BREAK IT APART",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0bf780e8-f66a-4f1e-a089-da86c9bd795a",
+          "type": "text",
+          "title": "",
+          "body": "<p>Evidence<br> Causes<br> Stakeholders<br> Relationships<br> Patterns<br> Constraints</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ae4a2894-c5d7-4246-ad05-539b59190550",
+          "type": "heading",
+          "title": "PUT IT BACK TOGETHER",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fff0c308-7dea-4278-a487-55df7d8ca448",
+          "type": "text",
+          "title": "",
+          "body": "<p>Connections<br> Consequences<br> Meaning<br> System effects<br> Competing explanations</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5e9b545f-c5e1-40d5-afee-81f303330a9b",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "dd068cd5-1144-4bf9-aa4b-3ceb8ea7dae9",
+          "type": "heading",
+          "title": "Not every complex problem has one root cause.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "02fa74ed-7475-463e-ae28-b6c49bce986e",
+          "type": "text",
+          "title": "",
+          "body": "<p>Searching for <em>the</em> root cause can encourage premature certainty when outcomes are actually produced by several interacting conditions.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "6098bc56-c8a2-425c-ae06-d948e624c541",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">A stronger question is often: &#x201c;What combination of conditions could be producing this outcome?&#x201d;</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "9142fe26-3299-4035-adb9-2589810f16e2",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4f3d09dd-2b13-4898-a8e3-9eed2ea42dbc",
+          "type": "heading",
+          "title": "Define. Understand. Question. Analyze.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7b6e5259-b309-4cb0-abf3-f409a70b9cf3",
+          "type": "text",
+          "title": "",
+          "body": "<p>You have built the front half of the reasoning process.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ff30f66b-14c2-4315-a90c-accd7d4cce30",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "a3c5cb50-3bba-4bf8-aa28-1eca15e5e287",
+          "type": "heading",
+          "title": "Diverge before you converge.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "096b513b-8474-4b1f-a025-cd2e27a16dc9",
+          "type": "text",
+          "title": "",
+          "body": "<p>Strong judgment requires alternatives, criteria, evidence, and an honest look at tradeoffs.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7204bef2-9456-44c9-a6d0-b40c59e59687",
+          "type": "heading",
+          "title": "EXPLORE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e36846db-fbce-46f6-a6e9-88fbfaf56d11",
+          "type": "heading",
+          "title": "Create alternatives before choosing.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8c7ba940-a16c-49b4-a644-bee9d4886188",
+          "type": "text",
+          "title": "",
+          "body": "<p>Our first reasonable idea often gains an unfair advantage simply because it arrived first.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "daf7c03a-1ca7-420e-a64c-0bda6fca59d2",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Delay commitment long enough to create alternatives.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "55f2481b-b74d-4e0b-a9a9-79d26d6101b1",
+          "type": "heading",
+          "title": "Practice: generate three possible explanations.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "702a03ce-9443-4559-a5d5-5c12d09f4cc7",
+          "type": "text",
+          "title": "",
+          "body": "<p>A team&apos;s processing time has increased for three months. Before selecting a cause, generate three plausible explanations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a539a8ae-514c-4e7c-ab08-b64818da78ef",
+          "type": "reflection",
+          "title": "Generate three plausible explanations",
+          "body": "<p>Write three possible explanations for the increase in processing time. Delay commitment until you have considered alternatives.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "340b0e15-bdec-481e-a7a0-57bb69acb4a0",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "6f67664b-33a5-426a-aba2-fcc8d9088e5d",
+          "type": "heading",
+          "title": "EVALUATE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "41edb773-d22c-4d84-a3a8-d3f17838f5d2",
+          "type": "heading",
+          "title": "Criteria before choice.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f137c6c0-0d83-4638-a43e-dcc0bebe163f",
+          "type": "text",
+          "title": "",
+          "body": "<p>If you decide what you prefer before deciding what matters, your criteria can become justification rather than evaluation.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f9ac97f6-7cae-4e3b-ab0e-7c923ec4bf87",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Define what a good decision must accomplish before comparing alternatives.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "86b1be4b-d1fe-4dbd-ac94-80e65cbf4140",
+          "type": "heading",
+          "title": "Choose exactly three criteria first.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4cb9128e-fa74-4362-aa16-1f149cd9e97e",
+          "type": "reflection",
+          "title": "Choose three criteria before comparing options",
+          "body": "<p>Choose exactly three criteria and explain why each matters.</p><ul><li>Mission impact</li><li>Time</li><li>Cost</li><li>Risk</li><li>Employee impact</li><li>Sustainability</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "fa0989d6-860f-4e55-a26a-5e9056a2adbe",
+          "type": "continue",
+          "title": "Compare the options",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "d9c204e6-a871-44b6-a84f-c3103da8083d",
+          "type": "table",
+          "title": "Compare options against your criteria",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "rows": "Option | Your three selected criteria\nImprove the routing procedure | Assess evidence and tradeoffs\nAdd temporary staffing | Assess evidence and tradeoffs\nTargeted process coaching | Assess evidence and tradeoffs"
+        },
+        {
+          "id": "4e307c2e-980a-47be-abab-e186c3240d14",
+          "type": "note",
+          "title": "",
+          "body": "<p>The criteria should exist before the options are compared. The dots in the original demonstration were illustrative; use evidence to justify your comparison.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1992efcc-dd20-4c58-a9d6-8fe9aa524dec",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "0680b894-01d8-4caf-a8d8-e8c02b1eab23",
+          "type": "heading",
+          "title": "DECIDE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "caf590b6-3c5d-48df-a286-53fa37d06d35",
+          "type": "heading",
+          "title": "Make judgment visible.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8d225be8-886e-44e5-a5f3-bbe3facb998b",
+          "type": "text",
+          "title": "",
+          "body": "<p>A defensible decision does not require everyone to agree. It requires others to understand how the judgment was reached.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "630923c4-34dd-4f12-a90b-384a6ad504df",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"formula\"><span>OPTION</span><b>+</b><span>CRITERIA</span><b>+</b><span>EVIDENCE</span><b>+</b><span>TRADEOFFS</span><b>&#x2192;</b><span>DEFENSIBLE JUDGMENT</span></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4c352abb-9f59-4616-aaaa-2720f34e33c9",
+          "type": "heading",
+          "title": "Confidence should match evidence.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2d380ae6-b4ee-4fa2-a006-06290e3d64d3",
+          "type": "text",
+          "title": "",
+          "body": "<p>How confident are you in your current judgment?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8e6847b5-c5a2-4113-a555-81786d2f6a61",
+          "type": "survey",
+          "title": "How confident are you in your current judgment?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Low confidence",
+          "maxLabel": "High confidence",
+          "scale": 10
+        },
+        {
+          "id": "ace44948-93a7-44c8-abe0-1bd45b260c0e",
+          "type": "accordion",
+          "title": "Reveal new evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "4b2fec82-4f54-49aa-aa30-33777a356f0e",
+              "title": "New evidence",
+              "text": "<div class=\"contradiction\" id=\"contradiction\"><strong>New information:</strong> A second data source contradicts one of the assumptions supporting your preferred option.<p>Adjust your confidence if the evidence changes what the conclusion deserves.</p></div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "29dc6f06-c56c-4287-a912-22673c394170",
+          "type": "survey",
+          "title": "Reassess your confidence after reviewing the evidence",
+          "body": "<p>Adjust your confidence if the evidence changes what the conclusion deserves.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "minLabel": "Low confidence",
+          "maxLabel": "High confidence",
+          "scale": 10
+        },
+        {
+          "id": "b8020651-1512-4861-a7a6-7fd0627adcd9",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "121e083e-9af2-4262-a79b-0e73bbd5b3c3",
+          "type": "heading",
+          "title": "REFLECT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e88890f1-b906-47e5-a909-73b924340a22",
+          "type": "heading",
+          "title": "Close the loop.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "8373dece-b2dd-4c43-a0b9-3efda76a6cf9",
+          "type": "text",
+          "title": "",
+          "body": "<p>Reflection is not simply asking whether the decision worked. It examines the quality of the reasoning that produced it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ffd549af-aac5-435d-a77a-f33865ac0dbf",
+          "type": "heading",
+          "title": "Outcome",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5f247518-50fd-4e88-aa92-3587ea7bd555",
+          "type": "text",
+          "title": "",
+          "body": "<p>What happened after the decision?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5edd644e-e429-42b4-a710-27fc56a67919",
+          "type": "heading",
+          "title": "Reasoning",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2c27bdc1-5ed6-4519-a0b0-ee60258d4153",
+          "type": "text",
+          "title": "",
+          "body": "<p>Which assumptions, evidence, or alternatives mattered most?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "06c74cdb-9483-4cc7-a3b8-e03c9631beb1",
+          "type": "heading",
+          "title": "Learning",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5a92d586-4914-409b-ae44-cee83fda4bb8",
+          "type": "text",
+          "title": "",
+          "body": "<p>What would you repeat or change next time?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "472123c6-24c2-42ed-a527-2bf29fe21ee7",
+          "type": "reflection",
+          "title": "What reasoning habit will you carry into your next decision?",
+          "body": "<p>What is one reasoning habit you want to carry into your next important decision?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "a1bdda08-d4b2-4540-a68e-8cbededc78fe",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "e95c16dd-e592-4ed6-ac2d-701a98bce15d",
+          "type": "heading",
+          "title": "Reasoning Check",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0f44631d-f47f-45f8-a344-af8de1727991",
+          "type": "text",
+          "title": "",
+          "body": "<p>Put the process together in one short case. Complete all five decisions to unlock the toolkit.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "55065fbb-e6f2-45a0-ab25-702a5f410d14",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Scenario:</strong> A regional support team has missed its response-time target for eight weeks. Leaders believe staffing is the problem and are considering adding overtime. Records show incoming workload rose 6%, response time rose 24%, and a new routing procedure began nine weeks ago. Employees report inconsistent instructions, but no one has compared performance by shift or reviewed how cases move through the new routing process.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "31578823-441d-4610-adda-0aec1ccfa368",
+          "type": "quiz",
+          "title": "Reasoning Check",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "946371e4-d3b6-4acb-a1b2-33695859e4c4",
+              "type": "mcq",
+              "title": "What is the strongest neutral problem statement?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "8d94baaa-667b-4e4d-a5c6-18a2c49f7588",
+                  "text": "The team needs more staff.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "117969f7-960c-4916-a2d4-5be18722031c",
+                  "text": "Response time has been above target for eight weeks.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Response time has been above target for eight weeks."
+                },
+                {
+                  "id": "94d0a373-0396-4c8a-a812-4056c24cdc1a",
+                  "text": "The routing procedure is failing.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Response time has been above target for eight weeks.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Response time has been above target for eight weeks.",
+              "completion": "attempt"
+            },
+            {
+              "id": "5a9cd168-0798-48ba-a0c9-a4aa0a951633",
+              "type": "mcq",
+              "title": "Which is a fact?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "281bd243-de5f-488c-ab36-c6d79d26cfa3",
+                  "text": "Employees dislike the new process.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "37f45cb8-48ea-48f2-a13f-415a8cc657cd",
+                  "text": "Workload rose 6%.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Workload rose 6%."
+                },
+                {
+                  "id": "f162efbf-01fb-474c-a393-e5fd2ebf8b58",
+                  "text": "Staffing is causing the delay.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Workload rose 6%.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Workload rose 6%.",
+              "completion": "attempt"
+            },
+            {
+              "id": "b1ae289d-5d73-4d12-ae9d-d1597b19c538",
+              "type": "mcq",
+              "title": "Which statement is currently an assumption?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "58caf9b6-ca2c-497c-ae88-adca2bf685c2",
+                  "text": "Response time rose 24%.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "6ce032f5-8ae6-4aed-ab51-4d22b4d180ef",
+                  "text": "The routing procedure began nine weeks ago.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "91b8c6d7-776c-4e16-ab44-fd91aac9f7f9",
+                  "text": "Staffing is the primary cause.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Staffing is the primary cause."
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Staffing is the primary cause.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Staffing is the primary cause.",
+              "completion": "attempt"
+            },
+            {
+              "id": "3c446dd0-5769-4e99-a45a-e9a29a95052b",
+              "type": "mcq",
+              "title": "Which unanswered question is most useful next?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "2973c862-d321-4a60-afbc-2adf26be713d",
+                  "text": "Who should approve overtime?",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "ea77a353-6999-4dd4-ad55-8d3dbfa9b2ce",
+                  "text": "How does performance vary by shift and routing path?",
+                  "correct": true,
+                  "feedback": "The strongest answer is: How does performance vary by shift and routing path?"
+                },
+                {
+                  "id": "81e0b589-e860-43b1-abc9-b690bb5b0716",
+                  "text": "Which employee first complained?",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: How does performance vary by shift and routing path?",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: How does performance vary by shift and routing path?",
+              "completion": "attempt"
+            },
+            {
+              "id": "d0124193-2738-4e4a-a15e-1801851d33ab",
+              "type": "mcq",
+              "title": "What is the strongest next step?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "b6a78b96-218f-446e-a069-5fce1858ed63",
+                  "text": "Authorize overtime immediately.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "68c5dc2c-1a0d-4214-a7ba-ec32c7600a59",
+                  "text": "Return to the old procedure immediately.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "c58a9827-cf4e-4d4c-a0fe-736af3cf7fe6",
+                  "text": "Gather process and shift-level evidence before choosing a remedy.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Gather process and shift-level evidence before choosing a remedy."
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Gather process and shift-level evidence before choosing a remedy.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Gather process and shift-level evidence before choosing a remedy.",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "b96e69f0-e455-4e4e-a9d6-be96d409ca7a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "aa169f48-84aa-4874-a8a4-5aefaeebb2aa",
+      "title": "Critical Thinking Toolkit",
+      "description": "",
+      "blocks": [
+        {
+          "id": "4377fd13-81b1-43f7-aba4-6bec7bd984c0",
+          "type": "heading",
+          "title": "TOOLS",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ac9a09b3-d4f7-4547-a8be-4033b2a2fdd5",
+          "type": "text",
+          "title": "",
+          "body": "<p>A tool can organize your reasoning. It cannot replace it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "10c48ebd-2381-49d7-a722-0c0af6689d69",
+          "type": "heading",
+          "title": "Choose the tool that serves the thinking—not the other way around.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ab45a582-f99e-4250-afe6-0254eeaf2d58",
+          "type": "text",
+          "title": "",
+          "body": "<p>Move horizontally through the toolkit. Select a card to see when the tool helps, what it produces, and when it can mislead you.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "552aef91-7ced-4f68-a7a2-41e99dd4d979",
+          "type": "tabs",
+          "title": "When, why, and how to use each tool",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "54843131-2e2c-4278-ade0-d03a0e4aa6a4",
+              "title": "5 Whys",
+              "text": "<p><strong>When:</strong> When a relatively straightforward problem may have a causal chain worth probing.</p><p><strong>How it helps:</strong> Pushes beyond the first explanation by repeatedly asking what produced the condition.</p><p><strong>Watch for:</strong> Do not force five levels or assume a complex system has one linear root cause.</p>",
+              "image": ""
+            },
+            {
+              "id": "a213d8db-76de-4503-ad69-dcf73b812492",
+              "title": "Stakeholder Map",
+              "text": "<p><strong>When:</strong> When different people or groups influence, experience, or are affected by a decision.</p><p><strong>How it helps:</strong> Makes interests, influence, impact, missing voices, and potential resistance visible.</p><p><strong>Watch for:</strong> Do not treat stakeholder assumptions as facts. Validate important perspectives directly.</p>",
+              "image": ""
+            },
+            {
+              "id": "d805bae0-23d1-42f8-ae85-b66eb89bdd94",
+              "title": "Mind Map",
+              "text": "<p><strong>When:</strong> When the issue is broad, messy, or still being explored.</p><p><strong>How it helps:</strong> Externalizes ideas and relationships so patterns, categories, and missing areas become easier to see.</p><p><strong>Watch for:</strong> Do not mistake a crowded map for analysis. Connections still require evidence and interpretation.</p>",
+              "image": ""
+            },
+            {
+              "id": "8938e706-8208-4f4a-a283-f6d420b25645",
+              "title": "SWOT",
+              "text": "<p><strong>When:</strong> When you need a high-level scan of internal strengths/weaknesses and external opportunities/threats.</p><p><strong>How it helps:</strong> Creates a shared strategic snapshot and prompts both internal and external examination.</p><p><strong>Watch for:</strong> Do not use vague labels or stop at four lists. The value comes from evidence and implications.</p>",
+              "image": ""
+            },
+            {
+              "id": "bece566f-dc88-4c8c-af7d-2a08b2ade81d",
+              "title": "Assumption Testing",
+              "text": "<p><strong>When:</strong> When a recommendation depends on beliefs that may not have been verified.</p><p><strong>How it helps:</strong> Surfaces assumptions, rates their importance and uncertainty, and identifies what should be tested first.</p><p><strong>Watch for:</strong> Do not test only assumptions you already doubt. High-impact assumptions supporting your preferred answer matter most.</p>",
+              "image": ""
+            },
+            {
+              "id": "2e02f3c3-e4cf-4322-a73b-4ed7ee24de8b",
+              "title": "Evidence Matrix",
+              "text": "<p><strong>When:</strong> When several claims or explanations compete and the evidence is mixed.</p><p><strong>How it helps:</strong> Compares what supports, contradicts, or is missing for each claim.</p><p><strong>Watch for:</strong> Do not count pieces of evidence as if all evidence has equal quality, relevance, or independence.</p>",
+              "image": ""
+            },
+            {
+              "id": "ec4f2560-2928-4fe6-ac88-ff5f2229faf4",
+              "title": "Decision Matrix",
+              "text": "<p><strong>When:</strong> When multiple viable options must be compared against explicit criteria.</p><p><strong>How it helps:</strong> Makes criteria, weighting, tradeoffs, and comparisons visible and discussable.</p><p><strong>Watch for:</strong> Do not let scores create false precision. Weak criteria and weak evidence still produce weak decisions.</p>",
+              "image": ""
+            },
+            {
+              "id": "2130a39d-6067-462d-a3a2-647d39431879",
+              "title": "Tradeoff Analysis",
+              "text": "<p><strong>When:</strong> When every realistic option has meaningful benefits, costs, risks, or opportunity costs.</p><p><strong>How it helps:</strong> Forces an explicit look at what is gained, what is sacrificed, and who bears the consequences.</p><p><strong>Watch for:</strong> Do not reduce important qualitative consequences to a simple pros-and-cons count.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "4bc9a21b-4b89-4921-a967-fe55637fe91c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4523e0ae-a578-4d86-abff-e9912ea8b275",
+          "type": "heading",
+          "title": "Every tool has a useful side—and a misuse.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ec1b8449-96b5-4343-a11b-d4148cd2e580",
+          "type": "text",
+          "title": "",
+          "body": "<p>Flip all eight cards. The back of each card shows the caution that matters most.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "66abf9d6-ca7f-4c24-aebd-879973bc4d7b",
+          "type": "flashcards",
+          "title": "Every tool has a useful side—and a misuse",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "3edd319d-bc3c-4718-acd0-cf4f7bd6df2c",
+              "front": "<h3>5 Whys</h3><p>When a relatively straightforward problem may have a causal chain worth probing.</p>",
+              "back": "<h3>5 Whys</h3><p>Do not force five levels or assume a complex system has one linear root cause.</p>",
+              "image": ""
+            },
+            {
+              "id": "de4b6594-76c4-49f0-a76e-6f3336f5feed",
+              "front": "<h3>Stakeholder Map</h3><p>When different people or groups influence, experience, or are affected by a decision.</p>",
+              "back": "<h3>Stakeholder Map</h3><p>Do not treat stakeholder assumptions as facts. Validate important perspectives directly.</p>",
+              "image": ""
+            },
+            {
+              "id": "d66abc78-c4cb-449c-a7f0-bb7e5e12ac87",
+              "front": "<h3>Mind Map</h3><p>When the issue is broad, messy, or still being explored.</p>",
+              "back": "<h3>Mind Map</h3><p>Do not mistake a crowded map for analysis. Connections still require evidence and interpretation.</p>",
+              "image": ""
+            },
+            {
+              "id": "225d56a4-1162-4fc1-a7a3-c65ba7479dbc",
+              "front": "<h3>SWOT</h3><p>When you need a high-level scan of internal strengths/weaknesses and external opportunities/threats.</p>",
+              "back": "<h3>SWOT</h3><p>Do not use vague labels or stop at four lists. The value comes from evidence and implications.</p>",
+              "image": ""
+            },
+            {
+              "id": "d242e489-95ec-4355-aca4-d5c474ca745a",
+              "front": "<h3>Assumption Testing</h3><p>When a recommendation depends on beliefs that may not have been verified.</p>",
+              "back": "<h3>Assumption Testing</h3><p>Do not test only assumptions you already doubt. High-impact assumptions supporting your preferred answer matter most.</p>",
+              "image": ""
+            },
+            {
+              "id": "1ee6392b-1061-4e44-a8b7-730e9467d219",
+              "front": "<h3>Evidence Matrix</h3><p>When several claims or explanations compete and the evidence is mixed.</p>",
+              "back": "<h3>Evidence Matrix</h3><p>Do not count pieces of evidence as if all evidence has equal quality, relevance, or independence.</p>",
+              "image": ""
+            },
+            {
+              "id": "91ae7519-c6d4-4694-a969-fe3ed18214ca",
+              "front": "<h3>Decision Matrix</h3><p>When multiple viable options must be compared against explicit criteria.</p>",
+              "back": "<h3>Decision Matrix</h3><p>Do not let scores create false precision. Weak criteria and weak evidence still produce weak decisions.</p>",
+              "image": ""
+            },
+            {
+              "id": "86af8ee9-2398-4664-a8a2-e7f263d2eaa9",
+              "front": "<h3>Tradeoff Analysis</h3><p>When every realistic option has meaningful benefits, costs, risks, or opportunity costs.</p>",
+              "back": "<h3>Tradeoff Analysis</h3><p>Do not reduce important qualitative consequences to a simple pros-and-cons count.</p>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "ac324fa0-e8bc-475c-a961-51f78a2ca5e4",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "64c7cfec-d3aa-41f1-a164-71056de777a4",
+          "type": "heading",
+          "title": "Good tool use begins before you open the template.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "2160dad8-05f5-433f-a7c2-384b5a6cf311",
+          "type": "heading",
+          "title": "Use a tool when…",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "768c0dbe-2405-4c74-a108-b5e5410d6d4d",
+          "type": "text",
+          "title": "",
+          "body": "<p>You need structure for a specific reasoning task: finding relationships, testing assumptions, comparing alternatives, organizing evidence, or seeing stakeholders.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ac15c5d3-28f3-4b48-a2b6-b56a573b8379",
+          "type": "heading",
+          "title": "Do not use a tool just because…",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "864d26fe-52c3-4340-a03c-33998b15f103",
+          "type": "text",
+          "title": "",
+          "body": "<p>It is familiar, impressive, required by habit, or available. A polished framework can create false confidence if it is answering the wrong question.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "cb9fd0ca-c339-4661-a083-8d7bf1eb898e",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">The simplest adequate method is often the strongest. Sometimes the right &#x201c;tool&#x201d; is a better question or one missing piece of evidence.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5e827f19-c1c7-4d06-af1d-4cad1f3e0f3a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4f25bc4d-9270-4368-af54-c34008162fa0",
+          "type": "mcq",
+          "title": "The explanation is resting on an unverified belief.",
+          "body": "<p>A leader recommends changing schedules because the team is assumed to be less productive late in the day. No hour-by-hour performance data has been reviewed.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "d92ad7c6-b003-4765-aabc-4cf192b6f2b2",
+              "text": "SWOT",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "23c99e66-e2d2-414f-ab02-4f13eec2be55",
+              "text": "Assumption Testing",
+              "correct": true,
+              "feedback": "Assumption Testing is the best fit because the proposed action depends on a consequential belief that has not yet been verified."
+            },
+            {
+              "id": "16d7c2fe-423e-44cd-a61c-d4f53bc5cc03",
+              "text": "Decision Matrix",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "979332e2-867f-4d92-a1bf-bc9e4e5d3078",
+              "text": "5 Whys",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Assumption Testing is the best fit because the proposed action depends on a consequential belief that has not yet been verified.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Assumption Testing is the best fit because the proposed action depends on a consequential belief that has not yet been verified.",
+          "completion": "attempt"
+        },
+        {
+          "id": "91ccc5cf-9611-4c6f-aa1a-ad7791f483f4",
+          "type": "mcq",
+          "title": "Several explanations fit the same outcome.",
+          "body": "<p>Quality declined after a policy change, staffing turnover, and a software update occurred within the same month. Different teams point to different causes.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "d08bf4ad-95b5-41ef-abc2-0a5d862a7c79",
+              "text": "Evidence Matrix",
+              "correct": true,
+              "feedback": "An Evidence Matrix helps compare what supports, contradicts, or is still missing for each competing explanation."
+            },
+            {
+              "id": "9b3e6eaf-84ef-4b4a-ab10-78896fe1d8c8",
+              "text": "Stakeholder Map",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "c9947a5e-e0f2-4c24-aa2b-bd5b2aec7316",
+              "text": "Tradeoff Analysis",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "abb0ef86-d47c-4e81-ace0-c937c399de07",
+              "text": "SWOT",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "An Evidence Matrix helps compare what supports, contradicts, or is still missing for each competing explanation.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. An Evidence Matrix helps compare what supports, contradicts, or is still missing for each competing explanation.",
+          "completion": "attempt"
+        },
+        {
+          "id": "b528a641-84f1-4e6d-a8d4-61a89acfab08",
+          "type": "mcq",
+          "title": "Three viable options remain.",
+          "body": "<p>The team has already defined the problem and gathered evidence. Three options could work, but they differ in time, cost, mission impact, and risk.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "b8c8db6e-7411-4061-afd8-6fec5efc612b",
+              "text": "Mind Map",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "31bbe465-5056-4e8d-a3e0-f8a7b583bc1e",
+              "text": "5 Whys",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "7299a741-c89a-43c2-adcf-a8ca698dea1f",
+              "text": "Decision Matrix",
+              "correct": true,
+              "feedback": "A Decision Matrix is useful now because viable alternatives can be compared against criteria established before the choice."
+            },
+            {
+              "id": "b189c22e-fdfb-40bf-a6c2-2df9aa5614c7",
+              "text": "Stakeholder Map",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "A Decision Matrix is useful now because viable alternatives can be compared against criteria established before the choice.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. A Decision Matrix is useful now because viable alternatives can be compared against criteria established before the choice.",
+          "completion": "attempt"
+        },
+        {
+          "id": "bb665858-638f-47e8-aa86-11c8f7c48c1c",
+          "type": "mcq",
+          "title": "A change affects groups very differently.",
+          "body": "<p>A proposed process redesign may improve speed for one unit while increasing workload for two others, and one external partner has not been consulted.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "11e5fe3b-1658-4e63-a3fa-f68f25b2f038",
+              "text": "Stakeholder Map",
+              "correct": true,
+              "feedback": "A Stakeholder Map helps expose who influences, experiences, or is affected by the change—including the missing external perspective."
+            },
+            {
+              "id": "f35161f4-8a5c-4c82-ad95-56127111769f",
+              "text": "SWOT",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "d0a1eca1-e8e3-42f3-a994-2e5993bdd64f",
+              "text": "5 Whys",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "b13f15e6-2735-4308-a2ed-a915641c4d8a",
+              "text": "Decision Matrix",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "A Stakeholder Map helps expose who influences, experiences, or is affected by the change—including the missing external perspective.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. A Stakeholder Map helps expose who influences, experiences, or is affected by the change—including the missing external perspective.",
+          "completion": "attempt"
+        },
+        {
+          "id": "a2fb6d54-0047-4238-a0c2-3c64aad56d5f",
+          "type": "mcq",
+          "title": "The information is simply missing.",
+          "body": "<p>A supervisor wants to choose a framework to determine why one shift is slower. No one has yet compared workload, staffing, or processing time by shift.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "83ef52a4-e0fa-4ba7-acf1-a5e1ff9a274e",
+              "text": "5 Whys",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "3d1f01a1-6f57-488b-a5c8-590f3470ba6e",
+              "text": "SWOT",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "0920c681-e72b-437c-a730-4c0e2b1e4dae",
+              "text": "Decision Matrix",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "18fa8fc1-6aa5-48f3-ada5-d404a40828ef",
+              "text": "None yet—get the missing evidence",
+              "correct": true,
+              "feedback": "Correct. Not every thinking problem needs a framework. Here the disciplined next step is to obtain basic missing evidence before selecting an analytical tool."
+            }
+          ],
+          "feedbackCorrect": "Correct. Not every thinking problem needs a framework. Here the disciplined next step is to obtain basic missing evidence before selecting an analytical tool.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Correct. Not every thinking problem needs a framework. Here the disciplined next step is to obtain basic missing evidence before selecting an analytical tool.",
+          "completion": "attempt"
+        },
+        {
+          "id": "a9d44d95-8f41-40a2-a913-2afa53a43221",
+          "type": "heading",
+          "title": "Match the reasoning need to the tool.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "552d1b84-e308-4a84-a734-2533902610b4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Complete each match. This is about purpose&#x2014;not memorizing names.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4fa8145d-56e9-4d53-a117-033ee84d8c26",
+          "type": "matching",
+          "title": "Match the reasoning need to the tool",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "pairs": [
+            {
+              "id": "a2b6631e-08aa-469d-a093-378a7fc089b1",
+              "left": "Compare viable options against explicit criteria",
+              "right": "Decision Matrix"
+            },
+            {
+              "id": "b13c746e-e0f0-415e-a7bc-7ed5810c067f",
+              "left": "Surface beliefs a recommendation depends on",
+              "right": "Assumption Testing"
+            },
+            {
+              "id": "4945b7b8-a7c3-4b50-a9ff-8c8236e99af0",
+              "left": "See who influences or is affected by a decision",
+              "right": "Stakeholder Map"
+            },
+            {
+              "id": "e9c1553c-8e4f-4413-ab76-786557340a42",
+              "left": "Compare evidence for competing explanations",
+              "right": "Evidence Matrix"
+            }
+          ],
+          "completion": "attempt",
+          "feedbackCorrect": "Strong tool selection.",
+          "feedbackIncorrect": "Revisit the purpose of each tool—not just its name."
+        },
+        {
+          "id": "9d45cf18-9224-4af8-a897-0d865df0ddd5",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "1df0b7f2-bc52-48a9-a89b-9e86be9bd2d7",
+          "type": "heading",
+          "title": "You don't need more tools. You need better tool selection.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c1c26dbc-5518-4e6a-aba7-5301d7ac66ae",
+          "type": "text",
+          "title": "",
+          "body": "<p>Next: apply the complete critical-thinking process to one realistic organizational challenge.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "d548b0b3-6dee-4145-a90b-2fd769564321",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "9a532b5a-4ef6-4fe3-ae64-d04fce2f3112",
+      "title": "Application: Project Relay",
+      "description": "",
+      "blocks": [
+        {
+          "id": "1d76c415-db12-411b-ac21-c29109c3717c",
+          "type": "heading",
+          "title": "YOU KNOW THE LANGUAGE. NOW THINK.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "73b77314-08a7-4b0b-a600-891421bece11",
+          "type": "text",
+          "title": "",
+          "body": "<p>One organizational challenge. Eight stages. Your reasoning determines what happens next.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c889ce9f-242e-4255-ae2c-31dca0a916ea",
+          "type": "heading",
+          "title": "A performance problem—or something else?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4bc1d690-a9dc-4563-a476-b3ba311cf5b4",
+          "type": "text",
+          "title": "",
+          "body": "<p>A service unit that coordinates time-sensitive requests has missed its 24-hour processing target for ten consecutive weeks.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ccaa0532-ddac-4e51-a50c-d525c19d210c",
+          "type": "text",
+          "title": "",
+          "body": "<p><strong>Leadership&apos;s initial proposal:</strong> mandatory refresher training for all employees.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "87b81d5c-e998-40f4-a030-138ce2b36221",
+          "type": "text",
+          "title": "",
+          "body": "<p>Your job is not to defend or reject that proposal. Your job is to determine what the evidence supports.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "80510cf2-11bb-4f7a-a0bb-7a5af04fa304",
+          "type": "heading",
+          "title": "What you know at the start.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b7e920b6-002f-4d18-aaa3-f2a64bfb6037",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"evidenceStack\"><div class=\"evidenceCard\"><strong>Performance:</strong> On-time processing fell from 91% to 73% over ten weeks.</div><div class=\"evidenceCard\"><strong>Workload:</strong> Incoming volume increased 8% during the same period.</div><div class=\"evidenceCard\"><strong>Change:</strong> A new intake-and-routing procedure began eleven weeks ago.</div><div class=\"evidenceCard\"><strong>Training:</strong> 94% of employees completed required procedure training before launch.</div><div class=\"evidenceCard\"><strong>Employee reports:</strong> Several employees describe conflicting guidance about priority cases.</div><div class=\"evidenceCard\"><strong>Unknown:</strong> No one has compared delays by shift, case type, routing path, or supervisor.</div></div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a5cff5d4-1eab-497c-a127-d5fd255472fb",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Resist the urge to solve the case now. Your information will expand as your questions improve.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4df6a6ad-53fa-4fbd-a294-0526a4fd35e7",
+          "type": "heading",
+          "title": "DEFINE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "064d7504-ad0c-412a-a114-5f7f7e2c6304",
+          "type": "text",
+          "title": "",
+          "body": "<p>State the performance gap without embedding a cause or solution.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7af33583-e0d4-4872-a644-9763831ffd50",
+          "type": "heading",
+          "title": "Which is the strongest problem statement?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fd631b02-5a2f-4cc6-a1a4-90c2d17be98e",
+          "type": "mcq",
+          "title": "Which is the strongest problem statement?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "ba955e50-4b42-459c-ac96-a219f8a580ef",
+              "text": "Employees need refresher training on the new procedure.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "7fe4894e-2e59-414e-ac71-be44ccb1c55a",
+              "text": "On-time processing declined from 91% to 73% during the past ten weeks.",
+              "correct": true,
+              "feedback": "The neutral performance gap is strongest. The other choices embed either a remedy or an unproven cause."
+            },
+            {
+              "id": "692e54bb-b6fb-48cf-ad8b-42ddcc26a75e",
+              "text": "The new routing procedure is causing delays.",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "The neutral performance gap is strongest. The other choices embed either a remedy or an unproven cause.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The neutral performance gap is strongest. The other choices embed either a remedy or an unproven cause.",
+          "completion": "attempt"
+        },
+        {
+          "id": "478f77a5-5216-4bf7-abc9-198694c4ee23",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "2029d809-0bec-4b25-aa22-c6cd5784b7c0",
+          "type": "heading",
+          "title": "UNDERSTAND",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "35d28d21-a3f6-4e22-ab41-23304cbf2851",
+          "type": "text",
+          "title": "",
+          "body": "<p>Separate evidence from interpretation and identify what remains unknown.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f3660752-9caf-487a-ab6a-4931a3e3e65c",
+          "type": "heading",
+          "title": "Which statement is an inference?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b2e89ce2-a266-4105-af7a-2de1e0b4e537",
+          "type": "mcq",
+          "title": "Which statement is an inference?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "7d3c48b3-96c4-47b2-a077-0f88ebf530fc",
+              "text": "Incoming volume increased 8%.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "4a87ad17-e01b-4584-a737-8e06cc19125f",
+              "text": "94% completed required training.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "7bcb14ba-2587-4112-aef3-2f79de68c519",
+              "text": "Employees are confused because the training was ineffective.",
+              "correct": true,
+              "feedback": "Correct. The training explanation may be plausible, but the available evidence does not establish it."
+            },
+            {
+              "id": "e41f1808-687f-41c2-ae8d-c7c2f86bf1a3",
+              "text": "The routing procedure began eleven weeks ago.",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Correct. The training explanation may be plausible, but the available evidence does not establish it.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Correct. The training explanation may be plausible, but the available evidence does not establish it.",
+          "completion": "attempt"
+        },
+        {
+          "id": "883f5345-de2d-472d-a74b-7c2afc80ba59",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "3a3028bc-adf9-43f1-a47a-1607e79c6ff7",
+          "type": "heading",
+          "title": "QUESTION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "eeb9a61f-6152-4d34-a854-ef84adcafbf8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Ask for information that can distinguish between competing explanations.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "69343f78-42bb-4cfc-a6c2-d18eec602de7",
+          "type": "heading",
+          "title": "Which question has the greatest diagnostic value?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "499cdf38-cf2c-4e1f-a841-7a0b7670bdbf",
+          "type": "mcq",
+          "title": "Which question has the greatest diagnostic value?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "4fe8b036-db86-4a9d-ae0f-a544a7d8c010",
+              "text": "How soon can refresher training be scheduled?",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "dfd34b14-8e92-428a-ab69-2562bce8db6c",
+              "text": "Do employees like the new procedure?",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "679b8563-9bad-486b-a440-1c66a627dfcc",
+              "text": "Where in the workflow are delays occurring, and do they vary by shift, case type, or routing path?",
+              "correct": true,
+              "feedback": "Strong questions help discriminate among explanations. This question can show where the performance gap is actually being produced."
+            },
+            {
+              "id": "8693cbce-aad6-4e5e-a293-b43ace0e4e87",
+              "text": "Which supervisor first recommended training?",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Strong questions help discriminate among explanations. This question can show where the performance gap is actually being produced.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Strong questions help discriminate among explanations. This question can show where the performance gap is actually being produced.",
+          "completion": "attempt"
+        },
+        {
+          "id": "98976c2a-b317-4cac-a916-a54692bc09c2",
+          "type": "accordion",
+          "title": "Reveal new evidence",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "195a55e2-1720-494b-ab25-3fec995ae89d",
+              "title": "New evidence",
+              "text": "<div class=\"evidenceReveal\" id=\"caseEvidence\"><strong>New evidence received:</strong><p>Most delays occur in priority cases routed through two approval paths. Those cases average 31 hours; other cases average 19 hours. The two affected paths require an additional supervisor review introduced with the new procedure. Error rates are essentially unchanged from before implementation.</p></div>",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "6284160e-89b1-42d0-ac77-e43253487c2a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "2ed43293-ae12-4f38-af62-2d71cb53482c",
+          "type": "heading",
+          "title": "ANALYZE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1e13f3d1-cf5b-4c82-a930-84fa9cf8a6c4",
+          "type": "text",
+          "title": "",
+          "body": "<p>Update your explanation when the evidence changes the picture.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "309be631-8cff-47fb-a978-567666b18d1b",
+          "type": "heading",
+          "title": "Which explanation is now best supported?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c5b19acc-45f0-41fc-ae88-0be291f746b3",
+          "type": "mcq",
+          "title": "Which explanation is now best supported?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "c20c3591-db0c-45cb-afbe-194dbb99b161",
+              "text": "Employees forgot the training.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "aaa126cf-c0cc-44f4-ad26-1599390d9122",
+              "text": "The added approval step is creating a workflow bottleneck for priority cases.",
+              "correct": true,
+              "feedback": "The evidence now points most strongly to a process bottleneck. That does not prove there are no other contributors, but it should change where attention goes next."
+            },
+            {
+              "id": "5b4e1a0b-e0f3-4a7b-a753-9b849239ab06",
+              "text": "The 8% workload increase fully explains the decline.",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "618670c1-cbf4-476b-a861-4151c4455f75",
+              "text": "Employees are resisting the change.",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "The evidence now points most strongly to a process bottleneck. That does not prove there are no other contributors, but it should change where attention goes next.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The evidence now points most strongly to a process bottleneck. That does not prove there are no other contributors, but it should change where attention goes next.",
+          "completion": "attempt"
+        },
+        {
+          "id": "4968bb10-753d-4d75-ac61-ad13994397e4",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "f903f3be-e4fa-4496-afd3-3e611bb5b3ab",
+          "type": "heading",
+          "title": "EXPLORE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e50fb33e-3658-40c2-afbe-409fc5ed43d8",
+          "type": "text",
+          "title": "",
+          "body": "<p>Generate alternatives before selecting a remedy.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "0d770145-887b-41fd-a839-489d8b286b57",
+          "type": "heading",
+          "title": "Create three distinct response options.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a31a910a-dfa7-4399-a27b-0a5771db0c49",
+          "type": "reflection",
+          "title": "Create three distinct response options",
+          "body": "<p>Write three distinct response options for Project Relay. Aim for different approaches, then explain how each addresses the evidence.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ef99b450-101a-4cb3-a19b-8fe32e81b7cc",
+          "type": "text",
+          "title": "",
+          "body": "<p class=\"detail\">Aim for genuinely different approaches&#x2014;not three versions of the same idea.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "41bc7975-0aef-4c38-a0ce-381b13cc6d5b",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "753a2636-86ea-4d8e-a5d1-e841619e3e7b",
+          "type": "heading",
+          "title": "EVALUATE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f9a0505e-fdda-4f52-a58d-27ce958aef84",
+          "type": "text",
+          "title": "",
+          "body": "<p>Choose criteria before choosing your preferred option.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3437b8c5-a98f-4a8b-acd4-c7302dcee288",
+          "type": "heading",
+          "title": "Select three criteria that matter most.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "fb5cc3e4-56f3-4ec1-ae3a-b09b254b70a2",
+          "type": "reflection",
+          "title": "Choose three criteria before comparing options",
+          "body": "<p>Choose exactly three criteria and explain why each matters.</p><ul><li>Mission impact</li><li>Speed to implement</li><li>Risk</li><li>Employee burden</li><li>Cost</li><li>Sustainability</li></ul>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "ba0d85ff-13a8-4180-abf2-c81b16ebc813",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "76b87345-17da-41d1-a755-963f1491e7b0",
+          "type": "heading",
+          "title": "DECIDE",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e9bacbee-581d-4def-a5ca-e9a36a5f760c",
+          "type": "text",
+          "title": "",
+          "body": "<p>Make a recommendation that shows the reasoning behind it.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bdf8004e-cc33-44aa-a11d-1eeb54f693a0",
+          "type": "heading",
+          "title": "Your recommendation",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "1010949a-543f-4211-a2b2-6c5675d05f95",
+          "type": "reflection",
+          "title": "Your Project Relay recommendation",
+          "body": "<p>Based on the evidence and criteria, I recommend…</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "31a09766-d3d5-4d6c-a0ce-ec7a898a545a",
+          "type": "heading",
+          "title": "What tradeoff are you accepting?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "e80f0b12-a19c-44d6-a710-a98047384315",
+          "type": "reflection",
+          "title": "What tradeoff are you accepting?",
+          "body": "<p>This choice improves… but requires/risks…</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "39cecfab-55ce-4088-a971-b3678ed3252c",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "96c8939c-0a57-4e03-af2a-98bde7697d07",
+          "type": "heading",
+          "title": "REFLECT",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "21e1d3e9-8080-451a-a661-83cf7ec58606",
+          "type": "text",
+          "title": "",
+          "body": "<p>Good thinkers examine how they reached the decision&#x2014;not only whether they like the answer.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "30cc44dc-5f86-4adc-a404-c9c54ec03f80",
+          "type": "heading",
+          "title": "Which reflection question is most valuable?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "4f652a7c-7c7b-4503-a766-175fd4d0365b",
+          "type": "mcq",
+          "title": "Which reflection question is most valuable?",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "options": [
+            {
+              "id": "5ec16888-3e4c-4793-a8a1-9a4edd6b0a3a",
+              "text": "How can I defend my original idea?",
+              "correct": false,
+              "feedback": ""
+            },
+            {
+              "id": "840e92bb-8202-4523-a4da-be929502ee76",
+              "text": "What evidence changed my thinking, and what assumption did I have to revise?",
+              "correct": true,
+              "feedback": "Reflection should improve future reasoning. Notice what changed your judgment, where confidence was misplaced, and what you would examine earlier next time."
+            },
+            {
+              "id": "986c4837-a2eb-49fd-a316-658fb062ea26",
+              "text": "How quickly can we close the issue?",
+              "correct": false,
+              "feedback": ""
+            }
+          ],
+          "feedbackCorrect": "Reflection should improve future reasoning. Notice what changed your judgment, where confidence was misplaced, and what you would examine earlier next time.",
+          "feedbackIncorrect": "Review the explanation and compare each option with the evidence. Reflection should improve future reasoning. Notice what changed your judgment, where confidence was misplaced, and what you would examine earlier next time.",
+          "completion": "attempt"
+        },
+        {
+          "id": "27b96a64-3d6d-4425-a9e4-c890cc59f013",
+          "type": "reflection",
+          "title": "What did this case reveal about your own reasoning?",
+          "body": "<p>What did this case reveal about your own reasoning?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "c64da852-a12d-4c35-abac-1625a68e746a",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "36be1630-e7ab-4ec1-a311-73b4bf803fb6",
+          "type": "heading",
+          "title": "You worked the problem before choosing the answer.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "213b631f-998a-4ad4-a233-36506066b5fd",
+          "type": "text",
+          "title": "",
+          "body": "<p>Next: turn the process into a repeatable personal practice.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "05635861-3e07-49c4-a427-088da1d52308",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        }
+      ]
+    },
+    {
+      "id": "6d71b20f-dd60-41c0-a9ff-c54c2f78b9bd",
+      "title": "Reflection and Transfer",
+      "description": "",
+      "blocks": [
+        {
+          "id": "7a32fe7c-e3e5-4c0e-ab82-040426c7d02a",
+          "type": "heading",
+          "title": "KNOW YOUR THINKING. USE IT DELIBERATELY.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "607aeaae-e401-4fc8-ae41-680a13b26118",
+          "type": "text",
+          "title": "",
+          "body": "<p>The goal is not to remember a course. The goal is to change what you notice before an important decision.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "a6928d44-50e5-4020-a595-c7ad9f7b5eed",
+          "type": "heading",
+          "title": "Early in the course, you identified a moment when your thinking is most vulnerable.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7a31f1fb-2798-4319-aa0e-b07152b31449",
+          "type": "text",
+          "title": "",
+          "body": "<p>Revisit the tendency you identified in Foundations. What should you watch for when pressure or confidence takes over?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "7e07aa63-3808-49bc-a732-9671897af00b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Knowing your tendency does not eliminate it. It gives you something specific to watch for.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "42c94ce4-766a-427f-a8e4-1a6a786b47d2",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "936122d1-1146-4dc1-adeb-76d8d215e788",
+          "type": "heading",
+          "title": "You do not need to remember every screen. Remember these.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "c8199b5e-736b-433a-a505-8f411b6aadca",
+          "type": "text",
+          "title": "",
+          "body": "<p>Select each card and move horizontally through the principles.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "ee55804b-f803-47ff-a237-cf17313d6280",
+          "type": "flashcards",
+          "title": "Five principles to carry forward",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "items": [
+            {
+              "id": "02ccd133-0416-4b4d-aa3d-6b4b21b2031d",
+              "front": "DEFINE before solving.",
+              "back": "Describe the gap before you attach a cause or remedy. A neutral problem statement protects the inquiry from premature closure.",
+              "image": ""
+            },
+            {
+              "id": "d7de1a08-e0ef-44b7-aec5-75e783904c97",
+              "front": "SEPARATE evidence from inference.",
+              "back": "Facts, interpretations, and unknowns can all be useful—but only when you know which is which.",
+              "image": ""
+            },
+            {
+              "id": "d82224ac-454d-48c6-a1ef-5e67c285cc27",
+              "front": "QUESTION your own reasoning.",
+              "back": "Do not only interrogate the problem. Ask what you are assuming, what contradicts your view, and what would change your mind.",
+              "image": ""
+            },
+            {
+              "id": "dcd5df6f-9cbf-4d1d-acfe-0ceaceecc61a",
+              "front": "DIVERGE before converging.",
+              "back": "Create alternatives before selecting among them. The first reasonable idea should not automatically become the answer.",
+              "image": ""
+            },
+            {
+              "id": "3fb1eebb-e1aa-4d72-acbd-ce9b45cc0ab5",
+              "front": "MATCH confidence to evidence.",
+              "back": "Confidence should rise or fall with the quality of the evidence. Revising confidence is disciplined reasoning, not indecision.",
+              "image": ""
+            }
+          ]
+        },
+        {
+          "id": "05f5be30-f21d-4f32-ae8a-381bf2516af4",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "9642cf75-766c-408c-a9dd-38c8fa378467",
+          "type": "heading",
+          "title": "Turn insight into a behavior you can use.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "38d1be68-f3c8-4517-a664-5fd69afded0e",
+          "type": "heading",
+          "title": "My warning sign",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3a0cb851-739c-4d29-a848-719dacb7ecef",
+          "type": "text",
+          "title": "",
+          "body": "<p>What should tell you that you may be moving too quickly or becoming too certain?</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "63c36527-634f-46fe-a0ea-1dc3090ae931",
+          "type": "reflection",
+          "title": "My warning sign",
+          "body": "<p>I should slow down when…</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b96a1a98-4296-4036-ae00-a9db6e25d223",
+          "type": "heading",
+          "title": "My reset question",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "f3128140-98fe-44c6-ae41-c9998c9260c6",
+          "type": "text",
+          "title": "",
+          "body": "<p>Choose one question you can use to interrupt automatic thinking.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "bdfec0fe-ccea-4c28-a205-4a2f244799fe",
+          "type": "reflection",
+          "title": "My reset question",
+          "body": "<p>Before I decide, I will ask…</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true
+        },
+        {
+          "id": "b48163e7-4e64-4850-aa95-ca01e01eda25",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "fce413d1-648d-43a3-ab97-b604b77a71b9",
+          "type": "heading",
+          "title": "What happens next is intentionally harder.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "5d5d9b97-34d3-4993-a84d-bcd1b756933e",
+          "type": "text",
+          "title": "",
+          "body": "<p>This course gave you the language and foundation. The live classroom is where you will use it under ambiguity, competing perspectives, incomplete information, and time pressure.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "86118fab-804a-46d8-a585-91ab23b2616b",
+          "type": "text",
+          "title": "",
+          "body": "<p>Expect to explain what you believe, why you believe it, and what would change your mind.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "71765834-ba17-4e14-ac27-ab020e72da38",
+          "type": "text",
+          "title": "",
+          "body": "<p>Expect facts, inferences, unknowns, and contradictory information to arrive together.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "185f0c28-3d10-46e5-af86-8ad8acb8d1ba",
+          "type": "text",
+          "title": "",
+          "body": "<p>Expect to make a recommendation and make the path to that recommendation visible.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "62762117-1457-43b2-a596-ea5b57e69903",
+          "type": "note",
+          "title": "",
+          "body": "<div class=\"principle\">Your goal in class is not to be the fastest person to an answer. It is to improve the quality of the reasoning that produces the answer.</div>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "b007940f-51bb-43d0-a265-4098029f4241",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "4e8e753e-2bec-4ce0-ad07-a29b00d07de0",
+          "type": "heading",
+          "title": "Five decisions. One last look at the fundamentals.",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "3500c67e-86ee-4c0c-a9dc-32a554c924ff",
+          "type": "quiz",
+          "title": "Final Knowledge Check",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": true,
+          "questions": [
+            {
+              "id": "efef07a9-d02f-4a96-aa4e-4039d6a6cd27",
+              "type": "mcq",
+              "title": "Before proposing a solution, the strongest first move is to…",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "ac84bebb-30e7-4be8-a903-71e822706f33",
+                  "text": "Identify the performance gap without assuming its cause.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Identify the performance gap without assuming its cause."
+                },
+                {
+                  "id": "e9a95650-1f1b-400f-a1ed-89250d9bc018",
+                  "text": "Choose the most familiar analytical tool.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "b5f669c5-df67-4316-acb5-455b66ea9f9e",
+                  "text": "Ask the most experienced person for the answer.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Identify the performance gap without assuming its cause.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Identify the performance gap without assuming its cause.",
+              "completion": "attempt"
+            },
+            {
+              "id": "c8fe4bad-af0f-4da5-a318-a6bd69228fac",
+              "type": "mcq",
+              "title": "Which statement best reflects disciplined evidence use?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "751bbe98-fcb8-45ae-a212-17d268dc62e1",
+                  "text": "A plausible inference can be treated as a fact when time is short.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "9a358f7d-0afd-4f7e-a7b1-f2751b6edea5",
+                  "text": "Confidence should match the quality and completeness of the evidence.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Confidence should match the quality and completeness of the evidence."
+                },
+                {
+                  "id": "718b5ac6-ecb6-4ad9-af62-fdc7cdf8d531",
+                  "text": "More information always produces a better decision.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Confidence should match the quality and completeness of the evidence.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Confidence should match the quality and completeness of the evidence.",
+              "completion": "attempt"
+            },
+            {
+              "id": "48db37f5-ef0c-4e36-a0a4-da4abefa0139",
+              "type": "mcq",
+              "title": "When should you generate alternatives?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "75409480-9175-40cb-a803-4ff78ddfb9cd",
+                  "text": "After selecting your preferred solution.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "5d088fb5-e18a-4894-ae29-c452230c8cc8",
+                  "text": "Before converging on a preferred solution.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Before converging on a preferred solution."
+                },
+                {
+                  "id": "ea4684f9-225e-4317-ac52-ca26e5fb81d0",
+                  "text": "Only when the first option fails.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Before converging on a preferred solution.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Before converging on a preferred solution.",
+              "completion": "attempt"
+            },
+            {
+              "id": "d82c22d1-f0ee-4f61-a92d-50d70b6e9358",
+              "type": "mcq",
+              "title": "What is the best use of a critical-thinking tool?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "bc8f3877-d5c5-4c9b-a851-4c37f36d5ada",
+                  "text": "Use the most comprehensive tool available.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "a127b172-2cb1-43bc-a8e3-7e5971c10f48",
+                  "text": "Use a tool because the template creates objectivity.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "a3fcd5e5-1b9d-4669-a1e9-e521ecca6cc4",
+                  "text": "Choose a tool only when it serves a specific reasoning need.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: Choose a tool only when it serves a specific reasoning need."
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: Choose a tool only when it serves a specific reasoning need.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: Choose a tool only when it serves a specific reasoning need.",
+              "completion": "attempt"
+            },
+            {
+              "id": "d68f1656-d3a5-412d-aa9a-5f2b6f7f00b3",
+              "type": "mcq",
+              "title": "What does strong reflection examine?",
+              "body": "",
+              "design": {
+                "background": "#ffffff",
+                "useThemeSurface": true,
+                "padding": 36,
+                "width": "standard",
+                "align": "left"
+              },
+              "required": true,
+              "options": [
+                {
+                  "id": "2e4d51a7-3cf9-4977-a488-7745c517baf7",
+                  "text": "Whether other people agreed with the decision.",
+                  "correct": false,
+                  "feedback": ""
+                },
+                {
+                  "id": "23f103ee-8c13-4319-acea-46789d833c09",
+                  "text": "The outcome and the quality of the reasoning that produced it.",
+                  "correct": true,
+                  "feedback": "The strongest answer is: The outcome and the quality of the reasoning that produced it."
+                },
+                {
+                  "id": "fc2b0cee-810b-4163-a60b-de7f2df642bc",
+                  "text": "How to defend the original recommendation.",
+                  "correct": false,
+                  "feedback": ""
+                }
+              ],
+              "feedbackCorrect": "The strongest answer is: The outcome and the quality of the reasoning that produced it.",
+              "feedbackIncorrect": "Review the explanation and compare each option with the evidence. The strongest answer is: The outcome and the quality of the reasoning that produced it.",
+              "completion": "attempt"
+            }
+          ],
+          "passScore": 0,
+          "scorePolicy": "best",
+          "randomize": false,
+          "maxAttempts": 0
+        },
+        {
+          "id": "fc5d2219-b73c-4e1b-af2d-f975e2a5d5fb",
+          "type": "continue",
+          "title": "Continue",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false,
+          "gate": true
+        },
+        {
+          "id": "e770589a-a26a-4165-af08-3a56790810c6",
+          "type": "heading",
+          "title": "READY FOR APPLICATION",
+          "body": "",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        },
+        {
+          "id": "12383b97-46bb-423f-a8e4-789db2bcab11",
+          "type": "text",
+          "title": "",
+          "body": "<p>You know the foundation. Now come prepared to challenge assumptions, examine evidence, consider alternatives, and defend your reasoning.</p>",
+          "design": {
+            "background": "#ffffff",
+            "useThemeSurface": true,
+            "padding": 36,
+            "width": "standard",
+            "align": "left"
+          },
+          "required": false
+        }
+      ]
+    }
+  ]
+}
