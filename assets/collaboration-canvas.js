@@ -29,7 +29,7 @@ const svgNS='http://www.w3.org/2000/svg';
 const localStore=(key,data)=>{try{localStorage.setItem(key,JSON.stringify(data));return true}catch{return false}};
 const localRead=key=>{try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}};
 const getObj=id=>board.items.find(o=>o.id===id);
-const cleanSettings=v=>({locked:v?.locked===true,votingOpen:v?.votingOpen!==false,votesPerPerson:Math.max(1,Math.min(10,Number(v?.votesPerPerson)||3)),follow:v?.follow===true,focus:v?.focus||null,brainstormOpen:v?.brainstormOpen===true});
+const cleanSettings=v=>({locked:v?.locked===true,votingOpen:v?.votingOpen!==false,votesPerPerson:Math.max(1,Math.min(10,Number(v?.votesPerPerson)||3)),follow:v?.follow===true,focus:v?.focus||null,brainstormOpen:v?.brainstormOpen===true,voteRound:Math.max(0,Number(v?.voteRound)||0)});
 const editable=o=>!o?.locked&&!(room?.role==='guest'&&board.settings?.locked);
 const cleanItem=o=>{if(!o||typeof o!=='object'||!['note','text','shape','ellipse','frame','image','connector','stroke'].includes(o.type))return null;
 const n=(v,def,min,max)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Math.round(Number(v)))):def;
@@ -55,11 +55,11 @@ try{const d=await rpc(action,payload);version=Number(d.version)||version;setStat
 catch(e){version=-1;setStatus('⚠ Could not sync changes');toast('Changes could not sync: '+e.message+'. Export your board as a backup.')}
 finally{pending--;}
 });}
-async function refresh(){if(!room||refreshing||pending||dragging||editingInput||document.hidden)return;refreshing=true;try{const d=await rpc('get');if(Number(d.version)!==version){version=Number(d.version);board=cleanState(d.state);if(room?.role==='guest'&&board.settings?.follow&&board.settings.focus){const focus=board.settings.focus;zoom=clampZoom(focus.zoom);pan={x:Number(focus.x)||0,y:Number(focus.y)||0};applyView();}title=String(d.name||title);$('#board-title').value=title;if(selected&&!getObj(selected))selected=null;render();setStatus('● Live · synchronized')}}catch{setStatus('⚠ Connection interrupted')}finally{refreshing=false}}
+async function refresh(){if(!room||refreshing||pending||dragging||editingInput||document.hidden)return;refreshing=true;try{const d=await rpc('get');if(Number(d.version)!==version){const prevRound=board.settings?.voteRound||0;version=Number(d.version);board=cleanState(d.state);if((board.settings?.voteRound||0)!==prevRound)voteChoices.clear();if(room?.role==='guest'&&board.settings?.follow&&board.settings.focus){const focus=board.settings.focus;zoom=clampZoom(focus.zoom);pan={x:Number(focus.x)||0,y:Number(focus.y)||0};applyView();}title=String(d.name||title);$('#board-title').value=title;if(selected&&!getObj(selected))selected=null;render();setStatus('● Live · synchronized')}}catch{setStatus('⚠ Connection interrupted')}finally{refreshing=false}}
 function roomUI(){const live=!!room;$('#board-mode').textContent=live?'● Live shared canvas':'◌ Personal workspace';$('#board-mode').classList.toggle('connected',live);$('#room-info').textContent=live?(room.role==='owner'?'Instructor is hosting · invitation enabled':'Joined as a participant · edits sync automatically'):'Private draft · autosaved locally';$('#host-room').hidden=live||entry==='guest';$('#share-board').hidden=!live||room?.role!=='owner';$('#board-title').readOnly=room?.role==='guest'||entry==='guest';$('#stage-prompt').readOnly=room?.role==='guest'||entry==='guest';updateUndo()}
 function saveRoom(){if(room?.role==='owner')localStore(ROOM_KEY,{id:room.id,secret:room.secret,guest:room.guest})}
 async function hostRoom(){if(room)return;try{setStatus('Creating live board…');const d=await rpc('create',{name:title,state:board});room={id:d.id,secret:d.owner,guest:d.guest,role:'owner'};version=Number(d.version);saveRoom();roomUI();setStatus('● Live board created');startPresence();toast('Live session ready! Copy the student join link.')}catch(e){setStatus('● Personal draft · saved locally');toast('Unable to start live session: '+e.message)}}
-async function joinRoom(id,secret){room={id,secret,role:'guest'};roomUI();setStatus('Connecting to class…');try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();roomUI();setStatus('● Connected to classroom');startPresence()}catch(e){room=null;roomUI();setStatus('⚠ Join link unavailable');toast('Unable to join: '+e.message)}}
+async function joinRoom(id,secret){voteChoices.clear();room={id,secret,role:'guest'};roomUI();setStatus('Connecting to class…');try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();roomUI();setStatus('● Connected to classroom');startPresence()}catch(e){room=null;roomUI();setStatus('⚠ Join link unavailable');toast('Unable to join: '+e.message)}}
 async function restoreRoom(){const saved=localRead(ROOM_KEY);if(!saved?.id||!saved?.secret)return;room={id:saved.id,secret:saved.secret,guest:saved.guest,role:'owner'};roomUI();try{const d=await rpc('get');version=Number(d.version);board=cleanState(d.state);title=String(d.name||title);$('#board-title').value=title;render();setStatus('● Live · synchronized');startPresence()}catch(e){room=null;roomUI();setStatus('● Saved on this device');toast('Could not reopen live board: '+e.message)}}
 function inviteLink(){const p=new URLSearchParams({id:room.id,token:room.guest});return location.origin+'/collaboration-join.html#'+p.toString()}
 async function copyText(text){try{await navigator.clipboard.writeText(text);toast('Copied to clipboard')}catch{window.prompt('Copy this text:',text)}}
@@ -70,7 +70,7 @@ function applyView(){$('#canvas-world').style.transform='translate('+pan.x+'px,'
 function zoomTo(z,cx,cy){const v=$('#canvas-viewport').getBoundingClientRect(),x=cx??v.width/2,y=cy??v.height/2, wx=(x-pan.x)/zoom,wy=(y-pan.y)/zoom;zoom=clampZoom(z);pan={x:x-wx*zoom,y:y-wy*zoom};applyView()}
 function fitView(){if(!board.items.length){zoom=.76;const rect=$('#canvas-viewport').getBoundingClientRect();pan={x:rect.width/2-1800*zoom,y:rect.height/2-1200*zoom};applyView();return}const shapes=board.items.filter(o=>!['connector','stroke'].includes(o.type));if(!shapes.length)return;const minX=Math.min(...shapes.map(o=>o.x))-110,maxX=Math.max(...shapes.map(o=>o.x+o.w))+110,minY=Math.min(...shapes.map(o=>o.y))-110,maxY=Math.max(...shapes.map(o=>o.y+o.h))+110;const r=$('#canvas-viewport').getBoundingClientRect();zoom=clampZoom(Math.min(r.width/(maxX-minX),r.height/(maxY-minY),1.4));pan={x:(r.width-(maxX-minX)*zoom)/2-minX*zoom,y:(r.height-(maxY-minY)*zoom)/2-minY*zoom};applyView()}
 function setTool(next){finishInlineEdit();if(next!=='pan')lastNonPanTool=next;tool=next;connectFrom=null;$$('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===next));$('#canvas-viewport').classList.toggle('pan',next==='pan');$('#canvas-viewport').classList.toggle('draw',['stroke','connector'].includes(next));announce(next==='connector'?'Click two objects to connect them':next==='vote'?'Click an idea to add a vote':next==='image'?'Click the board to position an image':'Tool: '+next)}
-function add(item){if(board.items.length>=MAX_ITEMS){toast('Canvas limit reached. Export or remove some objects.');return}before();board.items.push(cleanItem(item));selected=item.id;render();save();enqueue('put',{item:getObj(selected)})}
+function add(item){if(!canChangeSelected())return toast('The instructor locked editing');if(board.items.length>=MAX_ITEMS){toast('Canvas limit reached. Export or remove some objects.');return}before();board.items.push(cleanItem(item));selected=item.id;render();save();enqueue('put',{item:getObj(selected)})}
 function addType(type,p=viewportCenter()){const id=makeId();const defaults={note:[215,150,'New idea',COLORS[0]],text:[235,80,'Double-click to edit',COLORS[5]],shape:[230,135,'Editable shape',COLORS[1]],ellipse:[180,160,'Idea',COLORS[2]],frame:[430,300,'Group or theme',COLORS[5]]};const [w,h,text,color]=defaults[type]||defaults.note;add({id,type,x:Math.round(p.x-w/2),y:Math.round(p.y-h/2),w,h,text,color,votes:0});setTool('select');startInlineEdit(id,{selectAll:true})}
 function elementNode(tag,cls){const node=document.createElement(tag);if(cls)node.className=cls;return node}
 function pathNode(tag,attrs={}){const n=document.createElementNS(svgNS,tag);Object.entries(attrs).forEach(([key,value])=>n.setAttribute(key,String(value)));return n}
@@ -233,9 +233,11 @@ function pasteSelection(){
 
 function renderInspector(){const item=getObj(selected);$('#inspector').hidden=!item;$('#inspector-empty').hidden=!!item;if(!item)return;$('#selected-type').textContent={note:'Sticky note',text:'Text',shape:'Rectangle',ellipse:'Circle',frame:'Group frame',image:'Image',connector:'Connector',stroke:'Freehand line'}[item.type]||'Object';
 if(document.activeElement!==$('#object-text'))$('#object-text').value=item.text;$('#object-width').value=item.w;$('#object-height').value=item.h;$('#object-help').textContent=item.type==='connector'?'Connectors automatically follow their linked objects.':item.type==='stroke'?'Pen lines can be removed or moved through their settings.':'Type directly in the object. Drag ⠿ to move. Drag a corner or edge handle to resize; hold Shift to maintain proportions.';$('#edit-inline').hidden=!canEditText(item);
-$('#object-text').disabled=['connector','stroke','image'].includes(item.type);$('#object-width').disabled=['connector','stroke'].includes(item.type);$('#object-height').disabled=['connector','stroke'].includes(item.type);
+$('#object-text').disabled=['connector','stroke','image'].includes(item.type)||!editable(item);
+$('#object-width').disabled=['connector','stroke'].includes(item.type)||!editable(item);
+$('#object-height').disabled=['connector','stroke'].includes(item.type)||!editable(item);
 const sw=$('#color-swatches');sw.replaceChildren();COLORS.forEach(color=>{const b=elementNode('button');b.type='button';b.title=color;b.style.backgroundColor=color;b.className=color===item.color?'active':'';b.addEventListener('click',()=>patchSelected({color}));sw.appendChild(b)})}
-function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagation();if(isMulti(e)){select(id,{append:true});return}if(!canChangeSelected()||(!editable(getObj(id))&&tool!=='vote')){select(id);return}const grouped=getObj(id)?.group;const peers=grouped?board.items.filter(o=>o.group===grouped):[];if(peers.length>1&&tool==='select'){selectedIds=new Set(peers.map(o=>o.id));selected=id;}if(editingInput?.id===id)finishInlineEdit();finishInlineEdit(true);const obj=getObj(id);if(!obj)return;if(tool==='text'&&canEditText(obj)){startInlineEdit(id);return}if(tool==='vote'){
+function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagation();if(isMulti(e)){select(id,{append:true});return}if(tool!=='vote'&&(!canChangeSelected()||!editable(getObj(id)))){select(id);return}const grouped=getObj(id)?.group;const peers=grouped?board.items.filter(o=>o.group===grouped):[];if(peers.length>1&&tool==='select'){selectedIds=new Set(peers.map(o=>o.id));selected=id;}if(editingInput?.id===id)finishInlineEdit();finishInlineEdit(true);const obj=getObj(id);if(!obj)return;if(tool==='text'&&canEditText(obj)){startInlineEdit(id);return}if(tool==='vote'){
  if(board.settings?.votingOpen===false)return toast('Voting is closed');
  if(voteChoices.has(id))return toast('You have already voted for that idea');
  if(room&&voteChoices.size>=(board.settings?.votesPerPerson||3))return toast('All votes used');
@@ -245,7 +247,8 @@ function onObjectDown(e,id){if(e.button!==0&&e.button!==1)return;e.stopPropagati
 }
 if(tool==='connector'){if(!connectFrom){connectFrom=id;select(id);announce('Now click the second object to connect')}else if(connectFrom!==id){add({id:makeId(),type:'connector',from:connectFrom,to:id,text:'',color:COLORS[5],x:0,y:0,w:60,h:35});connectFrom=null;setTool('select')}return}
 if(tool==='pan'||spaceDown){startPan(e);return}
-if(!peers.length&&!(selectedIds.size>1&&selectedIds.has(id)))select(id);if(tool!=='select')return;before();const p=worldPoint(e);dragging={type:'item',id,dx:p.x-obj.x,dy:p.y-obj.y,moved:false,starts:selectedObjects().map(o=>({id:o.id,x:o.x,y:o.y})),sx:p.x,sy:p.y};$('#canvas-viewport').setPointerCapture(e.pointerId)}
+if(peers.length>1){$('.item').forEach(el=>el.classList.toggle('selected',selectedIds.has(el.dataset.id)));renderInspector();updateSelectionStatus();}
+else if(!(selectedIds.size>1&&selectedIds.has(id)))select(id);if(tool!=='select')return;before();const p=worldPoint(e);dragging={type:'item',id,dx:p.x-obj.x,dy:p.y-obj.y,moved:false,starts:selectedObjects().map(o=>({id:o.id,x:o.x,y:o.y})),sx:p.x,sy:p.y};$('#canvas-viewport').setPointerCapture(e.pointerId)}
 function startPan(e,{rightButton=false}={}){
  dragging={type:'pan',sx:e.clientX,sy:e.clientY,x:pan.x,y:pan.y,rightButton,moved:false};
  const viewport=$('#canvas-viewport');
@@ -313,7 +316,7 @@ if(was.type==='resize'&&was.moved){
 if(was.type==='item'){if(was.moved){const moved=was.starts.map(x=>getObj(x.id)).filter(Boolean);persistItems(moved);announce(moved.length+' object(s) moved')}else{if(!room&&history.length){history.pop();updateUndo()}}}
 if(was.type==='stroke'||was.type==='line'){const o=getObj(was.id);if(o){if(o.points.length<2)o.points.push([o.x+1,o.y+1]);selected=o.id;render();save();enqueue('put',{item:o})}}
 }
-function patchSelected(changes){const o=getObj(selected);if(!o)return;before();Object.assign(o,changes);const cleaned=cleanItem(o);Object.assign(o,cleaned);render();save();enqueue('put',{item:o})}
+function patchSelected(changes){const o=getObj(selected);if(!o||!editable(o)||!canChangeSelected())return;before();Object.assign(o,changes);const cleaned=cleanItem(o);Object.assign(o,cleaned);render();save();enqueue('put',{item:o})}
 function deleteSelected(){
  const ids=new Set(activeIds().filter(id=>editable(getObj(id))));if(!ids.size)return;
  if(!canChangeSelected())return toast('The instructor locked this board');
@@ -430,7 +433,7 @@ async function switchInstructorRoom(destination){
  try{
   finishInlineEdit();
   const data=await rpc('get',{},destination);
-  room={...destination,role:'owner'};version=Number(data.version);board=cleanState(data.state);title=String(data.name||title);
+  room={...destination,role:'owner'};voteChoices.clear();version=Number(data.version);board=cleanState(data.state);title=String(data.name||title);
   $('#board-title').value=title;selected=null;selectedIds.clear();history=[];future=[];saveRoom();roomUI();render();fitView();startPresence();closeBoardMode();
   toast('Opened '+title);
  }catch(e){toast('Cannot open board: '+e.message)}
