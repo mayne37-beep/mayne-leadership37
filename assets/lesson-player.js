@@ -17,21 +17,22 @@ function color(v,fallback='#176599'){return /^#[a-f\d]{6}$/i.test(v||'')?v:fallb
 
 /* Shared color themes; kept in the player so standalone HTML and SCORM exports work. */
 export const THEME_PRESETS = [
- {id:'executive-blue',name:'Executive Blue',palette:{accent:'#173B63',secondary:'#3377A7',highlight:'#D6AD60',background:'#DCEBF6',surface:'#FFFFFF',ink:'#17344B',muted:'#52697B'}},
- {id:'modern-professional',name:'Modern Professional',palette:{accent:'#283F55',secondary:'#6D91A9',highlight:'#83ACA1',background:'#E7EDF1',surface:'#FFFFFF',ink:'#283F55',muted:'#617481'}},
- {id:'warm-leadership',name:'Warm Leadership',palette:{accent:'#72523C',secondary:'#C9A77F',highlight:'#A6A86E',background:'#F4EBDC',surface:'#FFFFFF',ink:'#43372E',muted:'#75675A'}},
- {id:'slate-gold',name:'Slate & Gold',palette:{accent:'#313F51',secondary:'#667788',highlight:'#C8A052',background:'#E9EEF2',surface:'#FFFFFF',ink:'#263544',muted:'#657384'}},
- {id:'coastal-teal',name:'Coastal Teal',palette:{accent:'#145C65',secondary:'#4C9CA0',highlight:'#E0B56D',background:'#DDF1F0',surface:'#FFFFFF',ink:'#183F44',muted:'#5A7679'}},
- {id:'minimal-light',name:'Minimal Light',palette:{accent:'#527EB1',secondary:'#9DA9B4',highlight:'#9CAFC1',background:'#F3F5F7',surface:'#FFFFFF',ink:'#303944',muted:'#677582'}}
+ {id:'executive-blue',name:'Executive Blue',palette:{accent:'#173B63',secondary:'#3377A7',highlight:'#D6AD60',background:'#DCEBF6',surface:'#FFFFFF',ink:'#17344B',muted:'#52697B',heading:'#173B63',callout:'#E7F1F8'}},
+ {id:'modern-professional',name:'Modern Professional',palette:{accent:'#283F55',secondary:'#6D91A9',highlight:'#83ACA1',background:'#E7EDF1',surface:'#FFFFFF',ink:'#283F55',muted:'#617481',heading:'#283F55',callout:'#E6EEF1'}},
+ {id:'warm-leadership',name:'Warm Leadership',palette:{accent:'#72523C',secondary:'#C9A77F',highlight:'#A6A86E',background:'#F4EBDC',surface:'#FFFFFF',ink:'#43372E',muted:'#75675A',heading:'#5F4634',callout:'#F8F0E4'}},
+ {id:'slate-gold',name:'Slate & Gold',palette:{accent:'#313F51',secondary:'#667788',highlight:'#C8A052',background:'#E9EEF2',surface:'#FFFFFF',ink:'#263544',muted:'#657384',heading:'#313F51',callout:'#F0F3F5'}},
+ {id:'coastal-teal',name:'Coastal Teal',palette:{accent:'#145C65',secondary:'#4C9CA0',highlight:'#E0B56D',background:'#DDF1F0',surface:'#FFFFFF',ink:'#183F44',muted:'#5A7679',heading:'#145C65',callout:'#E8F4F1'}},
+ {id:'minimal-light',name:'Minimal Light',palette:{accent:'#527EB1',secondary:'#9DA9B4',highlight:'#9CAFC1',background:'#F3F5F7',surface:'#FFFFFF',ink:'#303944',muted:'#677582',heading:'#303944',callout:'#EEF3F8'}}
 ];
 export const THEME_COLOR_FIELDS = [
  ['accent','Primary / buttons'],['secondary','Secondary'],['highlight','Highlights'],['background','Page background'],
- ['surface','Content cards'],['ink','Heading & body text'],['muted','Supporting text']
+ ['surface','Content cards'],['heading','Headings'],['ink','Body text'],['muted','Supporting text'],['callout','Callouts']
 ];
-const DEFAULT_THEME_COLORS = {accent:'#176599',secondary:'#3377A7',highlight:'#C59A43',background:'#FFFFFF',surface:'#FFFFFF',ink:'#20364A',muted:'#52697B'};
+const DEFAULT_THEME_COLORS = {accent:'#176599',secondary:'#3377A7',highlight:'#C59A43',background:'#FFFFFF',surface:'#FFFFFF',heading:'#20364A',ink:'#20364A',muted:'#52697B',callout:'#EDF5FB'};
 export function resolveTheme(base={},override=null){
  const combined={...DEFAULT_THEME_COLORS,...(base||{}),...(override||{})};
  const result={};for(const key of Object.keys(DEFAULT_THEME_COLORS))result[key]=color(combined[key],DEFAULT_THEME_COLORS[key]);
+ if(!(base?.heading||override?.heading))result.heading=result.ink;
  result.font=(override?.font||base?.font)==='serif'?'serif':'sans';
  return result;
 }
@@ -41,7 +42,7 @@ function onAccent(hex){
 }
 export function themeVars(theme){
  const t=resolveTheme(theme);
- return '--accent:'+t.accent+';--secondary:'+t.secondary+';--highlight:'+t.highlight+';--course-bg:'+t.background+';--surface:'+t.surface+';--ink:'+t.ink+';--muted-ink:'+t.muted+';--on-accent:'+onAccent(t.accent)+';';
+ return '--accent:'+t.accent+';--secondary:'+t.secondary+';--highlight:'+t.highlight+';--course-bg:'+t.background+';--surface:'+t.surface+';--heading:'+t.heading+';--ink:'+t.ink+';--muted-ink:'+t.muted+';--callout-bg:'+t.callout+';--on-accent:'+onAccent(t.accent)+';';
 }
 
 function shuffled(items){return [...items].map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);}
