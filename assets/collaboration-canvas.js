@@ -22,7 +22,7 @@ const blank=()=>({stage:0,items:[],settings:{locked:false,votingOpen:true,votesP
 const entry=document.body.dataset.entry||'owner';
 let board=blank(), title='Untitled collaboration', selected=null, tool='select', zoom=.8, pan={x:0,y:0}, dragging=null, connectFrom=null, room=null, version=0, pending=0, queue=Promise.resolve(), timerLeft=300, timerInterval=null, toastTimeout, imagePoint=null, revision=0;
 let history=[],future=[],saveTimer=null,refreshing=false,spaceDown=false,editingInput=null,textSyncTimer=null,lastNonPanTool='select';
-let selectedIds=new Set(),copiedItems=[],library=[],breakoutRooms=[],voterId=null,clientId=null,displayName='Participant',presenceInterval=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
+let selectedIds=new Set(),copiedItems=[],library=[],breakoutRooms=[],decisionModel=null,voterId=null,clientId=null,displayName='Participant',presenceInterval=null,facilitatorSettings={locked:false,votingOpen:true,votesPerPerson:3,follow:false},voteChoices=new Set(),presentIndex=0,laserEl=null,penColor='#205f97',penWidth=4;
 const activeIds=()=>selectedIds.size?[...selectedIds]:selected?[selected]:[];
 const canEditText=o=>!!o&&['note','text','shape','ellipse','frame'].includes(o.type);
 const svgNS='http://www.w3.org/2000/svg';
@@ -475,6 +475,89 @@ async function mergeBreakoutRoom(){
  }catch(e){toast('Merge unsuccessful: '+e.message)}
 }
 
+
+/* Working, weighted decision matrix: editable criteria, weights and scores. */
+function defaultDecisionModel(){return {options:['Option A','Option B','Option C'],criteria:['Mission impact','Feasibility','Risk management'],weights:[5,3,2],scores:[[3,4,5],[5,3,4],[4,5,3]]}}
+function normalizeDecisionModel(){if(!decisionModel)decisionModel=defaultDecisionModel();}
+function decisionChanged(e){
+ const c=e.target.dataset.decision;if(!c)return;
+ normalizeDecisionModel();
+ const i=Number(e.target.dataset.index),j=Number(e.target.dataset.scoreIndex);
+ if(c==='option')decisionModel.options[i]=e.target.value.slice(0,50);
+ if(c==='criterion')decisionModel.criteria[i]=e.target.value.slice(0,50);
+ if(c==='weight')decisionModel.weights[i]=Math.max(1,Math.min(10,Number(e.target.value)||1));
+ if(c==='score')decisionModel.scores[i][j]=Math.max(1,Math.min(5,Number(e.target.value)||1));
+ localStore('ml.canvas.decision-model.v1',decisionModel);
+}
+function matrixTotals(){
+ normalizeDecisionModel();
+ return decisionModel.options.map((name,j)=>({name,score:decisionModel.criteria.reduce((sum,_,i)=>sum+decisionModel.weights[i]*decisionModel.scores[i][j],0)})).sort((a,b)=>b.score-a.score);
+}
+function openDecisionMatrix(){
+ const c=setBoardMode('Weighted Decision Matrix');normalizeDecisionModel();
+ proHeader(c,'Compare three choices against weighted criteria','Change the options, criteria, importance (1–10), and scores (1–5). Results update when you select Evaluate.');
+ const label=(text,input)=>{const row=elementNode('label','pro-matrix-label');row.textContent=text;row.appendChild(input);return row};
+ const input=(value,kind,i,j,type='text')=>{
+  const x=elementNode('input');x.type=type;x.value=value;x.dataset.decision=kind;x.dataset.index=i;if(j!==undefined)x.dataset.scoreIndex=j;
+  if(type==='number'){x.min=1;x.max=kind==='score'?5:10;x.step=1;}return x;
+ };
+ const table=elementNode('table','pro-matrix-table');
+ const head=elementNode('tr');const title=elementNode('th');title.textContent='Criterion';head.appendChild(title);
+ for(let j=0;j<3;j++){const th=elementNode('th');th.appendChild(input(decisionModel.options[j],'option',j));head.appendChild(th)}table.appendChild(head);
+ for(let i=0;i<3;i++){
+  const tr=elementNode('tr');const heading=elementNode('td');heading.appendChild(input(decisionModel.criteria[i],'criterion',i));heading.appendChild(label('Weight',input(decisionModel.weights[i],'weight',i,undefined,'number')));tr.appendChild(heading);
+  for(let j=0;j<3;j++){const td=elementNode('td');td.appendChild(input(decisionModel.scores[i][j],'score',i,j,'number'));tr.appendChild(td)}table.appendChild(tr);
+ }
+ c.appendChild(table);
+ proActions(c,[[['Evaluate choices','decision-evaluate'],['Add results to Canvas','decision-to-canvas'],['Export matrix CSV','decision-export']]]);
+ const totals=elementNode('div','pro-results');totals.id='decision-results';c.appendChild(totals);evaluateDecisionMatrix();
+}
+function evaluateDecisionMatrix(){
+ const results=$('#decision-results');if(!results)return;
+ results.replaceChildren();const ordered=matrixTotals();
+ const h=elementNode('strong');h.textContent='Ranked options';results.appendChild(h);
+ ordered.forEach((o,i)=>{const p=elementNode('p','pro-explain');p.textContent=(i+1)+'. '+o.name+' — '+o.score+' weighted points';results.appendChild(p)});
+ const winner=elementNode('p','pro-explain');
+ winner.textContent=ordered.length>1&&ordered[0].score===ordered[1].score?'The highest scores are tied; discuss trade-offs.':'Recommended for discussion: '+ordered[0].name;results.appendChild(winner);
+}
+function insertDecisionResults(){
+ if(!canChangeSelected())return toast('Board is locked');
+ const rows=matrixTotals(),center=viewportCenter();
+ add({id:makeId(),type:'shape',x:Math.round(center.x-235),y:Math.round(center.y-120),w:480,h:265,color:COLORS[1],
+ text:'WEIGHTED DECISION MATRIX\n'+rows.map((o,i)=>(i+1)+'. '+o.name+': '+o.score+' points').join('\n')+'\nNext: validate evidence and discuss trade-offs'});
+ toast('Decision matrix results added to the shared canvas');
+}
+function exportDecisionMatrix(){
+ normalizeDecisionModel();const quote=v=>'"'+String(v||'').replaceAll('"','""')+'"';
+ const rows=[['Criteria','Weight',...decisionModel.options].map(quote).join(',')];
+ for(let i=0;i<3;i++)rows.push([decisionModel.criteria[i],decisionModel.weights[i],...decisionModel.scores[i]].map(quote).join(','));
+ rows.push(['Totals','',...decisionModel.options.map((_,j)=>decisionModel.criteria.reduce((sum,_,i)=>sum+decisionModel.weights[i]*decisionModel.scores[i][j],0))].map(quote).join(','));
+ saveReport('canvas-decision-matrix.csv','text/csv;charset=utf-8',rows.join('\r\n'));
+}
+function clusterByColor(){
+ if(!canChangeSelected())return toast('Board is locked');
+ let notes=selectedObjects().filter(o=>o.type==='note'&&editable(o));
+ if(notes.length<2)notes=board.items.filter(o=>o.type==='note'&&editable(o));
+ if(notes.length<2)return toast('Add at least two sticky notes first');
+ const byColor=new Map();for(const o of notes){if(!byColor.has(o.color))byColor.set(o.color,[]);byColor.get(o.color).push(o)}
+ const start=viewportCenter(),colors=[...byColor.keys()];
+ before();for(let col=0;col<colors.length;col++){
+  for(let row=0;row<byColor.get(colors[col]).length;row++){
+   const note=byColor.get(colors[col])[row];
+   note.x=Math.round(Math.min(4300,Math.max(50,start.x-350+col*265)));
+   note.y=Math.round(Math.min(3050,Math.max(50,start.y-180+row*175)));
+  }
+ }
+ render();persistItems(notes);toast('Arranged '+notes.length+' notes into '+colors.length+' color clusters');
+}
+function sendSelectedBack(){
+ const selectedSet=new Set(activeIds());if(!selectedSet.size)return;
+ before();board.items=[...board.items.filter(o=>selectedSet.has(o.id)),...board.items.filter(o=>!selectedSet.has(o.id))];render();save();
+ // In live mode a full reorder requires the facilitator's replace action.
+ if(room?.role==='owner')enqueue('replace',{state:board});
+ else if(room)toast('Layer ordering changes are local until the instructor publishes the board');
+}
+
 /* Collaboration Canvas Pro: a compact command center atop the existing canvas. */
 function notifySelection(){updateSelectionStatus();$('#pro-selection-count').textContent=selectedIds.size+' selected';}
 function setBoardMode(name){$('#pro-panel').hidden=false;$('#pro-panel-title').textContent=name;$('#pro-panel-content').replaceChildren();return $('#pro-panel-content')}
@@ -493,7 +576,7 @@ function openProPanel(name){
  }else if(name==='edit'){
   proHeader(container,'Select and arrange','Shift-click objects or Shift-drag the canvas for multi-selection. Drag ⠿ to move; drag corners to resize.');
  const penBar=elementNode('div','pro-buttons');const color=elementNode('input');color.type='color';color.value=penColor;color.id='pro-pen-color';color.title='Pen and line color';const width=elementNode('input');width.type='range';width.min=2;width.max=20;width.value=penWidth;width.id='pro-pen-width';width.title='Pen thickness';const label=elementNode('span');label.textContent='Pen color / thickness';penBar.append(label,color,width);container.appendChild(penBar);
-  proActions(container,[[['Copy','copy'],['Paste','paste'],['Duplicate','duplicate-all'],['Delete','delete-all']],[['Group','group'],['Ungroup','ungroup'],['Lock','lock-selection'],['Unlock','unlock-selection']],[['Align left','align-left'],['Align center','align-center'],['Align right','align-right']],[['Align top','align-top'],['Align middle','align-middle'],['Align bottom','align-bottom']],[['Distribute horizontally','distribute-x'],['Distribute vertically','distribute-y']],[['Rotate left','rotate-left'],['Rotate right','rotate-right'],['Bring to front','front-all']],[['Select all','select-all'],['Clear selection','clear-selection']]]);  
+  proActions(container,[[['Copy','copy'],['Paste','paste'],['Duplicate','duplicate-all'],['Delete','delete-all']],[['Group','group'],['Ungroup','ungroup'],['Lock','lock-selection'],['Unlock','unlock-selection']],[['Align left','align-left'],['Align center','align-center'],['Align right','align-right']],[['Align top','align-top'],['Align middle','align-middle'],['Align bottom','align-bottom']],[['Distribute horizontally','distribute-x'],['Distribute vertically','distribute-y']],[['Rotate left','rotate-left'],['Rotate right','rotate-right'],['Bring to front','front-all'],['Send to back','send-back']],[['Select all','select-all'],['Clear selection','clear-selection']]]);  
  }else if(name==='facilitator'){
   proHeader(container,'Manage this session','Classroom switches are saved with live boards. Participant access is controlled by the board settings.');
   const settings=board.settings||cleanSettings();
@@ -524,7 +607,7 @@ function openProPanel(name){
  }
  }else if(name==='tools'){
   proHeader(container,'Templates that move thinking forward','Insert these as editable objects anywhere on your current board.');
-  proActions(container,[[['5 Whys','tpl-whys'],['Stakeholders','tpl-stakeholders'],['Force Field','tpl-force']],[['Six Thinking Hats','tpl-hats'],['Decision Matrix','tpl-decision'],['Systems Map','tpl-system']],[['Gradients of Agreement','tpl-gradients'],['Action Plan','tpl-action'],['Retrospective','tpl-retrospective']],[['PESTLE','tpl-pestle'],['Fishbone','tpl-fishbone'],['Team Breakout','tpl-breakout']]]);
+  proActions(container,[[['Interactive weighted decision matrix','model-decision'],['Cluster notes by color','cluster']],[['5 Whys','tpl-whys'],['Stakeholders','tpl-stakeholders'],['Force Field','tpl-force']],[['Six Thinking Hats','tpl-hats'],['Decision Matrix','tpl-decision'],['Systems Map','tpl-system']],[['Gradients of Agreement','tpl-gradients'],['Action Plan','tpl-action'],['Retrospective','tpl-retrospective']],[['PESTLE','tpl-pestle'],['Fishbone','tpl-fishbone'],['Team Breakout','tpl-breakout']]]);
  }else if(name==='present'){
   proHeader(container,'Frame-by-frame presentation','Navigate through your group frames in their order on the canvas.');
   proActions(container,[[['◀ Previous frame','prev-frame'],['Next frame ▶','next-frame']],[['Focus participants here','focus'],['Fit entire board','fit'],['Fullscreen','fullscreen']]]);
@@ -626,6 +709,12 @@ function printReport(){
  pop.document.close();pop.document.getElementById('content').textContent=reportText();
 }
 function handlePro(action){
+ if(action==='model-decision')return openDecisionMatrix();
+ if(action==='decision-evaluate')return evaluateDecisionMatrix();
+ if(action==='decision-to-canvas')return insertDecisionResults();
+ if(action==='decision-export')return exportDecisionMatrix();
+ if(action==='cluster')return clusterByColor();
+ if(action==='send-back')return sendSelectedBack();
  if(action==='new-breakout')return createBreakoutRoom();
  if(action==='breakout-link')return copyBreakoutLink();
  if(action==='breakout-open')return openBreakoutRoom();
@@ -677,7 +766,7 @@ function initPro(){
  bar.addEventListener('click',e=>{const btn=e.target.closest('[data-open]');if(btn)openProPanel(btn.dataset.open)});
  $('#pro-close').addEventListener('click',closeBoardMode);
  $('#pro-panel').addEventListener('click',e=>{const b=e.target.closest('[data-pro]');if(b)handlePro(b.dataset.pro)});
- $('#pro-panel').addEventListener('change',settingsChanged);$('#pro-panel').addEventListener('input',e=>{if(e.target.id==='pro-pen-color')penColor=e.target.value;if(e.target.id==='pro-pen-width')penWidth=Number(e.target.value)});
+ $('#pro-panel').addEventListener('change',settingsChanged);$('#pro-panel').addEventListener('change',decisionChanged);$('#pro-panel').addEventListener('input',e=>{if(e.target.id==='pro-pen-color')penColor=e.target.value;if(e.target.id==='pro-pen-width')penWidth=Number(e.target.value)});
  $('#canvas-viewport').addEventListener('pointerdown',e=>{if(e.target.closest('.canvas-text-input')&&isMulti(e)){e.preventDefault();e.stopPropagation();select(e.target.dataset.id,{append:true})}},{capture:true});
  window.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select,[contenteditable]'))return;if(e.ctrlKey||e.metaKey){
  const key=e.key.toLowerCase();
@@ -715,7 +804,7 @@ $('#copy-summary').addEventListener('click',()=>copyText(summary()));$('#timer-s
 window.addEventListener('keydown',e=>{const editing=e.target.closest('input,textarea,select,[contenteditable]');if(e.code==='Space'&&!editing){spaceDown=true;e.preventDefault()}if(editing)return;const key=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&key==='z'){e.preventDefault();undo()}else if((e.ctrlKey||e.metaKey)&&key==='y'){e.preventDefault();redo()}else if(key==='delete'||key==='backspace'){e.preventDefault();deleteSelected()}else if(!e.ctrlKey&&!e.metaKey){const shortcuts={v:'select',h:'pan',n:'note',t:'text',r:'shape',e:'ellipse',f:'frame',c:'connector',p:'stroke'};if(shortcuts[key])setTool(shortcuts[key])}});
 window.addEventListener('keyup',e=>{if(e.code==='Space')spaceDown=false});window.addEventListener('blur',()=>{spaceDown=false});window.addEventListener('beforeunload',()=>{finishInlineEdit(true);saveLocal()});
 }
-async function init(){library=localRead('ml.canvas.library.v2')||[];breakoutRooms=localRead('ml.canvas.breakout.rooms.v1')||[];voterId=localRead('ml.canvas.voter.v2')||crypto.randomUUID();localStore('ml.canvas.voter.v2',voterId);bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
+async function init(){decisionModel=localRead('ml.canvas.decision-model.v1')||defaultDecisionModel();library=localRead('ml.canvas.library.v2')||[];breakoutRooms=localRead('ml.canvas.breakout.rooms.v1')||[];voterId=localRead('ml.canvas.voter.v2')||crypto.randomUUID();localStore('ml.canvas.voter.v2',voterId);bind();initPro();const saved=localRead(DRAFT_KEY);if(saved&&saved.board){board=cleanState(saved.board);title=String(saved.title||title).slice(0,110);$('#board-title').value=title}
 render();requestAnimationFrame(fitView);timerRender();roomUI();if(entry==='guest'){const p=new URLSearchParams(location.hash.slice(1));const id=p.get('id'),token=p.get('token');if(/^[0-9a-f-]{36}$/i.test(id||'')&&/^[0-9a-f-]{36}$/i.test(token||''))await joinRoom(id,token);else{setStatus('Invitation required');toast('Open the invitation link provided by your instructor.')}}else await restoreRoom();setInterval(refresh,1900);
 }
 init().catch(e=>{setStatus('⚠ Canvas startup error');toast(e.message)});
