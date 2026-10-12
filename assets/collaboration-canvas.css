@@ -27,3 +27,6 @@
 .item.image .canvas-move-handle{right:5px;top:5px}
 .item:focus-within{outline:3px solid #2c75ac;outline-offset:3px}
 @media(hover:none){.item .canvas-move-handle{opacity:1}}
+
+/* Right mouse drag pans across the canvas without interfering with the active drawing tool. */
+#canvas-viewport.right-panning,#canvas-viewport.right-panning *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
