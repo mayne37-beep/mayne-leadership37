@@ -763,7 +763,7 @@ function handlePro(action){
  if(action==='export-json')return exportJSON();
  if(action==='copy-summary')return copyText(summary());
 }
-function bulkResetVotes(){const items=board.items.filter(o=>o.votes>0);if(!items.length)return;before();items.forEach(o=>o.votes=0);voteChoices.clear();render();save();if(room)enqueue('reset_votes',{});toast('Voting totals reset')}
+function bulkResetVotes(){const items=board.items.filter(o=>o.votes>0);if(!items.length)return;before();items.forEach(o=>o.votes=0);board.settings.voteRound=(board.settings.voteRound||0)+1;voteChoices.clear();render();save();if(room)enqueue('reset_votes',{});toast('Voting totals reset')}
 function initPro(){
  const bar=$('#pro-toolbar');if(!bar)return;laserEl=elementNode('div','canvas-laser');laserEl.hidden=true;$('#canvas-viewport').appendChild(laserEl);$('#canvas-viewport').addEventListener('pointerleave',()=>{laserEl.hidden=true});
  bar.addEventListener('click',e=>{const btn=e.target.closest('[data-open]');if(btn)openProPanel(btn.dataset.open)});
