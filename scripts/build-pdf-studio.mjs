@@ -40,3 +40,5 @@ console.log('Leadership Challenge Studio built.');
 await mkdir(path.join(root,'dist'), {recursive:true});
 await build({entryPoints:[path.join(root,'src/challenge/server.js')],outfile:path.join(root,'dist/challenge-server.mjs'),bundle:true,format:'esm',platform:'node',target:'node20',minify:false,banner:{js:"import {createRequire as __nodeRequire} from 'node:module';const require=__nodeRequire(import.meta.url);"}});
 console.log('Challenge Studio server bundled for Vercel.');
+await build({entryPoints:[path.join(root,'src/lms/app.js')],outfile:path.join(out,'assets/lms-app.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
+console.log('Mayne Learning Studio built.');

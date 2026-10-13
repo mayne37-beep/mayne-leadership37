@@ -4,6 +4,10 @@ import { next } from '@vercel/functions';
 // Exact student entry pages remain publicly available by design.
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
+  '/lms.html',
+  '/assets/lms-app.js',
+  '/assets/lms.css',
+  '/api/lms',
   '/challenge-join.html',
   '/collaboration-join.html',
   '/assets/collaboration-canvas.css',

@@ -11,7 +11,8 @@
     "test:challenge:backend": "node tests/challenge/backend.mjs",
     "test:challenge:advanced": "node tests/challenge/advanced.mjs",
     "test:challenge:browser": "node tests/challenge/browser.mjs",
-    "test:challenge:load": "node tests/challenge/load.mjs"
+    "test:challenge:load": "node tests/challenge/load.mjs",
+    "test:lms": "node --test tests/lms/model.test.mjs && node tests/lms/dom-flow.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "esbuild": "0.25.12",
     "https-proxy-agent": "7.0.6",
+    "jsdom": "26.1.0",
     "playwright": "1.62.1",
     "supabase": "2.54.11",
     "ws": "8.22.0"
