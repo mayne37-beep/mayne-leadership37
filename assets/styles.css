@@ -78,3 +78,6 @@ body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
 @media(max-width:760px){.belief-showcase{min-height:390px;padding:36px 20px}.believe-sign{width:min(88%,350px)}.believe-sign span{font-size:clamp(42px,11vw,66px)}.belief-showcase-caption{margin-top:36px}}
 
 .brand-logo{display:block;width:54px;height:54px;object-fit:contain;flex-shrink:0}.brand{display:inline-flex;align-items:center;gap:10px}
+
+/* Keep the full course navigation accessible on smaller screens. */
+@media(max-width:1180px){.menu-btn{display:block}.header .nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;padding:15px 24px 24px;background:#fff;box-shadow:0 25px 40px #1d446323;border-bottom:1px solid var(--line)}.header .nav.open{display:flex}.header .nav a{font-size:15px;padding:11px}.header .nav .nav-button{margin-top:10px;text-align:center}}
