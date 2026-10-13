@@ -1,5 +1,5 @@
 import {seed} from '../../src/lms/model.js';import {writeFile} from 'node:fs/promises';
-const c=seed();const lecture=c.items.find(i=>i.type==='lecture'),discussion=c.items.find(i=>i.type==='discussion'),assignment=c.items.find(i=>i.type==='assignment'),quiz=c.items.find(i=>i.type==='quiz');
+const c=seed();c.announcements.push({id:crypto.randomUUID(),title:'Private instructor draft',body:'Confidential draft message',published:false,date:new Date().toISOString()});const lecture=c.items.find(i=>i.type==='lecture'),discussion=c.items.find(i=>i.type==='discussion'),assignment=c.items.find(i=>i.type==='assignment'),quiz=c.items.find(i=>i.type==='quiz');
 const sql=`begin;
 insert into ml_lms.gateway_keys values(encode(sha256(convert_to(repeat('a',64),'UTF8')),'hex')) on conflict do nothing;
 do $test$
@@ -13,6 +13,12 @@ select id into peer from ml_lms.enrollments where course_id=cid and email='peer@
 begin perform ml_lms.gateway(k,learner,'outsider@example.invalid',false,'get',jsonb_build_object('course',cid));raise exception 'FAIL outsider access';exception when insufficient_privilege then null;end;
 r:=ml_lms.gateway(k,learner,'student@example.invalid',false,'get',jsonb_build_object('course',cid));
 if r->>'instructor'<>'false' or jsonb_array_length(r->'enrollments')<>1 or r::text like '%"correct"%' then raise exception 'FAIL student privacy';end if;
+if r::text like '%Confidential draft message%' or jsonb_array_length(r->'course'->'data'->'announcements')<>1 then raise exception 'FAIL announcement draft privacy';end if;
+r:=ml_lms.gateway(k,teacher,'teacher@example.invalid',true,'get',jsonb_build_object('course',cid));
+if jsonb_array_length(r->'course'->'data'->'announcements')<>2 then raise exception 'FAIL instructor announcement access';end if;
+r:=ml_lms.gateway(k,teacher,'teacher@example.invalid',true,'get',jsonb_build_object('course',cid,'preview',eid));
+if r::text like '%Confidential draft message%' then raise exception 'FAIL student preview announcement privacy';end if;
+
 begin perform ml_lms.gateway(k,learner,'student@example.invalid',false,'grade',jsonb_build_object('course',cid));raise exception 'FAIL student grading';exception when insufficient_privilege then null;end;
 r:=ml_lms.gateway(k,learner,'student@example.invalid',false,'view',jsonb_build_object('course',cid,'item','${lecture.id}'));
 r:=ml_lms.gateway(k,learner,'student@example.invalid',false,'draft',jsonb_build_object('course',cid,'item','${assignment.id}','answer',jsonb_build_object('fields',jsonb_build_array('One','Two','Three','Four'))));

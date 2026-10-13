@@ -65,3 +65,7 @@ Quiz answers save every 15 seconds and on Save answers. A server-expired quiz su
 Production student registration depends on the existing Supabase email confirmation and reset redirect configuration. Confirm these flows and email delivery capacity before enrolling a full real cohort. No unrelated Auth configuration was changed.
 
 Validation performed during implementation: rule tests, DOM-level instructor/student journey, live transactional database tests, and real Supabase account/API integration. The managed environment did not provide the required browser-control capability, so a visual browser QA pass was not performed.
+
+## Announcements
+
+Each class has a dedicated Announcements page. Instructors can create, edit, publish, return to draft, or delete announcements. The latest three are also displayed on Home. Drafts are omitted from student API responses and student view; existing announcements without a publication flag remain published. Announcements are course updates and do not send email.

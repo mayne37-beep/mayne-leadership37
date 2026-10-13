@@ -157,6 +157,8 @@ begin
  if p_action<>'get' then perform ml_lms.refresh(cid);end if;
  clean:=c.data;
  if not is_teacher or eid is not null then
+ select coalesce(jsonb_agg(value),'[]'::jsonb) into result from jsonb_array_elements(coalesce(c.data->'announcements','[]'::jsonb)) where coalesce((value->>'published')::bool,true);
+ clean:=jsonb_set(clean,'{announcements}',result);
  select coalesce(jsonb_agg(case when value->>'type'='quiz' then (value-'questions')||jsonb_build_object('question_count',jsonb_array_length(value->'questions')) else value end),'[]') into result from jsonb_array_elements(c.data->'items') where (value->>'published')::bool;clean:=jsonb_set(clean,'{items}',result);
  end if;
  return jsonb_build_object('course',jsonb_build_object('id',c.id,'name',c.name,'data',clean,'version',c.version),'instructor',is_teacher and eid is null,'me',eid,
