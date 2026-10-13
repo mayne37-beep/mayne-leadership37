@@ -157,9 +157,10 @@ begin
  if p_action<>'get' then perform ml_lms.refresh(cid);end if;
  clean:=c.data;
  if not is_teacher or eid is not null then
+ clean:=clean-'instructor_guide';
  select coalesce(jsonb_agg(value),'[]'::jsonb) into result from jsonb_array_elements(coalesce(c.data->'announcements','[]'::jsonb)) where coalesce((value->>'published')::bool,true);
  clean:=jsonb_set(clean,'{announcements}',result);
- select coalesce(jsonb_agg(case when value->>'type'='quiz' then (value-'questions')||jsonb_build_object('question_count',jsonb_array_length(value->'questions')) else value end),'[]') into result from jsonb_array_elements(c.data->'items') where (value->>'published')::bool;clean:=jsonb_set(clean,'{items}',result);
+ select coalesce(jsonb_agg(case when value->>'type'='quiz' then (value-'questions'-'instructor_notes')||jsonb_build_object('question_count',jsonb_array_length(value->'questions')) else value-'instructor_notes' end),'[]') into result from jsonb_array_elements(c.data->'items') where (value->>'published')::bool;clean:=jsonb_set(clean,'{items}',result);
  end if;
  return jsonb_build_object('course',jsonb_build_object('id',c.id,'name',c.name,'data',clean,'version',c.version),'instructor',is_teacher and eid is null,'me',eid,
  'enrollments',coalesce((select jsonb_agg(to_jsonb(en)||jsonb_build_object('summary',ml_lms.summary(en.id))) from ml_lms.enrollments en where course_id=cid and (is_teacher and eid is null or en.id=eid)),'[]'),

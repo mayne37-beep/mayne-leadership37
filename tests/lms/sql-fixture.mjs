@@ -1,5 +1,6 @@
 import {seed} from '../../src/lms/model.js';import {writeFile} from 'node:fs/promises';
 const c=seed();c.announcements.push({id:crypto.randomUUID(),title:'Private instructor draft',body:'Confidential draft message',published:false,date:new Date().toISOString()});const lecture=c.items.find(i=>i.type==='lecture'),discussion=c.items.find(i=>i.type==='discussion'),assignment=c.items.find(i=>i.type==='assignment'),quiz=c.items.find(i=>i.type==='quiz');
+c.syllabus='Student-facing syllabus';c.instructor_guide='Private course teaching guide';for(const i of c.items)i.instructor_notes='Private activity grading notes';
 const sql=`begin;
 insert into ml_lms.gateway_keys values(encode(sha256(convert_to(repeat('a',64),'UTF8')),'hex')) on conflict do nothing;
 do $test$
@@ -13,10 +14,13 @@ select id into peer from ml_lms.enrollments where course_id=cid and email='peer@
 begin perform ml_lms.gateway(k,learner,'outsider@example.invalid',false,'get',jsonb_build_object('course',cid));raise exception 'FAIL outsider access';exception when insufficient_privilege then null;end;
 r:=ml_lms.gateway(k,learner,'student@example.invalid',false,'get',jsonb_build_object('course',cid));
 if r->>'instructor'<>'false' or jsonb_array_length(r->'enrollments')<>1 or r::text like '%"correct"%' then raise exception 'FAIL student privacy';end if;
+if r::text like '%Private course teaching guide%' or r::text like '%Private activity grading notes%' or r::text not like '%Student-facing syllabus%' then raise exception 'FAIL instructor material privacy';end if;
 if r::text like '%Confidential draft message%' or jsonb_array_length(r->'course'->'data'->'announcements')<>1 then raise exception 'FAIL announcement draft privacy';end if;
 r:=ml_lms.gateway(k,teacher,'teacher@example.invalid',true,'get',jsonb_build_object('course',cid));
+if r::text not like '%Private course teaching guide%' or r::text not like '%Private activity grading notes%' then raise exception 'FAIL teacher guidance access';end if;
 if jsonb_array_length(r->'course'->'data'->'announcements')<>2 then raise exception 'FAIL instructor announcement access';end if;
 r:=ml_lms.gateway(k,teacher,'teacher@example.invalid',true,'get',jsonb_build_object('course',cid,'preview',eid));
+if r::text like '%Private course teaching guide%' or r::text like '%Private activity grading notes%' then raise exception 'FAIL preview guidance privacy';end if;
 if r::text like '%Confidential draft message%' then raise exception 'FAIL student preview announcement privacy';end if;
 
 begin perform ml_lms.gateway(k,learner,'student@example.invalid',false,'grade',jsonb_build_object('course',cid));raise exception 'FAIL student grading';exception when insufficient_privilege then null;end;
