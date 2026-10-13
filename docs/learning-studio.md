@@ -69,3 +69,11 @@ Validation performed during implementation: rule tests, DOM-level instructor/stu
 ## Announcements
 
 Each class has a dedicated Announcements page. Instructors can create, edit, publish, return to draft, or delete announcements. The latest three are also displayed on Home. Drafts are omitted from student API responses and student view; existing announcements without a publication flag remain published. Announcements are course updates and do not send email.
+
+## Current course imports
+
+The seven current authored courses are copied into instructor-owned Learning Studio offerings with 81 modules/lectures. Each lecture retains its structured interactive blocks, media links, and source theme. Instructor notes are excluded. Complete lesson records the lecture requirement; browser practice scores are separate from official grades. Reflections are grouped into 70 native worksheets, with repeated identical prompts consolidated. The eight existing checkpoint quizzes become native server-graded quizzes. The other five courses receive application checks using their existing practice and reflection questions; written answers require instructor grading. Each course has an application discussion and welcome announcement. Review these assessment settings before publishing.
+
+The imported offerings start unpublished, with no students enrolled. Use Settings → Duplicate as new class for a new cohort. The original Lesson Authoring Studio courses remain intact. Import metadata records source identity and version; imported content is a snapshot, so subsequent authoring edits do not silently change live learner records. Clip start and end times in existing YouTube URLs are honored by the lesson renderer.
+
+`node scripts/import-current-courses.mjs SOURCE_DIRECTORY OUTPUT_DIRECTORY` prepares deterministic, validated LMS JSON from source backups. It makes no database writes and preserves source files. Importing into the database should check source versions, ownership, and empty enrollments before replacing an offering. Never overwrite an enrolled class as a refresh.

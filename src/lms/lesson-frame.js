@@ -1,0 +1,4 @@
+import {mountCourse} from '../../assets/lesson-player.js';
+const host=document.querySelector('#lesson');let channel=null,instance=null;
+window.addEventListener('message',event=>{if(event.source!==window.parent||event.origin!==location.origin||event.data?.kind!=='lms-lesson-init')return;const payload=event.data;if(!payload.channel||!payload.course?.lessons?.length)return;channel=payload.channel;instance?.destroy();instance=mountCourse(host,payload.course,{storageSuffix:payload.storageKey,preview:payload.preview,onComplete:()=>{const complete=host.querySelector('[data-completion]');if(complete){const title=complete.querySelector('h2');if(title)title.textContent='Lesson complete';}window.parent.postMessage({kind:'lms-lesson-complete',channel},location.origin);}});const next=host.querySelector('.next-lesson');if(next)next.textContent='Complete lesson ✓';});
+window.parent.postMessage({kind:'lms-lesson-ready'},location.origin);

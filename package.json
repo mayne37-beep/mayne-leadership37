@@ -12,7 +12,7 @@
     "test:challenge:advanced": "node tests/challenge/advanced.mjs",
     "test:challenge:browser": "node tests/challenge/browser.mjs",
     "test:challenge:load": "node tests/challenge/load.mjs",
-    "test:lms": "node --test tests/lms/model.test.mjs && node tests/lms/dom-flow.mjs"
+    "test:lms": "node --test tests/lms/model.test.mjs tests/lms/import.test.mjs tests/lms/player.test.mjs && node tests/lms/dom-flow.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",

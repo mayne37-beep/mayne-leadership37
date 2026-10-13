@@ -42,3 +42,6 @@ await build({entryPoints:[path.join(root,'src/challenge/server.js')],outfile:pat
 console.log('Challenge Studio server bundled for Vercel.');
 await build({entryPoints:[path.join(root,'src/lms/app.js')],outfile:path.join(out,'assets/lms-app.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
 console.log('Mayne Learning Studio built.');
+
+await build({entryPoints:[path.join(root,'src/lms/lesson-frame.js')],outfile:path.join(out,'assets/lms-lesson.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
+console.log('Learning Studio interactive lesson player built.');

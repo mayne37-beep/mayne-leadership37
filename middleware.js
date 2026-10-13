@@ -5,6 +5,11 @@ import { next } from '@vercel/functions';
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
   '/lms.html',
+  '/lms-lesson.html',
+  '/assets/lms-lesson.js',
+  '/assets/lesson-studio.css',
+  '/assets/ct-foundations-banner.jpg',
+  '/assets/ct-definition.jpg',
   '/assets/lms-app.js',
   '/assets/lms.css',
   '/api/lms',
