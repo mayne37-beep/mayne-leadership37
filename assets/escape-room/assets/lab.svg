@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+<defs><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#ecf2f3"/><stop offset="1" stop-color="#bdd0d3"/></linearGradient><linearGradient id="floor" x2="0" y2="1"><stop stop-color="#a4b6b9"/><stop offset="1" stop-color="#d1dee0"/></linearGradient><linearGradient id="desk" x2="0" y2="1"><stop stop-color="#e5eaeb"/><stop offset="1" stop-color="#aebdc4"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="13"/></filter></defs>
+<path fill="url(#wall)" d="M0 0h1600v760H0z"/><path fill="#aebfc5" d="M0 0l178 89v667L0 1000z"/><path fill="#d2dddf" d="M0 0h1600l-135 89H178z"/><path fill="url(#floor)" d="M178 756h1287l135 244H0z"/>
+<g stroke="#8ea9b0" fill="none" stroke-width="2"><path d="M178 173h1287M178 453h1287M178 741h1287M385 89v667M723 89v667M1072 89v667M0 881h1534M450 756l-79 244M1060 756l211 244"/></g>
+<path fill="#90adb5" d="M235 204h400v203H235z"/><path fill="#d9edf0" d="M250 218h370v175H250z"/><path fill="#f6fbfb" d="M261 230h349v142H261z"/>
+<text x="435" y="270" text-anchor="middle" fill="#4d787f" font-family="Arial,sans-serif" font-size="22" letter-spacing="4">EVIDENCE LAB</text>
+<g fill="#81b1b5"><rect x="287" y="293" width="28" height="51" rx="2"/><rect x="326" y="310" width="28" height="34" rx="2"/><rect x="365" y="286" width="28" height="58" rx="2"/></g>
+<g fill="#a2bbbf"><rect x="421" y="293" width="158" height="7" rx="3"/><rect x="421" y="314" width="121" height="7" rx="3"/><rect x="421" y="335" width="147" height="7" rx="3"/></g>
+<rect x="924" y="171" width="314" height="299" rx="8" fill="#9fb6bd"/><rect x="940" y="186" width="282" height="268" rx="4" fill="#edf3f2"/>
+<path fill="#728e95" d="M984 220h197v23H984z"/><g fill="#b3c7c9"><rect x="984" y="274" width="66" height="62" rx="4"/><rect x="1070" y="274" width="111" height="11" rx="3"/><rect x="1070" y="303" width="83" height="11" rx="3"/><rect x="984" y="368" width="197" height="11" rx="3"/><rect x="984" y="397" width="147" height="11" rx="3"/></g>
+<ellipse cx="811" cy="846" rx="613" ry="46" fill="#1c4852" opacity=".23" filter="url(#blur)"/>
+<path fill="#859da6" d="M271 640h990v181H271z"/><path fill="url(#desk)" d="M317 583h922l98 89H221z"/><path fill="#e9f0f1" d="M221 672h1116v15H221z"/><path fill="#a2b7bf" d="M272 687h35v175h-35zM1243 687h34v175h-34z"/>
+<path fill="#607b84" d="M614 787h410v88H614z"/><path fill="#a4b8bd" d="M628 801h182v60H628zM828 801h182v60H828z"/>
+<path fill="#94aeb5" d="M95 442h87v305H95z"/><path fill="#cddbdd" d="M103 454h71v282H103z"/>
+<path stroke="#769ca2" stroke-width="4" d="M117 497h44M117 519h44M117 541h44"/>
+<path fill="#9bb5bd" d="M1420 309h180v440h-180z"/><path fill="#e3edef" d="M1440 329h160v197h-160z"/><path fill="#a9c5ca" d="M1440 548h160v181h-160z"/>
+<path fill="#fff" opacity=".2" d="M177 89h366L1049 1000H493z"/>
+</svg>

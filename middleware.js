@@ -4,6 +4,18 @@ import { next } from '@vercel/functions';
 // Exact student entry pages remain publicly available by design.
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
+  '/escape-room-play.html',
+  '/api/escape-studio',
+  '/assets/escape-room/styles.css',
+  '/assets/escape-room/engine.js',
+  '/assets/escape-room/panorama.js',
+  '/assets/escape-room/template.js',
+  '/assets/escape-room/cloud.js',
+  '/assets/escape-room/app.js',
+  '/assets/escape-room/player-boot.js',
+  '/assets/escape-room/assets/briefing.svg',
+  '/assets/escape-room/assets/lab.svg',
+  '/assets/escape-room/assets/command.svg',
   '/lms.html',
   '/lms-lesson.html',
   '/assets/lms-lesson.js',
