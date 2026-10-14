@@ -164,6 +164,18 @@ function triggerForm(id){
     mutate(()=>{if(old){Object.assign(old,next);if(!next.condition)delete old.condition;}else s.triggers.push(next);});close();
   };
 }
+function courseLibrary(){show('Course library','<div class="project-item"><strong>Critical Thinking: Reason Better, Decide Better</strong><small>Paul–Elder framework · 8 modules · 64 slides · about 2 hours<br>Worked cases, feedback activities, capstone, and a 12-question learning assessment.</small>'+btn('Open editable copy','course-open')+'<a href="/critical-thinking-paul-elder.html" target="_blank" rel="noopener">Open learner course</a></div><p>The editable copy is kept as a device draft. Save to website when project storage is available, or download your project for a portable backup.</p>');}
+async function openCourseTemplate(){
+  const response=await fetch('/assets/interactive-courses/critical-thinking-paul-elder.mayne-course.json');
+  if(!response.ok)throw Error('Unable to open the course. Re-enter the site PIN and try again.');
+  let data;try{data=await response.json();}catch{throw Error('Re-enter the site PIN, then open the course library again.');}
+  const issues=validateProject(data);if(issues.length)throw Error(issues[0]);
+  if(saving)await saving.catch(()=>{});
+  if(dirty){try{await save();}catch{backup();notify('Downloaded your current draft before opening the course.');}}
+  stopTiming();preview?.destroy();preview=null;if($('preview-modal').open)$('preview-modal').close();
+  project=data;project.id=uid();remote=false;version=0;dirty=true;resetSelection();localSave();close();draw();status('Critical Thinking opened · editable device draft');
+  notify('Course opened. Edit any slide, Preview course, or Download project. Save to website to keep a shared project.');
+}
 async function projects(){
   show('Your projects','<p>Loading saved projects…</p>');
   try{const list=await request('list');$('modal-body').innerHTML='<p>Website projects are shared with instructors who have the site PIN.</p>'+list.map(p=>'<div class="project-item"><strong>'+esc(p.title)+'</strong><small>Version '+p.version+'<br>'+new Date(p.updated_at).toLocaleDateString()+'</small>'+btn('Open','project-open','data-project="'+p.id+'"')+btn('History','project-history','data-project="'+p.id+'"')+'</div>').join('')+(list.length?'':'<p>No website projects yet. Save your course to create one.</p>');}
@@ -175,6 +187,7 @@ function removeObject(){const o=currentObject();if(!o)return;mutate(()=>{current
 async function action(name,b){
   const s=currentSlide(),l=currentLayer(),o=currentObject();
   if(name==='close-modal')return close();if(name==='save')return save();if(name==='backup')return backup();if(name==='projects')return projects();
+  if(name==='course-library')return courseLibrary();if(name==='course-open')return openCourseTemplate();
   if(name==='project-open')return openProject(b.dataset.project);
   if(name==='project-history'){const history=await request('history',{id:b.dataset.project});show('Saved versions',history.length?history.map(h=>'<div class="project-item"><strong>Version '+h.version+'</strong><small>'+new Date(h.created_at).toLocaleString()+'</small>'+btn('Download source','history-download','data-history="'+h.version+'"')+'</div>').join(''):'<p>A previous version appears after the project is edited and saved.</p>');$('modal-body')._history=history;return;}
   if(name==='history-download'){const h=$('modal-body')._history.find(h=>h.version===Number(b.dataset.history));download(JSON.stringify(h.data,null,2),'course-version-'+h.version+'.json');return;}
@@ -237,4 +250,8 @@ if(recovered?.data&&!validateProject(recovered.data).length){project=recovered.d
 resetSelection();draw();status(dirty?'Recovered device draft · save to website':remote?'Website project · device copy':'Editable example · save to create your website project',dirty);
 // A clean website copy is refreshed before editing; an unsynced device draft is always retained.
 if(remote&&!dirty){const openingId=project.id;request('get',{id:openingId}).then(r=>{if(project.id===openingId&&!dirty&&r.version!==version){project=r.data;version=r.version;resetSelection();localSave();draw();status('Latest website version loaded ✓');}}).catch(()=>status('Offline copy · website save can be retried',true));}
+if(new URLSearchParams(location.search).get('course')==='paul-elder'){
+  if(recovered?.data)courseLibrary();else openCourseTemplate().catch(e=>notify(e.message));
+}
 export const editorForTesting=()=>({project,slideId,layerId,objectId,version,remote,dirty});
+
