@@ -83,7 +83,7 @@ function draw(){if(!slideById(project,slideId)){slideId=project.startSlideId;obj
   $('undo').disabled=!undo.length;$('redo').disabled=!redo.length;outline();canvas();timeline();inspector();
 }
 function select(id){objectId=id;editState='normal';canvas();timeline();inspector();}
-function editText(e){const o=currentObject();if(!o||o.locked||!['text','button'].includes(o.type))return;const text=e.querySelector('.obj-text');if(!text)return;checkpoint();text.setAttribute('contenteditable','plaintext-only');text.setAttribute('tabindex','0');text.setAttribute('role','textbox');text.setAttribute('aria-label','Edit '+o.name);text.focus();
+function editText(e){stopTiming();const o=currentObject();if(!o||o.locked||!['text','button'].includes(o.type))return;const text=e.querySelector('.obj-text');if(!text)return;checkpoint();text.setAttribute('contenteditable','plaintext-only');text.setAttribute('tabindex','0');text.setAttribute('role','textbox');text.setAttribute('aria-label','Edit '+o.name);text.focus();
   const range=document.createRange();range.selectNodeContents(text);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
   text.oninput=()=>{const value=text.innerText??text.textContent;if(editState==='normal')o.text=value;else o.states[editState].text=value;change(false);};
   text.onblur=()=>{text.setAttribute('contenteditable','false');text.oninput=null;canvas();inspector();};
@@ -91,10 +91,12 @@ function editText(e){const o=currentObject();if(!o||o.locked||!['text','button']
 $('canvas').addEventListener('dblclick',ev=>{const e=ev.target.closest('.author-object');if(!e)return;if(objectId!==e.dataset.object)select(e.dataset.object);editText($('canvas').querySelector('[data-object="'+objectId+'"]'));});
 $('canvas').addEventListener('pointerdown',ev=>{
   if(ev.button!==0||ev.target.closest('[contenteditable=true],[contenteditable=plaintext-only]'))return;
+  stopTiming();
   const e=ev.target.closest('.author-object');if(!e){select(null);return;}
   const corner=ev.target.closest('[data-corner]')?.dataset.corner,id=e.dataset.object;
   if(id!==objectId)select(id);const o=currentObject();if(!o||o.locked)return;ev.preventDefault();
   const start={x:ev.clientX,y:ev.clientY,ox:o.x,oy:o.y,w:o.w,h:o.h},element=$('canvas').querySelector('[data-object="'+id+'"]');let moved=false;
+  try{element.setPointerCapture?.(ev.pointerId);}catch{}
   const move=event=>{const dx=(event.clientX-start.x)/scale,dy=(event.clientY-start.y)/scale;if(!moved&&Math.abs(dx)+Math.abs(dy)<2)return;if(!moved){checkpoint();moved=true;}
     if(corner){const west=corner.includes('w'),north=corner.includes('n');o.w=Math.max(12,start.w+(west?-dx:dx));o.h=Math.max(12,start.h+(north?-dy:dy));o.x=west?start.ox+start.w-o.w:start.ox;o.y=north?start.oy+start.h-o.h:start.oy;}
     else{o.x=start.ox+dx;o.y=start.oy+dy;}
@@ -108,7 +110,7 @@ $('inspector').addEventListener('change',ev=>{
   if(key==='editState'){editState=input.value;canvas();return;}
   const value=input.type==='checkbox'?input.checked:input.type==='number'?Number(input.value):input.value;
   const target=key.startsWith('slide.')?currentSlide():key.startsWith('layer.')?currentLayer():currentObject(),property=key.replace(/^(slide|layer)\./,'');
-  if(key==='startSlide'){if(value)mutate(()=>project.startSlideId=currentSlide().id);return;}
+  if(key==='startSlide'){if(value)mutate(()=>project.startSlideId=currentSlide().id);else inspector();return;}
   if(!target)return;
   mutate(()=>{if(target===currentObject()&&editState!=='normal'&&['text','fill','color','fontSize','bold','align','radius'].includes(property))target.states[editState][property]=value;
     else target[property]=['w','h'].includes(property)?clamp(value,12,7680):property==='fontSize'?clamp(value,8,180):property==='duration'?clamp(value,.1,3600):property==='start'?clamp(value,0,3600):value;});
