@@ -35,8 +35,11 @@ export default async function handler(req,res){
  if(action==='session-settings'&&(payload.mode!==undefined&&!['edit','view'].includes(payload.mode)||payload.locked!==undefined&&typeof payload.locked!=='boolean'||payload.active!==undefined&&typeof payload.active!=='boolean'||payload.minutes!==undefined&&(!Number.isInteger(payload.minutes)||payload.minutes<0||payload.minutes>180)))return send(400,{error:'Invalid classroom settings.'});
  if(!process.env.LESSON_STUDIO_GATEWAY_KEY)return send(503,{error:'Website saving is temporarily unavailable. Your device draft is retained; export JSON for a backup.'});
  try{
-  const upstream=await fetch(URL+'/rest/v1/rpc/ml_systems_rpc',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),signal:AbortSignal.timeout(24000)});
+  const upstream=await fetch(URL+'/rest/v1/rpc/ml_systems_safe_rpc',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),signal:AbortSignal.timeout(24000)});
   const data=await upstream.json();
+  // PostgREST may retry SQLSTATE 40001. An explicit result keeps stale saves
+  // prompt and deterministic instead of exhausting the serverless timeout.
+  if(data?.conflict)return send(409,{error:'Another person saved first. Your device draft is kept. Export it, then reload the website version.'});
   if(!upstream.ok){const code=data.code,status=code==='40001'?409:code==='P0002'?404:code==='42501'?403:code==='54000'?429:503;return send(status,{error:status===409?'Another person saved first. Your device draft is kept. Export it, then reload the website version.':status===404?'This map or classroom session is unavailable or has expired.':status===403?'Classroom access denied or editing is locked.':status===429?'This classroom session is full (60 participants).':'Website storage is unavailable. Your device draft is retained.'});}
   return send(200,data);
  }catch{return send(503,{error:'Website storage could not be reached. Your device draft is retained.'});}

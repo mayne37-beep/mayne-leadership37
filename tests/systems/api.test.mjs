@@ -19,6 +19,7 @@ test('API forwards only validated requests and maps database conflicts / locks',
  try{globalThis.fetch=async(url,opt)=>{passed=JSON.parse(opt.body);return {ok:true,json:async()=>({version:1})};};const p=template('burnout');assert.equal((await invoke('save',{id:p.id,version:0,data:p})).statusCode,200);assert.equal(passed.p_action,'save');
   await invoke('session-create',{id:p.id});assert.match(passed.p_payload.room,/^[a-f0-9]{48}$/);assert(passed.p_payload.session);
   globalThis.fetch=async()=>({ok:false,json:async()=>({code:'40001'})});assert.equal((await invoke('save',{id:p.id,version:1,data:p})).statusCode,409);
+  globalThis.fetch=async()=>({ok:true,json:async()=>({conflict:true})});assert.equal((await invoke('save',{id:p.id,version:1,data:p})).statusCode,409);
   globalThis.fetch=async()=>({ok:false,json:async()=>({code:'42501'})});assert.equal((await invoke('session-get',{room:'a'.repeat(48)})).statusCode,403);
  }finally{globalThis.fetch=original;delete process.env.LESSON_STUDIO_GATEWAY_KEY;}
 });
