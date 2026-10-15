@@ -15,6 +15,11 @@ async function setup({device=new Map(),remote=new Map(),hosted=!standalone,offli
  const errors=[],calls=[];const vc=new VirtualConsole();vc.on('jsdomError',error=>errors.push(error.message));
  const dom=new JSDOM('<!doctype html><div id="app"></div><dialog id="modal"></dialog><div id="toast"></div><input id="fileInput" type="file">',{url:'https://studio.test/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
  const w=dom.window,d=w.document;
+ const viewport={width:800},scrolled=[];
+ w.HTMLElement.prototype.getBoundingClientRect=function(){const width=this.id==='stage'?viewport.width:800,height=this.id==='stage'?(parseFloat(this.style.height)||width*10/16):500;return {left:0,top:0,width,height,right:width,bottom:height};};
+ w.HTMLElement.prototype.scrollIntoView=function(){scrolled.push(this.querySelector('#stage')?.dataset.sceneId);};
+ const observers=new Set();w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(){observers.add(this);}disconnect(){observers.delete(this);}};
+ const resize=width=>{viewport.width=width;for(const observer of [...observers])observer.callback();w.dispatchEvent(new w.Event('resize'));};
  w.HTMLDialogElement.prototype.showModal=function(){this.open=true;};w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};
  if(!fallback)w.indexedDB=indexedStore(device,fail);
  else w.localStorage.setItem('escape-projects',JSON.stringify([...device.values()]));
@@ -33,7 +38,7 @@ async function setup({device=new Map(),remote=new Map(),hosted=!standalone,offli
  const click=selector=>{const el=d.querySelector(selector);assert.ok(el,'Missing '+selector);el.click();};
  const input=(selector,value)=>{const el=d.querySelector(selector);assert.ok(el,'Missing '+selector);el.dispatchEvent(new w.FocusEvent('focusin',{bubbles:true}));el.value=value;el.dispatchEvent(new w.Event('input',{bubbles:true}));el.dispatchEvent(new w.Event('change',{bubbles:true}));el.dispatchEvent(new w.FocusEvent('focusout',{bubbles:true}));};
  const submit=selector=>d.querySelector(selector).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
- return {w,d,dom,calls,errors,device,remote,offline,fail,click,input,submit,close:()=>{dom.window.close();assert.deepEqual(errors,[]);}};
+ return {w,d,dom,calls,errors,device,remote,offline,fail,click,input,submit,resize,scrolled,close:()=>{dom.window.close();assert.deepEqual(errors,[]);}};
 }
 
 test('startup ignores the previous project, opens an empty canvas and preserves saved work',async()=>{
@@ -47,6 +52,33 @@ test('startup ignores the previous project, opens an empty canvas and preserves 
  assert.equal(ui.d.querySelector('#modalTitle').textContent,'My Projects');assert.equal(ui.device.size,1);
  ui.click('[data-open-project="room-legacy"]');await wait(()=>ui.d.querySelector('.top-title strong').textContent==='Existing room');
  assert.equal(ui.d.querySelectorAll('.scene-card').length,3);ui.close();
+});
+
+test('selecting scenes reveals a sized editable canvas and retains object edits after switching',async t=>{
+ const ui=await setup(),{d,w}=ui;
+ t.after(()=>ui.close());
+ const first=d.querySelector('.scene-card').dataset.scene;
+ assert.equal(d.querySelector('#stage').style.height,'500px');
+ ui.click('[data-action="add-scene"]');const second=d.querySelector('.scene-card.selected').dataset.scene;
+ await wait(()=>ui.scrolled.includes(second));
+ assert.equal(d.querySelector('#stage').dataset.sceneId,second);
+ ui.click('[data-scene="'+first+'"]');await wait(()=>ui.scrolled.includes(first));
+ assert.equal(d.querySelector('#stage').getAttribute('aria-label'),'Editable scene canvas: Scene 1');
+ ui.click('[data-add="clue"]');ui.input('[data-field="object.body"]','Editable after changing scenes.');
+ const object=d.querySelector('[data-object]'),id=object.dataset.object;
+ object.dispatchEvent(new w.MouseEvent('pointerdown',{bubbles:true,button:0,clientX:400,clientY:250}));
+ w.dispatchEvent(new w.MouseEvent('pointermove',{clientX:480,clientY:300}));w.dispatchEvent(new w.MouseEvent('pointerup',{clientX:480,clientY:300}));
+ assert.equal(object.style.left,'55.5%');assert.equal(object.style.top,'51.5%');
+ d.querySelector('[data-resize]').dispatchEvent(new w.MouseEvent('pointerdown',{bubbles:true,button:0,clientX:480,clientY:300}));
+ w.dispatchEvent(new w.MouseEvent('pointermove',{clientX:560,clientY:350}));w.dispatchEvent(new w.MouseEvent('pointerup',{clientX:560,clientY:350}));
+ assert.equal(d.querySelector('[data-field="object.w"]').value,'19');assert.equal(d.querySelector('[data-field="object.h"]').value,'27');
+ ui.resize(320);assert.equal(d.querySelector('#stage').style.height,'200px');
+ ui.resize(1200);assert.equal(d.querySelector('#stage').style.height,'750px');
+ await delay(360);ui.click('[data-scene="'+second+'"]');assert.equal(d.querySelectorAll('[data-object]').length,0);
+ ui.click('[data-scene="'+first+'"]');ui.click('[data-object="'+id+'"]');
+ assert.equal(d.querySelector('[data-field="object.body"]').value,'Editable after changing scenes.');
+ assert.equal(d.querySelector('[data-object="'+id+'"]').style.left,'55.5%');
+ ui.click('[data-tab="scene"]');ui.click('[data-action="canvas-focus"]');await wait(()=>d.activeElement.id==='stage');
 });
 
 test('named saves and autosaves reopen after a fresh blank startup without duplicate empty rooms',async()=>{
