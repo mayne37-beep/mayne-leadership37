@@ -22,6 +22,7 @@ const PUBLIC_PAGES = new Set([
   '/assets/escape-room/template.js',
   '/assets/escape-room/cloud.js',
   '/assets/escape-room/app.js',
+  '/assets/escape-room/project-assets.js',
   '/assets/escape-room/player-boot.js',
   '/assets/escape-room/assets/briefing.svg',
   '/assets/escape-room/assets/lab.svg',
