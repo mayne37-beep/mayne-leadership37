@@ -4,7 +4,7 @@ Instructor workspace: `/escape-room-studio.html`, linked from Classroom Tools. I
 
 ## Workflow
 
-1. Open a website room or create a new blank/example room.
+1. The studio always opens with a blank project and one empty scene. Use **Save project** to name it, or open **My Projects** to continue an existing room. Edited rooms save automatically; untouched blank projects do not fill the project list. My Projects shows last edited dates, supports search, and includes website projects and unsynced device drafts. The example room remains available through **Use example**.
 2. Edit scene backgrounds, clickable clues, images, collectible items, answer locks, drop targets, doorways, and finish puzzles. Move and resize objects directly on the scene.
 3. For 360-degree scenes, upload a full equirectangular panorama, normally a 2:1 JPG/PNG. Drag empty space to look around, place anchored clues, and save the starting view.
 4. Configure accepted items, placement/consumption behavior, prerequisites, hidden-object reveals, scene transitions, progressive hints, and learning/debrief text.

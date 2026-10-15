@@ -36,7 +36,7 @@ async function setup(player=false){
  for(const file of ['engine.js','panorama.js','template.js','cloud.js'])w.eval(fs.readFileSync(path.join(root,'assets/escape-room',file),'utf8'));
  if(player){const {learnerProject}=await import('../../src/escape/model.js');const r=records.get(template.id);w.ESCAPE_PACKAGE=learnerProject(r.published,r.token,r.publishedVersion);w.ESCAPE_REMOTE_ROOM=r.token;}
  w.eval(fs.readFileSync(path.join(root,'assets/escape-room/app.js'),'utf8'));
- if(!player)await wait(()=>d.querySelector('.save-indicator')?.textContent==='Saved on your website');
+ if(!player)await wait(()=>d.querySelector('[data-action="library"]'));
  else await wait(()=>d.querySelector('[data-action="begin"]'));
  return {dom,w,d};
 }
@@ -44,7 +44,11 @@ async function setup(player=false){
  const teacher=await setup();let {w,d}=teacher;
  const q=selector=>{const el=d.querySelector(selector);assert.ok(el,'Missing '+selector);return el;};const click=selector=>q(selector).click();
  const input=(selector,value)=>{const el=q(selector);el.dispatchEvent(new w.FocusEvent('focusin',{bubbles:true}));el.value=value;el.dispatchEvent(new w.Event('input',{bubbles:true}));el.dispatchEvent(new w.Event('change',{bubbles:true}));el.dispatchEvent(new w.FocusEvent('focusout',{bubbles:true}));};
- assert.equal(d.querySelectorAll('.scene-card').length,3);assert.ok(q('.header .brand').href.endsWith('/facilitation.html'));
+ assert.equal(d.querySelectorAll('.scene-card').length,1);assert.equal(d.querySelectorAll('[data-object]').length,0);
+ assert.equal(records.size,1,'opening a blank project must not save an unused empty room');
+ click('[data-action="library"]');await wait(()=>d.querySelector('[data-open-project="'+template.id+'"]'));
+ click('[data-open-project="'+template.id+'"]');await wait(()=>d.querySelectorAll('.scene-card').length===3);
+ assert.ok(q('.header .brand').href.endsWith('/facilitation.html'));
  click('[data-object="evidence-note"]');input('[data-field="object.name"]','Cloud-saved evidence summary');
  await wait(()=>records.get(template.id).data.scenes[0].objects[0].name==='Cloud-saved evidence summary');
  assert.equal(records.get(template.id).published.scenes[0].objects[0].name,'Evidence summary','draft edits must not mutate a published room');
