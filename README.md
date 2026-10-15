@@ -2,6 +2,10 @@
 
 The website is deployed from `mayne37-beep/mayne-leadership37` to the existing Vercel project `mayne-leadership37`. Production: https://www.mayneleadership.com.
 
+## Systems Mapping Studio
+
+Thinking Tools now opens `systems-mapping-studio.html`: a direct-edit systems canvas with signed causal links, bounded feedback-loop analysis, delays, boundaries, leverage and consequence prompts, nine templates, guided workflows, worksheets, website/device project storage, version history, exports, and classroom sharing. See [the implementation and verification guide](docs/systems-mapping-studio.md) for usage, calculations, database design, and limits. Run `npm run test:systems`. Classroom student links use `systems-mapping-join.html` and the isolated PIN-aware `/api/systems-studio` gateway.
+
 ## Build
 
 ```sh

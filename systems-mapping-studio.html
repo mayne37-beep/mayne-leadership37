@@ -8,14 +8,17 @@
 <link rel="icon" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/systems-mapping-studio.css">
 <script type="module" src="/assets/systems-mapping-studio.js"></script>
+<meta name="referrer" content="no-referrer">
+<script defer src="/assets/vendor/qrcode.min.js"></script>
 </head>
-<body>
+<body data-entry="owner">
 <a class="skip" href="#viewport">Skip to canvas</a>
 <header class="topbar">
   <a class="brand" href="/tools.html"><img src="/assets/jm-leadership-logo.svg" width="42" height="42" alt=""><span><small>MAYNE LEADERSHIP · THINKING TOOLS</small><strong>Systems Mapping <em>Studio</em></strong></span></a>
   <div class="project-name"><label for="project-title" class="sr">Project name</label><input id="project-title" value="Untitled System Map" maxlength="100" aria-label="Project name"><span id="save-status" role="status">New blank map</span></div>
   <div class="top-actions"><button id="new-map" title="Create a blank map">New</button><button id="open-library" title="Saved maps">My Maps</button><button id="save-map" class="primary" title="Save this map">Save</button><button id="present" title="Presentation mode">Present</button><button id="export-menu" title="Export map and report">Export ▾</button><a class="home-link" href="/tools.html">← Thinking Tools</a></div>
 </header>
+<div id="session-strip" class="session-strip"></div>
 <div class="shell">
   <aside class="sidebar left-panel" id="left-panel">
     <div class="panel-header"><div><span class="eyebrow">BUILD YOUR SYSTEM</span><h2>Mapping toolbox</h2></div><button data-action="toggle-left" title="Collapse toolbox" aria-label="Collapse toolbox">☰</button></div>
@@ -29,6 +32,7 @@
       <div class="section-head">Starter maps</div>
       <label class="sr" for="template">Choose a starter map</label><select id="template"><option value="">Select a systems-thinking template…</option><option value="engagement">Engagement &amp; Performance</option><option value="burnout">Workload &amp; Burnout</option><option value="limits">Limits to Growth</option><option value="fixes">Fixes That Fail</option><option value="burden">Shifting the Burden</option><option value="stock">Stock and Flow Example</option></select>
       <button id="load-template" class="secondary full">Load selected template</button><p class="hint">Templates replace your current canvas after confirmation, but your saved maps remain in My Maps.</p>
+      <div class="section-head">Systems-thinking tools</div><div class="relation-tools"><button data-action="iceberg">◈ Iceberg exploration</button><button data-action="behavior">⌁ Behavior over time</button><button data-action="simulation">⇢ Stock &amp; flow illustration</button><button data-action="actions">✦ Interventions &amp; action plan</button><button id="classroom" class="owner-only">♙ Classroom session</button><button data-action="help">? Studio guide &amp; shortcuts</button></div>
       <div class="section-head">Learning reference</div>
       <p class="hint">Positive (+) means a same-direction influence; negative (−) means an opposite-direction influence. Neither means good or bad. A reinforcing loop has an even number of negative links; a balancing loop has an odd number.</p>
       <a class="text-link" href="/systems-thinking-foundations.html">Open Systems Thinking course ↗</a>
@@ -39,6 +43,7 @@
       <button data-tool="select" class="tool active" title="Select and move (V)">↖ <span>Select</span></button>
       <button data-tool="pan" class="tool" title="Pan (H or Space)">✋ <span>Pan</span></button>
       <button data-tool="connect" class="tool" title="Connect nodes (C)">↗ <span>Connect</span></button>
+      <button data-action="mobile-left" title="Toggle toolbox">☰</button><button data-action="mobile-right" title="Toggle inspector">☷</button>
       <span class="separator"></span>
       <button id="undo" title="Undo (Ctrl+Z)" disabled>↶</button><button id="redo" title="Redo (Ctrl+Y)" disabled>↷</button>
       <button id="fit" title="Fit map to view">⌗ Fit</button>

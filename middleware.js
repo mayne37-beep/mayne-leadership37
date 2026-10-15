@@ -4,6 +4,16 @@ import { next } from '@vercel/functions';
 // Exact student entry pages remain publicly available by design.
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
+  '/systems-mapping-join.html',
+  '/api/systems-studio',
+  '/assets/systems-mapping-studio.css',
+  '/assets/systems-mapping-studio.js',
+  '/assets/systems-pdf.js',
+  '/assets/systems/model.js',
+  '/assets/systems/templates.js',
+  '/assets/systems/exports.js',
+  '/assets/systems/storage.js',
+  '/assets/vendor/qrcode.min.js',
   '/escape-room-play.html',
   '/api/escape-studio',
   '/assets/escape-room/styles.css',

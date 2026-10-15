@@ -14,7 +14,8 @@
     "test:challenge:load": "node tests/challenge/load.mjs",
     "test:lms": "node --test tests/lms/model.test.mjs tests/lms/import.test.mjs tests/lms/player.test.mjs && node tests/lms/dom-flow.mjs",
     "test:interactive": "node --test tests/interactive/model.test.mjs tests/interactive/api.test.mjs && node tests/interactive/dom-flow.mjs",
-    "test:escape": "node --test tests/escape/engine.test.cjs tests/escape/api.test.mjs tests/escape/projects.test.cjs && node tests/escape/dom-flow.cjs"
+    "test:escape": "node --test tests/escape/engine.test.cjs tests/escape/api.test.mjs tests/escape/projects.test.cjs && node tests/escape/dom-flow.cjs",
+    "test:systems": "node --test tests/systems/model.test.mjs tests/systems/api.test.mjs && node tests/systems/dom-flow.mjs && node tests/systems/participant-flow.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",

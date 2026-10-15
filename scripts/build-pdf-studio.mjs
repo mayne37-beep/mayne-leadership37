@@ -45,3 +45,6 @@ console.log('Mayne Learning Studio built.');
 
 await build({entryPoints:[path.join(root,'src/lms/lesson-frame.js')],outfile:path.join(out,'assets/lms-lesson.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
 console.log('Learning Studio interactive lesson player built.');
+
+await build({entryPoints:[path.join(root,'src/systems-pdf.js')],outfile:path.join(out,'assets/systems-pdf.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
+console.log('Systems Mapping Studio PDF export built.');
