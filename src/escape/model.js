@@ -8,7 +8,7 @@ export function assetIds(project){
   if(!source)continue;
   const match=String(source).match(/^\/api\/escape-studio\?action=asset&id=(asset-[a-f0-9]{64})$/);
   if(match)result.add(match[1]);
- }}return [...result];
+ }}for(const asset of project.assetLibrary||[]){const match=String(asset.image||'').match(/^\/api\/escape-studio\?action=asset&id=(asset-[a-f0-9]{64})$/);if(match)result.add(match[1]);}return [...result];
 }
 export function validateDraft(p){
  if(!p||p.schemaVersion!==1||!validId(p.id)||!Array.isArray(p.scenes)||!p.scenes.length||p.scenes.length>100)return ['Invalid room structure.'];
@@ -26,11 +26,14 @@ export function validateDraft(p){
    if(!imageOK(o.image)||!imageOK(o.clueImage))return ['Upload object images using the studio controls.'];
   }
  }
+ if(p.assetLibrary!==undefined){if(!Array.isArray(p.assetLibrary)||p.assetLibrary.length>400)return ['Invalid project asset library.'];for(const a of p.assetLibrary){if(!a||typeof a.path!=='string'||a.path.length>300||!a.image||!imageOK(a.image)||typeof a.name!=='string'||a.name.length>200||!['background','object','character'].includes(a.kind)||typeof a.category!=='string'||a.category.length>200||a.svg!==undefined&&(typeof a.svg!=='string'||a.svg.length>50000))return ['Invalid project artwork.'];}}
+ if(p.assetDocuments!==undefined&&(!Array.isArray(p.assetDocuments)||p.assetDocuments.length>20||p.assetDocuments.some(d=>!d||typeof d.path!=='string'||d.path.length>300||typeof d.text!=='string'||d.text.length>150000)))return ['Invalid asset documents.'];
+ if(p.originalGame!==undefined&&(!p.originalGame||typeof p.originalGame.htmlTemplate!=='string'||p.originalGame.htmlTemplate.length>300000))return ['Invalid original game package.'];
  if(!scenes.has(p.startSceneId))return ['Select an existing starting scene.'];
  return [];
 }
 export function validatePublished(p){const issues=validateDraft(p);return issues.length?issues:E.validate(p);}
-export function learnerProject(source,token,version){const data=structuredClone(source);for(const s of data.scenes){if(s.background.data)s.background.data+='&room='+token;for(const o of s.objects)for(const key of ['image','clueImage'])if(o[key])o[key]+='&room='+token;}data.id+='-v'+version;data.publicationVersion=version;delete data._cloud;return data;}
+export function learnerProject(source,token,version){const data=structuredClone(source);for(const s of data.scenes){if(s.background.data)s.background.data+='&room='+token;for(const o of s.objects)for(const key of ['image','clueImage'])if(o[key])o[key]+='&room='+token;}data.id+='-v'+version;data.publicationVersion=version;delete data._cloud;delete data.assetLibrary;delete data.assetDocuments;delete data.originalGame;return data;}
 export function validateProgress(p){
  if(!p||typeof p!=='object'||!Array.isArray(p.solved)||p.solved.length>1000||!Array.isArray(p.log)||p.log.length>2000)return false;
  return Number.isFinite(p.attempts)&&p.attempts>=0&&p.attempts<=100000&&Number.isFinite(p.elapsed)&&p.elapsed>=0&&p.elapsed<=604800&&typeof p.finished==='boolean'&&typeof p.learner==='string'&&p.learner.length<=100&&typeof p.notes==='string'&&p.notes.length<=12000;
