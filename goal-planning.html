@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f9fd"><meta name="description" content="Turn goals into clear action plans, deadlines, milestones, and regular check-ins.">
+<title>Goal Planning Studio | Mayne Leadership</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/goal-planning.css">
+<script src="assets/goal-planning.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#workspace">Skip to workspace</a>
+<header class="topbar">
+<a class="identity" href="tools.html" aria-label="Return to Thinking Tools">
+<img src="assets/jm-leadership-logo.svg" alt="" width="42" height="42">
+<span><small>MAYNE LEADERSHIP / THINKING TOOLS</small><strong>Goal Planning <em>Studio</em></strong></span></a>
+<div class="plan-heading"><label class="sr" for="plan-name">Plan name</label><input id="plan-name" aria-label="Plan name" maxlength="120" placeholder="Untitled goal plan"><span id="save-status" role="status" aria-live="polite">Saved on this device</span></div>
+<div class="top-actions">
+<button id="new-plan" class="btn subtle" type="button">＋ New plan</button>
+<button id="duplicate-plan" class="btn subtle" type="button">Duplicate</button>
+<button id="export-json" class="btn subtle" type="button">Export</button>
+<button id="print-plan" class="btn primary" type="button">Print / PDF ↗</button>
+</div>
+</header>
+<div class="app">
+<aside class="left-side" aria-label="Plan library">
+<div class="sidebar-heading"><span class="eyebrow">YOUR WORKSPACE</span><h2>Make progress <em>visible.</em></h2><p>A practical home for every goal, milestone, next step, and review.</p></div>
+<label class="search-wrap"><span class="sr">Search your plans</span><input id="plan-search" placeholder="Search plans…" autocomplete="off"></label>
+<div class="section-row"><strong>My plans</strong><span id="plan-count" class="number-pill">0</span></div>
+<div id="plan-list" class="plan-list" aria-label="Saved plans"></div>
+<div class="side-bottom">
+<div class="eyebrow">QUICK START TEMPLATES</div>
+<div class="template-buttons"><button type="button" data-template="project">Project launch</button><button type="button" data-template="team">Team development</button><button type="button" data-template="personal">Professional growth</button></div>
+<div class="divider"></div>
+<button id="import-button" class="link-button" type="button">↥ Import plan backup</button>
+<input id="import-file" type="file" accept=".json,application/json" hidden>
+<p class="storage-note">Plans autosave to this browser on this device. Export a backup to move them elsewhere. No account or cloud sync is required.</p>
+<a class="sibling-link" href="smart-goals.html">Open SMART Goals Tracker ↗</a>
+</div>
+</aside>
+<main id="workspace" class="main-area">
+<div class="welcome"><div><span class="eyebrow">FROM INTENTION TO EXECUTION</span><h1>Build the plan. <em>Make it happen.</em></h1><p>Define the outcome, break it into manageable actions, schedule milestones, and reflect on your progress.</p></div><div class="welcome-art" aria-hidden="true"><span>01 <b>Define</b></span><i>→</i><span>02 <b>Plan</b></span><i>→</i><span>03 <b>Achieve</b></span></div></div>
+<div class="summary-grid" id="summary-grid" aria-label="Plan overview"></div>
+<nav class="tabs" aria-label="Goal planning sections">
+<button type="button" data-tab="overview" class="active">◎ Goal canvas</button>
+<button type="button" data-tab="actions">☑ Action plan</button>
+<button type="button" data-tab="milestones">◇ Milestones</button>
+<button type="button" data-tab="checkins">◷ Check-ins</button>
+<button type="button" data-tab="review">✦ Review & risks</button>
+</nav>
+<section id="tab-content" class="tab-content" aria-live="off"></section>
+</main>
+<aside class="right-side" aria-label="Planning insights">
+<div class="insight-title"><span class="eyebrow">PLAN INTELLIGENCE</span><h2>Stay on course.</h2></div>
+<div class="progress-card"><div class="progress-ring" id="progress-ring"><div><strong id="progress-number">0%</strong><small>Action progress</small></div></div><div id="progress-breakdown" class="progress-breakdown"></div></div>
+<div id="health-panel"></div>
+<div class="coach-card"><div class="coach-icon">✦</div><span class="eyebrow">THINKING PROMPT</span><p id="coach-prompt">What would meaningful progress look like this week?</p><button id="next-prompt" class="link-button" type="button">Try another prompt →</button></div>
+<div class="right-foot"><h3>Planning vs. tracking</h3><p>Use this studio to design the work and review execution. Use SMART Goals Tracker to maintain your broader collection of goals.</p></div>
+</aside>
+</div>
+<dialog id="editor-modal" aria-labelledby="modal-title"><form id="editor-form" method="dialog"><div class="modal-head"><div><span class="eyebrow" id="modal-label">EDIT ITEM</span><h2 id="modal-title">Edit</h2></div><button type="button" id="modal-close" class="icon-btn" aria-label="Close">×</button></div><div id="modal-fields"></div><div class="modal-actions"><button type="button" class="btn subtle" id="modal-cancel">Cancel</button><button type="submit" class="btn primary">Save changes</button></div></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
