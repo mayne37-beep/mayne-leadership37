@@ -1,4 +1,5 @@
 import {esc,analysis,paretoAnalysis,STAGES} from './root-cause-model.js';
+import {renderFiveWhys} from './five-whys.js';
 export const VIEWS={problem:['FRAME THE PROBLEM','Problem definition'],whys:['QUESTION ASSUMPTIONS','The 5 Whys'],fishbone:['ORGANIZE CONTRIBUTING FACTORS','Fishbone diagram'],tree:['MAP CAUSAL HYPOTHESES','Cause-and-effect tree'],pareto:['PRIORITIZE RECORDED ISSUES','Pareto analysis'],evidence:['CHALLENGE EXPLANATIONS','Evidence evaluator'],actions:['DESIGN INTERVENTIONS','Solutions and monitoring']};
 const pill=(x,k='')=>'<span class="pill '+k+'">'+esc(x)+'</span>';
 export const button=(label,action,attrs='',cls='')=>'<button type="button" data-action="'+action+'" '+attrs+' class="'+cls+'">'+label+'</button>';
@@ -46,14 +47,7 @@ function problem(c){
  panel('03 · Observation log','Keep a record of facts, interviews, and review notes.',logs?'<div class="records">'+logs+'</div>':empty('◷','No observations yet','Document an observation without interpreting it as proof.','add-note','Record an observation'),button('＋ Add observation','add-note','','primary'))+
  '<div class="note">Next: try the 5 Whys to explore several explanations. The same cause records are shared across 5 Whys, fishbone, and cause tree.</div>';
 }
-function whys(c){
- const a=analysis(c);
- return panel('Ask Why — explore multiple paths','Branching is encouraged. Five is a prompt, not a limit, and deeper chains do not prove a cause.',
- '<div class="note"><strong>Investigated problem:</strong> '+esc(c.problem||'Not yet defined. Open the Problem tab to add it.')+'</div>'+
- (c.causes.length?nested(c):empty('↳','Begin the first Why','What condition could explain the observed problem?','add-cause','Add first possible cause'))+
- '<div class="panel-actions" style="justify-content:flex-start;margin-top:18px">'+button('＋ Another explanation','add-cause','','primary')+button('View cause tree','go-tree')+'</div>')+
- panel('Depth check','Follow the evidence rather than chasing an arbitrary number of questions.','<div class="note gold">Longest current chain: <strong>'+a.deepestChain+' level(s)</strong>. Use evidence records to determine whether suspected factors are supported or contradicted.</div>');
-}
+function whys(c,focusId=''){return renderFiveWhys(c,focusId)}
 function tree(c){
  return panel('Connected cause tree','Each branch represents a suspected explanation. Child causes describe possible reasons for their parent.',
  '<div class="note"><strong>Effect:</strong> '+esc(c.problem||'Problem not yet defined')+'</div>'+
@@ -141,8 +135,9 @@ function solutions(c){
  ranked?'<div class="table-scroll"><table><thead><tr><th>Proposed intervention</th><th>Impact</th><th>Effort</th><th>Confidence</th><th>Score</th></tr></thead><tbody>'+ranked+'</tbody></table></div>':'<div class="note">Add a proposed response to compare possible options.</div>')+
  '<div class="note gold">After implementation, record the observed result and any unintended consequences. Do not equate activity completion with solving the problem.</div>';
 }
-export function renderView(c,view){
- return ({problem,whys,fishbone,tree,pareto,evidence,actions:solutions})[view]?.(c)||problem(c);
+export function renderView(c,view,options={}){
+ if(view==='whys')return whys(c,options.focusId||'');
+ return ({problem,fishbone,tree,pareto,evidence,actions:solutions})[view]?.(c)||problem(c);
 }
 export function reportHTML(c){
  const a=analysis(c),table=(columns,rows)=>rows.length?'<table><thead><tr>'+columns.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x??'—')+'</td>').join('')+'</tr>').join('')+'</tbody></table>':'<p>No entries recorded.</p>';
