@@ -33,7 +33,7 @@ export function makeNode(type='decision',data={}){
 export function createProject(title='Untitled decision analysis'){
  const root=makeNode('decision',{title:'Decision to make',x:120,y:330});
  return {version:VERSION,id:uid(),title,question:'',objective:'',context:'',owner:'',deadline:'',status:'Exploring',
-  criteria:[],options:[],nodes:[root],scenarios:[],activeScenario:'',risks:[],teams:[],injects:[],
+  criteria:[],options:[],nodes:[root],scenarios:[],activeScenario:'',risks:[],teams:[],injects:[],exercise:null,
   brief:{recommendationId:'',recommendation:'',dissent:'',assumptions:'',reviewDate:'',reviewTrigger:'',accountable:'',result:''},
   decisions:[],created:stamp(),updated:stamp()};
 }
@@ -216,7 +216,8 @@ export function makeRisk(data={}){
 export function addRisk(p,data={}){guard(p.risks,LIMIT.risks,'Premortem');const r=makeRisk(data);p.risks.push(r);return r;}
 export function makeTeam(data={}){
  return {id:uid(),name:clean(data.name||'New team',110),recommendation:clean(data.recommendation,1800),evidence:clean(data.evidence,1200),
- tradeoffs:clean(data.tradeoffs,1100),scores:Object.fromEntries(RUBRIC.map(key=>[key,integer(data.scores?.[key],0,5,0)])),created:stamp()};
+ tradeoffs:clean(data.tradeoffs,1100),scores:Object.fromEntries(RUBRIC.map(key=>[key,integer(data.scores?.[key],0,5,0)])),
+ roundNotes:Object.fromEntries(Object.entries(data.roundNotes&&typeof data.roundNotes==='object'&&!Array.isArray(data.roundNotes)?data.roundNotes:{}).slice(0,12).map(([key,value])=>[clean(key,45),clean(value,1800)])),created:stamp()};
 }
 export function addTeam(p,data={}){guard(p.teams,LIMIT.teams,'Teams');const t=makeTeam(data);p.teams.push(t);return t;}
 export const teamScore=t=>RUBRIC.reduce((sum,k)=>sum+integer(t.scores?.[k],0,5,0),0);
@@ -236,6 +237,38 @@ export function removeRecord(p,kind,id){
  if(!['risks','teams','injects','decisions'].includes(kind))return false;
  const length=p[kind].length;p[kind]=p[kind].filter(x=>x.id!==id);return p[kind].length!==length;
 }
+
+/* Scenario brief persists with exported projects and copied projects.
+   Keep a strictly bounded, serializable structure and preserve round progress. */
+export function normalizeExercise(raw){
+ if(!raw||typeof raw!=='object'||Array.isArray(raw))return null;
+ const strings=(items,count,max)=>Array.isArray(items)?items.slice(0,count).map(v=>clean(v,max)):[];
+ const roles=(Array.isArray(raw.roles)?raw.roles:[]).slice(0,10).map(r=>({
+  name:clean(r.name,100),goal:clean(r.goal,400),concern:clean(r.concern,450),question:clean(r.question,400)
+ }));
+ const facts=(Array.isArray(raw.facts)?raw.facts:[]).slice(0,20).map(f=>({
+  status:['Verified','Reported','Unknown','Assumption'].includes(f.status)?f.status:'Unknown',
+  text:clean(f.text,800),source:clean(f.source,150)
+ }));
+ const rounds=(Array.isArray(raw.rounds)?raw.rounds:[]).slice(0,9).map((r,i)=>({
+  id:clean(r.id,45)||'round-'+(i+1),title:clean(r.title,130),time:clean(r.time,35),
+  duration:integer(r.duration,1,90,12),mission:clean(r.mission,1400),
+  deliverables:strings(r.deliverables,6,280),
+  facilitator:clean(r.facilitator,1800),
+  injectIndexes:(Array.isArray(r.injectIndexes)?r.injectIndexes:[]).slice(0,8).map(v=>integer(v,0,39)),
+  decisionPrompt:clean(r.decisionPrompt,800)
+ }));
+ return {id:clean(raw.id,75)||'custom-exercise',title:clean(raw.title,150),subtitle:clean(raw.subtitle,250),
+  agency:clean(raw.agency,130),incidentTime:clean(raw.incidentTime,45),
+  opening:clean(raw.opening,2800),participant:clean(raw.participant,2500),
+  facilitator:clean(raw.facilitator,4000),
+  objectives:strings(raw.objectives,9,270),constraints:strings(raw.constraints,12,350),
+  roles,facts,rounds,debrief:strings(raw.debrief,15,700),
+  durationMinutes:integer(raw.durationMinutes,15,240,75),
+  currentRound:integer(raw.currentRound,0,Math.max(0,rounds.length-1),0)
+ };
+}
+
 export function normalizeProject(raw,{regenerate=false}={}){
  if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Invalid decision project.');
  if(raw.version!=null&&raw.version!==VERSION)throw Error('Unsupported project version.');
@@ -282,6 +315,7 @@ export function normalizeProject(raw,{regenerate=false}={}){
  p.teams=(Array.isArray(raw.teams)?raw.teams:[]).map(r=>{const v=makeTeam(r);v.id=regenerate?uid():clean(r.id,120)||uid();return v});
  p.injects=(Array.isArray(raw.injects)?raw.injects:[]).map(r=>{const v={id:regenerate?uid():clean(r.id,120)||uid(),title:clean(r.title,110),message:clean(r.message,1100),revealed:!!r.revealed,created:clean(r.created,60)};return v});
  p.decisions=(Array.isArray(raw.decisions)?raw.decisions:[]).map(r=>{const v=addDecisionInternal(r);v.id=regenerate?uid():clean(r.id,120)||uid();return v});
+ p.exercise=normalizeExercise(raw.exercise);
  const b=raw.brief||{};
  p.brief={recommendationId:optionIds.get(b.recommendationId)||'',recommendation:clean(b.recommendation,1700),
   dissent:clean(b.dissent,1500),assumptions:clean(b.assumptions,1500),reviewDate:clean(b.reviewDate,10),
