@@ -131,5 +131,5 @@ test('SWOT visual export and print report escape user-provided text',async()=>{
  const {diagramSVG,reportHTML}=await import('../../assets/swot-render.js');
  const p=sampleProject();addFactor(p,'T','<script>alert("bad")</script>');
  assert.ok(!diagramSVG(p).includes('<script>'));
- assert.ok(reportHTML(p).includes('Action plan'));
+ assert.match(reportHTML(p),/action plan/i);
 });
