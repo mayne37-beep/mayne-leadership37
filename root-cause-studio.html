@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f9fd">
+<meta name="description" content="Explore root causes with interactive 5 Whys, fishbone diagrams, cause trees, Pareto analysis, evidence, and interventions.">
+<title>Root Cause Analysis Studio | Mayne Leadership</title>
+<link rel="icon" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/root-cause-studio.css">
+<script type="module" src="/assets/root-cause-studio.js"></script>
+</head>
+<body>
+<a class="skip" href="#workspace">Skip to investigation</a>
+<header class="topbar">
+<a class="brand" href="/tools.html" aria-label="Back to Mayne Leadership Thinking Tools"><img src="/assets/jm-leadership-logo.svg" width="42" height="42" alt=""><span><small>MAYNE LEADERSHIP · THINKING TOOLS</small><strong>Root Cause Analysis <em>Studio</em></strong></span></a>
+<div class="project-name"><label class="sr" for="case-title">Investigation title</label><input id="case-title" maxlength="120" aria-label="Investigation title" placeholder="Untitled investigation"><span id="save-indicator" role="status" aria-live="polite">Saved on this device</span></div>
+<div class="top-actions"><button id="new-case" title="Create a blank investigation">＋ New</button><button id="duplicate-case" title="Duplicate this investigation">Duplicate</button><button id="export-menu" title="Export data and diagram">Export ▾</button><button id="print-report" class="primary" title="Print a report or save it as PDF">Report / PDF ↗</button></div>
+</header>
+<div class="app-shell">
+<aside class="sidebar left-pane" aria-label="Investigation library and stages">
+<div class="intro-side"><div class="eyebrow">YOUR INVESTIGATIONS</div><h2>Get beyond <em>symptoms.</em></h2><p>Follow the evidence and uncover the conditions behind a recurring problem.</p></div>
+<div class="search-field"><label class="sr" for="case-search">Search investigations</label><input id="case-search" placeholder="Search projects…" autocomplete="off"></div>
+<div class="side-row"><strong>Saved investigations</strong><span class="count" id="case-count">0</span></div>
+<div id="case-list" class="case-list"></div>
+<div class="divider"></div>
+<div class="eyebrow">GUIDED INVESTIGATION</div>
+<ol id="stage-list" class="stages"></ol>
+<div class="stage-prompt"><strong id="stage-name">Define the problem</strong><p id="stage-prompt">Start by defining what is actually happening.</p><button id="next-stage" type="button">Next stage →</button></div>
+<div class="divider"></div>
+<div class="eyebrow">START WITH A SCENARIO</div>
+<div class="templates"><button data-template="training" type="button">Training backlog</button><button data-template="engagement" type="button">Employee engagement</button><button data-template="service" type="button">Service response delays</button></div>
+<div class="import-row"><button id="import-case" type="button">↥ Import JSON backup</button><input id="import-file" type="file" accept=".json,application/json" hidden></div>
+<p class="save-disclosure">Autosaves in this browser on this device. Export backups for transfer or safekeeping. No cloud sync or automatic student sharing in this version.</p>
+</aside>
+<main class="main-pane" id="workspace">
+<section class="hero"><div><div class="eyebrow">THINK CRITICALLY · INVESTIGATE SYSTEMATICALLY</div><h1>Ask better questions.<br><em>Find better answers.</em></h1><p>Start with an observable problem. Explore competing explanations. Test each suspected cause. Design interventions you can evaluate.</p></div><div class="hero-symbol" aria-hidden="true"><span class="orbit orbit-a"></span><span class="orbit orbit-b"></span><span class="orbit orbit-c"></span><i class="core">?</i></div></section>
+<div id="metrics" class="metrics" aria-label="Investigation metrics"></div>
+<div class="workspace-heading"><div><span class="eyebrow" id="view-eyebrow">DISCOVER THE PROBLEM</span><h2 id="view-title">Problem definition</h2></div><div class="view-nav" role="navigation" aria-label="Analysis methods">
+<button type="button" data-view="problem">Problem</button><button type="button" data-view="whys">5 Whys</button><button type="button" data-view="fishbone">Fishbone</button><button type="button" data-view="tree">Cause Tree</button><button type="button" data-view="pareto">Pareto</button><button type="button" data-view="evidence">Evidence</button><button type="button" data-view="actions">Solutions</button>
+</div></div>
+<div id="view-root" class="view-root" aria-live="off"></div>
+</main>
+<aside class="sidebar right-pane" aria-label="Investigation insights and tools">
+<div><div class="eyebrow">ANALYSIS DESK</div><h2>Make the logic <em>visible.</em></h2></div>
+<div class="scorebox"><div class="scorebox-label">Evidence coverage</div><div class="scorebar"><span id="evidence-meter"></span></div><strong id="evidence-amount">0 / 0 causes</strong><p>Evidence records linked to causes. Coverage is not proof of causation.</p></div>
+<div id="insights"></div>
+<div class="spotlight"><span class="spark">✦</span><div class="eyebrow">INVESTIGATION QUESTION</div><p id="thinking-prompt">What evidence would convince someone who disagrees?</p><button id="cycle-prompt">New question →</button></div>
+<div class="method-note"><strong>One investigation, many lenses</strong><p>Causes added in 5 Whys automatically appear in the fishbone and cause tree. Evidence and proposed solutions are linked to those same causes.</p></div>
+<div class="method-note"><strong>About your information</strong><p>Example scenarios contain invented training data. Never interpret those counts as findings from a real organization.</p></div>
+</aside>
+</div>
+<dialog id="editor-dialog" aria-labelledby="dialog-title"><form id="editor-form"><div class="dialog-top"><div><span class="eyebrow" id="dialog-eyebrow">EDIT</span><h2 id="dialog-title">Edit item</h2></div><button id="dialog-close" type="button" aria-label="Close editor">×</button></div><div id="dialog-fields"></div><div class="dialog-actions"><button id="dialog-cancel" type="button">Cancel</button><button class="primary" type="submit">Save changes</button></div></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<section id="print-document" hidden aria-label="Printable investigation report"></section>
+</body></html>
