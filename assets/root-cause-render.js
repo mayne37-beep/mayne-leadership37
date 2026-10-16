@@ -1,4 +1,4 @@
-import {esc,analysis,paretoAnalysis,STAGES} from './root-cause-model.js';
+import {esc,analysis,paretoAnalysis,STAGES,depth} from './root-cause-model.js';
 import {renderFiveWhys} from './five-whys.js';
 export const VIEWS={problem:['FRAME THE PROBLEM','Problem definition'],whys:['QUESTION ASSUMPTIONS','The 5 Whys'],fishbone:['ORGANIZE CONTRIBUTING FACTORS','Fishbone diagram'],tree:['MAP CAUSAL HYPOTHESES','Cause-and-effect tree'],pareto:['PRIORITIZE RECORDED ISSUES','Pareto analysis'],evidence:['CHALLENGE EXPLANATIONS','Evidence evaluator'],actions:['DESIGN INTERVENTIONS','Solutions and monitoring']};
 const pill=(x,k='')=>'<span class="pill '+k+'">'+esc(x)+'</span>';
@@ -145,6 +145,7 @@ export function reportHTML(c){
  return '<h1>'+esc(c.title)+'</h1><p>Mayne Leadership Root Cause Investigation · '+esc(new Date().toLocaleDateString())+'</p>'+
  '<section><h2>Problem and scope</h2><p><b>Problem:</b> '+esc(c.problem||'Not defined')+'</p><p><b>Where and when:</b> '+esc(c.where+' · '+c.when)+'</p><p><b>Frequency and impact:</b> '+esc(c.frequency+' · '+c.impact)+'</p><p><b>Boundaries:</b> '+esc(c.boundary)+'</p><p><b>Desired outcome:</b> '+esc(c.goal)+'</p></section>'+
  '<section><h2>Fishbone diagram</h2>'+fishboneSVG(c)+'</section>'+
+ '<section><h2>Five Whys reasoning map</h2><p>These are proposed causal explanations, not verified findings. Numbering describes depth; it does not imply that five questions are always sufficient.</p>'+table(['Why level','Possible explanation','Contributes to','Assessment','Linked evidence'],[...c.causes].sort((a,b)=>depth(c,a.id)-depth(c,b.id)).map(x=>[depth(c,x.id)+1,x.text,c.causes.find(p=>p.id===x.parentId)?.text||c.problem||'Observed problem',x.status,c.evidence.filter(ev=>ev.causeId===x.id).length]))+'</section>'+ 
  '<section><h2>Possible causes</h2>'+table(['Cause','Category','Contributing to','Assessment','Root candidate'],c.causes.map(x=>[x.text,category(c,x.category),c.causes.find(p=>p.id===x.parentId)?.text||'Problem',x.status,x.root?'Yes':'No']))+'</section>'+
  '<section><h2>Supporting and contrary evidence</h2>'+table(['Evidence','Hypothesis','Direction','Source','Date'],c.evidence.map(x=>[x.finding,c.causes.find(t=>t.id===x.causeId)?.text||'General',x.stance,x.source,x.date]))+'</section>'+
  '<section><h2>Pareto observations</h2><p>Total recorded occurrences: '+p.total+'. Illustrative scenario counts are invented.</p>'+table(['Issue','Count','Share','Cumulative','Sample'],p.rows.map(x=>[x.label,x.count,(x.share*100).toFixed(1)+'%',(x.cumulative*100).toFixed(1)+'%',x.sample?'Yes':'No']))+'</section>'+
