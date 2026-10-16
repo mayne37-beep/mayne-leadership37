@@ -5,6 +5,7 @@ on:
       - 'decision-intelligence-studio.html'
       - 'assets/decision-intelligence*.js'
       - 'assets/decision-intelligence.css'
+      - 'assets/operations-crisis-scenario.js'
       - 'tests/decision-intelligence/**'
       - 'tools.html'
       - 'package.json'
@@ -15,6 +16,7 @@ on:
       - 'decision-intelligence-studio.html'
       - 'assets/decision-intelligence*.js'
       - 'assets/decision-intelligence.css'
+      - 'assets/operations-crisis-scenario.js'
       - 'tests/decision-intelligence/**'
       - 'tools.html'
       - 'package.json'
@@ -43,3 +45,4 @@ jobs:
           test -f public/assets/decision-intelligence-render.js
           test -f public/assets/decision-intelligence.js
           test -f public/assets/decision-intelligence.css
+          test -f public/assets/operations-crisis-scenario.js
