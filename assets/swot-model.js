@@ -217,3 +217,49 @@ export function sampleProject(){
  sc.factorShifts.O=2;sc.deltas.feasibility=-1;sc.deltas.resources=1;
  return p;
 }
+
+
+/** Editable, explicitly hypothetical classroom starter projects. */
+export function templateProject(id){
+ if(id==='leadership')return sampleProject();
+ if(!['change','service'].includes(id))throw Error('Unknown SWOT template.');
+ const spec=id==='change'?{
+  title:'Organizational change · Classroom SWOT',objective:'Implement a new work process while maintaining employee engagement.',
+  description:'Hypothetical organization-wide change exercise. Factor assessments are examples, not factual findings.',
+  factors:[
+   ['S','Trusted frontline supervisors','People',22,28,'blue'],
+   ['S','Established communication channels','Communications',70,69,'teal'],
+   ['W','Limited time for training','Capacity',24,25,'coral'],
+   ['W','Uneven understanding of the change','Readiness',69,65,'rose'],
+   ['O','New collaboration technology','Technology',24,27,'mint'],
+   ['O','Opportunity to simplify handoffs','Process',70,68,'violet'],
+   ['T','Employee change fatigue','People',24,27,'gold'],
+   ['T','Unexpected operational disruptions','Operations',71,66,'slate']
+  ],
+  actions:['Pilot a shorter onboarding session','Supervisors','Percentage of staff confident in new process','80%']
+ }:{
+  title:'Customer response delays · Classroom SWOT',objective:'Improve service response time without reducing service quality.',
+  description:'Hypothetical service team exercise. All SWOT factors and performance assumptions should be validated.',
+  factors:[
+   ['S','Strong service-oriented team','People',20,28,'blue'],
+   ['S','Historical request logs','Evidence',68,65,'teal'],
+   ['W','Inconsistent intake triage','Process',24,26,'coral'],
+   ['W','Limited peak-hour coverage','Resources',68,68,'rose'],
+   ['O','Automated request routing','Technology',24,27,'mint'],
+   ['O','New partner service agreements','Partnerships',70,67,'violet'],
+   ['T','Rising request volumes','Demand',24,28,'gold'],
+   ['T','Budget pressures','Resources',71,66,'slate']
+  ],
+  actions:['Pilot a standardized intake checklist','Service team lead','Average time to first response','Within service target']
+ };
+ const p=createProject(spec.title);p.objective=spec.objective;p.description=spec.description;
+ const nodes=spec.factors.map(([q,label,group,x,y,color])=>addFactor(p,q,label,{group,x,y,color}));
+ const strategySO=addStrategy(p,[nodes[0].id,nodes[4].id]);
+ addStrategy(p,[nodes[1].id,nodes[6].id]);
+ addStrategy(p,[nodes[2].id,nodes[5].id]);
+ addStrategy(p,[nodes[3].id,nodes[7].id]);
+ addAction(p,{strategyId:strategySO.id,title:spec.actions[0],owner:spec.actions[1],metric:spec.actions[2],target:spec.actions[3],milestone:'Pilot and review'});
+ const scenario=addScenario(p,{name:id==='change'?'Implementation readiness declines':'Demand rises unexpectedly',description:'Illustrative disruption for discussion.'});
+ scenario.factorShifts.T=2;scenario.deltas.feasibility=-1;
+ return p;
+}
