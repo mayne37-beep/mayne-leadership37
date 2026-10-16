@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'root-cause-studio.html'
+      - 'five-whys-studio.html'
+      - 'assets/five-whys.js'
       - 'assets/root-cause-*.js'
       - 'assets/root-cause-studio.css'
       - 'tests/root-cause/**'
@@ -12,6 +14,8 @@ on:
   pull_request:
     paths:
       - 'root-cause-studio.html'
+      - 'five-whys-studio.html'
+      - 'assets/five-whys.js'
       - 'assets/root-cause-*.js'
       - 'assets/root-cause-studio.css'
       - 'tests/root-cause/**'
