@@ -119,6 +119,12 @@ test('SWOT & TOWS Studio supports real editing, pointer dragging, resizing, stra
   assert.equal(active().factors.length,8);
   assert.equal(active().strategies.length,4);
   assert.equal(state().projects[1].actions[0].status,'Done');
+  click('[data-template="change"]');
+  assert.equal(state().projects.length,3);
+  assert.equal(active().factors.length,8);
+  assert.match(active().name,/Organizational change/);
+  assert.equal(state().projects[1].name,'Leadership development · Strategy example');
+
   click('#undo');assert.ok($('#redo'));click('#redo');
  }finally{
   dom.window.Element.prototype.getBoundingClientRect=originalRect;
