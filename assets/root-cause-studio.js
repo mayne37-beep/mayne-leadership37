@@ -1,7 +1,7 @@
 import {VERSION,LIMITS,STAGES,uid,esc,copy,blankCase,addCause,removeCause,isDescendant,analysis,normalizeCase,template,today} from './root-cause-model.js';
 import {VIEWS,renderView,button} from './root-cause-render.js';
 import {exportJSON,exportSVG,exportPNG,exportPareto,exportSolutions,printReport,exportWhysCSV} from './root-cause-export.js';
-import {fiveWhysExample} from './five-whys.js';
+import {fiveWhysExample,tracePath} from './five-whys.js';
 
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 const STORE='ml.root-cause.studio.v1';
@@ -79,12 +79,39 @@ function renderMetrics(){
  a.warnings.slice(0,6).map(x=>'<div class="insight-item warn">'+esc(x)+'</div>').join('')+
  (!a.warnings.length?'<div class="insight-item"><strong>Continue investigating</strong>No completeness warnings are currently flagged. Consider alternative explanations and new evidence.</div>':'');
 }
+/** Connect parent and child cards after browser layout; paths scroll with the board. */
+function paintWhyConnections(){
+ const canvas=$('.why-canvas'),svg=$('#why-connections');
+ if(!canvas||!svg)return;
+ const width=canvas.offsetWidth,height=canvas.offsetHeight;
+ if(!width||!height)return; // DOM test environments may not perform layout.
+ svg.setAttribute('viewBox','0 0 '+width+' '+height);
+ svg.setAttribute('width',String(width));svg.setAttribute('height',String(height));
+ svg.replaceChildren();
+ const box=canvas.getBoundingClientRect();
+ const nodes=new Map($('[data-why-card]').map(el=>[el.dataset.whyCard,el]));
+ const active=new Set(tracePath(current(),whyFocusId).map(x=>x.id));
+ for(const cause of current().causes){
+  if(!cause.parentId)continue;
+  const a=nodes.get(cause.parentId),b=nodes.get(cause.id);
+  if(!a||!b)continue;
+  const from=a.getBoundingClientRect(),to=b.getBoundingClientRect();
+  const x1=from.right-box.left,y1=from.top+from.height*.5-box.top;
+  const x2=to.left-box.left,y2=to.top+Math.min(48,to.height*.5)-box.top;
+  const dx=Math.max(10,(x2-x1)/2);
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d','M'+x1+','+y1+' C'+(x1+dx)+','+y1+' '+(x2-dx)+','+y2+' '+x2+','+y2);
+  path.setAttribute('class','why-connection'+(active.has(cause.parentId)&&active.has(cause.id)?' emphasized':''));
+  svg.append(path);
+ }
+}
 function render(){
  const c=current();$('#case-title').value=c.title;
  renderLibrary();renderStages();renderMetrics();
  $('#view-title').textContent=VIEWS[view][1];$('#view-eyebrow').textContent=VIEWS[view][0];
  $$('[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false')});
  $('#view-root').innerHTML=renderView(c,view,{focusId:whyFocusId});
+ if(view==='whys')paintWhyConnections();
  document.body.classList.toggle('why-presenting',view==='whys'&&whyPresenting);
  $('#undo-case').disabled=!past.length;$('#redo-case').disabled=!future.length;
 }
@@ -269,6 +296,7 @@ async function importCase(file){
  }catch(error){announce('Unable to import: '+error.message)}
 }
 function bind(){
+ window.addEventListener('resize',()=>{if(view==='whys')paintWhyConnections()});
  $('#new-case').onclick=()=>createCase();
  $('#duplicate-case').onclick=()=>createCase(normalizeCase({...current(),title:current().title+' (copy)'},{regenerate:true}));
  $('#undo-case').onclick=undo;$('#redo-case').onclick=redo;
