@@ -59,6 +59,7 @@ function addNew(label,role='',color='',where=null){
  if(done){S.selected=newNode.id;render();notify('Stakeholder added. Drag it to position it.')}
 }
 function renderSummary(){const s=mapStats(map());
+ $('#legend-colors').innerHTML=COLORS.map(c=>'<span title="'+esc(c.id)+'" style="background:'+c.line+'" aria-label="'+esc(c.id)+'"></span>').join('');
  $('#summary').innerHTML='<div><strong>'+s.total+'</strong><small>Stakeholders</small></div><div><strong>'+s.links+'</strong><small>Connections</small></div><div><strong>'+s.groups.length+'</strong><small>Groups</small></div>';
  $('#stake-count').textContent=s.total;
 }
@@ -350,11 +351,13 @@ function bind(){
  document.addEventListener('click',event=>handleAction(event.target));
  document.addEventListener('keydown',event=>{
   const tag=event.target?.tagName?.toLowerCase()||'',typing=['input','textarea','select'].includes(tag)||event.target.isContentEditable;
+  const focusedNode=event.target.closest?.('[data-node]');
+  if(focusedNode&&!typing&&['Enter',' '].includes(event.key)){event.preventDefault();setSelected(focusedNode.dataset.node);$('#edit-label').focus();return}
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='s'){event.preventDefault();persist();notify('Map saved.');return}
   if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?redo():undo();return}
   if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y'){event.preventDefault();redo();return}
   if(!typing&&event.code==='Space'){S.space=true;$('#stakeholder-svg')?.classList.add('panning');event.preventDefault()}
-  if(!typing&&S.selected&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){
+  if(!typing&&S.selected&&event.target.closest?.('#map-host')&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){
    event.preventDefault();const n=selected(),amount=event.shiftKey?1:12;
    const dx=event.key==='ArrowLeft'?-amount:event.key==='ArrowRight'?amount:0;
    const dy=event.key==='ArrowUp'?-amount:event.key==='ArrowDown'?amount:0;
