@@ -51,6 +51,9 @@ test('tree evaluator uses decision maximization and correctly normalized chance 
  assert.equal(deleteNode(p,first.id),true);
  assert.ok(!p.nodes.find(x=>x.id===good.id));
  assert.equal(p.nodes.length,2);
+ const size=updateNode(p,second.id,{w:310,h:222});
+ assert.equal(size,true);assert.equal(p.nodes.find(x=>x.id===second.id).w,310);
+ assert.equal(p.nodes.find(x=>x.id===second.id).h,222);
 });
 
 test('scenario overrides change calculated scores but preserve original rating, utility, and probability',()=>{
