@@ -1,4 +1,4 @@
-import {VERSION,MAX,QUADRANTS,COLORS,TOWS_TYPES,DEFAULT_WEIGHTS,uid,copy,escapeHTML as esc,clamp,createProject,addFactor,createFactor,repositionFactor,resizeFactor,removeFactor,strategyTypeForFactors,suggestedStrategy,addStrategy,removeStrategy,rankStrategies,scoreStrategy,addAction,addScenario,projectStats,normalizeProject,sampleProject,dateToday} from './swot-model.js';
+import {VERSION,MAX,QUADRANTS,COLORS,TOWS_TYPES,DEFAULT_WEIGHTS,uid,copy,escapeHTML as esc,clamp,createProject,addFactor,createFactor,repositionFactor,resizeFactor,removeFactor,strategyTypeForFactors,suggestedStrategy,addStrategy,removeStrategy,rankStrategies,scoreStrategy,addAction,addScenario,projectStats,normalizeProject,sampleProject,templateProject,dateToday} from './swot-model.js';
 import {colorFor,typeFor,factorHTML,factorListHTML,typePickerHTML,optionHTML,strategyCardsHTML,rankingHTML,scenarioComparisonHTML,actionsHTML,guidanceForProject,diagramSVG,reportHTML} from './swot-render.js';
 
 const $=selector=>document.querySelector(selector),$$=selector=>Array.from(document.querySelectorAll(selector));
@@ -427,6 +427,7 @@ function handleClick(event){
  if(view||shortcut){setView(view?.dataset.view||shortcut.dataset.shortcut);return}
  const add=target.closest('[data-add-quadrant]');if(add){$('#quick-quadrant').value=add.dataset.addQuadrant;$('#quick-factor').focus();return}
  const starter=target.closest('[data-starter]');if(starter){$('#quick-quadrant').value=starter.dataset.starter;$('#quick-factor').focus();return}
+ const templateButton=target.closest('[data-template]');if(templateButton){try{newProject(templateProject(templateButton.dataset.template))}catch(error){toast(error.message)}return}
  const pick=target.closest('[data-select-factor]');if(pick){selectFactor(pick.dataset.selectFactor);setView('board');return}
  const factorCard=target.closest('[data-factor]');if(factorCard&&!state.ignoreClick){selectFactor(factorCard.dataset.factor);return}
  const color=target.closest('[data-factor-color]');if(color&&factor()){change(p=>p.factors.find(f=>f.id===state.selectedFactor).color=color.dataset.factorColor);return}
@@ -456,7 +457,7 @@ function bind(){
  $('#new-project').onclick=()=>newProject();$('#projects-button').onclick=()=>{renderLibrary();showDialog('#library-dialog')};
  $('#library-new').onclick=()=>newProject();$('#library-import').onclick=()=>$('#import-file').click();
  $('#import-file').onchange=event=>{importFile(event.target.files?.[0]);event.target.value=''};
- $('#sample-project').onclick=()=>newProject(sampleProject());
+ // Classroom templates are delegated through data-template so every choice opens a separate project.
  $('#undo').onclick=undo;$('#redo').onclick=redo;$('#export-button').onclick=()=>showDialog('#export-dialog');
  $('#quick-add').onclick=()=>{const q=$('#quick-quadrant').value,text=$('#quick-factor').value.trim();if(!text){toast('Write a factor before adding it.');$('#quick-factor').focus();return}
   addNewFactor(q,text);$('#quick-factor').value='';
