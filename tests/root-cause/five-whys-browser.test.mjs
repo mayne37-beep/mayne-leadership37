@@ -66,7 +66,7 @@ test('Dedicated 5 Whys Studio supports guided questions, competing paths, inline
   $('[data-view=fishbone]').click();
   assert.ok($('#fishbone-svg').outerHTML.includes('Changes arrive late'));
   $('[data-view=tree]').click();
-  assert.ok($('#view-root').textContent.includes('Reviews begin after'));
+  assert.ok($('#view-root').innerHTML.includes('Reviews begin after'));
   const final=state().cases[0];
   assert.equal(final.causes.length,3);
   assert.equal(final.causes.find(x=>x.id===b).parentId,a);
