@@ -144,6 +144,7 @@ function setSelected(id){
 }
 function fieldChanged(key,value){
  const n=selected();if(!n)return;
+ if(!S.inspectorDraft)S.inspectorDraft=copy(map());
  if(key==='label'){n.label=String(value).slice(0,92)||'Unnamed stakeholder'}
  else if(key==='role'){n.role=String(value).slice(0,110)}
  else if(key==='group'){n.group=String(value).slice(0,90)}
@@ -154,7 +155,7 @@ function fieldChanged(key,value){
  updateLayers();if(['label','role','group'].includes(key))renderList();if(S.pane==='engagement')renderEngagement();
 }
 function saveFieldChange(){
- if(!S.inspectorDraft)return;
+ if(!S.inspectorDraft){persist();return;}
  const before=S.inspectorDraft;S.inspectorDraft=null;
  if(JSON.stringify(before)!==JSON.stringify(map())){remember(before);persist();renderSummary()}
 }
