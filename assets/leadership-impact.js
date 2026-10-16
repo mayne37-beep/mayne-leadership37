@@ -64,8 +64,22 @@ function student(){
  const newInfo=Array.isArray(d.scenario?.revealed_info)?d.scenario.revealed_info:[];
  $('student-reveals').hidden=!newInfo.length;$('student-reveals-list').innerHTML=evidenceCards(newInfo);
  if(d.round!==lastRound){lastRound=d.round;for(const key of ['trust','support','effective']){$(key).value='50';$(key+'-output').textContent='50';}$('comment').value='';$('question').value='';$('vote-confirm').textContent='';}
- const active=d.round>0&&d.active_team===member.team;const canVote=d.phase==='vote'&&!active;const canAsk=['discuss','vote'].includes(d.phase)&&!active;
- $('presenter-message').hidden=!active;$('rating-panel').hidden=!canVote;$('question-panel').hidden=!canAsk;$('waiting').hidden=active||canVote;
+ const active=d.round>0&&d.active_team===member.team;
+ const canDraft=d.round>0&&!active&&['discuss','vote'].includes(d.phase);
+ const canVote=canDraft&&d.phase==='vote';
+ const canAsk=canDraft;
+ $('presenter-message').hidden=!active;
+ $('rating-panel').hidden=!canDraft;
+ $('question-panel').hidden=!canAsk;
+ $('waiting').hidden=active||canDraft;
+ $('send-vote').disabled=!canVote;
+ $('send-vote').textContent=canVote?'Submit or update anonymous feedback →':'Waiting for instructor to open feedback';
+ $('observer-target').textContent=d.round>0?'You are observing '+teamName(d.active_team)+' · Round '+d.round:'Waiting for a presenting team';
+ $('observer-status').classList.toggle('ready',canVote);
+ $('observer-status').classList.toggle('drafting',canDraft&&!canVote);
+ $('observer-status-title').textContent=canVote?'Feedback submissions are OPEN':canDraft?'Observer feedback — prepare your response':active?'Your team is presenting':'Observer feedback';
+ $('observer-status-description').textContent=canVote?'Use the three sliders and optional personal reflection below, then select Submit anonymous feedback.':canDraft?'Your sliders and comment box are ready below. Draft your response as the team presents; submission will unlock when your instructor opens ratings.':active?'You will give anonymous feedback when a different team presents. Your team cannot rate itself.':d.phase==='closed'?'This session has ended.':'When a different team presents, the sliders and anonymous reflection area will appear here.';
+ $('draft-instructions').textContent=canVote?'Ratings are open. Submit your personal reaction to the leadership approach.': 'Your response is a private draft on this device until your instructor opens observer ratings.';
  $('waiting-text').textContent=d.phase==='reveal'?'Your class will discuss the results. Prepare for the next round.':d.phase==='closed'?'This assessment has ended. Thank you for your contributions.':d.phase==='vote'&&active?'Your team is currently presenting.':'The facilitator controls when each round begins and when observer ratings open.';
  $('vote-confirm').textContent=d.has_voted?'Your feedback was received for this round. You may update it while ratings are open.':'';
  }
