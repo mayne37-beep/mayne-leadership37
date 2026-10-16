@@ -18,7 +18,8 @@
     "test:systems": "node --test tests/systems/model.test.mjs tests/systems/api.test.mjs && node tests/systems/dom-flow.mjs && node tests/systems/participant-flow.mjs",
     "test:root-cause": "node --test tests/root-cause/*.test.mjs",
     "test:stakeholder": "node --test tests/stakeholder/*.test.mjs",
-    "test:swot": "node --test tests/swot/*.test.mjs"
+    "test:swot": "node --test tests/swot/*.test.mjs",
+    "test:force-field": "node --test tests/force-field/*.test.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
