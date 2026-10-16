@@ -91,3 +91,20 @@
 .course-player .note-block{background:var(--callout-bg);color:var(--ink)}
 .editor-canvas .block-snapshot .lesson-block h2,.editor-canvas .block-snapshot .lesson-block h3,.editor-canvas .lesson-heading h1{color:var(--heading)}
 .editor-canvas .block-snapshot .note-block{background:var(--callout-bg)}
+
+/* True 3D flip cards — the two faces remain mounted during rotation. */
+.flashcard-grid{align-items:stretch}
+.flashcard{display:block;min-height:220px;height:auto;perspective:1200px;-webkit-perspective:1200px;border:0;border-radius:16px;background:transparent;padding:0;text-align:center;align-self:stretch;cursor:pointer}
+.flashcard-inner{position:relative;display:grid;min-height:220px;height:100%;width:100%;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform 680ms cubic-bezier(.23,.82,.33,1);will-change:transform}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard .flashcard-face{grid-area:1/1;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;min-height:220px;height:auto;padding:25px;border:1px solid #d3e1ed;border-radius:16px;overflow-wrap:anywhere;box-shadow:0 10px 24px #12334816;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(0deg);transition:box-shadow 220ms,border-color 220ms}
+.flashcard .flashcard-back{transform:rotateY(180deg);background:#fff7e7;color:#60491e;border-color:#e9d5aa}
+.flashcard .flashcard-copy{display:block;max-width:100%;width:100%;font-size:inherit;line-height:1.55}
+.flashcard .flashcard-copy > :first-child{margin-top:0}
+.flashcard .flashcard-copy > :last-child{margin-bottom:0}
+.flashcard:hover .flashcard-face{box-shadow:0 14px 28px #12334822}
+.flashcard:focus-visible{outline:3px solid var(--highlight,var(--gold,#c59a43));outline-offset:4px}
+.course-player .flashcard .flashcard-front,.editor-canvas .block-snapshot .flashcard .flashcard-front{background:color-mix(in srgb,var(--secondary,#3377a7) 10%,var(--surface,#fff));color:var(--ink,#20364a);border-color:color-mix(in srgb,var(--secondary,#3377a7) 35%,#fff)}
+.course-player .flashcard .flashcard-back,.editor-canvas .block-snapshot .flashcard .flashcard-back{background:color-mix(in srgb,var(--highlight,#c59a43) 22%,var(--surface,#fff));color:var(--ink,#20364a);border-color:color-mix(in srgb,var(--highlight,#c59a43) 45%,#fff)}
+@media(prefers-reduced-motion:reduce){.flashcard-inner{transition:none!important}.flashcard .flashcard-face{transition:none!important}}
+@media print{.flashcard{perspective:none!important;break-inside:avoid}.flashcard-inner,.flashcard.flipped .flashcard-inner{display:block;transform:none!important;transition:none!important}.flashcard .flashcard-face,.flashcard .flashcard-back{display:block;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;min-height:0;margin:10px 0;height:auto}}
