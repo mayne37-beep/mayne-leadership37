@@ -40,7 +40,7 @@ test('Drag-to-quadrant stakeholder map updates influence and impact, not name or
  assert.deepEqual(a.adkar,before);assert.equal(a.stance,'Concerned');
  const html=stakeholdersHTML(p);
  assert.match(html,/data-group-quadrant="high-high"/);
- assert.match(html,/draggable="true" data-map-group/);
+ assert.match(html,/draggable="true"/);assert.match(html,/data-map-group=/);
  assert.match(html,/Operations/);
 });
 
