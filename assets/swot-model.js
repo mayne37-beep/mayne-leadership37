@@ -50,11 +50,14 @@ export function addFactor(project,quadrant,label,options={}){
 export function repositionFactor(project,id,quadrant,x,y){
  const n=project.factors.find(f=>f.id===id);if(!n)return false;
  if(!QUADRANTS.some(q=>q.id===quadrant))throw Error('Invalid SWOT quadrant.');
+ const changedQuadrant=n.quadrant!==quadrant;
  n.quadrant=quadrant;n.x=clamp(x,8,92,n.x);n.y=clamp(y,9,91,n.y);
- // Prevent orphan strategies; their pair of quadrant types must remain valid.
- for(const s of project.strategies.filter(s=>s.factorIds.includes(id))){
-  if(strategyTypeForFactors(project,s.factorIds))s.type=strategyTypeForFactors(project,s.factorIds);
+ // A category change should never silently preserve an outdated TOWS recommendation.
+ if(changedQuadrant)for(const s of project.strategies.filter(s=>s.factorIds.includes(id))){
+  const nextType=strategyTypeForFactors(project,s.factorIds);
+  if(nextType)s.type=nextType;
   else {s.factorIds=s.factorIds.filter(fid=>fid!==id);s.type='';}
+  s.status='Under review';
  }
  return true;
 }
