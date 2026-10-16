@@ -62,5 +62,5 @@ test('classroom demo has multiple competing branches and at least five Whys',()=
  assert.ok(c.causes.every(x=>x.status==='Hypothesis'));
  assert.match(c.summary,/Illustrative/);
  assert.equal(c.evidence.length,0);
- assert.match(renderFiveWhys(c),/Training materials/);
+ assert.match(renderFiveWhys(c),/training materials/i);
 });
