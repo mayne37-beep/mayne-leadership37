@@ -56,6 +56,24 @@ test('Decision Intelligence Studio supports direct tree editing, drag, scoring, 
 
   click('#tree-organize');
   assert.ok(project().nodes[2].x>project().nodes[1].x);
+  // A visual corner handle resizes cards and preserves dimensions in the project.
+  const resizeBefore=project().nodes.find(n=>n.id===chance.id).w;
+  pointer('pointerdown',$('[data-resize-node="'+chance.id+'"]'),200,150);
+  pointer('pointermove',$('#tree-frame'),252,188);
+  pointer('pointerup',$('#tree-frame'),252,188);
+  assert.ok(project().nodes.find(n=>n.id===chance.id).w>resizeBefore);
+  assert.match($('[data-node="'+chance.id+'"]').getAttribute('style'),/width:/);
+
+  // Drag the direct connector of a second chance node onto an existing outcome.
+  click('[data-node="'+project().nodes[0].id+'"]');
+  click('#tree-add-chance');
+  const newParent=project().nodes.at(-1);
+  const existingOutcome=project().nodes.find(n=>n.id===first.id);
+  pointer('pointerdown',$('[data-connect-node="'+newParent.id+'"]'),190,140);
+  pointer('pointermove',$('#tree-frame'),existingOutcome.x,existingOutcome.y);
+  pointer('pointerup',$('#tree-frame'),existingOutcome.x,existingOutcome.y);
+  assert.equal(project().nodes.find(n=>n.id===first.id).parentId,newParent.id);
+
 
   // Matrix comparisons and evidence metadata.
   go('matrix');click('#new-criterion');
