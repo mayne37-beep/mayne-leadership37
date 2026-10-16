@@ -3,7 +3,7 @@ import {authorized} from './lesson-studio.js';
 const SUPABASE='https://vteamreihsunsllwcphw.supabase.co';
 const PUBLISHABLE='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
 const PUBLIC=new Set(['join','state','vote','ask']);
-const HOST=new Set(['create','host-view','host-update','host-export']);
+const HOST=new Set(['create','host-view','host-update','host-export','host-reveal-info']);
 const ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ROOM=/^[a-f0-9]{20}$/;
 const TOKEN=/^[a-f0-9]{48}$/;
@@ -52,9 +52,10 @@ export default async function handler(req,res){
  }
  if(!process.env.LESSON_STUDIO_GATEWAY_KEY)return fail(503,'The classroom service is not configured.');
  try{
-  const response=await fetch(SUPABASE+'/rest/v1/rpc/'+(action==='host-export'?'ml_impact_export':'ml_impact_rpc'),{
+  const endpoint=action==='host-export'?'ml_impact_export':action==='host-reveal-info'?'ml_impact_reveal':'ml_impact_rpc';
+  const response=await fetch(SUPABASE+'/rest/v1/rpc/'+endpoint,{
    method:'POST',headers:{apikey:PUBLISHABLE,'Content-Type':'application/json'},
-   body:JSON.stringify(action==='host-export'?{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_id:payload.id}:{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),
+   body:JSON.stringify(['host-export','host-reveal-info'].includes(action)?{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_id:payload.id}:{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),
    signal:AbortSignal.timeout(24000)
   });
   const data=await response.json();
@@ -62,6 +63,13 @@ export default async function handler(req,res){
    const code=data?.code;
    return fail(code==='P0002'?404:code==='42501'?403:code==='P0003'?409:code==='P0004'?429:400,
     code==='P0002'?'Session not found.':code==='42501'?'Participant access denied.':code==='P0003'?'This phase is no longer accepting responses.':code==='P0004'?'Session or question limit reached.':'Unable to process this action.');
+  }
+  // Do not expose unreleased evidence or facilitator-only discussion cues to participants.
+  if(action==='state'&&data?.scenario&&typeof data.scenario==='object'){
+   const sc=data.scenario;
+   const count=Number.isInteger(sc.revealed)?Math.max(0,Math.min(sc.revealed,3)):0;
+   data.scenario={id:sc.id,title:sc.title,tag:sc.tag,brief:sc.brief,prompt:sc.prompt,
+    revealed_info:Array.isArray(sc.reveals)?sc.reveals.slice(0,count):[]};
   }
   return res.status(200).json(data);
  }catch(error){console.error('Leadership Impact Lab service failure:',error?.message);return fail(503,'Classroom service temporarily unavailable.');}
