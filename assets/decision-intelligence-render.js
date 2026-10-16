@@ -12,16 +12,16 @@ export function treeNodesHTML(p,selected='',scenario=null){
   const value=evaluated.values.get(n.id),prob=scenario&&Object.hasOwn(scenario.probabilityOverrides,n.id)?scenario.probabilityOverrides[n.id]:n.probability;
   const utility=scenario&&Object.hasOwn(scenario.utilityOverrides,n.id)?scenario.utilityOverrides[n.id]:n.utility;
   const parent=p.nodes.find(x=>x.id===n.parentId);
-  return '<article tabindex="0" class="tree-node '+n.type+chosen(n,selected)+'" data-node="'+e(n.id)+'" style="left:'+n.x+'px;top:'+n.y+'px" aria-label="'+e(n.type+' node: '+n.title)+'">'+
-   '<div class="node-top"><span class="node-kind">'+(n.type==='decision'?'◆ Decision':n.type==='chance'?'◇ Chance':'● Outcome')+'</span><span class="node-grip" data-move-node="'+e(n.id)+'" role="button" tabindex="0" aria-label="'+e('Drag '+n.title)+'">⠿</span></div>'+
+  return '<article tabindex="0" class="tree-node '+n.type+chosen(n,selected)+'" data-node="'+e(n.id)+'" style="left:'+n.x+'px;top:'+n.y+'px;width:'+n.w+'px;min-height:'+n.h+'px" aria-label="'+e(n.type+' node: '+n.title)+'">'+
+   '<div class="node-top"><span class="node-kind">'+(n.type==='decision'?'◆ Decision':n.type==='chance'?'◇ Chance':'● Outcome')+'</span><span class="node-grip" data-move-node="'+e(n.id)+'" role="button" tabindex="0" aria-label="'+e('Drag '+n.title)+'">⠿</span>'+(n.type!=='outcome'?'<span data-connect-node="'+e(n.id)+'" role="button" tabindex="0" class="node-connect" aria-label="Drag to connect another node as a child" title="Drag to connect a branch">↗</span>':'')+'</div>'+
    '<textarea rows="2" data-inline-title="'+e(n.id)+'" aria-label="'+e('Edit node title '+n.title)+'" class="node-input" maxlength="180">'+e(n.title)+'</textarea>'+
    '<div class="node-footer"><span class="node-badge '+e(n.evidenceTag)+'">'+e(n.evidenceTag)+'</span>'+
    '<strong>'+(n.type==='outcome'?'Value '+utility:n.type==='chance'?(value===null?'Unresolved':'EV '+Number(value.toFixed(2))):value===null?'Unresolved':'Best '+Number(value.toFixed(2)))+'</strong>'+
    (n.type==='outcome'?'':'<button type="button" data-add-branch="'+e(n.id)+'" aria-label="Add branch">＋</button>')+'</div>'+
-   (parent?.type==='chance'?'<div class="node-footer"><span class="node-badge">P = '+prob+'%</span></div>':'')+'</article>';
+   (parent?.type==='chance'?'<div class="node-footer"><span class="node-badge">P = '+prob+'%</span></div>':'')+'<span class="node-resize" data-resize-node="'+e(n.id)+'" role="button" tabindex="0" title="Drag to resize card" aria-label="Resize decision card">◢</span></article>';
  }).join('');
 }
-function pathFor(a,b){const ax=a.x+112,bx=b.x-112;return 'M'+ax+' '+a.y+' C'+(ax+Math.max(40,(bx-ax)*.44))+' '+a.y+', '+(bx-Math.max(40,(bx-ax)*.44))+' '+b.y+', '+bx+' '+b.y;}
+function pathFor(a,b){const ax=a.x+(a.w||224)/2,bx=b.x-(b.w||224)/2;return 'M'+ax+' '+a.y+' C'+(ax+Math.max(40,(bx-ax)*.44))+' '+a.y+', '+(bx-Math.max(40,(bx-ax)*.44))+' '+b.y+', '+bx+' '+b.y;}
 export function treeLinksHTML(p,scenario=null){
  return '<defs><marker id="di-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#87a8be"/></marker></defs>'+
  p.nodes.filter(n=>n.parentId).map(n=>{
@@ -44,11 +44,11 @@ export function diagramSVG(p,scenario=null){
  const results=evaluateTree(p,scenario);
  for(const n of p.nodes){
   const c=fills[n.type],s=stroke[n.type],lines=wrap(n.title,28,3);
-  svg+='<rect x="'+(n.x-112)+'" y="'+(n.y-54)+'" width="224" height="108" rx="12" fill="'+c+'" stroke="'+s+'" stroke-width="2"/>'+
-   '<text x="'+(n.x-98)+'" y="'+(n.y-29)+'" fill="#4d6d84" font-size="11" font-weight="800">'+e(n.type.toUpperCase())+'</text>';
+  svg+='<rect x="'+(n.x-(n.w||224)/2)+'" y="'+(n.y-(n.h||125)/2)+'" width="'+(n.w||224)+'" height="'+(n.h||125)+'" rx="12" fill="'+c+'" stroke="'+s+'" stroke-width="2"/>'+
+   '<text x="'+(n.x-(n.w||224)/2+14)+'" y="'+(n.y-(n.h||125)/2+24)+'" fill="#4d6d84" font-size="11" font-weight="800">'+e(n.type.toUpperCase())+'</text>';
   lines.forEach((line,i)=>{svg+='<text x="'+n.x+'" y="'+(n.y-13+i*17)+'" fill="#244f6c" font-size="13" font-weight="740" text-anchor="middle">'+e(line)+'</text>'});
   const value=results.values.get(n.id);
-  svg+='<text x="'+n.x+'" y="'+(n.y+43)+'" fill="#436b82" font-size="10" text-anchor="middle">'+e(n.type==='outcome'?'Utility '+n.utility:value===null?'Incomplete':'Expected '+Number(value.toFixed(2)))+'</text>';
+  svg+='<text x="'+n.x+'" y="'+(n.y+(n.h||125)/2-12)+'" fill="#436b82" font-size="10" text-anchor="middle">'+e(n.type==='outcome'?'Utility '+n.utility:value===null?'Incomplete':'Expected '+Number(value.toFixed(2)))+'</text>';
  }
  return svg+'</svg>';
 }
