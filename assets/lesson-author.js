@@ -208,6 +208,22 @@ function bindPanel(host){
 }
 function renderCanvas(){const host=byId('editor-canvas');if(!host)return;const l=selectedLesson(),canvasTheme=resolveTheme(course.theme,l.theme);host.style.cssText=themeVars(canvasTheme)+'background:'+canvasTheme.background+';color:'+canvasTheme.ink+';';host.innerHTML='<div class="lesson-heading"><span class="eyebrow">LESSON '+(course.lessons.indexOf(l)+1)+' · SCROLLING CANVAS</span><h1>'+esc(l.title)+'</h1><p>'+esc(l.description||'Add blocks, then select one to edit its content.')+'</p></div>'+l.blocks.map((b,n)=>'<div class="block-card '+(blockId===b.id?'selected':'')+'" data-edit-block="'+b.id+'"><div class="block-toolbar"><span draggable="true" data-drag-block="'+b.id+'" title="Drag to reorder" style="cursor:grab;padding:3px 8px">⠿</span><span class="block-label">'+esc(meta(b.type).label)+(b.required?' · REQUIRED':'')+'</span><button data-block-op="edit" data-id="'+b.id+'">Edit</button><button data-block-op="up" data-id="'+b.id+'" aria-label="Move up">↑</button><button data-block-op="down" data-id="'+b.id+'" aria-label="Move down">↓</button><button data-block-op="duplicate" data-id="'+b.id+'" title="Duplicate">⧉</button><button data-block-op="template" data-id="'+b.id+'" title="Save template">☆</button><button data-block-op="move" data-id="'+b.id+'" title="Move to another lesson">↗</button><button data-block-op="delete" data-id="'+b.id+'" title="Delete">×</button></div><div class="block-snapshot">'+snapshot(b,canvasTheme)+'</div></div><button class="add-between" data-insert="'+(n+1)+'">+ Add block here</button>').join('')+'<button class="add-block-main" id="canvas-add-block">+ Add a block</button>';
  host.querySelectorAll('[data-edit-block]').forEach(card=>{card.onclick=e=>{if(e.target.closest('button'))return;blockId=card.dataset.editBlock;panel='block';panelTab='content';renderCanvas();renderOutline();renderPanel();};card.ondragover=e=>{e.preventDefault();card.classList.add('drag-over');};card.ondragleave=()=>card.classList.remove('drag-over');card.ondrop=e=>{e.preventDefault();card.classList.remove('drag-over');const id=e.dataTransfer.getData('text/plain');const from=l.blocks.findIndex(x=>x.id===id),to=l.blocks.findIndex(x=>x.id===card.dataset.editBlock);if(from<0||to<0||from===to)return;remember(true);l.blocks.splice(to,0,l.blocks.splice(from,1)[0]);changed(true);};});
+ // Preview a true 3D flip on the authoring canvas without entering learner preview.
+ // Other snapshot content stays non-interactive so its block can still be selected.
+ host.querySelectorAll('.block-snapshot .flashcard[data-card]').forEach(btn=>{
+  btn.onclick=e=>{
+   e.stopPropagation();
+   const flipped=btn.classList.toggle('flipped');
+   const front=btn.querySelector('.flashcard-front'),back=btn.querySelector('.flashcard-back');
+   btn.setAttribute('aria-pressed',String(flipped));
+   btn.setAttribute('aria-label','Flip card '+(Number(btn.dataset.card)+1)+' to show the '+(flipped?'front':'back'));
+   if(front&&back){
+    front.setAttribute('aria-hidden',String(flipped));
+    back.setAttribute('aria-hidden',String(!flipped));
+    btn.setAttribute('aria-describedby',(flipped?back:front).id);
+   }
+  };
+ });
  host.querySelectorAll('[data-drag-block]').forEach(handle=>handle.ondragstart=e=>{e.dataTransfer.setData('text/plain',handle.dataset.dragBlock);});
  host.querySelectorAll('[data-insert]').forEach(btn=>btn.onclick=()=>blockLibrary(Number(btn.dataset.insert)));
  byId('canvas-add-block').onclick=()=>blockLibrary(l.blocks.length);
