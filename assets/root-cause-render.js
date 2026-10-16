@@ -142,7 +142,7 @@ function solutions(c){
  '<div class="note gold">After implementation, record the observed result and any unintended consequences. Do not equate activity completion with solving the problem.</div>';
 }
 export function renderView(c,view){
- return ({problem,whys,fishbone,tree,pareto,evidence,actions})[view]?.(c)||problem(c);
+ return ({problem,whys,fishbone,tree,pareto,evidence,actions:solutions})[view]?.(c)||problem(c);
 }
 export function reportHTML(c){
  const a=analysis(c),table=(columns,rows)=>rows.length?'<table><thead><tr>'+columns.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x??'—')+'</td>').join('')+'</tr>').join('')+'</tbody></table>':'<p>No entries recorded.</p>';
