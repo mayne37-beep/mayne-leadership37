@@ -24,18 +24,23 @@ export const optionHTML=(value,label,chosen)=>'<option value="'+esc(value)+'"'+(
 export function strategyCardsHTML(project,selectedStrategy=''){
  if(!project.strategies.length)return '<div class="empty"><strong>No strategies created yet.</strong>Choose a TOWS type, select two compatible factors and write an actionable strategic recommendation.</div>';
  const ratings=new Map(rankStrategies(project).map(x=>[x.id,x.baseline]));
- return TOWS_TYPES.map(t=>{
-  const items=project.strategies.filter(s=>s.type===t.id);
-  return items.map(s=>{
-   const factors=s.factorIds.map(id=>project.factors.find(f=>f.id===id)).filter(Boolean);
-   return '<article class="strategy-card'+(selectedStrategy===s.id?' selected':'')+'" style="--type-color:'+t.color+'" data-strategy-card="'+esc(s.id)+'">'+
-    '<div class="strategy-card-head"><span class="strategy-type-label">'+t.id+' · '+esc(t.title)+'</span><span class="pill">'+esc(s.status)+'</span></div>'+
-    '<h3>'+esc(s.title||'Untitled strategy')+'</h3><div class="strategy-sources">'+factors.map(f=>'<span class="source-pill">'+esc(f.quadrant)+' · '+esc(f.text.slice(0,80))+'</span>').join('')+'</div>'+
-    '<div class="strategy-footer"><button data-show-link="'+esc(s.id)+'" type="button">◎ Show connection</button><button data-edit-strategy="'+esc(s.id)+'" type="button">✎ Edit</button>'+
-    '<button data-action-strategy="'+esc(s.id)+'" type="button">＋ Action</button><button data-delete-strategy="'+esc(s.id)+'" type="button" class="danger">×</button>'+
-    '<span class="strategy-score">'+ratings.get(s.id).toFixed(2)+' / 5</span></div></article>';
-  }).join('');
- }).join('')||'<div class="empty">No fully linked strategies yet. Edit your strategies to reconnect factors.</div>';
+ const card=(s,t)=>{
+  const factors=s.factorIds.map(id=>project.factors.find(f=>f.id===id)).filter(Boolean);
+  const needsReview=!t||factors.length!==2;
+  const header=needsReview?'NEEDS REVIEW · Reconnect factors':t.id+' · '+t.title;
+  return '<article class="strategy-card'+(selectedStrategy===s.id?' selected':'')+'" style="--type-color:'+(t?.color||'#b47463')+'" data-strategy-card="'+esc(s.id)+'">'+
+   '<div class="strategy-card-head"><span class="strategy-type-label">'+esc(header)+'</span><span class="pill">'+esc(s.status)+'</span></div>'+
+   '<h3>'+esc(s.title||'Untitled strategy')+'</h3>'+
+   (needsReview?'<p class="muted">The SWOT factors changed categories or were deleted. Edit this strategy and select a new valid pair.</p>':'')+
+   '<div class="strategy-sources">'+factors.map(f=>'<span class="source-pill">'+esc(f.quadrant)+' · '+esc(f.text.slice(0,80))+'</span>').join('')+'</div>'+
+   '<div class="strategy-footer">'+(needsReview?'':'<button data-show-link="'+esc(s.id)+'" type="button">◎ Show connection</button>')+
+   '<button data-edit-strategy="'+esc(s.id)+'" type="button">'+(needsReview?'↻ Reconnect':'✎ Edit')+'</button>'+
+   '<button data-action-strategy="'+esc(s.id)+'" type="button">＋ Action</button><button data-delete-strategy="'+esc(s.id)+'" type="button" class="danger">×</button>'+
+   '<span class="strategy-score">'+ratings.get(s.id).toFixed(2)+' / 5</span></div></article>';
+ };
+ const linked=TOWS_TYPES.map(t=>project.strategies.filter(s=>s.type===t.id&&s.factorIds.length===2).map(s=>card(s,t)).join('')).join('');
+ const unlinked=project.strategies.filter(s=>!typeFor(s.type)||s.factorIds.length!==2).map(s=>card(s,null)).join('');
+ return linked+unlinked;
 }
 const bar=n=>'<div class="rank-bar"><span><b style="width:'+(Number(n)/5*100).toFixed(1)+'%"></b></span><strong>'+Number(n).toFixed(2)+'</strong></div>';
 export function rankingHTML(project){
