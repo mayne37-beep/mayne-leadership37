@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f6faff">
+<meta name="description" content="Change Management Studio by Mayne Leadership. Interactive Kotter change roadmap, ADKAR assessment, stakeholder analysis, communication plan, change resistance, milestones and real adoption outcomes.">
+<title>Change Management Studio | Mayne Leadership</title><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/change-studio.css"><script type="module" src="/assets/change-studio.js"></script></head><body>
+<a href="#work" class="skip">Skip to change management workspace</a>
+<header class="topbar"><a class="brand" href="/tools.html"><img src="/assets/jm-leadership-logo.svg" alt="" width="43" height="43"><span><small>MAYNE LEADERSHIP · STRATEGY TOOLKIT</small><strong>Change <em>Management Studio</em></strong></span></a>
+<div class="project-name"><label class="sr" for="project-title">Project title</label><input type="text" id="project-title" maxlength="130" value="Untitled change initiative"><span id="save-status" role="status" aria-live="polite">Saved on this device</span></div>
+<div class="top-actions"><button id="new-project" type="button">＋ New</button><button id="library-button" type="button">My projects</button><button id="undo" disabled type="button" aria-label="Undo">↶</button><button id="redo" disabled type="button" aria-label="Redo">↷</button>
+<button class="primary" id="export-button" type="button">Export / Report ↗</button><a href="/tools.html" class="back-link">← Tools</a></div></header>
+<section class="hero"><div><span class="eyebrow">LEAD PEOPLE · MANAGE TRANSFORMATION · MEASURE ADOPTION</span><h1>Guide the change. <em>Bring people with you.</em></h1><p>An interactive command center for planning, communicating, assessing readiness, removing resistance, and sustaining organizational change.</p></div><div class="hero-stats" id="hero-stats" aria-label="Change project statistics"></div></section>
+<div class="studio-layout">
+<aside class="side left" aria-label="Project context and examples"><span class="eyebrow">01 / DEFINE THE CHANGE</span><h2>The change brief</h2><p class="muted">Start with the case for change. Everything else should connect to this objective.</p>
+<label for="change-statement" class="field-label">What is changing?</label><textarea id="change-statement" maxlength="1300" rows="3" placeholder="Describe the organizational behavior, system or process to change…"></textarea>
+<label for="why-change" class="field-label">Why now?</label><textarea id="why-change" maxlength="1300" rows="3" placeholder="Business need, opportunity or pressure…"></textarea>
+<label for="future-vision" class="field-label">Future vision</label><textarea id="future-vision" maxlength="1300" rows="3" placeholder="What will look different after the change?"></textarea>
+<label for="success-definition" class="field-label">Definition of success</label><textarea id="success-definition" maxlength="1250" rows="3" placeholder="Describe observable outcomes, not just completed tasks…"></textarea>
+<div class="two-fields"><label class="field-label">Change owner<input id="change-owner" maxlength="110" placeholder="Change lead"></label><label class="field-label">Executive sponsor<input id="change-sponsor" maxlength="110" placeholder="Sponsor"></label></div>
+<div class="two-fields"><label class="field-label">Start date<input id="change-start" type="date"></label><label class="field-label">Target date<input id="change-target" type="date"></label></div>
+<label class="field-label" for="change-scope">Scope, assumptions and constraints</label><textarea id="change-scope" maxlength="1300" rows="3" placeholder="Who and what is affected?"></textarea>
+<div class="divider"></div><span class="eyebrow">CLASSROOM STARTER PROJECTS</span><p class="muted">Open an editable example without overwriting your current work.</p>
+<div class="examples"><button data-example="virtual" type="button">✦ Virtual learning transformation</button><button data-example="ai" type="button">◈ Responsible AI adoption</button><button data-example="operations" type="button">◎ Service improvement</button></div>
+<div class="divider"></div><span class="eyebrow">CONNECT YOUR TOOLKIT</span><p class="muted">Reuse data from your other studios when it was saved in this browser.</p>
+<button id="import-stakeholders" type="button" class="import-button">↗ Import Stakeholder Map</button><button id="import-force-field" type="button" class="import-button">↗ Import Restraining Forces</button><p id="import-status" class="import-note" aria-live="polite">Imports add new items and skip duplicates. Review them before using the analysis.</p>
+<div class="divider"></div><p class="fine-print">Projects are stored locally in this browser. No cloud sync or live student collaboration in this version. Export a JSON backup to move work between devices.</p></aside>
+<main id="work" class="center">
+<nav class="tabs" aria-label="Change Management Studio sections">
+<button data-view="dashboard" class="active" type="button">◈ Command Center</button>
+<button data-view="kotter" type="button">◎ Kotter's 8 Steps</button>
+<button data-view="adkar" type="button">▥ ADKAR Readiness</button>
+<button data-view="stakeholders" type="button">♙ Stakeholders</button>
+<button data-view="communications" type="button">✉ Communications</button>
+<button data-view="roadmap" type="button">⇢ Change Roadmap</button>
+<button data-view="risks" type="button">⚑ Resistance & Risks</button>
+<button data-view="outcomes" type="button">▤ Outcomes</button>
+</nav>
+<div class="view-head"><div><span class="eyebrow" id="view-kicker">CHANGE COMMAND CENTER</span><h2 id="view-title">Make change visible.</h2><p id="view-description" class="muted">Understand progress, adoption, resistance and the next step.</p></div><div id="view-actions" class="view-actions"></div></div>
+<div id="workspace" class="workspace" aria-live="off"></div>
+</main>
+<aside class="side right" aria-label="Change coach and guidance"><span class="eyebrow">02 / CHANGE NAVIGATOR</span><h2>Leadership lens</h2><p class="muted">Keep progress tied to people, evidence, and sustained behavior.</p>
+<div class="coach"><div class="coach-icon">✦</div><span class="eyebrow">REFLECTION PROMPT</span><p id="coach-question">What would people need to believe, know and do differently for this change to work?</p><button id="coach-next" type="button">Another question →</button></div>
+<div class="divider"></div><div class="small-heading"><strong>YOUR NEXT MOVES</strong><span>Evidence-based prompts</span></div><div id="signals"></div>
+<div class="divider"></div><div class="small-heading"><strong>CHANGE READINESS</strong></div><div id="mini-readiness"></div>
+<div class="divider"></div><div class="reference"><strong>Framework guidance</strong><p>Kotter's model supports organization-level change; ADKAR highlights the individual adoption journey. Treat scores as working estimates until validated by observation and feedback.</p>
+<a href="https://www.kotterinc.com/methodology/8-steps/" target="_blank" rel="noopener noreferrer">Kotter 8 Steps ↗</a><a href="https://www.prosci.com/methodology/adkar" target="_blank" rel="noopener noreferrer">Prosci ADKAR ↗</a>
+<p class="fine-print">Independent educational workspace. Not affiliated with Kotter or Prosci.</p></div>
+</aside></div>
+<dialog id="library-dialog" aria-labelledby="library-heading"><div class="dialog-head"><div><span class="eyebrow">SAVED WORK</span><h2 id="library-heading">Change project library</h2></div><button data-close="library-dialog" type="button" aria-label="Close">×</button></div>
+<div class="dialog-buttons"><button id="library-new" type="button" class="primary">＋ New project</button><button id="import-json" type="button">↥ Import JSON backup</button><input id="import-file" type="file" accept=".json,application/json" hidden></div><div id="library-list" class="library-list"></div><p class="modal-help">Projects are stored in this browser. Export backups regularly.</p></dialog>
+<dialog id="editor-dialog" aria-labelledby="editor-heading"><form id="editor-form"><div class="dialog-head"><div><span class="eyebrow" id="editor-kicker">CHANGE PLAN</span><h2 id="editor-heading">Edit item</h2></div><button type="button" data-close="editor-dialog" aria-label="Close">×</button></div><div id="editor-body" class="editor-body"></div><div class="dialog-buttons right"><button type="button" data-close="editor-dialog">Cancel</button><button type="submit" class="primary">Save changes</button></div></form></dialog>
+<dialog id="export-dialog" aria-labelledby="export-heading"><div class="dialog-head"><div><span class="eyebrow">TAKE IT WITH YOU</span><h2 id="export-heading">Export your change plan</h2></div><button data-close="export-dialog" type="button" aria-label="Close">×</button></div><div class="export-options">
+<button type="button" data-export="json">⊞ Editable project (JSON) <small>Complete backup with every plan, rating and outcome</small></button>
+<button type="button" data-export="milestones">⇢ Milestones & actions (CSV) <small>Dates, owners, stages, measures and completion</small></button>
+<button type="button" data-export="stakeholders">♙ Stakeholder readiness (CSV) <small>Groups, ADKAR scores, concerns, influence and engagement</small></button>
+<button type="button" data-export="communications">✉ Communications (CSV) <small>Audiences, messages, channels and schedules</small></button>
+<button type="button" data-export="risks">⚑ Resistance register (CSV) <small>Risks, ratings, owners, responses and evidence</small></button>
+<button type="button" data-export="outcomes">▤ Adoption pulses (CSV) <small>Dated adoption, training and confidence values</small></button>
+<button type="button" data-export="report">▣ Complete report / PDF <small>Print or save the full change strategy with visuals</small></button>
+</div></dialog><section id="print-report" aria-label="Print-ready change management report"></section><div id="toast" role="status" aria-live="polite"></div></body></html>
