@@ -16,7 +16,8 @@
     "test:interactive": "node --test tests/interactive/model.test.mjs tests/interactive/api.test.mjs && node tests/interactive/dom-flow.mjs",
     "test:escape": "node --test tests/escape/engine.test.cjs tests/escape/api.test.mjs tests/escape/projects.test.cjs tests/escape/project-assets.test.cjs && node tests/escape/dom-flow.cjs",
     "test:systems": "node --test tests/systems/model.test.mjs tests/systems/api.test.mjs && node tests/systems/dom-flow.mjs && node tests/systems/participant-flow.mjs",
-    "test:root-cause": "node --test tests/root-cause/*.test.mjs"
+    "test:root-cause": "node --test tests/root-cause/*.test.mjs",
+    "test:stakeholder": "node --test tests/stakeholder/*.test.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
