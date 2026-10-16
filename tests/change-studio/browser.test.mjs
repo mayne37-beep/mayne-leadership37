@@ -42,7 +42,7 @@ test('Change Studio supports an editable organizational and individual adoption 
   click('[data-example="ai"]');
   assert.equal(data().projects.length,2);
   assert.equal(p().groups.length,4);
-  assert.match($('#workspace').textContent,/Responsible AI/);
+  assert.match(p().title,/Responsible AI/);
 
   // Stage editor: record evidence and progress.
   go('kotter');
