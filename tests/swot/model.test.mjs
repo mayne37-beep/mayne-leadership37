@@ -35,7 +35,7 @@ test('SWOT factor pairing yields all four TOWS strategy types and rejects invali
  assert.throws(()=>addStrategy(p,[id.S,id.S]),/different/);
  assert.match(suggestedStrategy(p,id.S,id.O).text,/capitalize on/);
  const orphan=p.strategies.find(s=>s.type==='SO');
- repositionFactor(p,id.O,'T',48,55);
+ repositionFactor(p,id.O,'W',48,55);
  assert.equal(orphan.factorIds.length,1,'An incompatible move unlinks dependent strategy rather than claiming false pair');
  assert.equal(orphan.type,'');
 });
