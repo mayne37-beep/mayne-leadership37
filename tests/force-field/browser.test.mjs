@@ -113,7 +113,7 @@ test('Force Field Studio supports working force dragging, slider edits, what-if,
   assert.equal(state().projects[1].forces[0].stakeholder,'Program sponsor');
   assert.ok(p().actions.length===1);
   $('#open-library').click();
-  assert.ok($('#library-items').textContent.includes('Improve leadership'));
+  assert.ok($('#library-items').textContent.includes('Untitled change initiative'));
   assert.equal($('#library-dialog').open,true);
   closeAndPrint();
   function closeAndPrint(){
