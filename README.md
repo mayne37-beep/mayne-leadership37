@@ -2,6 +2,10 @@
 
 The website is deployed from `mayne37-beep/mayne-leadership37` to the existing Vercel project `mayne-leadership37`. Production: https://www.mayneleadership.com.
 
+## Leadership Impact Lab
+
+Classroom Tools opens `leadership-impact-lab.html`, the PIN-gated facilitator dashboard for a new peer-powered, open-ended Leadership 101 assessment center. `leadership-impact-join.html` is the public QR participant page; `leadership-impact-present.html` is the comment-free screen-share view. Two to six teams work through 12 randomized scenarios, give anonymous ratings of trust, support, and perceived effectiveness, submit comments/questions, and receive aggregated feedback after the facilitator reveals it. CSV exports preserve outcomes across all rounds. Backend routes through `/api/leadership-impact` to the private `ml_impact` schema in the existing Supabase project. See [the facilitator guide](docs/leadership-impact-lab.md) for setup, appropriate grading, privacy limits, and verification scope.
+
 ## Systems Mapping Studio
 
 Thinking Tools now opens `systems-mapping-studio.html`: a direct-edit systems canvas with signed causal links, bounded feedback-loop analysis, delays, boundaries, leverage and consequence prompts, nine templates, guided workflows, worksheets, website/device project storage, version history, exports, and classroom sharing. See [the implementation and verification guide](docs/systems-mapping-studio.md) for usage, calculations, database design, and limits. Run `npm run test:systems`. Classroom student links use `systems-mapping-join.html` and the isolated PIN-aware `/api/systems-studio` gateway.
