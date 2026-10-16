@@ -82,6 +82,7 @@ function render(){
  $('#view-title').textContent=VIEWS[view][1];$('#view-eyebrow').textContent=VIEWS[view][0];
  $$('[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false')});
  $('#view-root').innerHTML=renderView(c,view);
+ $('#undo-case').disabled=!past.length;$('#redo-case').disabled=!future.length;
 }
 function formField(label,key,val,type='text',options=[],help=''){
  let input='';
@@ -252,6 +253,7 @@ async function importCase(file){
 function bind(){
  $('#new-case').onclick=()=>createCase();
  $('#duplicate-case').onclick=()=>createCase(normalizeCase({...current(),title:current().title+' (copy)'},{regenerate:true}));
+ $('#undo-case').onclick=undo;$('#redo-case').onclick=redo;
  $('#export-menu').onclick=()=>showEditor('export');
  $('#print-report').onclick=()=>printReport(current());
  $('#case-search').oninput=renderLibrary;
