@@ -108,3 +108,7 @@
 .course-player .flashcard .flashcard-back,.editor-canvas .block-snapshot .flashcard .flashcard-back{background:color-mix(in srgb,var(--highlight,#c59a43) 22%,var(--surface,#fff));color:var(--ink,#20364a);border-color:color-mix(in srgb,var(--highlight,#c59a43) 45%,#fff)}
 @media(prefers-reduced-motion:reduce){.flashcard-inner{transition:none!important}.flashcard .flashcard-face{transition:none!important}}
 @media print{.flashcard{perspective:none!important;break-inside:avoid}.flashcard-inner,.flashcard.flipped .flashcard-inner{display:block;transform:none!important;transition:none!important}.flashcard .flashcard-face,.flashcard .flashcard-back{display:block;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;min-height:0;margin:10px 0;height:auto}}
+
+/* Keep editor snapshots selectable, while allowing authors to flip cards in place. */
+.editor-canvas .block-snapshot .flashcard{pointer-events:auto}
+.editor-canvas .block-snapshot .flashcard:focus-visible{outline:3px solid var(--highlight,var(--gold));outline-offset:4px}
