@@ -1,11 +1,14 @@
 import {VERSION,LIMITS,STAGES,uid,esc,copy,blankCase,addCause,removeCause,isDescendant,analysis,normalizeCase,template,today} from './root-cause-model.js';
 import {VIEWS,renderView,button} from './root-cause-render.js';
-import {exportJSON,exportSVG,exportPNG,exportPareto,exportSolutions,printReport} from './root-cause-export.js';
+import {exportJSON,exportSVG,exportPNG,exportPareto,exportSolutions,printReport,exportWhysCSV} from './root-cause-export.js';
+import {fiveWhysExample} from './five-whys.js';
 
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 const STORE='ml.root-cause.studio.v1';
+const entryView=new URLSearchParams(window.location.search).get('view')||document.body?.dataset?.initialView||'';
+const defaultView=VIEWS[entryView]?entryView:'problem';
 const PROMPTS=['What evidence would convince a skeptical colleague?','What other explanations have you not yet explored?','Are you treating a symptom as if it were a cause?','What changed before this problem appeared?','How could you measure your suspected causal relationship?','Who closest to the work has another perspective?','What unintended consequences could a solution produce?','Which assumption is most likely to be wrong?'];
-let library={cases:[],activeId:''},view='problem',modal=null,promptIndex=0,past=[],future=[],toastTimer=null,dragId='';
+let library={cases:[],activeId:''},view='problem',modal=null,promptIndex=0,past=[],future=[],toastTimer=null,dragId='',whyFocusId='',whyPresenting=false;
 function current(){return library.cases.find(x=>x.id===library.activeId)||library.cases[0];}
 function announce(message){const t=$('#toast');t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3100);}
 function loadLibrary(){
@@ -42,11 +45,11 @@ function redo(){
 }
 function chooseCase(id){
  if(!library.cases.some(c=>c.id===id))return;
- library.activeId=id;view='problem';past=[];future=[];persist();render();
+ library.activeId=id;view=defaultView;whyFocusId='';whyPresenting=false;past=[];future=[];persist();render();
 }
 function createCase(c=blankCase()){
  if(library.cases.length>=LIMITS.cases){announce('Project library limit reached. Export or remove a project.');return}
- library.cases.unshift(c);library.activeId=c.id;view='problem';past=[];future=[];persist();render();announce('Investigation ready.');
+ library.cases.unshift(c);library.activeId=c.id;view=defaultView;whyFocusId='';whyPresenting=false;past=[];future=[];persist();render();announce('Investigation ready.');
 }
 function renderLibrary(){
  const q=$('#case-search').value.trim().toLowerCase();
@@ -81,7 +84,8 @@ function render(){
  renderLibrary();renderStages();renderMetrics();
  $('#view-title').textContent=VIEWS[view][1];$('#view-eyebrow').textContent=VIEWS[view][0];
  $$('[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false')});
- $('#view-root').innerHTML=renderView(c,view);
+ $('#view-root').innerHTML=renderView(c,view,{focusId:whyFocusId});
+ document.body.classList.toggle('why-presenting',view==='whys'&&whyPresenting);
  $('#undo-case').disabled=!past.length;$('#redo-case').disabled=!future.length;
 }
 function formField(label,key,val,type='text',options=[],help=''){
@@ -201,6 +205,20 @@ function deleteRecord(kind,id){
 }
 function act(action,node){
  const id=node.dataset.id||'',causeId=node.dataset.causeId||'';
+ if(action==='why-select'||action==='why-add-child'){
+  if(!current().causes.some(x=>x.id===id))return;
+  whyFocusId=id;render();
+  if(action==='why-add-child')$('#why-answer')?.focus();
+  return;
+ }
+ if(action==='why-clear'){whyFocusId='';render();$('#why-answer')?.focus();return}
+ if(action==='why-focus-input'){$('#why-answer')?.focus();$('#why-answer')?.scrollIntoView?.({behavior:'smooth',block:'center'});return}
+ if(action==='why-present'){whyPresenting=!whyPresenting;render();return}
+ if(action==='why-sample'){createCase(fiveWhysExample());view='whys';persist();render();return}
+ if(action==='why-export'){exportWhysCSV(current());announce('Why-chain CSV exported.');return}
+ if(action==='why-to-evidence'||action==='why-to-fishbone'||action==='why-to-actions'){
+  view=action.replace('why-to-','');whyPresenting=false;persist();render();return;
+ }
  if(action==='add-cause')return showEditor('cause');
  if(action==='add-child')return showEditor('cause','',{parentId:id});
  if(action==='edit-cause')return showEditor('cause',id);
@@ -266,6 +284,27 @@ function bind(){
  $('#dialog-cancel').onclick=()=>$('#editor-dialog').close();
  $('#editor-dialog').addEventListener('close',()=>modal=null);
  $('#editor-form').onsubmit=e=>{e.preventDefault();try{saveEditor()}catch(err){announce('Update failed: '+err.message)}};
+ document.addEventListener('submit',event=>{
+  if(event.target?.id!=='why-add-form')return;
+  event.preventDefault();
+  const form=event.target,answer=String(form.elements.namedItem('why-answer')?.value||'').trim().slice(0,220);
+  const parentId=String(form.elements.namedItem('why-parent')?.value||'');
+  const category=String(form.elements.namedItem('why-category')?.value||'process');
+  if(!answer){announce('Enter a possible cause before adding the next Why.');return}
+  const c=current();
+  if(parentId&&!c.causes.some(x=>x.id===parentId)){announce('The selected parent cause no longer exists.');render();return}
+  if(c.causes.length>=LIMITS.causes){announce('This investigation reached its cause limit.');return}
+  try{
+   change(x=>{
+    const cause=addCause(x,{text:answer,parentId,category,status:'Hypothesis'});
+    whyFocusId=cause.id;
+    if(x.stage==='define')x.stage='explore';
+   });
+   const selected=$('[data-why-card]').find(x=>x.dataset.whyCard===whyFocusId);
+   selected?.scrollIntoView?.({behavior:'smooth',block:'nearest',inline:'center'});
+   announce('Explanation added. Choose Ask Why to continue the chain.');
+  }catch(error){announce('Could not add the Why: '+error.message)}
+ });
  document.addEventListener('click',e=>{
   const visual=e.target.closest('[data-visual-cause]');if(visual){showEditor('cause',visual.dataset.visualCause);return}
   const select=e.target.closest('[data-select-case]');if(select){chooseCase(select.dataset.selectCase);return}
@@ -311,4 +350,4 @@ function bind(){
  });
  document.addEventListener('dragend',()=>{$$('.bone-group.over').forEach(x=>x.classList.remove('over'));dragId=''});
 }
-loadLibrary();bind();persist();render();
+loadLibrary();if(VIEWS[entryView])view=entryView;bind();persist();render();
