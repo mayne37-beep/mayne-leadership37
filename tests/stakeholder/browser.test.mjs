@@ -34,7 +34,7 @@ test('Stakeholder Studio adds, moves, resizes, restyles, saves and plans engagem
   assert.match($('#map-host').innerHTML,/Program Sponsor/);
 
   $('[data-shape=diamond]').click();
-  $('[data-color=gold]').click();
+  $('#color-picker [data-color=gold]').click();
   m=state().maps[0];n=m.nodes[0];
   assert.equal(n.shape,'diamond');assert.equal(n.color,'gold');
   assert.match($('#map-host').innerHTML,/<polygon/);
