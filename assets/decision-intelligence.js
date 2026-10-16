@@ -1,4 +1,4 @@
-import {VERSION,LIMIT,TYPES,TAGS,PHASES,RISK_STATUSES,RUBRIC,copy,clean,clamp,integer,escapeHTML as e,today,createProject,addCriterion,addOption,setRating,deleteOption,deleteCriterion,addNode,updateNode,deleteNode,organizeTree,scoreMatrix,evaluateTree,makeScenario,addScenario,activeScenario,setScenarioOverride,makeRisk,addRisk,makeTeam,addTeam,teamScore,rankedTeams,addInject,addDecision,removeRecord,normalizeProject,sampleProject} from './decision-intelligence-model.js';
+import {VERSION,LIMIT,TYPES,TAGS,PHASES,RISK_STATUSES,RUBRIC,copy,clean,clamp,integer,escapeHTML as e,today,createProject,addCriterion,addOption,setRating,deleteOption,deleteCriterion,addNode,updateNode,deleteNode,reparentNode,organizeTree,scoreMatrix,evaluateTree,makeScenario,addScenario,activeScenario,setScenarioOverride,makeRisk,addRisk,makeTeam,addTeam,teamScore,rankedTeams,addInject,addDecision,removeRecord,normalizeProject,sampleProject} from './decision-intelligence-model.js';
 import {trim,option,empty,statsHTML,treeNodesHTML,treeLinksHTML,treeResultsHTML,diagramSVG,criteriaHTML,rankingHTML,matrixHTML,scenarioControlsHTML,scenarioResultsHTML,risksHTML,briefPreviewHTML,decisionLogHTML,teamsHTML,injectsHTML,reportHTML} from './decision-intelligence-render.js';
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const KEY='mayne.decision-intelligence.v1',SWOT='mayne.swot-tows-studio.v1';
@@ -65,23 +65,63 @@ function addBranch(type,parentId=S.selected){
 }
 function focus(id){const n=p().nodes.find(n=>n.id===id),box=$('#tree-frame');if(!n)return;box.scrollTo?.({left:Math.max(0,n.x-box.clientWidth/2),top:Math.max(0,n.y-box.clientHeight/2),behavior:'smooth'})}
 function position(ev){const box=$('#tree-frame'),r=box.getBoundingClientRect();return {x:ev.clientX-r.left+box.scrollLeft,y:ev.clientY-r.top+box.scrollTop}}
+function dropTargetAt(point,sourceId){
+ // Resolve the hovered card from geometry, rather than relying on event.target during pointer capture.
+ return p().nodes.find(n=>n.id!==sourceId&&point.x>=n.x-(n.w||224)/2&&point.x<=n.x+(n.w||224)/2&&point.y>=n.y-(n.h||125)/2&&point.y<=n.y+(n.h||125)/2)||null;
+}
 function pointerDown(ev){
- if(ev.button!==0)return;const grip=ev.target.closest?.('[data-move-node]');if(!grip)return;const n=p().nodes.find(x=>x.id===grip.dataset.moveNode);if(!n)return;
- const pos=position(ev);S.drag={id:n.id,x:pos.x,y:pos.y,originalX:n.x,originalY:n.y,moved:false,before:copy(p())};selectNode(n.id);
- try{$('#tree-frame').setPointerCapture(ev.pointerId)}catch{}ev.preventDefault();
+ if(ev.button!==0)return;
+ const connector=ev.target.closest?.('[data-connect-node]'),resizer=ev.target.closest?.('[data-resize-node]'),mover=ev.target.closest?.('[data-move-node]');
+ const id=connector?.dataset.connectNode||resizer?.dataset.resizeNode||mover?.dataset.moveNode;
+ if(!id)return;const n=p().nodes.find(x=>x.id===id);if(!n)return;
+ const pos=position(ev);
+ S.drag={id:n.id,type:connector?'connect':resizer?'resize':'move',x:pos.x,y:pos.y,originalX:n.x,originalY:n.y,w:n.w||224,h:n.h||125,moved:false,before:copy(p())};
+ selectNode(n.id);
+ try{$('#tree-frame').setPointerCapture(ev.pointerId)}catch{}
+ ev.preventDefault();
 }
 function pointerMove(ev){
- const drag=S.drag;if(!drag)return;const pos=position(ev),dx=pos.x-drag.x,dy=pos.y-drag.y;
+ const drag=S.drag;if(!drag)return;const pt=position(ev),dx=pt.x-drag.x,dy=pt.y-drag.y;
  if(!drag.moved&&Math.abs(dx)+Math.abs(dy)<4)return;drag.moved=true;
- const x=clamp(drag.originalX+dx,112,1786),y=clamp(drag.originalY+dy,67,1465),n=p().nodes.find(n=>n.id===drag.id);
- if(!n)return;n.x=x;n.y=y;
- const card=$('[data-node="'+drag.id+'"]');if(card){card.style.left=x+'px';card.style.top=y+'px'}
+ if(drag.type==='connect'){
+  const source=p().nodes.find(n=>n.id===drag.id),target=dropTargetAt(pt,drag.id),svg=$('#tree-links');
+  if(source&&svg){
+   svg.querySelector('.connect-preview')?.remove();
+   const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+   const fromX=source.x+(source.w||224)/2,fromY=source.y;
+   path.setAttribute('d','M'+fromX+' '+fromY+' C'+(fromX+70)+' '+fromY+', '+(pt.x-70)+' '+pt.y+', '+pt.x+' '+pt.y);
+   path.setAttribute('class','connect-preview');svg.appendChild(path);
+  }
+  $$('.tree-node').forEach(card=>card.classList.toggle('connect-target',card.dataset.node===target?.id));
+  return;
+ }
+ const n=p().nodes.find(n=>n.id===drag.id);if(!n)return;
+ const card=$('[data-node="'+drag.id+'"]');
+ if(drag.type==='resize'){
+  n.w=integer(drag.w+dx,180,330,drag.w);n.h=integer(drag.h+dy,110,240,drag.h);
+  if(card){card.style.width=n.w+'px';card.style.minHeight=n.h+'px';}
+ }else{
+  n.x=clamp(drag.originalX+dx,112,1786);n.y=clamp(drag.originalY+dy,67,1465);
+  if(card){card.style.left=n.x+'px';card.style.top=n.y+'px';}
+ }
  $('#tree-links').innerHTML=treeLinksHTML(p());
 }
 function pointerUp(ev,cancel=false){
- const drag=S.drag;if(!drag)return;S.drag=null;try{$('#tree-frame').releasePointerCapture(ev.pointerId)}catch{}
+ const drag=S.drag;if(!drag)return;S.drag=null;
+ const pt=position(ev);
+ try{$('#tree-frame').releasePointerCapture(ev.pointerId)}catch{}
  if(cancel){S.projects[S.projects.findIndex(x=>x.id===S.id)]=drag.before;render();return;}
- if(drag.moved&&JSON.stringify(drag.before)!==JSON.stringify(p())){S.history.push(drag.before);S.future=[];persist();render()}else renderTree();
+ if(drag.type==='connect'){
+  const target=dropTargetAt(pt,drag.id);
+  if(drag.moved&&target){
+   const outcome=change(pr=>{if(!reparentNode(pr,target.id,drag.id))throw Error('Cannot connect a node to itself, an outcome, or one of its descendants.');});
+   if(outcome){S.selected=target.id;render();toast('Branch reconnected. Review any chance-node probability totals.');}
+  }else{renderTree();if(drag.moved)toast('Drop the connector onto another node to reattach that branch.');}
+  return;
+ }
+ if(drag.moved&&JSON.stringify(drag.before)!==JSON.stringify(p())){
+  S.history.push(drag.before);if(S.history.length>65)S.history.shift();S.future=[];persist();render();
+ }else renderTree();
 }
 function show(q){const d=$(q);if(d&&!d.open)d.showModal()}
 function close(q){const d=$(q);if(d?.open)d.close()}
