@@ -14,7 +14,7 @@ test('Force Field Studio supports working force dragging, slider edits, what-if,
  const state=()=>JSON.parse(dom.window.localStorage.getItem('mayne.force-field-studio.v1'));
  const p=()=>state().projects.find(x=>x.id===state().projectId);
  const input=(node,kind='change')=>node.dispatchEvent(new dom.window.Event(kind,{bubbles:true,cancelable:true}));
- const click=q=>{const el=$(q);assert.ok(el,'Missing '+q);el.click()};
+ const click=q=>{const el=$(q);assert.ok(el,'Missing '+q);if(typeof el.click==='function')el.click();else el.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true,cancelable:true}));};
  const go=v=>click('[data-view="'+v+'"]');
  const pointer=(type,target,x,y)=>{const ev=new dom.window.Event(type,{bubbles:true,cancelable:true});
   for(const [key,val] of Object.entries({pointerId:1,button:0,clientX:x,clientY:y}))Object.defineProperty(ev,key,{value:val});
