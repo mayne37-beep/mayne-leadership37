@@ -41,6 +41,7 @@ test('Dedicated 5 Whys Studio supports guided questions, competing paths, inline
   c=state().cases[0];const b=c.causes[1].id;
   assert.equal(c.causes[1].parentId,a);
   assert.match($('#view-root').innerHTML,/WHY 2/);
+  assert.ok($('#why-connections'), 'SVG connector overlay exists for linked cause cards');
 
   $('[data-action=why-clear]').click();
   commitWhy('Changes arrive late from stakeholders');
