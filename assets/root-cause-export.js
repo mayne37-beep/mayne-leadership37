@@ -1,5 +1,5 @@
 import {fishboneSVG,reportHTML} from './root-cause-render.js';
-import {paretoAnalysis} from './root-cause-model.js';
+import {paretoAnalysis,depth} from './root-cause-model.js';
 export const safeName=c=>(c.title||'root-cause').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'').slice(0,55)||'root-cause';
 export function saveDownload(content,name,type){
  const b=content instanceof Blob?content:new Blob([content],{type});
@@ -34,3 +34,14 @@ export function exportSolutions(c){
  ...c.solutions.map(s=>[s.title,s.causeIds.map(id=>c.causes.find(x=>x.id===id)?.text||'').join('; '),s.owner,s.due,s.status,s.impact,s.effort,s.confidence,s.measure,s.baseline,s.target,s.result])]),safeName(c)+'-interventions.csv','text/csv;charset=utf-8');
 }
 export function printReport(c){document.querySelector('#print-document').innerHTML=reportHTML(c);window.print();}
+
+/** Structured 5 Whys export preserves each parent relationship for analysis. */
+export function exportWhysCSV(c){
+ const columns=['Why level','Potential cause','Contributes to','Category','Assessment','Root candidate','Evidence records','Reasoning / notes'];
+ const rows=c.causes.map(x=>[
+ depth(c,x.id)+1,x.text,c.causes.find(p=>p.id===x.parentId)?.text||c.problem||'Original problem',
+ c.categories.find(cat=>cat.id===x.category)?.name||'Uncategorized',x.status,x.root?'Yes':'No',
+ c.evidence.filter(ev=>ev.causeId===x.id).length,x.notes
+ ]);
+ saveDownload(csv([columns,...rows]),safeName(c)+'-5-whys.csv','text/csv;charset=utf-8');
+}
