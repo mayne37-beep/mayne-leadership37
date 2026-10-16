@@ -187,7 +187,7 @@ const csv=rows=>'\ufeff'+rows.map(row=>row.map(x=>'"'+String(x??'').replace(/"/g
 function exportFile(kind){
  close('#export-dialog');const pr=p();
  if(kind==='json'){download(JSON.stringify({kind:'mayne-decision-intelligence',version:VERSION,project:pr},null,2),stem()+'.decision.json','application/json');return;}
- if(kind==='report'){$('#print-report').innerHTML=reportHTML(pr);window.print();return;}
+ if(kind==='report'){$('#print-report').innerHTML=reportHTML(pr)+operationsReportHTML(pr);window.print();return;}
  if(kind==='svg'){download('<?xml version="1.0" encoding="UTF-8"?>\n'+diagramSVG(pr,activeScenario(pr)),stem()+'-tree.svg','image/svg+xml;charset=utf-8');return;}
  if(kind==='png'){exportPNG();return;}
  if(kind==='matrix'){
@@ -198,8 +198,8 @@ function exportFile(kind){
  }
  if(kind==='risks'){download(csv([['Failure','Likelihood','Impact','Warning','Safeguard','Owner','Status'],
   ...pr.risks.map(x=>[x.failure,x.likelihood,x.impact,x.warning,x.safeguard,x.owner,x.status])]),stem()+'-premortem.csv','text/csv;charset=utf-8');return;}
- if(kind==='teams'){download(csv([['Team','Recommendation','Evidence','Trade-offs',...RUBRIC,'Total /20'],
-  ...rankedTeams(pr).map(t=>[t.name,t.recommendation,t.evidence,t.tradeoffs,...RUBRIC.map(k=>t.scores[k]),teamScore(t)])]),stem()+'-teams.csv','text/csv;charset=utf-8');}
+ if(kind==='teams'){download(csv([['Team','Recommendation','Evidence','Trade-offs',...RUBRIC,'Total /20',...(pr.exercise?.rounds||[]).map(r=>r.title+' response')],
+  ...rankedTeams(pr).map(t=>[t.name,t.recommendation,t.evidence,t.tradeoffs,...RUBRIC.map(k=>t.scores[k]),teamScore(t),...(pr.exercise?.rounds||[]).map(r=>t.roundNotes?.[r.id]||'')])]),stem()+'-teams.csv','text/csv;charset=utf-8');}
 }
 async function exportPNG(){
  const markup=diagramSVG(p(),activeScenario(p())),url=URL.createObjectURL(new Blob([markup],{type:'image/svg+xml;charset=utf-8'}));
@@ -230,6 +230,23 @@ function importSwot(){
 function clickHandler(ev){
  const t=ev.target,closer=t.closest('[data-close]');if(closer){close('#'+closer.dataset.close);return;}
  const view=t.closest('[data-view]'),go=t.closest('[data-go]');if(view||go){setView(view?.dataset.view||go.dataset.go);return;}
+ const example=t.closest('[data-example]');if(example){
+  try{newProject(example.dataset.example==='crisis'?buildOperationsCrisisProject():sampleProject(example.dataset.example));}catch(err){toast(err.message);}
+  return;
+ }
+ const caseRound=t.closest('[data-case-round]');if(caseRound){goRound(Number(caseRound.dataset.caseRound));return;}
+ if(t.closest('[data-case-back]')){if(p().exercise)goRound(Math.max(0,p().exercise.currentRound-1));return;}
+ if(t.closest('[data-case-next]')){if(p().exercise)goRound(Math.min(p().exercise.rounds.length-1,p().exercise.currentRound+1));return;}
+ if(t.closest('[data-case-timer-toggle]')){toggleTimer();return;}
+ if(t.closest('[data-case-timer-reset]')){resetTimer();return;}
+ if(t.closest('[data-case-projector]')){S.projector=!S.projector;S.view='challenge';render();return;}
+ if(t.closest('[data-case-guide]')){$('#operations-guide-body').innerHTML=operationsGuideHTML(p());show('#operations-guide-dialog');return;}
+ if(t.closest('[data-case-reveal]')){
+  const ex=p().exercise;if(!ex)return;const current=ex.rounds[ex.currentRound];
+  const index=current?.injectIndexes.find(i=>p().injects[i]&&!p().injects[i].revealed);
+  if(index!==undefined){change(pr=>{pr.injects[index].revealed=true;});toast('Incident update released to the briefing board.');}
+  return;
+ }
  const branch=t.closest('[data-add-branch]');if(branch){const parent=p().nodes.find(n=>n.id===branch.dataset.addBranch);if(parent)addBranch(parent.type==='chance'?'outcome':'chance',parent.id);return;}
  const card=t.closest('[data-node]');if(card&&!t.closest('textarea')){selectNode(card.dataset.node);return;}
  for(const [attr,action] of [['openProject','open'],['copyProject','copy'],['deleteProject','delete']]){
@@ -254,6 +271,11 @@ function clickHandler(ev){
 function updateScenario(kind,a,b,v){const sc=activeScenario(p());if(!sc)return;change(pr=>setScenarioOverride(pr,sc.id,kind,a,b,v))}
 function changed(ev){
  const t=ev.target;
+ if(t.dataset.caseTeam&&t.dataset.caseResponse){
+  change(pr=>{const team=pr.teams.find(v=>v.id===t.dataset.caseTeam),round=pr.exercise?.rounds.find(r=>r.id===t.dataset.caseResponse);
+   if(team&&round){if(!team.roundNotes)team.roundNotes={};team.roundNotes[round.id]=clean(t.value,1800);}
+  });return;
+ }
  if(t.dataset.inlineTitle){change(pr=>updateNode(pr,t.dataset.inlineTitle,{title:t.value}));return;}
  if(t.dataset.weight){change(pr=>{const c=pr.criteria.find(c=>c.id===t.dataset.weight);if(c)c.weight=integer(t.value,0,100,c.weight);});return;}
  if(t.dataset.rating){change(pr=>setRating(pr,t.dataset.rating,t.dataset.criterion,{score:t.value}));return;}
