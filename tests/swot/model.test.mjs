@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
  VERSION,MAX,QUADRANTS,COLORS,TOWS_TYPES,createProject,addFactor,repositionFactor,resizeFactor,removeFactor,
  addStrategy,removeStrategy,strategyTypeForFactors,suggestedStrategy,scoreStrategy,rankStrategies,
- addAction,addScenario,projectStats,normalizeProject,sampleProject,DEFAULT_WEIGHTS
+ addAction,addScenario,projectStats,normalizeProject,sampleProject,templateProject,DEFAULT_WEIGHTS
 } from '../../assets/swot-model.js';
 import {factorHTML,strategyCardsHTML,rankingHTML,scenarioComparisonHTML,actionsHTML,diagramSVG,reportHTML} from '../../assets/swot-render.js';
 
@@ -108,4 +108,28 @@ test('Scenario delta limits and resource-demand direction are consistent',()=>{
  sc.deltas.resources=99;
  const clone=normalizeProject(p);
  assert.equal(clone.scenarios[0].deltas.resources,2);
+});
+
+
+test('Classroom starter templates remain editable and all strategic types connect',()=>{
+ for(const id of ['leadership','change','service']){
+  const project=templateProject(id);
+  assert.equal(project.factors.length,8);
+  assert.equal(project.strategies.length,4);
+  assert.equal(project.actions.length,1);
+  assert.equal(project.scenarios.length,1);
+  assert.ok(project.strategies.every(s=>s.factorIds.length===2));
+  assert.ok(project.description.toLowerCase().includes('hypothetical')||project.description.toLowerCase().includes('illustrative'));
+ }
+ assert.throws(()=>templateProject('unknown'),/Unknown/);
+});
+test('Invalidated TOWS pair remains available for review and reconnection',()=>{
+ const p=createProject(),s=addFactor(p,'S','Strong team'),o=addFactor(p,'O','Growing demand');
+ const st=addStrategy(p,[s.id,o.id]);
+ repositionFactor(p,o.id,'W',50,50);
+ assert.equal(st.status,'Under review');
+ assert.equal(st.type,'');
+ assert.equal(st.factorIds.length,1);
+ assert.match(strategyCardsHTML(p),/NEEDS REVIEW/);
+ assert.match(strategyCardsHTML(p),/data-edit-strategy/);
 });
