@@ -1,10 +1,11 @@
 import {VERSION,LIMIT,TYPES,TAGS,PHASES,RISK_STATUSES,RUBRIC,copy,clean,clamp,integer,escapeHTML as e,today,createProject,addCriterion,addOption,setRating,deleteOption,deleteCriterion,addNode,updateNode,deleteNode,reparentNode,organizeTree,scoreMatrix,evaluateTree,makeScenario,addScenario,activeScenario,setScenarioOverride,makeRisk,addRisk,makeTeam,addTeam,teamScore,rankedTeams,addInject,addDecision,removeRecord,normalizeProject,sampleProject} from './decision-intelligence-model.js';
 import {trim,option,empty,statsHTML,treeNodesHTML,treeLinksHTML,treeResultsHTML,diagramSVG,criteriaHTML,rankingHTML,matrixHTML,scenarioControlsHTML,scenarioResultsHTML,risksHTML,briefPreviewHTML,decisionLogHTML,teamsHTML,injectsHTML,reportHTML} from './decision-intelligence-render.js';
+import {buildOperationsCrisisProject,OPERATIONS_CASE_ID,operationsBriefHTML,operationsGuideHTML,operationsReportHTML} from './operations-crisis-scenario.js';
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const KEY='mayne.decision-intelligence.v1',SWOT='mayne.swot-tows-studio.v1';
 const VIEWS={tree:['VISUAL REASONING','Explore the possible paths.','Connect decisions, uncertainty, and consequences.'],matrix:['EVIDENCE-AWARE COMPARISON','Rate the alternatives.','Weigh trade-offs and document evidence for each estimate.'],scenarios:['SENSITIVITY ANALYSIS','Challenge the assumptions.','Explore hypothetical changes without overwriting your baseline.'],premortem:['FAILURE ANTICIPATION','Imagine the decision failed.','List likely failure causes, early signs, and safeguards.'],brief:['DECISION GOVERNANCE','Present an accountable recommendation.','Record the decision, challenges, and review triggers.'],challenge:['CLASSROOM DECISION CHALLENGE','Defend the recommendation.','Compare team responses to surprise developments.']};
 const PROMPTS=['Which assumption could reverse the preferred option?','Who could bear the greatest unintended cost?','What evidence would change your mind?','Which alternative have we neglected?','Are the probabilities justified by evidence?','What warning sign should trigger a review?','How would your decision change with a smaller budget?'];
-const S={projects:[],id:'',view:'tree',selected:'',history:[],future:[],editor:null,drag:null};let toastHandle,qIndex=0;
+const S={projects:[],id:'',view:'tree',selected:'',history:[],future:[],editor:null,drag:null,projector:false,timerSeconds:null,timerHandle:null,timerRunning:false,timerDeadline:0};let toastHandle,qIndex=0;
 function p(){return S.projects.find(x=>x.id===S.id)||S.projects[0]}
 function node(){return p().nodes.find(n=>n.id===S.selected)}
 function toast(message){const t=$('#toast');t.textContent=message;t.classList.add('show');clearTimeout(toastHandle);toastHandle=setTimeout(()=>t.classList.remove('show'),3300)}
@@ -13,10 +14,35 @@ function persist(){p().updated=new Date().toISOString();try{localStorage.setItem
 function change(fn){const current=p(),before=copy(current);let result;try{result=fn(current)}catch(err){S.projects[S.projects.indexOf(current)]=before;toast(err.message);render();return false}if(JSON.stringify(before)!==JSON.stringify(p())){S.history.push(before);if(S.history.length>65)S.history.shift();S.future=[];persist()}render();return result===undefined?true:result}
 function undo(){if(!S.history.length)return;const current=p(),i=S.projects.indexOf(current),previous=S.history.pop();S.future.push(copy(current));S.projects[i]=previous;if(!previous.nodes.some(n=>n.id===S.selected))S.selected='';persist();render()}
 function redo(){if(!S.future.length)return;const current=p(),i=S.projects.indexOf(current),next=S.future.pop();S.history.push(copy(current));S.projects[i]=next;if(!next.nodes.some(n=>n.id===S.selected))S.selected='';persist();render()}
-function newProject(value=createProject()){if(S.projects.length>=LIMIT.projects){toast('Project library is full. Export or remove a project.');return false}S.projects.unshift(value);S.id=value.id;S.selected=value.nodes[0]?.id||'';S.view='tree';S.history=[];S.future=[];persist();render();close('#library-dialog');toast('Decision project ready.');return true}
-function switchProject(id){if(!S.projects.some(x=>x.id===id))return;S.id=id;S.view='tree';S.selected=p().nodes[0]?.id||'';S.history=[];S.future=[];persist();render();close('#library-dialog')}
+function roundSeconds(){const ex=p()?.exercise;return ex?.rounds?.[ex.currentRound]?.duration*60||12*60;}
+function mmss(seconds){const t=Math.max(0,Math.ceil(seconds));return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
+function stopTimer(){if(S.timerHandle){clearInterval(S.timerHandle);S.timerHandle=null;}S.timerRunning=false;}
+function updateTimerLabel(){const label=$('#case-timer-label');if(label)label.textContent=mmss(S.timerSeconds??roundSeconds());const button=$('[data-case-timer-toggle]');if(button)button.textContent=S.timerRunning?'Pause':'Start timer';}
+function resetTimer(){stopTimer();S.timerSeconds=roundSeconds();updateTimerLabel();}
+function toggleTimer(){
+ if(!p().exercise)return;
+ if(S.timerRunning){S.timerSeconds=Math.max(0,Math.ceil((S.timerDeadline-Date.now())/1000));stopTimer();updateTimerLabel();return;}
+ if(S.timerSeconds==null||S.timerSeconds<=0)S.timerSeconds=roundSeconds();
+ S.timerRunning=true;S.timerDeadline=Date.now()+S.timerSeconds*1000;
+ S.timerHandle=setInterval(()=>{S.timerSeconds=Math.max(0,Math.ceil((S.timerDeadline-Date.now())/1000));if(!S.timerSeconds){stopTimer();toast('Round time complete. Capture team decisions.');}updateTimerLabel();},250);updateTimerLabel();
+}
+function goRound(index){
+ const ex=p().exercise;if(!ex?.rounds?.[index])return;
+ stopTimer();S.timerSeconds=ex.rounds[index].duration*60;
+ change(pr=>{pr.exercise.currentRound=index;});
+}
+function queryLaunch(){
+ const param=new URLSearchParams(window.location.search).get('scenario');
+ if(![OPERATIONS_CASE_ID,'crisis'].includes(param))return;
+ const existing=S.projects.find(v=>v.exercise?.id===OPERATIONS_CASE_ID);
+ if(existing){S.id=existing.id;S.selected=existing.nodes[0]?.id||'';S.view='challenge';S.timerSeconds=roundSeconds();return;}
+ if(S.projects.length>=LIMIT.projects){console.warn('Decision project library full; crisis scenario not preloaded.');return;}
+ const exercise=buildOperationsCrisisProject();S.projects.unshift(exercise);S.id=exercise.id;S.selected=exercise.nodes[0]?.id||'';S.view='challenge';S.timerSeconds=roundSeconds();
+}
+function newProject(value=createProject()){if(S.projects.length>=LIMIT.projects){toast('Project library is full. Export or remove a project.');return false}S.projects.unshift(value);S.id=value.id;S.selected=value.nodes[0]?.id||'';S.view=value.exercise?'challenge':'tree';S.projector=false;resetTimer();S.history=[];S.future=[];persist();render();close('#library-dialog');toast('Decision project ready.');return true}
+function switchProject(id){if(!S.projects.some(x=>x.id===id))return;S.id=id;S.view=p().exercise?'challenge':'tree';S.projector=false;S.selected=p().nodes[0]?.id||'';S.history=[];S.future=[];resetTimer();persist();render();close('#library-dialog')}
 function deleteProject(id){const x=S.projects.find(x=>x.id===id);if(!x||!confirm('Delete "'+x.title+'" and all its decision work?'))return;S.projects=S.projects.filter(x=>x.id!==id);if(!S.projects.length)S.projects=[createProject()];if(S.id===id)S.id=S.projects[0].id;S.history=[];S.future=[];S.selected='';S.view='tree';persist();render();library()}
-function setView(v){if(!VIEWS[v])return;S.view=v;render()}
+function setView(v){if(!VIEWS[v])return;S.view=v;if(v!=='challenge')S.projector=false;render()}
 function render(){
  const project=p();$('#project-name').value=project.title;$('#hero-stats').innerHTML=statsHTML(project);
  for(const [id,key] of [['decision-question','question'],['decision-objective','objective'],['decision-context','context'],['decision-owner','owner'],['decision-deadline','deadline'],['decision-status','status']])$('#'+id).value=project[key]||'';
@@ -54,7 +80,7 @@ function renderBrief(){const pr=p(),b=pr.brief;$('#brief-preview').innerHTML=bri
  for(const [id,key] of [['brief-recommendation','recommendation'],['brief-dissent','dissent'],['brief-assumptions','assumptions'],['brief-trigger','reviewTrigger'],['brief-accountable','accountable'],['brief-review-date','reviewDate'],['brief-result','result']])$('#'+id).value=b[key]||'';
  $('#decision-log').innerHTML=decisionLogHTML(pr);
 }
-function renderChallenge(){$('#team-list').innerHTML=teamsHTML(p());$('#inject-list').innerHTML=injectsHTML(p())}
+function renderChallenge(){const pr=p();document.body.classList.toggle('di-projector',S.projector&&S.view==='challenge'&&!!pr.exercise);$('#case-briefing').innerHTML=pr.exercise?operationsBriefHTML(pr,{projector:S.projector,timer:mmss(S.timerSeconds??roundSeconds()),timerRunning:S.timerRunning}):'';$('#team-list').innerHTML=teamsHTML(pr);$('#inject-list').innerHTML=injectsHTML(pr)}
 function selectNode(id){if(!p().nodes.some(n=>n.id===id))return;S.selected=id;$$('[data-node]').forEach(card=>card.classList.toggle('selected',card.dataset.node===id));renderInspector()}
 function addBranch(type,parentId=S.selected){
  const parent=p().nodes.find(n=>n.id===parentId)||p().nodes[0];
@@ -279,4 +305,4 @@ function bind(){
   }
  });
 }
-load();S.selected=p().nodes[0]?.id||'';bind();persist();render();
+load();queryLaunch();S.selected=p().nodes[0]?.id||'';bind();persist();render();
