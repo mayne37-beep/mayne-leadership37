@@ -1,4 +1,6 @@
-// This instructor-only scenario library is intentionally not listed among public join assets.\n// Reveal cards are sent to students only when released by the facilitator.\nwindow.LEADERSHIP_IMPACT_CASES = [
+// This instructor-only scenario library is intentionally not listed among public join assets.
+// Reveal cards are sent to students only when released by the facilitator.
+window.LEADERSHIP_IMPACT_CASES = [
   {
     "id": "morale",
     "title": "The High Performer Nobody Wants to Work With",
@@ -263,4 +265,4 @@
     ],
     "facilitator": "Observe respect for expertise, systematic knowledge transfer, workload trade-offs, mentoring incentives, progressive competence checks, and succession risk."
   }
-];\n
+];
