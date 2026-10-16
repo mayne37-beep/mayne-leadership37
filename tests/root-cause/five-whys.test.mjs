@@ -19,6 +19,7 @@ test('5 Whys lays out depth columns and preserves alternative branches',()=>{
  assert.match(html,/id="why-add-form"/);
  assert.match(html,/data-cause-text=/);
  assert.match(html,/data-why-card=/);
+ assert.match(html,/id="why-connections"/);
  assert.match(html,/Contributes to/);
  assert.match(html,/No review calendar/);
  assert.match(html,/Resources are unavailable/);
