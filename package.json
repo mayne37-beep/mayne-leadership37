@@ -19,7 +19,8 @@
     "test:root-cause": "node --test tests/root-cause/*.test.mjs",
     "test:stakeholder": "node --test tests/stakeholder/*.test.mjs",
     "test:swot": "node --test tests/swot/*.test.mjs",
-    "test:force-field": "node --test tests/force-field/*.test.mjs"
+    "test:force-field": "node --test tests/force-field/*.test.mjs",
+    "test:change-studio": "node --test tests/change-studio/*.test.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
