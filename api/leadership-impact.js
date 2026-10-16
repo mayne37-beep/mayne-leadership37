@@ -3,7 +3,7 @@ import {authorized} from './lesson-studio.js';
 const SUPABASE='https://vteamreihsunsllwcphw.supabase.co';
 const PUBLISHABLE='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
 const PUBLIC=new Set(['join','state','vote','ask']);
-const HOST=new Set(['create','host-view','host-update']);
+const HOST=new Set(['create','host-view','host-update','host-export']);
 const ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ROOM=/^[a-f0-9]{20}$/;
 const TOKEN=/^[a-f0-9]{48}$/;
@@ -52,9 +52,9 @@ export default async function handler(req,res){
  }
  if(!process.env.LESSON_STUDIO_GATEWAY_KEY)return fail(503,'The classroom service is not configured.');
  try{
-  const response=await fetch(SUPABASE+'/rest/v1/rpc/ml_impact_rpc',{
+  const response=await fetch(SUPABASE+'/rest/v1/rpc/'+(action==='host-export'?'ml_impact_export':'ml_impact_rpc'),{
    method:'POST',headers:{apikey:PUBLISHABLE,'Content-Type':'application/json'},
-   body:JSON.stringify({p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),
+   body:JSON.stringify(action==='host-export'?{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_id:payload.id}:{p_key:process.env.LESSON_STUDIO_GATEWAY_KEY,p_action:action,p_payload:payload}),
    signal:AbortSignal.timeout(24000)
   });
   const data=await response.json();
