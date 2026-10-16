@@ -25,7 +25,7 @@ export function makeOption(name='New option',data={}){
 export function makeNode(type='decision',data={}){
  if(!TYPES.includes(type))throw Error('Choose a valid decision tree node type.');
  return {id:uid(),parentId:clean(data.parentId,100),type,title:clean(data.title||({decision:'Decision',chance:'Uncertain event',outcome:'Possible outcome'}[type]),180),
-  x:clamp(data.x,90,1750,110),y:clamp(data.y,75,1400,175),
+  x:clamp(data.x,90,1750,110),y:clamp(data.y,75,1400,175),w:integer(data.w,180,330,224),h:integer(data.h,110,240,125),
   probability:integer(data.probability,0,100,50),utility:clamp(data.utility,-1000000,1000000,0),
   evidenceTag:TAGS.includes(data.evidenceTag)?data.evidenceTag:'Assumption',
   evidence:clean(data.evidence,1200),notes:clean(data.notes,1200)};
@@ -93,6 +93,8 @@ export function updateNode(p,id,updates={}){
  if(updates.title!==undefined)n.title=clean(updates.title,180);
  if(updates.x!==undefined)n.x=clamp(updates.x,90,1750,n.x);
  if(updates.y!==undefined)n.y=clamp(updates.y,75,1400,n.y);
+ if(updates.w!==undefined)n.w=integer(updates.w,180,330,n.w);
+ if(updates.h!==undefined)n.h=integer(updates.h,110,240,n.h);
  if(updates.probability!==undefined)n.probability=integer(updates.probability,0,100,n.probability);
  if(updates.utility!==undefined)n.utility=clamp(updates.utility,-1000000,1000000,n.utility);
  if(updates.evidenceTag!==undefined&&TAGS.includes(updates.evidenceTag))n.evidenceTag=updates.evidenceTag;
