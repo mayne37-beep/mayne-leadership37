@@ -208,3 +208,10 @@ dialog{border:0;width:min(560px,calc(100vw - 26px));max-height:90vh;padding:0;bo
 .why-presenting .why-scroll{max-height:65vh;overflow:auto}
 @media(max-width:1120px){.why-composer-row{grid-template-columns:repeat(2,minmax(0,1fr))}.why-composer-row button{grid-column:1/-1}.why-review-list{grid-template-columns:1fr}}
 @media(max-width:640px){.why-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.why-intro>.panel-header{display:block}.why-intro>.panel-header .panel-actions{justify-content:flex-start;margin-top:11px}.why-problem{padding:12px}.why-symbol{height:34px;width:34px;font-size:19px}.why-composer-row{grid-template-columns:1fr}.why-composer-row button{grid-column:auto}.why-lane{width:264px;flex-basis:264px}.why-selected-actions{display:grid;grid-template-columns:1fr 1fr}.why-presenting .main-pane{padding:15px 10px}}
+
+/* SVG branch lines follow the actual rendered positions of connected cause cards. */
+.why-canvas{position:relative;width:max-content;min-width:100%}
+.why-connections{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}
+.why-lanes{z-index:1}
+.why-connection{fill:none;stroke:#8eb1c9;stroke-width:2.5;opacity:.9;stroke-linecap:round}
+.why-connection.emphasized{stroke:#cca04b;stroke-width:4;opacity:1}
