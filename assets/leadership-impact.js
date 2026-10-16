@@ -73,4 +73,25 @@ function student(){
  $('send-vote').onclick=async()=>{if(!member)return;$('send-vote').disabled=true;try{await api('vote',{id:member.id,member:member.member,proof:member.proof,trust:Number($('trust').value),support:Number($('support').value),effective:Number($('effective').value),comment:$('comment').value.trim(),kind:$('comment-kind').value});$('vote-confirm').textContent='Thank you. Your anonymous feedback was saved.';toast('Anonymous feedback received.');}catch(e){toast(e.message,true);}finally{$('send-vote').disabled=false;}};
  $('send-question').onclick=async()=>{if(!member)return;try{await api('ask',{id:member.id,member:member.member,proof:member.proof,body:$('question').value.trim()});$('question').value='';toast('Question sent privately to the instructor.');}catch(e){toast(e.message,true);}};
 }
-document.body.dataset.mode==='host'?host():student();
+function present(){
+ const id=localStorage.getItem('ml_impact_host_id');
+ if(!id){$('present-status').textContent='Open the instructor console first';$('present-brief').textContent='Create or resume a session in the instructor dashboard, then reopen this view.';return;}
+ const refresh=async()=>{
+ try{const d=await api('host-view',{id});const s=d.session;
+ $('present-status').textContent={lobby:'LOBBY',discuss:'TEAM DISCUSSION',vote:'RATINGS OPEN',reveal:'PEER FEEDBACK',closed:'SESSION ENDED'}[s.phase]||s.phase.toUpperCase();
+ $('present-title').textContent=s.title;
+ $('present-meta').textContent=(s.round?'Round '+s.round+' · '+teamName(s.active_team):'Classroom joining')+' · '+s.teams+' teams';
+ $('present-case-title').textContent=s.scenario?.title||'Waiting for a leadership situation';
+ $('present-brief').textContent=s.scenario?.brief||'The facilitator will launch the first scenario.';
+ $('present-prompt').textContent=s.scenario?.prompt||'What kind of leadership would earn your trust?';
+ const counts=(d.roster||[]).reduce((a,x)=>a+Number(x.members),0);
+ $('present-participants').textContent=counts+' participants joined · '+d.votes.length+' ratings this round';
+ const show=s.phase==='reveal'&&d.votes.length>=3;
+ $('present-graphic').hidden=show;$('present-metrics').hidden=!show;
+ $('present-results-title').textContent=show?'How observers experienced this approach':s.phase==='reveal'?'Not enough ratings to show an average':'Results not yet revealed';
+ if(show){$('present-metrics').innerHTML=[['Trust','trust'],['Willingness to support','support'],['Perceived effectiveness','effective']].map(([name,key])=>{const values=d.votes.map(x=>Number(x[key]));const avg=Math.round(values.reduce((a,b)=>a+b,0)/values.length);return '<div class="present-meter"><div><strong>'+esc(name)+'</strong><span>'+avg+'<small>/100</small></span></div><div class="bar"><span style="width:'+avg+'%"></span></div></div>';}).join('')+'<p class="fine">'+d.votes.length+' anonymous ratings · averages reflect class perceptions, not correctness.</p>';}
+ }catch(e){$('present-status').textContent='Connection unavailable';}
+ };
+ refresh();setInterval(refresh,3500);
+}
+document.body.dataset.mode==='host'?host():document.body.dataset.mode==='present'?present():student();
