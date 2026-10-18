@@ -81,3 +81,65 @@ body{background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f5f9ff 100%)}
 
 /* Keep the full course navigation accessible on smaller screens. */
 @media(max-width:1180px){.menu-btn{display:block}.header .nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;padding:15px 24px 24px;background:#fff;box-shadow:0 25px 40px #1d446323;border-bottom:1px solid var(--line)}.header .nav.open{display:flex}.header .nav a{font-size:15px;padding:11px}.header .nav .nav-button{margin-top:10px;text-align:center}}
+
+
+/* Mayne Leadership: unified navigation and library discovery */
+.nav{gap:clamp(8px,1.2vw,16px)}
+.nav a{font-size:12px}
+.nav a[aria-current="page"]{color:var(--blue-deep);font-weight:850;background:var(--blue-soft);border-radius:10px;padding:10px 12px}
+.nav a.nav-button{color:white}
+.new-home-hero{padding-top:68px;padding-bottom:64px}
+.hero-links{display:flex;flex-wrap:wrap;gap:20px;margin-top:20px;font-size:13px;font-weight:750;color:var(--blue)}
+.hero-links a:hover{text-decoration:underline}
+.journey-section{background:linear-gradient(180deg,#f4f9fe,#fff)}
+.journey-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.journey-tile{display:flex;flex-direction:column;align-items:flex-start;min-height:278px;border:1px solid #d7e6f2;border-radius:20px;background:#fff;padding:24px;box-shadow:0 12px 26px #235d970b;transition:box-shadow .18s,transform .18s}
+.journey-tile:hover{transform:translateY(-3px);box-shadow:0 16px 35px #235d9720}
+.journey-tile .journey-symbol{display:grid;place-items:center;width:51px;height:51px;background:#e8f3ff;color:#235d97;border-radius:14px;font-size:27px;margin-bottom:18px}
+.journey-tile:nth-child(2) .journey-symbol{background:#fff4dc;color:#93651a}
+.journey-tile:nth-child(3) .journey-symbol{background:#e9f7f5;color:#266d71}
+.journey-tile:nth-child(4) .journey-symbol{background:#f0eefb;color:#57518f}
+.journey-label{font-size:10px;color:#477098;letter-spacing:.13em;font-weight:850}
+.journey-tile strong{font-size:21px;line-height:1.25;margin:8px 0 11px}
+.journey-tile>span:nth-last-child(2){font-size:13px;color:var(--muted);line-height:1.65}
+.journey-cta{margin-top:auto;padding-top:22px;font-size:13px;font-weight:850;color:var(--blue)}
+.quick-launch-section{border-top:1px solid #eef3f7}
+.quick-launch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.quick-launch-grid>a{display:grid;grid-template-columns:44px minmax(0,1fr) 20px;grid-template-rows:auto auto;column-gap:11px;align-items:center;background:#fff;border:1px solid #d9e7f3;border-radius:15px;padding:16px;transition:border-color .16s,box-shadow .16s}
+.quick-launch-grid>a:hover{border-color:#91bde0;box-shadow:0 10px 20px #235d9718}
+.quick-launch-grid>a>span{grid-row:1/3;display:grid;place-items:center;width:42px;height:42px;background:#edf5fc;color:var(--blue);border-radius:12px;font-size:20px}
+.quick-launch-grid strong{font-size:14px;line-height:1.4}
+.quick-launch-grid small{font-size:12px;color:var(--muted)}
+.quick-launch-grid b{grid-column:3;grid-row:1/3;font-size:18px;color:var(--blue)}
+.site-next-step{display:flex;justify-content:space-between;align-items:center;gap:26px;background:linear-gradient(115deg,#eaf5ff,#fff8ec);border:1px solid #dce9f4;border-radius:25px;padding:32px}
+.site-next-step h2{font-size:clamp(24px,3vw,38px);margin:10px 0}
+.site-next-step p{font-size:14px;color:var(--muted);max-width:590px}
+.site-next-step .buttons{margin-top:0}
+.refreshed-footer{gap:22px;flex-wrap:wrap}
+.refreshed-footer strong{font-size:14px}
+.refreshed-footer p{margin:3px 0 0}
+.refreshed-footer nav{display:flex;gap:14px 20px;flex-wrap:wrap;font-size:12px;font-weight:720}
+.refreshed-footer nav a:hover{color:var(--blue);text-decoration:underline}
+.library-toolbar{padding:18px 20px 15px;background:#f4f9fe;border:1px solid #dce8f3;border-radius:18px;margin:22px 0 33px}
+.library-search-label{display:block;font-size:12px;font-weight:850;color:var(--navy)}
+.library-search-label span{display:block;margin-bottom:8px}
+.library-search-label input{display:block;width:100%;min-height:46px;padding:11px 14px;border:1px solid #aac7df;border-radius:11px;background:#fff;font:inherit;font-size:14px;color:var(--navy)}
+.library-search-label input:focus{outline:3px solid #d2e8fc;outline-offset:1px}
+.library-filter{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.filter-chip{min-height:34px;padding:7px 12px;background:#fff;border:1px solid #ccdaea;border-radius:999px;color:#345a7d;font-size:12px;font-weight:760;transition:background .15s}
+.filter-chip:hover{background:#e5f1fc}
+.filter-chip.active,.filter-chip[aria-pressed="true"]{background:#235d97;color:#fff;border-color:#235d97}
+.library-count{font-size:12px;color:#586c82;margin:12px 0 0}
+.library-group{margin:0 0 43px}
+.library-group-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:0 0 18px;padding-bottom:13px;border-bottom:1px solid #dfe9f4}
+.library-group-heading h2{font-size:clamp(22px,2.5vw,29px);margin:7px 0 0}
+.library-group-heading p{max-width:350px;color:var(--muted);font-size:13px;margin:0}
+.library-group .page-card-grid{margin:0}
+.library-group .page-card{min-height:220px}
+.library-group .page-card h3{font-size:19px}
+.library-group .page-card p{font-size:13px}
+.page-card[hidden],.library-group[hidden],.library-empty[hidden]{display:none!important}
+.library-empty{padding:25px;text-align:center;border:1px dashed #b2cadf;border-radius:15px;color:var(--muted)}
+@media(max-width:1080px){.journey-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:780px){.quick-launch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.library-group-heading{display:block}.library-group-heading p{margin-top:9px}.site-next-step{flex-direction:column;align-items:flex-start}.refreshed-footer{align-items:flex-start}.new-home-hero{padding-top:42px}}
+@media(max-width:540px){.journey-grid,.quick-launch-grid{grid-template-columns:1fr}.journey-tile{min-height:235px}.library-toolbar{padding:14px}.site-next-step{padding:22px}.hero-links{gap:12px}}
