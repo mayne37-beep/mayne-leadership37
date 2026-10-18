@@ -44,7 +44,7 @@ function render(){
  const pr=p(),session=activeSession(pr);
  $('#project-top-title').textContent=pr.title;$('#scenario-list').innerHTML=sidebarHTML(S.projects,S.id,S.search);
  $('#selected-card').innerHTML=selectedCardHTML(pr);$('#pulse-panel').innerHTML=pulseHTML(pr);$('#recent-feedback').innerHTML=recentFeedbackHTML(pr);
- $('[data-view]').forEach(b=>{
+ $$('[data-view]').forEach(b=>{
   if(b.dataset.view==='characters'){
    const open=!!$('#character-drawer')?.open;
    b.classList.toggle('active',open);
