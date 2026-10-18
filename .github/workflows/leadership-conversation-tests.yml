@@ -5,6 +5,8 @@ on:
       - 'leadership-conversation-simulator.html'
       - 'assets/leadership-conversation*.js'
       - 'assets/leadership-conversation.css'
+      - 'assets/leadership-character*.js'
+      - 'assets/leadership-characters.js'
       - 'tests/leadership-conversation/**'
       - 'tools.html'
       - 'package.json'
@@ -15,6 +17,8 @@ on:
       - 'leadership-conversation-simulator.html'
       - 'assets/leadership-conversation*.js'
       - 'assets/leadership-conversation.css'
+      - 'assets/leadership-character*.js'
+      - 'assets/leadership-characters.js'
       - 'tests/leadership-conversation/**'
       - 'tools.html'
       - 'package.json'
@@ -43,3 +47,6 @@ jobs:
           test -f public/assets/leadership-conversation-render.js
           test -f public/assets/leadership-conversation.js
           test -f public/assets/leadership-conversation.css
+          test -f public/assets/leadership-characters.js
+          test -f public/assets/leadership-character-view.js
+          test -f public/assets/leadership-character-controller.js
