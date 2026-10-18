@@ -3,6 +3,14 @@ import {DIMENSIONS,EMOTIONS,TACTICS,STAGES,initialMetrics,activeSession,nodeById
 const short=(v,n=105)=>String(v??'').length>n?String(v).slice(0,n-1)+'…':String(v??'');
 export const opt=(v,label,current)=>'<option value="'+e(v)+'"'+(String(current)===String(v)?' selected':'')+'>'+e(label)+'</option>';
 const pct=(n)=>Math.round(clamp(n,0,100,50));
+const metricTone=(n)=>n>=60?'up':n<=40?'down':'steady';
+const categoryTone=(p)=>p.category.toLowerCase().includes('ethic')?'ethics':
+ p.category.toLowerCase().includes('conflict')?'conflict':
+ p.category.toLowerCase().includes('coaching')?'coaching':
+ p.category.toLowerCase().includes('change')?'change':
+ p.category.toLowerCase().includes('performance')?'performance':
+ p.category.toLowerCase().includes('motivation')?'motivation':'custom';
+const tacticTone=(t)=>({'Listen and explore':'explore','Clarify expectations':'clarify','Collaborate on options':'collaborate','Challenge respectfully':'challenge','Avoid or dismiss':'avoid'})[t]||'explore';
 export const status=key=>DIMENSIONS.find(d=>d.key===key)?.label||key;
 function emotionCaption(emotion){return ({guarded:'Guarded',frustrated:'Frustrated',skeptical:'Skeptical',thoughtful:'Reflective',open:'Open',hopeful:'Optimistic',disappointed:'Disappointed',neutral:'Neutral'})[emotion]||'Reflective';}
 export function avatarSVG(persona,emotion='neutral'){
@@ -42,7 +50,7 @@ export function sidebarHTML(projects,activeId,filter=''){
  const matching=projects.filter(p=>[p.title,p.category,p.summary,p.persona.name].join(' ').toLowerCase().includes(q));
  return matching.length?matching.map(p=>{
   const s=activeSession(p),progress=s?.complete?'Completed':s?.turns.length?'In progress':'Ready';
-  return '<button type="button" class="scenario-button'+(p.id===activeId?' active':'')+'" data-open-scenario="'+e(p.id)+'"><span class="scenario-icon">'+
+  return '<button type="button" class="scenario-button category-'+categoryTone(p)+(p.id===activeId?' active':'')+'" data-open-scenario="'+e(p.id)+'"><span class="scenario-icon">'+
   (p.category.toLowerCase().includes('ethic')?'⚖':p.category.toLowerCase().includes('conflict')?'◎':p.category.toLowerCase().includes('coaching')?'✦':'◈')+'</span>'+
   '<span class="scenario-detail"><strong>'+e(p.title)+'</strong><small>'+e(p.category)+' · '+p.timeMinutes+' min</small></span>'+
   '<span class="scenario-state">'+(p.id===activeId?'●':progress==='Completed'?'✓':'')+'</span></button>';
@@ -56,9 +64,9 @@ export function selectedCardHTML(p){
 }
 export function pulseHTML(p){
  const s=activeSession(p),data=s?.metrics||initialMetrics();
- return '<div class="pulse-metrics">'+DIMENSIONS.map(d=>'<div class="pulse-metric"><div class="pulse-label"><strong>'+e(d.label)+'</strong><b>'+pct(data[d.key])+'<small>/100</small></b></div>'+
- '<div class="pulse-track"><span style="width:'+pct(data[d.key])+'%"></span></div>'+
- '<p>'+e(d.description)+'</p></div>').join('')+'</div>'+
+ return '<div class="pulse-metrics">'+DIMENSIONS.map(d=>'<div class="pulse-metric metric-'+d.key+' metric-'+metricTone(data[d.key])+'"><div class="pulse-label"><strong>'+e(d.label)+'</strong><b>'+pct(data[d.key])+'<small>/100</small></b></div>'+
+ '<div class="pulse-track" role="progressbar" aria-label="'+e(d.label)+' scripted indicator" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct(data[d.key])+'"><span style="width:'+pct(data[d.key])+'%"></span></div>'+
+ '<div class="pulse-details"><p>'+e(d.description)+'</p><span class="pulse-change">'+(s?(data[d.key]>50?'↑ +':data[d.key]<50?'↓ ':'• ')+(data[d.key]===50?'Baseline':Math.abs(data[d.key]-50)+' vs. start'):'Starting point')+'</span></div></div>').join('')+'</div>'+
  (s?'<p class="pulse-foot">'+s.turns.length+' response'+(s.turns.length===1?'':'s')+' recorded'+(s.complete?' · Conversation complete':'')+'</p>':'<p class="pulse-foot">All indicators start at 50 in a new practice session.</p>');
 }
 function introHTML(p){
@@ -70,9 +78,9 @@ function introHTML(p){
 }
 const tip=(t)=>'<p class="mini-tip">'+e(t)+'</p>';
 function choicesHTML(node,s){
- return '<div class="response-section"><div class="response-heading"><span class="eyebrow">HOW WILL YOU RESPOND?</span><p>Select a response or draft your own words using a scripted approach.</p></div>'+
+ return '<div class="response-section"><div class="response-heading"><div><span class="decision-badge">YOUR MOVE · CHOOSE AN APPROACH</span><span class="eyebrow">HOW WILL YOU RESPOND?</span></div><p>Select a response or draft your own words using a scripted approach.</p></div>'+
  '<div class="response-list">'+node.choices.map((c,i)=>
- '<button type="button" data-choose="'+e(c.id)+'" class="response-choice"><span class="choice-number">'+String.fromCharCode(65+i)+'</span>'+
+ '<button type="button" data-choose="'+e(c.id)+'" class="response-choice tactic-'+tacticTone(c.tactic)+'"><span class="choice-number">'+String.fromCharCode(65+i)+'</span>'+
  '<span><strong>'+e(c.label)+'</strong><small>'+e(c.tactic)+'</small></span><span class="choice-arrow">↗</span></button>').join('')+'</div>'+
  '<div class="typed-response"><div class="typed-heading"><span>✎ SAY IT IN YOUR OWN WORDS</span><span class="typed-explain">Guided path, not AI chat</span></div>'+
  '<label for="typed-reply">What would you actually say?</label><textarea id="typed-reply" rows="3" maxlength="900" placeholder="Write your response as you would say it to this employee…"></textarea>'+
@@ -98,13 +106,13 @@ export function practiceHTML(p){
  if(!n)return '<div class="empty"><strong>Conversation cannot continue</strong><p>The selected moment was deleted. Restart the practice to use the latest scenario.</p><button data-start-session="1">Restart</button></div>';
  return '<div class="practice-topline"><div><span class="eyebrow">LIVE ROLEPLAY · '+e(n.stage)+'</span><strong>'+e(p.persona.name)+' · '+e(p.persona.role)+'</strong></div>'+
  '<div><span class="turn-count">TURN '+(s.turns.length+1)+'</span><button type="button" data-start-session="1">↻ Restart</button></div></div>'+
- '<div class="conversation-stage"><div class="character-scene"><div class="character-halo">'+avatarSVG(p.persona,n.emotion)+'</div>'+
+ '<div class="conversation-stage emotion-'+e(n.emotion)+'"><div class="character-scene"><div class="character-halo">'+avatarSVG(p.persona,n.emotion)+'</div>'+
  '<span class="expression-chip"><span class="expression-dot"></span>'+e(emotionCaption(n.emotion))+'</span><h3>'+e(p.persona.name)+'</h3>'+
  '<p>'+e(p.persona.role)+'</p></div>'+
- '<div class="dialogue-area"><span class="eyebrow">EMPLOYEE · '+e(n.stage.toUpperCase())+'</span><blockquote>'+e(n.line)+'</blockquote>'+
+ '<div class="dialogue-area"><div class="dialogue-kicker"><span class="eyebrow">EMPLOYEE · '+e(n.stage.toUpperCase())+'</span><span class="listening-cue">● LISTEN FOR THE NEED</span></div><blockquote>'+e(n.line)+'</blockquote>'+
  (n.context?'<p class="context-note">'+e(n.context)+'</p>':'')+
  '<div class="stage-footer"><span>What you say next shapes the direction.</span><span>'+e(p.objective)+'</span></div></div></div>'+
- (last?'<div class="coaching-feedback"><span class="eyebrow">REFLECTION ON YOUR PREVIOUS RESPONSE</span><p>'+e(last.feedback)+'</p>'+
+ (last?'<div class="coaching-feedback"><div class="feedback-heading"><span class="feedback-icon" aria-hidden="true">✦</span><span class="eyebrow">COACHING INSIGHT · YOUR LAST RESPONSE</span></div><p>'+e(last.feedback)+'</p>'+
  '<button type="button" data-undo-response="1">↶ Retry that moment</button></div>':'')+
  choicesHTML(n,s)+historyHTML(s);
 }
@@ -180,7 +188,7 @@ export function reviewHTML(p){
  const previous=p.sessions.find(x=>x.id!==s.id&&x.complete);
  return '<div class="review-header"><div><span class="eyebrow">YOUR CONVERSATION PATH</span><h3>'+e(p.title)+'</h3><p>'+s.turns.length+' responses · '+(s.complete?'Finished':'In progress')+' · '+e(s.learner||'Participant')+'</p></div>'+
  '<div class="review-actions"><button type="button" data-start-session="1">↻ Replay scenario</button><button type="button" data-open-export="1">Export debrief ↗</button></div></div>'+
- '<div class="review-metrics">'+DIMENSIONS.map(d=>'<div class="review-metric"><small>'+e(d.label)+'</small><strong>'+s.metrics[d.key]+'<span>/100</span></strong>'+
+ '<div class="review-metrics">'+DIMENSIONS.map(d=>'<div class="review-metric metric-'+d.key+' metric-'+metricTone(s.metrics[d.key])+'"><small>'+e(d.label)+'</small><strong>'+s.metrics[d.key]+'<span>/100</span></strong>'+
  '<div class="score-track"><span style="width:'+s.metrics[d.key]+'%"></span></div>'+
  '<p class="'+(result.changes[d.key]>0?'gain':result.changes[d.key]<0?'loss':'')+'">'+(result.changes[d.key]>0?'+':'')+result.changes[d.key]+' from baseline</p></div>').join('')+'</div>'+
  '<div class="review-two"><article class="review-panel"><div class="panel-title"><h3>Decision patterns</h3><span>Scripted pathway</span></div>'+
