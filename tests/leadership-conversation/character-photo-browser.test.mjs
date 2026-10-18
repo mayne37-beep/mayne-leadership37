@@ -40,7 +40,7 @@ test('Photo upload from Character Creator is resized, stored locally and reused 
   Object.defineProperty(control,'files',{configurable:true,value:[photo]});
   control.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
   await new Promise(resolve=>setTimeout(resolve,5));
-  assert.equal(drewImage,true);
+  assert.equal(drewImage,true,'Photo upload did not reach image resizing: '+$('#toast').textContent);
   const character=saved().characters.find(c=>c.id===expectedId);
   assert.equal(character.photos.frustrated,'data:image/webp;base64,AAAA');
   assert.ok($('.character-photo'),'Photo portrait should render');
