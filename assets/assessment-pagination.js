@@ -35,7 +35,29 @@
     const counter = navigation.querySelector('.assessment-question-counter');
     const help = navigation.querySelector('.assessment-question-help');
     const submit = form.querySelector('button[type="submit"]');
+    const welcome = document.createElement('section');
+    welcome.className = 'assessment-start-card';
+    welcome.setAttribute('aria-label', 'Assessment welcome');
+    welcome.innerHTML = `
+      <span class="assessment-start-eyebrow">READY WHEN YOU ARE</span>
+      <h3>Ready to begin your assessment?</h3>
+      <p>You'll answer ${questions.length} questions, one at a time. You can use Previous
+      to review or change an answer before seeing your results.</p>
+      <p class="assessment-start-status" aria-live="polite"></p>
+      <button class="assessment-start-button" type="button">Start Assessment →</button>`;
+    form.insertBefore(welcome, form.querySelector('.progress-wrapper'));
+    const startButton = welcome.querySelector('.assessment-start-button');
+    const startStatus = welcome.querySelector('.assessment-start-status');
+    let started = false;
     let position = 0;
+
+    function updateWelcome() {
+      const answered = questions.filter(isAnswered).length;
+      startButton.textContent = answered > 0 ? 'Resume Assessment →' : 'Start Assessment →';
+      startStatus.textContent = answered > 0
+        ? `${answered} of ${questions.length} already answered. Your previous selections are saved in this session.`
+        : `${questions.length} questions · One at a time · Review answers anytime`;
+    }
 
     function isAnswered(question) {
       return !!question.querySelector('input[type="radio"]:checked');
@@ -44,10 +66,12 @@
     function showQuestion(index, moveFocus = false) {
       position = Math.max(0, Math.min(questions.length - 1, index));
       questions.forEach((question, i) => {
-        question.hidden = i !== position;
+        question.hidden = !started || i !== position;
         question.setAttribute('aria-label', 'Question ' + (i + 1) + ' of ' + questions.length);
         question.setAttribute('role', 'group');
       });
+      navigation.hidden = !started;
+      welcome.hidden = started;
       const answered = questions.filter(isAnswered).length;
       const selected = isAnswered(questions[position]);
       const isLast = position === questions.length - 1;
@@ -69,7 +93,11 @@
           ? answered + ' of ' + questions.length + ' answered'
           : 'Choose an answer to continue.';
       }
-      if (submit) submit.disabled = answered !== questions.length;
+      if (submit) submit.disabled = !started || answered !== questions.length;
+      if (!started) {
+        updateWelcome();
+        return;
+      }
 
       if (moveFocus) {
         const tabs = document.querySelector('.tabs');
@@ -83,6 +111,12 @@
       }
     }
 
+    startButton.addEventListener('click', () => {
+      started = true;
+      form.classList.remove('assessment-awaiting-start');
+      const firstIncomplete = questions.findIndex(question => !isAnswered(question));
+      showQuestion(firstIncomplete < 0 ? questions.length - 1 : firstIncomplete, true);
+    });
     previous.addEventListener('click', () => showQuestion(position - 1, true));
     next.addEventListener('click', () => {
       if (!isAnswered(questions[position])) return;
@@ -105,6 +139,11 @@
 
     // Prevent an early keyboard or scripted submission from calculating a partial profile.
     form.addEventListener('submit', event => {
+      if (!started) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
       const firstUnanswered = questions.findIndex(question => !isAnswered(question));
       if (firstUnanswered !== -1) {
         event.preventDefault();
@@ -113,9 +152,13 @@
       }
     }, true);
 
-    form.classList.add('assessment-paged');
+    form.classList.add('assessment-paged', 'assessment-awaiting-start');
     pagers.set(type, {
-      reset() { showQuestion(0, false); },
+      reset() {
+        started = false;
+        form.classList.add('assessment-awaiting-start');
+        showQuestion(0, false);
+      },
       show: showQuestion,
       count: questions.length
     });
