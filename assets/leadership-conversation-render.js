@@ -43,7 +43,8 @@ export function pulseHTML(p){
 function introHTML(p){
  return '<article class="intro-case"><div class="intro-case-top"><div><span class="eyebrow">YOUR NEXT LEADERSHIP CONVERSATION</span><h3>'+e(p.title)+'</h3><p>'+e(p.summary)+'</p></div><div class="intro-minutes">'+p.timeMinutes+'<small>MIN</small></div></div>'+
  '<div class="intro-case-content"><div class="intro-face">'+avatarSVG(p.persona,'neutral')+'</div><div class="intro-copy"><span class="eyebrow">MEET YOUR EMPLOYEE</span><h3>'+e(p.persona.name)+'</h3>'+
- '<p class="role-text">'+e(p.persona.role)+'</p><p>'+e(p.persona.temperament)+'</p></div></div>'+
+ '<p class="role-text">'+e(p.persona.role)+'</p><p>'+e(p.persona.temperament)+'</p>'+
+ '<button type="button" class="character-intro-edit" data-go="characters">✎ Change character (optional)</button></div></div>'+
  '<div class="intro-brief"><strong>The situation</strong><p>'+e(p.context)+'</p><strong>Practice objective</strong><p>'+e(p.objective)+'</p></div>'+
  '<button type="button" class="primary start-button" data-start-session="1">Begin this conversation →</button></article>';
 }
@@ -78,6 +79,7 @@ export function practiceHTML(p){
  return '<div class="practice-topline"><div><span class="eyebrow">LIVE ROLEPLAY · '+e(n.stage)+'</span><strong>'+e(p.persona.name)+' · '+e(p.persona.role)+'</strong></div>'+
  '<div><span class="turn-count">TURN '+(s.turns.length+1)+'</span><button type="button" data-start-session="1">↻ Restart</button></div></div>'+
  '<div class="conversation-stage emotion-'+e(n.emotion)+'"><div class="character-scene"><div class="character-halo">'+avatarSVG(p.persona,n.emotion)+'</div>'+
+ '<button type="button" class="portrait-edit-chip" data-go="characters" aria-label="Change or edit '+e(p.persona.name)+'">✎ Edit</button>'+
  '<span class="expression-chip"><span class="expression-dot"></span>'+e(emotionCaption(n.emotion))+'</span><h3>'+e(p.persona.name)+'</h3>'+
  '<p>'+e(p.persona.role)+'</p></div>'+
  '<div class="dialogue-area"><div class="dialogue-kicker"><span class="eyebrow">EMPLOYEE · '+e(n.stage.toUpperCase())+'</span><span class="listening-cue">● LISTEN FOR THE NEED</span></div><blockquote>'+e(n.line)+'</blockquote>'+
