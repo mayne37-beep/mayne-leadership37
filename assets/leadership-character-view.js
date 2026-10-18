@@ -12,7 +12,7 @@ const swatches=(label,path,opts,active)=>'<div class="character-swatches"><stron
  (color===active?' aria-pressed="true" class="active"':' aria-pressed="false"')+' title="'+color+
  '" aria-label="'+e(label+' '+color)+'" style="--swatch-color:'+color+'"><span></span></button>').join('')+
  '</div></div>';
-export function characterStudioHTML(characters,currentId,project,previewEmotion='neutral'){
+export function characterStudioHTML(characters,currentId,project,previewEmotion='neutral',editorOpen=false){
  const chosen=characters.find(c=>c.id===currentId)||characters[0];
  const styleName=chosen?displayStyle(chosen.style):'';
  const activeId=project?.characterId||'';
@@ -31,9 +31,16 @@ export function characterStudioHTML(characters,currentId,project,previewEmotion=
  '<p class="muted">These profiles live in your browser’s local project library. Changes to an assigned character update any linked scenarios.</p></div>'+
  (chosen?'<div class="character-editor">'+
  '<div class="character-editor-head"><div><span class="eyebrow">SELECTED CHARACTER</span><h3>'+e(chosen.name)+'</h3><p>'+e(chosen.role)+'</p></div>'+
- '<div class="character-editor-actions"><button type="button" data-character-duplicate="1">Duplicate</button>'+
+ '<div class="character-editor-actions"><button type="button" class="character-editor-toggle" data-character-edit-toggle="1" aria-expanded="'+(editorOpen?'true':'false')+'" aria-controls="character-detail-editor">'+
+ (editorOpen?'▴ Hide editor':'✎ Edit character')+'</button><button type="button" data-character-duplicate="1">Duplicate</button>'+
  '<button type="button" data-character-delete="1" class="danger">Delete</button></div></div>'+
- '<div class="character-creator-body"><div class="character-visual">'+
+ '<div class="character-quick-view"'+(editorOpen?' hidden':'')+'><div class="character-quick-portrait">'+portraitHTML(chosen,'neutral')+'</div>'+
+ '<div class="character-quick-copy"><span class="eyebrow">READY TO USE</span><h4>'+e(chosen.name)+'</h4>'+
+ '<p>'+e(chosen.temperament)+'</p><span class="character-quick-style">'+e(styleName)+'</span>'+
+ (activeId===chosen.id?'<strong class="character-current-label">✓ Current scenario character</strong>':
+ '<button type="button" class="primary" data-character-assign="'+e(chosen.id)+'">Use this character →</button>')+
+ '<button type="button" class="character-quick-edit" data-character-edit-toggle="1" aria-expanded="false" aria-controls="character-detail-editor">✎ Customize appearance & behavior</button></div></div>'+
+ '<div class="character-creator-body" id="character-detail-editor"'+(editorOpen?'':' hidden')+'><div class="character-visual">'+
  '<div class="character-style-toggle" role="group" aria-label="Portrait style">'+
  CHARACTER_STYLES.map(style=>'<button type="button" data-character-style="'+style+'" aria-pressed="'+(chosen.style===style?'true':'false')+'" class="'+(chosen.style===style?'active':'')+'">'+e(displayStyle(style))+'</button>').join('')+'</div>'+
  '<div class="character-portrait-main">'+portraitHTML(chosen,previewEmotion)+
