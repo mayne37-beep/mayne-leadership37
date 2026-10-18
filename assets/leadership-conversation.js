@@ -4,7 +4,7 @@ import {createLibrary} from './leadership-characters.js';
 import {connectCharacterCreator} from './leadership-character-controller.js';
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const PROMPTS=['What might this person need to feel heard while still understanding expectations?','What question could uncover an important missing fact?','How could you be both empathetic and clear?','What assumption have you made about motives?','When is direct feedback more useful than another question?','What would a respectful accountability statement sound like?','What action would demonstrate an agreement actually worked?'];
-const VIEWS={practice:['LEADERSHIP ROLEPLAY','Practice the moment.','Explore realistic responses and reflect on employee reactions.'],builder:['SCENARIO AUTHORING','Design the conversation.','Edit character, employee lines, response paths and their consequences.'],characters:['CHARACTER CREATOR','Create your cast.','Customize portraits, expressions and personality; reuse characters across scenarios.'],observe:['PEER & INSTRUCTOR FEEDBACK','Observe the behavior.','Record what the learner actually says and does.'],review:['AFTER-ACTION LEARNING','Learn from the conversation.','Examine choices, feedback, and your next leadership commitment.']};
+const VIEWS={practice:['LEADERSHIP ROLEPLAY','Practice the moment.','Explore realistic responses and reflect on employee reactions.'],builder:['SCENARIO AUTHORING','Design the conversation.','Edit character, employee lines, response paths and their consequences.'],observe:['PEER & INSTRUCTOR FEEDBACK','Observe the behavior.','Record what the learner actually says and does.'],review:['AFTER-ACTION LEARNING','Learn from the conversation.','Examine choices, feedback, and your next leadership commitment.']};
 const S={projects:[],id:'',view:'practice',builderNode:'',search:'',present:false,editor:null,undo:[],redo:[],prompt:0,characters:[]};let toastHandle;
 const p=()=>S.projects.find(x=>x.id===S.id)||S.projects[0];
 function toast(message){const el=$('#toast');el.textContent=message;el.classList.add('show');clearTimeout(toastHandle);toastHandle=setTimeout(()=>el.classList.remove('show'),3200)}
@@ -16,17 +16,48 @@ function createProject(project=makeProject()){if(S.projects.length>=CAPS.project
 function duplicate(src=p()){const next=normalizeProject(src,{regenerate:true});next.title+=' (copy)';next.sessions=[];next.activeSessionId='';return createProject(next)}
 function deleteProject(id){const target=S.projects.find(x=>x.id===id);if(!target||!confirm('Delete "'+target.title+'" and its practice history?'))return;S.projects=S.projects.filter(x=>x.id!==id);if(!S.projects.length)S.projects=starterLibrary();if(S.id===id)S.id=S.projects[0].id;S.builderNode=p().firstNodeId;S.view='practice';S.undo=[];S.redo=[];persist();render();renderLibrary()}
 function start(){const validity=validateScenario(p());if(validity.errors.length){toast(validity.errors[0]);S.view='builder';render();return}mutate(pr=>startSession(pr));S.view='practice';S.present=false;render()}
-function setView(view){if(!VIEWS[view])return;S.view=view;if(view!=='practice')S.present=false;render()}
-function show(q){const d=$(q);if(d&&!d.open)d.showModal()}function close(q){const d=$(q);if(d?.open)d.close()}
+function openCharacterDrawer(){
+ const d=$('#character-drawer');if(!d)return;
+ if(d.open){closeCharacterDrawer(true);return;}
+ characterController.resetEditor();
+ characterController.render();
+ d.showModal();
+ const trigger=$('[data-view="characters"]');
+ if(trigger){trigger.setAttribute('aria-expanded','true');trigger.classList.add('active');}
+ const done=$('[data-character-done]');done?.focus();
+}
+function closeCharacterDrawer(restoreFocus=false){
+ const drawer=$('#character-drawer');if(drawer?.open)drawer.close();
+ const trigger=$('[data-view="characters"]');
+ if(trigger){trigger.setAttribute('aria-expanded','false');trigger.classList.remove('active');if(restoreFocus)trigger.focus();}
+ characterController.resetEditor();
+}
+function setView(view){
+ if(view==='characters'){openCharacterDrawer();return;}
+ if(!VIEWS[view])return;
+ closeCharacterDrawer();
+ S.view=view;if(view!=='practice')S.present=false;render();
+}
+function show(q){const d=$(q);if(d&&!d.open)d.showModal()}
+function close(q){const d=$(q);if(d?.open)d.close()}
 function render(){
  const pr=p(),session=activeSession(pr);
  $('#project-top-title').textContent=pr.title;$('#scenario-list').innerHTML=sidebarHTML(S.projects,S.id,S.search);
  $('#selected-card').innerHTML=selectedCardHTML(pr);$('#pulse-panel').innerHTML=pulseHTML(pr);$('#recent-feedback').innerHTML=recentFeedbackHTML(pr);
- $$('[data-view]').forEach(b=>{const on=b.dataset.view===S.view;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false')});
+ $('[data-view]').forEach(b=>{
+  if(b.dataset.view==='characters'){
+   const open=!!$('#character-drawer')?.open;
+   b.classList.toggle('active',open);
+   b.setAttribute('aria-expanded',String(open));
+   b.removeAttribute('aria-current');
+   return;
+  }
+  const on=b.dataset.view===S.view;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false');
+ });
  Object.keys(VIEWS).forEach(k=>$('#'+k+'-view').hidden=k!==S.view);
  const info=VIEWS[S.view];$('#view-eyebrow').textContent=info[0];$('#view-title').textContent=info[1];$('#view-summary').textContent=info[2];
  $('#view-actions').innerHTML=S.view==='practice'?'<button data-start-session="1">'+(session?'↻ Restart':'▶ Begin')+'</button>'+(session?'<button data-go="review">Review →</button>':''):S.view==='builder'?'<button data-go="practice" class="primary">Preview & practice →</button>':S.view==='observe'?'<button data-go="review">Open debrief →</button>':'<button data-go="practice">Return to practice →</button>';
- $('#practice-workspace').innerHTML=practiceHTML(pr);renderBuilder();characterController.render();
+ $('#practice-workspace').innerHTML=practiceHTML(pr);renderBuilder();if($('#character-drawer')?.open)characterController.render();
  $('#observation-content').innerHTML=observeHTML(pr);$('#review-content').innerHTML=reviewHTML(pr);
  document.body.classList.toggle('presentation-mode',S.present&&S.view==='practice');
  $('#present-btn').textContent=S.present?'▣ Exit presentation':'▣ Presentation';
@@ -75,7 +106,10 @@ function exportFile(kind){
 }
 async function importFile(file){if(!file)return;if(file.size>CAPS.importBytes){toast('JSON backup exceeds 3 MB limit.');return}try{const json=JSON.parse(await file.text()),pr=normalizeProject(json.kind==='mayne-leadership-conversation'?json.project:json,{regenerate:true});if(confirm('Import "'+pr.title+'" as a new scenario?'))createProject(pr)}catch(err){toast('Import failed: '+err.message)}}
 function handleClick(ev){
- const t=ev.target,closer=t.closest('[data-close]');if(closer){close('#'+closer.dataset.close);return}
+ const t=ev.target;
+ if(t.closest('[data-character-done]')){closeCharacterDrawer(true);return;}
+ const closer=t.closest('[data-close]');
+ if(closer){if(closer.dataset.close==='character-drawer')closeCharacterDrawer(true);else close('#'+closer.dataset.close);return}
  const tab=t.closest('[data-view]'),go=t.closest('[data-go]');if(tab||go){setView(tab?.dataset.view||go.dataset.go);return}
  if(t.closest('[data-start-session]')){start();return}
  const opened=t.closest('[data-open-scenario]');if(opened){switchProject(opened.dataset.openScenario);return}
@@ -106,12 +140,17 @@ function bind(){
  $('#projects-new').onclick=()=>createProject();$('#projects-import').onclick=()=>$('#import-input').click();
  $('#import-input').onchange=ev=>{importFile(ev.target.files?.[0]);ev.target.value=''};
  $('#export-btn').onclick=()=>show('#export-dialog');
- $('#present-btn').onclick=()=>{S.present=!S.present;S.view='practice';render()};
+ $('#present-btn').onclick=()=>{closeCharacterDrawer();S.present=!S.present;S.view='practice';render()};
  $('#coach-next').onclick=()=>$('#coach-prompt').textContent=PROMPTS[++S.prompt%PROMPTS.length];
  $('#builder-copy').onclick=()=>duplicate();
  $('#builder-add-moment').onclick=()=>{let item;const ok=mutate(pr=>{item=addNode(pr,{title:'New conversation moment',stage:'Explore',line:'What would you say next?',choices:[{label:'Explore this further',reply:'I will think about that.',feedback:'What was this response meant to accomplish?',nextId:'END'}]})});if(ok){S.builderNode=item.id;renderBuilder();}};
  $('#choice-form').onsubmit=ev=>{ev.preventDefault();saveChoice()};
  document.addEventListener('click',handleClick);document.addEventListener('change',handleChange);characterController.bind();
+ $('#character-drawer').addEventListener('close',()=>{
+  const trigger=$('[data-view="characters"]');
+  if(trigger){trigger.setAttribute('aria-expanded','false');trigger.classList.remove('active');}
+  characterController.resetEditor();
+ });
  $('#studio-main').addEventListener('click',ev=>{
   if(ev.target.closest('#submit-typed')){
    const message=String($('#typed-reply')?.value||'').trim(),id=$('#typed-path')?.value||'';
@@ -135,3 +174,4 @@ load();
 const initialView=new URLSearchParams(window.location.search).get('view');
 if(initialView&&VIEWS[initialView])S.view=initialView;
 S.builderNode=p().firstNodeId;bind();persist();render();
+if(initialView==='characters')openCharacterDrawer();
