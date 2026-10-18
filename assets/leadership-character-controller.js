@@ -7,12 +7,18 @@ import {characterStudioHTML} from './leadership-character-view.js';
 /* Character Creator is a local, facilitator-owned component; no external
    photos, camera feeds, image generation, or hosted user-image storage. */
 export function connectCharacterCreator({state,getProject,persist,render,toast,download}){
- let selection='',expression='neutral';
+ let selection='',expression='neutral',editorOpen=false;
  const $=q=>document.querySelector(q);
  const selected=()=>state.characters.find(c=>c.id===selection)||
   state.characters.find(c=>c.id===getProject().characterId)||state.characters[0]||null;
- const refresh=()=>{if(!state.characters.some(c=>c.id===selection))selection=getProject().characterId||state.characters[0]?.id||'';
-  const el=$('#character-workbench');if(el)el.innerHTML=characterStudioHTML(state.characters,selection,getProject(),expression);
+ const refresh=()=>{
+  if(!state.characters.some(c=>c.id===selection))selection=getProject().characterId||state.characters[0]?.id||'';
+  const el=$('#character-workbench');if(!el)return;
+  const drawer=$('#character-drawer'),previousScroll=drawer?.scrollTop||0;
+  const tiles=el.querySelector('.character-tiles'),tileScroll=tiles?.scrollTop||0;
+  el.innerHTML=characterStudioHTML(state.characters,selection,getProject(),expression,editorOpen);
+  if(drawer?.open)drawer.scrollTop=previousScroll;
+  const newTiles=el.querySelector('.character-tiles');if(newTiles)newTiles.scrollTop=tileScroll;
  };
  function transaction(fn){
   const snapshots=JSON.stringify({characters:state.characters,projects:state.projects});
@@ -35,7 +41,7 @@ export function connectCharacterCreator({state,getProject,persist,render,toast,d
   transaction(()=>{
    const next=copy&&current?duplicateCharacter(current):
     makeLegacyCharacter({name:'New employee',role:'Team member',temperament:'Describe how this person communicates and what they care about.'},state.characters.length);
-   state.characters.unshift(next);selection=next.id;expression='neutral';
+   state.characters.unshift(next);selection=next.id;expression='neutral';editorOpen=true;
   });
  }
  function eraseCharacter(){
@@ -64,7 +70,7 @@ export function connectCharacterCreator({state,getProject,persist,render,toast,d
    const p=createCharacter({...data.character,id:''});
    if(state.characters.length>=CHARACTER_LIMIT)throw Error('Character Library is full.');
    if(!confirm('Add "'+p.name+'" to the Character Library?'))return;
-   transaction(()=>{state.characters.unshift(p);selection=p.id;expression='neutral';});
+   transaction(()=>{state.characters.unshift(p);selection=p.id;expression='neutral';editorOpen=true;});
    toast('Character imported. Assign them to the desired scenario.');
   }catch(err){toast('Import failed: '+err.message);}
  }
@@ -106,7 +112,8 @@ export function connectCharacterCreator({state,getProject,persist,render,toast,d
  }
  function click(event){
   const t=event.target;
-  const select=t.closest('[data-character-select]');if(select){selection=select.dataset.characterSelect;expression='neutral';refresh();return;}
+  const select=t.closest('[data-character-select]');if(select){selection=select.dataset.characterSelect;expression='neutral';editorOpen=false;refresh();return;}
+  const toggle=t.closest('[data-character-edit-toggle]');if(toggle){editorOpen=!editorOpen;refresh();return;}
   if(t.closest('[data-character-create]')){addCharacter();return;}
   if(t.closest('[data-character-duplicate]')){addCharacter(true);return;}
   if(t.closest('[data-character-delete]')){eraseCharacter();return;}
@@ -140,6 +147,7 @@ export function connectCharacterCreator({state,getProject,persist,render,toast,d
  }
  return {
   render:refresh,
+  resetEditor(){selection='';expression='neutral';editorOpen=false;},
   bind(){document.addEventListener('click',click);document.addEventListener('change',change);document.addEventListener('input',input);}
  };
 }
