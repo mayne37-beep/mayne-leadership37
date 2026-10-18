@@ -810,3 +810,16 @@ dialog.character-drawer[open]{animation:character-drawer-enter .2s ease-out}
  dialog.character-drawer[open]{animation:none!important}
  .tabs .character-drawer-trigger span{transition:none!important}
 }
+
+
+/* Small, optional character affordance beside the default portrait. */
+.character-intro-edit{
+ font-size:11px;font-weight:830;color:#1c688f;
+ background:#eff8fe;border:1px dashed #b4d2e3;
+ padding:8px 11px;margin-top:11px;
+}
+.character-intro-edit:hover{background:#e2f1fa}
+.character-drawer[open] #characters-view{display:block}
+@media(prefers-reduced-motion:reduce){
+ .character-intro-edit,.portrait-edit-chip{transition:none!important}
+}
