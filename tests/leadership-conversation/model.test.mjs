@@ -31,7 +31,7 @@ test('One response path opens reflection while a confrontational alternative cre
  assert.equal(listening.classification,'Listen and explore');
  assert.equal(s.currentNodeId,'defensive-open');
  assert.equal(s.metrics.trust,60);assert.equal(s.metrics.safety,60);
- assert.match(practiceHTML(p),/Explore what is underneath/);
+ assert.match(practiceHTML(p),/covering tasks for two people/);
  const continued=choose(p,p.nodes.find(n=>n.id===s.currentNodeId).choices[0].id);
  assert.equal(s.currentNodeId,'defensive-facts');
  assert.equal(s.turns.length,2);
