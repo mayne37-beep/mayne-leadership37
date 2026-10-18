@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f8fc"><meta name="description" content="Practice coaching, conflict resolution, ethical communication and difficult leadership conversations.">
+<title>Leadership Conversation Simulator | Mayne Leadership</title><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/leadership-conversation.css"><script type="module" src="/assets/leadership-conversation.js"></script></head>
+<body><a class="skip-link" href="#studio-main">Skip to simulator</a>
+<header class="topbar"><a class="brand" href="/tools.html"><img src="/assets/jm-leadership-logo.svg" alt="" width="43" height="43"><span><small>MAYNE LEADERSHIP · INTERACTIVE LEARNING</small><strong>Leadership <em>Conversation Simulator</em></strong></span></a>
+<div class="project-top"><strong id="project-top-title">Leadership practice</strong><span id="save-status" role="status" aria-live="polite">Saved on this device</span></div>
+<div class="top-actions"><button id="present-btn" type="button" title="Focus classroom display">▣ Presentation</button><button id="projects-btn" type="button">My scenarios</button><button id="export-btn" type="button" class="primary">Export ↗</button><a href="/tools.html">← Tools</a></div></header>
+<section class="hero"><div><span class="eyebrow">PRACTICE THE WORDS · NOTICE THE IMPACT · GROW THE SKILL</span><h1>Leadership happens <em>one conversation at a time.</em></h1><p>Practice difficult conversations in a safe, simulated setting. Explore choices, watch employee reactions, and reflect on what you could do differently.</p></div>
+<div class="hero-stats" id="hero-stats"><div><b>6</b><span>Starting scenarios</span></div><div><b>4</b><span>Behavior indicators</span></div><div><b>∞</b><span>Opportunities to practice</span></div></div></section>
+<div class="app-layout">
+<aside class="sidebar left"><div class="sidebar-title"><span class="eyebrow">01 / PICK YOUR CHALLENGE</span><h2>Practice library</h2><p>Choose an existing scenario or build your own.</p></div>
+<label class="search-label" for="scenario-search"><span class="sr">Search scenarios</span><input id="scenario-search" type="search" placeholder="Search conversations…"></label>
+<div id="scenario-list" class="scenario-list"></div>
+<button id="new-scenario" type="button" class="new-scenario">＋ Build a scenario</button>
+<div class="sidebar-divider"></div><div class="selected-card" id="selected-card"></div>
+<div class="sidebar-divider"></div><span class="eyebrow">ABOUT THE SIMULATION</span><p class="disclaimer">Character reactions and indicator changes follow authored rules. They are not AI conversation, psychological measurements, or assessments of real employees. Type your own words and select the closest scripted approach to simulate a response.</p>
+</aside>
+<main class="center" id="studio-main">
+<nav class="tabs" aria-label="Simulator workspace">
+<button type="button" data-view="practice" class="active">◈ Practice</button>
+<button type="button" data-view="builder">✎ Scenario Builder</button>
+<button type="button" data-view="observe">◎ Observation Studio</button>
+<button type="button" data-view="review">▤ After-Action Review</button></nav>
+<div class="view-head"><div><span class="eyebrow" id="view-eyebrow">INTERACTIVE CONVERSATION</span><h2 id="view-title">Practice the moment.</h2><p id="view-summary">Choose a scenario and begin a conversation.</p></div><div id="view-actions" class="view-actions"></div></div>
+<section class="view" id="practice-view">
+<div id="practice-workspace"></div>
+</section>
+<section class="view" id="builder-view" hidden><div class="intro"><span class="eyebrow">CREATE · SCRIPT · BRANCH</span><h3>Build conversations that feel real.</h3><p>Edit the employee, the opening situation, and each conversational turning point. Connect different responses to different moments. Changes affect future playthroughs; existing transcript entries remain historical records.</p></div>
+<div class="builder-grid"><div class="builder-form"><div class="panel-title"><h3>Scenario identity</h3><button type="button" id="builder-copy">Copy scenario</button></div>
+<label>Scenario title<input id="edit-title" maxlength="145"></label>
+<label>Category<input id="edit-category" maxlength="80"></label>
+<label>Learning outcome<textarea id="edit-objective" maxlength="1100" rows="3"></textarea></label>
+<label>Opening situation<textarea id="edit-context" maxlength="1300" rows="4"></textarea></label>
+<label>Short description<textarea id="edit-summary" maxlength="1000" rows="3"></textarea></label>
+<div class="two-fields"><label>Estimated minutes<input id="edit-minutes" type="number" min="5" max="60"></label>
+<label>Avatar theme<select id="edit-avatar"><option value="blue">Slate blue</option><option value="olive">Olive</option><option value="sand">Sand</option><option value="rose">Rose</option><option value="slate">Slate gray</option></select></label></div>
+<div class="two-fields"><label>Character name<input id="edit-persona" maxlength="100"></label><label>Job / role<input id="edit-role" maxlength="120"></label></div>
+<label>Personality and context<textarea id="edit-temperament" maxlength="300" rows="2"></textarea></label>
+<div class="builder-status" id="builder-validation" role="status"></div></div>
+<div class="builder-map"><div class="panel-title"><h3>Conversation moments</h3><button type="button" class="primary" id="builder-add-moment">＋ Moment</button></div><p class="muted">A response can go to another moment or end the conversation. Select one to edit.</p>
+<div class="moment-list" id="moment-list"></div>
+<div id="builder-node-editor" class="builder-node-editor"></div></div></div>
+</section>
+<section class="view" id="observe-view" hidden><div class="intro"><span class="eyebrow">INSTRUCTOR / PEER OBSERVATION</span><h3>Notice behaviors, not just outcomes.</h3><p>One learner leads the simulated discussion while observers document what was said, what was missed, and what they would try differently. This is a facilitator-managed activity on a single device—not live, anonymous student joining.</p></div>
+<div id="observation-content"></div></section>
+<section class="view" id="review-view" hidden><div class="intro"><span class="eyebrow">LEARN · REFLECT · REPLAY</span><h3>Look beyond whether the conversation ended.</h3><p>Review your choices, simulated reactions, observer feedback, and a personal action for your next leadership conversation.</p></div>
+<div id="review-content"></div></section>
+</main>
+<aside class="sidebar right"><span class="eyebrow">02 / LEADERSHIP SIGNALS</span><h2>Conversation pulse</h2><p class="muted">Illustrative simulation indicators. Every choice changes them through the scripted scenario.</p>
+<div id="pulse-panel"></div><div class="sidebar-divider"></div>
+<div class="coach"><span>✦ FACILITATOR PROMPT</span><p id="coach-prompt">What might this employee need to feel heard and still understand the expectations?</p><button id="coach-next" type="button">Another prompt →</button></div>
+<div class="sidebar-divider"></div><div id="recent-feedback"></div><div class="sidebar-divider"></div>
+<span class="eyebrow">TEACHING TIP</span><p class="muted">Ask learners to explain why they selected a response, then replay with a different approach. The goal is reflective practice, not maximizing a numerical score.</p>
+</aside></div>
+<dialog id="projects-dialog" aria-labelledby="projects-heading"><div class="dialog-head"><div><span class="eyebrow">LOCAL PRACTICE LIBRARY</span><h2 id="projects-heading">My scenarios</h2></div><button data-close="projects-dialog" aria-label="Close">×</button></div>
+<div class="dialog-actions"><button type="button" id="projects-new" class="primary">＋ New</button><button type="button" id="projects-import">↥ Import JSON</button><input id="import-input" type="file" accept=".json,application/json" hidden></div><div id="projects-library" class="project-library"></div>
+<p class="dialog-note">Saved in this browser on this device. JSON backups preserve scenarios, past practice sessions, and observations.</p></dialog>
+<dialog id="export-dialog" aria-labelledby="export-heading"><div class="dialog-head"><div><span class="eyebrow">SAVE THE LEARNING</span><h2 id="export-heading">Export options</h2></div><button data-close="export-dialog" aria-label="Close">×</button></div><div class="export-options">
+<button type="button" data-export="project">⊞ Editable project JSON<small>Full scenario, branching choices, learner runs, and observations</small></button>
+<button type="button" data-export="transcript">▤ Transcript CSV<small>Learner responses, character reactions and indicator changes</small></button>
+<button type="button" data-export="observations">◎ Observation CSV<small>Ratings, strengths, and opportunities</small></button>
+<button type="button" data-export="report">▣ Printable debrief / PDF<small>Print or save a full after-action report</small></button>
+</div></dialog>
+<dialog id="choice-dialog" aria-labelledby="choice-heading"><form id="choice-form"><div class="dialog-head"><div><span class="eyebrow">EDIT THE BRANCH</span><h2 id="choice-heading">Response details</h2></div><button type="button" data-close="choice-dialog" aria-label="Close">×</button></div><div id="choice-fields" class="choice-fields"></div>
+<div class="dialog-actions end"><button type="button" data-close="choice-dialog">Cancel</button><button type="submit" class="primary">Save response</button></div></form></dialog>
+<section id="print-report"></section><div id="toast" role="status" aria-live="polite"></div></body></html>
