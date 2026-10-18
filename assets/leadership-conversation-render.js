@@ -1,5 +1,7 @@
 import {DIMENSIONS,EMOTIONS,TACTICS,STAGES,initialMetrics,activeSession,nodeById,metricsDelta,observationAverage,summarize,validateScenario,escapeHTML as e,clamp} from './leadership-conversation-model.js';
 
+import {portraitHTML,displayStyle} from './leadership-characters.js';
+
 const short=(v,n=105)=>String(v??'').length>n?String(v).slice(0,n-1)+'…':String(v??'');
 export const opt=(v,label,current)=>'<option value="'+e(v)+'"'+(String(current)===String(v)?' selected':'')+'>'+e(label)+'</option>';
 const pct=(n)=>Math.round(clamp(n,0,100,50));
@@ -13,38 +15,7 @@ const categoryTone=(p)=>p.category.toLowerCase().includes('ethic')?'ethics':
 const tacticTone=(t)=>({'Listen and explore':'explore','Clarify expectations':'clarify','Collaborate on options':'collaborate','Challenge respectfully':'challenge','Avoid or dismiss':'avoid'})[t]||'explore';
 export const status=key=>DIMENSIONS.find(d=>d.key===key)?.label||key;
 function emotionCaption(emotion){return ({guarded:'Guarded',frustrated:'Frustrated',skeptical:'Skeptical',thoughtful:'Reflective',open:'Open',hopeful:'Optimistic',disappointed:'Disappointed',neutral:'Neutral'})[emotion]||'Reflective';}
-export function avatarSVG(persona,emotion='neutral'){
- const skin={blue:'#e3ae8f',olive:'#bf8c6c',sand:'#c48d6d',rose:'#b57d60',slate:'#d7a78a'}[persona.avatar]||'#cf9576';
- const coat={blue:'#47789f',olive:'#617461',sand:'#bc946a',rose:'#a87784',slate:'#65717e'}[persona.avatar]||'#47789f';
- const hair={blue:'#403830',olive:'#2e302d',sand:'#36312a',rose:'#312d31',slate:'#54453b'}[persona.avatar]||'#403830';
- const browY=emotion==='frustrated'?104:emotion==='skeptical'?102:emotion==='disappointed'?109:108;
- const mouth=emotion==='hopeful'||emotion==='open'?'M119 163 Q136 176 153 163':
-   emotion==='frustrated'?'M119 168 Q136 157 153 168':
-   emotion==='disappointed'?'M120 168 Q136 159 151 168':
-   emotion==='skeptical'?'M121 166 Q138 162 151 164':'M122 164 Q136 167 152 164';
- const browL=emotion==='frustrated'?'M109 107 L123 101':emotion==='skeptical'?'M110 102 L123 108':'M110 '+browY+' L125 '+(browY-2);
- const browR=emotion==='frustrated'?'M145 101 L159 107':emotion==='skeptical'?'M145 108 L159 100':'M145 '+(browY-2)+' L159 '+browY;
- const aria=e('Illustration of '+(persona.name||'an employee')+' with a '+emotionCaption(emotion).toLowerCase()+' expression');
- return '<svg class="portrait-svg" role="img" aria-label="'+aria+'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 285">'+
- '<defs><linearGradient id="portrait-halo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#dcecf3"/></linearGradient><linearGradient id="coat-shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+coat+'"/><stop offset="1" stop-color="#354f67"/></linearGradient></defs>'+
- '<ellipse cx="131" cy="146" rx="117" ry="123" fill="url(#portrait-halo)" stroke="#d6e6f0"/>'+
- '<ellipse cx="130" cy="273" rx="102" ry="18" fill="#7ca3b7" opacity=".12"/>'+
- '<path d="M28 283 C29 230 56 215 95 208 L119 195 L143 195 L162 207 C207 219 229 243 230 283Z" fill="url(#coat-shade)"/>'+
- '<path d="M109 205 L132 234 L156 204 L144 200 L117 199Z" fill="#f7f8f5"/>'+
- '<path d="M116 176 L114 205 C125 216 143 216 155 205 L149 173Z" fill="'+skin+'"/>'+
- '<ellipse cx="90" cy="139" rx="8" ry="13" fill="'+skin+'"/><ellipse cx="167" cy="139" rx="8" ry="13" fill="'+skin+'"/>'+
- '<path d="M89 97 C89 63 106 50 131 50 C157 50 174 64 173 99 L168 152 C161 183 145 198 131 198 C111 198 95 182 92 153Z" fill="'+skin+'"/>'+
- '<path d="M88 132 C81 111 83 79 95 61 C109 43 135 38 154 48 C173 43 182 67 176 91 C176 106 172 117 167 124 L164 94 Q158 73 143 82 Q125 89 104 84 Q100 102 92 109Z" fill="'+hair+'"/>'+
- '<path d="'+browL+'" fill="none" stroke="'+hair+'" stroke-width="4" stroke-linecap="round"/>'+
- '<path d="'+browR+'" fill="none" stroke="'+hair+'" stroke-width="4" stroke-linecap="round"/>'+
- '<ellipse cx="118" cy="125" rx="4" ry="4.5" fill="#30353b"/><ellipse cx="152" cy="125" rx="4" ry="4.5" fill="#30353b"/>'+
- '<path d="M134 129 Q130 149 135 152 L139 151" fill="none" stroke="#956b5c" stroke-width="2.4" stroke-linecap="round"/>'+
- '<path d="'+mouth+'" fill="none" stroke="#874f4c" stroke-width="3.2" stroke-linecap="round"/>'+
- '<path d="M118 200 L132 228 L142 202" fill="none" stroke="#d5e1e8" stroke-width="3"/>'+
- '<path d="M92 211 L116 230 L132 255 L96 236Z" fill="#ffffff20"/>'+
- '<path d="M166 212 L146 229 L133 255 L170 238Z" fill="#071b2b19"/>'+
- '</svg>';
-}
+export function avatarSVG(persona,emotion='neutral'){return portraitHTML(persona,emotion)}
 export function sidebarHTML(projects,activeId,filter=''){
  const q=filter.toLowerCase().trim();
  const matching=projects.filter(p=>[p.title,p.category,p.summary,p.persona.name].join(' ').toLowerCase().includes(q));
@@ -59,8 +30,8 @@ export function sidebarHTML(projects,activeId,filter=''){
 export function selectedCardHTML(p){
  const s=activeSession(p);return '<span class="eyebrow">SELECTED SCENARIO</span><h3>'+e(p.title)+'</h3>'+
  '<p>'+e(p.summary)+'</p><div class="selected-meta"><span>◷ '+p.timeMinutes+' min</span><span>'+p.nodes.length+' moments</span></div>'+
- '<p class="selected-persona">Character: <strong>'+e(p.persona.name)+'</strong></p>'+
- '<button type="button" data-start-session="1" class="primary wide">'+(s?'↻ Practice again':'▶ Begin conversation')+'</button>';
+ '<p class="selected-persona">Character: <strong>'+e(p.persona.name)+'</strong> · '+e(displayStyle(p.persona.style))+'</p>'+
+ '<button type="button" data-start-session="1" class="primary wide">'+(s?'↻ Practice again':'▶ Begin conversation')+'</button><button type="button" class="character-edit-shortcut" data-go="characters">✦ Customize character →</button>';
 }
 export function pulseHTML(p){
  const s=activeSession(p),data=s?.metrics||initialMetrics();
