@@ -139,9 +139,9 @@ export function behaviorEffects(effects,character){
  return Object.fromEntries(Object.entries(effects||{}).map(([k,v])=>{
   const original=Math.max(-25,Math.min(25,Number(v)||0));
   const isNegative=original<0;
-  const factor=isNegative?1+(b.reactivity-3)*0.16:1+(b.openness-3)*0.13;
-  const directness=k==='clarity'?1+(b.directness-3)*0.09:1;
-  return [k,Math.max(-25,Math.min(25,Math.round(original*factor*directness)))];
+  const factor=isNegative?1+(b.reactivity-3)*0.16:
+   k==='clarity'?1+(b.directness-3)*0.14:1+(b.openness-3)*0.13;
+  return [k,Math.max(-25,Math.min(25,Math.round(original*factor)))];
  }));
 }
 const e=escapeHTML;
