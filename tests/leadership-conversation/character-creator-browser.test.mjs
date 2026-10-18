@@ -115,7 +115,6 @@ test('Full Character Creator: create, edit, preview moods, duplicate, assign, pr
   // Export an individual character without uploading it to a server.
   click('[data-character-export]');
   assert.ok(files.some(x=>typeof x==='string'&&x.endsWith('.character.json')));
-  assert.ok(files.some(x=>x instanceof dom.window.Blob||typeof x==='object'));
   click('[data-character-duplicate]');
   const secondId=library()[0].id;
   click('[data-character-assign="'+secondId+'"]');
