@@ -647,3 +647,166 @@ button.primary:hover:not(:disabled){
 @media(prefers-reduced-motion:reduce){
  .portrait-svg.character-style-three-d{animation:none!important;transform:none!important}
 }
+
+
+
+/* Optional Character Drawer: keep the roleplay front and center until requested. */
+.tabs .character-drawer-trigger{
+ margin-left:auto;flex:0 0 auto;align-self:center;
+ padding:7px 11px 8px!important;
+ border:1px solid #e0c999!important;border-bottom:2px solid #cda25d!important;
+ border-radius:9px!important;
+ background:linear-gradient(90deg,#fff9ed,#fffdfa)!important;
+ color:#755220!important;font-size:11px!important;letter-spacing:0!important;
+ white-space:nowrap;
+}
+.tabs .character-drawer-trigger span{display:inline-block;margin-left:6px;transition:transform .16s}
+.tabs .character-drawer-trigger.active{
+ background:#ffe9bf!important;border-color:#c4923c!important;
+ box-shadow:0 4px 14px rgba(145,102,35,.13);
+}
+.tabs .character-drawer-trigger.active span{transform:rotate(90deg)}
+.tabs .character-drawer-trigger:hover{background:#fff0d1!important}
+dialog.character-drawer{
+ position:fixed;inset:0 0 0 auto;
+ box-sizing:border-box;margin:0 0 0 auto;
+ width:min(990px,96vw);max-width:none;height:100dvh;max-height:100dvh;
+ border:0;border-left:2px solid #a8cbe0;border-radius:20px 0 0 20px;
+ padding:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;
+ box-shadow:-24px 0 80px rgba(11,38,57,.27);
+ background:#f4f8fb;
+}
+dialog.character-drawer::backdrop{background:rgba(9,30,48,.45);backdrop-filter:blur(2px)}
+dialog.character-drawer[open]{animation:character-drawer-enter .2s ease-out}
+@keyframes character-drawer-enter{from{transform:translateX(3%);opacity:.8}to{transform:translateX(0);opacity:1}}
+.character-drawer-top{
+ display:flex;justify-content:space-between;align-items:center;gap:14px;
+ position:sticky;top:0;z-index:12;
+ min-height:88px;padding:13px 21px;
+ border-bottom:2px solid #d8e5ec;border-top:4px solid #d1a55c;
+ background:linear-gradient(110deg,#fff,#ecf6fc);
+ box-shadow:0 5px 18px rgba(24,77,104,.07);
+}
+.character-drawer-heading .eyebrow{font-size:9px;color:#9c742e}
+.character-drawer-heading h2{font-size:20px;line-height:1.25;color:#1c506e;letter-spacing:-.045em;margin:4px 0}
+.character-drawer-heading p{font-size:11px;color:#6b8799;line-height:1.4;margin:0;max-width:620px}
+.character-drawer-buttons{display:flex;flex-shrink:0;align-items:center;gap:8px}
+.character-drawer-buttons button.primary{font-size:12px;padding:10px 16px}
+.character-drawer-close{
+ display:grid;place-items:center;
+ width:36px;height:36px;border-radius:12px;
+ color:#436d88;background:#f1f7fb;border:1px solid #cde0eb;
+ font-size:23px;line-height:1;padding:0;
+}
+.character-drawer #characters-view{padding:15px 18px 30px}
+.character-drawer .character-head{
+ padding:14px 17px;border-top-width:3px;gap:10px;
+ box-shadow:0 6px 18px rgba(20,74,103,.07);
+}
+.character-drawer .character-head h3{font-size:18px;margin:4px 0}
+.character-drawer .character-head p{font-size:11px;max-width:660px}
+.character-drawer .character-head-actions button{font-size:10px;padding:8px 11px}
+.character-drawer .character-workspace{
+ grid-template-columns:minmax(220px,.8fr) minmax(0,1.45fr);
+ gap:12px;
+}
+.character-drawer .character-tiles{grid-template-columns:repeat(2,minmax(0,1fr));max-height:480px}
+.character-drawer .character-creator-body{grid-template-columns:1fr}
+.character-drawer .character-visual{display:block}
+.character-drawer .character-portrait-main{min-height:235px}
+.character-drawer .character-portrait-main>.portrait-svg{max-height:225px}
+.character-editor-toggle{
+ color:#81571d;border-color:#ddc699;background:#fff8e9;
+ font-weight:840!important;
+}
+.character-editor-toggle:hover:not(:disabled){background:#ffefd0}
+.character-creator-body[hidden],.character-quick-view[hidden],.builder-legacy[hidden]{
+ display:none!important;
+}
+.character-quick-view{
+ display:grid;grid-template-columns:minmax(132px,.66fr) minmax(0,1.34fr);
+ align-items:center;gap:19px;padding:16px;
+ margin-top:15px;border:1px solid #d6e5ef;border-radius:13px;
+ background:linear-gradient(110deg,#eaf5fc,#fffaf0);
+}
+.character-quick-portrait{
+ display:grid;place-items:center;max-width:220px;
+ height:215px;border:1px solid #c7dce8;border-radius:13px;
+ background:radial-gradient(circle,#fff,#e0f0f9);
+ overflow:hidden;
+}
+.character-quick-portrait>.portrait-svg{height:208px;max-width:192px}
+.character-quick-portrait .character-photo-wrap{height:100%;width:100%}
+.character-quick-portrait .photo-placeholder{min-height:100%;height:100%;padding:14px}
+.character-quick-copy{display:grid;gap:7px;align-content:center}
+.character-quick-copy h4{font-size:22px;color:#1b4d6e;line-height:1.15;margin:0;letter-spacing:-.05em}
+.character-quick-copy p{font-size:12px;color:#66859a;line-height:1.55;margin:2px 0}
+.character-quick-style{
+ display:inline-block;width:max-content;font-size:10px;font-weight:850;
+ padding:4px 9px;background:#fff1d5;border:1px solid #e7ce99;
+ border-radius:8px;color:#8a6125;
+}
+.character-current-label{
+ color:#17735e;font-size:11px;font-weight:850;
+ background:#e0f5ee;border-radius:8px;
+ border:1px solid #c0e5d7;padding:9px 10px;
+}
+.character-quick-copy button{justify-self:start;min-width:190px}
+.character-quick-edit{
+ background:#fff;border:1px solid #b6d5e6;
+ color:#205e85;font-size:11px;padding:9px 13px;
+}
+.character-quick-edit:hover{background:#edf7fc}
+.character-drawer .character-editor-head{gap:10px}
+.character-drawer .character-editor-head .character-editor-actions{flex-wrap:wrap;justify-content:flex-end}
+.character-drawer .character-editor-head .character-editor-actions button{padding:7px 9px}
+.portrait-edit-chip{
+ position:absolute;right:10px;top:15px;z-index:5;
+ display:flex;align-items:center;gap:4px;
+ background:#fffdf7;border:1px solid #d7b873;
+ color:#76511d;font-size:10px;font-weight:850;
+ border-radius:24px;padding:7px 10px;
+ box-shadow:0 5px 12px rgba(47,80,92,.10);
+}
+.portrait-edit-chip:hover{background:#fff2d5}
+.presentation-mode .portrait-edit-chip{display:none!important}
+@media(max-width:1100px){
+ dialog.character-drawer{width:min(860px,97vw)}
+ .character-drawer .character-workspace{grid-template-columns:1fr}
+ .character-drawer .character-tiles{grid-template-columns:repeat(4,minmax(0,1fr));max-height:255px}
+ .character-drawer .character-creator-body{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+ dialog.character-drawer{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border-left:0}
+ .character-drawer-top{padding:11px 12px;min-height:76px;gap:7px}
+ .character-drawer-heading h2{font-size:17px}
+ .character-drawer-heading p{font-size:10px;line-height:1.3}
+ .character-drawer-buttons button.primary{padding:8px 11px;font-size:11px}
+ .character-drawer #characters-view{padding:11px 10px 22px}
+ .character-drawer .character-tiles{grid-template-columns:repeat(3,minmax(0,1fr));max-height:270px}
+ .character-drawer .character-creator-body{grid-template-columns:1fr 1fr}
+ .character-quick-view{grid-template-columns:140px minmax(0,1fr);gap:11px;padding:11px}
+ .character-quick-portrait{height:180px}
+ .character-quick-portrait>.portrait-svg{height:174px}
+}
+@media(max-width:540px){
+ .tabs .character-drawer-trigger{margin-left:0;padding:7px 9px!important;font-size:10px!important}
+ .character-drawer .character-tiles{grid-template-columns:repeat(3,minmax(0,1fr));max-height:240px}
+ .character-drawer .character-creator-body{grid-template-columns:1fr}
+ .character-quick-view{grid-template-columns:115px minmax(0,1fr)}
+ .character-quick-portrait{height:145px}
+ .character-quick-portrait>.portrait-svg{height:138px}
+ .character-quick-copy h4{font-size:17px}
+ .character-quick-copy p{font-size:10px}
+ .character-quick-copy button{min-width:0;width:100%;font-size:10px}
+ .character-drawer-top .character-drawer-heading p{display:none}
+ .character-drawer-heading h2{font-size:16px}
+ .character-drawer-buttons{gap:6px}
+ .character-drawer-buttons button.primary{padding:7px 9px;font-size:10px}
+ .character-drawer-close{width:33px;height:33px}
+ .portrait-edit-chip{right:8px;top:8px;font-size:9px;padding:5px 8px}
+}
+@media(prefers-reduced-motion:reduce){
+ dialog.character-drawer[open]{animation:none!important}
+ .tabs .character-drawer-trigger span{transition:none!important}
+}
