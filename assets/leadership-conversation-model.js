@@ -1,5 +1,6 @@
 /* Leadership Conversation Simulator — deterministic, inspectable classroom practice.
    Indicators and character reactions are scripted simulations, NOT assessments of real people. */
+import {createCharacter,characterPersona,behaviorEffects} from './leadership-characters.js';
 export const VERSION=1;
 export const KEY='mayne.leadership-conversation.v1';
 export const CAPS={projects:30,nodes:32,choices:6,turns:30,observations:35,importBytes:3_000_000};
@@ -43,9 +44,10 @@ export function makeProject(data={}){
   summary:text(data.summary||'A coaching conversation you can customize.',1000),
   objective:text(data.objective||'Practice curiosity, expectations and joint problem-solving.',1100),
   timeMinutes:round(data.timeMinutes,5,60,12),
-  persona:{name:text(data.persona?.name||'Jordan Taylor',100),role:text(data.persona?.role||'Team member',120),
-   temperament:text(data.persona?.temperament||'Thoughtful but uncertain',300),
-   avatar:['olive','blue','sand','rose','slate'].includes(data.persona?.avatar)?data.persona.avatar:'blue'},
+  characterId:text(data.characterId,95),persona:characterPersona(createCharacter({
+   ...data.persona,name:data.persona?.name||'Jordan Taylor',
+   role:data.persona?.role||'Team member',temperament:data.persona?.temperament||'Thoughtful but uncertain'
+  })),
   context:text(data.context||'A private one-on-one conversation.',1300),
   firstNodeId:first.id,nodes:[first],
   sessions:[],activeSessionId:'',created:now(),updated:now()};
@@ -66,11 +68,12 @@ export function choose(p,choiceId,{written='',classification=null}={}){
  if(typed&&!TACTICS.includes(classification))throw Error('Select the leadership approach used in your typed response.');
  if(!typed&&classification)classification=null;
  const before={...s.metrics};
- const after=Object.fromEntries(DIMENSIONS.map(d=>[d.key,round(before[d.key]+option.effects[d.key],0,100,50)]));
+ const effects=behaviorEffects(option.effects,p.persona);
+ const after=Object.fromEntries(DIMENSIONS.map(d=>[d.key,round(before[d.key]+effects[d.key],0,100,50)]));
  const turns=[...s.turns,{id:uid(),nodeId:n.id,stage:n.stage,employee:n.line,
   learner:typed||option.label,selectedChoice:option.label,typed:!!typed,
   classification:typed?classification:option.tactic,reply:option.reply,emotion:option.emotion,
-  feedback:option.feedback,effects:{...option.effects},before,after,at:now()}];
+  feedback:option.feedback,effects,before,after,at:now()}];
  const next=option.nextId;
  if(next!=='END'&&!nodeById(p,next))throw Error('The next conversation moment does not exist. Edit this response first.');
  s.turns=turns.slice(-CAPS.turns);s.metrics=after;
@@ -158,6 +161,7 @@ export function normalizeProject(raw,{regenerate=false}={}){
  if(raw.version!=null&&raw.version!==VERSION)throw Error('Unsupported project version.');
  if(!Array.isArray(raw.nodes)||!raw.nodes.length||raw.nodes.length>CAPS.nodes)throw Error('Invalid scenario moments.');
  const p=makeProject(raw);p.id=regenerate?uid():text(raw.id,90)||uid();
+ p.characterId=text(raw.characterId,95);
  p.title=text(raw.title,145)||p.title;p.category=text(raw.category,80);
  p.summary=text(raw.summary,1000);p.objective=text(raw.objective,1100);p.context=text(raw.context,1300);
  p.timeMinutes=round(raw.timeMinutes,5,60,12);
