@@ -631,3 +631,19 @@ button.primary:hover:not(:disabled){
  .character-tile{transition:none!important}
 }
 @media print{.character-studio,.character-photo-wrap{display:none!important}}
+
+
+/* Character rendering: professional low-motion 3D presence, no noisy effects. */
+@keyframes character-presence{
+  0%,100%{transform:translateY(0) rotate(-.25deg)}
+  50%{transform:translateY(-3px) rotate(.25deg)}
+}
+.portrait-svg.character-style-three-d{
+ animation:character-presence 5.8s ease-in-out infinite;
+ transform-origin:50% 86%;
+}
+.portrait-svg.character-style-illustrated{animation:none}
+.builder-legacy[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){
+ .portrait-svg.character-style-three-d{animation:none!important;transform:none!important}
+}
