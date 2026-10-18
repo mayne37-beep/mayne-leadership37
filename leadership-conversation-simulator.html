@@ -21,6 +21,7 @@
 <nav class="tabs" aria-label="Simulator workspace">
 <button type="button" data-view="practice" class="active">◈ Practice</button>
 <button type="button" data-view="builder">✎ Scenario Builder</button>
+<button type="button" data-view="characters">✦ Character Creator</button>
 <button type="button" data-view="observe">◎ Observation Studio</button>
 <button type="button" data-view="review">▤ After-Action Review</button></nav>
 <div class="view-head"><div><span class="eyebrow" id="view-eyebrow">INTERACTIVE CONVERSATION</span><h2 id="view-title">Practice the moment.</h2><p id="view-summary">Choose a scenario and begin a conversation.</p></div><div id="view-actions" class="view-actions"></div></div>
@@ -34,14 +35,20 @@
 <label>Learning outcome<textarea id="edit-objective" maxlength="1100" rows="3"></textarea></label>
 <label>Opening situation<textarea id="edit-context" maxlength="1300" rows="4"></textarea></label>
 <label>Short description<textarea id="edit-summary" maxlength="1000" rows="3"></textarea></label>
-<div class="two-fields"><label>Estimated minutes<input id="edit-minutes" type="number" min="5" max="60"></label>
-<label>Avatar theme<select id="edit-avatar"><option value="blue">Slate blue</option><option value="olive">Olive</option><option value="sand">Sand</option><option value="rose">Rose</option><option value="slate">Slate gray</option></select></label></div>
-<div class="two-fields"><label>Character name<input id="edit-persona" maxlength="100"></label><label>Job / role<input id="edit-role" maxlength="120"></label></div>
-<label>Personality and context<textarea id="edit-temperament" maxlength="300" rows="2"></textarea></label>
+<label>Estimated minutes<input id="edit-minutes" type="number" min="5" max="60"></label>
+<div class="builder-character-cta"><div><span class="eyebrow">ASSIGNED CHARACTER</span><strong id="builder-assigned-character">Not assigned</strong>
+<p>Appearance, personality, and expression portraits are now edited centrally in the Character Creator. Changes follow a character wherever it is used.</p></div>
+<button type="button" data-go="characters" class="primary">✦ Choose or edit character →</button></div>
+<div class="two-fields builder-legacy" hidden><label>Avatar theme<select id="edit-avatar"><option value="blue">Slate blue</option><option value="olive">Olive</option><option value="sand">Sand</option><option value="rose">Rose</option><option value="slate">Slate gray</option></select></label><label>Character name<input id="edit-persona" maxlength="100"></label><label>Job / role<input id="edit-role" maxlength="120"></label><label>Personality and context<textarea id="edit-temperament" maxlength="300" rows="2"></textarea></label></div>
 <div class="builder-status" id="builder-validation" role="status"></div></div>
 <div class="builder-map"><div class="panel-title"><h3>Conversation moments</h3><button type="button" class="primary" id="builder-add-moment">＋ Moment</button></div><p class="muted">A response can go to another moment or end the conversation. Select one to edit.</p>
 <div class="moment-list" id="moment-list"></div>
 <div id="builder-node-editor" class="builder-node-editor"></div></div></div>
+</section>
+<section class="view" id="characters-view" hidden>
+ <div id="character-workbench"></div>
+ <input type="file" id="character-photo-input" accept="image/png,image/jpeg,image/webp" hidden>
+ <input type="file" id="character-import-input" accept=".json,application/json" hidden>
 </section>
 <section class="view" id="observe-view" hidden><div class="intro"><span class="eyebrow">INSTRUCTOR / PEER OBSERVATION</span><h3>Notice behaviors, not just outcomes.</h3><p>One learner leads the simulated discussion while observers document what was said, what was missed, and what they would try differently. This is a facilitator-managed activity on a single device—not live, anonymous student joining.</p></div>
 <div id="observation-content"></div></section>
