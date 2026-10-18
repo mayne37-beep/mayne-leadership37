@@ -1,16 +1,18 @@
 import {VERSION,KEY,CAPS,DIMENSIONS,TACTICS,STAGES,EMOTIONS,round,text,escapeHTML as e,deepCopy,makeProject,starterLibrary,startSession,activeSession,nodeById,choose,rewindTurn,addObservation,removeNode,addNode,addChoice,updateChoice,deleteChoice,validateScenario,normalizeProject} from './leadership-conversation-model.js';
 import {opt,sidebarHTML,selectedCardHTML,pulseHTML,practiceHTML,recentFeedbackHTML,momentsHTML,nodeEditorHTML,choiceEditorFieldsHTML,observeHTML,reviewHTML,reportHTML} from './leadership-conversation-render.js';
+import {createLibrary} from './leadership-characters.js';
+import {connectCharacterCreator} from './leadership-character-controller.js';
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const PROMPTS=['What might this person need to feel heard while still understanding expectations?','What question could uncover an important missing fact?','How could you be both empathetic and clear?','What assumption have you made about motives?','When is direct feedback more useful than another question?','What would a respectful accountability statement sound like?','What action would demonstrate an agreement actually worked?'];
-const VIEWS={practice:['LEADERSHIP ROLEPLAY','Practice the moment.','Explore realistic responses and reflect on employee reactions.'],builder:['SCENARIO AUTHORING','Design the conversation.','Edit character, employee lines, response paths and their consequences.'],observe:['PEER & INSTRUCTOR FEEDBACK','Observe the behavior.','Record what the learner actually says and does.'],review:['AFTER-ACTION LEARNING','Learn from the conversation.','Examine choices, feedback, and your next leadership commitment.']};
-const S={projects:[],id:'',view:'practice',builderNode:'',search:'',present:false,editor:null,undo:[],redo:[],prompt:0};let toastHandle;
+const VIEWS={practice:['LEADERSHIP ROLEPLAY','Practice the moment.','Explore realistic responses and reflect on employee reactions.'],builder:['SCENARIO AUTHORING','Design the conversation.','Edit character, employee lines, response paths and their consequences.'],characters:['CHARACTER CREATOR','Create your cast.','Customize portraits, expressions and personality; reuse characters across scenarios.'],observe:['PEER & INSTRUCTOR FEEDBACK','Observe the behavior.','Record what the learner actually says and does.'],review:['AFTER-ACTION LEARNING','Learn from the conversation.','Examine choices, feedback, and your next leadership commitment.']};
+const S={projects:[],id:'',view:'practice',builderNode:'',search:'',present:false,editor:null,undo:[],redo:[],prompt:0,characters:[]};let toastHandle;
 const p=()=>S.projects.find(x=>x.id===S.id)||S.projects[0];
 function toast(message){const el=$('#toast');el.textContent=message;el.classList.add('show');clearTimeout(toastHandle);toastHandle=setTimeout(()=>el.classList.remove('show'),3200)}
-function load(){try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');if(raw?.projects?.length){S.projects=raw.projects.slice(0,CAPS.projects).map(x=>normalizeProject(x));S.id=S.projects.find(x=>x.id===raw.activeId)?.id||S.projects[0].id;return}}catch(err){console.warn('Could not load conversation projects',err)}S.projects=starterLibrary();S.id=S.projects[0].id}
-function persist(){p().updated=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify({version:VERSION,activeId:S.id,projects:S.projects}));$('#save-status').textContent='✓ Saved on this device';$('#save-status').classList.remove('error');return true}catch(err){$('#save-status').textContent='⚠ Save failed · Export backup';$('#save-status').classList.add('error');toast('Local storage failed. Export a JSON backup.');return false}}
+function load(){try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');if(raw?.projects?.length){S.projects=raw.projects.slice(0,CAPS.projects).map(x=>normalizeProject(x));S.id=S.projects.find(x=>x.id===raw.activeId)?.id||S.projects[0].id;S.characters=createLibrary(S.projects,raw.characters||[]);return}}catch(err){console.warn('Could not load conversation projects',err)}S.projects=starterLibrary();S.id=S.projects[0].id;S.characters=createLibrary(S.projects)}
+function persist(){p().updated=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify({version:VERSION,activeId:S.id,projects:S.projects,characters:S.characters}));$('#save-status').textContent='✓ Saved on this device';$('#save-status').classList.remove('error');return true}catch(err){$('#save-status').textContent='⚠ Save failed · Export backup';$('#save-status').classList.add('error');toast('Local storage failed. Export a JSON backup.');return false}}
 function mutate(fn){const current=p(),before=deepCopy(current);let result;try{result=fn(current)}catch(err){S.projects[S.projects.indexOf(current)]=before;toast(err.message);render();return false}if(JSON.stringify(before)!==JSON.stringify(p())){S.undo.push(before);if(S.undo.length>55)S.undo.shift();S.redo=[];persist()}render();return result===undefined?true:result}
 function switchProject(id){if(!S.projects.some(x=>x.id===id))return;S.id=id;S.builderNode=p().firstNodeId;S.view='practice';S.present=false;S.undo=[];S.redo=[];persist();render();close('#projects-dialog')}
-function createProject(project=makeProject()){if(S.projects.length>=CAPS.projects){toast('Scenario limit reached. Export or delete one first.');return false}S.projects.unshift(project);S.id=project.id;S.builderNode=project.firstNodeId;S.view='builder';S.present=false;S.undo=[];S.redo=[];persist();render();close('#projects-dialog');toast('Editable scenario created.');return true}
+function createProject(project=makeProject()){if(S.projects.length>=CAPS.projects){toast('Scenario limit reached. Export or delete one first.');return false}S.projects.unshift(project);S.id=project.id;S.characters=createLibrary(S.projects,S.characters);S.builderNode=project.firstNodeId;S.view='builder';S.present=false;S.undo=[];S.redo=[];persist();render();close('#projects-dialog');toast('Editable scenario created.');return true}
 function duplicate(src=p()){const next=normalizeProject(src,{regenerate:true});next.title+=' (copy)';next.sessions=[];next.activeSessionId='';return createProject(next)}
 function deleteProject(id){const target=S.projects.find(x=>x.id===id);if(!target||!confirm('Delete "'+target.title+'" and its practice history?'))return;S.projects=S.projects.filter(x=>x.id!==id);if(!S.projects.length)S.projects=starterLibrary();if(S.id===id)S.id=S.projects[0].id;S.builderNode=p().firstNodeId;S.view='practice';S.undo=[];S.redo=[];persist();render();renderLibrary()}
 function start(){const validity=validateScenario(p());if(validity.errors.length){toast(validity.errors[0]);S.view='builder';render();return}mutate(pr=>startSession(pr));S.view='practice';S.present=false;render()}
@@ -24,13 +26,14 @@ function render(){
  Object.keys(VIEWS).forEach(k=>$('#'+k+'-view').hidden=k!==S.view);
  const info=VIEWS[S.view];$('#view-eyebrow').textContent=info[0];$('#view-title').textContent=info[1];$('#view-summary').textContent=info[2];
  $('#view-actions').innerHTML=S.view==='practice'?'<button data-start-session="1">'+(session?'↻ Restart':'▶ Begin')+'</button>'+(session?'<button data-go="review">Review →</button>':''):S.view==='builder'?'<button data-go="practice" class="primary">Preview & practice →</button>':S.view==='observe'?'<button data-go="review">Open debrief →</button>':'<button data-go="practice">Return to practice →</button>';
- $('#practice-workspace').innerHTML=practiceHTML(pr);renderBuilder();
+ $('#practice-workspace').innerHTML=practiceHTML(pr);renderBuilder();characterController.render();
  $('#observation-content').innerHTML=observeHTML(pr);$('#review-content').innerHTML=reviewHTML(pr);
  document.body.classList.toggle('presentation-mode',S.present&&S.view==='practice');
  $('#present-btn').textContent=S.present?'▣ Exit presentation':'▣ Presentation';
 }
 function renderBuilder(){
  const pr=p();for(const [id,v] of [['edit-title',pr.title],['edit-category',pr.category],['edit-objective',pr.objective],['edit-context',pr.context],['edit-summary',pr.summary],['edit-minutes',pr.timeMinutes],['edit-avatar',pr.persona.avatar],['edit-persona',pr.persona.name],['edit-role',pr.persona.role],['edit-temperament',pr.persona.temperament]])$('#'+id).value=v;
+ $('#builder-assigned-character').textContent=pr.persona.name+' · '+pr.persona.role;
  if(!pr.nodes.some(n=>n.id===S.builderNode))S.builderNode=pr.firstNodeId;
  $('#moment-list').innerHTML=momentsHTML(pr,S.builderNode);$('#builder-node-editor').innerHTML=nodeEditorHTML(pr,S.builderNode);
  const validity=validateScenario(pr);
@@ -108,7 +111,7 @@ function bind(){
  $('#builder-copy').onclick=()=>duplicate();
  $('#builder-add-moment').onclick=()=>{let item;const ok=mutate(pr=>{item=addNode(pr,{title:'New conversation moment',stage:'Explore',line:'What would you say next?',choices:[{label:'Explore this further',reply:'I will think about that.',feedback:'What was this response meant to accomplish?',nextId:'END'}]})});if(ok){S.builderNode=item.id;renderBuilder();}};
  $('#choice-form').onsubmit=ev=>{ev.preventDefault();saveChoice()};
- document.addEventListener('click',handleClick);document.addEventListener('change',handleChange);
+ document.addEventListener('click',handleClick);document.addEventListener('change',handleChange);characterController.bind();
  $('#studio-main').addEventListener('click',ev=>{
   if(ev.target.closest('#submit-typed')){
    const message=String($('#typed-reply')?.value||'').trim(),id=$('#typed-path')?.value||'';
@@ -127,4 +130,5 @@ function bind(){
   if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='s'){ev.preventDefault();persist();toast('Saved on this device.')}
  });
 }
+const characterController=connectCharacterCreator({state:S,getProject:p,persist,render,toast,download});
 load();S.builderNode=p().firstNodeId;bind();persist();render();
