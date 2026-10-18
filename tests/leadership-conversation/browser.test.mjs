@@ -76,7 +76,7 @@ test('Practice screen, branching, guided typing, observation, reflection, scenar
   assert.match($('#practice-workspace').textContent,/CONVERSATION COMPLETE/);
   click('[data-go="review"]');
   assert.match($('#review-content').textContent,/Conversation replay/);
-  assert.match($('#review-content').textContent,/Peer A/)===null; // Observer metrics are summarized, not name-displayed in review.
+  assert.ok(!$('#review-content').textContent.includes('Peer A')); // Review displays rating averages, not observer identities.
   $('#reflection-keep').value='Ask open questions';$('#reflection-change').value='Explain standards sooner';
   $('#reflection-action').value='Schedule a follow-up';
   click('#save-reflection');
