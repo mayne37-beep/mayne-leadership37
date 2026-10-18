@@ -52,6 +52,8 @@ test('Simulation signals are readable, explicitly scripted, and accessible',()=>
  }
  startSession(p);
  choose(p,p.nodes[0].choices[1].id);
+ const defensive=p.nodes.find(n=>n.id===p.sessions[0].currentNodeId);
+ choose(p,defensive.choices[1].id);
  dom=parse(pulseHTML(p));
  assert.ok(dom.querySelector('.pulse-metric.metric-down'));
  assert.ok(dom.querySelector('.pulse-metric.metric-up'));
