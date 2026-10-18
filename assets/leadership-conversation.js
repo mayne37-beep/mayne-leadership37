@@ -131,4 +131,7 @@ function bind(){
  });
 }
 const characterController=connectCharacterCreator({state:S,getProject:p,persist,render,toast,download});
-load();S.builderNode=p().firstNodeId;bind();persist();render();
+load();
+const initialView=new URLSearchParams(window.location.search).get('view');
+if(initialView&&VIEWS[initialView])S.view=initialView;
+S.builderNode=p().firstNodeId;bind();persist();render();
