@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {VERSION,CAPS,DIMENSIONS,TACTICS,initialMetrics,makeProject,makeChoice,makeNode,starterLibrary,listTemplates,templateProject,startSession,activeSession,choose,rewindTurn,addObservation,observationAverage,metricsDelta,summarize,normalizeProject,validateScenario,addNode,addChoice,updateChoice,deleteChoice,removeNode,escapeHTML} from '../../assets/leadership-conversation-model.js';
+import {VERSION,CAPS,DIMENSIONS,TACTICS,initialMetrics,makeProject,makeChoice,makeNode,nodeById,starterLibrary,listTemplates,templateProject,startSession,activeSession,choose,rewindTurn,addObservation,observationAverage,metricsDelta,summarize,normalizeProject,validateScenario,addNode,addChoice,updateChoice,deleteChoice,removeNode,escapeHTML} from '../../assets/leadership-conversation-model.js';
 import {practiceHTML,sidebarHTML,selectedCardHTML,pulseHTML,momentsHTML,nodeEditorHTML,observeHTML,reviewHTML,reportHTML,avatarSVG,choiceEditorFieldsHTML} from '../../assets/leadership-conversation-render.js';
 
 test('Six individually scripted starter scenarios have distinct personas and meaningful branching paths',()=>{
