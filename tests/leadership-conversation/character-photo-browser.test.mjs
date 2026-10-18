@@ -44,7 +44,7 @@ test('Photo upload from Character Creator is resized, stored locally and reused 
   const character=saved().characters.find(c=>c.id===expectedId);
   assert.equal(character.photos.frustrated,'data:image/webp;base64,AAAA');
   assert.ok($('.character-photo'),'Photo portrait should render');
-  assert.equal($('.character-photo').alt.includes('frustrated'),true);
+  assert.equal($('.character-portrait-main .character-photo').alt.includes('frustrated'),true);
   click('[data-photo-remove="frustrated"]');
   assert.equal(saved().characters.find(c=>c.id===expectedId).photos.frustrated,undefined);
   assert.ok($('.photo-placeholder'));
