@@ -182,6 +182,7 @@ export function normalizeProject(raw,{regenerate=false}={}){
    after:Object.fromEntries(DIMENSIONS.map(d=>[d.key,round(t.after?.[d.key],0,100,50)])),at:text(t.at,60)}));
   s.metrics=s.turns.length?{...s.turns.at(-1).after}:initialMetrics();
   if(!s.complete&&!s.currentNodeId){s.complete=true;s.ended=s.ended||now();}
+  s.reflection={keep:text(rawS.reflection?.keep,1200),change:text(rawS.reflection?.change,1200),action:text(rawS.reflection?.action,1200)};
   s.observations=Array.isArray(rawS.observations)?rawS.observations.slice(0,CAPS.observations).map(o=>({
    id:regenerate?uid():text(o.id,90)||uid(),observer:text(o.observer,100),notes:text(o.notes,1600),
    strengths:text(o.strengths,950),opportunities:text(o.opportunities,950),timestamp:text(o.timestamp,60),
