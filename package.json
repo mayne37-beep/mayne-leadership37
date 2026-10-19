@@ -23,7 +23,8 @@
     "test:change-studio": "node --test tests/change-studio/*.test.mjs",
     "test:decision-intelligence": "node --test tests/decision-intelligence/*.test.mjs",
     "test:leadership-conversations": "node --test tests/leadership-conversation/*.test.mjs",
-    "test:migration": "node --test tests/migration/consolidation.test.mjs"
+    "test:migration": "node --test tests/migration/consolidation.test.mjs",
+    "test:accounts": "node --test tests/accounts/*.test.mjs"
   },
   "dependencies": {
     "@embedpdf/pdfium": "2.15.1",
