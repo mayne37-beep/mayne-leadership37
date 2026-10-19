@@ -4,7 +4,7 @@
 
 The static Mayne Leadership site remains intact. React is bundled by the existing esbuild build into `public/assets/challenge-app.js`. `facilitation.html` adds the Classroom Tools card. `api/challenge.js` is a Vercel Node function loading a private esbuild server bundle in `dist/challenge-server.mjs`. This bundle resolves mixed CommonJS/ESM dependencies for the existing hosting loader and is never placed in the public output directory. The exact public joining page and API are exceptions to the existing website PIN middleware; instructor pages still require the site PIN and instructor authentication.
 
-Instructor authentication uses the existing Mayne Leadership 360 Supabase project (`oxgbhrhpgvtolbasxzjj`) and `public.ml360_admins`. Content and gameplay use the existing classroom project (`vteamreihsunsllwcphw`) in the isolated `ml_challenge` schema. Media uses the first project's `leadership-challenge` Storage bucket. Existing schemas and services are preserved.
+This branch prepares backend consolidation: instructor authentication, `public.ml360_admins`, the private `ml_challenge` schema and the `leadership-challenge` media bucket use the classroom project (`vteamreihsunsllwcphw`). Production remains on the original authentication project until account/data transfer and verification pass. See [Backend consolidation](BACKEND_CONSOLIDATION.md); do not merge or pause the source before its cutover gate passes.
 
 ## Environment configuration
 
@@ -16,7 +16,7 @@ An authorized instructor must exist in BOTH the existing authentication project'
 
 ## Migrations and examples
 
-Apply `supabase/migrations/*.sql` in filename order to the classroom project. The migration changes are additive and isolated to this application. Apply `supabase/leadership_challenge_media.sql` separately to the authentication/media project. Review project selection carefully; these are two existing Supabase projects. Never rerun initial `CREATE` migrations against an already migrated database.
+Apply `supabase/migrations/*.sql` in filename order to the classroom project. The migration changes are additive and isolated to this application. The consolidation migrations add the media policies to the classroom project; bucket/file transfer is a separate verified operation. `supabase/leadership_challenge_media.sql` describes the historical source setup and must not be replayed into the consolidated destination. Review project selection carefully. Never rerun initial `CREATE` migrations against an already migrated database.
 
 Migration files include all fixes to answer validation, reports, team ranks, timer concurrency, host signal channels and configurable nickname requirements. Initial deployment provisioning inserted the gateway digest and authorized owner as environment-specific data, not hard-coded identities in schema migrations. `scripts/seed-challenge.mjs` creates and publishes the three 10-question examples for the instructor selected by CHALLENGE_STUDIO_OWNER_ID; it checks existing titles before inserting.
 

@@ -1,5 +1,5 @@
-export const AUTH_URL='https://oxgbhrhpgvtolbasxzjj.supabase.co';
-export const AUTH_KEY='sb_publishable_XpoqSmq4ZshQRGm0lpo3CQ_nyzrN4D8';
+export const AUTH_URL='https://vteamreihsunsllwcphw.supabase.co';
+export const AUTH_KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
 export const LIVE_URL='https://vteamreihsunsllwcphw.supabase.co';
 export const LIVE_KEY='sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud';
 export const TYPES={choice:'Multiple choice',truefalse:'True or false',text:'Type the answer',order:'Puzzle / correct order',image:'Image answers',poll:'Poll',cloud:'Word cloud',open:'Open response',rank:'Ranking',scale:'Scale / slider',pin:'Pin on image',number:'Numerical answer',info:'Information slide'};

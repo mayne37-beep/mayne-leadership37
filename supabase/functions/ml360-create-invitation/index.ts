@@ -1,0 +1,35 @@
+import { createClient } from "npm:@supabase/supabase-js@2.118.0";
+const url=Deno.env.get("SUPABASE_URL")!;
+const anon=Deno.env.get("SUPABASE_ANON_KEY")!;
+const service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS"};
+const reply=(data:unknown,status=200)=>new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json",...cors}});
+Deno.serve(async req=>{
+ if(req.method==="OPTIONS")return new Response(null,{headers:cors});
+ if(req.method!=="POST")return reply({error:"Method not allowed"},405);
+ const origin=req.headers.get("origin");
+ if(origin&&!["https://mayneleadership.com","https://www.mayneleadership.com"].includes(origin))return reply({error:"Origin not allowed"},403);
+ const token=req.headers.get("authorization")?.replace(/^Bearer\s+/i,"");
+ if(!token)return reply({error:"Authentication required"},401);
+ const auth=createClient(url,anon,{global:{headers:{Authorization:"Bearer "+token}}});
+ const {data:{user},error:authError}=await auth.auth.getUser(token);
+ if(authError||!user)return reply({error:"Invalid session"},401);
+ const db=createClient(url,service);
+ const {data:admin}=await db.from("ml360_admins").select("user_id").eq("user_id",user.id).maybeSingle();
+ if(!admin)return reply({error:"Administrator access required"},403);
+ let body;try{body=await req.json()}catch{return reply({error:"Invalid JSON"},400)}
+ const {cycle_id,role,invitee_email}=body||{};
+ if(!/^[0-9a-f-]{36}$/i.test(cycle_id||"")||!["Self","Supervisor","Peer","Direct Report"].includes(role))return reply({error:"Invalid assessment or evaluator role"},400);
+ if(invitee_email&&(typeof invitee_email!=="string"||invitee_email.length>254||!/^\S+@\S+\.\S+$/.test(invitee_email)))return reply({error:"Invalid email"},400);
+ const {data:cycle}=await db.from("ml360_cycles").select("id,status").eq("id",cycle_id).maybeSingle();
+ if(!cycle||!["draft","open"].includes(cycle.status))return reply({error:"Assessment cannot accept invitations"},409);
+ const bytes=crypto.getRandomValues(new Uint8Array(32));
+ const secret=Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
+ const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(secret));
+ const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,"0")).join("");
+ const expires=new Date(Date.now()+30*86400000).toISOString();
+ const {error}=await db.from("ml360_invitations").insert({cycle_id,role,invitee_email:invitee_email?.trim().toLowerCase()||null,token_hash:hash,expires_at:expires});
+ if(error)return reply({error:"Could not create invitation"},500);
+ if(cycle.status==="draft")await db.from("ml360_cycles").update({status:"open"}).eq("id",cycle_id);
+ return reply({link:"https://mayneleadership.com/360-respond.html?invite="+secret,expires_at:expires,role});
+});
