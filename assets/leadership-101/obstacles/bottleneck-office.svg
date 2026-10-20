@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="The Bottleneck Office">
+<defs>
+<linearGradient id="wall" x2="1" y2="1"><stop stop-color="#0b2037"/><stop offset=".53" stop-color="#173b5c"/><stop offset="1" stop-color="#071629"/></linearGradient>
+<linearGradient id="floor" x2="0" y2="1"><stop stop-color="#274560"/><stop offset="1" stop-color="#061321"/></linearGradient>
+<linearGradient id="glass" x2="0" y2="1"><stop stop-color="#8ac2d4"/><stop offset=".25" stop-color="#5c94b3"/><stop offset=".72" stop-color="#244369"/><stop offset="1" stop-color="#17273a"/></linearGradient>
+<linearGradient id="monitor" x2="0" y2="1"><stop stop-color="#173b65"/><stop offset="1" stop-color="#07182f"/></linearGradient>
+<linearGradient id="wood" x2="0" y2="1"><stop stop-color="#795e52"/><stop offset=".5" stop-color="#3b3034"/><stop offset="1" stop-color="#171c2a"/></linearGradient>
+<linearGradient id="gold" x2="0" y2="1"><stop stop-color="#ffdb99"/><stop offset="1" stop-color="#b57b40"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#ffe0a1" stop-opacity=".34"/><stop offset="1" stop-color="#ffe0a1" stop-opacity="0"/></radialGradient>
+<radialGradient id="vignette"><stop offset=".5" stop-color="#0a1f36" stop-opacity="0"/><stop offset="1" stop-color="#050e19" stop-opacity=".58"/></radialGradient>
+<filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter>
+<filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+<pattern id="grain" width="11" height="11" patternUnits="userSpaceOnUse"><path d="M1 4h1M8 7h1" stroke="#e7f0f3" stroke-opacity=".11"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/>
+<path d="M0 0L360 110L1225 105L1600 0Z" fill="#0a1a2e"/>
+<path d="M0 540L1600 540L1600 900L0 900Z" fill="url(#floor)"/>
+<path d="M0 540L1600 540M100 547L0 900M1500 547L1600 900M500 543L400 900M1100 543L1180 900" fill="none" stroke="#66819a" stroke-opacity=".28" stroke-width="3"/>
+<rect width="1600" height="900" fill="url(#grain)"/>
+<ellipse cx="800" cy="55" rx="440" ry="190" fill="url(#light)"/>
+<g opacity=".72"><path d="M80 0V560M1520 0V560" stroke="#1b3148" stroke-width="55"/><path d="M90 63H1508" stroke="#233b56" stroke-width="10"/><path d="M180 0L125 110L80 220" stroke="#8eaeae" stroke-opacity=".13" stroke-width="6"/></g>
+
+<g><rect x="1090" y="110" width="397" height="375" rx="4" fill="url(#glass)" stroke="#aec8cc" stroke-opacity=".46" stroke-width="9"/>
+<path d="M1290 110V485M1090 300H1487" stroke="#11283f" stroke-width="20"/>
+<path d="M1120 460V385H1160V400H1200V346H1222V398H1250V369H1272V430H1310V340H1335V399H1370V360H1398V408H1455V462" fill="#17304e" opacity=".9"/>
+<path d="M1120 111L1440 480" stroke="#e3eff1" stroke-opacity=".18" stroke-width="11"/></g>
+<rect x="58" y="120" width="495" height="430" rx="9" fill="#142a41" stroke="#b49668" stroke-width="12"/>
+<rect x="76" y="139" width="458" height="387" fill="#d9d6c8" rx="3"/>
+<text x="108" y="187" fill="#2c3844" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="700" >BACKLOG &amp; HANDOFF REVIEW</text>
+<g font-family="Arial" font-size="22" font-weight="700">
+<rect x="105" y="220" width="118" height="60" fill="#c6d7de" rx="6"/><text x="125" y="257" fill="#184266">INTAKE</text>
+<rect x="272" y="220" width="110" height="60" fill="#f2cf88" rx="6"/><text x="282" y="256" fill="#6b3c23">QUEUE</text>
+<rect x="430" y="220" width="91" height="60" fill="#c9dbd5" rx="6"/><text x="435" y="257" fill="#235d56">REVIEW</text>
+<path d="M223 250H268M383 250H429" stroke="#375a79" stroke-width="8" stroke-linecap="round"/>
+</g>
+<text x="112" y="340" fill="#9d4e39" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" >QUEUE TIME: 4.0 DAYS</text>
+<text x="112" y="388" fill="#375a79" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" >TRANSFER OWNER: UNCLEAR</text>
+<path d="M112 429L185 409L247 432L318 405L389 434L475 394" fill="none" stroke="#ba5d47" stroke-width="7" stroke-linecap="round"/>
+<g><rect x="575" y="165" width="469" height="320" rx="14" fill="#08192b" stroke="#698cad" stroke-width="12"/>
+<rect x="593" y="181" width="434" height="284" rx="4" fill="#102d4f"/>
+<text x="625" y="231" fill="#c8e6f5" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" >SERVICE DELIVERY TREND</text>
+<text x="625" y="280" fill="#f5ce87" font-family="Arial,Helvetica,sans-serif" font-size="31" font-weight="700" >64% ON TIME</text>
+<path d="M632 402L715 375L792 386L859 333L948 353L1005 315" fill="none" stroke="#edac55" stroke-width="8"/>
+<path d="M632 424H994" stroke="#44728e" stroke-width="3"/>
+<rect x="716" y="478" width="174" height="20" rx="5" fill="#263a50"/>
+</g>
+<g><rect x="30" y="565" width="420" height="124" rx="5" fill="#26364a"/><rect x="47" y="579" width="390" height="13" fill="#dcba80"/><rect x="47" y="609" width="390" height="13" fill="#d5d8d5"/><rect x="47" y="639" width="390" height="13" fill="#a1bdd0"/>
+<text x="68" y="677" fill="#ffc97f" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" >210 OVERDUE</text></g>
+<g transform="translate(1230 505)"><rect x="-8" y="5" width="65" height="142" rx="4" fill="#6b7c87"/><rect x="59" y="25" width="57" height="122" rx="4" fill="#d6a963"/><rect x="120" y="-15" width="54" height="164" rx="4" fill="#30465f"/><path d="M8 20h38M73 43h31M129 3h40" stroke="#fff6da" stroke-width="5" opacity=".8"/></g>
+<g><path d="M-90 730L670 680L1410 720L1630 870L1600 900H-20Z" fill="url(#wood)" stroke="#ae895e" stroke-opacity=".5" stroke-width="7"/>
+<path d="M0 790L1580 810" stroke="#cfb48b" stroke-opacity=".2" stroke-width="4"/>
+<g opacity=".93"><path d="M1050 722L1295 719L1390 761L1145 764Z" fill="#142434" stroke="#9bb0c5" stroke-width="3"/><path d="M1120 743H1340M1140 752H1355" stroke="#497b95" stroke-width="6"/></g>
+<path d="M310 750L570 733L625 765L370 786Z" fill="#e6d8c4" stroke="#b8aa92" stroke-width="4"/><path d="M355 763L540 750M380 773L515 758" stroke="#7d97ab" stroke-width="3"/></g>
+<g transform="translate(705 655)"><rect x="-5" y="-20" width="306" height="90" rx="9" fill="#102940" stroke="#7b9cad" stroke-width="4"/><rect x="16" y="-5" width="266" height="52" rx="3" fill="#173b65"/><text x="35" y="30" fill="#c8e6f5" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" >TRANSFER QUEUE</text><circle cx="257" cy="20" r="12" fill="#efac62"/></g>
+
+<rect width="1600" height="900" fill="url(#vignette)" pointer-events="none"/>
+</svg>

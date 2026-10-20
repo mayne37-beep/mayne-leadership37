@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="The Breakthrough Chamber">
+<defs>
+<linearGradient id="wall" x2="1" y2="1"><stop stop-color="#0b2037"/><stop offset=".53" stop-color="#102f51"/><stop offset="1" stop-color="#071629"/></linearGradient>
+<linearGradient id="floor" x2="0" y2="1"><stop stop-color="#274560"/><stop offset="1" stop-color="#061321"/></linearGradient>
+<linearGradient id="glass" x2="0" y2="1"><stop stop-color="#8ac2d4"/><stop offset=".25" stop-color="#5c94b3"/><stop offset=".72" stop-color="#244369"/><stop offset="1" stop-color="#17273a"/></linearGradient>
+<linearGradient id="monitor" x2="0" y2="1"><stop stop-color="#173b65"/><stop offset="1" stop-color="#07182f"/></linearGradient>
+<linearGradient id="wood" x2="0" y2="1"><stop stop-color="#795e52"/><stop offset=".5" stop-color="#3b3034"/><stop offset="1" stop-color="#171c2a"/></linearGradient>
+<linearGradient id="gold" x2="0" y2="1"><stop stop-color="#ffdb99"/><stop offset="1" stop-color="#b57b40"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#ffe0a1" stop-opacity=".34"/><stop offset="1" stop-color="#ffe0a1" stop-opacity="0"/></radialGradient>
+<radialGradient id="vignette"><stop offset=".5" stop-color="#0a1f36" stop-opacity="0"/><stop offset="1" stop-color="#050e19" stop-opacity=".58"/></radialGradient>
+<filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter>
+<filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+<pattern id="grain" width="11" height="11" patternUnits="userSpaceOnUse"><path d="M1 4h1M8 7h1" stroke="#e7f0f3" stroke-opacity=".11"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/>
+<path d="M0 0L360 110L1225 105L1600 0Z" fill="#0a1a2e"/>
+<path d="M0 540L1600 540L1600 900L0 900Z" fill="url(#floor)"/>
+<path d="M0 540L1600 540M100 547L0 900M1500 547L1600 900M500 543L400 900M1100 543L1180 900" fill="none" stroke="#66819a" stroke-opacity=".28" stroke-width="3"/>
+<rect width="1600" height="900" fill="url(#grain)"/>
+<ellipse cx="800" cy="55" rx="440" ry="190" fill="url(#light)"/>
+<g opacity=".72"><path d="M80 0V560M1520 0V560" stroke="#1b3148" stroke-width="55"/><path d="M90 63H1508" stroke="#233b56" stroke-width="10"/><path d="M180 0L125 110L80 220" stroke="#8eaeae" stroke-opacity=".13" stroke-width="6"/></g>
+
+<rect x="52" y="103" width="1501" height="467" rx="12" fill="#0b172a" stroke="#4b7397" stroke-width="15"/>
+<rect x="72" y="123" width="1459" height="426" fill="url(#monitor)"/>
+<text x="135" y="186" fill="#deefff" font-family="Arial,Helvetica,sans-serif" font-size="37" font-weight="700" >THE PATH TO BREAKTHROUGH</text>
+<path d="M200 314H1260" stroke="#376f95" stroke-width="8"/>
+<g><rect x="123" y="235" width="315" height="154" rx="18" fill="#783c42" stroke="#f4aa85" stroke-width="5"/>
+<text x="151" y="289" fill="#ffdcc4" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="700" >CURRENT</text>
+<text x="151" y="330" fill="#ffdcc4" font-family="Arial,Helvetica,sans-serif" font-size="31" font-weight="700" >BOTTLENECK</text>
+<rect x="564" y="235" width="339" height="154" rx="18" fill="#215579" stroke="#93c9e4" stroke-width="5"/>
+<text x="596" y="290" fill="#c8e6f5" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="700" >FOCUSED</text>
+<text x="596" y="333" fill="#c8e6f5" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="700" >ACTION</text>
+<rect x="1038" y="235" width="330" height="154" rx="18" fill="#1e6c68" stroke="#8fdfd0" stroke-width="5"/>
+<text x="1065" y="288" fill="#c4f8df" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700" >MEASURE</text>
+<text x="1065" y="330" fill="#c4f8df" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="700" >RESULTS</text>
+<path d="M442 314l65 -35v70zM915 314l65 -35v70z" fill="url(#gold)"/>
+</g>
+<g><rect x="115" y="442" width="1250" height="70" rx="12" fill="#102740" stroke="#365f7d"/>
+<text x="152" y="486" fill="#e8c28b" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" >CLARIFY PRIORITIES</text>
+<text x="481" y="486" fill="#e8c28b" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" >SUPPORT PEOPLE</text>
+<text x="800" y="486" fill="#e8c28b" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" >TEST &amp; LEARN</text>
+<text x="1096" y="486" fill="#e8c28b" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" >FOLLOW THROUGH</text>
+</g>
+<g><path d="M0 770L350 690L1252 690L1600 770L1600 902H0Z" fill="url(#wood)" stroke="#ac8e73" stroke-width="7"/><ellipse cx="804" cy="720" rx="448" ry="62" fill="#151e2e" opacity=".6"/>
+<path d="M535 706L1063 706L1140 752L466 754Z" fill="#193b57" stroke="#78a5b9" stroke-width="5"/>
+<path d="M593 726H1009" stroke="#b2dbe8" stroke-width="4" opacity=".4"/>
+<rect x="725" y="675" width="154" height="52" rx="12" fill="#142c48" stroke="#f1c78a" stroke-width="5"/>
+<text x="751" y="708" fill="#e5c48f" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" >30-DAY PLAN</text>
+</g>
+<g><rect x="190" y="640" width="190" height="69" rx="12" fill="#192f47" stroke="#7aa2bb" stroke-width="4"/><rect x="1210" y="629" width="204" height="70" rx="12" fill="#182d45" stroke="#87a5bc" stroke-width="4"/></g>
+
+<rect width="1600" height="900" fill="url(#vignette)" pointer-events="none"/>
+</svg>
