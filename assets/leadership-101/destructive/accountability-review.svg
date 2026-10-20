@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">The Accountability Review Boardroom</title><desc id="desc">Fictional Cedar Ridge workplace leadership simulation environment with evidence objects, dramatic but accessible blue and gold lighting.</desc><defs>
+<linearGradient id="wall" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#142d49"/><stop offset=".53" stop-color="#31577c"/><stop offset="1" stop-color="#748a96"/></linearGradient>
+<linearGradient id="glass" x1="0" x2="0.2" y1="0" y2="1"><stop stop-color="#aac9da"/><stop offset=".65" stop-color="#668dab"/><stop offset="1" stop-color="#163c5d"/></linearGradient>
+<linearGradient id="floor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#253f59"/><stop offset="1" stop-color="#132337"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#815b42"/><stop offset=".55" stop-color="#382e36"/><stop offset="1" stop-color="#121f31"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173854"/><stop offset="1" stop-color="#06182f"/></linearGradient>
+<linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8dfa0"/><stop offset=".52" stop-color="#d3a55e"/><stop offset="1" stop-color="#8d6133"/></linearGradient>
+<radialGradient id="spot"><stop stop-color="#f5c67a" stop-opacity=".58"/><stop offset="1" stop-color="#f5c67a" stop-opacity="0"/></radialGradient>
+<filter id="shadow" x="-30%" y="-40%" width="170%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="14"/><feOffset dx="0" dy="18"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+<pattern id="lines" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M 42 0 L0 0 0 42" fill="none" stroke="#ffffff" opacity=".055"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/><rect width="1600" height="900" fill="url(#lines)"/>
+<path d="M0 620 800 530 1600 650V900H0Z" fill="url(#floor)"/>
+<path d="M0 625 795 530 1600 650" fill="none" stroke="#adc0ca" stroke-opacity=".24" stroke-width="8"/>
+<ellipse cx="800" cy="560" rx="720" ry="360" fill="url(#spot)" opacity=".62"/>
+
+<rect x="60" y="91" width="1470" height="456" rx="18" fill="#091b2d" stroke="#6d98a5" stroke-width="13"/>
+<rect x="78" y="108" width="1430" height="413" rx="5" fill="url(#screen)"/>
+<text x="117" y="165" fill="#f5d296" font-size="31" font-family="Arial" letter-spacing="6" font-weight="bold">LEADERSHIP REVIEW</text>
+<text x="119" y="213" fill="#b6d4e4" font-size="24" font-family="Arial">Facts • Fair process • Long-term culture</text>
+<rect x="114" y="252" width="400" height="228" rx="8" fill="#173956" stroke="#476e85" stroke-width="4"/>
+<text x="145" y="297" fill="#e9ca91" font-size="24" font-family="Arial">EVIDENCE</text><path d="M155 341h310M155 371h251M155 401h280M155 432h237" stroke="#7daabd" stroke-width="11" opacity=".63"/>
+<rect x="547" y="252" width="437" height="228" rx="8" fill="#173956" stroke="#476e85" stroke-width="4"/>
+<text x="588" y="297" fill="#e9ca91" font-family="Arial" font-size="24">LEADERSHIP RESPONSE</text>
+<rect x="583" y="347" width="108" height="79" rx="10" fill="#b1796e"/><rect x="708" y="347" width="108" height="79" rx="10" fill="#d7ac67"/><rect x="830" y="347" width="108" height="79" rx="10" fill="#448fa7"/>
+<path d="M684 388h23M812 388h20" stroke="#d7e6e8" stroke-width="8"/>
+<rect x="1019" y="252" width="457" height="228" rx="8" fill="#173956" stroke="#476e85" stroke-width="4"/>
+<text x="1056" y="297" fill="#e9ca91" font-family="Arial" font-size="24">TEAM IMPACT</text>
+<path d="M1062 438v-111h366" stroke="#b3cdd6" stroke-width="5" fill="none"/>
+<path d="M1080 396 1160 373 1240 405 1320 346 1412 330" fill="none" stroke="#e2b567" stroke-width="11" stroke-linecap="round"/>
+<circle cx="1080" cy="396" r="11" fill="#f4d692"/><circle cx="1163" cy="373" r="11" fill="#f4d692"/><circle cx="1246" cy="405" r="11" fill="#f4d692"/><circle cx="1329" cy="346" r="11" fill="#f4d692"/><circle cx="1412" cy="330" r="11" fill="#f4d692"/>
+<path d="M0 550h1600" stroke="#b4a17d" opacity=".22" stroke-width="7"/>
+<g filter="url(#shadow)"><path d="M205 645 1090 565 1460 754 565 863Z" fill="url(#wood)" stroke="#b08b69" stroke-width="10"/><path d="M565 863v22l890-111v-20Z" fill="#182737"/><path d="M205 645v20l360 220v-22Z" fill="#5f4b4b"/><path d="M355 658 1045 600" stroke="#d9b486" stroke-opacity=".27" stroke-width="9"/>
+<g transform="translate(494 684) rotate(-4)"><rect width="292" height="149" rx="8" fill="#f1e9d8" stroke="#fff0d9" stroke-width="6"/><text x="24" y="38" fill="#35546e" font-family="Arial" font-size="24" font-weight="bold">REVIEW PACKET</text><path d="M22 62h260M22 89h230M22 117h199" stroke="#7b99a6" stroke-width="10" opacity=".57"/></g>
+<g transform="translate(932 668) rotate(6)"><rect width="222" height="119" rx="8" fill="#d2bc96" stroke="#fae4b8" stroke-width="5"/><text x="17" y="40" fill="#23465b" font-family="Arial" font-size="20" font-weight="bold">ACTION PLAN</text><path d="M17 61h188M17 82h142" stroke="#6c8292" stroke-width="7" opacity=".69"/></g></g>
+<g filter="url(#shadow)"><circle cx="123" cy="695" r="29" fill="url(#gold)"/><path d="M123 650v93M68 660h115M79 664l-26 50h52l-26-50M168 664l-26 50h52l-26-50" fill="none" stroke="#ebc17e" stroke-width="9"/></g>
+<circle cx="1330" cy="35" r="340" fill="url(#spot)" opacity=".39"/>
+<rect width="1600" height="900" fill="none" stroke="#12273c" stroke-width="18"/>
+</svg>

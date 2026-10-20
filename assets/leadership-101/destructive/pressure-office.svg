@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">The Pressure Office</title><desc id="desc">Fictional Cedar Ridge workplace leadership simulation environment with evidence objects, dramatic but accessible blue and gold lighting.</desc><defs>
+<linearGradient id="wall" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#142d49"/><stop offset=".53" stop-color="#31577c"/><stop offset="1" stop-color="#748a96"/></linearGradient>
+<linearGradient id="glass" x1="0" x2="0.2" y1="0" y2="1"><stop stop-color="#aac9da"/><stop offset=".65" stop-color="#668dab"/><stop offset="1" stop-color="#163c5d"/></linearGradient>
+<linearGradient id="floor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#253f59"/><stop offset="1" stop-color="#132337"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#815b42"/><stop offset=".55" stop-color="#382e36"/><stop offset="1" stop-color="#121f31"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173854"/><stop offset="1" stop-color="#06182f"/></linearGradient>
+<linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8dfa0"/><stop offset=".52" stop-color="#d3a55e"/><stop offset="1" stop-color="#8d6133"/></linearGradient>
+<radialGradient id="spot"><stop stop-color="#f5c67a" stop-opacity=".58"/><stop offset="1" stop-color="#f5c67a" stop-opacity="0"/></radialGradient>
+<filter id="shadow" x="-30%" y="-40%" width="170%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="14"/><feOffset dx="0" dy="18"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+<pattern id="lines" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M 42 0 L0 0 0 42" fill="none" stroke="#ffffff" opacity=".055"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/><rect width="1600" height="900" fill="url(#lines)"/>
+<path d="M0 620 800 530 1600 650V900H0Z" fill="url(#floor)"/>
+<path d="M0 625 795 530 1600 650" fill="none" stroke="#adc0ca" stroke-opacity=".24" stroke-width="8"/>
+<ellipse cx="800" cy="560" rx="720" ry="360" fill="url(#spot)" opacity=".62"/>
+
+<rect x="70" y="78" width="590" height="440" rx="8" fill="#0c223b" stroke="#b7c9d0" stroke-width="13"/>
+<rect x="86" y="93" width="559" height="410" fill="url(#glass)"/>
+<path d="M82 305h574M370 83v430" stroke="#122a44" stroke-width="16"/>
+<path d="M88 444h550" stroke="#f4c88c" stroke-opacity=".27" stroke-width="9"/>
+<path d="M90 480v-105h56v-87h28v192h43v-122h63v122h47v-225h60v225h55v-176h69v176h25v-105h61v105" fill="#203b5b" opacity=".65"/>
+<path d="M80 96 590 96 80 445Z" fill="#ffffff" opacity=".06"/>
+<path d="M682 0v565" stroke="#1a3859" stroke-width="16"/><rect x="770" y="100" width="710" height="405" rx="18" fill="#122a45" stroke="#8199a5" stroke-width="12"/>
+<rect x="800" y="134" width="650" height="337" rx="8" fill="url(#screen)"/>
+<text x="838" y="185" fill="#f1d497" font-family="Arial,sans-serif" font-size="24" letter-spacing="6" font-weight="bold">PERFORMANCE BOARD</text>
+<text x="840" y="237" fill="#b6cfdf" font-family="Arial,sans-serif" font-size="20">Output targets and team reporting</text>
+<path d="M850 411h505M850 330h505M850 265h505" stroke="#5e8199" stroke-width="2" opacity=".47"/>
+<rect x="876" y="325" width="74" height="86" fill="#4384ae"/><rect x="978" y="291" width="74" height="120" fill="#4384ae"/><rect x="1080" y="261" width="74" height="150" fill="#d2a75c"/><rect x="1182" y="353" width="74" height="58" fill="#bd685e"/>
+<rect x="1300" y="282" width="98" height="129" rx="8" fill="#1d4b66"/><text x="1320" y="327" fill="#f1c989" font-family="Arial,sans-serif" font-size="20">TEAM</text><text x="1311" y="360" fill="#c96665" font-family="Arial,sans-serif" font-size="22" font-weight="bold">AT RISK</text>
+<rect x="720" y="481" width="760" height="18" fill="#a98d6a" opacity=".5"/>
+<path d="M990 540v-85c0-47 120-47 120 0v85" fill="#0c1f36" stroke="#273f56" stroke-width="12"/><rect x="968" y="517" width="167" height="154" rx="33" fill="#14253c" stroke="#3b4f61" stroke-width="9"/>
+<ellipse cx="1063" cy="702" rx="200" ry="36" fill="#0a1b2b" opacity=".42"/>
+<g filter="url(#shadow)"><path d="M205 645 1090 565 1460 754 565 863Z" fill="url(#wood)" stroke="#b08b69" stroke-width="10"/><path d="M565 863v22l890-111v-20Z" fill="#182737"/><path d="M205 645v20l360 220v-22Z" fill="#5f4b4b"/><path d="M355 658 1045 600" stroke="#d9b486" stroke-opacity=".27" stroke-width="9"/>
+<g transform="translate(430 670) rotate(-6)"><rect width="250" height="164" rx="9" fill="#d8c4a2" stroke="#f5e8cc" stroke-width="5"/><path d="M27 37h170M27 59h203M27 81h140" stroke="#56677a" stroke-width="8" opacity=".65"/><rect x="23" y="106" width="174" height="40" fill="#a84a4a" opacity=".86"/><text x="39" y="134" fill="#fff" font-family="Arial" font-size="22" font-weight="bold">REVIEW</text></g>
+<rect x="870" y="636" width="225" height="121" rx="11" fill="#172b45" stroke="#788ba1" stroke-width="8"/><rect x="894" y="657" width="178" height="80" fill="#28608b" opacity=".65"/>
+</g>
+<g filter="url(#shadow)"><path d="M1030 756h190l24 14h118v88h-332z" fill="#e6d2a9" stroke="#f5e6c2" stroke-width="4"/><rect x="1046" y="799" width="274" height="43" rx="4" fill="#203a56" opacity=".85"/><text x="1060" y="827" fill="#e5b969" font-family="Arial,sans-serif" font-size="24" font-weight="bold" letter-spacing="3">STAFF FILES</text></g>
+<circle cx="1520" cy="70" r="210" fill="url(#spot)" opacity=".6"/>
+<text x="91" y="75" fill="#e8c98b" font-size="25" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="7">CEDAR RIDGE · LEADERSHIP CASE</text>
+<rect width="1600" height="900" fill="none" stroke="#12273c" stroke-width="18"/>
+</svg>

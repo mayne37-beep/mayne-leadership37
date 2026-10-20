@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">The Silence and Trust Suite</title><desc id="desc">Fictional Cedar Ridge workplace leadership simulation environment with evidence objects, dramatic but accessible blue and gold lighting.</desc><defs>
+<linearGradient id="wall" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#142d49"/><stop offset=".53" stop-color="#31577c"/><stop offset="1" stop-color="#748a96"/></linearGradient>
+<linearGradient id="glass" x1="0" x2="0.2" y1="0" y2="1"><stop stop-color="#aac9da"/><stop offset=".65" stop-color="#668dab"/><stop offset="1" stop-color="#163c5d"/></linearGradient>
+<linearGradient id="floor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#253f59"/><stop offset="1" stop-color="#132337"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#815b42"/><stop offset=".55" stop-color="#382e36"/><stop offset="1" stop-color="#121f31"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173854"/><stop offset="1" stop-color="#06182f"/></linearGradient>
+<linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8dfa0"/><stop offset=".52" stop-color="#d3a55e"/><stop offset="1" stop-color="#8d6133"/></linearGradient>
+<radialGradient id="spot"><stop stop-color="#f5c67a" stop-opacity=".58"/><stop offset="1" stop-color="#f5c67a" stop-opacity="0"/></radialGradient>
+<filter id="shadow" x="-30%" y="-40%" width="170%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="14"/><feOffset dx="0" dy="18"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+<pattern id="lines" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M 42 0 L0 0 0 42" fill="none" stroke="#ffffff" opacity=".055"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/><rect width="1600" height="900" fill="url(#lines)"/>
+<path d="M0 620 800 530 1600 650V900H0Z" fill="url(#floor)"/>
+<path d="M0 625 795 530 1600 650" fill="none" stroke="#adc0ca" stroke-opacity=".24" stroke-width="8"/>
+<ellipse cx="800" cy="560" rx="720" ry="360" fill="url(#spot)" opacity=".62"/>
+
+<rect x="35" y="60" width="675" height="420" rx="8" fill="#102840" stroke="#91b4be" stroke-width="11"/>
+<rect x="50" y="74" width="642" height="390" rx="2" fill="#e4edf1"/>
+<rect x="90" y="120" width="564" height="298" rx="6" fill="#cddde5"/>
+<text x="105" y="154" fill="#244768" font-family="Arial" font-size="23" font-weight="bold" letter-spacing="4">TEAM CLIMATE</text>
+<rect x="109" y="188" width="164" height="90" rx="9" fill="#f6e3b3"/><rect x="293" y="188" width="164" height="90" rx="9" fill="#ecb8a9"/><rect x="477" y="188" width="164" height="90" rx="9" fill="#bfd9de"/>
+<text x="124" y="223" fill="#4a5768" font-size="21" font-family="Arial">EXPECTATIONS</text><text x="314" y="223" fill="#734749" font-size="21" font-family="Arial">SPEAKING UP</text><text x="494" y="223" fill="#3b5c6b" font-size="21" font-family="Arial">FEEDBACK</text>
+<path d="M132 350h440" stroke="#44738a" stroke-width="5" opacity=".5"/>
+<rect x="135" y="304" width="90" height="48" fill="#376f92"/><rect x="243" y="324" width="90" height="28" fill="#b78a4f"/><rect x="352" y="287" width="90" height="65" fill="#376f92"/><rect x="464" y="332" width="90" height="20" fill="#be6460"/>
+<rect x="785" y="96" width="729" height="392" rx="13" fill="#0b2035" stroke="#a3bec7" stroke-width="13"/>
+<rect x="805" y="118" width="688" height="350" fill="#193e5c"/>
+<text x="845" y="174" fill="#f5d79c" font-family="Arial" font-size="27" letter-spacing="5" font-weight="bold">ANONYMOUS TEAM FEEDBACK</text>
+<rect x="850" y="215" width="588" height="70" rx="15" fill="#e4edf3" opacity=".91"/><rect x="850" y="301" width="588" height="70" rx="15" fill="#e4edf3" opacity=".91"/><rect x="850" y="385" width="588" height="48" rx="12" fill="#e4edf3" opacity=".75"/>
+<path d="M884 251h410M885 334h445M881 410h370" stroke="#51748a" stroke-width="6" opacity=".67"/>
+<rect x="730" y="0" width="18" height="565" fill="#2a425c"/>
+<g opacity=".93"><g transform="translate(260 540)"><rect x="20" y="-75" width="185" height="150" rx="30" fill="#1b354c" stroke="#628091" stroke-width="8"/><path d="M45 -70q57-58 127 0" stroke="#a5c4d4" stroke-opacity=".3" fill="none" stroke-width="10"/><rect x="55" y="65" width="10" height="200" fill="#0d2438"/><rect x="152" y="65" width="10" height="200" fill="#0d2438"/></g><g transform="translate(576 580)"><rect x="20" y="-75" width="185" height="150" rx="30" fill="#1b354c" stroke="#628091" stroke-width="8"/><path d="M45 -70q57-58 127 0" stroke="#a5c4d4" stroke-opacity=".3" fill="none" stroke-width="10"/><rect x="55" y="65" width="10" height="200" fill="#0d2438"/><rect x="152" y="65" width="10" height="200" fill="#0d2438"/></g><g transform="translate(892 540)"><rect x="20" y="-75" width="185" height="150" rx="30" fill="#1b354c" stroke="#628091" stroke-width="8"/><path d="M45 -70q57-58 127 0" stroke="#a5c4d4" stroke-opacity=".3" fill="none" stroke-width="10"/><rect x="55" y="65" width="10" height="200" fill="#0d2438"/><rect x="152" y="65" width="10" height="200" fill="#0d2438"/></g><g transform="translate(1208 580)"><rect x="20" y="-75" width="185" height="150" rx="30" fill="#1b354c" stroke="#628091" stroke-width="8"/><path d="M45 -70q57-58 127 0" stroke="#a5c4d4" stroke-opacity=".3" fill="none" stroke-width="10"/><rect x="55" y="65" width="10" height="200" fill="#0d2438"/><rect x="152" y="65" width="10" height="200" fill="#0d2438"/></g></g>
+<g filter="url(#shadow)"><path d="M205 645 1090 565 1460 754 565 863Z" fill="url(#wood)" stroke="#b08b69" stroke-width="10"/><path d="M565 863v22l890-111v-20Z" fill="#182737"/><path d="M205 645v20l360 220v-22Z" fill="#5f4b4b"/><path d="M355 658 1045 600" stroke="#d9b486" stroke-opacity=".27" stroke-width="9"/>
+<g transform="translate(545 672) rotate(-8)"><rect width="230" height="135" rx="9" fill="#eee7db" stroke="#f9f2de" stroke-width="5"/><text x="20" y="39" font-family="Arial" font-size="21" fill="#284761" font-weight="bold">EMPLOYEE NOTE</text><path d="M18 61h196M18 84h170M18 105h202" stroke="#7995a4" stroke-width="7" opacity=".6"/></g>
+<g transform="translate(899 681) rotate(3)"><rect width="205" height="123" rx="8" fill="#cae1df" stroke="#f2ffff" stroke-width="5"/><text x="17" y="38" font-family="Arial" font-size="19" fill="#20544f" font-weight="bold">ACTION LOG</text><path d="M18 61h175M18 83h120M18 104h165" stroke="#4b8685" stroke-width="7" opacity=".59"/></g></g>
+<circle cx="1227" cy="35" r="330" fill="url(#spot)" opacity=".43"/>
+<text x="66" y="48" fill="#ffdf9b" font-family="Arial" font-size="23" letter-spacing="7" font-weight="bold">PEOPLE · TRUST · SPEAKING UP</text>
+<rect width="1600" height="900" fill="none" stroke="#12273c" stroke-width="18"/>
+</svg>
