@@ -1,2 +1,0 @@
-do $$ declare definition text; begin select pg_get_functiondef('ml_challenge.gateway(text,uuid,text,jsonb)'::regprocedure) into definition; definition:=replace(definition,'not ml_challenge.valid_answer(q,p_payload->''answer'')','not coalesce(ml_challenge.valid_answer(q,p_payload->''answer''),false)'); definition:=replace(definition,'(p_payload->>''index'')::integer<>qi','(p_payload->>''index'')::integer is distinct from qi'); execute definition; end $$;
-notify pgrst,'reload schema';
