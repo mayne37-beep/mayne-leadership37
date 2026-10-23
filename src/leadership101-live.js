@@ -8,6 +8,7 @@ window.supabase={createClient};
 var API_URL="https://vteamreihsunsllwcphw.supabase.co",PUB_KEY="sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud",db=null;
 var lastInstructorHash='';var page='student',studentToken=localStorage.getItem('l101_live_token')||'',studentData=null,scenarioIndex=0,instructorUser=null,classes=[],scenarios=[],participants=[],responses=[],injects=[],selectedClass='',timer=null,editingScenario='';
 var notificationRows=[],notificationResponseRows={},notificationsReady=false,notificationsOpen=false,notificationsFilter='attention',notificationBusy=false,notificationPolling=false;
+var notificationsChannel=null,notificationsChannelOwner='';
 var notifiedIds=new Set(),soundEnabled=localStorage.getItem('l101_notify_sound')==='yes',desktopEnabled=localStorage.getItem('l101_notify_desktop')==='yes';
 var app=document.getElementById('app');
 function h(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -22,7 +23,7 @@ function sessionReport(data){var rows=(data.responses||[]).slice().sort(function
 function setPrint(data){document.getElementById('print-report').innerHTML=sessionReport(data)}
 function stat(n,label){return '<div class="stat"><b>'+h(n)+'</b><span class="small">'+h(label)+'</span></div>'}
 function download(filename,data){var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=filename;a.click();setTimeout(function(){URL.revokeObjectURL(u)},1500)}
-function setMode(mode){page=mode;if(mode!=='instructor')closeNotificationPanel();updateNotificationBell();document.getElementById('tab-student').classList.toggle('selected',mode==='student');document.getElementById('tab-instructor').classList.toggle('selected',mode==='instructor');document.getElementById('hero-title').textContent=mode==='student'?'Lead through the moment.':'Instructor Command Center';document.getElementById('hero-subtitle').textContent=mode==='student'?'Join a classroom, observe behavior, and practice leadership.':'Create sessions, evaluate student responses, and introduce live challenges.';if(mode==='student'){studentRender()}else{instructorLoad()}}
+function setMode(mode){page=mode;if(mode!=='instructor'){closeNotificationPanel();stopNotificationSubscription()}updateNotificationBell();document.getElementById('tab-student').classList.toggle('selected',mode==='student');document.getElementById('tab-instructor').classList.toggle('selected',mode==='instructor');document.getElementById('hero-title').textContent=mode==='student'?'Lead through the moment.':'Instructor Command Center';document.getElementById('hero-subtitle').textContent=mode==='student'?'Join a classroom, observe behavior, and practice leadership.':'Create sessions, evaluate student responses, and introduce live challenges.';if(mode==='student'){studentRender()}else{instructorLoad()}}
 async function init(){if(!window.supabase||!window.supabase.createClient){app.innerHTML='<div class="error">The online connection library did not load. Please check internet access or try again.</div>';return}db=window.supabase.createClient(API_URL,PUB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});setupNotificationUI();document.getElementById('tab-student').onclick=function(){setMode('student')};document.getElementById('tab-instructor').onclick=function(){setMode('instructor')};if(qs('code')){setMode('student');joinScreen()}else if(studentToken){await studentRefresh()}else joinScreen();setInterval(async function(){if(notificationPolling)return;notificationPolling=true;try{if(page==='student'&&studentToken){if(!isTyping())await studentRefresh(true)}if(page==='instructor'&&instructorUser){await loadInstructorNotifications(true);if(selectedClass)await instructorRefresh(true)}}finally{notificationPolling=false}},4500)}
 function joinScreen(){app.innerHTML='<div class="grid"><div class="panel stack"><h2>Join your Leadership 101 role-play</h2><p class="muted">Enter the classroom code from your instructor and your name. No student account or password is required for this classroom pilot.</p><label>Class code<input id="join-code" placeholder="Example: 1A2B3C4" value="'+h(qs('code'))+'" autocomplete="off"></label><label>Your name<input id="join-name" placeholder="First and last name" autocomplete="name"></label><div class="row"><button class="btn gold" id="join-go">Enter Classroom →</button></div><p class="info">This browser saves your private session token so you can resume. Use “Leave this device” when finished on a shared computer.</p></div><div class="panel"><h3>What happens next?</h3><p>1. Read your assigned leadership case.</p><p>2. Observe the team member and respond.</p><p>3. Your instructor evaluates original written responses.</p><p>4. Download your reflection report.</p><p class="notice">Prepared choices receive built-in practice feedback. Original responses are not automatically scored; your instructor reviews them.</p></div></div>';document.getElementById('join-go').onclick=join}
 async function join(){try{var code=val('join-code').trim(),name=val('join-name').trim();if(!code||name.length<2){flash('Enter your class code and name.',true);return}busy('Joining classroom…');var result=await db.rpc('l101_join',{p_code:code,p_name:name});if(result.error)throw result.error;studentToken=result.data.token;localStorage.setItem('l101_live_token',studentToken);scenarioIndex=0;await studentRefresh()}catch(e){error(e);joinScreen()}}
@@ -51,8 +52,26 @@ document.getElementById('json-student').onclick=function(){download('Leadership1
 document.getElementById('back-student').onclick=studentRender;
 document.getElementById('save-reflection').onclick=async function(){try{var t=val('student-reflection');var r=await db.rpc('l101_reflect',{p_token:studentToken,p_text:t});if(r.error)throw r.error;studentData.participant.reflection=t;flash('Reflection saved online');studentReport()}catch(e){error(e)}};
 }
-async function instructorLoad(){busy('Checking instructor access…');try{var a=await db.auth.getUser();if(a.error||!a.data.user){instructorLogin();return}var r=await db.from('l101_live_instructors').select('user_id').eq('user_id',a.data.user.id).maybeSingle();if(r.error)throw r.error;if(!r.data){instructorLogin('This account is not authorized as an instructor.');return}instructorUser=a.data.user;await instructorRefresh();await loadInstructorNotifications(false)}catch(e){error(e);instructorLogin()}}
+async function instructorLoad(){busy('Checking instructor access…');try{var a=await db.auth.getUser();if(a.error||!a.data.user){instructorLogin();return}var r=await db.from('l101_live_instructors').select('user_id').eq('user_id',a.data.user.id).maybeSingle();if(r.error)throw r.error;if(!r.data){instructorLogin('This account is not authorized as an instructor.');return}instructorUser=a.data.user;startNotificationSubscription();await instructorRefresh();await loadInstructorNotifications(false)}catch(e){error(e);instructorLogin()}}
 function instructorLogin(msg){instructorUser=null;app.innerHTML='<div class="grid"><div class="panel stack"><h2>Instructor sign in</h2><p class="muted">'+h(msg||'Sign in with your authorized Mayne Leadership instructor account.')+'</p><label>Email<input type="email" id="login-email" autocomplete="username" placeholder="Instructor email"></label><label>Password<input type="password" id="login-password" autocomplete="current-password" placeholder="Password"></label><button class="btn gold" id="login-go">Sign in →</button><p class="info">Instructor permissions are checked by the database. Switching tabs does not grant instructor access.</p></div><div class="panel"><h3>What you can manage</h3><p>✓ Create classrooms and share join codes</p><p>✓ View live student progress and responses</p><p>✓ Rate original answers and provide feedback</p><p>✓ Release unexpected leadership challenges</p><p>✓ Export student reports</p></div></div>';document.getElementById('login-go').onclick=async function(){try{var r=await db.auth.signInWithPassword({email:val('login-email'),password:val('login-password')});if(r.error)throw r.error;await instructorLoad()}catch(e){error(e)}}}
+
+
+function startNotificationSubscription(){
+ if(!db||!instructorUser||page!=='instructor')return;
+ var uid=instructorUser.id;
+ if(notificationsChannel&&notificationsChannelOwner===uid)return;
+ stopNotificationSubscription();
+ try{
+  notificationsChannelOwner=uid;
+  notificationsChannel=db.channel('l101-instructor-alerts-'+uid).on('postgres_changes',{
+    event:'*',schema:'public',table:'l101_live_notifications',filter:'instructor_id=eq.'+uid
+  },function(){loadInstructorNotifications(true)}).subscribe();
+ }catch(e){notificationsChannel=null;notificationsChannelOwner=''}
+}
+function stopNotificationSubscription(){
+ if(notificationsChannel&&db)db.removeChannel(notificationsChannel);
+ notificationsChannel=null;notificationsChannelOwner='';
+}
 
 function isTyping(){var el=document.activeElement;return !!(el&&/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))}
 function setupNotificationUI(){
@@ -134,7 +153,7 @@ function notificationVisible(n){
 function renderNotificationPanel(){
  if(!notificationsOpen)return;var el=document.getElementById('nc-body');if(!el)return;
  var total=notificationRows.length,waiting=attentionCount(),completed=notificationRows.filter(function(n){return n.kind==='scenario_complete'}).length;
- var html='<div class="nc-head"><div><div class="eyebrow">Across all classrooms</div><h2>Instructor Notification Center</h2><p>'+waiting+' need attention · '+completed+' completion updates</p></div><button id="nc-close" aria-label="Close notifications">✕ Close</button></div>';
+ var html='<div class="nc-head"><div><div class="eyebrow">Across all classrooms</div><h2>Instructor Notification Center</h2><p>'+waiting+' need attention · '+completed+' completion updates · Live connection with automatic refresh</p></div><button id="nc-close" aria-label="Close notifications">✕ Close</button></div>';
  html+='<div class="nc-pref"><button id="nc-sound">🔊 Sound: '+(soundEnabled?'On':'Off')+'</button><button id="nc-desktop">▣ Desktop alerts: '+(desktopEnabled?'On':'Off')+'</button></div>';
  html+='<div class="nc-filters">'+[['attention','Needs attention ('+waiting+')'],['all','All activity ('+total+')'],['activity','Completed / resolved']].map(function(a){return '<button class="'+(notificationsFilter===a[0]?'sel':'')+'" data-nc-filter="'+a[0]+'">'+h(a[1])+'</button>'}).join('')+'</div>';
  var list=notificationRows.filter(notificationVisible);
@@ -202,7 +221,7 @@ app.querySelectorAll('[data-rating]').forEach(function(div){div.querySelectorAll
 app.querySelectorAll('[data-save-rating]').forEach(function(b){b.onclick=function(){saveRating(b.dataset.saveRating)}});
 app.querySelectorAll('[data-print-participant]').forEach(function(b){b.onclick=function(){printParticipant(b.dataset.printParticipant)}});
 app.querySelectorAll('[data-edit-scenario]').forEach(function(b){b.onclick=function(){editScenario(b.dataset.editScenario)}});
-document.getElementById('instructor-logout').onclick=async function(){await db.auth.signOut();instructorUser=null;notificationRows=[];notificationResponseRows={};notificationsReady=false;notifiedIds.clear();closeNotificationPanel();updateNotificationBell();instructorLogin()};
+document.getElementById('instructor-logout').onclick=async function(){stopNotificationSubscription();await db.auth.signOut();instructorUser=null;notificationRows=[];notificationResponseRows={};notificationsReady=false;notifiedIds.clear();closeNotificationPanel();updateNotificationBell();instructorLogin()};
 document.getElementById('create-class').onclick=createClass;
 document.getElementById('import-scenarios').onchange=importScenarios;
 document.getElementById('new-scenario').onclick=function(){editScenario(null)};
