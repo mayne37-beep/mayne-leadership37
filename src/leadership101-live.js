@@ -445,11 +445,19 @@ function l101ScenarioAnalytics(){
   if(rs.length||story)g.inprogress++;
   g.waiting+=rs.filter(function(r){return !r.rating}).length;
  });
+ var metrics='<div class="l101-skill-summary"><h3>Observed leadership competencies</h3><p class="small muted">Counts reflect instructor rubric feedback in this class, excluding unobserved criteria.</p><div class="l101-skill-grid">'
+ +['Communication','Empathy','Accountability','Judgment','Integrity'].map(function(dim){
+  var grades=responses.map(function(r){return r.rubric&&r.rubric[dim]}).filter(Boolean),
+  strong=grades.filter(function(x){return x==='Strong'}).length,effective=grades.filter(function(x){return x==='Effective'}).length,developing=grades.filter(function(x){return x==='Developing'}).length;
+  return '<div class="l101-skill-row"><b>'+h(dim)+'</b><span class="small muted">'+grades.length+' observations</span>'
+   +'<div class="l101-skill-track">'+(grades.length?'<i style="width:'+(strong/grades.length*100)+'%"></i><em style="width:'+(effective/grades.length*100)+'%"></em><small style="width:'+(developing/grades.length*100)+'%"></small>':'')+'</div>'
+   +'<span class="small muted">'+strong+' Strong · '+effective+' Effective · '+developing+' Developing</span></div>';
+ }).join('')+'</div><p class="small muted">Bar segments: blue = Strong, teal = Effective, gold = Developing.</p></div>';
  return '<div class="panel"><div class="spread"><h2>Classroom Progress & Analytics</h2><span class="chip">'+participants.length+' learners · '+Object.keys(groups).length+' scenarios</span></div>'
-  +'<p class="muted small">See each scenario in progress within your one classroom.</p><div class="l101-analytics-grid">'
+  +'<p class="muted small">Follow several scenarios at once while students use one joining code.</p><div class="l101-analytics-grid">'
   +Object.keys(groups).map(function(id){var g=groups[id],pct=g.members?Math.round(100*g.completed/g.members):0;
-    return '<div class="l101-analytics-card"><div class="eyebrow">'+h(g.title)+'</div><strong>'+g.completed+' / '+g.members+'</strong><span class="small">Completed</span><div class="track"><i style="width:'+pct+'%"></i></div><p class="small">'+g.inprogress+' started · '+g.waiting+' waiting for review</p></div>';
-   }).join('')+'</div></div>';
+    return '<div class="l101-analytics-card"><div class="eyebrow">'+h(g.title)+'</div><strong>'+g.completed+' / '+g.members+'</strong><span class="small">Completed</span><div class="track"><i style="width:'+pct+'%"></i></div><p class="small">'+g.inprogress+' started · '+g.waiting+' awaiting reviews</p></div>';
+   }).join('')+'</div>'+metrics+'</div>';
 }
 function l101AssignmentsPanel(c){
  return '<div class="panel"><div class="spread"><h2>Student Scenario Assignments</h2><button class="btn" id="export-class">Export Reports (JSON)</button></div>'
