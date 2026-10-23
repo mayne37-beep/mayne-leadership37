@@ -17,11 +17,11 @@ Owner: Mayne Leadership. Student enrollment **remains name + classroom code**, w
 - Student picks whom to talk to and selects dialogue options. Each response produces an individual character reaction, coaching insight, and relationship effect. Progress is saved online.
 - Optional conversation practice does not block the existing three graded observation decisions.
 
-## Phase 2B — Immersive branching scenarios (next development increment)
-- A visual scene renderer with the approved professional workplace backgrounds and consistent character portrait/expression assets.
-- Visual branching story graph with consequential paths, alternate scenes, instructor inject response routes, meaningful recovery paths and alternate endings; preserve all original cases.
-- Author first exemplary branching pilot for `The First-Time Leader`, including automated and instructor-scored paths, then transfer engine to remaining scenarios.
-- Save a full event trail with path/version so resuming an interrupted branch is deterministic and print/export reflects it.
+## Phase 2B — Immersive branching stories (pilot delivered)
+- **The First-Time Leader** now supports 15 authored branching scenes, three alternative endings, scene imagery with character expressions, persistent outcome decisions, and instructor injects that alter the story before resuming.
+- Instructor progress, completion notifications, student print/PDF path export, and server-side choice validation are implemented.
+- All eight remaining scenarios keep their original checkpoint engine. The next content rollout will use the pilot as the reference implementation.
+- See `docs/leadership101-phase2b-branching-story.md` for activation and testing.
 
 ## Phase 3 — Instructor Studio and course operations (next)
 - Visual scenario editor (scenes, characters, dialogue choices, branches, assessment and rubric preview), draft/publish/version workflows.
