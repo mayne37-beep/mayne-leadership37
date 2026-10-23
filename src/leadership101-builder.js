@@ -37,7 +37,7 @@ function validateStory(story){
  if(!keys.length){errors.push('Create at least one story scene.');return {errors,warnings}}
  if(!story.start||!story.nodes[story.start])errors.push('Choose a valid opening scene.');
  if(keys.length>100)errors.push('Limit stories to 100 scenes.');
- const visited=new Set(),walk=k=>{if(!story.nodes[k]||visited.has(k))return;visited.add(k);(story.nodes[k].choices||[]).forEach(c=>{if(c.next!=='__ending__')walk(c.next)})};
+ const visited=new Set(),walk=k=>{if(!story.nodes[k]||visited.has(k))return;visited.add(k);(story.nodes[k].choices||[]).forEach(c=>{if(c.next==='__ending__'){['ending-strong','ending-fragile','ending-damaged'].forEach(walk)}else walk(c.next)})};
  if(story.start&&story.nodes[story.start])walk(story.start);
  let endings=0;
  keys.forEach(k=>{const n=story.nodes[k];if(n.ending){endings++;return}
