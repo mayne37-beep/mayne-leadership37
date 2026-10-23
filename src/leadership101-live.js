@@ -7,7 +7,7 @@ window.supabase={createClient};
 'use strict';
 var API_URL="https://vteamreihsunsllwcphw.supabase.co",PUB_KEY="sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud",db=null;
 var lastInstructorHash='';var page='student',studentToken=localStorage.getItem('l101_live_token')||'',studentData=null,scenarioIndex=0,dialogueCharacter=-1,instructorUser=null,classes=[],scenarios=[],participants=[],responses=[],injects=[],selectedClass='',timer=null,editingScenario='';
-var notificationDraftGrades={},notificationDraftNotes={},notificationMessageRows={},notificationMessageDrafts={};
+var notificationDraftGrades={},notificationDraftNotes={},notificationDraftRubrics={},notificationMessageRows={},notificationMessageDrafts={};
 var notificationRows=[],notificationResponseRows={},notificationsReady=false,notificationsOpen=false,notificationsFilter='attention',notificationBusy=false,notificationPolling=false;
 var notificationsChannel=null,notificationsChannelOwner='';
 var notifiedIds=new Set(),soundEnabled=localStorage.getItem('l101_notify_sound')==='yes',desktopEnabled=localStorage.getItem('l101_notify_desktop')==='yes';
@@ -141,7 +141,7 @@ async function loadInstructorNotifications(quiet){
  if(!db||!instructorUser||page!=='instructor'||notificationBusy)return;
  notificationBusy=true;
  try{
-  var r=await db.from('l101_live_notifications').select('id,instructor_id,kind,title,detail,created_at,read_at,resolved_at,class_id,participant_id,response_id,class:l101_live_classes(title,code,scenario_id),participant:l101_live_participants(display_name)').eq('instructor_id',instructorUser.id).order('created_at',{ascending:false}).limit(200);
+  var r=await db.from('l101_live_notifications').select('id,instructor_id,kind,title,detail,created_at,read_at,resolved_at,class_id,participant_id,response_id,class:l101_live_classes(title,code,scenario_id,scenario_snapshot,scenario_version),participant:l101_live_participants(display_name)').eq('instructor_id',instructorUser.id).order('created_at',{ascending:false}).limit(200);
   if(r.error)throw r.error;
   var next=r.data||[],ids=next.filter(function(n){return n.kind==='needs_review'&&!n.resolved_at&&n.response_id}).map(function(n){return n.response_id}),lookup={},messagesByParticipant={};
   if(ids.length){
@@ -203,7 +203,7 @@ function notificationVisible(n){
  return true;
 }
 
-function notificationScenario(n){return scenarios.find(function(s){return s.id===(n.class&&n.class.scenario_id)})||null}
+function notificationScenario(n){var sc=scenarios.find(function(s){return s.id===(n.class&&n.class.scenario_id)});return sc?Object.assign({},sc,{payload:n.class&&n.class.scenario_snapshot||sc.payload}):null}
 function notificationMoment(n,idx){
  var s=notificationScenario(n),items=s&&s.payload&&Array.isArray(s.payload.moments)?s.payload.moments:[];return items[idx]||null
 }
@@ -305,10 +305,23 @@ async function gradeNotification(id){
 async function markNotificationRead(id){try{var r=await db.from('l101_live_notifications').update({read_at:new Date().toISOString()}).eq('id',id);if(r.error)throw r.error;await loadInstructorNotifications(false)}catch(e){error(e)}}
 async function resolveNotification(id){try{var at=new Date().toISOString(),r=await db.from('l101_live_notifications').update({resolved_at:at,read_at:at}).eq('id',id);if(r.error)throw r.error;flash('Help request marked as handled');await loadInstructorNotifications(false)}catch(e){error(e)}}
 
-async function instructorRefresh(quiet){try{var s=await db.from('l101_live_scenarios').select('id,title,payload').order('id');if(s.error)throw s.error;scenarios=s.data||[];var c=await db.from('l101_live_classes').select('id,title,code,scenario_id,is_open,created_at').order('created_at',{ascending:false});if(c.error)throw c.error;classes=c.data||[];if(!selectedClass&&classes.length)selectedClass=classes[0].id;
-participants=[];responses=[];injects=[];if(selectedClass){var p=await db.from('l101_live_participants').select('id,class_id,display_name,reflection,joined_at').eq('class_id',selectedClass);if(p.error)throw p.error;participants=p.data||[];if(participants.length){var rr=await db.from('l101_live_responses').select('id,participant_id,observation_index,submitted_text,option_index,rating,observer_comment').in('participant_id',participants.map(function(x){return x.id})).order('observation_index');if(rr.error)throw rr.error;responses=rr.data||[]}var ir=await db.from('l101_live_injects').select('id,title,description,created_at').eq('class_id',selectedClass);if(ir.error)throw ir.error;injects=ir.data||[]}var digest=JSON.stringify({classes:classes,participants:participants,responses:responses,injects:injects});if(!quiet||digest!==lastInstructorHash){if(!quiet||!document.activeElement||!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){instructorRender();lastInstructorHash=digest}}}catch(e){error(e)}}
+async function instructorRefresh(quiet){try{var s=await db.from('l101_live_scenarios').select('id,title,payload').order('id');if(s.error)throw s.error;scenarios=s.data||[];var c=await db.from('l101_live_classes').select('id,title,code,scenario_id,scenario_snapshot,scenario_version,is_open,created_at').order('created_at',{ascending:false});if(c.error)throw c.error;classes=c.data||[];if(!selectedClass&&classes.length)selectedClass=classes[0].id;
+participants=[];responses=[];injects=[];if(selectedClass){var p=await db.from('l101_live_participants').select('id,class_id,display_name,reflection,joined_at').eq('class_id',selectedClass);if(p.error)throw p.error;participants=p.data||[];if(participants.length){var rr=await db.from('l101_live_responses').select('id,participant_id,observation_index,submitted_text,option_index,rating,observer_comment,rubric').in('participant_id',participants.map(function(x){return x.id})).order('observation_index');if(rr.error)throw rr.error;responses=rr.data||[]}var ir=await db.from('l101_live_injects').select('id,title,description,created_at').eq('class_id',selectedClass);if(ir.error)throw ir.error;injects=ir.data||[]}var digest=JSON.stringify({classes:classes,participants:participants,responses:responses,injects:injects});if(!quiet||digest!==lastInstructorHash){if(!quiet||!document.activeElement||!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){instructorRender();lastInstructorHash=digest}}}catch(e){error(e)}}
 function currentClass(){return classes.find(function(x){return x.id===selectedClass})}
-function currentScenario(){var c=currentClass();return c&&scenarios.find(function(s){return s.id===c.scenario_id})}
+function currentScenario(){var c=currentClass(),sc=c&&scenarios.find(function(s){return s.id===c.scenario_id});return sc&&c?Object.assign({},sc,{payload:c.scenario_snapshot||sc.payload}):sc}
+
+var l101RubricDimensions=['Communication','Empathy','Accountability','Judgment','Integrity'];
+function rubricFromForm(prefix){
+ var out={};l101RubricDimensions.forEach(function(key){var v=val(prefix+'-'+key.toLowerCase());if(v)out[key]=v});return out;
+}
+function rubricControls(prefix,values){
+ values=values||{};
+ return '<div class="l101-rubric-input"><b>Behavior-based feedback</b><p class="small muted">Optional: assess the competencies demonstrated by this response.</p><div class="l101-rubric-grid">'+l101RubricDimensions.map(function(key){
+ var id=prefix+'-'+key.toLowerCase(),current=values[key]||'';
+ return '<label>'+h(key)+'<select id="'+h(id)+'" data-l101-rubric="'+h(key)+'"><option value="">Not observed</option>'+[['Developing','Developing'],['Effective','Effective'],['Strong','Strong']].map(function(option){return '<option value="'+option[0]+'" '+(current===option[0]?'selected':'')+'>'+option[1]+'</option>'}).join('')+'</select></label>';
+ }).join('')+'</div></div>';
+}
+
 function instructorRender(){var c=currentClass(),sc=currentScenario();var pending=responses.filter(function(x){return !x.rating});var rated=responses.filter(function(x){return !!x.rating});var cards=classes.map(function(x){return '<button class="choice" style="margin:0 0 8px" data-class="'+h(x.id)+'"><span>◈</span><span><b>'+h(x.title)+'</b><br><small>'+h(x.code)+(x.is_open?' · Open':' · Closed')+'</small></span></button>'}).join('');
 var ui='<div class="grid"><div><div class="panel"><div class="spread"><h2>Live Classrooms</h2><button class="btn" id="instructor-logout">Sign out</button></div><div class="grid3">'+stat(classes.length,'Classes')+stat(participants.length,'Participants in current class')+stat(notificationRows.filter(function(n){return n.kind==='needs_review'&&!n.resolved_at}).length,'Written responses across all classes')+'</div><div class="notice" style="margin-top:15px"><div class="spread"><div><b>🔔 Instructor Notification Center</b><p class="small muted">Monitor all active scenarios without switching classrooms.</p></div><button class="btn gold" id="open-inbox-dashboard">Open all alerts ('+attentionCount()+')</button></div></div><div class="stack" style="margin-top:18px"><label>New class title<input id="new-class-title" placeholder="Leadership 101 — Cohort A"></label><label>Choose scenario<select id="new-class-scenario">'+scenarios.map(function(s){return '<option value="'+h(s.id)+'">'+h(s.title)+'</option>'}).join('')+'</select></label><button class="btn gold" id="create-class">Create Classroom</button></div></div>';
 if(c){ui+='<div class="panel"><div class="spread"><div><span class="eyebrow">Active classroom</span><h2>'+h(c.title)+'</h2></div><button class="btn" id="toggle-class">'+(c.is_open?'Close joining':'Reopen class')+'</button></div><p>Join code: <strong style="font-size:24px">'+h(c.code)+'</strong></p><p><a id="share-class" target="_blank" rel="noopener" href="/leadership101-live.html?code='+encodeURIComponent(c.code)+'">Student joining link</a></p><button class="btn ghost" id="copy-class">Copy student link</button><div style="display:flex;gap:14px;align-items:center;margin:14px 0"><canvas id="join-qrcode" width="160" height="160" aria-label="QR code for the student joining link"></canvas><p class="small muted">Students can scan this QR code to join the current class. The link includes only the classroom code.</p></div><div class="notice"><b>Assigned:</b> '+h(sc?sc.title:'Unknown scenario')+'<br>Students can join using the code or link. Instructor ratings appear on their screens automatically.</div></div>';
