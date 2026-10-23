@@ -48,3 +48,6 @@ console.log('Learning Studio interactive lesson player built.');
 
 await build({entryPoints:[path.join(root,'src/systems-pdf.js')],outfile:path.join(out,'assets/systems-pdf.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'eof'});
 console.log('Systems Mapping Studio PDF export built.');
+
+await build({entryPoints:[path.join(root,'src/leadership101-live.js')],outfile:path.join(out,'assets/leadership101-live.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022']});
+console.log('Leadership 101 live classroom client bundled.');
