@@ -133,8 +133,10 @@ function storyExperienceMarkup(d){
   +'<span class="l101-stage-kicker">'+(st.is_inject?'⚡ LIVE INSTRUCTOR CHALLENGE':ended?'YOUR STORY ENDING':'LEADERSHIP IN ACTION')+'</span>'
   +'<h2>'+h(n.title||st.title)+'</h2><div class="l101-stage-speaker">'+h(n.speaker||'Narrator')+'</div>'
   +'<p>'+h(n.text||'')+'</p></div></div></div>';
+ var lastEvent=history.length?history[history.length-1]:null;
  var out='<div class="l101-story-shell"><div class="l101-story-head"><div><div class="eyebrow">Immersive story · '+h(st.title||d.scenario.title)+'</div><p class="muted">'+h(st.synopsis||'Your decisions change the story.')+'</p></div>'
   +'<div class="l101-meters"><span>◈ '+h(trustLabel)+'</span><span>⌁ '+h(pressureLabel)+'</span></div></div>'+stage;
+ if(lastEvent){out+='<div class="l101-story-consequence"><span class="eyebrow">What happened because of your choice</span><p>'+h(lastEvent.reaction||'')+'</p>'+(lastEvent.coaching?'<p class="small"><b>Leadership insight:</b> '+h(lastEvent.coaching)+'</p>':'')+'</div>'}
  if(ended){out+='<div class="l101-story-prompt"><h3>Reflect on your leadership journey</h3><p>'+h(n.reflection||'Which decision would you revisit, and why?')+'</p>'
   +'<p class="muted">Your path and consequences are saved in My Leadership Report.</p><button class="btn gold" id="story-report-button">Open your leadership report →</button></div>'}
  else{out+='<div class="l101-story-prompt"><div class="eyebrow">'+(st.is_inject?'A new complication changes your priorities':'Decision point')+'</div><h3>'+h(n.prompt||'What will you do next?')+'</h3>'
