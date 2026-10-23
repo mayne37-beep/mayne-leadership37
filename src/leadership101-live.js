@@ -246,7 +246,18 @@ function setupNotificationUI(){
  var bell=document.getElementById('nc-bell'),shade=document.getElementById('nc-shade');
  if(bell)bell.onclick=function(){if(notificationsOpen)closeNotificationPanel();else openNotificationPanel()};
  if(shade)shade.onclick=closeNotificationPanel;
- document.addEventListener('keydown',function(event){if(event.key==='Escape'&&notificationsOpen)closeNotificationPanel()});
+ document.addEventListener('keydown',function(event){
+ if(!notificationsOpen)return;
+ if(event.key==='Escape'){event.preventDefault();closeNotificationPanel();return}
+ if(event.key!=='Tab')return;
+ var drawer=document.getElementById('nc-drawer');
+ if(!drawer)return;
+ var focusable=Array.from(drawer.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]')).filter(function(x){return x.getClientRects().length});
+ if(!focusable.length)return;
+ var first=focusable[0],last=focusable[focusable.length-1];
+ if(event.shiftKey&&(document.activeElement===first||!drawer.contains(document.activeElement))){event.preventDefault();last.focus()}
+ else if(!event.shiftKey&&(document.activeElement===last||!drawer.contains(document.activeElement))){event.preventDefault();first.focus()}
+});
  updateNotificationBell();
 }
 function attentionCount(){var active=notificationRows.filter(function(n){return !n.resolved_at&&(n.kind==='needs_review'||n.kind==='help_request')});return active.filter(function(n){return n.kind==='needs_review'}).length+new Set(active.filter(function(n){return n.kind==='help_request'}).map(function(n){return n.participant_id})).size}
@@ -313,13 +324,14 @@ function openNotificationPanel(filter,id){
  document.getElementById('nc-shade').classList.add('open');
  document.getElementById('nc-drawer').classList.add('open');
  updateNotificationBell();renderNotificationPanel();
+ var close=document.getElementById('nc-close');if(close)close.focus();
  if(id){var el=document.querySelector('[data-nc-entry="'+id+'"]');if(el)el.scrollIntoView({block:'center',behavior:'smooth'})}
 }
 function closeNotificationPanel(){
  notificationsOpen=false;
- var shade=document.getElementById('nc-shade'),drawer=document.getElementById('nc-drawer');
+ var shade=document.getElementById('nc-shade'),drawer=document.getElementById('nc-drawer'),restoreFocus=drawer&&drawer.contains(document.activeElement);
  if(shade)shade.classList.remove('open');if(drawer)drawer.classList.remove('open');
- updateNotificationBell();
+ updateNotificationBell();if(restoreFocus&&page==='instructor'){var bell=document.getElementById('nc-bell');if(bell)bell.focus()}
 }
 function notificationVisible(n){
  if(notificationsFilter==='attention')return (n.kind==='needs_review'||n.kind==='help_request')&&!n.resolved_at;
@@ -374,6 +386,8 @@ async function instructorSendMessage(notificationId){
 
 function renderNotificationPanel(){
  if(!notificationsOpen)return;var el=document.getElementById('nc-body');if(!el)return;
+ var active=el.contains(document.activeElement)?document.activeElement:null,focusToken=null;
+ if(active){focusToken=active.id?'#'+active.id:null;if(!focusToken){var key=Array.from(active.attributes).find(function(x){return x.name.indexOf('data-nc-')===0||x.name==='data-l101-send-reply'});if(key)focusToken='['+key.name+'="'+key.value+'"]'}}
  var total=notificationRows.length,waiting=attentionCount(),completed=notificationRows.filter(function(n){return n.kind==='scenario_complete'||n.kind==='story_complete'}).length;
  var html='<div class="nc-head"><div><div class="eyebrow">Across all classrooms</div><h2>Instructor Notification Center</h2><p>'+waiting+' need attention · '+completed+' completion updates · Live connection with automatic refresh</p></div><button id="nc-close" aria-label="Close notifications">✕ Close</button></div>';
  html+='<div class="nc-pref"><button id="nc-sound">🔊 Sound: '+(soundEnabled?'On':'Off')+'</button><button id="nc-desktop">▣ Desktop alerts: '+(desktopEnabled?'On':'Off')+'</button></div>';
@@ -403,6 +417,7 @@ function renderNotificationPanel(){
    html+='</section>';
  });
  el.innerHTML=html;
+ if(focusToken){var restored=el.querySelector(focusToken);if(restored)restored.focus({preventScroll:true})}
  document.getElementById('nc-close').onclick=closeNotificationPanel;
  document.getElementById('nc-sound').onclick=function(){soundEnabled=!soundEnabled;localStorage.setItem('l101_notify_sound',soundEnabled?'yes':'no');if(soundEnabled)notificationChime();renderNotificationPanel()};
  document.getElementById('nc-desktop').onclick=async function(){if(!('Notification' in window)){flash('Desktop notifications are not supported in this browser.',true);return}if(!desktopEnabled){var perm=await Notification.requestPermission();if(perm!=='granted'){flash('Desktop notification permission was not granted.',true);return}}desktopEnabled=!desktopEnabled;localStorage.setItem('l101_notify_desktop',desktopEnabled?'yes':'no');renderNotificationPanel()};
