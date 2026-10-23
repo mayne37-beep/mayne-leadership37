@@ -114,6 +114,16 @@
 @keyframes l101-pulse{0%,100%{opacity:.5;transform:scale(.93)}50%{opacity:1;transform:scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.l101-waiting-pulse{animation:none}}
 
+
+.l101-skill-summary{border-top:1px solid #d8e8f1;margin-top:19px;padding-top:17px}
+.l101-skill-summary h3{margin:0 0 4px;font-size:16px}
+.l101-skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:13px}
+.l101-skill-row{display:grid;gap:6px;background:#f6fbff;border:1px solid #d7e8f2;border-radius:12px;padding:12px}
+.l101-skill-row b{font-size:13px;color:#235d85}
+.l101-skill-track{height:10px;background:#e1edf4;border-radius:99px;display:flex;overflow:hidden}
+.l101-skill-track i,.l101-skill-track em,.l101-skill-track small{display:block;height:100%;padding:0;margin:0}
+.l101-skill-track i{background:#2f7fbd}.l101-skill-track em{background:#47a7a4}.l101-skill-track small{background:#e1b757}
+
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>
