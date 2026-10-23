@@ -7,6 +7,7 @@ window.supabase={createClient};
 'use strict';
 var API_URL="https://vteamreihsunsllwcphw.supabase.co",PUB_KEY="sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud",db=null;
 var lastInstructorHash='';var page='student',studentToken=localStorage.getItem('l101_live_token')||'',studentData=null,scenarioIndex=0,instructorUser=null,classes=[],scenarios=[],participants=[],responses=[],injects=[],selectedClass='',timer=null,editingScenario='';
+var notificationDraftGrades={},notificationDraftNotes={};
 var notificationRows=[],notificationResponseRows={},notificationsReady=false,notificationsOpen=false,notificationsFilter='attention',notificationBusy=false,notificationPolling=false;
 var notificationsChannel=null,notificationsChannelOwner='';
 var notifiedIds=new Set(),soundEnabled=localStorage.getItem('l101_notify_sound')==='yes',desktopEnabled=localStorage.getItem('l101_notify_desktop')==='yes';
@@ -166,8 +167,8 @@ function renderNotificationPanel(){
    html+='<h3>'+h(meta.student)+' — '+h(n.title)+'</h3><div class="nc-meta"><span>Scenario: '+h(meta.scenario||'Leadership 101')+'</span>'+(response?'<span>· Observation '+(response.observation_index+1)+'</span>':'')+'<span class="nc-priority">'+(actionable?'ACTION NEEDED':'Recorded')+'</span></div>';
    html+='<div class="nc-text">'+h(note)+'</div>';
    if(n.kind==='needs_review'&&!n.resolved_at){
-     html+='<div class="nc-rating" data-nc-rating="'+h(n.id)+'"><button type="button" data-nc-grade="positive">Positive</button><button type="button" data-nc-grade="neutral">Neutral</button><button type="button" data-nc-grade="negative">Negative</button></div>';
-     html+='<label>Observer comments (optional)<textarea id="nc-comment-'+h(n.id)+'" placeholder="What did the student demonstrate?"></textarea></label>';
+     html+='<div class="nc-rating" data-nc-rating="'+h(n.id)+'" data-grade="'+h(notificationDraftGrades[n.id]||'')+'"><button type="button" data-nc-grade="positive" class="'+(notificationDraftGrades[n.id]==='positive'?'chosen':'')+'">Positive</button><button type="button" data-nc-grade="neutral" class="'+(notificationDraftGrades[n.id]==='neutral'?'chosen':'')+'">Neutral</button><button type="button" data-nc-grade="negative" class="'+(notificationDraftGrades[n.id]==='negative'?'chosen':'')+'">Negative</button></div>';
+     html+='<label>Observer comments (optional)<textarea id="nc-comment-'+h(n.id)+'" placeholder="What did the student demonstrate?">'+h(notificationDraftNotes[n.id]||'')+'</textarea></label>';
      html+='<div class="nc-footer"><button class="btn ghost" data-nc-openclass="'+h(n.class_id)+'">Open classroom</button><button class="btn primary" data-nc-submit="'+h(n.id)+'">Save evaluation</button></div>';
    }else if(n.kind==='help_request'&&!n.resolved_at){
      html+='<div class="nc-footer"><button class="btn ghost" data-nc-openclass="'+h(n.class_id)+'">View classroom</button><button class="btn primary" data-nc-resolve="'+h(n.id)+'">Mark as handled</button></div>';
@@ -181,7 +182,8 @@ function renderNotificationPanel(){
  document.getElementById('nc-sound').onclick=function(){soundEnabled=!soundEnabled;localStorage.setItem('l101_notify_sound',soundEnabled?'yes':'no');if(soundEnabled)notificationChime();renderNotificationPanel()};
  document.getElementById('nc-desktop').onclick=async function(){if(!('Notification' in window)){flash('Desktop notifications are not supported in this browser.',true);return}if(!desktopEnabled){var perm=await Notification.requestPermission();if(perm!=='granted'){flash('Desktop notification permission was not granted.',true);return}}desktopEnabled=!desktopEnabled;localStorage.setItem('l101_notify_desktop',desktopEnabled?'yes':'no');renderNotificationPanel()};
  el.querySelectorAll('[data-nc-filter]').forEach(function(b){b.onclick=function(){notificationsFilter=b.dataset.ncFilter;renderNotificationPanel()}});
- el.querySelectorAll('[data-nc-rating]').forEach(function(box){box.querySelectorAll('[data-nc-grade]').forEach(function(b){b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.classList.remove('chosen')});b.classList.add('chosen');box.dataset.grade=b.dataset.ncGrade}})});
+ el.querySelectorAll('[data-nc-rating]').forEach(function(box){box.querySelectorAll('[data-nc-grade]').forEach(function(b){b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.classList.remove('chosen')});b.classList.add('chosen');box.dataset.grade=b.dataset.ncGrade;notificationDraftGrades[box.dataset.ncRating]=b.dataset.ncGrade}})});
+ el.querySelectorAll('textarea[id^="nc-comment-"]').forEach(function(input){input.oninput=function(){notificationDraftNotes[input.id.slice('nc-comment-'.length)]=input.value}});
  el.querySelectorAll('[data-nc-submit]').forEach(function(b){b.onclick=function(){gradeNotification(b.dataset.ncSubmit)}});
  el.querySelectorAll('[data-nc-resolve]').forEach(function(b){b.onclick=function(){resolveNotification(b.dataset.ncResolve)}});
  el.querySelectorAll('[data-nc-markread]').forEach(function(b){b.onclick=function(){markNotificationRead(b.dataset.ncMarkread)}});
@@ -194,7 +196,7 @@ async function gradeNotification(id){
  var note=val('nc-comment-'+id);
  try{var rr=await db.from('l101_live_responses').update({rating:grade,observer_comment:note,updated_at:new Date().toISOString()}).eq('id',n.response_id).is('rating',null).select('id');
  if(rr.error)throw rr.error;if(!(rr.data||[]).length){flash('This response was already reviewed by another instructor or tab.',true);await loadInstructorNotifications(false);return}
- flash('Rating sent to '+notificationPeople(n).student);
+ delete notificationDraftGrades[id];delete notificationDraftNotes[id];flash('Rating sent to '+notificationPeople(n).student);
  await loadInstructorNotifications(false);
  await instructorRefresh(true);
  }catch(e){error(e)}
