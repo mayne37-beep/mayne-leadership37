@@ -87,6 +87,51 @@
 @media print{.l101-stage,.l101-mode-switch,.l101-story-shell{display:none!important}}
 
 .l101-story-consequence{border:1px solid #ead69d;border-left:5px solid #d7a846;background:linear-gradient(110deg,#fff9e9,#fff);border-radius:12px;padding:15px 17px;margin-top:13px;color:#4e441d}.l101-story-consequence .eyebrow{color:#95651d}.l101-story-consequence p{font-size:14px;line-height:1.55;margin:6px 0}.l101-story-consequence p.small{font-size:12px;color:#6c5a30}
+
+/* Phase 3 instructor cohort analytics and learner scenario assignments */
+.l101-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:15px}
+.l101-analytics-card{background:#f4f9fe;border:1px solid #d3e4f0;border-radius:14px;padding:16px;display:grid;gap:5px}
+.l101-analytics-card strong{font-size:25px;font-weight:900;color:#145b97;line-height:1.1}
+.l101-analytics-card span{color:#55758e}
+.l101-analytics-card .track{margin:6px 0}
+.l101-analytics-card p{margin:0;color:#63819a}
+.l101-student-card{border:1px solid #d3e3ef;border-radius:14px;padding:15px;background:white;box-shadow:0 3px 12px #2144620c}
+.l101-roster-control{display:grid;grid-template-columns:minmax(180px,1fr) auto;align-items:end;gap:11px;margin:10px 0}
+.l101-roster-control label{min-width:0}
+.l101-roster-control select{width:100%;max-width:580px}
+.l101-roster-control select:disabled{background:#f3f7f9;color:#7890a0}
+.l101-authoring-link{display:inline-block;text-align:center;text-decoration:none;padding:11px 14px;border-radius:11px;background:#f5d179;color:#283b49;border:1px solid #e4bd5b;font-weight:850;margin:10px 0}
+.l101-authoring-link:hover{background:#ffdf97}
+@media(max-width:560px){.l101-roster-control{grid-template-columns:1fr}.l101-roster-control button{width:100%}}
+
+
+.l101-hold-setting{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #c5deed;background:#f2f9ff;border-radius:11px}
+.l101-hold-setting input{width:19px;height:19px;flex:0 0 19px}
+.l101-hold-setting span{display:grid;gap:3px}.l101-hold-setting small{display:block;color:#6b8499;font-size:11px;font-weight:450}
+.l101-waiting-scene{padding:24px 20px;background:linear-gradient(120deg,#0f3c69,#1d79a9);border-radius:17px;color:white;position:relative;min-height:210px;margin:17px 0;overflow:hidden}
+.l101-waiting-scene strong{font-size:21px}.l101-waiting-scene p{color:#d9edfa;max-width:440px}
+.l101-waiting-pulse{position:absolute;right:20px;bottom:12px;font-size:76px;color:#efd485;text-shadow:0 9px 21px #0c234982;animation:l101-pulse 2.2s ease-in-out infinite}
+@keyframes l101-pulse{0%,100%{opacity:.5;transform:scale(.93)}50%{opacity:1;transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.l101-waiting-pulse{animation:none}}
+
+
+.l101-skill-summary{border-top:1px solid #d8e8f1;margin-top:19px;padding-top:17px}
+.l101-skill-summary h3{margin:0 0 4px;font-size:16px}
+.l101-skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:13px}
+.l101-skill-row{display:grid;gap:6px;background:#f6fbff;border:1px solid #d7e8f2;border-radius:12px;padding:12px}
+.l101-skill-row b{font-size:13px;color:#235d85}
+.l101-skill-track{height:10px;background:#e1edf4;border-radius:99px;display:flex;overflow:hidden}
+.l101-skill-track i,.l101-skill-track em,.l101-skill-track small{display:block;height:100%;padding:0;margin:0}
+.l101-skill-track i{background:#2f7fbd}.l101-skill-track em{background:#47a7a4}.l101-skill-track small{background:#e1b757}
+
+
+.l101-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin:14px 0}
+.l101-team-card{border:1px solid #d1e5f0;border-radius:13px;background:#f5faff;padding:15px;display:grid;gap:10px}
+.l101-team-card b{color:#175b8b;font-size:16px}.l101-team-card p{margin:0;color:#6b8697}
+.l101-team-editor{display:flex;gap:9px;align-items:end;max-width:500px;margin:12px 0}
+.l101-team-editor label{flex:1;min-width:0}.l101-team-editor button{flex:0 0 auto}
+@media(max-width:510px){.l101-team-editor{flex-direction:column;align-items:stretch}.l101-team-editor button{width:100%}}
+
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>

@@ -23,11 +23,11 @@ Owner: Mayne Leadership. Student enrollment **remains name + classroom code**, w
 - All eight remaining scenarios keep their original checkpoint engine. The next content rollout will use the pilot as the reference implementation.
 - See `docs/leadership101-phase2b-branching-story.md` for activation and testing.
 
-## Phase 3 — Instructor Studio and course operations (next)
-- Visual scenario editor (scenes, characters, dialogue choices, branches, assessment and rubric preview), draft/publish/version workflows.
-- One class roster assigning different scenarios to individual students or groups without separate join codes.
-- Assignment scheduling, cohorts, bulk actions, individualized pacing, instructor intervention and simple timed injects.
-- Cohort analytics by behavior and competency, common decision patterns, repeated attempt growth and response turnaround, plus export formats.
+## Phase 3 — Visual authoring and flexible classroom operations (implemented)
+- Instructor-owned Visual Scenario Builder with editable decision scenes, flow map, character scripts, injects, original checkpoints, preview, JSON import/export, private drafts, and validated publishing.
+- Same-code multi-scenario classroom, pre-start per-student or whole-team assignment, optional instructor hold/waiting mode, scenario-targeted injects.
+- Instructor analytics by scenario and observed competencies, and context-aware feedback and exports.
+- Details and QA guidance: `docs/leadership101-phase3-visual-builder.md`.
 
 ## Phase 4 — Quality / scalability / interoperability (next)
 - WCAG 2.2 AA keyboard, focus-management, contrast and screen reader review.
