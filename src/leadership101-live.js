@@ -29,7 +29,7 @@ async function init(){if(!window.supabase||!window.supabase.createClient){app.in
 function joinScreen(){app.innerHTML='<div class="grid"><div class="panel stack"><h2>Join your Leadership 101 role-play</h2><p class="muted">Enter the classroom code from your instructor and your name. No student account or password is required for this classroom pilot.</p><label>Class code<input id="join-code" placeholder="Example: 1A2B3C4" value="'+h(qs('code'))+'" autocomplete="off"></label><label>Your name<input id="join-name" placeholder="First and last name" autocomplete="name"></label><div class="row"><button class="btn gold" id="join-go">Enter Classroom →</button></div><p class="info">This browser saves your private session token so you can resume. Use “Leave this device” when finished on a shared computer.</p></div><div class="panel"><h3>What happens next?</h3><p>1. Read your assigned leadership case.</p><p>2. Observe the team member and respond.</p><p>3. Your instructor evaluates original written responses.</p><p>4. Download your reflection report.</p><p class="notice">Prepared choices receive built-in practice feedback. Original responses are not automatically scored; your instructor reviews them.</p></div></div>';document.getElementById('join-go').onclick=join}
 async function join(){try{var code=val('join-code').trim(),name=val('join-name').trim();if(!code||name.length<2){flash('Enter your class code and name.',true);return}busy('Joining classroom…');var result=await db.rpc('l101_join',{p_code:code,p_name:name});if(result.error)throw result.error;studentToken=result.data.token;localStorage.setItem('l101_live_token',studentToken);scenarioIndex=0;await studentRefresh()}catch(e){error(e);joinScreen()}}
 async function studentRefresh(quiet){try{if(!studentToken){joinScreen();return}var pair=await Promise.all([db.rpc('l101_state',{p_token:studentToken}),db.rpc('l101_student_messages',{p_token:studentToken})]);var r=pair[0],msg=pair[1];if(r.error)throw r.error;if(msg.error)throw msg.error;var before=JSON.stringify(studentData&&studentData.responses)+'|'+JSON.stringify(studentData&&studentData.injects)+'|'+JSON.stringify(studentData&&studentData.messages);studentData=r.data;studentData.messages=msg.data||[];var after=JSON.stringify(studentData.responses)+'|'+JSON.stringify(studentData.injects)+'|'+JSON.stringify(studentData.messages);if(!quiet||before!==after)studentRender()}catch(e){if(!quiet)error(e);if(/Invalid participant/.test(String(e.message))){studentToken='';localStorage.removeItem('l101_live_token');joinScreen()}}}
-function studentRender(){if(!studentToken){joinScreen();return}if(!studentData){busy('Loading class…');return}var d=studentData,observations=d.scenario.moments||[],graded=progress(d);if(scenarioIndex>=observations.length)scenarioIndex=observations.length;var m=scenarioMoment(d,scenarioIndex),r=(d.responses||[]).find(function(x){return x.observation_index===scenarioIndex});var injectList=(d.injects||[]).map(function(i){return '<div class="notice"><b>⚡ '+h(i.title)+'</b><p>'+h(i.description)+'</p></div>'}).join('');var main='<div class="spread"><h2 style="margin:0">'+h(d.scenario.title)+'</h2><button class="btn ghost" id="student-report">My Leadership Report</button></div><p class="muted">'+h(d.scenario.subtitle||d.scenario.description)+'</p><div class="track"><i style="width:'+Math.round(100*graded/Math.max(1,observations.length))+'%"></i></div>';
+function studentRender(){if(!studentToken){joinScreen();return}if(!studentData){busy('Loading class…');return}var d=studentData,observations=d.scenario.moments||[],graded=progress(d);if(scenarioIndex>=observations.length)scenarioIndex=observations.length;var m=scenarioMoment(d,scenarioIndex),r=(d.responses||[]).find(function(x){return x.observation_index===scenarioIndex});var injectList=(d.injects||[]).map(function(i){return '<div class="notice"><b>⚡ '+h(i.title)+'</b><p>'+h(i.description)+'</p></div>'}).join('');var main='<div class="spread"><h2 style="margin:0">'+h(d.scenario.title)+'</h2><div class="row"><button class="btn ghost" id="student-ask-top">💬 Message Instructor</button><button class="btn ghost" id="student-report">My Leadership Report</button></div></div><p class="muted">'+h(d.scenario.subtitle||d.scenario.description)+'</p><div class="track"><i style="width:'+Math.round(100*graded/Math.max(1,observations.length))+'%"></i></div>';
 if(!m){main+='<div class="scene"><div class="speaker">Scenario complete</div><div class="quote">You have completed the leadership decisions in this scenario. Review what you learned and save your report.</div></div><div class="row" style="margin-top:15px"><button class="btn gold" id="student-report-finish">View my report →</button></div>'}
 else{main+='<div class="scene"><div class="speaker">Observation '+(scenarioIndex+1)+' of '+observations.length+' · '+h(m.trainee||'Team member')+'</div><div class="quote">'+h(m.behavior)+'</div></div><div style="padding-top:17px"><span class="eyebrow">Leadership challenge</span><h3 style="font-size:21px;margin:5px 0 9px">'+h(m.question)+'</h3><p class="muted">'+h(m.context)+'</p></div>';
 if(!r){main+='<div class="stack"><div>'+((m.options||[]).map(function(o,i){return '<button class="choice" data-choice="'+i+'"><span>'+String.fromCharCode(65+i)+'</span>'+h(o.action)+'</button>'}).join(''))+'</div><label>Or write your own leadership response<textarea id="student-written" placeholder="What would you actually say or do? Your observer will evaluate this response."></textarea></label><div class="row"><button class="btn gold" id="student-submit-written">Submit original response</button></div></div>'}
@@ -43,6 +43,7 @@ var submitBtn=document.getElementById('student-submit-written');if(submitBtn)sub
 var next=document.getElementById('student-next');if(next)next.onclick=function(){scenarioIndex++;studentRender()};
 var reportBtns=['student-report','student-report-finish'];reportBtns.forEach(function(id){var e=document.getElementById(id);if(e)e.onclick=studentReport});
 var helpButton=document.getElementById('student-help-request');if(helpButton)helpButton.onclick=sendStudentHelpRequest;
+var askTop=document.getElementById('student-ask-top');if(askTop)askTop.onclick=function(){var t=document.getElementById('student-help-note');if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.focus()}};
 document.getElementById('student-leave').onclick=function(){studentToken='';studentData=null;localStorage.removeItem('l101_live_token');joinScreen()};
 }
 async function submit(index,text,choice){try{var r=await db.rpc('l101_submit',{p_token:studentToken,p_index:index,p_text:text||'',p_option:choice});if(r.error)throw r.error;await studentRefresh()}catch(e){error(e)}}
@@ -82,7 +83,7 @@ function setupNotificationUI(){
  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&notificationsOpen)closeNotificationPanel()});
  updateNotificationBell();
 }
-function attentionCount(){return notificationRows.filter(function(n){return !n.resolved_at&&(n.kind==='needs_review'||n.kind==='help_request')}).length}
+function attentionCount(){var active=notificationRows.filter(function(n){return !n.resolved_at&&(n.kind==='needs_review'||n.kind==='help_request')});return active.filter(function(n){return n.kind==='needs_review'}).length+new Set(active.filter(function(n){return n.kind==='help_request'}).map(function(n){return n.participant_id})).size}
 function unreadActivityCount(){return notificationRows.filter(function(n){return !n.read_at&&n.kind==='scenario_complete'}).length}
 function updateNotificationBell(){
  var visible=page==='instructor'&&!!instructorUser,bar=document.getElementById('nc-toolbar'),bell=document.getElementById('nc-bell'),count=document.getElementById('nc-count');
@@ -115,10 +116,11 @@ async function loadInstructorNotifications(quiet){
   }
 
   var fresh=next.filter(function(n){return !n.read_at&&!n.resolved_at||n.kind==='scenario_complete'&&!n.read_at}).filter(function(n){return !notifiedIds.has(n.id)});
-  if(notificationsReady&&fresh.length&&page==='instructor')fresh.slice().reverse().slice(-3).forEach(showIncomingNotification);
+  var shouldNotify=notificationsReady;
   next.forEach(function(n){notifiedIds.add(n.id)});
   var previous=JSON.stringify(notificationRows.map(function(n){return [n.id,n.read_at,n.resolved_at]})),now=JSON.stringify(next.map(function(n){return [n.id,n.read_at,n.resolved_at]}));
   notificationRows=next;notificationResponseRows=lookup;notificationMessageRows=messagesByParticipant;notificationsReady=true;
+  if(shouldNotify&&fresh.length&&page==='instructor')fresh.slice().reverse().slice(-3).forEach(showIncomingNotification);
   updateNotificationBell();
   if(notificationsOpen&&!isTyping())renderNotificationPanel();
   if(previous!==now&&!isTyping()&&app.querySelector('#open-inbox-dashboard'))instructorRender();
@@ -175,6 +177,7 @@ function notificationContextMarkup(n,index){
  +(m.context?'<p><b>Background:</b> '+h(m.context)+'</p>':'')
  +(m.question?'<p><b>Decision prompt:</b> '+h(m.question)+'</p>':'')
  +(m.cues?'<details><summary>Facilitator observation cues</summary><p>'+h(m.cues)+'</p></details>':'')
+ +(Array.isArray(m.options)&&m.options.length?'<details><summary>Prepared response examples (instructor reference)</summary>'+m.options.map(function(o,i){return '<p><b>'+(i+1)+'.</b> '+h(o.action||'')+(o.outcome?' <em class="small muted">('+h(o.outcome)+')</em>':'')+'</p>'}).join('')+'</details>':'')
  +'</div>';
 }
 function instructorThreadMarkup(n){
@@ -209,7 +212,7 @@ function renderNotificationPanel(){
  var html='<div class="nc-head"><div><div class="eyebrow">Across all classrooms</div><h2>Instructor Notification Center</h2><p>'+waiting+' need attention · '+completed+' completion updates · Live connection with automatic refresh</p></div><button id="nc-close" aria-label="Close notifications">✕ Close</button></div>';
  html+='<div class="nc-pref"><button id="nc-sound">🔊 Sound: '+(soundEnabled?'On':'Off')+'</button><button id="nc-desktop">▣ Desktop alerts: '+(desktopEnabled?'On':'Off')+'</button></div>';
  html+='<div class="nc-filters">'+[['attention','Needs attention ('+waiting+')'],['messages','Student messages'],['all','All activity ('+total+')'],['activity','Completed / resolved']].map(function(a){return '<button class="'+(notificationsFilter===a[0]?'sel':'')+'" data-nc-filter="'+a[0]+'">'+h(a[1])+'</button>'}).join('')+'</div>';
- var list=notificationRows.filter(notificationVisible);
+ var list=notificationRows.filter(notificationVisible);if(notificationsFilter==='attention'||notificationsFilter==='messages'){var seenThreads=new Set();list=list.filter(function(n){if(n.kind!=='help_request')return true;if(seenThreads.has(n.participant_id))return false;seenThreads.add(n.participant_id);return true})}
  if(!list.length)html+='<div class="nc-empty">✓ Nothing needs your attention in this view.<br><small>Incoming student responses from all classes will appear here.</small></div>';
  else list.forEach(function(n){
    var meta=notificationPeople(n),response=notificationResponseRows[n.response_id],note=n.kind==='needs_review'?(response&&response.submitted_text||n.detail):n.detail,
