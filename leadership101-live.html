@@ -35,6 +35,56 @@
 .l101-rubric-input{background:#f0f7fc;border:1px solid #d5e7f2;border-radius:13px;padding:13px;margin:13px 0}.l101-rubric-input p{margin:4px 0 10px}.l101-rubric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px}.l101-rubric-grid label{font-size:12px}.l101-rubric-grid select{padding:8px;font-size:12px}.l101-retry-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.l101-retry{font-size:11px!important;padding:6px 9px!important}.l101-report-item{break-inside:avoid;border-top:1px solid #dce7ef;margin-top:12px;padding-top:8px}.l101-report-item p{margin:7px 0;font-size:13px}.l101-rubric-results{background:#f0f8fc;padding:13px;border:1px solid #cbdfea;border-radius:10px;margin:12px 0}
 @media print{.l101-report-item{page-break-inside:avoid} .l101-report-item h2{font-size:14px}.l101-report-item p{font-size:11px}}
 
+
+/* Phase 2B: immersive, accessible branching story journey */
+.l101-mode-switch{display:flex;gap:7px;flex-wrap:wrap;margin:19px 0 18px;padding:5px;background:#eaf4fc;border-radius:13px;border:1px solid #cfe4f4}
+.l101-mode-switch button{flex:1;min-width:190px;padding:10px 14px;background:transparent;border:1px solid transparent;border-radius:10px;color:#245b85;font-weight:850;font-size:13px}
+.l101-mode-switch button.active{background:#fff;border:1px solid #b9d6ed;color:#0d457b;box-shadow:0 2px 8px #123d6415}
+.l101-story-shell{margin:0 0 18px}
+.l101-story-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:13px}
+.l101-story-head p{font-size:13px;margin:6px 0}
+.l101-meters{display:flex;gap:7px;flex-wrap:wrap}
+.l101-meters span{display:inline-flex;border:1px solid #bbd5e8;border-radius:20px;padding:5px 10px;background:#edf7ff;color:#1f5d88;font-size:11px;font-weight:800}
+.l101-stage{min-height:325px;background-position:center;background-size:cover;background-color:#123f66;border:1px solid #315c7d;border-radius:19px;box-shadow:0 12px 30px #122e4d25;color:white;overflow:hidden;position:relative;padding:18px}
+.l101-stage-top{display:flex;justify-content:space-between;gap:10px;color:#e8f5ff;font-size:11px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.l101-stage-top span{background:#082e4b9c;border:1px solid #ffffff38;border-radius:10px;padding:7px 10px}
+.l101-stage-subject{display:flex;gap:19px;align-items:flex-end;margin-top:30px}
+.l101-story-avatar{width:180px;min-width:180px;height:216px;display:grid;place-items:end center;overflow:hidden;filter:drop-shadow(0 9px 11px #051e3766);align-self:flex-end}
+.l101-story-avatar svg{width:180px;height:216px;object-fit:contain}
+.l101-story-avatar.l101-narrator{align-self:center;place-items:center;display:grid;height:145px;width:130px;min-width:130px;font-size:63px;background:#ffffff17;border:1px solid #ffffff48;border-radius:21px;color:#e4c46d}
+.l101-stage-copy{flex:1;min-width:0;max-width:760px;align-self:center}
+.l101-stage-kicker{display:inline-block;text-transform:uppercase;font-size:11px;letter-spacing:.17em;color:#ffd98b;font-weight:900}
+.l101-stage-copy h2{color:white;font-size:clamp(23px,3vw,32px);line-height:1.16;margin:8px 0}
+.l101-stage-speaker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#d9ebf9;font-weight:850}
+.l101-stage-copy p{color:#f1f8fe;font-size:16px;line-height:1.6;font-weight:540;white-space:pre-wrap;text-wrap:pretty}
+.l101-story-prompt{margin-top:15px;background:linear-gradient(145deg,#fff,#f7fbff);border:1px solid #c8ddeb;border-radius:17px;padding:20px}
+.l101-story-prompt .eyebrow{color:#277faf}
+.l101-story-prompt h3{margin:5px 0 17px;font-size:19px;color:#153e67}
+.l101-story-choices{display:grid;gap:9px}
+.l101-story-choice{display:flex;align-items:center;gap:14px;text-align:left;padding:15px 14px;border:1px solid #c0d9eb;border-radius:13px;background:white;color:#1c4c71;font-size:14px;line-height:1.45;font-weight:670;box-shadow:0 2px 7px #1642670c}
+.l101-story-choice:hover:not(:disabled),.l101-story-choice:focus-visible{outline:2px solid #75c1e8;border-color:#3896c7;background:#f0f9ff}
+.l101-choice-letter{flex:0 0 32px;width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#16689f;color:white;font-weight:900}
+.l101-choice-arrow{margin-left:auto;color:#2788ba;font-size:20px}
+.l101-story-history{background:#f4f9fc;border:1px solid #cddfeb;border-radius:14px;margin-top:12px;padding:13px}
+.l101-story-history summary{cursor:pointer;font-size:13px;font-weight:800;color:#28658f}
+.l101-story-history-items{display:grid;gap:8px;margin-top:11px}
+.l101-story-event{border-left:3px solid #d5ad60;background:white;border-radius:9px;padding:12px}
+.l101-story-event b{font-size:13px;color:#234d6c}
+.l101-story-event p{margin:6px 0;font-size:12px;color:#41677e}
+.l101-story-event .small{font-size:11px}
+@media(max-width:680px){
+.l101-stage{padding:12px;min-height:310px}
+.l101-stage-subject{gap:9px;align-items:flex-start;flex-direction:column;margin-top:14px}
+.l101-story-avatar{width:88px;min-width:88px;height:105px;position:absolute;right:12px;top:50px;opacity:.8}
+.l101-story-avatar svg{width:88px;height:105px}
+.l101-story-avatar.l101-narrator{height:85px;width:85px;min-width:85px;font-size:34px}
+.l101-stage-copy{padding-top:112px}
+.l101-stage-copy h2{font-size:23px}
+.l101-stage-copy p{font-size:14px}
+.l101-story-prompt{padding:13px}
+.l101-story-choice{padding:11px;font-size:13px}
+}
+@media print{.l101-stage,.l101-mode-switch,.l101-story-shell{display:none!important}}
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>
