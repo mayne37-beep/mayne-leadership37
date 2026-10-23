@@ -419,7 +419,7 @@ async function markNotificationRead(id){try{var r=await db.from('l101_live_notif
 async function resolveNotification(id){try{var at=new Date().toISOString(),r=await db.from('l101_live_notifications').update({resolved_at:at,read_at:at}).eq('id',id);if(r.error)throw r.error;flash('Help request marked as handled');await loadInstructorNotifications(false)}catch(e){error(e)}}
 
 async function instructorRefresh(quiet){try{var s=await db.from('l101_live_scenarios').select('id,title,payload').order('id');if(s.error)throw s.error;scenarios=s.data||[];var c=await db.from('l101_live_classes').select('id,title,code,scenario_id,scenario_snapshot,scenario_version,is_open,created_at,assignment_mode').order('created_at',{ascending:false});if(c.error)throw c.error;classes=c.data||[];if(!selectedClass&&classes.length)selectedClass=classes[0].id;
-participants=[];responses=[];injects=[];histories=[];dialogueLogs=[];recoveryRows=[];storyRuns=[];storyEvents=[];if(selectedClass){var p=await db.from('l101_live_participants').select('id,class_id,display_name,reflection,joined_at,assigned_scenario_id,assigned_scenario_snapshot').eq('class_id',selectedClass);if(p.error)throw p.error;participants=p.data||[];if(participants.length){var rr=await db.from('l101_live_responses').select('id,participant_id,observation_index,submitted_text,option_index,rating,observer_comment,rubric').in('participant_id',participants.map(function(x){return x.id})).order('observation_index');if(rr.error)throw rr.error;responses=rr.data||[];var sr=await db.from('l101_live_story_runs').select('participant_id,current_node,trust_score,pressure_score,finished_at,updated_at').in('participant_id',participants.map(function(x){return x.id}));if(sr.error)throw sr.error;storyRuns=sr.data||[]}var ir=await db.from('l101_live_injects').select('id,title,description,created_at,target_scenario_id').eq('class_id',selectedClass);if(ir.error)throw ir.error;injects=ir.data||[]}var digest=JSON.stringify({classes:classes,participants:participants,responses:responses,injects:injects,histories:histories,dialogue:dialogueLogs,recovery:recoveryRows,story:storyRuns});if(!quiet||digest!==lastInstructorHash){if(!quiet||!document.activeElement||!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){instructorRender();lastInstructorHash=digest}}}catch(e){error(e)}}
+participants=[];responses=[];injects=[];histories=[];dialogueLogs=[];recoveryRows=[];storyRuns=[];storyEvents=[];if(selectedClass){var p=await db.from('l101_live_participants').select('id,class_id,display_name,reflection,joined_at,assigned_scenario_id,assigned_scenario_snapshot,team_name').eq('class_id',selectedClass);if(p.error)throw p.error;participants=p.data||[];if(participants.length){var rr=await db.from('l101_live_responses').select('id,participant_id,observation_index,submitted_text,option_index,rating,observer_comment,rubric').in('participant_id',participants.map(function(x){return x.id})).order('observation_index');if(rr.error)throw rr.error;responses=rr.data||[];var sr=await db.from('l101_live_story_runs').select('participant_id,current_node,trust_score,pressure_score,finished_at,updated_at').in('participant_id',participants.map(function(x){return x.id}));if(sr.error)throw sr.error;storyRuns=sr.data||[]}var ir=await db.from('l101_live_injects').select('id,title,description,created_at,target_scenario_id').eq('class_id',selectedClass);if(ir.error)throw ir.error;injects=ir.data||[]}var digest=JSON.stringify({classes:classes,participants:participants,responses:responses,injects:injects,histories:histories,dialogue:dialogueLogs,recovery:recoveryRows,story:storyRuns});if(!quiet||digest!==lastInstructorHash){if(!quiet||!document.activeElement||!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){instructorRender();lastInstructorHash=digest}}}catch(e){error(e)}}
 function currentClass(){return classes.find(function(x){return x.id===selectedClass})}
 function currentScenario(){var c=currentClass(),sc=c&&scenarios.find(function(s){return s.id===c.scenario_id});return sc&&c?Object.assign({},sc,{payload:c.scenario_snapshot||sc.payload}):sc}
 function scenarioForParticipant(p){var c=currentClass(),id=p&&p.assigned_scenario_id||c&&c.scenario_id,sc=scenarios.find(function(x){return x.id===id});if(!sc)return currentScenario();return Object.assign({},sc,{payload:p&&p.assigned_scenario_snapshot||c&&c.scenario_snapshot||sc.payload})}
@@ -459,9 +459,16 @@ function l101ScenarioAnalytics(){
     return '<div class="l101-analytics-card"><div class="eyebrow">'+h(g.title)+'</div><strong>'+g.completed+' / '+g.members+'</strong><span class="small">Completed</span><div class="track"><i style="width:'+pct+'%"></i></div><p class="small">'+g.inprogress+' started · '+g.waiting+' awaiting reviews</p></div>';
    }).join('')+'</div>'+metrics+'</div>';
 }
+function l101TeamsPanel(c){
+ var names=Array.from(new Set(participants.map(function(p){return p.team_name}).filter(Boolean))).sort();
+ return '<div class="panel"><h2>Team Scenario Assignments</h2><p class="muted small">Enter a team name on each student card below. Then assign all members of the same team to one scenario at once. Active attempts remain protected.</p>'
+ +(names.length?'<div class="l101-team-grid">'+names.map(function(name){var members=participants.filter(function(p){return p.team_name===name});
+    return '<div class="l101-team-card"><b>'+h(name)+'</b><p class="small">'+members.length+' learners</p><label>Scenario for this team<select data-team-scenario="'+h(name)+'">'+scenarios.map(function(sc){return '<option value="'+h(sc.id)+'">'+h(sc.title)+'</option>'}).join('')+'</select></label><button class="btn gold compact" data-team-assign="'+h(name)+'">Assign team scenario</button></div>';
+  }).join('')+'</div>':'<div class="notice">No teams have been created. Type a team name on any student card to start.</div>')+'</div>';
+}
 function l101AssignmentsPanel(c){
- return '<div class="panel"><div class="spread"><h2>Student Scenario Assignments</h2><button class="btn" id="export-class">Export Reports (JSON)</button></div>'
-  +'<p class="muted small">Everyone joins using this classroom code. Assign different scenarios before students start; attempts already in progress remain protected.</p><div class="list">'
+ return l101TeamsPanel(c)+'<div class="panel"><div class="spread"><h2>Student Scenario Assignments</h2><button class="btn" id="export-class">Export Reports (JSON)</button></div>'
+  +'<p class="muted small">Everyone joins using the same classroom code. Assign students or teams before they start.</p><div class="list">'
   +(participants.length?participants.map(function(p){
     var mine=responses.filter(function(r){return r.participant_id===p.id}),st=storyRuns.find(function(x){return x.participant_id===p.id}),sc=scenarioForParticipant(p),
     active=mine.length>0||!!st,chosen=p.assigned_scenario_id||c.scenario_id,graded=mine.filter(function(r){return !!r.rating}).length;
@@ -469,8 +476,9 @@ function l101AssignmentsPanel(c){
       +'<div class="l101-roster-control"><label>Assigned scenario<select data-assign-scenario="'+h(p.id)+'" '+(active?'disabled':'')+'>'
       +scenarios.map(function(s){return '<option value="'+h(s.id)+'" '+(s.id===chosen?'selected':'')+'>'+h(s.title)+'</option>'}).join('')
       +'</select></label><button class="btn ghost" data-print-participant="'+h(p.id)+'">Print report</button></div>'
+      +'<div class="l101-team-editor"><label>Team <input data-team-name="'+h(p.id)+'" maxlength="60" placeholder="e.g. Team Blue" value="'+h(p.team_name||'')+'"></label><button class="btn compact" data-save-team="'+h(p.id)+'">Save team</button></div>'
       +'<p class="small muted">'+graded+' / '+((sc&&sc.payload&&sc.payload.moments)||[]).length+' checkpoints rated · '+mine.filter(function(r){return !r.rating}).length+' awaiting feedback'
-      +(st?' · Story '+(st.finished_at?'completed':'in progress'):'')+'</p><div class="l101-retry-list">'
+      +(st?' · Story '+(st.finished_at?'completed':' in progress'):'')+'</p><div class="l101-retry-list">'
       +mine.filter(function(r){return !!r.rating}).map(function(r){return '<button class="btn ghost l101-retry" data-reopen="'+h(r.id)+'">Reopen checkpoint '+(r.observation_index+1)+'</button>'}).join('')
       +'</div></div>';
    }).join(''):'<p class="muted">No students yet. Use the joining code or QR link above.</p>')+'</div></div>';
@@ -484,6 +492,24 @@ function l101InjectPanel(){
   +'<div class="list" style="margin-top:14px">'+injects.map(function(i){var t=scenarios.find(function(s){return s.id===i.target_scenario_id});
     return '<div class="notice"><b>'+h(i.title)+'</b><p>'+h(i.description)+'</p><p class="small muted">Audience: '+h(t?t.title:'Entire classroom')+'</p></div>'
    }).join('')+'</div></div>';
+}
+async function l101SetTeam(participantId){
+ var student=participants.find(function(p){return p.id===participantId}),input=app.querySelector('[data-team-name="'+participantId+'"]');
+ if(!student||!input)return;
+ try{
+  var r=await db.rpc('l101_set_student_team',{p_participant_id:participantId,p_team:input.value.trim()});
+  if(r.error)throw r.error;flash('Team updated for '+student.display_name+'.');await instructorRefresh();
+ }catch(e){error(e)}
+}
+async function l101AssignTeam(team){
+ var c=currentClass(),select=app.querySelector('[data-team-scenario="'+team+'"]'),members=participants.filter(function(p){return p.team_name===team});
+ if(!c||!select||!members.length)return;
+ var scenario=scenarios.find(function(s){return s.id===select.value});
+ if(!scenario||!window.confirm('Assign '+members.length+' members of '+team+' to '+scenario.title+'? Already-started team assignments cannot be changed.'))return;
+ try{
+  var r=await db.rpc('l101_assign_team_scenario',{p_class_id:c.id,p_team:team,p_scenario_id:select.value});
+  if(r.error)throw r.error;flash('Assigned '+r.data.assigned_count+' learners in '+team+'.');await instructorRefresh();
+ }catch(e){error(e)}
 }
 async function l101AssignScenario(participantId,newId){
  var person=participants.find(function(p){return p.id===participantId}),item=scenarios.find(function(s){return s.id===newId});
@@ -512,6 +538,9 @@ var inboxButton=document.getElementById('open-inbox-dashboard');if(inboxButton)i
 if(c&&window.lead101QR){window.lead101QR.toCanvas(document.getElementById('join-qrcode'),new URL('/leadership101-live.html?code='+c.code,location.origin).href,{width:160,margin:1,errorCorrectionLevel:'M'}).catch(function(){})}
 app.querySelectorAll('[data-class]').forEach(function(x){x.onclick=function(){selectedClass=x.dataset.class;instructorRefresh()}});
 app.querySelectorAll('[data-assign-scenario]').forEach(function(x){x.onchange=function(){l101AssignScenario(x.dataset.assignScenario,x.value)}});
+app.querySelectorAll('[data-save-team]').forEach(function(b){b.onclick=function(){l101SetTeam(b.dataset.saveTeam)}});
+app.querySelectorAll('[data-team-assign]').forEach(function(b){b.onclick=function(){l101AssignTeam(b.dataset.teamAssign)}});
+
 app.querySelectorAll('[data-rating]').forEach(function(div){div.querySelectorAll('[data-grade]').forEach(function(b){b.onclick=function(){div.querySelectorAll('button').forEach(function(z){z.classList.remove('selected')});b.classList.add('selected');div.dataset.grade=b.dataset.grade}})});
 app.querySelectorAll('[data-save-rating]').forEach(function(b){b.onclick=function(){saveRating(b.dataset.saveRating)}});
 app.querySelectorAll('[data-reopen]').forEach(function(b){b.onclick=function(){reopenStudentDecision(b.dataset.reopen)}});
