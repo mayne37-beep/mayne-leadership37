@@ -1,0 +1,36 @@
+name: Leadership 101 Phase 4 Regression Checks
+
+on:
+  pull_request:
+    paths:
+      - 'src/leadership101-live.js'
+      - 'src/leadership101-builder.js'
+      - 'leadership101-live.html'
+      - 'data/leadership101-first-time-leader-story.json'
+      - 'scripts/test-leadership101-phase4.mjs'
+      - '.github/workflows/leadership101-phase4.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/leadership101-live.js'
+      - 'src/leadership101-builder.js'
+      - 'leadership101-live.html'
+      - 'data/leadership101-first-time-leader-story.json'
+      - 'scripts/test-leadership101-phase4.mjs'
+      - '.github/workflows/leadership101-phase4.yml'
+
+jobs:
+  studio-contract-tests:
+    name: Studio source and scenario smoke tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run regression tests
+        run: node --test scripts/test-leadership101-phase4.mjs
