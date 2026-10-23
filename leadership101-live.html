@@ -124,6 +124,14 @@
 .l101-skill-track i,.l101-skill-track em,.l101-skill-track small{display:block;height:100%;padding:0;margin:0}
 .l101-skill-track i{background:#2f7fbd}.l101-skill-track em{background:#47a7a4}.l101-skill-track small{background:#e1b757}
 
+
+.l101-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin:14px 0}
+.l101-team-card{border:1px solid #d1e5f0;border-radius:13px;background:#f5faff;padding:15px;display:grid;gap:10px}
+.l101-team-card b{color:#175b8b;font-size:16px}.l101-team-card p{margin:0;color:#6b8697}
+.l101-team-editor{display:flex;gap:9px;align-items:end;max-width:500px;margin:12px 0}
+.l101-team-editor label{flex:1;min-width:0}.l101-team-editor button{flex:0 0 auto}
+@media(max-width:510px){.l101-team-editor{flex-direction:column;align-items:stretch}.l101-team-editor button{width:100%}}
+
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>
