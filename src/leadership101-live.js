@@ -20,7 +20,34 @@ function error(e){flash(e&&e.message?e.message:String(e),true)}
 function qs(s){return new URLSearchParams(location.search).get(s)||''}
 function progress(data){return (data.responses||[]).filter(function(x){return !!x.rating}).length}
 function scenarioMoment(data,n){return data.scenario.moments[n]||null}
-function sessionReport(data){var rows=(data.responses||[]).slice().sort(function(a,b){return a.observation_index-b.observation_index}).map(function(r){var m=data.scenario.moments[r.observation_index]||{};return '<section><h2>'+h((r.observation_index+1)+'. '+(m.title||'Leadership decision'))+'</h2><p>'+h(m.behavior||'')+'</p><p><b>Student response:</b> '+h(r.submitted_text)+'</p><p><b>Observer rating:</b> '+h(r.rating||'Awaiting review')+'</p><p><b>Observer feedback:</b> '+h(r.observer_comment||'—')+'</p></section>'}).join('');return '<div><h1>Leadership 101 — Student Leadership Report</h1><p><b>Participant:</b> '+h(data.participant.name)+'</p><p><b>Class:</b> '+h(data.class.title)+'</p><p><b>Scenario:</b> '+h(data.scenario.title)+'</p><p><b>Completed decisions:</b> '+progress(data)+' / '+data.scenario.moments.length+'</p><hr>'+rows+'<section><h2>Personal Reflection</h2><p>'+h(data.participant.reflection||'No reflection recorded')+'</p></section><p class="small">Mayne Leadership · Role-play practice record. Ratings represent instructional feedback.</p></div>'}
+function sessionReport(data){
+ var moments=data.scenario.moments||[],rows=(data.responses||[]).slice().sort(function(a,b){return a.observation_index-b.observation_index}).map(function(r){
+  var m=moments[r.observation_index]||{},con=r.consequence||{},rec=(data.recovery_plans||[]).find(function(x){return x.observation_index===r.observation_index}),rubric=r.rubric||{};
+  return '<section class="l101-report-item"><h2>'+h((r.observation_index+1)+'. '+(m.title||'Leadership decision'))+'</h2>'
+  +'<p><b>Situation:</b> '+h(m.behavior||'')+'</p><p><b>Decision:</b> '+h(m.question||'')+'</p>'
+  +'<p><b>Student response:</b> '+h(r.submitted_text)+'</p><p><b>Observer evaluation:</b> '+h(r.rating||'Awaiting review')+'</p>'
+  +'<p><b>Instructor comments:</b> '+h(r.observer_comment||'—')+'</p>'
+  +(Object.keys(rubric).length?'<p><b>Competencies:</b> '+Object.entries(rubric).map(function(e){return h(e[0])+': '+h(e[1])}).join(' · ')+'</p>':'')
+  +(con.reaction?'<p><b>Character reaction:</b> '+h(con.reaction)+'</p>':'')
+  +(con.lesson?'<p><b>Coaching insight:</b> '+h(con.lesson)+'</p>':'')
+  +(rec?'<p><b>Recovery plan:</b> '+h(rec.plan)+'</p>':'')
+  +'</section>';
+ }).join('');
+ var conversations=data.dialogue||[],characters=data.scenario.characters||[];
+ var dialogueHtml=conversations.length?'<section><h2>Character conversations</h2>'+conversations.map(function(turn){
+  var ch=characters[turn.character_index]||{};return '<p><b>'+h(ch.name||'Character')+':</b> '+h(turn.chosen_text)+'<br><b>Reaction:</b> '+h(turn.reply_text)+'<br><b>Coaching:</b> '+h(turn.coaching_tip||'—')+'</p>';
+ }).join('')+'</section>':'';
+ var history=data.response_history||[];
+ return '<div><h1>Leadership 101 — Student Leadership Report</h1><p><b>Participant:</b> '+h(data.participant.name)+'</p>'
+ +'<p><b>Class:</b> '+h(data.class.title)+'</p><p><b>Scenario:</b> '+h(data.scenario.title)+'</p>'
+ +'<p><b>Evaluated checkpoints:</b> '+progress(data)+' / '+moments.length+'</p>'
+ +'<p><b>Recorded decision events:</b> '+history.length+'</p><hr>'+rows+dialogueHtml
+ +'<section><h2>Personal Reflection</h2><p>'+h(data.participant.reflection||'No reflection recorded')+'</p></section>'
+ +(history.length?'<section><h2>Attempt history</h2>'+history.map(function(ev){
+   return '<p><b>Observation '+(ev.observation_index+1)+' · '+h(ev.event)+':</b> '+h(ev.submitted_text||'—')+' ('+h(ev.rating||'Pending')+')</p>';
+ }).join('')+'</section>':'')
+ +'<p class="small">Mayne Leadership · Leadership role-play learning record. Indicators are educational, not clinical or employment assessments.</p></div>';
+}
 function setPrint(data){document.getElementById('print-report').innerHTML=sessionReport(data)}
 function stat(n,label){return '<div class="stat"><b>'+h(n)+'</b><span class="small">'+h(label)+'</span></div>'}
 function download(filename,data){var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=filename;a.click();setTimeout(function(){URL.revokeObjectURL(u)},1500)}
