@@ -1,0 +1,421 @@
+{
+  "version": 2,
+  "start": "opening-meeting",
+  "title": "The First-Time Leader — An Unfolding Story",
+  "synopsis": "You have just been promoted to supervise your former peers. One public challenge can either strengthen or undermine your credibility—and every follow-up matters.",
+  "nodes": {
+    "opening-meeting": {
+      "act": 1,
+      "setting": "Team conference room",
+      "scene": "meeting",
+      "speaker": "Jordan Mitchell",
+      "tone": "tense",
+      "title": "Your First Meeting",
+      "text": "Jordan interrupts: “Yesterday you were one of us. Now you are telling us how to do our jobs?” The room falls silent. You can feel the team waiting to see what kind of leader you will be.",
+      "prompt": "What do you do in front of everyone?",
+      "choices": [
+        {
+          "text": "Acknowledge the concern, establish your responsibility, and invite Jordan to discuss the process privately after the meeting.",
+          "next": "private-conversation",
+          "trust": 2,
+          "pressure": -1,
+          "reaction": "Jordan nods cautiously. Two teammates begin speaking again.",
+          "coaching": "You maintained authority while protecting dignity."
+        },
+        {
+          "text": "Reassure the team that everything will continue as before, so nobody feels uncomfortable.",
+          "next": "role-confusion",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Nobody objects, but two people exchange uncertain looks.",
+          "coaching": "Avoiding discomfort can create role ambiguity."
+        },
+        {
+          "text": "End the challenge publicly: “I'm the supervisor. We're not debating that.”",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 2,
+          "reaction": "Jordan says “Understood.” Nobody speaks for the rest of the meeting.",
+          "coaching": "Silence isn't the same as commitment."
+        }
+      ]
+    },
+    "private-conversation": {
+      "act": 1,
+      "setting": "Quiet office",
+      "scene": "office",
+      "speaker": "Jordan Mitchell",
+      "tone": "reflective",
+      "title": "The Conversation After the Meeting",
+      "text": "Jordan stays behind. “I helped design the old process, and now it sounds like my experience doesn't count. What exactly do you expect from me?”",
+      "prompt": "How will you respond to the former peer?",
+      "choices": [
+        {
+          "text": "Listen to Jordan's evidence, clarify decision rights, and invite a recommendation by tomorrow.",
+          "next": "shared-ownership",
+          "trust": 3,
+          "pressure": -1,
+          "reaction": "Jordan offers to bring two workable alternatives.",
+          "coaching": "Specific voice and boundaries build constructive ownership."
+        },
+        {
+          "text": "Promise to consider everything later but avoid defining who now makes the decision.",
+          "next": "unclear-expectations",
+          "trust": 0,
+          "pressure": 2,
+          "reaction": "Jordan leaves still unsure whose approval is needed.",
+          "coaching": "Listening without clarifying authority leaves uncertainty in place."
+        },
+        {
+          "text": "Explain the new hierarchy at length without asking for Jordan's view.",
+          "next": "strained-trust",
+          "trust": -2,
+          "pressure": 1,
+          "reaction": "Jordan becomes polite but stops offering suggestions.",
+          "coaching": "A positional explanation alone rarely restores engagement."
+        }
+      ]
+    },
+    "role-confusion": {
+      "act": 1,
+      "setting": "Open-plan office",
+      "scene": "hallway",
+      "speaker": "Taylor Brooks",
+      "tone": "uncertain",
+      "title": "Who Owns the Work?",
+      "text": "Taylor catches you in the hallway: “Since you said nothing's changing, do we still use Jordan's sign-off? Operations wants a decision today.”",
+      "prompt": "Do you clarify expectations now or protect the earlier promise?",
+      "choices": [
+        {
+          "text": "Correct your earlier statement, assign a decision owner, and tell the team why the responsibilities changed.",
+          "next": "shared-ownership",
+          "trust": 2,
+          "pressure": -1,
+          "reaction": "Taylor appears relieved to have a clear route for decisions.",
+          "coaching": "Acknowledge the ambiguity and repair it openly."
+        },
+        {
+          "text": "Tell Taylor to work it out with Jordan for now.",
+          "next": "unclear-expectations",
+          "trust": -1,
+          "pressure": 3,
+          "reaction": "Two different teams begin working from conflicting instructions.",
+          "coaching": "Delegation without authority and guardrails is abandonment."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Team corridor",
+      "scene": "corridor",
+      "speaker": "Morgan Ellis",
+      "tone": "worried",
+      "title": "After the Silence",
+      "text": "Morgan quietly says, “The meeting ended quickly, but people are upset. Nobody wants to ask questions anymore. We might be hiding a problem with Friday's deadline.”",
+      "prompt": "How do you respond to feedback about your leadership style?",
+      "choices": [
+        {
+          "text": "Own the tone of the meeting, speak privately with Jordan, and invite facts about the deadline.",
+          "next": "repair-attempt",
+          "trust": 2,
+          "pressure": -1,
+          "reaction": "Morgan agrees to share what the team knows.",
+          "coaching": "Timely ownership is the foundation of recovery."
+        },
+        {
+          "text": "Say the team needs to adjust to stronger leadership and focus on deadlines.",
+          "next": "strained-trust",
+          "trust": -2,
+          "pressure": 2,
+          "reaction": "Morgan stops bringing up concerns.",
+          "coaching": "Dismissed warnings often return later as preventable surprises."
+        }
+      ]
+    },
+    "repair-attempt": {
+      "act": 2,
+      "setting": "Private mentoring room",
+      "scene": "office",
+      "speaker": "Jordan Mitchell",
+      "tone": "guarded",
+      "title": "An Apology That Needs Action",
+      "text": "Jordan listens as you acknowledge the public shutdown. “I appreciate that, but how will I know you're actually going to include us when decisions are difficult?”",
+      "prompt": "What concrete commitment do you make?",
+      "choices": [
+        {
+          "text": "Set a daily ten-minute risk check, make decision rights explicit, and ask Jordan to flag barriers directly.",
+          "next": "shared-ownership",
+          "trust": 3,
+          "pressure": -1,
+          "reaction": "Jordan agrees to raise an unresolved risk before it becomes a crisis.",
+          "coaching": "Trust repair requires an observable agreement, not only an apology."
+        },
+        {
+          "text": "Promise to be more approachable without a follow-up mechanism.",
+          "next": "unclear-expectations",
+          "trust": 0,
+          "pressure": 1,
+          "reaction": "Jordan appreciates the sentiment but isn't sure what will change.",
+          "coaching": "A vague promise rarely changes a team's expectations."
+        }
+      ]
+    },
+    "shared-ownership": {
+      "act": 2,
+      "setting": "Project planning room",
+      "scene": "planning",
+      "speaker": "Taylor Brooks",
+      "tone": "focused",
+      "title": "The Ownership Map",
+      "text": "Taylor brings the Friday deliverable tracker. Two teams are waiting on each other; neither owns the final approval. Jordan offers to help define roles.",
+      "prompt": "How do you organize the work?",
+      "choices": [
+        {
+          "text": "Assign a decision owner, clarify handoffs, invite dissenting risks, and schedule a verification check.",
+          "next": "deadline-crisis",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The team commits to clear roles; hidden dependencies start surfacing.",
+          "coaching": "Specific ownership and feedback loops reduce uncertainty."
+        },
+        {
+          "text": "Assign every decision to yourself so no mistakes can occur.",
+          "next": "deadline-crisis",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Your inbox fills with approvals; the team begins waiting on you.",
+          "coaching": "Centralizing all decisions creates a bottleneck."
+        }
+      ]
+    },
+    "unclear-expectations": {
+      "act": 2,
+      "setting": "Busy workstations",
+      "scene": "planning",
+      "speaker": "Taylor Brooks",
+      "tone": "frustrated",
+      "title": "Two Teams, Two Plans",
+      "text": "You discover conflicting instructions. Taylor asks, “Which plan should we follow? Everyone thinks somebody else is responsible.”",
+      "prompt": "How do you regain clarity without blaming the team?",
+      "choices": [
+        {
+          "text": "Call a short alignment huddle, clarify who owns each decision, and document the handoffs.",
+          "next": "deadline-crisis",
+          "trust": 2,
+          "pressure": -1,
+          "reaction": "The teams finally share one version of the plan.",
+          "coaching": "Repair ambiguity with explicit agreements and visible ownership."
+        },
+        {
+          "text": "Issue a rushed directive but don't confirm whether the groups understood.",
+          "next": "deadline-crisis",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Work continues, but the teams interpret your directive differently.",
+          "coaching": "An instruction is not the same as shared understanding."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Tense team briefing",
+      "scene": "conflict",
+      "speaker": "Morgan Ellis",
+      "tone": "defensive",
+      "title": "Information Stops Flowing",
+      "text": "The team has gone quiet. Morgan warns that an unresolved handoff has put the Friday deadline at risk. One person says they didn't want to be embarrassed in another meeting.",
+      "prompt": "How do you reduce the fear and get reliable information?",
+      "choices": [
+        {
+          "text": "Acknowledge your contribution, invite specific risks without punishment, and name clear owners.",
+          "next": "deadline-crisis",
+          "trust": 2,
+          "pressure": -1,
+          "reaction": "Two people finally disclose the missing handoff.",
+          "coaching": "Invite candor and demonstrate that raising risk is safe."
+        },
+        {
+          "text": "Warn everyone that failure to deliver will have consequences.",
+          "next": "deadline-crisis",
+          "trust": -2,
+          "pressure": 3,
+          "reaction": "The team focuses on appearing busy rather than showing problems.",
+          "coaching": "Pressure without psychological safety can reduce the accuracy of reports."
+        }
+      ]
+    },
+    "deadline-crisis": {
+      "act": 3,
+      "setting": "Operations war room",
+      "scene": "crisis",
+      "speaker": "Morgan Ellis",
+      "tone": "urgent",
+      "title": "Friday's Deadline Is Now at Risk",
+      "text": "A late partner update changes the delivery requirements. The team has six hours. Your supervisor wants a progress briefing, Jordan wants to solve the technical gap, and Taylor needs a decision right now.",
+      "prompt": "What gets your attention first?",
+      "choices": [
+        {
+          "text": "Separate critical from optional work, delegate expertise, brief leadership with transparent risks, and set a checkpoint.",
+          "next": "team-recovery",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "People know what to prioritize, and leadership accepts a realistic update.",
+          "coaching": "Focused priorities and candor create room for adaptive leadership."
+        },
+        {
+          "text": "Promise leadership an on-time delivery and ask everyone to work faster without revisiting scope.",
+          "next": "executive-escalation",
+          "trust": -1,
+          "pressure": 3,
+          "reaction": "The team looks exhausted. Your supervisor asks for evidence behind your assurance.",
+          "coaching": "Unverified promises create organizational risk."
+        },
+        {
+          "text": "Take over all important tasks personally and tell Jordan to stop questioning the plan.",
+          "next": "quiet-resistance",
+          "trust": -2,
+          "pressure": 3,
+          "reaction": "An avoidable issue stays hidden until the final hour.",
+          "coaching": "Micromanagement removes capacity at the moment you most need it."
+        }
+      ]
+    },
+    "team-recovery": {
+      "act": 3,
+      "setting": "Team huddle",
+      "scene": "planning",
+      "speaker": "Jordan Mitchell",
+      "tone": "hopeful",
+      "title": "A Team Starts Owning the Outcome",
+      "text": "Jordan has a workable compromise. Taylor volunteers to coordinate the revised checklist. The team watches whether you will support their ownership or pull control back.",
+      "prompt": "How do you close this critical moment?",
+      "choices": [
+        {
+          "text": "Confirm owners, communicate the revised plan, recognize contributions, and schedule a brief debrief.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The team delivers a transparent update and commits to the next milestone.",
+          "coaching": "Recognition and review reinforce future performance."
+        },
+        {
+          "text": "Accept their solution but take all credit in the final update.",
+          "next": "__ending__",
+          "trust": -3,
+          "pressure": 1,
+          "reaction": "The work progresses, but team members notice the missing credit.",
+          "coaching": "Attribution affects whether people will volunteer next time."
+        }
+      ]
+    },
+    "executive-escalation": {
+      "act": 3,
+      "setting": "Executive review",
+      "scene": "executive",
+      "speaker": "Supervisor Rivera",
+      "tone": "firm",
+      "title": "Your Supervisor Challenges the Promise",
+      "text": "Rivera asks, “You promised Friday, but the tracker is inconsistent. What evidence supports that commitment?” Your team is waiting outside.",
+      "prompt": "How do you recover credibility?",
+      "choices": [
+        {
+          "text": "Correct the earlier assurance, show verified status, and propose an accountable recovery timeline.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Rivera accepts the corrected picture and asks for the next checkpoint.",
+          "coaching": "Truthful adjustment is often more credible than defending an unsupported promise."
+        },
+        {
+          "text": "Blame the team for providing inaccurate information.",
+          "next": "__ending__",
+          "trust": -2,
+          "pressure": 2,
+          "reaction": "Rivera asks why you had not verified the report before giving assurance.",
+          "coaching": "Blame erodes trust upward and downward."
+        }
+      ]
+    },
+    "quiet-resistance": {
+      "act": 3,
+      "setting": "After-hours meeting room",
+      "scene": "conflict",
+      "speaker": "Morgan Ellis",
+      "tone": "exhausted",
+      "title": "A Problem Nobody Wanted to Raise",
+      "text": "Morgan admits the final review found an error. “We thought you'd be angry, so we kept trying to fix it ourselves.”",
+      "prompt": "What is your leadership response now?",
+      "choices": [
+        {
+          "text": "Thank the team for surfacing the risk, establish safe escalation, and agree on a realistic correction plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The team shares the remaining issues, making recovery possible.",
+          "coaching": "A leader can still improve the outcome by changing the conditions for candor."
+        },
+        {
+          "text": "Demand names and assign blame before discussing the correction.",
+          "next": "__ending__",
+          "trust": -3,
+          "pressure": 2,
+          "reaction": "Nobody volunteers more information, delaying the repair.",
+          "coaching": "Punishment before diagnosis can turn a problem into a culture of silence."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Team recognition meeting",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust Becomes Momentum",
+      "text": "You combined clear responsibility with listening, accountability, and follow-through. The team still faced uncertainty, but people were willing to tell the truth early, share ownership, and adapt. Your credibility grew through the actions you repeated.",
+      "ending": true,
+      "reflection": "What specific behavior most strengthened trust? How will you repeat it under more pressure?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Follow-up one-on-one",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: Credibility Still Needs Repair",
+      "text": "The team made progress, but unclear expectations or inconsistent responses left trust uneven. Some employees contributed while others remained cautious. Your next leadership challenge is to make expectations and follow-through consistent.",
+      "ending": true,
+      "reflection": "Where did you create ambiguity? Name one action you would take within 24 hours to regain clarity."
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Empty conference room",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: Silence Is Not Commitment",
+      "text": "The deadline became harder because people stopped raising risks or waiting for permission slowed the work. Authority was visible, but confidence in leadership was not. Recovery is possible only if you address the conditions that made honest communication difficult.",
+      "ending": true,
+      "reflection": "What assumptions drove your choices, and how would you create a safer and more accountable environment?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the development, gather facts, and assign an owner before changing course.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team starts coordinating a verified response."
+    },
+    {
+      "text": "Issue immediate instructions without confirming the impact on existing priorities.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The team scrambles, uncertain what has changed."
+    },
+    {
+      "text": "Set the new issue aside until the original work is finished.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unresolved issue grows and returns as a larger risk."
+    }
+  ]
+}
