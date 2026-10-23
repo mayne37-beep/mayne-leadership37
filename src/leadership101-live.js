@@ -424,6 +424,57 @@ function rubricControls(prefix,values){
  }).join('')+'</div></div>';
 }
 
+
+function l101ScenarioAnalytics(){
+ var groups={};participants.forEach(function(p){
+  var sc=scenarioForParticipant(p),id=sc&&sc.id||'unassigned',g=groups[id]||(groups[id]={title:sc&&sc.title||'Unassigned',members:0,completed:0,inprogress:0,waiting:0});
+  g.members++;var rs=responses.filter(function(r){return r.participant_id===p.id}),story=storyRuns.find(function(x){return x.participant_id===p.id}),steps=(sc&&sc.payload&&sc.payload.moments||[]).length;
+  if(story&&story.finished_at||(steps>0&&rs.filter(function(r){return !!r.rating}).length>=steps))g.completed++;
+  if(rs.length||story)g.inprogress++;
+  g.waiting+=rs.filter(function(r){return !r.rating}).length;
+ });
+ return '<div class="panel"><div class="spread"><h2>Classroom Progress & Analytics</h2><span class="chip">'+participants.length+' learners · '+Object.keys(groups).length+' scenarios</span></div>'
+  +'<p class="muted small">See each scenario in progress within your one classroom.</p><div class="l101-analytics-grid">'
+  +Object.keys(groups).map(function(id){var g=groups[id],pct=g.members?Math.round(100*g.completed/g.members):0;
+    return '<div class="l101-analytics-card"><div class="eyebrow">'+h(g.title)+'</div><strong>'+g.completed+' / '+g.members+'</strong><span class="small">Completed</span><div class="track"><i style="width:'+pct+'%"></i></div><p class="small">'+g.inprogress+' started · '+g.waiting+' waiting for review</p></div>';
+   }).join('')+'</div></div>';
+}
+function l101AssignmentsPanel(c){
+ return '<div class="panel"><div class="spread"><h2>Student Scenario Assignments</h2><button class="btn" id="export-class">Export Reports (JSON)</button></div>'
+  +'<p class="muted small">Everyone joins using this classroom code. Assign different scenarios before students start; attempts already in progress remain protected.</p><div class="list">'
+  +(participants.length?participants.map(function(p){
+    var mine=responses.filter(function(r){return r.participant_id===p.id}),st=storyRuns.find(function(x){return x.participant_id===p.id}),sc=scenarioForParticipant(p),
+    active=mine.length>0||!!st,chosen=p.assigned_scenario_id||c.scenario_id,graded=mine.filter(function(r){return !!r.rating}).length;
+    return '<div class="l101-student-card"><div class="spread"><strong>'+h(p.display_name)+'</strong><span class="badge">'+(active?'Working · Assignment locked':'Ready for assignment')+'</span></div>'
+      +'<div class="l101-roster-control"><label>Assigned scenario<select data-assign-scenario="'+h(p.id)+'" '+(active?'disabled':'')+'>'
+      +scenarios.map(function(s){return '<option value="'+h(s.id)+'" '+(s.id===chosen?'selected':'')+'>'+h(s.title)+'</option>'}).join('')
+      +'</select></label><button class="btn ghost" data-print-participant="'+h(p.id)+'">Print report</button></div>'
+      +'<p class="small muted">'+graded+' / '+((sc&&sc.payload&&sc.payload.moments)||[]).length+' checkpoints rated · '+mine.filter(function(r){return !r.rating}).length+' awaiting feedback'
+      +(st?' · Story '+(st.finished_at?'completed':'in progress'):'')+'</p><div class="l101-retry-list">'
+      +mine.filter(function(r){return !!r.rating}).map(function(r){return '<button class="btn ghost l101-retry" data-reopen="'+h(r.id)+'">Reopen checkpoint '+(r.observation_index+1)+'</button>'}).join('')
+      +'</div></div>';
+   }).join(''):'<p class="muted">No students yet. Use the joining code or QR link above.</p>')+'</div></div>';
+}
+function l101InjectPanel(){
+ var prepared=scenarios.filter(function(s){return s.payload&&Array.isArray(s.payload.injects)&&s.payload.injects.length});
+ return '<div class="panel"><h2>Release scenario-specific injects</h2><p class="muted small">A complication goes only to students assigned the selected scenario.</p>'
+  +'<label>Prepared scenario complication<select id="inject-selector">'+prepared.map(function(s){
+   return '<optgroup label="'+h(s.title)+'">'+s.payload.injects.map(function(i,n){return '<option value="'+h(s.id)+'::'+n+'">'+h(i.title)+'</option>'}).join('')+'</optgroup>';
+  }).join('')+'</select></label><div class="row" style="margin-top:12px"><button class="btn gold" id="release-inject">Release inject</button></div>'
+  +'<div class="list" style="margin-top:14px">'+injects.map(function(i){var t=scenarios.find(function(s){return s.id===i.target_scenario_id});
+    return '<div class="notice"><b>'+h(i.title)+'</b><p>'+h(i.description)+'</p><p class="small muted">Audience: '+h(t?t.title:'Entire classroom')+'</p></div>'
+   }).join('')+'</div></div>';
+}
+async function l101AssignScenario(participantId,newId){
+ var person=participants.find(function(p){return p.id===participantId}),item=scenarios.find(function(s){return s.id===newId});
+ if(!person||!item)return;
+ if(!window.confirm('Assign '+person.display_name+' to '+item.title+'? This is allowed only before the student begins.')){instructorRender();return}
+ try{
+  var r=await db.rpc('l101_assign_scenario',{p_participant_id:participantId,p_scenario_id:newId});
+  if(r.error)throw r.error;flash('Assigned '+person.display_name+' to '+item.title+'.');await instructorRefresh();
+ }catch(e){error(e);await instructorRefresh()}
+}
+
 function instructorRender(){var c=currentClass(),sc=currentScenario();var pending=responses.filter(function(x){return !x.rating});var rated=responses.filter(function(x){return !!x.rating});var cards=classes.map(function(x){return '<button class="choice" style="margin:0 0 8px" data-class="'+h(x.id)+'"><span>◈</span><span><b>'+h(x.title)+'</b><br><small>'+h(x.code)+(x.is_open?' · Open':' · Closed')+'</small></span></button>'}).join('');
 var ui='<div class="grid"><div><div class="panel"><div class="spread"><h2>Live Classrooms</h2><button class="btn" id="instructor-logout">Sign out</button></div><div class="grid3">'+stat(classes.length,'Classes')+stat(participants.length,'Participants in current class')+stat(notificationRows.filter(function(n){return n.kind==='needs_review'&&!n.resolved_at}).length,'Written responses across all classes')+'</div><div class="notice" style="margin-top:15px"><div class="spread"><div><b>🔔 Instructor Notification Center</b><p class="small muted">Monitor all active scenarios without switching classrooms.</p></div><button class="btn gold" id="open-inbox-dashboard">Open all alerts ('+attentionCount()+')</button></div></div><div class="stack" style="margin-top:18px"><label>New class title<input id="new-class-title" placeholder="Leadership 101 — Cohort A"></label><label>Choose scenario<select id="new-class-scenario">'+scenarios.map(function(s){return '<option value="'+h(s.id)+'">'+h(s.title)+'</option>'}).join('')+'</select></label><button class="btn gold" id="create-class">Create Classroom</button></div></div>';
 if(c){ui+='<div class="panel"><div class="spread"><div><span class="eyebrow">Active classroom</span><h2>'+h(c.title)+'</h2></div><button class="btn" id="toggle-class">'+(c.is_open?'Close joining':'Reopen class')+'</button></div><p>Join code: <strong style="font-size:24px">'+h(c.code)+'</strong></p><p><a id="share-class" target="_blank" rel="noopener" href="/leadership101-live.html?code='+encodeURIComponent(c.code)+'">Student joining link</a></p><button class="btn ghost" id="copy-class">Copy student link</button><div style="display:flex;gap:14px;align-items:center;margin:14px 0"><canvas id="join-qrcode" width="160" height="160" aria-label="QR code for the student joining link"></canvas><p class="small muted">Students can scan this QR code to join the current class. The link includes only the classroom code.</p></div><div class="notice"><b>Assigned:</b> '+h(sc?sc.title:'Unknown scenario')+'<br>Students can join using the code or link. Instructor ratings appear on their screens automatically.</div></div>';
