@@ -7,7 +7,7 @@ window.supabase={createClient};
 'use strict';
 var API_URL="https://vteamreihsunsllwcphw.supabase.co",PUB_KEY="sb_publishable_dFlcGsz0Fu1TifebqIu4fQ_6aLjG7ud",db=null;
 var lastInstructorHash='';var page='student',studentToken=localStorage.getItem('l101_live_token')||'',studentData=null,scenarioIndex=0,instructorUser=null,classes=[],scenarios=[],participants=[],responses=[],injects=[],selectedClass='',timer=null,editingScenario='';
-var notificationDraftGrades={},notificationDraftNotes={};
+var notificationDraftGrades={},notificationDraftNotes={},notificationMessageRows={},notificationMessageDrafts={};
 var notificationRows=[],notificationResponseRows={},notificationsReady=false,notificationsOpen=false,notificationsFilter='attention',notificationBusy=false,notificationPolling=false;
 var notificationsChannel=null,notificationsChannelOwner='';
 var notifiedIds=new Set(),soundEnabled=localStorage.getItem('l101_notify_sound')==='yes',desktopEnabled=localStorage.getItem('l101_notify_desktop')==='yes';
@@ -101,17 +101,24 @@ async function loadInstructorNotifications(quiet){
  try{
   var r=await db.from('l101_live_notifications').select('id,instructor_id,kind,title,detail,created_at,read_at,resolved_at,class_id,participant_id,response_id,class:l101_live_classes(title,code,scenario_id),participant:l101_live_participants(display_name)').eq('instructor_id',instructorUser.id).order('created_at',{ascending:false}).limit(200);
   if(r.error)throw r.error;
-  var next=r.data||[],ids=next.filter(function(n){return n.kind==='needs_review'&&!n.resolved_at&&n.response_id}).map(function(n){return n.response_id}),lookup={};
+  var next=r.data||[],ids=next.filter(function(n){return n.kind==='needs_review'&&!n.resolved_at&&n.response_id}).map(function(n){return n.response_id}),lookup={},messagesByParticipant={};
   if(ids.length){
    var rr=await db.from('l101_live_responses').select('id,submitted_text,observation_index,rating,observer_comment').in('id',ids.slice(0,200));
    if(rr.error)throw rr.error;
    (rr.data||[]).forEach(function(x){lookup[x.id]=x});
   }
+  var conversationParticipants=Array.from(new Set(next.filter(function(n){return n.kind==='help_request'}).map(function(n){return n.participant_id}))).slice(0,200);
+  if(conversationParticipants.length){
+   var mr=await db.from('l101_live_messages').select('id,participant_id,observation_index,sender_kind,content,created_at').in('participant_id',conversationParticipants).order('created_at',{ascending:true}).limit(1000);
+   if(mr.error)throw mr.error;
+   (mr.data||[]).forEach(function(m){(messagesByParticipant[m.participant_id]||(messagesByParticipant[m.participant_id]=[])).push(m)});
+  }
+
   var fresh=next.filter(function(n){return !n.read_at&&!n.resolved_at||n.kind==='scenario_complete'&&!n.read_at}).filter(function(n){return !notifiedIds.has(n.id)});
   if(notificationsReady&&fresh.length&&page==='instructor')fresh.slice().reverse().slice(-3).forEach(showIncomingNotification);
   next.forEach(function(n){notifiedIds.add(n.id)});
   var previous=JSON.stringify(notificationRows.map(function(n){return [n.id,n.read_at,n.resolved_at]})),now=JSON.stringify(next.map(function(n){return [n.id,n.read_at,n.resolved_at]}));
-  notificationRows=next;notificationResponseRows=lookup;notificationsReady=true;
+  notificationRows=next;notificationResponseRows=lookup;notificationMessageRows=messagesByParticipant;notificationsReady=true;
   updateNotificationBell();
   if(notificationsOpen&&!isTyping())renderNotificationPanel();
   if(previous!==now&&!isTyping()&&app.querySelector('#open-inbox-dashboard'))instructorRender();
@@ -128,7 +135,7 @@ function showIncomingNotification(n){
    try{var msg=new Notification(n.title,{body:notificationSummary(n),tag:n.id});msg.onclick=function(){window.focus();openNotificationPanel()}}catch(e){}
  }
  var area=document.getElementById('nc-toaststack');if(!area)return;
- var div=document.createElement('div');div.className='nc-toast';var title=document.createElement('strong');title.textContent=n.kind==='needs_review'?'Written response needs your rating':n.title;var detail=document.createElement('small');detail.textContent=meta.student+' · '+meta.className;var buttons=document.createElement('div');buttons.className='nc-actions';var review=document.createElement('button');review.textContent=n.kind==='needs_review'?'Review & rate':'Open alert';review.onclick=function(){div.remove();openNotificationPanel('attention',n.id)};var close=document.createElement('button');close.className='nc-dismiss';close.textContent='Dismiss pop-up';close.onclick=function(){div.remove()};buttons.append(review,close);div.append(title,detail,buttons);area.prepend(div);
+ var div=document.createElement('div');div.className='nc-toast';var title=document.createElement('strong');title.textContent=n.kind==='needs_review'?'Written response needs your rating':n.title;var detail=document.createElement('small');var pending=notificationResponseRows[n.response_id];var moment=pending?notificationMoment(n,pending.observation_index):null;detail.textContent=meta.student+' · '+meta.className+(moment?' · '+(moment.title||'Observation '+(pending.observation_index+1)):'');var buttons=document.createElement('div');buttons.className='nc-actions';var review=document.createElement('button');review.textContent=n.kind==='needs_review'?'Review & rate':'Open alert';review.onclick=function(){div.remove();openNotificationPanel('attention',n.id)};var close=document.createElement('button');close.className='nc-dismiss';close.textContent='Dismiss pop-up';close.onclick=function(){div.remove()};buttons.append(review,close);div.append(title,detail,buttons);area.prepend(div);
  while(area.children.length>3)area.lastElementChild.remove();
  setTimeout(function(){if(div.isConnected)div.remove()},14000);
 }
@@ -149,14 +156,59 @@ function closeNotificationPanel(){
 function notificationVisible(n){
  if(notificationsFilter==='attention')return (n.kind==='needs_review'||n.kind==='help_request')&&!n.resolved_at;
  if(notificationsFilter==='activity')return n.kind==='scenario_complete'||!!n.resolved_at;
+ if(notificationsFilter==='messages')return n.kind==='help_request';
  return true;
 }
+
+function notificationScenario(n){return scenarios.find(function(s){return s.id===(n.class&&n.class.scenario_id)})||null}
+function notificationMoment(n,idx){
+ var s=notificationScenario(n),items=s&&s.payload&&Array.isArray(s.payload.moments)?s.payload.moments:[];return items[idx]||null
+}
+function notificationContextMarkup(n,index){
+ if(!Number.isInteger(index))return '';
+ var sc=notificationScenario(n),moments=sc&&sc.payload&&sc.payload.moments||[],m=moments[index];
+ if(!m)return '<div class="l101-context"><b>Observation '+(index+1)+'</b><p>The scenario prompt is not available for this saved response.</p></div>';
+ return '<div class="l101-context"><div class="eyebrow">What the student was responding to</div>'
+ +'<h4>'+h(m.title||'Observation '+(index+1))+' <span class="small muted">· '+(index+1)+' of '+moments.length+'</span></h4>'
+ +(m.trainee?'<p><b>Team member:</b> '+h(m.trainee)+'</p>':'')
+ +(m.behavior?'<p><b>Situation / observed behavior:</b> '+h(m.behavior)+'</p>':'')
+ +(m.context?'<p><b>Background:</b> '+h(m.context)+'</p>':'')
+ +(m.question?'<p><b>Decision prompt:</b> '+h(m.question)+'</p>':'')
+ +(m.cues?'<details><summary>Facilitator observation cues</summary><p>'+h(m.cues)+'</p></details>':'')
+ +'</div>';
+}
+function instructorThreadMarkup(n){
+ var messages=notificationMessageRows[n.participant_id]||[];
+ return '<div class="l101-thread"><div class="spread"><b>Conversation with '+h(notificationPeople(n).student)+'</b><span class="small muted">'+messages.length+' messages</span></div>'
+ +'<div class="l101-thread-history" aria-label="Conversation history">'
+ +(messages.length?messages.map(function(m){
+ return '<div class="l101-chat-message '+(m.sender_kind==='instructor'?'instructor':'student')+'"><div class="l101-chat-by">'+(m.sender_kind==='student'?'Student':'You')+(Number.isInteger(m.observation_index)?' · Observation '+(m.observation_index+1):'')+'</div>'
+ +'<p>'+h(m.content)+'</p><div class="small muted">'+h(notificationTime(m.created_at))+'</div></div>'
+ }).join(''):'<p class="small muted">No previous messages recorded for this student.</p>')+'</div>'
+ +'<label style="margin-top:12px">Reply to student<textarea rows="3" maxlength="1500" id="l101-reply-'+h(n.id)+'" placeholder="Type your response; the student will see it in their message thread.">'+h(notificationMessageDrafts[n.participant_id]||'')+'</textarea></label>'
+ +'<div class="nc-footer"><button class="btn ghost" data-nc-openclass="'+h(n.class_id)+'">Open classroom</button><button class="btn primary" data-l101-send-reply="'+h(n.id)+'">Send reply →</button></div>'
+ +'</div>';
+}
+async function instructorSendMessage(notificationId){
+ var n=notificationRows.find(function(x){return x.id===notificationId});if(!n||!instructorUser)return;
+ var content=val('l101-reply-'+n.id).trim();if(!content){flash('Write a reply before sending.',true);return}
+ try{
+  var messages=notificationMessageRows[n.participant_id]||[],lastStudent=messages.slice().reverse().find(function(x){return x.sender_kind==='student'});
+  var payload={class_id:n.class_id,participant_id:n.participant_id,sender_kind:'instructor',sender_user_id:instructorUser.id,observation_index:lastStudent&&Number.isInteger(lastStudent.observation_index)?lastStudent.observation_index:null,content:content};
+  var r=await db.from('l101_live_messages').insert(payload).select('id').single();
+  if(r.error)throw r.error;
+  delete notificationMessageDrafts[n.participant_id];
+  flash('Reply sent to '+notificationPeople(n).student+'.');
+  await loadInstructorNotifications(false);
+ }catch(e){error(e)}
+}
+
 function renderNotificationPanel(){
  if(!notificationsOpen)return;var el=document.getElementById('nc-body');if(!el)return;
  var total=notificationRows.length,waiting=attentionCount(),completed=notificationRows.filter(function(n){return n.kind==='scenario_complete'}).length;
  var html='<div class="nc-head"><div><div class="eyebrow">Across all classrooms</div><h2>Instructor Notification Center</h2><p>'+waiting+' need attention · '+completed+' completion updates · Live connection with automatic refresh</p></div><button id="nc-close" aria-label="Close notifications">✕ Close</button></div>';
  html+='<div class="nc-pref"><button id="nc-sound">🔊 Sound: '+(soundEnabled?'On':'Off')+'</button><button id="nc-desktop">▣ Desktop alerts: '+(desktopEnabled?'On':'Off')+'</button></div>';
- html+='<div class="nc-filters">'+[['attention','Needs attention ('+waiting+')'],['all','All activity ('+total+')'],['activity','Completed / resolved']].map(function(a){return '<button class="'+(notificationsFilter===a[0]?'sel':'')+'" data-nc-filter="'+a[0]+'">'+h(a[1])+'</button>'}).join('')+'</div>';
+ html+='<div class="nc-filters">'+[['attention','Needs attention ('+waiting+')'],['messages','Student messages'],['all','All activity ('+total+')'],['activity','Completed / resolved']].map(function(a){return '<button class="'+(notificationsFilter===a[0]?'sel':'')+'" data-nc-filter="'+a[0]+'">'+h(a[1])+'</button>'}).join('')+'</div>';
  var list=notificationRows.filter(notificationVisible);
  if(!list.length)html+='<div class="nc-empty">✓ Nothing needs your attention in this view.<br><small>Incoming student responses from all classes will appear here.</small></div>';
  else list.forEach(function(n){
@@ -165,13 +217,16 @@ function renderNotificationPanel(){
    html+='<section class="nc-item '+(actionable?'attention ':'done ')+(n.kind==='help_request'?'help ':'')+(!n.read_at?'unread':'')+'" data-nc-entry="'+h(n.id)+'">';
    html+='<div class="spread"><div class="nc-class">'+h(meta.className)+(meta.scenario?' · '+h(meta.scenario):'')+'</div><span class="small muted">'+h(notificationTime(n.created_at))+'</span></div>';
    html+='<h3>'+h(meta.student)+' — '+h(n.title)+'</h3><div class="nc-meta"><span>Scenario: '+h(meta.scenario||'Leadership 101')+'</span>'+(response?'<span>· Observation '+(response.observation_index+1)+'</span>':'')+'<span class="nc-priority">'+(actionable?'ACTION NEEDED':'Recorded')+'</span></div>';
-   html+='<div class="nc-text">'+h(note)+'</div>';
+   if(n.kind==='needs_review'&&response)html+=notificationContextMarkup(n,response.observation_index);
+   else if(n.kind==='help_request'){var thread=notificationMessageRows[n.participant_id]||[],last=thread.slice().reverse().find(function(m){return m.sender_kind==='student'});if(last&&Number.isInteger(last.observation_index))html+=notificationContextMarkup(n,last.observation_index)}
+   html+='<div class="nc-text"><b>'+(n.kind==='needs_review'?'Student’s original leadership response':n.kind==='help_request'?'Student’s question / message':'Update')+'</b><p>'+h(note)+'</p></div>';
    if(n.kind==='needs_review'&&!n.resolved_at){
      html+='<div class="nc-rating" data-nc-rating="'+h(n.id)+'" data-grade="'+h(notificationDraftGrades[n.id]||'')+'"><button type="button" data-nc-grade="positive" class="'+(notificationDraftGrades[n.id]==='positive'?'chosen':'')+'">Positive</button><button type="button" data-nc-grade="neutral" class="'+(notificationDraftGrades[n.id]==='neutral'?'chosen':'')+'">Neutral</button><button type="button" data-nc-grade="negative" class="'+(notificationDraftGrades[n.id]==='negative'?'chosen':'')+'">Negative</button></div>';
      html+='<label>Observer comments (optional)<textarea id="nc-comment-'+h(n.id)+'" placeholder="What did the student demonstrate?">'+h(notificationDraftNotes[n.id]||'')+'</textarea></label>';
      html+='<div class="nc-footer"><button class="btn ghost" data-nc-openclass="'+h(n.class_id)+'">Open classroom</button><button class="btn primary" data-nc-submit="'+h(n.id)+'">Save evaluation</button></div>';
-   }else if(n.kind==='help_request'&&!n.resolved_at){
-     html+='<div class="nc-footer"><button class="btn ghost" data-nc-openclass="'+h(n.class_id)+'">View classroom</button><button class="btn primary" data-nc-resolve="'+h(n.id)+'">Mark as handled</button></div>';
+   }else if(n.kind==='help_request'){
+     html+=instructorThreadMarkup(n);
+     if(!n.resolved_at)html+='<div class="nc-footer"><button class="btn ghost" data-nc-resolve="'+h(n.id)+'">Mark resolved without replying</button></div>';
    }else if(!n.read_at){
      html+='<div class="nc-footer"><button class="btn ghost" data-nc-markread="'+h(n.id)+'">Mark as read</button></div>';
    }
@@ -185,6 +240,8 @@ function renderNotificationPanel(){
  el.querySelectorAll('[data-nc-rating]').forEach(function(box){box.querySelectorAll('[data-nc-grade]').forEach(function(b){b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.classList.remove('chosen')});b.classList.add('chosen');box.dataset.grade=b.dataset.ncGrade;notificationDraftGrades[box.dataset.ncRating]=b.dataset.ncGrade}})});
  el.querySelectorAll('textarea[id^="nc-comment-"]').forEach(function(input){input.oninput=function(){notificationDraftNotes[input.id.slice('nc-comment-'.length)]=input.value}});
  el.querySelectorAll('[data-nc-submit]').forEach(function(b){b.onclick=function(){gradeNotification(b.dataset.ncSubmit)}});
+ el.querySelectorAll('textarea[id^="l101-reply-"]').forEach(function(input){input.oninput=function(){var n=notificationRows.find(function(x){return x.id===input.id.slice('l101-reply-'.length)});if(n)notificationMessageDrafts[n.participant_id]=input.value}});
+ el.querySelectorAll('[data-l101-send-reply]').forEach(function(b){b.onclick=function(){instructorSendMessage(b.dataset.l101SendReply)}});
  el.querySelectorAll('[data-nc-resolve]').forEach(function(b){b.onclick=function(){resolveNotification(b.dataset.ncResolve)}});
  el.querySelectorAll('[data-nc-markread]').forEach(function(b){b.onclick=function(){markNotificationRead(b.dataset.ncMarkread)}});
  el.querySelectorAll('[data-nc-openclass]').forEach(function(b){b.onclick=async function(){selectedClass=b.dataset.ncOpenclass;closeNotificationPanel();await instructorRefresh()}});
