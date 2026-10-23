@@ -104,6 +104,16 @@
 .l101-authoring-link:hover{background:#ffdf97}
 @media(max-width:560px){.l101-roster-control{grid-template-columns:1fr}.l101-roster-control button{width:100%}}
 
+
+.l101-hold-setting{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #c5deed;background:#f2f9ff;border-radius:11px}
+.l101-hold-setting input{width:19px;height:19px;flex:0 0 19px}
+.l101-hold-setting span{display:grid;gap:3px}.l101-hold-setting small{display:block;color:#6b8499;font-size:11px;font-weight:450}
+.l101-waiting-scene{padding:24px 20px;background:linear-gradient(120deg,#0f3c69,#1d79a9);border-radius:17px;color:white;position:relative;min-height:210px;margin:17px 0;overflow:hidden}
+.l101-waiting-scene strong{font-size:21px}.l101-waiting-scene p{color:#d9edfa;max-width:440px}
+.l101-waiting-pulse{position:absolute;right:20px;bottom:12px;font-size:76px;color:#efd485;text-shadow:0 9px 21px #0c234982;animation:l101-pulse 2.2s ease-in-out infinite}
+@keyframes l101-pulse{0%,100%{opacity:.5;transform:scale(.93)}50%{opacity:1;transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.l101-waiting-pulse{animation:none}}
+
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>
