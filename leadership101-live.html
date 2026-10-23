@@ -132,10 +132,24 @@
 .l101-team-editor label{flex:1;min-width:0}.l101-team-editor button{flex:0 0 auto}
 @media(max-width:510px){.l101-team-editor{flex-direction:column;align-items:stretch}.l101-team-editor button{width:100%}}
 
+
+/* Leadership 101 Phase 4 — reliable live updates and keyboard access */
+.l101-connection[hidden]{display:none!important}
+.l101-connection{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;background:#fff8e9;border:1px solid #d2a75d;border-left:5px solid #d89a35;color:#724f20;border-radius:13px;padding:12px 16px;margin:-6px 0 18px;box-shadow:0 4px 12px #b17e2210}
+.l101-connection[data-state="offline"]{background:#fff2f2;border-color:#d796a3;color:#812f49}
+.l101-connection[data-state="updates"]{background:#eff8ff;border-color:#8dbfdc;color:#1a587e}
+.l101-connection .btn{padding:7px 12px;background:white}
+.l101-skip-link{position:fixed;left:8px;top:-100px;background:#fff;color:#0b385c;padding:9px 14px;border:2px solid #207da8;z-index:10000;border-radius:8px;font-weight:800}
+.l101-skip-link:focus{top:8px}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid #edb943!important;outline-offset:3px}
+.nc-drawer button:focus-visible{outline:3px solid #f1bd43}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media print{.l101-connection,.l101-skip-link{display:none!important}}
+
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print"><button id="tab-student" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>
 <div class="nc-shade" id="nc-shade"></div><aside class="nc-drawer" id="nc-drawer" role="dialog" aria-modal="true" aria-label="Instructor notifications"><div id="nc-body"></div></aside><div class="nc-toaststack" id="nc-toaststack" aria-live="polite"></div>
-<div class="wrap"><div class="hero"><div><div class="eyebrow">Practice · Reflect · Develop</div><h1 id="hero-title">Lead through the moment.</h1><p id="hero-subtitle">Join a Leadership 101 classroom, practice decisions, and receive observer feedback.</p></div><div style="font-size:50px;opacity:.65">✦</div></div><div id="app"></div><div id="print-report" class="report"></div></div><div id="feedback" role="status"></div><div class="footer">Fictional training scenarios · Student information is private to the participant and their assigned instructor.</div>
+<a class="l101-skip-link" href="#app">Skip to classroom</a><div class="wrap"><div class="hero"><div><div class="eyebrow">Practice · Reflect · Develop</div><h1 id="hero-title">Lead through the moment.</h1><p id="hero-subtitle">Join a Leadership 101 classroom, practice decisions, and receive observer feedback.</p></div><div style="font-size:50px;opacity:.65">✦</div></div><div id="l101-connection" class="l101-connection no-print" role="status" aria-live="polite" aria-atomic="true" hidden><span id="l101-connection-text">Connection interrupted.</span><button class="btn" id="l101-refresh-now" type="button">Retry connection</button></div><main id="app" tabindex="-1"></main><div id="print-report" class="report"></div></div><div id="feedback" role="status"></div><div class="footer">Fictional training scenarios · Student information is private to the participant and their assigned instructor.</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0/dist/umd/supabase.min.js"></script>
 <script type="module" src="/assets/leadership101-live.js"></script></body></html>
