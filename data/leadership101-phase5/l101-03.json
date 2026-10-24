@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "The Conflict Crossroads — An Unfolding Story",
+  "synopsis": "An action-oriented coordinator and a risk-focused analyst both want a strong result. Their conflicting strengths are now dividing the team.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Project workspace · Initial response",
+      "scene": "meeting",
+      "speaker": "Sofia Martinez",
+      "tone": "tense",
+      "title": "The Meeting Freezes",
+      "text": "Sofia calls Daniel a roadblock. Daniel fires back that Sofia makes promises nobody can deliver. Both turn to you as colleagues fall silent.",
+      "prompt": "What do you say while everyone is watching?",
+      "choices": [
+        {
+          "text": "Interrupt the personal remarks, acknowledge both priorities, and schedule a structured discussion.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Separate interests and behavior from assumptions about personality."
+        },
+        {
+          "text": "Tell them to act professionally and end the topic without clarifying next steps.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Publicly side with the faster employee and tell Daniel to stop blocking progress.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "The argument shifts underground; employees no longer trust the process for raising risk.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Project workspace · Initial response",
+      "scene": "office",
+      "speaker": "Sofia Martinez",
+      "tone": "reflective",
+      "title": "Two Valid Concerns",
+      "text": "In private, Sofia fears being seen as indecisive. Daniel fears being blamed if an unchecked launch fails. Rae says both have stopped listening.",
+      "prompt": "How do you surface their interests without choosing a villain?",
+      "choices": [
+        {
+          "text": "Use Rae to surface each person's underlying concern, then set criteria for a bounded test.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Separate interests and behavior from assumptions about personality."
+        },
+        {
+          "text": "Ask both to compromise quietly and send you one version without discussing differences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Project workspace · Initial response",
+      "scene": "hallway",
+      "speaker": "Daniel Park",
+      "tone": "uncertain",
+      "title": "The Truce That Isn't",
+      "text": "You ask them to be professional and move on. The next draft arrives with incompatible assumptions and pointed comments in the shared chat.",
+      "prompt": "How will you address the unresolved disagreement?",
+      "choices": [
+        {
+          "text": "Use Rae to surface each person's underlying concern, then set criteria for a bounded test.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Separate interests and behavior from assumptions about personality."
+        },
+        {
+          "text": "Ask both to compromise quietly and send you one version without discussing differences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Project workspace · Initial response",
+      "scene": "conflict",
+      "speaker": "Rae Johnson",
+      "tone": "defensive",
+      "title": "Picking a Winner",
+      "text": "Your public decision in Sofia's favor leaves Daniel feeling excluded. He stops raising risks; two smaller errors escape review.",
+      "prompt": "What will you repair before another decision?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Separate interests and behavior from assumptions about personality."
+        },
+        {
+          "text": "Give Sofia the decision and direct Daniel to sign off regardless of his concerns.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Project workspace · Developing situation",
+      "scene": "office",
+      "speaker": "Sofia Martinez",
+      "tone": "guarded",
+      "title": "A Structured Reset",
+      "text": "Both employees agree to one facilitated session, but each insists the other must apologize first. Rae can help set behavioral rules.",
+      "prompt": "What specific agreement will you seek?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Separate interests and behavior from assumptions about personality."
+        },
+        {
+          "text": "Ask both to compromise quietly and send you one version without discussing differences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Project workspace · Developing situation",
+      "scene": "planning",
+      "speaker": "Daniel Park",
+      "tone": "focused",
+      "title": "The Pilot Proposal",
+      "text": "Sofia proposes a limited pilot. Daniel provides three measurable safeguards. Morgan expects one recommendation tomorrow.",
+      "prompt": "How do you combine urgency with assurance?",
+      "choices": [
+        {
+          "text": "Use Rae to surface each person's underlying concern, then set criteria for a bounded test.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Emotional regulation makes a difficult conversation possible."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Project workspace · Developing situation",
+      "scene": "planning",
+      "speaker": "Rae Johnson",
+      "tone": "frustrated",
+      "title": "The Vague Compromise",
+      "text": "The pair agree to 'communicate better' but no one defines the release threshold. The stakeholder briefing is now at risk.",
+      "prompt": "What working rule must be documented?",
+      "choices": [
+        {
+          "text": "Use Rae to surface each person's underlying concern, then set criteria for a bounded test.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Emotional regulation makes a difficult conversation possible."
+        },
+        {
+          "text": "Ask both to compromise quietly and send you one version without discussing differences.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Project workspace · Developing situation",
+      "scene": "conflict",
+      "speaker": "Sofia Martinez",
+      "tone": "worried",
+      "title": "The Hidden Risk",
+      "text": "Daniel discovers a defect and hesitates to raise it after being labeled negative. Sofia assumes silence means agreement.",
+      "prompt": "How do you restore candid disagreement?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Emotional regulation makes a difficult conversation possible."
+        },
+        {
+          "text": "Give Sofia the decision and direct Daniel to sign off regardless of his concerns.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Project workspace · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Morgan Ellis",
+      "tone": "urgent",
+      "title": "Tomorrow's Recommendation",
+      "text": "Morgan asks for a joint recommendation. Sofia wants to move with a pilot; Daniel wants to complete a full review first.",
+      "prompt": "How do you lead a defensible decision?",
+      "choices": [
+        {
+          "text": "Propose a time-limited pilot with documented risk checks, owners and a stop rule.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Emotional regulation makes a difficult conversation possible."
+        },
+        {
+          "text": "Recommend the pilot without specifying how the team will detect harm.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Announce the plan while suppressing the unresolved quality warning.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "The argument shifts underground; employees no longer trust the process for raising risk.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Project workspace · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Daniel Park",
+      "tone": "hopeful",
+      "title": "A Decision With Guardrails",
+      "text": "A bounded pilot could resolve the disagreement if the team can name owners, limits, stop conditions and a review time.",
+      "prompt": "What will you record before the team commits?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Test a shared decision rule, not just a temporary truce."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Project workspace · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Morgan Ellis",
+      "tone": "firm",
+      "title": "Stakeholder Friction",
+      "text": "Morgan questions why two talented employees still disagree and asks you to decide alone. The team will notice how you handle pressure.",
+      "prompt": "How do you explain your decision process?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Test a shared decision rule, not just a temporary truce."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Project workspace · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Rae Johnson",
+      "tone": "exhausted",
+      "title": "The Conflict Spreads",
+      "text": "An accusatory chat message reaches the broader group. Trust is deteriorating even though the technical issue is solvable.",
+      "prompt": "How will you interrupt escalation and reestablish norms?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Sofia and Daniel can describe each other's constraints and begin testing a shared standard.",
+          "coaching": "Test a shared decision rule, not just a temporary truce."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The surface dispute cools, but decisions still depend on undefined expectations.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Project workspace · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The team runs a bounded pilot with transparent criteria. Disagreement becomes useful information instead of a personal contest.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Project workspace · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "A recommendation reaches Morgan, but trust and decision rules remain inconsistent. A facilitated reset is still needed.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Project workspace · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "The team launches without a shared risk standard. Errors and resentment grow, and leadership credibility takes a hit.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "A Vision Worth Following — An Unfolding Story",
+  "synopsis": "A compelling vision to improve accessibility and reduce delays sounds like a poster to employees who fear a hidden staffing cut.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Service unit · Initial response",
+      "scene": "meeting",
+      "speaker": "Wei Chen",
+      "tone": "tense",
+      "title": "A Poster Is Not a Plan",
+      "text": "After your presentation, Wei asks, “What changes on Monday, or is this just another slogan?” Several teammates nod.",
+      "prompt": "What do you say to connect purpose to the team's work?",
+      "choices": [
+        {
+          "text": "Explain the customer purpose, invite workflow examples, and name two testable priorities.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Translate aspiration into Monday-morning decisions."
+        },
+        {
+          "text": "Restate the inspiring message and promise detailed plans in a future meeting.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Tell Wei to stop undermining the initiative and focus on the target.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Staff stop asking questions and interpret every gap as evidence that leadership is hiding something.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Service unit · Initial response",
+      "scene": "planning",
+      "speaker": "Wei Chen",
+      "tone": "reflective",
+      "title": "The Monday-Morning Test",
+      "text": "Wei proposes a smaller intake experiment. Amira identifies customers the faster flow could leave behind. They want a priority, not a slogan.",
+      "prompt": "How will you turn the vision into a credible first step?",
+      "choices": [
+        {
+          "text": "Share what is known and unknown about staffing, then set a date to update the team.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Translate aspiration into Monday-morning decisions."
+        },
+        {
+          "text": "Tell staff not to worry because leadership will take care of everything.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Service unit · Initial response",
+      "scene": "hallway",
+      "speaker": "Amira Hassan",
+      "tone": "uncertain",
+      "title": "The Inspirational Email",
+      "text": "You send another inspiring message without answering Wei. Staff quietly begin treating the initiative as temporary management language.",
+      "prompt": "What practical question must you answer next?",
+      "choices": [
+        {
+          "text": "Share what is known and unknown about staffing, then set a date to update the team.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Translate aspiration into Monday-morning decisions."
+        },
+        {
+          "text": "Tell staff not to worry because leadership will take care of everything.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Service unit · Initial response",
+      "scene": "conflict",
+      "speaker": "Tessa Brooks",
+      "tone": "defensive",
+      "title": "No Room for Doubt",
+      "text": "You tell the team that the vision is nonnegotiable and questions signal resistance. Amira stops sharing customer feedback.",
+      "prompt": "How will you repair the communication climate?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Translate aspiration into Monday-morning decisions."
+        },
+        {
+          "text": "Dismiss the staffing rumor without asking what employees have heard.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Service unit · Developing situation",
+      "scene": "office",
+      "speaker": "Wei Chen",
+      "tone": "guarded",
+      "title": "Explaining the Tradeoffs",
+      "text": "Tessa offers to help shape a two-way briefing. Staff ask whether faster service means fewer people or reduced accessibility.",
+      "prompt": "How do you communicate when the budget remains unresolved?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Translate aspiration into Monday-morning decisions."
+        },
+        {
+          "text": "Tell staff not to worry because leadership will take care of everything.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Service unit · Developing situation",
+      "scene": "meeting",
+      "speaker": "Amira Hassan",
+      "tone": "focused",
+      "title": "The Staffing Rumor",
+      "text": "Amira hears the project is a pretext for cuts. Robert has not finalized next year's funding and you cannot guarantee the outcome.",
+      "prompt": "What can you communicate truthfully now?",
+      "choices": [
+        {
+          "text": "Share what is known and unknown about staffing, then set a date to update the team.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "State uncertainty plainly and respond to employee concerns."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Service unit · Developing situation",
+      "scene": "planning",
+      "speaker": "Tessa Brooks",
+      "tone": "frustrated",
+      "title": "Metrics Without Meaning",
+      "text": "The team has a speed target but no access measure. People worry that difficult cases will count against them.",
+      "prompt": "How will you redefine progress?",
+      "choices": [
+        {
+          "text": "Share what is known and unknown about staffing, then set a date to update the team.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "State uncertainty plainly and respond to employee concerns."
+        },
+        {
+          "text": "Tell staff not to worry because leadership will take care of everything.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Service unit · Developing situation",
+      "scene": "conflict",
+      "speaker": "Wei Chen",
+      "tone": "worried",
+      "title": "Resistance Goes Quiet",
+      "text": "Wei's improvement idea stalls and employees nod in meetings while privately questioning the rationale. Customer complaints begin to rise.",
+      "prompt": "What feedback channel would reveal the gap?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "State uncertainty plainly and respond to employee concerns."
+        },
+        {
+          "text": "Dismiss the staffing rumor without asking what employees have heard.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Service unit · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Robert King",
+      "tone": "urgent",
+      "title": "A Faster But Less Fair Proposal",
+      "text": "Robert asks for turnaround reductions. Amira warns that the quickest routing method could harm customers with complex needs.",
+      "prompt": "How will you define success?",
+      "choices": [
+        {
+          "text": "Measure both turnaround and accessibility, assign owners, and share results with employees.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "State uncertainty plainly and respond to employee concerns."
+        },
+        {
+          "text": "Report speed improvements and mention access concerns only if asked.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Optimize speed alone even when complex customers are left waiting.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Staff stop asking questions and interpret every gap as evidence that leadership is hiding something.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Service unit · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Amira Hassan",
+      "tone": "hopeful",
+      "title": "Vision Becomes a Routine",
+      "text": "Two measurable actions are feasible: reduce avoidable rework and track accessible resolution for complex cases. Teams want to know who owns each.",
+      "prompt": "What will sustain these commitments?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Balance speed with access and customer outcomes."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Service unit · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Robert King",
+      "tone": "firm",
+      "title": "The Director's Scorecard",
+      "text": "Robert praises a speed-only dashboard. You have evidence that accessibility has declined for a smaller group of customers.",
+      "prompt": "How do you present the full picture?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Balance speed with access and customer outcomes."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Service unit · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Tessa Brooks",
+      "tone": "exhausted",
+      "title": "A Credibility Gap",
+      "text": "Employees learn that a promised change will not be funded this quarter. They are disappointed and question whether anything else was real.",
+      "prompt": "What will you correct and recommit to?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Wei and Amira see their real work reflected in the vision and offer concrete improvements.",
+          "coaching": "Balance speed with access and customer outcomes."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "People understand the headline but are unsure which daily tradeoffs they can make.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Service unit · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The vision guides daily tradeoffs, employees know what is uncertain, and the team tracks both speed and customer access.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Service unit · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "The team adopts some useful steps, but credibility will depend on honest updates and sustained follow-through.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Service unit · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "An impressive slogan masks degraded access and unresolved staff concerns. Trust collapses when the results surface.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "The Deadline and the Team — An Unfolding Story",
+  "synopsis": "Ten days to deliver. Your best specialist is exhausted, your newest colleague wants to help, and a director wants certainty you do not have.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Operations unit · Initial response",
+      "scene": "meeting",
+      "speaker": "Malik Thompson",
+      "tone": "tense",
+      "title": "The Stand-up Erupts",
+      "text": "Malik misses a handoff and snaps, “I'm doing the work of three people.” Other employees look down at their desks while the Friday work queue grows.",
+      "prompt": "How do you handle the missed handoff and Malik's warning?",
+      "choices": [
+        {
+          "text": "Acknowledge the missed handoff, check on Malik privately, and audit the distribution of work.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Protect sustainable performance; attend to both task and relationship."
+        },
+        {
+          "text": "Thank Malik for the honesty, then ask everyone to push through until Friday.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Criticize Malik for the tone and order the team to work harder.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Employees become reluctant to report overload, and preventable defects begin stacking up.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Operations unit · Initial response",
+      "scene": "office",
+      "speaker": "Malik Thompson",
+      "tone": "reflective",
+      "title": "The Private Conversation",
+      "text": "Away from the stand-up, Malik shows you three assignments that no one else can yet complete. He fears that asking for help will be treated as poor performance.",
+      "prompt": "What will make this conversation both supportive and accountable?",
+      "choices": [
+        {
+          "text": "Give Hannah a bounded task, pair her with a reviewer, and publish ownership and escalation rules.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Protect sustainable performance; attend to both task and relationship."
+        },
+        {
+          "text": "Let Hannah take the complex work immediately and hope Malik can check it later.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Operations unit · Initial response",
+      "scene": "planning",
+      "speaker": "Hannah Lee",
+      "tone": "uncertain",
+      "title": "An Easy Promise",
+      "text": "You tell the team to keep pushing and say you will review capacity after the deadline. Hannah asks whether she should take Malik's complex queue tonight.",
+      "prompt": "What do you clarify before another handoff fails?",
+      "choices": [
+        {
+          "text": "Give Hannah a bounded task, pair her with a reviewer, and publish ownership and escalation rules.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Protect sustainable performance; attend to both task and relationship."
+        },
+        {
+          "text": "Let Hannah take the complex work immediately and hope Malik can check it later.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Operations unit · Initial response",
+      "scene": "conflict",
+      "speaker": "Nora Patel",
+      "tone": "defensive",
+      "title": "The Public Warning",
+      "text": "Your sharp correction silences Malik. Nora privately reports people are now hiding skipped breaks and quality flags so they will not appear uncommitted.",
+      "prompt": "How do you address the chilling effect?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Protect sustainable performance; attend to both task and relationship."
+        },
+        {
+          "text": "Keep every complicated item on Malik's desk and demand daily overtime updates.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Operations unit · Developing situation",
+      "scene": "office",
+      "speaker": "Malik Thompson",
+      "tone": "guarded",
+      "title": "A Repair That Costs Time",
+      "text": "Malik agrees to speak again but asks whether you will actually change assignments. The team is listening for concrete action rather than another apology.",
+      "prompt": "What observable repair do you make?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Protect sustainable performance; attend to both task and relationship."
+        },
+        {
+          "text": "Let Hannah take the complex work immediately and hope Malik can check it later.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Operations unit · Developing situation",
+      "scene": "planning",
+      "speaker": "Hannah Lee",
+      "tone": "focused",
+      "title": "Hannah Volunteers",
+      "text": "Hannah offers to take Malik's hardest task. Malik worries that an untrained handoff could create days of rework; Nora has a workload breakdown.",
+      "prompt": "How will you share work without simply transferring risk?",
+      "choices": [
+        {
+          "text": "Give Hannah a bounded task, pair her with a reviewer, and publish ownership and escalation rules.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "A firm date is not a license to hide capacity limits."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Operations unit · Developing situation",
+      "scene": "hallway",
+      "speaker": "Nora Patel",
+      "tone": "frustrated",
+      "title": "The Ownership Gap",
+      "text": "Two urgent cases have been reassigned in a hurry, but neither worker knows who checks quality. A deadline that looked recoverable is slipping again.",
+      "prompt": "How do you rebuild a workable handoff?",
+      "choices": [
+        {
+          "text": "Give Hannah a bounded task, pair her with a reviewer, and publish ownership and escalation rules.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "A firm date is not a license to hide capacity limits."
+        },
+        {
+          "text": "Let Hannah take the complex work immediately and hope Malik can check it later.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Operations unit · Developing situation",
+      "scene": "conflict",
+      "speaker": "Malik Thompson",
+      "tone": "worried",
+      "title": "Quiet Overtime",
+      "text": "After the reprimand, Malik stops reporting problems. Another colleague mentions he has been fixing errors late at night without recording the effort.",
+      "prompt": "What evidence will you seek before changing priorities?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "A firm date is not a license to hide capacity limits."
+        },
+        {
+          "text": "Keep every complicated item on Malik's desk and demand daily overtime updates.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Operations unit · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Cameron Brooks",
+      "tone": "urgent",
+      "title": "The Director Calls",
+      "text": "Cameron asks, “Are you promising the complete deliverable by Friday?” Nora's figures show that is possible only with reduced scope or new capacity.",
+      "prompt": "What forecast and recommendation will you provide?",
+      "choices": [
+        {
+          "text": "Offer Cameron a verified forecast, a reduced-scope option, and a staffing decision with checkpoints.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "A firm date is not a license to hide capacity limits."
+        },
+        {
+          "text": "Commit to Friday but say the team will somehow find a way.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Conceal the quality risk and present the optimistic dashboard number.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Employees become reluctant to report overload, and preventable defects begin stacking up.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Operations unit · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Hannah Lee",
+      "tone": "hopeful",
+      "title": "A Credible Delivery Plan",
+      "text": "The team proposes a phased delivery, quality review and daily risk check. Cameron will support an amended commitment if the tradeoffs are explicit.",
+      "prompt": "What must your final team briefing establish?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Responsible delegation requires training, checkpoints, and ownership."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Operations unit · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Cameron Brooks",
+      "tone": "firm",
+      "title": "The Difficult Escalation",
+      "text": "Cameron questions why the original forecast was wrong. Malik worries leadership will see him as the problem rather than the bottleneck.",
+      "prompt": "How do you present facts and protect fair accountability?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Responsible delegation requires training, checkpoints, and ownership."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Operations unit · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Nora Patel",
+      "tone": "exhausted",
+      "title": "A Preventable Rework Loop",
+      "text": "An unchecked handoff produces defects and two workers volunteer to stay late. The original target is no longer credible.",
+      "prompt": "How will you contain the error and reset expectations?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Malik shares the real backlog, Hannah receives a safe learning task, and the team starts flagging risks earlier.",
+          "coaching": "Responsible delegation requires training, checkpoints, and ownership."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "A temporary sense of calm leaves important ownership and quality questions unresolved.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Operations unit · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The revised plan meets critical needs without concealing risk. Malik receives sustainable support, Hannah learns safely, and the team owns its handoffs.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Operations unit · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "Some work ships, but the team remains stretched and the forecast requires repair. People are watching whether you follow through.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Operations unit · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "The team misses an avoidable defect, burnout worsens, and Cameron learns the true position too late. A credible recovery plan is now essential.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

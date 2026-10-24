@@ -144,7 +144,51 @@ function storyExperienceMarkup(d){
  crisis:'/assets/leadership-escape/fractured-team.webp',
  executive:'/assets/leadership-101/ethics/executive-review.jpg'
  };
- var bg=backgrounds[scene]||backgrounds.meeting,trust=Number(st.trust||0),pressure=Number(st.pressure||0);
+ // Phase 5: reuse topic-specific site artwork across opening/conflict, conversation and planning scenes.
+ var scenarioArtwork={
+ "l101-02": [
+  "/assets/leadership-101/obstacles/bottleneck-office.avif",
+  "/assets/leadership-101/ethics/people-trust-suite.jpg",
+  "/assets/leadership-escape/style-switch.webp"
+ ],
+ "l101-03": [
+  "/assets/leadership-escape/managing-conflict.webp",
+  "/assets/leadership-escape/four-styles.webp",
+  "/assets/leadership-escape/style-switch.webp"
+ ],
+ "l101-04": [
+  "/assets/leadership-escape/fractured-team.webp",
+  "/assets/leadership-101/ethics/people-trust-suite.jpg",
+  "/assets/leadership-escape/style-switch.webp"
+ ],
+ "l101-05": [
+  "/assets/leadership-101/ethics/executive-review.jpg",
+  "/assets/leadership-101/ethics/people-trust-suite.jpg",
+  "/assets/leadership-escape/style-switch.webp"
+ ],
+ "l101-06": [
+  "/assets/leadership-101/ethics/records-office.jpg",
+  "/assets/leadership-101/ethics/people-trust-suite.jpg",
+  "/assets/leadership-101/ethics/executive-review.jpg"
+ ],
+ "l101-07": [
+  "/assets/leadership-escape/style-switch.webp",
+  "/assets/leadership-101/ethics/people-trust-suite.jpg",
+  "/assets/leadership-escape/four-styles.webp"
+ ],
+ "l101-08": [
+  "/assets/leadership-101/destructive/pressure-office.avif",
+  "/assets/leadership-101/destructive/silence-suite.avif",
+  "/assets/leadership-101/destructive/accountability-review.avif"
+ ],
+ "l101-09": [
+  "/assets/leadership-101/obstacles/friction-zone.avif",
+  "/assets/leadership-101/obstacles/bottleneck-office.avif",
+  "/assets/leadership-101/obstacles/breakthrough-chamber.avif"
+ ]
+};
+ var themedImages=scenarioArtwork[String(d.scenario&&d.scenario.id||'')],sceneImageIndex=/^(office|hallway|corridor)$/.test(scene)?1:/^(planning|executive|meeting)$/.test(scene)?2:0;
+ var bg=themedImages?themedImages[sceneImageIndex]:backgrounds[scene]||backgrounds.meeting,trust=Number(st.trust||0),pressure=Number(st.pressure||0);
  var trustLabel=trust>=6?'Growing confidence':trust>=0?'Cautious confidence':'Trust under strain';
  var pressureLabel=pressure>=7?'High operational pressure':pressure>=2?'Pressure increasing':'Pressure manageable';
  var stage='<div class="l101-stage l101-stage-'+scene+'" style="background-image:linear-gradient(90deg,rgba(7,33,60,.94),rgba(14,54,88,.76),rgba(9,46,72,.38)),url('+bg+')">'

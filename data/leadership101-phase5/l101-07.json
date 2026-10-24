@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "When Excellence Plateaus — An Unfolding Story",
+  "synopsis": "Your top performer wants to grow. Praise alone no longer helps, but an unlimited stretch assignment could create more harm than development.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Development meeting · Initial response",
+      "scene": "office",
+      "speaker": "Leah Brooks",
+      "tone": "tense",
+      "title": "What Should I Improve?",
+      "text": "After another 'great job,' Leah asks, “What would make me a stronger leader?” You realize you have not offered meaningful developmental feedback in months.",
+      "prompt": "How will you answer the request?",
+      "choices": [
+        {
+          "text": "Give Leah evidence-based feedback and ask which leadership skill she most wants to develop.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Coach toward a specific, observable growth skill."
+        },
+        {
+          "text": "Offer more general praise and promise to think about a stretch role later.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Imply promotion is guaranteed if Leah takes on more work.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Leah becomes the team's permanent bottleneck and starts questioning whether leadership values her growth.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Development meeting · Initial response",
+      "scene": "meeting",
+      "speaker": "Leah Brooks",
+      "tone": "reflective",
+      "title": "An Ambition With Direction",
+      "text": "Leah is interested in influencing cross-team decisions, not simply handling more tasks. She asks what behaviors she should practice.",
+      "prompt": "What development goal would build capability?",
+      "choices": [
+        {
+          "text": "Set an observable coaching goal for Leah and give Omar bounded practice with review.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Coach toward a specific, observable growth skill."
+        },
+        {
+          "text": "Ask Leah to mentor Omar informally while completing all difficult cases herself.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Development meeting · Initial response",
+      "scene": "hallway",
+      "speaker": "Omar Hassan",
+      "tone": "uncertain",
+      "title": "The Praise Loop",
+      "text": "You tell Leah to keep doing what she is doing. She smiles, but later asks Angela about opportunities outside the unit.",
+      "prompt": "What evidence will you use to reset the conversation?",
+      "choices": [
+        {
+          "text": "Set an observable coaching goal for Leah and give Omar bounded practice with review.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Coach toward a specific, observable growth skill."
+        },
+        {
+          "text": "Ask Leah to mentor Omar informally while completing all difficult cases herself.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Development meeting · Initial response",
+      "scene": "conflict",
+      "speaker": "Angela Ortiz",
+      "tone": "defensive",
+      "title": "The Promotion Shortcut",
+      "text": "You imply that a promotion is imminent, although no opening exists. Leah begins acting as unofficial supervisor while peers grow uncertain.",
+      "prompt": "How will you correct the expectation?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Coach toward a specific, observable growth skill."
+        },
+        {
+          "text": "Make Leah responsible for everyone's quality without reducing her own workload.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Development meeting · Developing situation",
+      "scene": "office",
+      "speaker": "Leah Brooks",
+      "tone": "guarded",
+      "title": "Specific Coaching",
+      "text": "Leah shares a recent meeting where she solved a problem quickly but never let Omar practice. She wants feedback on how to coach rather than rescue.",
+      "prompt": "What will you ask her to try?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Coach toward a specific, observable growth skill."
+        },
+        {
+          "text": "Ask Leah to mentor Omar informally while completing all difficult cases herself.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Development meeting · Developing situation",
+      "scene": "planning",
+      "speaker": "Omar Hassan",
+      "tone": "focused",
+      "title": "Omar's Shortcut",
+      "text": "Omar relies on Leah to fix complicated cases. Leah admits that doing the work herself is faster and has become routine.",
+      "prompt": "How will you build both employees' skills?",
+      "choices": [
+        {
+          "text": "Set an observable coaching goal for Leah and give Omar bounded practice with review.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Help employees learn without letting experts do their work."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Development meeting · Developing situation",
+      "scene": "planning",
+      "speaker": "Angela Ortiz",
+      "tone": "frustrated",
+      "title": "Development by Extra Work",
+      "text": "Leah is given additional assignments but no protected time. Omar remains dependent, and routine quality checks suffer.",
+      "prompt": "How will you adjust the plan?",
+      "choices": [
+        {
+          "text": "Set an observable coaching goal for Leah and give Omar bounded practice with review.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Help employees learn without letting experts do their work."
+        },
+        {
+          "text": "Ask Leah to mentor Omar informally while completing all difficult cases herself.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Development meeting · Developing situation",
+      "scene": "conflict",
+      "speaker": "Leah Brooks",
+      "tone": "worried",
+      "title": "The Expert Bottleneck",
+      "text": "Colleagues now wait for Leah before making basic decisions. She is missing the opportunity to lead through others.",
+      "prompt": "What behavior must change?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Help employees learn without letting experts do their work."
+        },
+        {
+          "text": "Make Leah responsible for everyone's quality without reducing her own workload.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Development meeting · Decision and aftermath",
+      "scene": "meeting",
+      "speaker": "Kai Nguyen",
+      "tone": "urgent",
+      "title": "Kai's Pilot Invitation",
+      "text": "Kai invites Leah to coordinate a pilot with two extra meetings each week. Angela warns her workload is already high.",
+      "prompt": "How will you evaluate the opportunity?",
+      "choices": [
+        {
+          "text": "Approve a scoped pilot with time protection, check-ins and a clear skills-based success measure.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Help employees learn without letting experts do their work."
+        },
+        {
+          "text": "Approve the pilot but leave scope and schedule to Leah to figure out.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Accept every extra request from Kai and call the increased workload development.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Leah becomes the team's permanent bottleneck and starts questioning whether leadership values her growth.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Development meeting · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Omar Hassan",
+      "tone": "hopeful",
+      "title": "A Stretch With Guardrails",
+      "text": "Leah can lead the pilot if routine work is redistributed and success includes collaboration and coaching, not just output.",
+      "prompt": "What measurable safeguards will you set?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Protect stretch assignments with scope, coverage, and feedback."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Development meeting · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Kai Nguyen",
+      "tone": "firm",
+      "title": "A Limited Promotion Budget",
+      "text": "Angela cannot promise a promotion and worries Leah will interpret a development assignment as extra labor without recognition.",
+      "prompt": "How will you discuss opportunity and limits honestly?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Protect stretch assignments with scope, coverage, and feedback."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Development meeting · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Angela Ortiz",
+      "tone": "exhausted",
+      "title": "The Pilot Expands",
+      "text": "Kai asks Leah to take on unrelated tasks. Omar again needs help, and Leah starts skipping development check-ins.",
+      "prompt": "How will you prevent overextension?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Leah sees a real learning path, and Omar begins doing work independently under appropriate supervision.",
+          "coaching": "Protect stretch assignments with scope, coverage, and feedback."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Growth sounds promising, but support, workload and success measures remain vague.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Development meeting · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "Leah develops influence and coaching skills through a protected pilot, while Omar gains independence and the team shares expertise.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Development meeting · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "The stretch experience begins, but responsibilities and feedback require adjustment before it becomes sustainable.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Development meeting · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "Leah burns out while doing everyone's work. Development is confused with unpaid overload, and retention risk rises.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

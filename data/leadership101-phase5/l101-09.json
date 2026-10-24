@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "The Obstacle Course — An Unfolding Story",
+  "synopsis": "Two days before launch, a test fails. A tempting workaround competes with deeper design concerns, and your sponsor wants a decision by five.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Service pilot lab · Initial response",
+      "scene": "crisis",
+      "speaker": "Omar Haddad",
+      "tone": "tense",
+      "title": "The Failed Test",
+      "text": "The redesigned service fails a major customer test. Omar says to scrap the project; Grace sees a specific unresolved defect; Ben wants an immediate workaround.",
+      "prompt": "What is the first leadership move?",
+      "choices": [
+        {
+          "text": "Stabilize the team, separate facts from assumptions, and ask for a bounded failure analysis.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Distinguish what failed from why it failed."
+        },
+        {
+          "text": "Promise a workaround will save the deadline before testing it.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Blame the implementation specialist and order a launch regardless of the defect.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "An unverified shortcut becomes the plan and customers inherit the unresolved risk.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Service pilot lab · Initial response",
+      "scene": "planning",
+      "speaker": "Omar Haddad",
+      "tone": "reflective",
+      "title": "Facts Before Fault",
+      "text": "Grace can isolate the failure, but Omar feels personally responsible. Ben argues there is no time for another review.",
+      "prompt": "How will you separate root cause from blame?",
+      "choices": [
+        {
+          "text": "Require an accessibility check and acceptance criteria before approving Ben's workaround.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Distinguish what failed from why it failed."
+        },
+        {
+          "text": "Run a quick demonstration and treat passing examples as sufficient.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Service pilot lab · Initial response",
+      "scene": "hallway",
+      "speaker": "Grace Kim",
+      "tone": "uncertain",
+      "title": "Keep the Date",
+      "text": "You tell the team the launch is still on while evidence is incomplete. The workaround gets circulated as if it were approved.",
+      "prompt": "What immediate control is needed?",
+      "choices": [
+        {
+          "text": "Require an accessibility check and acceptance criteria before approving Ben's workaround.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Distinguish what failed from why it failed."
+        },
+        {
+          "text": "Run a quick demonstration and treat passing examples as sufficient.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Service pilot lab · Initial response",
+      "scene": "conflict",
+      "speaker": "Ben Wallace",
+      "tone": "defensive",
+      "title": "The Blame Meeting",
+      "text": "You demand to know who caused the failure. Omar withdraws, and Grace stops explaining how the issue affects customers using assistive tools.",
+      "prompt": "How will you restore useful information?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Distinguish what failed from why it failed."
+        },
+        {
+          "text": "Bypass the concern because most customers are unlikely to notice.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Service pilot lab · Developing situation",
+      "scene": "office",
+      "speaker": "Omar Haddad",
+      "tone": "guarded",
+      "title": "Resetting the Question",
+      "text": "Omar is willing to help with diagnosis if the meeting focuses on learning. Grace asks for one controlled test before a decision.",
+      "prompt": "What hypothesis and evidence will you prioritize?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Distinguish what failed from why it failed."
+        },
+        {
+          "text": "Run a quick demonstration and treat passing examples as sufficient.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Service pilot lab · Developing situation",
+      "scene": "planning",
+      "speaker": "Grace Kim",
+      "tone": "focused",
+      "title": "Ben's Fast Fix",
+      "text": "Ben demonstrates a workaround that restores most features. Grace notes that it may fail accessibility checks.",
+      "prompt": "How will you assess the tradeoff?",
+      "choices": [
+        {
+          "text": "Require an accessibility check and acceptance criteria before approving Ben's workaround.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Use bounded tests and risk criteria rather than false certainty."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Service pilot lab · Developing situation",
+      "scene": "planning",
+      "speaker": "Ben Wallace",
+      "tone": "frustrated",
+      "title": "An Undefined Acceptance Test",
+      "text": "The team says the workaround 'looks good,' but there is no agreed threshold for customer safety or accessibility.",
+      "prompt": "What must pass before launch is reconsidered?",
+      "choices": [
+        {
+          "text": "Require an accessibility check and acceptance criteria before approving Ben's workaround.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Use bounded tests and risk criteria rather than false certainty."
+        },
+        {
+          "text": "Run a quick demonstration and treat passing examples as sufficient.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Service pilot lab · Developing situation",
+      "scene": "conflict",
+      "speaker": "Omar Haddad",
+      "tone": "worried",
+      "title": "A Team Afraid to Stop",
+      "text": "The team is exhausted and reluctant to question the launch date. Ben believes any delay will be read as failure.",
+      "prompt": "How do you create space for a defensible stop decision?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Use bounded tests and risk criteria rather than false certainty."
+        },
+        {
+          "text": "Bypass the concern because most customers are unlikely to notice.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Service pilot lab · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Nadia Roberts",
+      "tone": "urgent",
+      "title": "The Five O'Clock Brief",
+      "text": "Nadia asks whether to launch, delay, or reduce scope. You have a preliminary cause analysis and two credible options, not complete certainty.",
+      "prompt": "How will you frame the recommendation?",
+      "choices": [
+        {
+          "text": "Give Nadia a risk-based recommendation with options, confidence limits and a retest plan.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Use bounded tests and risk criteria rather than false certainty."
+        },
+        {
+          "text": "Tell Nadia launch should work without stating the unresolved risk.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Hide the failing test and confirm the original launch date.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "An unverified shortcut becomes the plan and customers inherit the unresolved risk.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Service pilot lab · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Grace Kim",
+      "tone": "hopeful",
+      "title": "A Controlled Recovery",
+      "text": "A reduced-scope pilot and explicit re-test would protect customer needs while preserving some momentum.",
+      "prompt": "What monitoring and exit conditions will you require?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Communicate decisions, uncertainties and learning clearly."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Service pilot lab · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Nadia Roberts",
+      "tone": "firm",
+      "title": "Sponsor Resistance",
+      "text": "Nadia worries that a delay will be politically difficult. Your responsibility is to describe cost, risk and decision criteria without exaggeration.",
+      "prompt": "How will you advise upward?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Communicate decisions, uncertainties and learning clearly."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Service pilot lab · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Ben Wallace",
+      "tone": "exhausted",
+      "title": "The Shortcut Breaks",
+      "text": "The workaround fails an additional edge case. The team realizes a full launch could expose customers to avoidable harm.",
+      "prompt": "What will you stop, preserve and communicate now?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Omar contributes to diagnosis, Grace's accessibility evidence is reviewed, and Ben can test a bounded option.",
+          "coaching": "Communicate decisions, uncertainties and learning clearly."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team sees a possible path but cannot yet defend its acceptance criteria or external message.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Service pilot lab · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The team makes a transparent, criteria-based decision. The controlled pilot preserves accessibility and produces useful learning.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Service pilot lab · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "The launch decision is partially stabilized, but tests, ownership and sponsor updates still require a stronger agreement.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Service pilot lab · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "The team commits to an unsafe schedule. The unresolved defect spreads and a preventable failure damages trust.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}
