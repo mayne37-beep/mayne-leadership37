@@ -1,4 +1,4 @@
-name: Leadership 101 Phase 4 Regression Checks
+name: Leadership 101 Regression Checks
 
 on:
   pull_request:
@@ -7,6 +7,8 @@ on:
       - 'src/leadership101-builder.js'
       - 'leadership101-live.html'
       - 'data/leadership101-first-time-leader-story.json'
+      - 'data/leadership101-phase5/**'
+      - 'scripts/test-leadership101-phase5.mjs'
       - 'scripts/test-leadership101-phase4.mjs'
       - '.github/workflows/leadership101-phase4.yml'
   push:
@@ -16,6 +18,8 @@ on:
       - 'src/leadership101-builder.js'
       - 'leadership101-live.html'
       - 'data/leadership101-first-time-leader-story.json'
+      - 'data/leadership101-phase5/**'
+      - 'scripts/test-leadership101-phase5.mjs'
       - 'scripts/test-leadership101-phase4.mjs'
       - '.github/workflows/leadership101-phase4.yml'
 
@@ -33,4 +37,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run regression tests
-        run: node --test scripts/test-leadership101-phase4.mjs
+        run: node --test scripts/test-leadership101-phase4.mjs scripts/test-leadership101-phase5.mjs
