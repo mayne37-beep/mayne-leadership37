@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "The Integrity Test — An Unfolding Story",
+  "synopsis": "A quarterly report overstates completion. You have hours to correct it while senior leadership pressures you to preserve a flattering headline.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Performance reporting office · Initial response",
+      "scene": "office",
+      "speaker": "Dev Patel",
+      "tone": "tense",
+      "title": "Ninety-Four or Eighty-One?",
+      "text": "Dev finds that unfinished cases were included in a 94% completion rate. The verified figure may be closer to 81%. “Please don't make this public,” Dev says.",
+      "prompt": "What is your first response?",
+      "choices": [
+        {
+          "text": "Pause release of the metric, preserve the source records, and ask Nina to verify the calculation.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Distinguish an honest error from intentional misconduct."
+        },
+        {
+          "text": "Tell Dev you will fix the number later if anyone notices.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Keep the 94% because the underlying trend is still positive.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "The misleading statistic spreads and staff learn that appearance matters more than facts.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Performance reporting office · Initial response",
+      "scene": "planning",
+      "speaker": "Dev Patel",
+      "tone": "reflective",
+      "title": "Behind the Spreadsheet",
+      "text": "Nina shows you an ambiguous field label that may explain the error. Dev is anxious and insists there was no intent to deceive.",
+      "prompt": "What will you verify before assigning responsibility?",
+      "choices": [
+        {
+          "text": "Document the verified definition and correction, and treat Dev's intent as an open question.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Distinguish an honest error from intentional misconduct."
+        },
+        {
+          "text": "Tell Dev the problem is solved but skip documenting why it happened.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Performance reporting office · Initial response",
+      "scene": "hallway",
+      "speaker": "Nina Foster",
+      "tone": "uncertain",
+      "title": "The Convenient Footnote",
+      "text": "You leave the original chart in place pending a later review. The presentation is already circulating for final approval.",
+      "prompt": "How will you prevent a misleading decision today?",
+      "choices": [
+        {
+          "text": "Document the verified definition and correction, and treat Dev's intent as an open question.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Distinguish an honest error from intentional misconduct."
+        },
+        {
+          "text": "Tell Dev the problem is solved but skip documenting why it happened.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Performance reporting office · Initial response",
+      "scene": "executive",
+      "speaker": "Olivia Reed",
+      "tone": "defensive",
+      "title": "Keep the Headline",
+      "text": "Olivia says revising the metric will make the unit look incompetent and suggests offering context only if someone asks.",
+      "prompt": "How will you address the pressure from above?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Distinguish an honest error from intentional misconduct."
+        },
+        {
+          "text": "Blame Dev publicly before the validation is complete.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Performance reporting office · Developing situation",
+      "scene": "office",
+      "speaker": "Dev Patel",
+      "tone": "guarded",
+      "title": "A Careful Correction",
+      "text": "Olivia is unhappy but agrees to hear a concise explanation. Nina can validate the record; Dev needs fair treatment.",
+      "prompt": "What accurate correction and documentation will you provide?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Distinguish an honest error from intentional misconduct."
+        },
+        {
+          "text": "Tell Dev the problem is solved but skip documenting why it happened.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Performance reporting office · Developing situation",
+      "scene": "planning",
+      "speaker": "Nina Foster",
+      "tone": "focused",
+      "title": "Who Owns the Definition?",
+      "text": "The team finds that two units counted 'complete' differently. The discrepancy is material but the cause is not yet fully resolved.",
+      "prompt": "How will you document and disclose uncertainty?",
+      "choices": [
+        {
+          "text": "Document the verified definition and correction, and treat Dev's intent as an open question.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Correct material information before it is relied upon."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Performance reporting office · Developing situation",
+      "scene": "planning",
+      "speaker": "Olivia Reed",
+      "tone": "frustrated",
+      "title": "Corrected but Unclear",
+      "text": "A revised chart is prepared, but the definition of 'complete' is missing. Readers could make the same mistake next quarter.",
+      "prompt": "What control would stop a repeat?",
+      "choices": [
+        {
+          "text": "Document the verified definition and correction, and treat Dev's intent as an open question.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Correct material information before it is relied upon."
+        },
+        {
+          "text": "Tell Dev the problem is solved but skip documenting why it happened.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Performance reporting office · Developing situation",
+      "scene": "conflict",
+      "speaker": "Dev Patel",
+      "tone": "worried",
+      "title": "Fear of Speaking Up",
+      "text": "Dev says they almost stayed silent because people are punished for bad news. Nina confirms earlier questions about the field were not answered.",
+      "prompt": "What accountability climate will you establish?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Correct material information before it is relied upon."
+        },
+        {
+          "text": "Blame Dev publicly before the validation is complete.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Performance reporting office · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Andre Lewis",
+      "tone": "urgent",
+      "title": "The Noon Briefing",
+      "text": "Andre needs the figures now. Olivia still hopes the original 94% can be shown as a trend line, even though it includes incomplete work.",
+      "prompt": "What will your briefing say?",
+      "choices": [
+        {
+          "text": "Brief Andre with the corrected figure, methodology and a follow-up control plan.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Correct material information before it is relied upon."
+        },
+        {
+          "text": "Use the old slide and offer the caveat only verbally.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Present 94% as verified, knowing unfinished work was included.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "The misleading statistic spreads and staff learn that appearance matters more than facts.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Performance reporting office · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Nina Foster",
+      "tone": "hopeful",
+      "title": "A Defensible Record",
+      "text": "Nina has a verified correction and Dev has described the compilation process. Your explanation can separate facts from unresolved intent.",
+      "prompt": "What follow-up will make the record reliable?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Document and escalate facts fairly, without overpromising confidentiality."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Performance reporting office · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Andre Lewis",
+      "tone": "firm",
+      "title": "A Hard Question From Andre",
+      "text": "Andre asks how the incorrect number reached leadership and what action you have taken. Speculation about Dev would be easy but unfair.",
+      "prompt": "How will you answer without hiding responsibility?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Document and escalate facts fairly, without overpromising confidentiality."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Performance reporting office · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Olivia Reed",
+      "tone": "exhausted",
+      "title": "The Misleading Deck Is Sent",
+      "text": "The uncorrected file reaches a stakeholder. They quote the 94% figure in another briefing.",
+      "prompt": "How will you contain and correct the record?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "The record becomes more accurate while Dev and Nina can raise data quality concerns safely.",
+          "coaching": "Document and escalate facts fairly, without overpromising confidentiality."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "An incomplete explanation leaves readers uncertain which figure they can rely on.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Performance reporting office · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The corrected report is delivered transparently. Dev receives fair review, and new validation controls reduce repeat errors.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Performance reporting office · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "The immediate record improves, but accountability and measurement standards still need documented follow-through.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Performance reporting office · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "The overstated result informs decisions and the correction arrives late. Restoring credibility will require formal remediation.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

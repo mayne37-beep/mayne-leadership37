@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "Team Northstar — An Unfolding Story",
+  "synopsis": "A new cross-functional team has six weeks to improve onboarding. Its strongest voices dominate meetings while work ownership stays unclear.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Northstar team room · Initial response",
+      "scene": "meeting",
+      "speaker": "Aisha Okafor",
+      "tone": "tense",
+      "title": "The Idea That Stops Mid-Sentence",
+      "text": "Grant interrupts Aisha: “We already tried that.” Aisha stops speaking. Oscar has data but stays quiet, waiting to see what the leader will do.",
+      "prompt": "How do you intervene without dismissing Grant's experience?",
+      "choices": [
+        {
+          "text": "Thank Grant for the context, invite Aisha to finish, and ask Oscar for relevant evidence.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Build norms that make participation safe and useful."
+        },
+        {
+          "text": "Promise to return to Aisha after the meeting without changing how airtime is allocated.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Let Grant dismiss the idea because he has the longest experience.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "People retreat into departmental positions and customer problems remain hidden.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Northstar team room · Initial response",
+      "scene": "office",
+      "speaker": "Aisha Okafor",
+      "tone": "reflective",
+      "title": "The Voices You Didn't Hear",
+      "text": "Aisha privately explains a customer problem the earlier project missed. Grant believes the old failure should have ended the debate.",
+      "prompt": "How will you bring evidence and quieter contributions into the room?",
+      "choices": [
+        {
+          "text": "Agree on speaking norms and a responsibility map, including each handoff and a named verifier.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Build norms that make participation safe and useful."
+        },
+        {
+          "text": "Ask each department to do its part and email updates when possible.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Northstar team room · Initial response",
+      "scene": "hallway",
+      "speaker": "Grant Cooper",
+      "tone": "uncertain",
+      "title": "Polite Silence",
+      "text": "You promise to revisit the idea later. Aisha doesn't raise it again and Oscar's analysis remains untouched in a shared folder.",
+      "prompt": "What will change the next team meeting?",
+      "choices": [
+        {
+          "text": "Agree on speaking norms and a responsibility map, including each handoff and a named verifier.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Build norms that make participation safe and useful."
+        },
+        {
+          "text": "Ask each department to do its part and email updates when possible.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Northstar team room · Initial response",
+      "scene": "conflict",
+      "speaker": "Oscar Chen",
+      "tone": "defensive",
+      "title": "The Expert Takes Over",
+      "text": "You let Grant run the meeting. He assigns work based on old roles and says the team will have no time for experiments.",
+      "prompt": "How will you restore shared ownership?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Build norms that make participation safe and useful."
+        },
+        {
+          "text": "Give every decision to Grant so that the group cannot disagree.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Northstar team room · Developing situation",
+      "scene": "meeting",
+      "speaker": "Aisha Okafor",
+      "tone": "guarded",
+      "title": "Resetting the Norms",
+      "text": "Grant agrees not to interrupt if the group respects past lessons. Aisha wants a real opportunity to show her customer evidence.",
+      "prompt": "What team norm and decision method will you establish?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Build norms that make participation safe and useful."
+        },
+        {
+          "text": "Ask each department to do its part and email updates when possible.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Northstar team room · Developing situation",
+      "scene": "planning",
+      "speaker": "Grant Cooper",
+      "tone": "focused",
+      "title": "Two Handoffs, No Owner",
+      "text": "Two departments redesign the same handoff while nobody is responsible for customer notices. Oscar's map makes the overlap visible.",
+      "prompt": "How will you assign responsibility without creating silos?",
+      "choices": [
+        {
+          "text": "Agree on speaking norms and a responsibility map, including each handoff and a named verifier.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Clarify interdependent work with named owners and handoffs."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Northstar team room · Developing situation",
+      "scene": "planning",
+      "speaker": "Oscar Chen",
+      "tone": "frustrated",
+      "title": "Everybody Thought Somebody Else",
+      "text": "The process document lists departments but no specific approver. Customers receive inconsistent instructions.",
+      "prompt": "How will you make handoffs verifiable?",
+      "choices": [
+        {
+          "text": "Agree on speaking norms and a responsibility map, including each handoff and a named verifier.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Clarify interdependent work with named owners and handoffs."
+        },
+        {
+          "text": "Ask each department to do its part and email updates when possible.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Northstar team room · Developing situation",
+      "scene": "conflict",
+      "speaker": "Aisha Okafor",
+      "tone": "worried",
+      "title": "A Team That Won't Speak Up",
+      "text": "An avoidable issue surfaces late. Aisha says she didn't feel invited to challenge Grant, and Oscar says he wasn't sure his numbers mattered.",
+      "prompt": "How do you change the signal the team receives?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Clarify interdependent work with named owners and handoffs."
+        },
+        {
+          "text": "Give every decision to Grant so that the group cannot disagree.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Northstar team room · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Naomi Rivera",
+      "tone": "urgent",
+      "title": "The Customer Test Fails",
+      "text": "The first redesigned workflow misses its customer test. Grant says he warned everyone; Aisha wants to defend her proposal; Oscar sees a narrower defect.",
+      "prompt": "What do you do with the setback?",
+      "choices": [
+        {
+          "text": "Run a focused experiment, assign an owner and use customer results in a blameless debrief.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Clarify interdependent work with named owners and handoffs."
+        },
+        {
+          "text": "Tell Naomi the team is working hard and will sort out details after launch.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Declare the test a success by excluding the cases that failed.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "People retreat into departmental positions and customer problems remain hidden.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Northstar team room · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Grant Cooper",
+      "tone": "hopeful",
+      "title": "Turning Friction Into Norms",
+      "text": "The team can revise one step, measure customer impact and conduct a non-blaming review if the work remains shared.",
+      "prompt": "What will the next test include?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Learn from failures without personal blame."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Northstar team room · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Naomi Rivera",
+      "tone": "firm",
+      "title": "The Sponsor Wants Evidence",
+      "text": "Naomi asks whether Northstar is actually cooperating or simply meeting more often. She wants to see changes in the customer experience.",
+      "prompt": "What proof will you provide?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Learn from failures without personal blame."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Northstar team room · Decision and aftermath",
+      "scene": "conflict",
+      "speaker": "Oscar Chen",
+      "tone": "exhausted",
+      "title": "The Blame Spiral",
+      "text": "Grant and Aisha trade accusations about the failed test. People begin protecting their departments rather than the process.",
+      "prompt": "How will you bring the team back to the customer outcome?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Aisha reenters the discussion, Grant contributes expertise without dominating, and Oscar's data becomes actionable.",
+          "coaching": "Learn from failures without personal blame."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "Meetings remain civil but ownership and participation are still inconsistent.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Northstar team room · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "Northstar establishes shared norms, accountable handoffs and evidence-based improvement. The next test shows meaningful customer progress.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Northstar team room · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "The team recovers partially, but the next handoff is vulnerable until roles and participation become routine.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Northstar team room · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "Departments defend their own work, the customer test continues to fail, and the team's purpose is lost in blame.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}

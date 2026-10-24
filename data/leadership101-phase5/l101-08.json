@@ -1,0 +1,413 @@
+{
+  "version": 2,
+  "start": "opening",
+  "title": "The Leader Everyone Fears — An Unfolding Story",
+  "synopsis": "A celebrated supervisor gets results while employees withdraw in fear. You witnessed a public humiliation and must respond without overclaiming facts.",
+  "nodes": {
+    "opening": {
+      "act": 1,
+      "setting": "Partner-unit conference · Initial response",
+      "scene": "conflict",
+      "speaker": "Taylor Morgan",
+      "tone": "tense",
+      "title": "Silenced in Public",
+      "text": "Vince tells Taylor, “If you cannot answer a simple question, maybe you don't belong here.” Taylor stops speaking and other staff avoid eye contact.",
+      "prompt": "How will you respond to what you actually witnessed?",
+      "choices": [
+        {
+          "text": "Interrupt the disrespectful remark, reset the meeting standard, and follow up privately.",
+          "next": "private-discussion",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Interrupt observable disrespect without diagnosing motives."
+        },
+        {
+          "text": "Move past the remark and check on Taylor later if time allows.",
+          "next": "unresolved-delay",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Attack Vince's character in front of everyone and demand a public apology.",
+          "next": "public-shutdown",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Employees withdraw further and the culture teaches that results excuse humiliation.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "private-discussion": {
+      "act": 1,
+      "setting": "Partner-unit conference · Initial response",
+      "scene": "office",
+      "speaker": "Taylor Morgan",
+      "tone": "reflective",
+      "title": "Taylor's Question",
+      "text": "Taylor later asks whether it is safe to speak. “Can you guarantee Vince can't retaliate?” You cannot guarantee an outcome you do not control.",
+      "prompt": "What will you say about support and confidentiality?",
+      "choices": [
+        {
+          "text": "Give Taylor honest confidentiality limits, document direct observations, and consult Fatima.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Interrupt observable disrespect without diagnosing motives."
+        },
+        {
+          "text": "Promise Taylor complete secrecy and protection from any consequences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "unresolved-delay": {
+      "act": 1,
+      "setting": "Partner-unit conference · Initial response",
+      "scene": "hallway",
+      "speaker": "Vince Hart",
+      "tone": "uncertain",
+      "title": "The Awkward Aftermath",
+      "text": "You treat the remark as an isolated personality clash. Taylor skips the next joint meeting, and coworkers stop sharing critical details.",
+      "prompt": "What behavior and impact will you document?",
+      "choices": [
+        {
+          "text": "Give Taylor honest confidentiality limits, document direct observations, and consult Fatima.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Interrupt observable disrespect without diagnosing motives."
+        },
+        {
+          "text": "Promise Taylor complete secrecy and protection from any consequences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "public-shutdown": {
+      "act": 1,
+      "setting": "Partner-unit conference · Initial response",
+      "scene": "conflict",
+      "speaker": "Fatima Noor",
+      "tone": "defensive",
+      "title": "The Public Confrontation",
+      "text": "You accuse Vince of being abusive in front of the group without first documenting the facts. Vince disputes the accusation and Taylor feels exposed.",
+      "prompt": "How will you recover a fair process?",
+      "choices": [
+        {
+          "text": "Acknowledge the impact, seek firsthand facts, and restore a respectful decision process.",
+          "next": "repair-conversation",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Interrupt observable disrespect without diagnosing motives."
+        },
+        {
+          "text": "Press Taylor to make a formal accusation immediately so you can confront Vince.",
+          "next": "strained-trust",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "repair-conversation": {
+      "act": 2,
+      "setting": "Partner-unit conference · Developing situation",
+      "scene": "office",
+      "speaker": "Taylor Morgan",
+      "tone": "guarded",
+      "title": "A Documented Concern",
+      "text": "Fatima explains the available reporting routes, protection options, and the limits of confidentiality. Taylor wants to decide what information to share.",
+      "prompt": "What support can you offer without pressuring disclosure?",
+      "choices": [
+        {
+          "text": "Name a concrete behavioral commitment, identify an owner and invite a check-in.",
+          "next": "shared-plan",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Interrupt observable disrespect without diagnosing motives."
+        },
+        {
+          "text": "Promise Taylor complete secrecy and protection from any consequences.",
+          "next": "ambiguous-ownership",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "shared-plan": {
+      "act": 2,
+      "setting": "Partner-unit conference · Developing situation",
+      "scene": "planning",
+      "speaker": "Vince Hart",
+      "tone": "focused",
+      "title": "A Pattern or a Rumor?",
+      "text": "Several employees describe fear, but you personally observed one incident. Fatima advises separating direct observation from reports requiring review.",
+      "prompt": "How will you record the evidence responsibly?",
+      "choices": [
+        {
+          "text": "Give Taylor honest confidentiality limits, document direct observations, and consult Fatima.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Explain confidentiality and protection limits accurately."
+        },
+        {
+          "text": "Centralize the remaining decisions without verifying the capacity to follow through.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ambiguous-ownership": {
+      "act": 2,
+      "setting": "Partner-unit conference · Developing situation",
+      "scene": "corridor",
+      "speaker": "Fatima Noor",
+      "tone": "frustrated",
+      "title": "Whisper Network",
+      "text": "The team knows rumors are circulating but no one trusts the reporting channel. Even routine handoffs are delayed.",
+      "prompt": "How can you open a safe channel without promising secrecy?",
+      "choices": [
+        {
+          "text": "Give Taylor honest confidentiality limits, document direct observations, and consult Fatima.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Explain confidentiality and protection limits accurately."
+        },
+        {
+          "text": "Promise Taylor complete secrecy and protection from any consequences.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "strained-trust": {
+      "act": 2,
+      "setting": "Partner-unit conference · Developing situation",
+      "scene": "conflict",
+      "speaker": "Taylor Morgan",
+      "tone": "worried",
+      "title": "Results at Any Cost",
+      "text": "Vince cites exceptional output and says hard pressure is why the unit performs. Staff report that quality questions now go unasked.",
+      "prompt": "What leadership standard will you reinforce?",
+      "choices": [
+        {
+          "text": "Invite dissenting evidence and specify a protected way to escalate risks.",
+          "next": "critical-decision",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Explain confidentiality and protection limits accurately."
+        },
+        {
+          "text": "Press Taylor to make a formal accusation immediately so you can confront Vince.",
+          "next": "critical-decision",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "critical-decision": {
+      "act": 3,
+      "setting": "Partner-unit conference · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Evelyn Shaw",
+      "tone": "urgent",
+      "title": "Evelyn Pushes Back",
+      "text": "Evelyn says Vince's team leads the dashboard. She asks whether the conduct issue is worth the disruption; your notes show a specific incident.",
+      "prompt": "What will you recommend?",
+      "choices": [
+        {
+          "text": "Tell Evelyn what you observed, request fair review and safeguards, and evaluate outcomes beyond volume.",
+          "next": "coordinated-response",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Explain confidentiality and protection limits accurately."
+        },
+        {
+          "text": "Recommend informal monitoring with no documented follow-up.",
+          "next": "difficult-escalation",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        },
+        {
+          "text": "Drop the concern because Vince's output numbers are high.",
+          "next": "fallout-recovery",
+          "trust": -3,
+          "pressure": 3,
+          "reaction": "Employees withdraw further and the culture teaches that results excuse humiliation.",
+          "coaching": "Silencing evidence or substituting certainty for verification increases human and operational risk."
+        }
+      ]
+    },
+    "coordinated-response": {
+      "act": 3,
+      "setting": "Partner-unit conference · Decision and aftermath",
+      "scene": "planning",
+      "speaker": "Vince Hart",
+      "tone": "hopeful",
+      "title": "Standards and Safeguards",
+      "text": "Fatima can support a proportionate response that protects employees, checks facts and prevents process interference.",
+      "prompt": "What follow-through do you request?",
+      "choices": [
+        {
+          "text": "Document owners, communicate tradeoffs, and schedule evidence-based follow-up.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Use fair documentation and appropriate reporting pathways."
+        },
+        {
+          "text": "Declare the issue closed without checking whether the agreement holds.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "difficult-escalation": {
+      "act": 3,
+      "setting": "Partner-unit conference · Decision and aftermath",
+      "scene": "executive",
+      "speaker": "Evelyn Shaw",
+      "tone": "firm",
+      "title": "The Numbers Are Incomplete",
+      "text": "A new quality measure suggests that some work has been completed quickly but reworked later. You must present the metric without treating it as proof of misconduct.",
+      "prompt": "How will you separate performance evidence from conduct allegations?",
+      "choices": [
+        {
+          "text": "Present verified facts and options, own the decision, and protect fair review.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Use fair documentation and appropriate reporting pathways."
+        },
+        {
+          "text": "Offer a reassuring promise without documenting the unresolved limitation.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "fallout-recovery": {
+      "act": 3,
+      "setting": "Partner-unit conference · Decision and aftermath",
+      "scene": "crisis",
+      "speaker": "Fatima Noor",
+      "tone": "exhausted",
+      "title": "Employee Withdrawal",
+      "text": "Taylor resigns from a joint task rather than attend another meeting. Colleagues need an immediate continuity plan and a credible way to raise concerns.",
+      "prompt": "How do you reduce further harm without prejudging findings?",
+      "choices": [
+        {
+          "text": "Stop the preventable harm, acknowledge the failure, and set a transparent repair plan.",
+          "next": "__ending__",
+          "trust": 2,
+          "pressure": -2,
+          "reaction": "Taylor receives respectful support, observed facts are recorded, and an appropriate review can proceed.",
+          "coaching": "Use fair documentation and appropriate reporting pathways."
+        },
+        {
+          "text": "Minimize the impact and put responsibility entirely on the team.",
+          "next": "__ending__",
+          "trust": -1,
+          "pressure": 2,
+          "reaction": "The team senses concern but still lacks a reliable, explicit process for speaking up.",
+          "coaching": "A reassuring or incomplete answer may delay an uncomfortable issue, but does not remove responsibility."
+        }
+      ]
+    },
+    "ending-strong": {
+      "act": 4,
+      "setting": "Partner-unit conference · Leadership debrief",
+      "scene": "meeting",
+      "speaker": "Narrator",
+      "tone": "hopeful",
+      "title": "Ending: Trust and Direction",
+      "text": "The issue receives a fair, documented response. Employees understand available protections, and performance is evaluated alongside conduct.",
+      "ending": true,
+      "reflection": "Which observable behaviors made this result possible, and how will you repeat them?"
+    },
+    "ending-fragile": {
+      "act": 4,
+      "setting": "Partner-unit conference · Leadership debrief",
+      "scene": "office",
+      "speaker": "Narrator",
+      "tone": "reflective",
+      "title": "Ending: A Recoverable Gap",
+      "text": "Some boundaries improve, but trust remains fragile until reporting and safeguards are visibly followed through.",
+      "ending": true,
+      "reflection": "Which assumption or handoff would you revisit before the next decision?"
+    },
+    "ending-damaged": {
+      "act": 4,
+      "setting": "Partner-unit conference · Leadership debrief",
+      "scene": "conflict",
+      "speaker": "Narrator",
+      "tone": "tense",
+      "title": "Ending: A Costly Leadership Pattern",
+      "text": "Employees are silenced and the concern goes unaddressed. Short-term metrics conceal mounting human and operational costs.",
+      "ending": true,
+      "reflection": "What would you acknowledge, repair and change first to prevent repetition?"
+    }
+  },
+  "injectChoices": [
+    {
+      "text": "Acknowledge the new development, confirm facts, assign ownership and adjust the plan openly.",
+      "trust": 2,
+      "pressure": -1,
+      "reaction": "The team gains a verified response and a shared next step."
+    },
+    {
+      "text": "Issue an immediate direction without checking the impact on existing commitments.",
+      "trust": -1,
+      "pressure": 2,
+      "reaction": "The new demand displaces work and creates confusion about responsibility."
+    },
+    {
+      "text": "Set the disruption aside and maintain the original plan without a risk review.",
+      "trust": -2,
+      "pressure": 2,
+      "reaction": "The unaddressed issue escalates while the team works from stale assumptions."
+    }
+  ]
+}
