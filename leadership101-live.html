@@ -146,6 +146,16 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,summary:focus-visi
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 @media print{.l101-connection,.l101-skip-link{display:none!important}}
 
+
+/* Scenario-specific photo-cast upgrades (fallback portraits remain visible until loaded). */
+.l101-avatar-photoreal{position:relative;border-radius:15px;background:#edf6fb22}
+.l101-photo-expression{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:0;transition:opacity .3s ease;border-radius:15px}
+.l101-photo-expression.l101-photo-ready{opacity:1}
+.l101-stage-photo-loaded{background-position:center;background-size:cover}
+.l101-stage-photo-loaded .l101-story-avatar{width:122px;min-width:122px;height:135px;border:2px solid #ffffff77;align-self:center}
+.l101-stage-photo-loaded .l101-story-avatar svg{width:122px;height:135px}
+@media(max-width:680px){.l101-stage-photo-loaded .l101-story-avatar{width:84px;min-width:84px;height:94px;top:50px}.l101-stage-photo-loaded .l101-story-avatar svg{width:84px;height:94px}}
+@media(prefers-reduced-motion:reduce){.l101-photo-expression{transition:none}}
 </style>
 </head>
 <body><header><div class="head"><a class="brand" href="/"><span class="compass">✦</span><span>LEADERSHIP 101<small>LIVE SCENARIO STUDIO · MAYNE LEADERSHIP</small></span></a><div class="tabs no-print" role="tablist" aria-label="Studio perspective"><button id="tab-student" role="tab" aria-selected="true" aria-controls="app" class="selected" data-action="mode-student">Student Studio</button><button id="tab-instructor" role="tab" aria-selected="false" aria-controls="app" data-action="mode-instructor">Instructor Command Center</button></div><div class="nc-toolbar no-print hidden" id="nc-toolbar"><button class="nc-bell" id="nc-bell" aria-label="Open instructor notifications" aria-controls="nc-drawer" aria-expanded="false">🔔 <span class="nc-count" id="nc-count"></span></button></div></div></header>

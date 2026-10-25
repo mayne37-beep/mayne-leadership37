@@ -116,7 +116,49 @@ async function saveRecoveryPlan(){
 }
 
 
-function storyPortrait(speaker,tone){
+// Photo-cast asset manifest: characters keep consistent identities across the journey.
+// URLs are activated only after an image successfully loads. Broken/missing images
+// leave the existing illustrated portraits and workplace backgrounds intact.
+var L101_DEADLINE_ASSETS='/assets/leadership-101/deadline-team/';
+var L101_DEADLINE_SCENES={
+ opening:'standup', 'private-discussion':'coaching','unresolved-delay':'standup',
+ 'public-shutdown':'standup','repair-conversation':'coaching','shared-plan':'planning',
+ 'ambiguous-ownership':'planning','strained-trust':'coaching','critical-decision':'briefing',
+ 'coordinated-response':'planning','difficult-escalation':'briefing','fallout-recovery':'standup',
+ 'ending-strong':'planning','ending-fragile':'coaching','ending-damaged':'briefing'
+};
+var L101_DEADLINE_CAST={
+ malik:{name:'Malik Thompson',skin:'#865642',hair:'#252a34',outfit:'#a6c9e7',hairstyle:'Short',presentation:'Masculine',clothing:'Business casual',beard:'Short beard'},
+ hannah:{name:'Hannah Lee',skin:'#f3d5b8',hair:'#302923',outfit:'#ad8dc5',hairstyle:'Bun',presentation:'Feminine',clothing:'Blouse',beard:'None'},
+ nora:{name:'Nora Patel',skin:'#ac7557',hair:'#252a34',outfit:'#6b705e',hairstyle:'Long',presentation:'Feminine',clothing:'Blazer',beard:'None'},
+ cameron:{name:'Cameron Brooks',skin:'#e9b991',hair:'#8d9296',outfit:'#3e4857',hairstyle:'Short',presentation:'Masculine',clothing:'Blazer',beard:'None'}
+};
+function l101PhotoEmotion(tone){
+ return ({tense:'frustrated',worried:'concerned',uncertain:'concerned',defensive:'defensive',
+ firm:'defensive',urgent:'frustrated',exhausted:'disappointed',hopeful:'hopeful',
+ focused:'thoughtful',reflective:'thoughtful',guarded:'defensive'})[tone]||'neutral';
+}
+function hydrateL101StoryPhotos(){
+ app.querySelectorAll('img[data-l101-photo]').forEach(function(photo){
+  var ready=function(){photo.classList.add('l101-photo-ready')};
+  if(photo.complete&&photo.naturalWidth){ready();return}
+  photo.addEventListener('load',ready,{once:true});
+  photo.addEventListener('error',function(){photo.remove()},{once:true});
+ });
+ var stage=app.querySelector('[data-l101-photo-scene]');
+ if(!stage)return;
+ var url=stage.getAttribute('data-l101-photo-scene');
+ if(!url.startsWith(L101_DEADLINE_ASSETS+'scenes/')||!/\.webp$/.test(url))return;
+ var picture=new Image();
+ picture.onload=function(){
+  if(!stage.isConnected)return;
+  stage.style.backgroundImage='linear-gradient(90deg,rgba(4,28,51,.45),rgba(8,40,70,.79) 42%,rgba(8,40,70,.91)),url("'+url+'")';
+  stage.classList.add('l101-stage-photo-loaded');
+ };
+ picture.src=url;
+}
+
+function storyPortrait(speaker,tone,scenarioId){
  if(!speaker||speaker==='Narrator'||speaker==='Live classroom update')return '<div class="l101-story-avatar l101-narrator" aria-hidden="true">✦</div>';
  var key=speaker.split(' ')[0].toLowerCase(),looks={
  jordan:{skin:'#ac7557',hair:'#302923',outfit:'#345f81',hairstyle:'Short'},
@@ -124,13 +166,19 @@ function storyPortrait(speaker,tone){
  morgan:{skin:'#865642',hair:'#252a34',outfit:'#9b6576',hairstyle:'Locs'},
  supervisor:{skin:'#e9b991',hair:'#554136',outfit:'#3e4857',hairstyle:'Short'}
  };
- var look=looks[key]||looks.jordan;
- var emotion=({tense:'frustrated',worried:'guarded',uncertain:'thoughtful',defensive:'skeptical',firm:'skeptical',urgent:'frustrated',exhausted:'disappointed',hopeful:'open',focused:'thoughtful',reflective:'thoughtful',guarded:'guarded'})[tone]||'neutral';
- try{return '<div class="l101-story-avatar">'+portraitHTML({
+ var look=scenarioId==='l101-02'?L101_DEADLINE_CAST[key]:(looks[key]||looks.jordan);
+ var mood=l101PhotoEmotion(tone);
+ var vectorMood=({concerned:'guarded',defensive:'skeptical',relieved:'open'})[mood]||mood;
+ try{
+  var fallback=portraitHTML({
    id:'l101-story-'+key,name:speaker,role:'Team member',style:'illustrated',
-   appearance:{age:'Adult',presentation:'Androgynous',hairstyle:look.hairstyle,hair:look.hair,skin:look.skin,
-     clothing:'Blazer',outfit:look.outfit,beard:'None',accessories:'None'}
- },emotion)+'</div>'}catch(e){return '<div class="l101-story-avatar l101-narrator">'+h(speaker[0])+'</div>'}
+   appearance:{age:'Adult',presentation:look.presentation||'Androgynous',hairstyle:look.hairstyle,hair:look.hair,skin:look.skin,
+    clothing:look.clothing||'Blazer',outfit:look.outfit,beard:look.beard||'None',accessories:'None'}
+  },vectorMood);
+  var photo=(scenarioId==='l101-02'&&L101_DEADLINE_CAST[key])?
+   '<img class="l101-photo-expression" data-l101-photo src="'+L101_DEADLINE_ASSETS+'portraits/'+key+'-'+mood+'.webp" alt="'+h(speaker)+' — '+h(mood)+' expression" decoding="async" loading="lazy">':'';
+  return '<div class="l101-story-avatar'+(photo?' l101-avatar-photoreal':'')+'">'+fallback+photo+'</div>';
+ }catch(e){return '<div class="l101-story-avatar l101-narrator">'+h(speaker[0])+'</div>'}
 }
 function storyExperienceMarkup(d){
  var st=d.story||{},n=st.node||{},history=st.history||[],ended=!!st.finished,choices=n.choices||[];
@@ -187,13 +235,14 @@ function storyExperienceMarkup(d){
   "/assets/leadership-101/obstacles/breakthrough-chamber.avif"
  ]
 };
- var themedImages=scenarioArtwork[String(d.scenario&&d.scenario.id||'')],sceneImageIndex=/^(office|hallway|corridor)$/.test(scene)?1:/^(planning|executive|meeting)$/.test(scene)?2:0;
+ var scenarioId=String(d.scenario&&d.scenario.id||''),sceneId=String(st.node_id||'').replace(/[^a-z0-9-]/g,''),photoScene=scenarioId==='l101-02'?L101_DEADLINE_SCENES[sceneId]:null;
+ var themedImages=scenarioArtwork[scenarioId],sceneImageIndex=/^(office|hallway|corridor)$/.test(scene)?1:/^(planning|executive|meeting)$/.test(scene)?2:0;
  var bg=themedImages?themedImages[sceneImageIndex]:backgrounds[scene]||backgrounds.meeting,trust=Number(st.trust||0),pressure=Number(st.pressure||0);
  var trustLabel=trust>=6?'Growing confidence':trust>=0?'Cautious confidence':'Trust under strain';
  var pressureLabel=pressure>=7?'High operational pressure':pressure>=2?'Pressure increasing':'Pressure manageable';
- var stage='<div class="l101-stage l101-stage-'+scene+'" style="background-image:linear-gradient(90deg,rgba(7,33,60,.94),rgba(14,54,88,.76),rgba(9,46,72,.38)),url('+bg+')">'
+ var stage='<div class="l101-stage l101-stage-'+scene+'"'+(photoScene?' data-l101-photo-scene="'+L101_DEADLINE_ASSETS+'scenes/'+photoScene+'.webp"':'')+' style="background-image:linear-gradient(90deg,rgba(7,33,60,.94),rgba(14,54,88,.76),rgba(9,46,72,.38)),url('+bg+')">'
   +'<div class="l101-stage-top"><span>ACT '+h(n.act||1)+'</span><span>'+h(n.setting||'Leadership situation')+'</span></div>'
-  +'<div class="l101-stage-subject">'+storyPortrait(n.speaker,n.tone)+'<div class="l101-stage-copy">'
+  +'<div class="l101-stage-subject">'+storyPortrait(n.speaker,n.tone,scenarioId)+'<div class="l101-stage-copy">'
   +'<span class="l101-stage-kicker">'+(st.is_inject?'⚡ LIVE INSTRUCTOR CHALLENGE':ended?'YOUR STORY ENDING':'LEADERSHIP IN ACTION')+'</span>'
   +'<h2>'+h(n.title||st.title)+'</h2><div class="l101-stage-speaker">'+h(n.speaker||'Narrator')+'</div>'
   +'<p>'+h(n.text||'')+'</p></div></div></div>';
@@ -248,6 +297,7 @@ else{var consequence=r.consequence||{},follow=consequence.reaction|| (r.rating==
 if(!d.story||!d.story.available||storyMode==='checkpoints')main+=characterDialogueMarkup(d);
 var side='<div class="panel"><h3>Participant</h3><strong>'+h(d.participant.name)+'</strong><p class="muted">Class: '+h(d.class.title)+'</p>'+stat(graded+' / '+observations.length,'Decisions evaluated')+'<p class="info">Your written responses go to your instructor, not other students.</p><button class="btn" id="student-leave">Leave this device</button></div><div class="panel"><h3>Characters</h3>'+(d.scenario.characters||[]).map(function(c){return '<div class="card" style="margin-bottom:8px"><b>'+h(c.name)+'</b><div class="small muted">'+h(c.role)+'</div><p class="small">'+h(c.publicInfo||'')+'</p></div>'}).join('')+'</div><div class="panel"><div class="spread"><h3>💬 Instructor Messages</h3><span class="chip">Two-way conversation</span></div><p class="small muted">Ask questions and receive replies right here. Only you and your instructor can view this thread.</p><div class="l101-chat-history" id="student-chat-history" aria-label="Messages with instructor">'+((d.messages||[]).length?(d.messages||[]).map(function(msg){return '<div class="l101-chat-message '+(msg.sender_kind==='student'?'student':'instructor')+'"><div class="l101-chat-by">'+(msg.sender_kind==='student'?'You':'Instructor')+(Number.isInteger(msg.observation_index)?' · Observation '+(msg.observation_index+1):'')+'</div><p>'+h(msg.content)+'</p><div class="small muted">'+h(notificationTime(msg.created_at))+'</div></div>'}).join(''):'<p class="small muted">No messages yet. Ask the instructor about the situation or an upcoming decision.</p>')+'</div><label style="margin-top:13px">Ask a question or reply<textarea id="student-help-note" rows="3" maxlength="1500" placeholder="Write your question or reply to your instructor…"></textarea></label><button class="btn ghost" id="student-help-request" style="margin-top:10px">📨 Send message to instructor</button></div><div class="panel"><h3>Live scenario updates</h3>'+(injectList||'<p class="small muted">No new challenges have been released yet.</p>')+'</div>';
 app.innerHTML='<div class="grid"><div class="panel">'+main+'</div><aside>'+side+'</aside></div>';
+if(storyActive)hydrateL101StoryPhotos();
 app.querySelectorAll('[data-story-choice]').forEach(function(b){b.onclick=function(){storyChoose(Number(b.dataset.storyChoice))}});
 app.querySelectorAll('[data-l101-mode]').forEach(function(b){b.onclick=function(){storyMode=b.dataset.l101Mode;studentRender()}});
 var storyReportButton=document.getElementById('story-report-button');if(storyReportButton)storyReportButton.onclick=studentReport;
