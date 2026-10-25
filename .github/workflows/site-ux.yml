@@ -1,0 +1,46 @@
+name: Site Navigation and Responsive UX
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'assets/styles.css'
+      - 'assets/catalog.js'
+      - 'assets/site.js'
+      - 'tests/site-ux*'
+      - '.github/workflows/site-ux.yml'
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - 'assets/styles.css'
+      - 'assets/catalog.js'
+      - 'assets/site.js'
+      - 'tests/site-ux*'
+      - '.github/workflows/site-ux.yml'
+jobs:
+  site-ux:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Validate navigation and resource links
+        run: node --test tests/site-ux.test.mjs
+      - name: Build site
+        run: npm run build
+      - name: Install Chromium for responsive checks
+        run: npx playwright install --with-deps chromium
+      - name: Test desktop, tablet and mobile layouts
+        run: node tests/site-ux-browser.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-ux-screenshots
+          path: test-results/
+          if-no-files-found: ignore
