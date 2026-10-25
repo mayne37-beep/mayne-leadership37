@@ -54,8 +54,8 @@ test('Conflict Crossroads uses its four distinctive characters and all 15 story 
  assert.match(source,/L101_CONFLICT_ASSETS/);
  assert.match(source,/L101_CONFLICT_SCENES/);
  assert.match(source,/L101_PHOTO_CONFIGS/);
- assert.match(source,/photoConfig\.root\+'scenes\/\+'/);
- assert.match(source,/cfg\.root\+'portraits\/\+'/);
+ assert.ok(source.includes("photoConfig.root+'scenes/'"));
+ assert.ok(source.includes("cfg.root+'portraits/'"));
  assert.match(source,/photo\.addEventListener\('error'/);
  for(const node of ['opening','private-discussion','unresolved-delay','public-shutdown','repair-conversation','shared-plan','ambiguous-ownership','strained-trust','critical-decision','coordinated-response','difficult-escalation','fallout-recovery','ending-strong','ending-fragile','ending-damaged'])
   assert.ok(source.includes("'"+node+"':")||source.includes(node+":"),node+' scene mapping missing');
