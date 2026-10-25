@@ -38,3 +38,11 @@ test('duplicate actions and unsaved text are protected',()=>{
 test('notification panel retains keyboard focus and escape behavior',()=>{
  for(const marker of ["event.key==='Escape'","event.key!=='Tab'","drawer.contains(document.activeElement)","if(close)close.focus()","if(restored)restored.focus"])assert.ok(source.includes(marker),marker);
 });
+
+test('photo-cast mapping keeps 4 distinct people and all fifteen scene paths',()=>{
+ for(const person of ['malik','hannah','nora','cameron']) assert.ok(source.includes(person+':{name:'),person);
+ for(const photo of ['standup','coaching','planning','briefing']) assert.ok(source.includes("'"+photo+"'"),photo);
+ assert.match(source,/L101_DEADLINE_SCENES/);assert.match(source,/hydrateL101StoryPhotos/);
+ assert.match(source,/photo\.addEventListener\('error'/);
+ assert.ok(html.includes('.l101-photo-expression'));
+});
