@@ -133,6 +133,25 @@ var L101_DEADLINE_CAST={
  nora:{name:'Nora Patel',skin:'#ac7557',hair:'#252a34',outfit:'#6b705e',hairstyle:'Long',presentation:'Feminine',clothing:'Blazer',beard:'None'},
  cameron:{name:'Cameron Brooks',skin:'#e9b991',hair:'#8d9296',outfit:'#3e4857',hairstyle:'Short',presentation:'Masculine',clothing:'Blazer',beard:'None'}
 };
+var L101_CONFLICT_ASSETS='/assets/leadership-101/conflict-crossroads/';
+var L101_CONFLICT_SCENES={
+ opening:'conflict','private-discussion':'coaching','unresolved-delay':'conflict',
+ 'public-shutdown':'conflict','repair-conversation':'coaching','shared-plan':'planning',
+ 'ambiguous-ownership':'planning','strained-trust':'conflict','critical-decision':'briefing',
+ 'coordinated-response':'planning','difficult-escalation':'briefing','fallout-recovery':'conflict',
+ 'ending-strong':'planning','ending-fragile':'coaching','ending-damaged':'conflict'
+};
+var L101_CONFLICT_CAST={
+ sofia:{name:'Sofia Martinez',skin:'#d5a079',hair:'#302923',outfit:'#4d6a96',hairstyle:'Bob',presentation:'Feminine',clothing:'Blazer',beard:'None'},
+ daniel:{name:'Daniel Park',skin:'#e9b991',hair:'#252a34',outfit:'#3e4857',hairstyle:'Short',presentation:'Masculine',clothing:'Blazer',beard:'None'},
+ rae:{name:'Rae Johnson',skin:'#865642',hair:'#302923',outfit:'#427c89',hairstyle:'Curly',presentation:'Feminine',clothing:'Blazer',beard:'None'},
+ morgan:{name:'Morgan Ellis',skin:'#f3d5b8',hair:'#b18a66',outfit:'#3e4857',hairstyle:'Bob',presentation:'Feminine',clothing:'Blazer',beard:'None'}
+};
+var L101_PHOTO_CONFIGS={
+ 'l101-02':{root:L101_DEADLINE_ASSETS,scenes:L101_DEADLINE_SCENES,cast:L101_DEADLINE_CAST},
+ 'l101-03':{root:L101_CONFLICT_ASSETS,scenes:L101_CONFLICT_SCENES,cast:L101_CONFLICT_CAST}
+};
+
 function l101PhotoEmotion(tone){
  return ({tense:'frustrated',worried:'concerned',uncertain:'concerned',defensive:'defensive',
  firm:'defensive',urgent:'frustrated',exhausted:'disappointed',hopeful:'hopeful',
@@ -148,7 +167,7 @@ function hydrateL101StoryPhotos(){
  var stage=app.querySelector('[data-l101-photo-scene]');
  if(!stage)return;
  var url=stage.getAttribute('data-l101-photo-scene');
- if(!url.startsWith(L101_DEADLINE_ASSETS+'scenes/')||!/\.webp$/.test(url))return;
+ if(!Object.values(L101_PHOTO_CONFIGS).some(function(cfg){return url.startsWith(cfg.root+'scenes/')})||!/\.webp$/.test(url))return;
  var picture=new Image();
  picture.onload=function(){
   if(!stage.isConnected)return;
@@ -166,7 +185,7 @@ function storyPortrait(speaker,tone,scenarioId){
  morgan:{skin:'#865642',hair:'#252a34',outfit:'#9b6576',hairstyle:'Locs'},
  supervisor:{skin:'#e9b991',hair:'#554136',outfit:'#3e4857',hairstyle:'Short'}
  };
- var look=scenarioId==='l101-02'?L101_DEADLINE_CAST[key]:(looks[key]||looks.jordan);
+ var cfg=L101_PHOTO_CONFIGS[scenarioId],look=(cfg&&cfg.cast[key])||(looks[key]||looks.jordan);
  var mood=l101PhotoEmotion(tone);
  var vectorMood=({concerned:'guarded',defensive:'skeptical',relieved:'open'})[mood]||mood;
  try{
@@ -175,8 +194,8 @@ function storyPortrait(speaker,tone,scenarioId){
    appearance:{age:'Adult',presentation:look.presentation||'Androgynous',hairstyle:look.hairstyle,hair:look.hair,skin:look.skin,
     clothing:look.clothing||'Blazer',outfit:look.outfit,beard:look.beard||'None',accessories:'None'}
   },vectorMood);
-  var photo=(scenarioId==='l101-02'&&L101_DEADLINE_CAST[key])?
-   '<img class="l101-photo-expression" data-l101-photo src="'+L101_DEADLINE_ASSETS+'portraits/'+key+'-'+mood+'.webp" alt="'+h(speaker)+' — '+h(mood)+' expression" decoding="async" loading="lazy">':'';
+  var photo=(cfg&&cfg.cast[key])?
+   '<img class="l101-photo-expression" data-l101-photo src="'+cfg.root+'portraits/'+key+'-'+mood+'.webp" alt="'+h(speaker)+' — '+h(mood)+' expression" decoding="async" loading="lazy">':'';
   return '<div class="l101-story-avatar'+(photo?' l101-avatar-photoreal':'')+'">'+fallback+photo+'</div>';
  }catch(e){return '<div class="l101-story-avatar l101-narrator">'+h(speaker[0])+'</div>'}
 }
@@ -235,12 +254,12 @@ function storyExperienceMarkup(d){
   "/assets/leadership-101/obstacles/breakthrough-chamber.avif"
  ]
 };
- var scenarioId=String(d.scenario&&d.scenario.id||''),sceneId=String(st.node_id||'').replace(/[^a-z0-9-]/g,''),photoScene=scenarioId==='l101-02'?L101_DEADLINE_SCENES[sceneId]:null;
+ var scenarioId=String(d.scenario&&d.scenario.id||''),sceneId=String(st.node_id||'').replace(/[^a-z0-9-]/g,''),photoConfig=L101_PHOTO_CONFIGS[scenarioId],photoScene=photoConfig?photoConfig.scenes[sceneId]:null;
  var themedImages=scenarioArtwork[scenarioId],sceneImageIndex=/^(office|hallway|corridor)$/.test(scene)?1:/^(planning|executive|meeting)$/.test(scene)?2:0;
  var bg=themedImages?themedImages[sceneImageIndex]:backgrounds[scene]||backgrounds.meeting,trust=Number(st.trust||0),pressure=Number(st.pressure||0);
  var trustLabel=trust>=6?'Growing confidence':trust>=0?'Cautious confidence':'Trust under strain';
  var pressureLabel=pressure>=7?'High operational pressure':pressure>=2?'Pressure increasing':'Pressure manageable';
- var stage='<div class="l101-stage l101-stage-'+scene+'"'+(photoScene?' data-l101-photo-scene="'+L101_DEADLINE_ASSETS+'scenes/'+photoScene+'.webp"':'')+' style="background-image:linear-gradient(90deg,rgba(7,33,60,.94),rgba(14,54,88,.76),rgba(9,46,72,.38)),url('+bg+')">'
+ var stage='<div class="l101-stage l101-stage-'+scene+'"'+(photoScene?' data-l101-photo-scene="'+photoConfig.root+'scenes/'+photoScene+'.webp"':'')+' style="background-image:linear-gradient(90deg,rgba(7,33,60,.94),rgba(14,54,88,.76),rgba(9,46,72,.38)),url('+bg+')">'
   +'<div class="l101-stage-top"><span>ACT '+h(n.act||1)+'</span><span>'+h(n.setting||'Leadership situation')+'</span></div>'
   +'<div class="l101-stage-subject">'+storyPortrait(n.speaker,n.tone,scenarioId)+'<div class="l101-stage-copy">'
   +'<span class="l101-stage-kicker">'+(st.is_inject?'⚡ LIVE INSTRUCTOR CHALLENGE':ended?'YOUR STORY ENDING':'LEADERSHIP IN ACTION')+'</span>'

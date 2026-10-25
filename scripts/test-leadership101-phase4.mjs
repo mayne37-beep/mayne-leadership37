@@ -46,3 +46,17 @@ test('photo-cast mapping keeps 4 distinct people and all fifteen scene paths',()
  assert.match(source,/photo\.addEventListener\('error'/);
  assert.ok(html.includes('.l101-photo-expression'));
 });
+
+test('Conflict Crossroads uses its four distinctive characters and all 15 story scenes',()=>{
+ const cast=['sofia','daniel','rae','morgan'], scenes=['conflict','coaching','planning','briefing'];
+ for(const name of cast) assert.ok(source.includes(name+':{name:'),name+' should have a named portrait identity');
+ for(const scene of scenes) assert.ok(source.includes("'"+scene+"'"),scene+' should map to a photo scene');
+ assert.match(source,/L101_CONFLICT_ASSETS/);
+ assert.match(source,/L101_CONFLICT_SCENES/);
+ assert.match(source,/L101_PHOTO_CONFIGS/);
+ assert.ok(source.includes("photoConfig.root+'scenes/'"));
+ assert.ok(source.includes("cfg.root+'portraits/'"));
+ assert.match(source,/photo\.addEventListener\('error'/);
+ for(const node of ['opening','private-discussion','unresolved-delay','public-shutdown','repair-conversation','shared-plan','ambiguous-ownership','strained-trust','critical-decision','coordinated-response','difficult-escalation','fallout-recovery','ending-strong','ending-fragile','ending-damaged'])
+  assert.ok(source.includes("'"+node+"':")||source.includes(node+":"),node+' scene mapping missing');
+});
