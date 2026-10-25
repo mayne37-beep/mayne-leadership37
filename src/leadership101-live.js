@@ -148,7 +148,7 @@ function hydrateL101StoryPhotos(){
  var stage=app.querySelector('[data-l101-photo-scene]');
  if(!stage)return;
  var url=stage.getAttribute('data-l101-photo-scene');
- if(!/^\\/assets\\/leadership-101\\/deadline-team\\/scenes\\/[a-z-]+\\.webp$/.test(url))return;
+ if(!url.startsWith(L101_DEADLINE_ASSETS+'scenes/')||!/\.webp$/.test(url))return;
  var picture=new Image();
  picture.onload=function(){
   if(!stage.isConnected)return;
