@@ -187,6 +187,8 @@ function storyPortrait(speaker,tone,scenarioId){
  };
  var cfg=L101_PHOTO_CONFIGS[scenarioId],look=(cfg&&cfg.cast[key])||(looks[key]||looks.jordan);
  var mood=l101PhotoEmotion(tone);
+ // This cast's eighth emotion is skeptical rather than disappointed.
+ if(scenarioId==='l101-03'&&mood==='disappointed')mood='skeptical';
  var vectorMood=({concerned:'guarded',defensive:'skeptical',relieved:'open'})[mood]||mood;
  try{
   var fallback=portraitHTML({
