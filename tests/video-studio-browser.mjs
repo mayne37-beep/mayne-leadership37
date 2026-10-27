@@ -20,7 +20,7 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base='http://127.0.0.1:'+server.address().port;
 let browser;
 try{
- browser=await chromium.launch({headless:true,args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});
+ browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||undefined,args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});
  for(const width of [390,1280]){
   const ctx=await browser.newContext({viewport:{width,height:900},acceptDownloads:true});
   const page=await ctx.newPage(),errors=[];
@@ -76,13 +76,13 @@ try{
     zip.file('characters/test-presenter-casual.png',png);
     const archive=await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
     await page.locator('#asset-pack-file').setInputFiles({name:'mayne-presenters.zip',mimeType:'application/zip',buffer:archive});
-    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('2 outfits'),{timeout:16000});
-    assert.equal(await page.locator('#asset-gallery .asset-card').count(),2,'both professional and casual outfits appear');
-    await page.locator('#asset-gallery .asset-card').first().click();
+    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('12 outfits'),{timeout:16000});
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'custom professional and casual outfits appear alongside the ten included outfits');
+    await page.getByRole('button',{name:'Use Studio Test Presenter Professional',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
     await page.reload();
     await page.locator('#project-choice option').first().waitFor({state:'attached'});
-    assert.equal(await page.locator('#asset-gallery .asset-card').count(),2,'character library is reusable after reload');
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'included and imported character library is reusable after reload');
     assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected character outfit persists');
   }
 

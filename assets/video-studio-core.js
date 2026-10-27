@@ -1,5 +1,5 @@
 // Pure project model shared by the browser editor and Node tests.
-import {validatedBackground} from './video-studio-library-core.js';
+import {validatedBackground,builtinPhoto} from './video-studio-library-core.js';
 export const STORAGE_KEY = 'mayne-video-studio-projects-v1';
 export const MAX_SCENES = 40;
 export const LAYOUTS = ['presenter-right','presenter-left','title','split','text-only'];
@@ -81,15 +81,15 @@ export function totalSeconds(project){ return project.scenes.reduce((sum,s)=>sum
 export function clock(secs){ const n=Math.max(0,Math.floor(secs));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0'); }
 export function safeProjectExport(project){
   const clean=normalizeProject(project);
-  // Local IndexedDB audio keys are not portable. Users must reattach audio after import.
-  clean.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';s.videoAssetId='';});
+  // Included character IDs are portable; device-only media must be reattached after import.
+  clean.scenes.forEach(s=>{s.audioAssetId='';if(!builtinPhoto(s.photoAssetId))s.photoAssetId='';s.videoAssetId='';});
   return { format:'mayne-video-project',version:1,project:clean };
 }
 export function parseProjectImport(obj){
   if(!obj||obj.format!=='mayne-video-project'||obj.version!==1||!obj.project) throw Error('Not a supported Mayne Video Studio project file.');
   const project=normalizeProject(obj.project);
   project.id=makeId();
-  project.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';});
+  project.scenes.forEach(s=>{s.audioAssetId='';if(!builtinPhoto(s.photoAssetId))s.photoAssetId='';});
   return project;
 }
 
@@ -104,7 +104,8 @@ export function localRenderManifest(raw){
    duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,backgroundImage:s.backgroundImage,
    voice:s.localVoice,videoMode:s.videoMode,videoFit:s.videoFit,
    videoTrimStart:s.videoTrimStart,videoMuted:s.videoMuted,
-   needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId),video:Boolean(s.videoAssetId)}
+   presenterImage:builtinPhoto(s.photoAssetId)?.url||'',
+   needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId)&&!builtinPhoto(s.photoAssetId),video:Boolean(s.videoAssetId)}
   }))}
  };
 }

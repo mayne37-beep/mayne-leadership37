@@ -1,7 +1,24 @@
 // Shared curated asset catalog used by the Video Studio.
 // Background images are reused from the existing Leadership 101 authoring assets.
-// Presenter cutouts are user-installed ZIP media, stored in the browser.
+// Included presenter cutouts are permanent, same-origin assets. Custom ZIP media stays local.
 export const CHARACTER_CATALOG_KEY='mayne-video-character-library-v1';
+export const BUILTIN_CHARACTERS=Object.freeze([
+ ['amara','Amara','Black woman, 30s'],
+ ['daniel','Daniel','White man, 50s'],
+ ['sofia','Sofia','Latina woman, 20s–30s'],
+ ['kenji','Kenji','East Asian man, 30s'],
+ ['priya','Priya','South Asian woman, 40s']
+].map(([id,name,description])=>Object.freeze({id,name,description,variants:Object.freeze(
+ Object.fromEntries(['professional','casual'].map(style=>[style,Object.freeze({
+  assetId:'mayne-character-'+id+'-'+style,
+  name:name+' ('+(style==='professional'?'Professional':'Casual')+')',
+  url:'/assets/video-studio/characters/'+id+'-'+style+'.png'
+ })]))
+)})));
+const builtinPhotos=new Map(BUILTIN_CHARACTERS.flatMap(person=>
+ Object.values(person.variants).map(variant=>[variant.assetId,variant])));
+// Only catalogued IDs can resolve to website media; imported data never supplies a URL.
+export function builtinPhoto(assetId){return builtinPhotos.get(assetId)||null;}
 export const LEADERSHIP_BACKGROUNDS=Object.freeze([
  ['foundations','Leadership Foundations','01-foundations.webp'],
  ['traits','Leadership Traits','02-traits.webp'],
@@ -46,4 +63,8 @@ export function mergeCharacters(existing,incoming){
   merged.set(c.id,old?{...old,...c,variants:{...old.variants,...c.variants}}:c);
  }
  return [...merged.values()].slice(0,80);
+}
+export function characterLibrary(imported){
+ const includedIds=new Set(BUILTIN_CHARACTERS.map(c=>c.id));
+ return [...BUILTIN_CHARACTERS,...normalizeCharacters(imported).filter(c=>!includedIds.has(c.id))];
 }

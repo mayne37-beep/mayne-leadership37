@@ -1,0 +1,53 @@
+{
+  "format": "mayne-video-character-pack",
+  "version": 1,
+  "collection": "Mayne Leadership Realistic Presenter Collection",
+  "characters": [
+    {
+      "id": "amara",
+      "name": "Amara",
+      "description": "Black woman, 30s",
+      "outfits": {
+        "professional": "characters/amara-professional.png",
+        "casual": "characters/amara-casual.png"
+      }
+    },
+    {
+      "id": "daniel",
+      "name": "Daniel",
+      "description": "White man, 50s",
+      "outfits": {
+        "professional": "characters/daniel-professional.png",
+        "casual": "characters/daniel-casual.png"
+      }
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "description": "Latina woman, 20s\u201330s",
+      "outfits": {
+        "professional": "characters/sofia-professional.png",
+        "casual": "characters/sofia-casual.png"
+      }
+    },
+    {
+      "id": "kenji",
+      "name": "Kenji",
+      "description": "East Asian man, 30s",
+      "outfits": {
+        "professional": "characters/kenji-professional.png",
+        "casual": "characters/kenji-casual.png"
+      }
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "description": "South Asian woman, 40s",
+      "outfits": {
+        "professional": "characters/priya-professional.png",
+        "casual": "characters/priya-casual.png"
+      }
+    }
+  ],
+  "source": "AI-generated synthetic characters. Each outfit pair is intended to represent one consistent fictional identity. No real person likeness was used."
+}
