@@ -18,3 +18,10 @@
 .audio-actions{margin-top:6px}.inspector #remove-photo{font-size:.78rem}
 #ai-voice,#ai-avatar,#ai-avatar-voice{font-size:.83rem}
 @media(max-width:760px){.video-timeline{min-height:68px}.timeline-segment{min-width:78px}.advanced-media{padding:10px}}
+
+
+/* Composited moving-video scene controls */
+.checkbox-line{display:flex;gap:9px;align-items:center;margin:13px 0;color:#dae8f6;font-size:.83rem;cursor:pointer}
+.checkbox-line input[type=checkbox]{width:18px;height:18px;accent-color:#e1ad4d;flex:none}
+.timeline-segment .clip-marker{font-size:.68rem;color:#fed08d;white-space:nowrap}
+#video-info{min-height:20px}#scene-video{margin-top:7px}#video-trim{max-width:160px}
