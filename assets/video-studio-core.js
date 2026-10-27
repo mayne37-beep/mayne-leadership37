@@ -19,7 +19,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,...overrides
   };
   return normalizeScene(s);
 }
@@ -35,7 +35,12 @@ export function normalizeScene(raw={}){
     theme:THEMES.includes(s.theme)?s.theme:'navy',
     presenter:['Alex','Jordan','None'].includes(s.presenter)?s.presenter:'Alex',
     audioAssetId:txt(s.audioAssetId,100),
-    photoAssetId:txt(s.photoAssetId,100)
+    photoAssetId:txt(s.photoAssetId,100),
+    videoAssetId:txt(s.videoAssetId,100),
+    videoMode:s.videoMode==='full'?'full':'presenter',
+    videoFit:s.videoFit==='contain'?'contain':'cover',
+    videoMuted:s.videoMuted===true,
+    videoTrimStart:Math.max(0,Math.min(120,Number(s.videoTrimStart)||0))
   };
 }
 export function normalizeProject(raw={}){
@@ -74,7 +79,7 @@ export function clock(secs){ const n=Math.max(0,Math.floor(secs));return Math.fl
 export function safeProjectExport(project){
   const clean=normalizeProject(project);
   // Local IndexedDB audio keys are not portable. Users must reattach audio after import.
-  clean.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';});
+  clean.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';s.videoAssetId='';});
   return { format:'mayne-video-project',version:1,project:clean };
 }
 export function parseProjectImport(obj){
