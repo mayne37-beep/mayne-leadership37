@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c1930"><meta name="description" content="Design and export leadership training videos in the Mayne Leadership Video Studio.">
+<title>AI Video Studio · Mayne Leadership</title>
+<link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
+<body><a class="skip" href="#workspace">Skip to video editor</a>
+<header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
+<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 1 · Browser editor</span></div>
+<nav aria-label="Studio navigation"><a href="/create.html">← All studios</a><button type="button" id="help-button" class="ghost">How it works</button></nav></header>
+<main id="workspace" class="workspace">
+<aside class="projects panel" aria-label="Projects and scenes">
+<div class="pane-heading"><div><span class="eyebrow">YOUR WORKSPACE</span><h1>Video projects</h1></div><button id="new-project" class="icon-button" title="New project" aria-label="New project">＋</button></div>
+<label for="project-choice" class="small-label">Open project</label><select id="project-choice" aria-label="Open project"></select>
+<div class="project-actions"><button id="duplicate-project" class="ghost" type="button">Duplicate</button><button id="delete-project" class="ghost danger" type="button">Delete</button></div>
+<div class="divider"></div>
+<div class="pane-heading"><h2>Scenes</h2><button class="small-primary" id="add-scene" type="button">+ Add scene</button></div>
+<p class="sidebar-hint">Reorder, duplicate, and customize every scene.</p><div id="scene-list" class="scene-list" role="list" aria-label="Video scenes"></div>
+<div class="sidebar-bottom"><div id="scene-total" class="total"></div><p>Project changes save in this browser. Download a JSON backup to move between devices.</p>
+<button id="save-json" class="ghost" type="button">Export project JSON</button><button id="import-json" class="ghost" type="button">Import project JSON</button><input id="json-file" type="file" accept=".json,application/json" hidden></div>
+</aside>
+<section class="stage panel" aria-labelledby="preview-title">
+<div class="pane-heading stage-head"><div><span class="eyebrow">VIDEO PREVIEW</span><h2 id="preview-title">Storyboard</h2></div><span class="stage-label" id="stage-label">Scene 1</span></div>
+<div class="canvas-shell"><canvas id="video-canvas" width="1280" height="720" aria-label="Visual preview of selected video scene">Your browser does not support canvas preview.</canvas></div>
+<div class="playbar"><button id="play-preview" class="primary" type="button">▶ Play storyboard</button><button id="stop-preview" class="ghost" type="button" disabled>■ Stop</button>
+<span id="play-time" class="time">0:00 / 0:39</span><div class="playbar-right"><button id="speak-scene" class="ghost" type="button">♫ Preview voice</button></div></div>
+<div class="export-box"><div><strong>Render video</strong><p>Export a real video using your scene durations. Attach a narration audio file to each scene to include speech; browser voice previews cannot be included in an export.</p></div>
+<button id="render-video" class="primary gold" type="button">Export video</button></div>
+<p class="status" id="status" role="status" aria-live="polite">Ready. Edit your storyboard to get started.</p>
+<details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. AI avatars, natural AI voice generation, cloud projects, and lip synchronization are planned integrations, not Phase 1 features.</p></details>
+</section>
+<aside class="inspector panel" aria-label="Selected scene editor"><div class="pane-heading"><div><span class="eyebrow">SCENE SETTINGS</span><h2>Edit scene</h2></div><span id="editor-scene-index" class="counter">01 / 04</span></div>
+<label class="field-label" for="project-name">Video project title</label><input type="text" id="project-name" maxlength="120">
+<div class="divider"></div>
+<label class="field-label" for="scene-title">Scene heading</label><input id="scene-title" maxlength="115">
+<label class="field-label" for="scene-subtitle">On-screen message</label><textarea id="scene-subtitle" rows="3" maxlength="320"></textarea>
+<label class="field-label" for="scene-script">Narration script</label><textarea id="scene-script" rows="6" maxlength="6000"></textarea>
+<p class="field-hint">Use Preview voice to hear this script; record or upload audio separately for exports.</p>
+<div class="two-fields"><div><label class="field-label" for="scene-duration">Duration (seconds)</label><input id="scene-duration" type="number" min="3" max="120" step="1"></div>
+<div><label class="field-label" for="scene-layout">Layout</label><select id="scene-layout"><option value="presenter-right">Presenter right</option><option value="presenter-left">Presenter left</option><option value="split">Split layout</option><option value="title">Title slide</option><option value="text-only">Text only</option></select></div></div>
+<div class="two-fields"><div><label class="field-label" for="scene-theme">Color theme</label><select id="scene-theme"><option value="navy">Midnight navy</option><option value="blue">Clear blue</option><option value="sunset">Sunset</option><option value="forest">Forest</option><option value="slate">Slate</option></select></div>
+<div><label class="field-label" for="scene-presenter">Illustrated presenter</label><select id="scene-presenter"><option value="Alex">Alex</option><option value="Jordan">Jordan</option><option value="None">No presenter</option></select></div></div>
+<div class="divider"></div>
+<label class="field-label" for="scene-audio">Recorded narration (optional)</label><input id="scene-audio" type="file" accept="audio/*"><div id="audio-info" class="audio-info">No narration attached.</div>
+<div class="audio-actions"><button id="play-audio" type="button" class="ghost" disabled>▶ Play audio</button><button id="remove-audio" type="button" class="ghost danger" disabled>Remove audio</button></div>
+<div class="divider"></div>
+<div class="scene-actions"><button id="clone-scene" type="button" class="ghost">Duplicate scene</button><button id="remove-scene" type="button" class="ghost danger">Delete scene</button></div>
+</aside></main>
+<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>This first release is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. Audio is stored on this device using IndexedDB and is not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. High-quality voice synthesis and photorealistic avatar generation require a separate AI integration.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
+<script type="module" src="/assets/video-studio.js"></script></body></html>
