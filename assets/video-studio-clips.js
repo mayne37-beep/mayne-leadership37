@@ -46,10 +46,10 @@ export function inspectVideoFile(blob){
         width:video.videoWidth,height:video.videoHeight});
     }
     video.addEventListener('loadedmetadata',()=>{
-      if(!Number.isFinite(video.duration)||video.duration<=0||!video.videoWidth)return finish(Error('Could not read video duration or dimensions.'));
+      if(!video.videoWidth||!video.videoHeight)return finish(Error('Could not read video dimensions.'));
       const duration=video.duration,width=video.videoWidth,height=video.videoHeight;
       clearTimeout(timer);video.removeAttribute('src');video.load();URL.revokeObjectURL(url);
-      resolve({duration,width,height});
+      resolve({duration:Number.isFinite(duration)&&duration>0?duration:10,width,height,estimated:!Number.isFinite(duration)||duration<=0});
     },{once:true});
     video.addEventListener('error',()=>finish(Error('This browser cannot decode the selected video clip.')),{once:true});
     video.src=url;
@@ -83,8 +83,8 @@ export function stopClips(){
 export function setClipPosition(key,seconds){
   const item=currentClip(key);if(!item)return;
   const video=item.video;
-  if(!Number.isFinite(video.duration)||video.duration<=0)return;
-  const next=Math.max(0,Math.min(video.duration-.05,seconds));
+  const next=Number.isFinite(video.duration)&&video.duration>0
+    ?Math.max(0,Math.min(video.duration-.05,seconds)):Math.max(0,seconds);
   if(Math.abs(video.currentTime-next)>.15){try{video.currentTime=next;}catch{}}
 }
 export function drawVideo(ctx,video,x,y,w,h,fit='cover'){
