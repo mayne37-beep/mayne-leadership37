@@ -25,9 +25,17 @@ export const BUILTIN_CHARACTERS=Object.freeze([
   name:name+' ('+(style==='professional'?'Professional':'Casual')+')',
   url:'/assets/video-studio/characters/'+id+'-'+style+'.png'
  })]))
-)})));
+),looks:Object.freeze(Object.fromEntries(['professional','casual'].map(style=>[style,Object.freeze(
+ Object.fromEntries(CHARACTER_LOOKS.map(look=>[look.id,Object.freeze({
+  assetId:'mayne-character-'+id+'-'+style+'-'+look.id,
+  name:name+' ('+(style==='professional'?'Professional':'Casual')+' · '+look.label+')',
+  url:'/assets/video-studio/variations/'+id+'/'+style+'/'+look.id+'.jpg',
+  quality:'concept'
+ })]))
+)])))})));
 const builtinPhotos=new Map(BUILTIN_CHARACTERS.flatMap(person=>
- Object.values(person.variants).map(variant=>[variant.assetId,variant])));
+ [...Object.values(person.variants),...Object.values(person.looks).flatMap(Object.values)]
+  .map(variant=>[variant.assetId,variant])));
 // Only catalogued IDs can resolve to website media; imported data never supplies a URL.
 export function builtinPhoto(assetId){return builtinPhotos.get(assetId)||null;}
 export const LEADERSHIP_BACKGROUNDS=Object.freeze([
@@ -95,6 +103,9 @@ export function characterLibrary(imported){
  const included=new Set(BUILTIN_CHARACTERS.map(c=>c.id));
  return [...BUILTIN_CHARACTERS.map(c=>{
    const add=incoming.find(x=>x.id===c.id);
-   return add?{...c,looks:add.looks||{}}:c;
+   return add?{...c,looks:{
+     professional:{...c.looks.professional,...add.looks?.professional},
+     casual:{...c.looks.casual,...add.looks?.casual}
+   }}:c;
  }),...incoming.filter(c=>!included.has(c.id))];
 }

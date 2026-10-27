@@ -1,0 +1,407 @@
+{
+  "format": "mayne-video-character-pack",
+  "version": 2,
+  "collection": "Mayne Leadership: expressions and poses (concept previews)",
+  "notes": "Contains 10 original high resolution transparent PNGs and 80 low-resolution prototype variants cropped from a composite. Preview-quality only; replace with individually generated high-resolution transparent presenter poses for final production.",
+  "qualities": {
+    "original": "production cutout",
+    "variation": "low resolution contact sheet crop"
+  },
+  "characters": [
+    {
+      "id": "amara",
+      "name": "Amara",
+      "description": "Fictional synthetic leadership presenter",
+      "outfits": {
+        "professional": "characters/amara-professional.png",
+        "casual": "characters/amara-casual.png"
+      },
+      "looks": {
+        "professional": {
+          "neutral": {
+            "path": "variations/amara/professional/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/amara/professional/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/amara/professional/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/amara/professional/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/amara/professional/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/amara/professional/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/amara/professional/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/amara/professional/listening.jpg",
+            "quality": "concept"
+          }
+        },
+        "casual": {
+          "neutral": {
+            "path": "variations/amara/casual/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/amara/casual/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/amara/casual/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/amara/casual/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/amara/casual/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/amara/casual/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/amara/casual/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/amara/casual/listening.jpg",
+            "quality": "concept"
+          }
+        }
+      }
+    },
+    {
+      "id": "daniel",
+      "name": "Daniel",
+      "description": "Fictional synthetic leadership presenter",
+      "outfits": {
+        "professional": "characters/daniel-professional.png",
+        "casual": "characters/daniel-casual.png"
+      },
+      "looks": {
+        "professional": {
+          "neutral": {
+            "path": "variations/daniel/professional/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/daniel/professional/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/daniel/professional/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/daniel/professional/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/daniel/professional/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/daniel/professional/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/daniel/professional/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/daniel/professional/listening.jpg",
+            "quality": "concept"
+          }
+        },
+        "casual": {
+          "neutral": {
+            "path": "variations/daniel/casual/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/daniel/casual/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/daniel/casual/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/daniel/casual/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/daniel/casual/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/daniel/casual/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/daniel/casual/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/daniel/casual/listening.jpg",
+            "quality": "concept"
+          }
+        }
+      }
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "description": "Fictional synthetic leadership presenter",
+      "outfits": {
+        "professional": "characters/sofia-professional.png",
+        "casual": "characters/sofia-casual.png"
+      },
+      "looks": {
+        "professional": {
+          "neutral": {
+            "path": "variations/sofia/professional/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/sofia/professional/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/sofia/professional/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/sofia/professional/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/sofia/professional/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/sofia/professional/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/sofia/professional/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/sofia/professional/listening.jpg",
+            "quality": "concept"
+          }
+        },
+        "casual": {
+          "neutral": {
+            "path": "variations/sofia/casual/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/sofia/casual/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/sofia/casual/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/sofia/casual/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/sofia/casual/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/sofia/casual/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/sofia/casual/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/sofia/casual/listening.jpg",
+            "quality": "concept"
+          }
+        }
+      }
+    },
+    {
+      "id": "kenji",
+      "name": "Kenji",
+      "description": "Fictional synthetic leadership presenter",
+      "outfits": {
+        "professional": "characters/kenji-professional.png",
+        "casual": "characters/kenji-casual.png"
+      },
+      "looks": {
+        "professional": {
+          "neutral": {
+            "path": "variations/kenji/professional/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/kenji/professional/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/kenji/professional/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/kenji/professional/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/kenji/professional/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/kenji/professional/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/kenji/professional/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/kenji/professional/listening.jpg",
+            "quality": "concept"
+          }
+        },
+        "casual": {
+          "neutral": {
+            "path": "variations/kenji/casual/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/kenji/casual/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/kenji/casual/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/kenji/casual/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/kenji/casual/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/kenji/casual/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/kenji/casual/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/kenji/casual/listening.jpg",
+            "quality": "concept"
+          }
+        }
+      }
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "description": "Fictional synthetic leadership presenter",
+      "outfits": {
+        "professional": "characters/priya-professional.png",
+        "casual": "characters/priya-casual.png"
+      },
+      "looks": {
+        "professional": {
+          "neutral": {
+            "path": "variations/priya/professional/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/priya/professional/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/priya/professional/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/priya/professional/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/priya/professional/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/priya/professional/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/priya/professional/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/priya/professional/listening.jpg",
+            "quality": "concept"
+          }
+        },
+        "casual": {
+          "neutral": {
+            "path": "variations/priya/casual/neutral.jpg",
+            "quality": "concept"
+          },
+          "friendly": {
+            "path": "variations/priya/casual/friendly.jpg",
+            "quality": "concept"
+          },
+          "confident": {
+            "path": "variations/priya/casual/confident.jpg",
+            "quality": "concept"
+          },
+          "thoughtful": {
+            "path": "variations/priya/casual/thoughtful.jpg",
+            "quality": "concept"
+          },
+          "concerned": {
+            "path": "variations/priya/casual/concerned.jpg",
+            "quality": "concept"
+          },
+          "enthusiastic": {
+            "path": "variations/priya/casual/enthusiastic.jpg",
+            "quality": "concept"
+          },
+          "explaining": {
+            "path": "variations/priya/casual/explaining.jpg",
+            "quality": "concept"
+          },
+          "listening": {
+            "path": "variations/priya/casual/listening.jpg",
+            "quality": "concept"
+          }
+        }
+      }
+    }
+  ]
+}
