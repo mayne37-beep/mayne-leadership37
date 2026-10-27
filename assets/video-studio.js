@@ -310,9 +310,35 @@ async function exportVideo(){
   recording=true;$('render-video').disabled=true;$('play-preview').disabled=true;
   $('render-video').textContent='Rendering…';
   let media=null,recorder=null,stream=null,dest=null,ac=null,frame=0,currentAudio=null,currentUrl='',finished=false;
+  let activeRenderVideo=null;
+  const videoSources=new Map();
+  function clearRenderedClips(){
+    for(const clip of renderVideos?.values()||[]){
+      clip.video.pause();clip.video.removeAttribute('src');clip.video.load();
+      URL.revokeObjectURL(clip.url);
+    }
+    renderVideos=null;
+  }
   const blobs=new Map();
   try{
     await Promise.all(p.scenes.filter(s=>s.photoAssetId).map(loadPhoto));
+    renderVideos=new Map();
+    for(const s of p.scenes.filter(s=>s.videoAssetId)){
+      if(renderVideos.has(s.videoAssetId))continue;
+      const stored=await readClip(s.videoAssetId);
+      if(!stored)throw Error('Video file missing on this device for scene "'+s.title+'". Reimport the clip.');
+      const url=URL.createObjectURL(stored.blob),video=document.createElement('video');
+      video.preload='auto';video.playsInline=true;video.src=url;video.muted=false;
+      const clip={video,url,stored};renderVideos.set(s.videoAssetId,clip);
+      await new Promise((resolve,reject)=>{
+        if(video.readyState>=2)return resolve();
+        const timer=setTimeout(()=>{cleanup();reject(Error('The video clip could not be prepared for export.'));},12000);
+        function cleanup(){clearTimeout(timer);video.removeEventListener('loadeddata',ready);video.removeEventListener('error',fail);}
+        function ready(){cleanup();resolve();}
+        function fail(){cleanup();reject(Error('Video format could not be decoded by the browser.'));}
+        video.addEventListener('loadeddata',ready);video.addEventListener('error',fail);
+      });
+    }
     for(const s of p.scenes){
       if(s.audioAssetId && !blobs.has(s.audioAssetId)){const a=await getAudio(s.audioAssetId);if(a)blobs.set(s.audioAssetId,a);}
     }
@@ -326,11 +352,32 @@ async function exportVideo(){
     recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
     let index=0,total=0,start=performance.now();
     function stopClip(){
+      if(activeRenderVideo){activeRenderVideo.pause();activeRenderVideo=null;}
       if(currentAudio){currentAudio.pause();currentAudio.removeAttribute('src');currentAudio.load();currentAudio=null;}
       if(currentUrl){URL.revokeObjectURL(currentUrl);currentUrl='';}
     }
     function startClip(scene){
-      stopClip();const clip=blobs.get(scene.audioAssetId);
+      stopClip();
+      if(scene.videoAssetId){
+        const clip=renderVideos?.get(scene.videoAssetId);
+        if(!clip)return;
+        const v=clip.video;activeRenderVideo=v;
+        v.pause();v.loop=false;v.playbackRate=1;v.muted=false;
+        const seekTo=Math.max(0,Math.min(Math.max(0,v.duration-.08),scene.videoTrimStart||0));
+        try{v.currentTime=seekTo;}catch{}
+        if(dest&&ac){
+          let route=videoSources.get(scene.videoAssetId);
+          if(!route){
+            const source=ac.createMediaElementSource(v),gain=ac.createGain();
+            source.connect(gain);gain.connect(dest);route={source,gain};
+            videoSources.set(scene.videoAssetId,route);
+          }
+          route.gain.gain.value=scene.videoMuted?0:1;
+        }else v.muted=Boolean(scene.videoMuted);
+        v.play().catch(()=>{status('One video clip could not autoplay during export. Check the exported result.','error');});
+        return;
+      }
+      const clip=blobs.get(scene.audioAssetId);
       if(!clip||!dest||!ac)return;
       currentUrl=URL.createObjectURL(clip.blob);currentAudio=new Audio(currentUrl);
       const source=ac.createMediaElementSource(currentAudio);source.connect(dest);
@@ -341,6 +388,7 @@ async function exportVideo(){
       for(const track of media?.getTracks()||[])track.stop();
       for(const track of stream?.getTracks()||[])track.stop();
       if(ac)void ac.close().catch(()=>{});
+      clearRenderedClips();
       recording=false;$('render-video').disabled=false;$('render-video').textContent='Export video';
       $('play-preview').disabled=false;drawCurrent();
     }
@@ -384,6 +432,7 @@ async function exportVideo(){
     for(const track of media?.getTracks()||[])track.stop();
     for(const track of stream?.getTracks()||[])track.stop();
     if(ac)void ac.close().catch(()=>{});
+    clearRenderedClips();
     recording=false;$('render-video').disabled=false;$('render-video').textContent='Export video';$('play-preview').disabled=false;
     drawCurrent();status('Video export failed: '+err.message,'error');
   }
