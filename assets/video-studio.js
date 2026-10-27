@@ -2,13 +2,14 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
+import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 
 const $ = id => document.getElementById(id);
 const canvas=$('video-canvas'),ctx=canvas.getContext('2d');
 let projects=[],projectId='',sceneId='',playback=null,recording=false,audioPlaying=null,storageOK=true;
 let timelineSeek=null,micRecorder=null,micStream=null,avatarJobId='';
 const photoImages=new Map();
-let renderVideos=null;
+let renderVideos=null,assetLibrary=null;
 let freeWorker=null,freeBusy=false,freeFile=null,freeTask=null;
 const selectedProject=()=>projects.find(p=>p.id===projectId);
 const selectedScene=()=>selectedProject()?.scenes.find(s=>s.id===sceneId);
@@ -80,6 +81,7 @@ function populateEditor(){
   refreshAudioInfo();
   void refreshPhotoInfo();
   void refreshVideoInfo();
+  assetLibrary?.refresh();
   freeFile=null;
   $('free-download').disabled=true;
 }
@@ -147,6 +149,7 @@ function drawScene(s,secs=0,index=0){
   ctx.clearRect(0,0,1280,720);
   const gradient=ctx.createLinearGradient(0,0,1280,720);gradient.addColorStop(0,p.bg);gradient.addColorStop(1,p.bg2);
   ctx.fillStyle=gradient;ctx.fillRect(0,0,1280,720);
+  drawBackground(ctx,s);
   const source=renderVideos?.get(s.videoAssetId)?.video||currentClip(s.videoAssetId)?.video;
   if(s.videoAssetId&&s.videoMode==='full'){
     if(drawVideo(ctx,source,0,0,1280,720,s.videoFit)){
@@ -174,10 +177,9 @@ function drawScene(s,secs=0,index=0){
     const hasVideo=s.videoAssetId&&s.videoMode==='presenter'&&drawVideo(ctx,source,presenterX,177,345,414,s.videoFit);
     if(!hasVideo && photo && photo.complete && photo.naturalWidth){
       const x=presenterX,y=177,w=345,h=414;
-      const scale=Math.max(w/photo.naturalWidth,h/photo.naturalHeight);
-      const sw=w/scale,sh=h/scale;
+      const scale=Math.min(w/photo.naturalWidth,h/photo.naturalHeight);
       ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,32);ctx.clip();
-      ctx.drawImage(photo,(photo.naturalWidth-sw)/2,(photo.naturalHeight-sh)/2,sw,sh,x,y,w,h);
+      ctx.drawImage(photo,x+(w-photo.naturalWidth*scale)/2,y+h-photo.naturalHeight*scale,photo.naturalWidth*scale,photo.naturalHeight*scale);
       ctx.restore();
     }else if(!hasVideo&&s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
@@ -191,8 +193,14 @@ function drawScene(s,secs=0,index=0){
 }
 function drawCurrent(){
   const p=selectedProject();if(!p)return;
+  const scene=selectedScene();
+  if(scene?.backgroundImage&&!hasBackgroundLoaded(scene)){
+    void preloadBackground(scene).then(()=>{
+      if(selectedScene()?.id===scene.id)drawCurrent();
+    }).catch(()=>{});
+  }
   const i=p.scenes.findIndex(s=>s.id===sceneId);
-  drawScene(selectedScene(),timelineSeek?.id===sceneId?timelineSeek.offset:0,i);
+  drawScene(scene,timelineSeek?.id===sceneId?timelineSeek.offset:0,i);
 }
 function download(blob,name){
   const url=URL.createObjectURL(blob),a=document.createElement('a');
@@ -327,6 +335,7 @@ async function exportVideo(){
   const blobs=new Map();
   try{
     await Promise.all(p.scenes.filter(s=>s.photoAssetId).map(loadPhoto));
+    await Promise.all(p.scenes.filter(s=>s.backgroundImage).map(preloadBackground));
     renderVideos=new Map();
     for(const s of p.scenes.filter(s=>s.videoAssetId)){
       if(renderVideos.has(s.videoAssetId))continue;
@@ -446,6 +455,17 @@ function wire(){
   $('project-choice').addEventListener('change',e=>selectProject(e.target.value));
   wirePhaseTwo();
   wireFreeSpeech();
+  assetLibrary=initAssetLibrary({
+    getScene:selectedScene,
+    savePhoto:putPhoto,
+    readPhoto:getPhoto,
+    makeId,
+    commit:touch,
+    photoChanged:()=>{void refreshPhotoInfo();},
+    redraw:drawCurrent,
+    message:status,
+    editable:()=>!recording&&micRecorder?.state!=='recording'
+  });
   $('new-project').addEventListener('click',()=>{
     if(recording)return;
     const name=prompt('Project name','New Leadership Video');if(name===null)return;
