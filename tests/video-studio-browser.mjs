@@ -78,7 +78,7 @@ try{
     await page.locator('#asset-pack-file').setInputFiles({name:'mayne-presenters.zip',mimeType:'application/zip',buffer:archive});
     await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('12 looks'),{timeout:16000});
     assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'custom professional and casual outfits appear alongside the ten included outfits');
-    await page.getByRole('button',{name:/Use Studio Test Presenter Professional.*Original/}).click();
+    await page.getByRole('button',{name:'Use Studio Test Presenter Professional',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
     await page.reload();
     await page.locator('#project-choice option').first().waitFor({state:'attached'});
