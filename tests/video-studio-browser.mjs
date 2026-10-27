@@ -82,6 +82,37 @@ try{
  wav.writeUInt32LE(sampleRate,24);wav.writeUInt32LE(sampleRate*2,28);
  wav.writeUInt16LE(2,32);wav.writeUInt16LE(16,34);wav.write('data',36);wav.writeUInt32LE(samples*2,40);
  for(let i=0;i<samples;i++)wav.writeInt16LE(Math.round(4000*Math.sin(i*2*Math.PI*440/sampleRate)),44+i*2);
+
+ // Phase 3: import an actual browser-encoded video clip, confirm device persistence and re-export.
+ const videoBytes=await page.evaluate(async()=>{
+   const c=document.createElement('canvas');c.width=160;c.height=90;const ctx=c.getContext('2d');
+   const stream=c.captureStream(16);
+   const recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});
+   const chunks=[];
+   recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data);};
+   const done=new Promise(resolve=>recorder.onstop=resolve);
+   recorder.start(100);
+   let n=0;
+   const timer=setInterval(()=>{
+     ctx.fillStyle=n%2?'#a5162d':'#12bb77';ctx.fillRect(0,0,160,90);
+     ctx.fillStyle='white';ctx.fillRect(n%140,14,18,18);n+=7;
+   },45);
+   await new Promise(r=>setTimeout(r,1250));
+   clearInterval(timer);recorder.stop();await done;
+   stream.getTracks().forEach(track=>track.stop());
+   return [...new Uint8Array(await new Blob(chunks,{type:'video/webm'}).arrayBuffer())];
+ });
+ assert.ok(videoBytes.length>1000,'test clip contains video bytes');
+ await page.locator('#scene-video').setInputFiles({name:'talking-presenter.webm',mimeType:'video/webm',buffer:Buffer.from(videoBytes)});
+ await page.waitForFunction(()=>document.querySelector('#video-info')?.textContent?.includes('talking-presenter.webm'),{timeout:20000});
+ await page.locator('#video-mode').selectOption('full');
+ await page.reload();
+ await page.waitForFunction(()=>document.querySelector('#video-info')?.textContent?.includes('talking-presenter.webm'),{timeout:20000});
+ assert.equal(await page.locator('#video-mode').inputValue(),'full','video layout persisted');
+ assert.equal(await page.locator('#remove-video').isEnabled(),true,'video clip persisted');
+ // Remove this clip so the standard narration-audio export case remains independent.
+ await page.locator('#remove-video').click();
+
  await page.locator('#scene-audio').setInputFiles({name:'narration.wav',mimeType:'audio/wav',buffer:wav});
  await page.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.startsWith('Attached:'));
  await page.reload();
@@ -93,6 +124,16 @@ try{
   assert.match(video.suggestedFilename(),/\.(webm|mp4)$/);
   const path=await video.path();assert.ok((await stat(path)).size>1200,'video render produced bytes');
   assert.match(await page.locator('#status').innerText(),/exported/i);
+  // Real video clip compositor export test: a single imported moving-video scene.
+  await page.locator('#scene-video').setInputFiles({name:'clip-for-render.webm',mimeType:'video/webm',buffer:Buffer.from(videoBytes)});
+  await page.waitForFunction(()=>document.querySelector('#video-info')?.textContent?.includes('clip-for-render.webm'),{timeout:20000});
+  await page.locator('#video-mode').selectOption('presenter');
+  const compositedDownload=page.waitForEvent('download',{timeout:30000});
+  await page.locator('#render-video').click();
+  const movie=await compositedDownload;
+  assert.match(movie.suggestedFilename(),/\.(webm|mp4)$/);
+  assert.ok((await stat(await movie.path())).size>1200,'composited video export has data');
+
  }else console.warn('Browser does not support MediaRecorder; skipped export render');
  assert.deepEqual(errors,[],'no browser errors during render');
  await ctx.close();
