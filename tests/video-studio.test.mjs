@@ -148,6 +148,7 @@ test('expanded outfit-specific expressions and poses merge into builtin characte
  assert.equal(merged[0].variants.professional.assetId,'mayne-character-amara-professional');
  assert.equal(merged[0].looks.professional.friendly.assetId,'local-pose-123456');
  assert.equal(merged[0].looks.casual.listening.assetId,'local-pose-654321');
+ assert.equal(merged[0].looks.professional.neutral.assetId,'mayne-character-amara-professional-neutral','partial custom imports retain the other included poses');
  const updated=mergeCharacters(imported,[{id:'amara',name:'Amara',looks:{casual:{
    enthusiastic:{assetId:'local-pose-987654',name:'excited pose',quality:'standard'}
  }}}]);
@@ -157,4 +158,43 @@ test('expanded outfit-specific expressions and poses merge into builtin characte
    invented:{assetId:'local-pose-999999'},serious:{assetId:'https://evil.test/asset.png'}
  }}}]);
  assert.equal(bad.length,0,'unsupported looks and remote URLs are rejected');
+});
+
+test('all eighty included expression/pose assets match the supplied expansion manifest',async()=>{
+ const manifest=JSON.parse(await readFile(new URL('../assets/video-studio/expressions-poses-manifest.json',import.meta.url)));
+ assert.equal(manifest.version,2);
+ const ids=new Set();
+ for(const person of BUILTIN_CHARACTERS){
+  const source=manifest.characters.find(c=>c.id===person.id);
+  assert.ok(source);
+  for(const style of ['professional','casual']){
+   assert.equal(Object.keys(person.looks[style]).length,8);
+   for(const [look,asset] of Object.entries(person.looks[style])){
+    assert.equal(asset.url,'/assets/video-studio/'+source.looks[style][look].path);
+    assert.equal(asset.quality,'concept');
+    assert.equal(builtinPhoto(asset.assetId),asset);
+    assert.ok(!ids.has(asset.assetId));ids.add(asset.assetId);
+    const jpeg=await readFile(new URL('..'+asset.url,import.meta.url));
+    assert.equal(jpeg.subarray(0,3).toString('hex'),'ffd8ff');
+    assert.ok(jpeg.length>1000);
+   }
+  }
+ }
+ assert.equal(ids.size,80);
+ assert.equal(builtinPhoto('mayne-character-amara-professional-invented'),null);
+ assert.equal(builtinPhoto('https://example.com/variations/neutral.jpg'),null);
+});
+
+test('every included expression and pose is portable in project JSON and local render jobs',()=>{
+ for(const person of BUILTIN_CHARACTERS){
+  const assets=Object.values(person.looks).flatMap(Object.values);
+  const project=normalizeProject({scenes:assets.map(v=>makeScene({photoAssetId:v.assetId}))});
+  const imported=parseProjectImport(safeProjectExport(project)),job=localRenderManifest(project);
+  assert.equal(imported.scenes.length,16);
+  assets.forEach((asset,i)=>{
+   assert.equal(imported.scenes[i].photoAssetId,asset.assetId);
+   assert.equal(job.project.scenes[i].presenterImage,asset.url);
+   assert.equal(job.project.scenes[i].needsMedia.photo,false);
+  });
+ }
 });

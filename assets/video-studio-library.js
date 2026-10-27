@@ -69,7 +69,7 @@ export function initAssetLibrary(config){
   $('asset-import-actions').hidden=!isPeople;
   $('asset-backdrop-actions').hidden=isPeople;
   $('asset-selection-note').textContent=isPeople
-   ?'Choose an original full-resolution cutout or an imported expression/pose. Concept previews are low resolution; keep originals for finished full-screen videos.'
+   ?'The 10 original cutouts and 80 expression/pose previews are included on every device. Concept previews are 420 × 320 images; choose original cutouts for full-resolution presenters. Custom imports stay on this device.'
    :'Reused from existing Leadership 101 course artwork. Pick a background to apply it to the active scene.';
   let count=0;
   if(isPeople){
@@ -101,7 +101,7 @@ export function initAssetLibrary(config){
       if(term&&!(person.name+' '+person.description+' '+style+' '+look.label).toLowerCase().includes(term))continue;
       count++;
       out.append(card({title:person.name,detail:(style==='professional'?'Professional':'Casual')+' · '+look.label,
-        assetId:v.assetId,active:scene?.photoAssetId===v.assetId,quality:v.quality},()=>{
+        assetId:v.assetId,url:builtinPhoto(v.assetId)?.url,active:scene?.photoAssetId===v.assetId,quality:v.quality},()=>{
          if(!config.editable()||!config.getScene())return;
          config.getScene().photoAssetId=v.assetId;
          config.commit();config.photoChanged();config.redraw();render();
@@ -112,7 +112,7 @@ export function initAssetLibrary(config){
     }
    }
    $('asset-count').textContent=count+' looks shown · '+people.length+' characters available'+
-     (people.some(p=>p.looks&&Object.keys(p.looks).length)?' · Expanded variation pack installed':'');
+     ' · 80 expression/pose previews included';
   }else{
    for(const bg of LEADERSHIP_BACKGROUNDS){
     if(term&&!bg.name.toLowerCase().includes(term))continue;

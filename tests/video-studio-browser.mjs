@@ -76,13 +76,13 @@ try{
     zip.file('characters/test-presenter-casual.png',png);
     const archive=await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
     await page.locator('#asset-pack-file').setInputFiles({name:'mayne-presenters.zip',mimeType:'application/zip',buffer:archive});
-    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('12 looks'),{timeout:16000});
-    assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'custom professional and casual outfits appear alongside the ten included outfits');
+    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('92 looks'),{timeout:16000});
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),92,'custom professional and casual outfits appear alongside the ninety included looks');
     await page.getByRole('button',{name:'Use Studio Test Presenter Professional',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
     await page.reload();
     await page.locator('#project-choice option').first().waitFor({state:'attached'});
-    assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'included and imported character library is reusable after reload');
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),92,'included and imported character library is reusable after reload');
     assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected character outfit persists');
 
     // Phase 6: variant pack extends an existing included character, without replacing native originals.
@@ -96,7 +96,8 @@ try{
     extension.file('variations/amara/casual/explaining.png',png);
     const zipV2=await extension.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
     await page.locator('#asset-pack-file').setInputFiles({name:'character-variations-v2.zip',mimeType:'application/zip',buffer:zipV2});
-    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('14 looks'),{timeout:16000});
+    await page.waitForFunction(()=>document.querySelector('#status')?.textContent?.includes('Character pack imported:'),{timeout:16000});
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),92,'custom pose overrides preserve all other included looks');
     await page.locator('#asset-character-filter').selectOption('amara');
     await page.locator('#asset-outfit-filter').selectOption('professional');
     await page.locator('#asset-variant-filter').selectOption('friendly');

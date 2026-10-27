@@ -4,11 +4,11 @@ import {readFile,stat} from 'node:fs/promises';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
-import {BUILTIN_CHARACTERS} from '../assets/video-studio-library-core.js';
+import {BUILTIN_CHARACTERS,CHARACTER_LOOKS} from '../assets/video-studio-library-core.js';
 import {makeScene,safeProjectExport,normalizeProject} from '../assets/video-studio-core.js';
 
 const root=resolve(fileURLToPath(new URL('../public/',import.meta.url)));
-const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp'};
+const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp'};
 const server=createServer(async(req,res)=>{
  try{
   const file=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname));
@@ -35,6 +35,37 @@ async function importProject(page,payload){
  await page.locator('#json-file').setInputFiles({name:'included-characters.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(payload))});
  await page.waitForFunction(name=>document.querySelector('#project-name').value===name&&document.querySelector('#status').textContent.startsWith('Project imported.'),payload.project.name);
 }
+async function verifyMovieFrames(page,expected,entries,errors=[]){
+ const download=page.waitForEvent('download',{timeout:60000}).catch(async error=>{
+  console.error('Character export diagnostics:',await page.locator('#status').innerText(),errors);
+  throw error;
+ });
+ await page.locator('#render-video').click();
+ const movie=await download;
+ assert.match(movie.suggestedFilename(),/\.(mp4|webm)$/);
+ assert.ok((await stat(await movie.path())).size>10000,'real video export contains media data');
+ const bytes=[...await readFile(await movie.path())];
+ const decoded=await page.evaluate(async({bytes,count})=>{
+  const url=URL.createObjectURL(new Blob([new Uint8Array(bytes)]));
+  const video=document.createElement('video');video.muted=true;video.preload='auto';
+  const loaded=new Promise((resolve,reject)=>{video.onloadeddata=resolve;video.onerror=()=>reject(Error('Exported movie could not be decoded'));});
+  video.src=url;await loaded;
+  const sample=document.createElement('canvas');sample.width=20;sample.height=24;
+  const ctx=sample.getContext('2d'),frames=[];
+  try{
+   for(let i=0;i<count;i++){
+    const sought=new Promise(r=>video.addEventListener('seeked',r,{once:true}));
+    video.currentTime=i*3+1;await sought;
+    ctx.drawImage(video,875,190,310,390,0,0,20,24);
+    frames.push([...ctx.getImageData(0,0,20,24).data]);
+   }
+   return {width:video.videoWidth,height:video.videoHeight,frames};
+  }finally{video.removeAttribute('src');video.load();URL.revokeObjectURL(url);}
+ },{bytes,count:entries.length});
+ assert.equal(decoded.width,1280);assert.equal(decoded.height,720);
+ const differences=decoded.frames.map((frame,i)=>distance(frame,expected[i]));
+ differences.forEach((difference,i)=>assert.ok(difference<15,entries[i].name+' is present in the decoded video frame (mean pixel difference '+difference.toFixed(2)+')'));
+}
 let browser;
 try{
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||undefined,args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});
@@ -46,7 +77,9 @@ try{
   page.on('pageerror',e=>errors.push(e.message));
   page.on('response',r=>{if(r.url().includes('/assets/video-studio/characters/')&&!r.ok())failedImages.push(r.status()+' '+r.url());});
   await ready(page);
-  assert.equal(await page.locator('#asset-gallery .asset-card').count(),10,'fresh device has ten included outfits without a ZIP');
+  assert.equal(await page.locator('#asset-gallery .asset-card').count(),90,'fresh device has ten original cutouts and eighty expression/pose previews without a ZIP');
+  await page.locator('#asset-variant-filter').selectOption('base');
+  assert.equal(await page.locator('#asset-gallery .asset-card').count(),10,'original full-resolution outfits remain available');
   assert.match(await page.locator('#asset-count').innerText(),/5 characters/);
   assert.equal(await page.evaluate(()=>localStorage.getItem('mayne-video-character-library-v1')),null,'included library needs no imported catalog');
   const baseline=await page.evaluate(sampleCanvas);
@@ -105,36 +138,72 @@ try{
  assert.ok(distance(secondScene,expected[1])<1,'storyboard preloads an unselected scene outfit before playback');
  await page.locator('#stop-preview').click();
 
- const download=page.waitForEvent('download',{timeout:60000}).catch(async error=>{
-  console.error('Character export diagnostics:',await page.locator('#status').innerText(),errors);
-  throw error;
- });
- await page.locator('#render-video').click();
- const movie=await download;
- assert.match(movie.suggestedFilename(),/\.(mp4|webm)$/);
- assert.ok((await stat(await movie.path())).size>10000,'real video export contains media data');
- const bytes=[...await readFile(await movie.path())];
- const decoded=await page.evaluate(async({bytes,count})=>{
-  const url=URL.createObjectURL(new Blob([new Uint8Array(bytes)]));
-  const video=document.createElement('video');video.muted=true;video.preload='auto';
-  const loaded=new Promise((resolve,reject)=>{video.onloadeddata=resolve;video.onerror=()=>reject(Error('Exported movie could not be decoded'));});
-  video.src=url;await loaded;
-  const sample=document.createElement('canvas');sample.width=20;sample.height=24;
-  const ctx=sample.getContext('2d'),frames=[];
-  try{
-   for(let i=0;i<count;i++){
-    const sought=new Promise(r=>video.addEventListener('seeked',r,{once:true}));
-    video.currentTime=i*3+1;await sought;
-    ctx.drawImage(video,875,190,310,390,0,0,20,24);
-    frames.push([...ctx.getImageData(0,0,20,24).data]);
-   }
-   return {width:video.videoWidth,height:video.videoHeight,frames};
-  }finally{video.removeAttribute('src');video.load();URL.revokeObjectURL(url);}
- },{bytes,count:10});
- assert.equal(decoded.width,1280);assert.equal(decoded.height,720);
- const differences=decoded.frames.map((frame,i)=>distance(frame,expected[i]));
- differences.forEach((difference,i)=>assert.ok(difference<15,outfits[i].name+' is present in the decoded video frame (mean pixel difference '+difference.toFixed(2)+')'));
+ await verifyMovieFrames(page,expected,outfits,errors);
  assert.deepEqual(errors,[]);
  await context.close();
- console.log('Included character browser checks passed: ten original previews, both outfits for all five characters, mobile/desktop, per-scene selection, fresh-device JSON import, storyboard and decoded 1280×720 video frames.');
+ console.log('Original cutout export and decoded 1280×720 frames passed.');
+
+ const expansionContext=await browser.newContext({viewport:{width:1280,height:900},acceptDownloads:true});
+ const expansionPage=await expansionContext.newPage(),expansionErrors=[];
+ expansionPage.on('pageerror',e=>expansionErrors.push(e.message));
+ await ready(expansionPage);
+ const representative=CHARACTER_LOOKS.map((look,i)=>{
+  const person=BUILTIN_CHARACTERS[i%5],style=i%2?'casual':'professional';
+  return person.looks[style][look.id];
+ });
+ const poseFrames=new Map();
+ let previews=0;
+ for(const look of CHARACTER_LOOKS){
+  await expansionPage.locator('#asset-variant-filter').selectOption(look.id);
+  assert.equal(await expansionPage.locator('#asset-gallery .asset-card').count(),10,look.id+' appears for all five people and both outfits');
+  for(const person of BUILTIN_CHARACTERS){
+   for(const style of ['professional','casual']){
+    const variant=person.looks[style][look.id];
+    const card=expansionPage.getByRole('button',{name:'Use '+person.name+' '+(style==='professional'?'Professional':'Casual')+' · '+look.label,exact:true});
+    await card.scrollIntoViewIfNeeded();
+    await card.locator('img').evaluate(img=>img.decode());
+    assert.deepEqual(await card.locator('img').evaluate(img=>[img.naturalWidth,img.naturalHeight]),[420,320],'original JPEG preview is decoded');
+    assert.match(await card.innerText(),/Concept preview/,'preview quality remains explicit');
+    await card.click();
+    await expansionPage.waitForFunction(name=>document.querySelector('#photo-info').textContent==='Photo attached: '+name,variant.name);
+    await expansionPage.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+    if(representative.some(v=>v.assetId===variant.assetId))poseFrames.set(variant.assetId,await expansionPage.evaluate(sampleCanvas));
+    assert.equal(await expansionPage.locator('#asset-gallery .asset-card.active').count(),1,'each expression can be selected');
+    previews++;
+   }
+  }
+ }
+ assert.equal(previews,80);
+ assert.equal(poseFrames.size,8);
+ assert.equal(await expansionPage.evaluate(()=>localStorage.getItem('mayne-video-character-library-v1')),null,'all eighty expressions need no ZIP or local catalog');
+ console.log('All eighty permanent expression/pose JPEG previews and selections passed.');
+ const expandedProject=safeProjectExport(normalizeProject({name:'Eight included expressions and poses',scenes:representative.map(v=>makeScene({title:v.name,subtitle:'Included expression and pose',duration:3,photoAssetId:v.assetId}))}));
+ await importProject(expansionPage,expandedProject);
+ const expandedDownload=expansionPage.waitForEvent('download');await expansionPage.locator('#save-json').click();
+ const expandedBackup=JSON.parse(await readFile(await (await expandedDownload).path(),'utf8'));
+ assert.deepEqual(expandedBackup.project.scenes.map(s=>s.photoAssetId),representative.map(v=>v.assetId),'JSON retains all included pose IDs');
+ assert.deepEqual(expansionErrors,[]);
+ await expansionContext.close();
+
+ const mobileContext=await browser.newContext({viewport:{width:390,height:900},acceptDownloads:true});
+ const mobilePage=await mobileContext.newPage(),mobileErrors=[];mobilePage.on('pageerror',e=>mobileErrors.push(e.message));
+ await ready(mobilePage);await importProject(mobilePage,expandedBackup);
+ await mobilePage.waitForFunction(name=>document.querySelector('#photo-info').textContent==='Photo attached: '+name,representative[0].name);
+ assert.equal(await mobilePage.locator('#asset-gallery .concept-asset.active').count(),1,'pose restores on a fresh mobile device');
+ await mobilePage.locator('#asset-character-filter').selectOption('amara');
+ await mobilePage.locator('#asset-outfit-filter').selectOption('professional');
+ await mobilePage.locator('#asset-variant-filter').selectOption('neutral');
+ assert.equal(await mobilePage.locator('#asset-gallery .asset-card').count(),1,'person, outfit and pose filters work on mobile');
+ assert.ok(await mobilePage.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth<=2),'no mobile overflow with expression filters');
+ await mobilePage.locator('#scene-list [role="listitem"]').nth(1).locator('button').first().click();
+ await mobilePage.waitForFunction(name=>document.querySelector('#photo-info').textContent==='Photo attached: '+name,representative[1].name);
+ await mobilePage.locator('#play-preview').click();
+ await mobilePage.waitForFunction(()=>document.querySelector('#stage-label').textContent==='Playing scene 3');
+ const posePreview=await mobilePage.evaluate(sampleCanvas);
+ assert.ok(distance(posePreview,poseFrames.get(representative[2].assetId))<1,'storyboard preloads the next included pose');
+ await mobilePage.locator('#stop-preview').click();
+ await verifyMovieFrames(mobilePage,representative.map(v=>poseFrames.get(v.assetId)),representative,mobileErrors);
+ assert.deepEqual(mobileErrors,[]);
+ await mobileContext.close();
+ console.log('Included character browser checks passed: 10 originals, all 80 expression/pose previews, filters, fresh-device JSON, per-scene selection, storyboard and decoded 1280×720 original/pose video exports.');
 }finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}
