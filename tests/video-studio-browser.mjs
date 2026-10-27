@@ -29,6 +29,7 @@ try{
   await page.locator('#scene-title').waitFor();
   await page.locator('#project-choice option').first().waitFor({state:'attached',timeout:10000});
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'starter storyboard has four scenes');
+  assert.equal(await page.locator('#video-timeline button').count(),4,'interactive scene timeline is present');
   assert.match(await page.locator('#project-name').inputValue(),/Task vs\. Relationship/);
   const canvasInfo=await page.evaluate(()=>{const c=document.querySelector('canvas'),ctx=c.getContext('2d');
     return {pixel:[...ctx.getImageData(40,40,1,1).data],center:[...ctx.getImageData(640,360,1,1).data],
@@ -40,9 +41,19 @@ try{
   assert.ok(painted,'canvas drew its scene');
   const horizontal=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
+  await page.locator('#video-timeline button').nth(1).click();
+  assert.match(await page.locator('#scene-title').inputValue(),/Task-oriented behaviors/);
+  await page.locator('#scene-list [role="listitem"]').first().locator('button').first().click();
   await page.locator('#scene-title').fill('Updated Task Leadership');
   await page.reload();
   assert.equal(await page.locator('#scene-title').inputValue(),'Updated Task Leadership','edits persist on reload');
+  // Exercise real JPEG/PNG photo presenter persistence and compositing.
+  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLytQAAAABJRU5ErkJggg==','base64');
+  await page.locator('#scene-photo').setInputFiles({name:'presenter.png',mimeType:'image/png',buffer:png});
+  await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'));
+  await page.reload();
+  await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'));
+  assert.equal(await page.locator('#remove-photo').isEnabled(),true,'photo persists between sessions');
   await page.locator('#add-scene').click();
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be added');
   await page.locator('#clone-scene').click();
