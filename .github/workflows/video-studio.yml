@@ -6,6 +6,8 @@ on:
       - 'assets/video-studio*.js'
       - 'assets/video-studio.css'
       - 'tests/video-studio*.mjs'
+      - 'tests/video-ai.test.mjs'
+      - 'api/video-ai.js'
       - '.github/workflows/video-studio.yml'
       - 'package.json'
   pull_request:
