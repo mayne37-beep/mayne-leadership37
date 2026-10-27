@@ -588,6 +588,10 @@ async function checkProviderStatus(){
     const data=await (await callStudioAPI('GET','status')).json();
     $('voice-provider-state').textContent=data.speech?'ElevenLabs connection active.':'ElevenLabs API key not configured in Vercel.';
     $('avatar-provider-state').textContent=data.avatars?'HeyGen connection active.':'HeyGen API key not configured in Vercel.';
+    if(!data.paidEnabled && (data.speech||data.avatars)){
+      $('voice-provider-state').textContent+=' Paid generation is disabled until the owner enables it.';
+      $('avatar-provider-state').textContent+=' Paid generation is disabled until the owner enables it.';
+    }
     if(data.speech)void loadVoices();
     if(data.avatars)void loadAvatarOptions();
   }catch{
