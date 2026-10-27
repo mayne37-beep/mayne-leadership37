@@ -5,7 +5,7 @@
 <link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
 <body><a class="skip" href="#workspace">Skip to video editor</a>
 <header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
-<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 2 · Studio + AI connectors</span></div>
+<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 3 · Moving-video compositor</span></div>
 <nav aria-label="Studio navigation"><a href="/create.html">← All studios</a><button type="button" id="help-button" class="ghost">How it works</button></nav></header>
 <main id="workspace" class="workspace">
 <aside class="projects panel" aria-label="Projects and scenes">
@@ -27,7 +27,7 @@
 <div class="export-box"><div><strong>Render video</strong><p>Export a real video using your scene durations. Attach a narration audio file to each scene to include speech; browser voice previews cannot be included in an export.</p></div>
 <button id="render-video" class="primary gold" type="button">Export video</button></div>
 <p class="status" id="status" role="status" aria-live="polite">Ready. Edit your storyboard to get started.</p>
-<details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. Real presenter photos and scene timeline are included. ElevenLabs voice and HeyGen video generation work only after server-side provider keys are configured. Generated HeyGen clips are downloadable separately, not yet overlaid into the local storyboard render. Cloud projects and local AI lip-sync are not included.</p></details>
+<details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. Real presenter photos and scene timeline are included. ElevenLabs voice and HeyGen video generation work only after server-side provider keys are configured. Download generated HeyGen clips, then import them in Moving presenter video to composite the footage and its sound into your final export. Cloud projects and local AI lip-sync are not included.</p></details>
 </section>
 <aside class="inspector panel" aria-label="Selected scene editor"><div class="pane-heading"><div><span class="eyebrow">SCENE SETTINGS</span><h2>Edit scene</h2></div><span id="editor-scene-index" class="counter">01 / 04</span></div>
 <label class="field-label" for="project-name">Video project title</label><input type="text" id="project-name" maxlength="120">
@@ -40,6 +40,19 @@
 <div><label class="field-label" for="scene-layout">Layout</label><select id="scene-layout"><option value="presenter-right">Presenter right</option><option value="presenter-left">Presenter left</option><option value="split">Split layout</option><option value="title">Title slide</option><option value="text-only">Text only</option></select></div></div>
 <div class="two-fields"><div><label class="field-label" for="scene-theme">Color theme</label><select id="scene-theme"><option value="navy">Midnight navy</option><option value="blue">Clear blue</option><option value="sunset">Sunset</option><option value="forest">Forest</option><option value="slate">Slate</option></select></div>
 <div><label class="field-label" for="scene-presenter">Illustrated presenter</label><select id="scene-presenter"><option value="Alex">Alex</option><option value="Jordan">Jordan</option><option value="None">No presenter</option></select></div></div>
+<div class="divider"></div>
+<details class="advanced-media" open><summary>Moving presenter video · Phase 3</summary>
+<p class="field-hint">Bring MP4 or WebM video into a scene—including a talking-avatar video downloaded from HeyGen. It plays in the storyboard and is composited into the video export, including its audio unless muted.</p>
+<label class="field-label" for="scene-video">Import talking-presenter or other video clip</label><input id="scene-video" type="file" accept="video/mp4,video/webm,.mp4,.webm">
+<div id="video-info" class="audio-info">No moving clip attached. You can add one below.</div>
+<div class="two-fields"><div><label for="video-mode" class="field-label">Video position</label>
+<select id="video-mode"><option value="presenter">Presenter panel</option><option value="full">Full-screen with title overlay</option></select></div>
+<div><label for="video-fit" class="field-label">Fill style</label><select id="video-fit"><option value="cover">Crop to fill</option><option value="contain">Fit whole video</option></select></div></div>
+<label class="field-label" for="video-trim">Video starts at (seconds)</label><input id="video-trim" type="number" min="0" max="120" step="0.1" value="0">
+<label class="checkbox-line" for="video-muted"><input id="video-muted" type="checkbox"> Mute embedded video audio</label>
+<div class="audio-actions"><button id="preview-video" class="ghost" type="button" disabled>▶ Preview this clip</button><button id="remove-video" class="ghost danger" type="button" disabled>Remove clip</button></div>
+<p class="field-hint">Keep clips under 120 MB. For exports, video sound takes priority over separate narration in that scene. Projects and backups do not include clip files; they remain on this device.</p>
+</details>
 <div class="divider"></div>
 <details class="advanced-media" open><summary>Real presenter image</summary>
 <p class="field-hint">Upload a photo you own or have permission to use. It replaces the illustration in preview and video exports. A still photo does not lip-sync.</p>
@@ -61,10 +74,10 @@
 <label class="field-label" for="ai-avatar-voice">Avatar voice</label><select id="ai-avatar-voice"><option value="">Choose a voice</option></select>
 <button type="button" id="generate-avatar" class="primary">Generate talking-avatar clip</button>
 <button type="button" id="check-avatar" class="ghost" disabled>Check generation status</button>
-<div id="avatar-output" class="audio-info" role="status">An AI-generated clip can be downloaded and reused in your lessons. Studio compositing of moving presenter footage comes in a later release.</div>
+<div id="avatar-output" class="audio-info" role="status">An AI-generated clip can be downloaded and reused in your lessons. Download the completed MP4, then import it using Moving presenter video above. It will play and export alongside your other scenes.</div>
 <p class="field-hint">Generating an AI video consumes HeyGen API credits. Confirm the cost in your provider account before ordering.</p></div></details>
 <div class="divider"></div>
 <div class="scene-actions"><button id="clone-scene" type="button" class="ghost">Duplicate scene</button><button id="remove-scene" type="button" class="ghost danger">Delete scene</button></div>
 </aside></main>
-<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. Audio and presenter photos are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips are separate downloads, not automatically composited into this storyboard.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
+<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. Audio and presenter photos are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips can be downloaded and then imported into individual scenes for video compositing.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
 <script type="module" src="/assets/video-studio.js"></script></body></html>
