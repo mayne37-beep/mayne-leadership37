@@ -19,7 +19,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...overrides
   };
   return normalizeScene(s);
 }
@@ -40,6 +40,7 @@ export function normalizeScene(raw={}){
     videoMode:s.videoMode==='full'?'full':'presenter',
     videoFit:s.videoFit==='contain'?'contain':'cover',
     videoMuted:s.videoMuted===true,
+    localVoice:/^(?:af|am|bf|bm)_[a-z]+$/.test(s.localVoice||'')?s.localVoice:'af_heart',
     videoTrimStart:Math.max(0,Math.min(120,Number(s.videoTrimStart)||0))
   };
 }
@@ -88,4 +89,20 @@ export function parseProjectImport(obj){
   project.id=makeId();
   project.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';});
   return project;
+}
+
+
+// Portable job format for the later GPU workstation; no browser-only blob IDs or secrets.
+export function localRenderManifest(raw){
+ const p=normalizeProject(raw);
+ return {
+  format:'mayne-local-video-job',version:1,generatedAt:new Date().toISOString(),
+  project:{name:p.name,id:p.id,scenes:p.scenes.map(s=>({
+   id:s.id,title:s.title,subtitle:s.subtitle,script:s.script,
+   duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,
+   voice:s.localVoice,videoMode:s.videoMode,videoFit:s.videoFit,
+   videoTrimStart:s.videoTrimStart,videoMuted:s.videoMuted,
+   needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId),video:Boolean(s.videoAssetId)}
+  }))}
+ };
 }
