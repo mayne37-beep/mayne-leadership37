@@ -37,10 +37,10 @@ export function initAssetLibrary(config){
   catch{config.message('Browser storage is full; could not save character catalog.','error');}
  }
  function clearThumbs(){galleryUrls.forEach(url=>URL.revokeObjectURL(url));galleryUrls=[];}
- function card({title,detail,url,assetId,active,isBackground,quality},action){
+ function card({title,detail,url,assetId,active,isBackground,quality,ariaLabel},action){
   const btn=document.createElement('button');btn.type='button';
   btn.className='asset-card'+(active?' active':'')+(isBackground?' background-card':'');
-  btn.setAttribute('aria-label','Use '+title+' '+detail);
+  btn.setAttribute('aria-label',ariaLabel||'Use '+title+' '+detail);
   const figure=document.createElement('span');figure.className='asset-thumb';
   const img=document.createElement('img');img.alt='';img.loading='lazy';
   if(url)img.src=url;
@@ -87,6 +87,7 @@ export function initAssetLibrary(config){
        count++;
        out.append(card({title:person.name,detail:style==='professional'?'Professional · Original':'Casual · Original',
         assetId:variant.assetId,url:builtinPhoto(variant.assetId)?.url,
+        ariaLabel:'Use '+person.name+' '+(style==='professional'?'Professional':'Casual'),
         active:scene?.photoAssetId===variant.assetId},()=>{
          if(!config.editable()||!config.getScene())return;
          config.getScene().photoAssetId=variant.assetId;
