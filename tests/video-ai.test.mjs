@@ -40,7 +40,7 @@ test('connection status reports missing optional providers without exposing keys
  process.env.LEADERSHIP_ACCESS_SECRET=SECRET;process.env.LEADERSHIP_ACCESS_PIN_VERIFIER=VERIFIER;
  delete process.env.HEYGEN_API_KEY;delete process.env.ELEVENLABS_API_KEY;
  const r=response();await handler(req('GET','status'),r);
- assert.equal(r.statusCode,200);assert.deepEqual(r.payload,{speech:false,avatars:false});
+ assert.equal(r.statusCode,200);assert.deepEqual(r.payload,{speech:false,avatars:false,paidEnabled:false});
 });
 test('speech generation fails safely without a configured provider',async()=>{
  process.env.LEADERSHIP_ACCESS_SECRET=SECRET;process.env.LEADERSHIP_ACCESS_PIN_VERIFIER=VERIFIER;
