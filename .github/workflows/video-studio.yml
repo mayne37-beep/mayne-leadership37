@@ -1,0 +1,38 @@
+name: Video Studio Phase 1
+on:
+  push:
+    paths:
+      - 'video-studio.html'
+      - 'assets/video-studio*.js'
+      - 'assets/video-studio.css'
+      - 'tests/video-studio*.mjs'
+      - '.github/workflows/video-studio.yml'
+      - 'package.json'
+  pull_request:
+    paths:
+      - 'video-studio.html'
+      - 'assets/video-studio*.js'
+      - 'assets/video-studio.css'
+      - 'tests/video-studio*.mjs'
+      - '.github/workflows/video-studio.yml'
+      - 'package.json'
+jobs:
+  studio-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check:video
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install chromium
+      - name: Smoke test actual browser preview and export
+        run: node tests/video-studio-browser.mjs
+      - name: Ensure editor and authoring assets can be deployed
+        run: |
+          test -f video-studio.html
+          test -f assets/video-studio.js
+          test -f assets/video-studio-core.js
+          test -f assets/video-studio.css
