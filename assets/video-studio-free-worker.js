@@ -3,9 +3,8 @@
 import {splitNarration,pcmToWav,validLocalVoice,LOCAL_MODEL} from './video-studio-free-core.js';
 
 let engine=null;
-let ready=false;
 let loading=null;
-const send=(type,detail={})=>postMessage({type,...detail});
+const send=(type,detail={},transfer=[])=>postMessage({type,...detail},transfer);
 async function loadEngine(){
  if(engine)return engine;
  if(!loading){
@@ -24,7 +23,6 @@ async function loadEngine(){
        }
      });
      engine=result;
-     ready=true;
      send('ready',{message:'Free AI speech model is loaded on this device.'});
      return engine;
    })().catch(e=>{loading=null;throw e;});
