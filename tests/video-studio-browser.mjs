@@ -30,8 +30,13 @@ try{
   await page.locator('#project-choice option').first().waitFor({state:'attached',timeout:10000});
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'starter storyboard has four scenes');
   assert.match(await page.locator('#project-name').inputValue(),/Task vs\. Relationship/);
-  const painted=await page.evaluate(()=>{const c=document.querySelector('canvas');const p=c.getContext('2d').getImageData(40,40,1,1);return p[3]>0;});
-  if(!painted)console.error('CANVAS DIAGNOSTICS',JSON.stringify({errors,status:await page.locator('#status').innerText(),options:await page.locator('#project-choice option').count()}));
+  const canvasInfo=await page.evaluate(()=>{const c=document.querySelector('canvas'),ctx=c.getContext('2d');
+    return {pixel:[...ctx.getImageData(40,40,1,1).data],center:[...ctx.getImageData(640,360,1,1).data],
+      width:c.width,height:c.height,sceneCount:document.querySelectorAll('#scene-list [role=listitem]').length,
+      stage:document.querySelector('#stage-label').textContent,sceneTitle:document.querySelector('#scene-title').value,
+      canvasDataSize:c.toDataURL().length};});
+  const painted=canvasInfo.pixel[3]>0;
+  if(!painted)console.error('CANVAS DIAGNOSTICS',JSON.stringify({errors,canvasInfo,status:await page.locator('#status').innerText(),options:await page.locator('#project-choice option').count()}));
   assert.ok(painted,'canvas drew its scene');
   const horizontal=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
