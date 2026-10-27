@@ -255,7 +255,7 @@ async function playAttached(scene,quiet=false){
 }
 function previewSceneAudio(scene){
   // Calls after a scene transition may be blocked by mobile autoplay rules.
-  if(scene.audioAssetId)void playAttached(scene,true);
+  if(scene.audioAssetId&&!scene.videoAssetId)void playAttached(scene,true);
 }
 function beginPreview(){
   if(recording)return;stopPreview();
@@ -678,6 +678,101 @@ async function checkAvatar(){
     status('HeyGen job status: '+data.state,'success');
   }catch(e){status('Could not check avatar job: '+e.message,'error');}
 }
+
+async function previewClipFrame(scene,offset=0){
+  if(!scene?.videoAssetId)return;
+  try{
+    const clip=await ensureClip(scene.videoAssetId);
+    if(!clip||selectedScene()?.id!==scene.id||recording)return;
+    clip.video.pause();
+    setClipPosition(scene.videoAssetId,scene.videoTrimStart+offset);
+    clip.video.addEventListener('seeked',()=>{if(selectedScene()?.id===scene.id&&!playback&&!recording)drawCurrent();},{once:true});
+    if(clip.video.readyState>=2)drawCurrent();
+  }catch(err){if(selectedScene()?.id===scene.id)status('Video preview: '+err.message,'error');}
+}
+async function refreshVideoInfo(){
+  const scene=selectedScene();if(!scene)return;
+  $('scene-video').value='';
+  $('video-mode').value=scene.videoMode;
+  $('video-fit').value=scene.videoFit;
+  $('video-muted').checked=scene.videoMuted;
+  $('video-trim').value=scene.videoTrimStart;
+  $('remove-video').disabled=!scene.videoAssetId;
+  $('preview-video').disabled=!scene.videoAssetId;
+  if(!scene.videoAssetId){$('video-info').textContent='No moving video attached.';return;}
+  $('video-info').textContent='Loading moving presenter video…';
+  try{
+    const clip=await ensureClip(scene.videoAssetId);
+    if(selectedScene()?.id!==scene.id)return;
+    if(!clip){$('video-info').textContent='Video clip is missing on this device. Reimport the MP4 or WebM file.';return;}
+    $('video-info').textContent=clip.record.name+' · '+clock(clip.record.duration)+' · '+clip.record.width+'×'+clip.record.height;
+    await previewClipFrame(scene,timelineSeek?.id===scene.id?timelineSeek.offset:0);
+  }catch(err){if(selectedScene()?.id===scene.id)$('video-info').textContent='Unable to load clip: '+err.message;}
+}
+async function startPreviewVideo(scene,offset){
+  if(!scene?.videoAssetId)return;
+  try{
+    const clip=await ensureClip(scene.videoAssetId);
+    if(!clip||!playback||selectedProject()?.scenes[playback.index]?.id!==scene.id)return;
+    const video=clip.video;
+    video.pause();video.muted=scene.videoMuted;video.playbackRate=1;video.loop=false;
+    setClipPosition(scene.videoAssetId,scene.videoTrimStart+offset);
+    await video.play();
+  }catch(err){status('Clip playback unavailable; the storyboard will continue without video sound: '+err.message,'error');}
+}
+function wirePhaseThree(){
+  $('scene-video').addEventListener('change',async e=>{
+    if(recording||micRecorder?.state==='recording')return;
+    const file=e.target.files?.[0];if(!file)return;
+    const targetSceneId=sceneId,targetProjectId=projectId;
+    try{
+      validateClip(file);
+      status('Checking video duration and format…');
+      const info=await inspectVideoFile(file);
+      if(info.duration>240)throw Error('Long clips need to be trimmed before upload (maximum 4 minutes).');
+      const id=makeId();
+      await saveClip(id,file,info);
+      const p=projects.find(p=>p.id===targetProjectId);
+      const scene=p?.scenes.find(s=>s.id===targetSceneId);if(!scene)return;
+      scene.videoAssetId=id;scene.videoTrimStart=0;
+      scene.duration=Math.max(3,Math.min(120,Math.ceil(info.duration)));
+      if(projectId===targetProjectId)touch();else persist();
+      if(sceneId===targetSceneId){$('scene-duration').value=scene.duration;renderScenes();await refreshVideoInfo();}
+      status('Moving clip attached to '+scene.title+'. Its audio will be included when you export.','success');
+    }catch(err){status('Video import failed: '+err.message,'error');}
+    finally{e.target.value='';}
+  });
+  for(const [id,key] of [['video-mode','videoMode'],['video-fit','videoFit'],['video-trim','videoTrimStart']]){
+    $(id).addEventListener('change',e=>{
+      if(recording)return;
+      const s=selectedScene();
+      s[key]=key==='videoTrimStart'?Math.max(0,Math.min(120,Number(e.target.value)||0)):e.target.value;
+      touch();renderScenes();drawCurrent();
+      void previewClipFrame(s,timelineSeek?.id===s.id?timelineSeek.offset:0);
+    });
+  }
+  $('video-muted').addEventListener('change',e=>{
+    if(recording)return;
+    selectedScene().videoMuted=e.target.checked;touch();
+    const clip=currentClip(selectedScene().videoAssetId);if(clip)clip.video.muted=e.target.checked;
+  });
+  $('preview-video').addEventListener('click',()=>{
+    if(recording)return;
+    const s=selectedScene();if(!s.videoAssetId)return;
+    timelineSeek={id:s.id,offset:0};
+    beginPreview();
+  });
+  $('remove-video').addEventListener('click',()=>{
+    if(recording)return;
+    const scene=selectedScene();scene.videoAssetId='';scene.videoTrimStart=0;
+    stopClips();touch();renderScenes();drawCurrent();void refreshVideoInfo();
+    status('Moving video detached. File remains on this device for other scenes using it.','success');
+  });
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden&&playback){stopPreview();status('Preview stopped because the tab was hidden.');}
+  });
+}
+
 function wirePhaseTwo(){
   $('scene-photo').addEventListener('change',async e=>{
     const file=e.target.files?.[0];if(!file)return;
