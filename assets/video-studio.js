@@ -1,4 +1,4 @@
-import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,normalizeProject,clock,totalSeconds,safeProjectExport,parseProjectImport} from './video-studio-core.js';
+import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,normalizeProject,clock,totalSeconds,safeProjectExport,parseProjectImport,localRenderManifest} from './video-studio-core.js';
 
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
@@ -75,6 +75,7 @@ function populateEditor(){
   const p=selectedProject(),s=selectedScene();
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
+  $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('scene-audio').value='';
   refreshAudioInfo();
   void refreshPhotoInfo();
@@ -789,6 +790,11 @@ function wireFreeSpeech(){
   choose.replaceChildren();
   for(const voice of LOCAL_VOICES)choose.add(new Option(voice.label,voice.id));
   choose.value=validLocalVoice(lastVoice)?lastVoice:'af_heart';
+  $('save-render-job').addEventListener('click',()=>{
+    const job=localRenderManifest(selectedProject());
+    download(new Blob([JSON.stringify(job,null,2)],{type:'application/json'}),safeFilename(selectedProject().name)+'-gpu-render-job.json');
+    status('Portable render job downloaded. Media files are not included; attach them when the local GPU renderer is connected.','success');
+  });
   $('free-download').addEventListener('click',()=>{
     if(freeFile)download(freeFile,'mayne-free-ai-narration.wav');
   });
@@ -861,6 +867,7 @@ function wireFreeSpeech(){
     freeBusy=true;
     $('free-generate').disabled=true;
     freeFile=null;$('free-download').disabled=true;
+    scene.localVoice=voice;touch();
     freeTask={projectId,sceneId:scene.id};
     freeModelNote('Starting Kokoro on this device… The first model download can take time.');
     status('Generating free narration for '+scene.title+'.');
