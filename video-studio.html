@@ -5,7 +5,7 @@
 <link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
 <body><a class="skip" href="#workspace">Skip to video editor</a>
 <header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
-<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 5 · Reusable asset library</span></div>
+<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 6 · Expressions & poses</span></div>
 <nav aria-label="Studio navigation"><a href="/create.html">← All studios</a><button type="button" id="help-button" class="ghost">How it works</button></nav></header>
 <main id="workspace" class="workspace">
 <aside class="projects panel" aria-label="Projects and scenes">
@@ -63,6 +63,27 @@
 </div>
 <label for="asset-search" class="field-label">Find an asset</label>
 <input id="asset-search" type="search" placeholder="Search names and themes">
+<div class="asset-filter-grid" aria-label="Character variations">
+ <label>Character
+  <select id="asset-character-filter"><option value="all">All characters</option>
+   <option value="amara">Amara</option><option value="daniel">Daniel</option>
+   <option value="sofia">Sofia</option><option value="kenji">Kenji</option>
+   <option value="priya">Priya</option></select>
+ </label>
+ <label>Outfit
+  <select id="asset-outfit-filter"><option value="all">Both outfits</option>
+   <option value="professional">Professional</option><option value="casual">Casual</option></select>
+ </label>
+ <label>Expression / pose
+  <select id="asset-variant-filter">
+   <option value="all">All looks</option><option value="base">Original full-body</option>
+   <option value="neutral">Neutral</option><option value="friendly">Friendly</option>
+   <option value="confident">Confident</option><option value="thoughtful">Thoughtful</option>
+   <option value="concerned">Concerned</option><option value="enthusiastic">Enthusiastic</option>
+   <option value="explaining">Explaining</option><option value="listening">Listening</option>
+  </select>
+ </label>
+</div>
 <div id="asset-import-actions" class="asset-import-actions">
   <button id="asset-import-button" class="ghost" type="button">+ Import character pack (.zip)</button>
   <input id="asset-pack-file" type="file" accept=".zip,application/zip" hidden>
