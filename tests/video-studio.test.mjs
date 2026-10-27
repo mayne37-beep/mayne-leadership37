@@ -35,3 +35,19 @@ test('JSON export has no local audio references and imported copy gets new IDs',
  assert.notEqual(imported.id,p.id);assert.equal(imported.scenes.length,p.scenes.length);
  assert.throws(()=>parseProjectImport({format:'bad'}),/supported/);
 });
+
+test('moving-video scene attributes are bounded and survive model normalization',()=>{
+ const p=normalizeProject({scenes:[{title:'Video scene',duration:6,videoAssetId:'local-video-id',
+   videoMode:'full',videoFit:'contain',videoMuted:true,videoTrimStart:4.5}]});
+ assert.equal(p.scenes[0].videoMode,'full');
+ assert.equal(p.scenes[0].videoFit,'contain');
+ assert.equal(p.scenes[0].videoMuted,true);
+ assert.equal(p.scenes[0].videoTrimStart,4.5);
+ assert.equal(p.scenes[0].videoAssetId,'local-video-id');
+ const exported=safeProjectExport(p);
+ assert.equal(exported.project.scenes[0].videoAssetId,'','export contains no missing browser blob IDs');
+ assert.equal(parseProjectImport(exported).scenes[0].videoAssetId,'');
+ const bad=normalizeScene({videoMode:'strange',videoFit:'broken',videoMuted:'true',videoTrimStart:-8});
+ assert.equal(bad.videoMode,'presenter');assert.equal(bad.videoFit,'cover');
+ assert.equal(bad.videoMuted,false);assert.equal(bad.videoTrimStart,0);
+});
