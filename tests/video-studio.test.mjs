@@ -64,3 +64,20 @@ test('local GPU manifest retains scripts, design and voice while omitting device
  assert.ok(!JSON.stringify(job).includes('device-audio-123'));
  assert.ok(!JSON.stringify(job).includes('device-photo-456'));
 });
+
+
+test('Leadership 101 background assets are known and imported project URLs are validated',async()=>{
+ const {LEADERSHIP_BACKGROUNDS,validatedBackground,normalizeCharacters,mergeCharacters}=await import('../assets/video-studio-library-core.js');
+ assert.equal(LEADERSHIP_BACKGROUNDS.length,12);
+ assert.equal(validatedBackground('https://evil.example.com/fake.png'),'');
+ const bg=LEADERSHIP_BACKGROUNDS[0].url;
+ const selected=normalizeScene({backgroundImage:bg});
+ assert.equal(selected.backgroundImage,bg);
+ assert.equal(normalizeScene({backgroundImage:'javascript:alert(1)'}).backgroundImage,'');
+ assert.equal(safeProjectExport(normalizeProject({scenes:[selected]})).project.scenes[0].backgroundImage,bg);
+ const people=normalizeCharacters([{id:'amara',name:'Amara',variants:{professional:{assetId:'abcdefghij1234',name:'asset'}}}]);
+ const additions=normalizeCharacters([{id:'amara',name:'Amara',variants:{casual:{assetId:'abcdefghij5678',name:'asset2'}}}]);
+ const merged=mergeCharacters(people,additions);
+ assert.equal(merged.length,1);
+ assert.equal(Object.keys(merged[0].variants).length,2);
+});
