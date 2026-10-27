@@ -2,6 +2,17 @@
 // Background images are reused from the existing Leadership 101 authoring assets.
 // Included presenter cutouts are permanent, same-origin assets. Custom ZIP media stays local.
 export const CHARACTER_CATALOG_KEY='mayne-video-character-library-v1';
+export const CHARACTER_LOOKS=Object.freeze([
+ ['neutral','Neutral / attentive','expression'],
+ ['friendly','Friendly / smiling','expression'],
+ ['confident','Confident / assertive','expression'],
+ ['thoughtful','Thoughtful / reflective','expression'],
+ ['concerned','Concerned / empathetic','expression'],
+ ['enthusiastic','Enthusiastic / excited','expression'],
+ ['explaining','Explaining / open hands','pose'],
+ ['listening','Listening / attentive','pose']
+].map(([id,label,kind])=>Object.freeze({id,label,kind})));
+export const LOOK_KEYS=new Set(CHARACTER_LOOKS.map(v=>v.id));
 export const BUILTIN_CHARACTERS=Object.freeze([
  ['amara','Amara','Black woman, 30s'],
  ['daniel','Daniel','White man, 50s'],
@@ -50,9 +61,22 @@ export function normalizeCharacters(items){
     if(v&&typeof v.assetId==='string'&&/^[a-z0-9-]{10,100}$/i.test(v.assetId))
       variants[style]={assetId:v.assetId,name:String(v.name||style).slice(0,100)};
   }
-  if(!Object.keys(variants).length)continue;
+  const looks={};
+  for(const style of ['professional','casual']){
+    const row=raw.looks?.[style];if(!row||typeof row!=='object')continue;
+    const mapped={};
+    for(const look of CHARACTER_LOOKS){
+      const item=row[look.id];
+      if(item && typeof item.assetId==='string' && /^[a-z0-9-]{10,100}$/i.test(item.assetId)){
+        mapped[look.id]={assetId:item.assetId,name:String(item.name||look.label).slice(0,100),
+          quality:item.quality==='concept'?'concept':'standard'};
+      }
+    }
+    if(Object.keys(mapped).length)looks[style]=mapped;
+  }
+  if(!Object.keys(variants).length && !Object.keys(looks).length)continue;
   seen.add(id);
-  out.push({id,name:String(raw.name||id).slice(0,60),description:String(raw.description||'').slice(0,90),variants});
+  out.push({id,name:String(raw.name||id).slice(0,60),description:String(raw.description||'').slice(0,90),variants,looks});
  }
  return out;
 }
@@ -60,11 +84,17 @@ export function mergeCharacters(existing,incoming){
  const merged=new Map(normalizeCharacters(existing).map(c=>[c.id,c]));
  for(const c of normalizeCharacters(incoming)){
   const old=merged.get(c.id);
-  merged.set(c.id,old?{...old,...c,variants:{...old.variants,...c.variants}}:c);
+  merged.set(c.id,old?{...old,...c,variants:{...old.variants,...c.variants},
+    looks:{professional:{...old.looks?.professional,...c.looks?.professional},
+      casual:{...old.looks?.casual,...c.looks?.casual}}}:c);
  }
  return [...merged.values()].slice(0,80);
 }
 export function characterLibrary(imported){
- const includedIds=new Set(BUILTIN_CHARACTERS.map(c=>c.id));
- return [...BUILTIN_CHARACTERS,...normalizeCharacters(imported).filter(c=>!includedIds.has(c.id))];
+ const incoming=normalizeCharacters(imported);
+ const included=new Set(BUILTIN_CHARACTERS.map(c=>c.id));
+ return [...BUILTIN_CHARACTERS.map(c=>{
+   const add=incoming.find(x=>x.id===c.id);
+   return add?{...c,looks:add.looks||{}}:c;
+ }),...incoming.filter(c=>!included.has(c.id))];
 }
