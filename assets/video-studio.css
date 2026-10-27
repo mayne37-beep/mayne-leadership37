@@ -25,3 +25,11 @@
 .checkbox-line input[type=checkbox]{width:18px;height:18px;accent-color:#e1ad4d;flex:none}
 .timeline-segment .clip-marker{font-size:.68rem;color:#fed08d;white-space:nowrap}
 #video-info{min-height:20px}#scene-video{margin-top:7px}#video-trim{max-width:160px}
+
+
+/* Phase 4: provider-free, browser-computed narration */
+.free-voice-panel{border-color:#70918b;background:linear-gradient(155deg,#12352f,#17293a);}
+.free-voice-panel summary{color:#e1fbf0}
+.free-voice-panel .audio-actions button{font-size:.78rem}
+#free-model-progress{padding:9px 11px;background:#0c1d2c;border:1px solid #344f56;border-radius:8px;line-height:1.45;}
+#free-voice{width:100%}

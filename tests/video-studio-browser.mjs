@@ -137,5 +137,42 @@ try{
  }else console.warn('Browser does not support MediaRecorder; skipped export render');
  assert.deepEqual(errors,[],'no browser errors during render');
  await ctx.close();
+ // Offline generation integration test: mock the model output, never download a giant model in CI.
+ const freeCtx=await browser.newContext({viewport:{width:1200,height:880},acceptDownloads:true});
+ const freePage=await freeCtx.newPage(),freeErrors=[];
+ freePage.on('pageerror',err=>freeErrors.push(err.message));
+ await freePage.addInitScript(()=>{
+   window.Worker=class MockKokoroWorker {
+     postMessage(input){
+       const rate=24000,size=rate,bytes=44+size*2;
+       const buffer=new ArrayBuffer(bytes),d=new DataView(buffer);
+       const str=(o,s)=>{for(let i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i));};
+       str(0,'RIFF');d.setUint32(4,bytes-8,true);str(8,'WAVE');str(12,'fmt ');
+       d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);
+       d.setUint32(24,rate,true);d.setUint32(28,rate*2,true);d.setUint16(32,2,true);
+       d.setUint16(34,16,true);str(36,'data');d.setUint32(40,size*2,true);
+       for(let i=0;i<size;i++)d.setInt16(44+i*2,Math.round(Math.sin(i*2*Math.PI*320/rate)*5000),true);
+       setTimeout(()=>this.onmessage?.({data:{type:'result',buffer,duration:5,voice:input.voice}}),150);
+     }
+     terminate(){}
+   };
+ });
+ await freePage.goto(base+'/video-studio.html');
+ await freePage.locator('#project-choice option').first().waitFor({state:'attached'});
+ assert.equal(await freePage.locator('#free-voice option').count()>5,true,'free voice catalog has choices');
+ await freePage.locator('#free-voice').selectOption('bm_george');
+ await freePage.locator('#free-generate').click();
+ await freePage.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.includes('Attached: free-kokoro-'),{timeout:15000});
+ assert.equal(await freePage.locator('#free-download').isEnabled(),true,'downloaded WAV is retained on page');
+ assert.equal(await freePage.locator('#scene-duration').inputValue(),'5','scene timing follows generated narration');
+ const renderManifest=freePage.waitForEvent('download');
+ await freePage.locator('#save-render-job').click();
+ assert.match((await renderManifest).suggestedFilename(),/-gpu-render-job\.json$/);
+ await freePage.reload();
+ await freePage.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.includes('Attached: free-kokoro-'));
+ assert.equal(await freePage.locator('#free-voice').inputValue(),'bm_george','scene voice persists');
+ assert.deepEqual(freeErrors,[],'no errors in local free narration integration');
+ await freeCtx.close();
+
  console.log('Video Studio Chromium smoke tests passed: scene edits, browser storage, audio, export and responsive UI.');
 }finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}

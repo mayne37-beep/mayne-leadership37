@@ -5,7 +5,7 @@
 <link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
 <body><a class="skip" href="#workspace">Skip to video editor</a>
 <header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
-<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 3 · Moving-video compositor</span></div>
+<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 4 · Free online creator</span></div>
 <nav aria-label="Studio navigation"><a href="/create.html">← All studios</a><button type="button" id="help-button" class="ghost">How it works</button></nav></header>
 <main id="workspace" class="workspace">
 <aside class="projects panel" aria-label="Projects and scenes">
@@ -16,7 +16,7 @@
 <div class="pane-heading"><h2>Scenes</h2><button class="small-primary" id="add-scene" type="button">+ Add scene</button></div>
 <p class="sidebar-hint">Reorder, duplicate, and customize every scene.</p><div id="scene-list" class="scene-list" role="list" aria-label="Video scenes"></div>
 <div class="sidebar-bottom"><div id="scene-total" class="total"></div><p>Project changes save in this browser. Download a JSON backup to move between devices.</p>
-<button id="save-json" class="ghost" type="button">Export project JSON</button><button id="import-json" class="ghost" type="button">Import project JSON</button><input id="json-file" type="file" accept=".json,application/json" hidden></div>
+<button id="save-json" class="ghost" type="button">Export project JSON</button><button id="save-render-job" class="ghost" type="button">Download future GPU render job</button><button id="import-json" class="ghost" type="button">Import project JSON</button><input id="json-file" type="file" accept=".json,application/json" hidden></div>
 </aside>
 <section class="stage panel" aria-labelledby="preview-title">
 <div class="pane-heading stage-head"><div><span class="eyebrow">VIDEO PREVIEW</span><h2 id="preview-title">Storyboard</h2></div><span class="stage-label" id="stage-label">Scene 1</span></div>
@@ -24,10 +24,10 @@
 <section class="timeline-section" aria-label="Video scene timeline"><div class="timeline-heading"><strong>Scene timeline</strong><span id="timeline-cursor">0:00</span></div><div id="video-timeline" class="video-timeline" role="group" aria-label="Select a scene or seek within it"></div></section>
 <div class="playbar"><button id="play-preview" class="primary" type="button">▶ Play storyboard</button><button id="stop-preview" class="ghost" type="button" disabled>■ Stop</button>
 <span id="play-time" class="time">0:00 / 0:39</span><div class="playbar-right"><button id="speak-scene" class="ghost" type="button">♫ Preview voice</button></div></div>
-<div class="export-box"><div><strong>Render video</strong><p>Export a real video using your scene durations. Attach a narration audio file to each scene to include speech; browser voice previews cannot be included in an export.</p></div>
+<div class="export-box"><div><strong>Render video</strong><p>Export a real video using your scene durations. Free AI narration, microphone recordings and imported audio are included in exported videos after they are attached to scenes. Browser speech previews alone are not recorded.</p></div>
 <button id="render-video" class="primary gold" type="button">Export video</button></div>
 <p class="status" id="status" role="status" aria-live="polite">Ready. Edit your storyboard to get started.</p>
-<details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. Real presenter photos and scene timeline are included. ElevenLabs voice and HeyGen video generation work only after server-side provider keys are configured. Download generated HeyGen clips, then import them in Moving presenter video to composite the footage and its sound into your final export. Cloud projects and local AI lip-sync are not included.</p></details>
+<details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. Real presenter photos and scene timeline are included. Kokoro voice generation runs on your device at no provider charge. Optional ElevenLabs and HeyGen integrations still require server-side credentials and owner consent to enable paid generation. Download generated HeyGen clips, then import them in Moving presenter video to composite the footage and its sound into your final export. Cloud projects and local AI lip-sync are not included.</p></details>
 </section>
 <aside class="inspector panel" aria-label="Selected scene editor"><div class="pane-heading"><div><span class="eyebrow">SCENE SETTINGS</span><h2>Edit scene</h2></div><span id="editor-scene-index" class="counter">01 / 04</span></div>
 <label class="field-label" for="project-name">Video project title</label><input type="text" id="project-name" maxlength="120">
@@ -35,7 +35,7 @@
 <label class="field-label" for="scene-title">Scene heading</label><input id="scene-title" maxlength="115">
 <label class="field-label" for="scene-subtitle">On-screen message</label><textarea id="scene-subtitle" rows="3" maxlength="320"></textarea>
 <label class="field-label" for="scene-script">Narration script</label><textarea id="scene-script" rows="6" maxlength="6000"></textarea>
-<p class="field-hint">Preview with your browser voice, record your own narration, or generate an AI voice once your provider is connected.</p>
+<p class="field-hint">Generate free narration in your browser below, record your own voice, or optionally connect an external provider.</p>
 <div class="two-fields"><div><label class="field-label" for="scene-duration">Duration (seconds)</label><input id="scene-duration" type="number" min="3" max="120" step="1"></div>
 <div><label class="field-label" for="scene-layout">Layout</label><select id="scene-layout"><option value="presenter-right">Presenter right</option><option value="presenter-left">Presenter left</option><option value="split">Split layout</option><option value="title">Title slide</option><option value="text-only">Text only</option></select></div></div>
 <div class="two-fields"><div><label class="field-label" for="scene-theme">Color theme</label><select id="scene-theme"><option value="navy">Midnight navy</option><option value="blue">Clear blue</option><option value="sunset">Sunset</option><option value="forest">Forest</option><option value="slate">Slate</option></select></div>
@@ -58,6 +58,15 @@
 <p class="field-hint">Upload a photo you own or have permission to use. It replaces the illustration in preview and video exports. A still photo does not lip-sync.</p>
 <label class="field-label" for="scene-photo">Presenter photograph</label><input id="scene-photo" type="file" accept="image/png,image/jpeg,image/webp">
 <div id="photo-info" class="audio-info">Using an illustrated presenter.</div><button id="remove-photo" class="ghost danger" type="button" disabled>Remove photo</button></details>
+<div class="divider"></div>
+<details class="advanced-media free-voice-panel" open><summary>Free AI narration · runs in your browser</summary>
+<p class="field-hint">No subscription, API key, or cloud AI processing. Kokoro runs on your device while the studio stays online. The first run downloads an open-source speech model (which can be large); future runs may reuse the browser cache. Desktop Chrome or Edge recommended.</p>
+<label for="free-voice" class="field-label">Free voice</label>
+<select id="free-voice"><option value="af_heart">Heart · US feminine</option><option value="am_michael">Michael · US masculine</option></select>
+<div class="audio-actions"><button class="primary" type="button" id="free-generate">Generate free narration</button>
+<button class="ghost" type="button" id="free-download" disabled>Download WAV</button></div>
+<p class="field-hint" id="free-model-progress" role="status" aria-live="polite">Ready when you are. Narration is limited to 1,200 characters per scene. Free AI audio will be attached to this scene and included in the final video export.</p>
+</details>
 <div class="divider"></div>
 <label class="field-label" for="scene-audio">Recorded narration (optional)</label><input id="scene-audio" type="file" accept="audio/*"><div id="audio-info" class="audio-info">No narration attached.</div>
 <div class="audio-actions"><button id="play-audio" type="button" class="ghost" disabled>▶ Play audio</button><button id="remove-audio" type="button" class="ghost danger" disabled>Remove audio</button></div>
