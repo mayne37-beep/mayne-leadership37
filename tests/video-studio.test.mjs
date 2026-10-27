@@ -130,3 +130,31 @@ test('included characters stay available with a full or previously imported cata
  assert.equal(previous.length,5,'reimporting the original pack does not duplicate included identities');
  assert.equal(previous[0].variants.casual.assetId,'mayne-character-amara-casual');
 });
+
+
+test('expanded outfit-specific expressions and poses merge into builtin characters without replacing originals',async()=>{
+ const {CHARACTER_LOOKS,normalizeCharacters,mergeCharacters}=await import('../assets/video-studio-library-core.js');
+ assert.equal(CHARACTER_LOOKS.length,8);
+ const imported=normalizeCharacters([{
+   id:'amara',name:'Amara',looks:{
+    professional:{friendly:{assetId:'local-pose-123456',name:'friendly pose',quality:'concept'}},
+    casual:{listening:{assetId:'local-pose-654321',name:'listening pose'}}
+   }
+ }]);
+ assert.equal(imported.length,1);
+ assert.equal(imported[0].looks.professional.friendly.quality,'concept');
+ const merged=characterLibrary(imported);
+ assert.equal(merged.length,5);
+ assert.equal(merged[0].variants.professional.assetId,'mayne-character-amara-professional');
+ assert.equal(merged[0].looks.professional.friendly.assetId,'local-pose-123456');
+ assert.equal(merged[0].looks.casual.listening.assetId,'local-pose-654321');
+ const updated=mergeCharacters(imported,[{id:'amara',name:'Amara',looks:{casual:{
+   enthusiastic:{assetId:'local-pose-987654',name:'excited pose',quality:'standard'}
+ }}}]);
+ assert.equal(updated.length,1);
+ assert.equal(Object.keys(updated[0].looks.casual).length,2);
+ const bad=normalizeCharacters([{id:'amara',looks:{casual:{
+   invented:{assetId:'local-pose-999999'},serious:{assetId:'https://evil.test/asset.png'}
+ }}}]);
+ assert.equal(bad.length,0,'unsupported looks and remote URLs are rejected');
+});
