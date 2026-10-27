@@ -64,9 +64,9 @@ try{
  wav.writeUInt16LE(2,32);wav.writeUInt16LE(16,34);wav.write('data',36);wav.writeUInt32LE(samples*2,40);
  for(let i=0;i<samples;i++)wav.writeInt16LE(Math.round(4000*Math.sin(i*2*Math.PI*440/sampleRate)),44+i*2);
  await page.locator('#scene-audio').setInputFiles({name:'narration.wav',mimeType:'audio/wav',buffer:wav});
- await page.locator('#audio-info').getByText('Attached:',{exact:false}).waitFor();
+ await page.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.startsWith('Attached:'));
  await page.reload();
- await page.locator('#audio-info').getByText('Attached:',{exact:false}).waitFor();
+ await page.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.startsWith('Attached:'));
  if(await page.evaluate(()=>!!window.MediaRecorder && !!HTMLCanvasElement.prototype.captureStream)){
   const filePromise=page.waitForEvent('download',{timeout:30000});
   await page.locator('#render-video').click();
