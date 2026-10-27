@@ -4,6 +4,7 @@ import {readFile,stat} from 'node:fs/promises';
 import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
+import JSZip from 'jszip';
 const root=resolve(fileURLToPath(new URL('../public/',import.meta.url)));
 const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{
@@ -54,6 +55,37 @@ try{
   await page.reload();
   await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'));
   assert.equal(await page.locator('#remove-photo').isEnabled(),true,'photo persists between sessions');
+
+  if(width===1280){
+    await page.locator('#asset-tab-backgrounds').click();
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'Leadership 101 backdrop library contains twelve existing assets');
+    await page.locator('#asset-gallery .asset-card').first().click();
+    assert.match(await page.locator('#status').innerText(),/background applied/i);
+    await page.reload();
+    await page.locator('#project-choice option').first().waitFor({state:'attached'});
+    await page.locator('#asset-tab-backgrounds').click();
+    assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected background survives reload');
+    await page.locator('#asset-remove-background').click();
+    await page.locator('#asset-tab-characters').click();
+    const zip=new JSZip();
+    zip.file('manifest.json',JSON.stringify({format:'mayne-video-character-pack',version:1,characters:[
+      {id:'test-presenter',name:'Studio Test Presenter',description:'Studio demo',outfits:{
+       professional:'characters/test-presenter-professional.png',casual:'characters/test-presenter-casual.png'}}
+    ]}));
+    zip.file('characters/test-presenter-professional.png',png);
+    zip.file('characters/test-presenter-casual.png',png);
+    const archive=await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
+    await page.locator('#asset-pack-file').setInputFiles({name:'mayne-presenters.zip',mimeType:'application/zip',buffer:archive});
+    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('2 outfits'),{timeout:16000});
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),2,'both professional and casual outfits appear');
+    await page.locator('#asset-gallery .asset-card').first().click();
+    await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
+    await page.reload();
+    await page.locator('#project-choice option').first().waitFor({state:'attached'});
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),2,'character library is reusable after reload');
+    assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected character outfit persists');
+  }
+
   await page.locator('#add-scene').click();
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be added');
   await page.locator('#clone-scene').click();
