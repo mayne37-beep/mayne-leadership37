@@ -3,6 +3,8 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 const $ = id => document.getElementById(id);
 const canvas=$('video-canvas'),ctx=canvas.getContext('2d');
 let projects=[],projectId='',sceneId='',playback=null,recording=false,audioPlaying=null,storageOK=true;
+let timelineSeek=null,micRecorder=null,micStream=null,avatarJobId='';
+const photoImages=new Map();
 const selectedProject=()=>projects.find(p=>p.id===projectId);
 const selectedScene=()=>selectedProject()?.scenes.find(s=>s.id===sceneId);
 const sceneFields={ 'scene-title':'title','scene-subtitle':'subtitle','scene-script':'script','scene-duration':'duration',
@@ -60,6 +62,7 @@ function renderScenes(){
   $('editor-scene-index').textContent=String(p.scenes.findIndex(s=>s.id===sceneId)+1).padStart(2,'0')+' / '+String(p.scenes.length).padStart(2,'0');
   $('stage-label').textContent='Scene '+(p.scenes.findIndex(s=>s.id===sceneId)+1);
   $('play-time').textContent='0:00 / '+clock(totalSeconds(p));
+  renderTimeline();
 }
 function populateEditor(){
   const p=selectedProject(),s=selectedScene();
@@ -67,11 +70,15 @@ function populateEditor(){
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   $('scene-audio').value='';
   refreshAudioInfo();
+  void refreshPhotoInfo();
 }
 function selectScene(id){
-  stopPreview();stopAudio();sceneId=id;renderScenes();populateEditor();drawCurrent();
+  if(recording)return;
+  stopPreview();stopAudio();timelineSeek=null;sceneId=id;renderScenes();populateEditor();drawCurrent();
 }
 function selectProject(id){
+  if(recording||micRecorder?.state==='recording')return;
+  timelineSeek=null;avatarJobId='';$('check-avatar').disabled=true;
   if(!projects.some(p=>p.id===id))return;
   stopPreview();stopAudio();projectId=id;sceneId=selectedProject().scenes[0].id;
   persist();renderProjectChoice();renderScenes();populateEditor();drawCurrent();
@@ -146,8 +153,16 @@ function drawScene(s,secs=0,index=0){
     const presenterX=left?80:split?827:860;
     const textX=left?525:95;
     const maxWidth=split?700:670;
-    if(s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
-    if(s.presenter==='None'){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
+    const photo=photoImages.get(s.photoAssetId);
+    if(photo && photo.complete && photo.naturalWidth){
+      const x=presenterX,y=177,w=345,h=414;
+      const scale=Math.max(w/photo.naturalWidth,h/photo.naturalHeight);
+      const sw=w/scale,sh=h/scale;
+      ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,32);ctx.clip();
+      ctx.drawImage(photo,(photo.naturalWidth-sw)/2,(photo.naturalHeight-sh)/2,sw,sh,x,y,w,h);
+      ctx.restore();
+    }else if(s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
+    if(s.presenter==='None'&&!photo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
     paintParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3);
     paintParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4);
   }
@@ -156,7 +171,11 @@ function drawScene(s,secs=0,index=0){
   paintParagraph('LEADERSHIP 101  •  '+String(index+1).padStart(2,'0'),74,668,520,'bold 17px system-ui',p.soft,22,1);
   paintParagraph(clock(secs)+' / '+clock(s.duration),1081,668,160,'17px system-ui',p.soft,22,1);
 }
-function drawCurrent(){const p=selectedProject();const i=p.scenes.findIndex(s=>s.id===sceneId);drawScene(selectedScene(),0,i);}
+function drawCurrent(){
+  const p=selectedProject();if(!p)return;
+  const i=p.scenes.findIndex(s=>s.id===sceneId);
+  drawScene(selectedScene(),timelineSeek?.id===sceneId?timelineSeek.offset:0,i);
+}
 function download(blob,name){
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();
@@ -177,8 +196,11 @@ function stopPreview(){
 function openDb(){
   return new Promise((resolve,reject)=>{
     if(!('indexedDB' in window)){reject(Error('Browser storage not supported'));return;}
-    const r=indexedDB.open('mayne-video-studio-media-v1',1);
-    r.onupgradeneeded=()=>r.result.createObjectStore('audio');
+    const r=indexedDB.open('mayne-video-studio-media-v1',2);
+    r.onupgradeneeded=()=>{
+      if(!r.result.objectStoreNames.contains('audio'))r.result.createObjectStore('audio');
+      if(!r.result.objectStoreNames.contains('photo'))r.result.createObjectStore('photo');
+    };
     r.onerror=()=>reject(r.error||Error('Database unavailable'));
     r.onsuccess=()=>resolve(r.result);
   });
@@ -225,9 +247,13 @@ function previewSceneAudio(scene){
 function beginPreview(){
   if(recording)return;stopPreview();
   const p=selectedProject(),scenes=p.scenes;
-  const state={index:0,start:performance.now(),frame:0,total:0};playback=state;
+  const startIndex=timelineSeek?p.scenes.findIndex(s=>s.id===timelineSeek.id):0;
+  const index=Math.max(0,startIndex);
+  const offset=timelineSeek?Math.min(scenes[index].duration-.1,timelineSeek.offset):0;
+  const total=scenes.slice(0,index).reduce((n,s)=>n+s.duration,0);
+  const state={index,start:performance.now()-offset*1000,frame:0,total};playback=state;
   $('play-preview').disabled=true;$('stop-preview').disabled=false;
-  previewSceneAudio(scenes[0]);
+  previewSceneAudio(scenes[index]);
   function tick(now){
     if(playback!==state)return;
     let elapsed=(now-state.start)/1000;
@@ -240,6 +266,7 @@ function beginPreview(){
     drawScene(scenes[state.index],elapsed,state.index);
     $('stage-label').textContent='Playing scene '+(state.index+1);
     $('play-time').textContent=clock(state.total+elapsed)+' / '+clock(totalSeconds(p));
+    setTimelineProgress(state.index,elapsed);
     state.frame=requestAnimationFrame(tick);
   }
   state.frame=requestAnimationFrame(tick);
@@ -270,6 +297,7 @@ async function exportVideo(){
   let media=null,recorder=null,stream=null,dest=null,ac=null,frame=0,currentAudio=null,currentUrl='',finished=false;
   const blobs=new Map();
   try{
+    await Promise.all(p.scenes.filter(s=>s.photoAssetId).map(loadPhoto));
     for(const s of p.scenes){
       if(s.audioAssetId && !blobs.has(s.audioAssetId)){const a=await getAudio(s.audioAssetId);if(a)blobs.set(s.audioAssetId,a);}
     }
@@ -328,6 +356,7 @@ async function exportVideo(){
       }
       drawScene(p.scenes[index],elapsed,index);
       $('play-time').textContent=clock(total+elapsed)+' / '+clock(seconds);
+      setTimelineProgress(index,elapsed);
       status('Rendering scene '+(index+1)+' of '+p.scenes.length+' · '+Math.floor((total+elapsed)/seconds*100)+'%. Keep tab visible.');
       frame=requestAnimationFrame(tick);
     }
@@ -346,6 +375,7 @@ async function exportVideo(){
 }
 function wire(){
   $('project-choice').addEventListener('change',e=>selectProject(e.target.value));
+  wirePhaseTwo();
   $('new-project').addEventListener('click',()=>{
     if(recording)return;
     const name=prompt('Project name','New Leadership Video');if(name===null)return;
@@ -436,5 +466,225 @@ function wire(){
   $('close-help').addEventListener('click',()=>$('help-dialog').close());
   window.addEventListener('beforeunload',e=>{if(recording){e.preventDefault();e.returnValue='';}});
 }
+
+function renderTimeline(){
+  const p=selectedProject(),out=$('video-timeline');if(!p)return;
+  out.replaceChildren();const total=Math.max(1,totalSeconds(p));
+  p.scenes.forEach((s,i)=>{
+    const b=document.createElement('button');b.type='button';
+    b.className='timeline-segment'+(s.id===sceneId?' active':'');
+    b.style.flexGrow=String(s.duration);
+    b.title='Seek within scene '+(i+1)+': '+s.title;
+    const title=document.createElement('strong');title.textContent=(i+1)+'. '+s.title;
+    const detail=document.createElement('small');detail.textContent=clock(s.duration);
+    const fill=document.createElement('span');fill.className='timeline-fill';fill.style.width='0%';
+    b.append(title,detail,fill);
+    b.addEventListener('click',e=>{
+      if(recording||micRecorder?.state==='recording')return;
+      const rect=b.getBoundingClientRect();
+      const fraction=Math.max(0,Math.min(.995,(e.clientX-rect.left)/rect.width));
+      selectScene(s.id);
+      timelineSeek={id:s.id,offset:fraction*s.duration};
+      drawCurrent();setTimelineProgress(i,timelineSeek.offset);
+      const before=p.scenes.slice(0,i).reduce((n,a)=>n+a.duration,0);
+      $('play-time').textContent=clock(before+timelineSeek.offset)+' / '+clock(total);
+    });
+    out.append(b);
+  });
+}
+function setTimelineProgress(index,offset){
+  [...$('video-timeline').children].forEach((b,i)=>{
+    b.classList.toggle('active',i===index);
+    b.querySelector('.timeline-fill').style.width=(i<index?100:i===index?100*Math.min(1,offset/selectedProject().scenes[i].duration):0)+'%';
+  });
+  const p=selectedProject(),before=p.scenes.slice(0,index).reduce((sum,s)=>sum+s.duration,0);
+  $('timeline-cursor').textContent=clock(before+offset)+' / '+clock(totalSeconds(p));
+}
+async function putPhoto(key,file){
+  const db=await openDb();
+  try{await new Promise((resolve,reject)=>{
+    const tx=db.transaction('photo','readwrite');
+    tx.objectStore('photo').put({blob:file,name:file.name,type:file.type},key);
+    tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
+  });}finally{db.close();}
+}
+async function getPhoto(key){
+  if(!key)return null;const db=await openDb();
+  try{return await new Promise((resolve,reject)=>{
+    const rq=db.transaction('photo','readonly').objectStore('photo').get(key);
+    rq.onsuccess=()=>resolve(rq.result||null);rq.onerror=()=>reject(rq.error);
+  });}finally{db.close();}
+}
+async function loadPhoto(scene){
+  if(!scene?.photoAssetId||photoImages.has(scene.photoAssetId))return;
+  const id=scene.photoAssetId,asset=await getPhoto(id);if(!asset)return;
+  const url=URL.createObjectURL(asset.blob),image=new Image();
+  try{
+    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url;});
+    photoImages.set(id,image);
+  }finally{URL.revokeObjectURL(url);}
+}
+async function refreshPhotoInfo(){
+  const scene=selectedScene();if(!scene)return;
+  $('remove-photo').disabled=!scene.photoAssetId;
+  if(!scene.photoAssetId){$('photo-info').textContent='Using an illustrated presenter.';return;}
+  try{
+    const photo=await getPhoto(scene.photoAssetId);
+    if(selectedScene()?.id!==scene.id)return;
+    $('photo-info').textContent=photo?'Photo attached: '+photo.name:'Photo missing on this device. Reattach it.';
+    await loadPhoto(scene);
+    if(selectedScene()?.id===scene.id)drawCurrent();
+  }catch{if(selectedScene()?.id===scene.id)$('photo-info').textContent='Photo could not be loaded on this device.';}
+}
+let capturedChunks=[];
+async function startMicRecording(){
+  if(recording||micRecorder?.state==='recording')return;
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)return status('Microphone recording is not available in this browser.','error');
+  try{
+    const scene=selectedScene(),targetId=scene.id;
+    micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const format=['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(m=>MediaRecorder.isTypeSupported(m));
+    micRecorder=new MediaRecorder(micStream,format?{mimeType:format}:{});
+    capturedChunks=[];
+    micRecorder.ondataavailable=e=>{if(e.data?.size)capturedChunks.push(e.data);};
+    micRecorder.onstop=async()=>{
+      const mime=micRecorder.mimeType||'audio/webm';
+      const file=new File(capturedChunks,'microphone-narration.'+(mime.includes('mp4')?'m4a':'webm'),{type:mime});
+      micStream?.getTracks().forEach(t=>t.stop());micStream=null;
+      $('record-audio').disabled=false;$('stop-record-audio').disabled=true;
+      if(file.size>25*1024*1024)return status('Recording exceeds the 25 MB audio limit.','error');
+      try{
+        const id=makeId();await putAudio(id,file);
+        const target=selectedProject()?.scenes.find(s=>s.id===targetId);
+        if(target){target.audioAssetId=id;touch();void refreshAudioInfo();}
+        status('Microphone recording saved to the selected scene on this device.','success');
+      }catch(e){status('Could not save recording: '+e.message,'error');}
+      micRecorder=null;
+    };
+    micRecorder.start();
+    $('record-audio').disabled=true;$('stop-record-audio').disabled=false;
+    status('Microphone recording. Select Finish recording when done.');
+  }catch(e){
+    micStream?.getTracks().forEach(t=>t.stop());micStream=null;
+    status('Microphone access failed: '+e.message,'error');
+  }
+}
+async function callStudioAPI(method,action,body={}){
+  const qs=new URLSearchParams({action});
+  if(body.videoId)qs.set('videoId',body.videoId);
+  const res=await fetch('/api/video-ai'+(method==='GET'?'?'+qs:''),{
+    method,credentials:'same-origin',
+    ...(method==='POST'?{headers:{'content-type':'application/json'},body:JSON.stringify({action,...body})}:{})
+  });
+  if(!res.ok){let error='Provider request failed.';try{error=(await res.json()).error||error;}catch{}throw Error(error);}
+  return res;
+}
+function optionsInto(select,values,placeholder){
+  select.replaceChildren(new Option(placeholder,''));
+  for(const v of values)select.add(new Option(v.name,v.id));
+}
+async function checkProviderStatus(){
+  try{
+    const data=await (await callStudioAPI('GET','status')).json();
+    $('voice-provider-state').textContent=data.speech?'ElevenLabs connection active.':'ElevenLabs API key not configured in Vercel.';
+    $('avatar-provider-state').textContent=data.avatars?'HeyGen connection active.':'HeyGen API key not configured in Vercel.';
+    if(data.speech)void loadVoices();
+    if(data.avatars)void loadAvatarOptions();
+  }catch{
+    $('voice-provider-state').textContent='Sign in with the site PIN to use server AI services.';
+    $('avatar-provider-state').textContent='Sign in with the site PIN to use server AI services.';
+  }
+}
+async function loadVoices(){
+  try{
+    const data=await (await callStudioAPI('GET','voices')).json();
+    optionsInto($('ai-voice'),data.voices||[],'Choose a voice');
+    $('voice-provider-state').textContent=(data.voices||[]).length+' AI voices available.';
+  }catch(e){$('voice-provider-state').textContent=e.message;}
+}
+async function generateVoice(){
+  const voiceId=$('ai-voice').value,scene=selectedScene(),sceneIdAtStart=scene.id;
+  const text=scene.script.trim();
+  if(!voiceId||!text)return status('Choose an AI voice and write a narration script.','error');
+  if(text.length>3500)return status('AI narration is limited to 3500 characters per scene.','error');
+  if(!confirm('Generate paid ElevenLabs narration for this scene using provider credits?'))return;
+  const button=$('generate-ai-voice');button.disabled=true;
+  try{
+    status('Generating AI narration…');
+    const response=await callStudioAPI('POST','speech',{voiceId,text});
+    const blob=await response.blob();
+    const audio=new File([blob],'ai-narration.mp3',{type:'audio/mpeg'});
+    const id=makeId();await putAudio(id,audio);
+    const target=selectedProject()?.scenes.find(s=>s.id===sceneIdAtStart);
+    if(target){target.audioAssetId=id;touch();if(selectedScene()?.id===sceneIdAtStart)void refreshAudioInfo();}
+    status('AI narration generated and attached to the scene.','success');
+  }catch(e){status('AI narration failed: '+e.message,'error');}
+  finally{button.disabled=false;}
+}
+async function loadAvatarOptions(){
+  try{
+    const data=await (await callStudioAPI('GET','avatar-options')).json();
+    optionsInto($('ai-avatar'),data.avatars||[],'Choose an avatar');
+    optionsInto($('ai-avatar-voice'),data.voices||[],'Choose an avatar voice');
+    $('avatar-provider-state').textContent=(data.avatars||[]).length+' avatars and '+(data.voices||[]).length+' voices available.';
+  }catch(e){$('avatar-provider-state').textContent=e.message;}
+}
+async function generateAvatar(){
+  const avatarId=$('ai-avatar').value,voiceId=$('ai-avatar-voice').value,script=selectedScene().script.trim();
+  if(!avatarId||!voiceId||!script)return status('Choose a HeyGen avatar, voice and scene script.','error');
+  if(script.length>2200)return status('Avatar script must be under 2200 characters.','error');
+  if(!confirm('Submit this scene to HeyGen for paid talking-avatar video generation? This will consume HeyGen API credits.'))return;
+  const b=$('generate-avatar');b.disabled=true;
+  try{
+    status('Submitting avatar video generation…');
+    const data=await (await callStudioAPI('POST','avatar-generate',{avatarId,voiceId,text:script})).json();
+    avatarJobId=data.videoId;
+    $('check-avatar').disabled=false;
+    $('avatar-output').textContent='Video requested. Job ID: '+avatarJobId+'. Check its generation status here.';
+    status('HeyGen job submitted. Select Check generation status to see the result.','success');
+  }catch(e){status('Avatar generation failed: '+e.message,'error');}
+  finally{b.disabled=false;}
+}
+async function checkAvatar(){
+  if(!avatarJobId)return;
+  try{
+    const data=await (await callStudioAPI('GET','avatar-status',{videoId:avatarJobId})).json();
+    $('avatar-output').replaceChildren();
+    $('avatar-output').append(document.createTextNode('Generation status: '+data.state+'. '));
+    if(data.videoUrl){
+      const link=document.createElement('a');link.textContent='Open finished avatar video';link.href=data.videoUrl;
+      link.target='_blank';link.rel='noopener noreferrer';$('avatar-output').append(link);
+    }
+    status('HeyGen job status: '+data.state,'success');
+  }catch(e){status('Could not check avatar job: '+e.message,'error');}
+}
+function wirePhaseTwo(){
+  $('scene-photo').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024)
+      return status('Choose a PNG, JPEG or WebP photo under 8 MB.','error');
+    const targetId=sceneId,id=makeId();
+    try{
+      await putPhoto(id,file);
+      const scene=selectedProject()?.scenes.find(s=>s.id===targetId);
+      if(scene){scene.photoAssetId=id;touch();if(sceneId===targetId)await refreshPhotoInfo();}
+      status('Photo presenter saved for this scene.','success');
+    }catch(err){status('Photo storage failed: '+err.message,'error');}
+    e.target.value='';
+  });
+  $('remove-photo').addEventListener('click',()=>{
+    const s=selectedScene();s.photoAssetId='';touch();drawCurrent();void refreshPhotoInfo();
+    status('Presenter photo removed from scene.','success');
+  });
+  $('record-audio').addEventListener('click',startMicRecording);
+  $('stop-record-audio').addEventListener('click',()=>{if(micRecorder?.state==='recording')micRecorder.stop();});
+  $('load-ai-voices').addEventListener('click',loadVoices);
+  $('generate-ai-voice').addEventListener('click',generateVoice);
+  $('load-avatar-options').addEventListener('click',loadAvatarOptions);
+  $('generate-avatar').addEventListener('click',generateAvatar);
+  $('check-avatar').addEventListener('click',checkAvatar);
+  void checkProviderStatus();
+}
+
 load();wire();refreshAll();
 if(!storageOK)status('Storage unavailable; export JSON backups to keep your projects.','error');
