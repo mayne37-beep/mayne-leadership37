@@ -27,9 +27,12 @@ try{
   page.on('dialog',d=>d.accept('Browser smoke video'));
   await page.goto(base+'/video-studio.html');
   await page.locator('#scene-title').waitFor();
+  await page.locator('#project-choice option').first().waitFor({timeout:10000});
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'starter storyboard has four scenes');
   assert.match(await page.locator('#project-name').inputValue(),/Task vs\. Relationship/);
-  assert.ok(await page.evaluate(()=>{const c=document.querySelector('canvas');const p=c.getContext('2d').getImageData(40,40,1,1);return p[3]>0;}),'canvas drew its scene');
+  const painted=await page.evaluate(()=>{const c=document.querySelector('canvas');const p=c.getContext('2d').getImageData(40,40,1,1);return p[3]>0;});
+  if(!painted)console.error('CANVAS DIAGNOSTICS',JSON.stringify({errors,status:await page.locator('#status').innerText(),options:await page.locator('#project-choice option').count()}));
+  assert.ok(painted,'canvas drew its scene');
   const horizontal=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
   await page.locator('#scene-title').fill('Updated Task Leadership');
