@@ -3,12 +3,14 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
+import {builtinPhoto} from './video-studio-library-core.js';
 
 const $ = id => document.getElementById(id);
 const canvas=$('video-canvas'),ctx=canvas.getContext('2d');
 let projects=[],projectId='',sceneId='',playback=null,recording=false,audioPlaying=null,storageOK=true;
 let timelineSeek=null,micRecorder=null,micStream=null,avatarJobId='';
-const photoImages=new Map();
+const photoImages=new Map(),photoLoads=new Map();
+let previewRequest=0;
 let renderVideos=null,assetLibrary=null;
 let freeWorker=null,freeBusy=false,freeFile=null,freeTask=null;
 const selectedProject=()=>projects.find(p=>p.id===projectId);
@@ -213,6 +215,7 @@ function stopAudio(){
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
 }
 function stopPreview(){
+  previewRequest++;
   if(playback){cancelAnimationFrame(playback.frame);playback=null;}
   stopAudio();stopClips();
   $('play-preview').disabled=false;$('stop-preview').disabled=true;
@@ -270,9 +273,18 @@ function previewSceneAudio(scene){
   // Calls after a scene transition may be blocked by mobile autoplay rules.
   if(scene.audioAssetId&&!scene.videoAssetId)void playAttached(scene,true);
 }
-function beginPreview(){
+async function beginPreview(){
   if(recording)return;stopPreview();
   const p=selectedProject(),scenes=p.scenes;
+  const request=previewRequest;
+  $('play-preview').disabled=true;$('stop-preview').disabled=false;
+  try{
+    await Promise.all(scenes.flatMap(s=>[loadPhoto(s),preloadBackground(s)]));
+  }catch{
+    if(request!==previewRequest)return;
+    stopPreview();status('A scene image could not be loaded. Check your connection and try again.','error');return;
+  }
+  if(request!==previewRequest||recording||selectedProject()!==p)return;
   const startIndex=timelineSeek?p.scenes.findIndex(s=>s.id===timelineSeek.id):0;
   const index=Math.max(0,startIndex);
   const offset=timelineSeek?Math.min(scenes[index].duration-.1,timelineSeek.offset):0;
@@ -357,7 +369,13 @@ async function exportVideo(){
       if(s.audioAssetId && !blobs.has(s.audioAssetId)){const a=await getAudio(s.audioAssetId);if(a)blobs.set(s.audioAssetId,a);}
     }
     const AudioContextType=window.AudioContext||window.webkitAudioContext;
-    if(AudioContextType){ac=new AudioContextType();await ac.resume();dest=ac.createMediaStreamDestination();}
+    if(AudioContextType){
+      ac=new AudioContextType();await ac.resume();dest=ac.createMediaStreamDestination();
+      // Keep the audio track producing samples when a scene has no narration.
+      // Some recorders otherwise wait for audio forever and return an empty video.
+      const silence=ac.createConstantSource();silence.offset.value=0;
+      silence.connect(dest);silence.start();
+    }
     stream=canvas.captureStream(30);
     const tracks=[...stream.getVideoTracks(),...(dest?dest.stream.getAudioTracks():[])];
     media=new MediaStream(tracks);
@@ -600,7 +618,9 @@ async function putPhoto(key,file){
   });}finally{db.close();}
 }
 async function getPhoto(key){
-  if(!key)return null;const db=await openDb();
+  if(!key)return null;
+  const included=builtinPhoto(key);if(included)return included;
+  const db=await openDb();
   try{return await new Promise((resolve,reject)=>{
     const rq=db.transaction('photo','readonly').objectStore('photo').get(key);
     rq.onsuccess=()=>resolve(rq.result||null);rq.onerror=()=>reject(rq.error);
@@ -608,24 +628,34 @@ async function getPhoto(key){
 }
 async function loadPhoto(scene){
   if(!scene?.photoAssetId||photoImages.has(scene.photoAssetId))return;
-  const id=scene.photoAssetId,asset=await getPhoto(id);if(!asset)return;
-  const url=URL.createObjectURL(asset.blob),image=new Image();
-  try{
-    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url;});
-    photoImages.set(id,image);
-  }finally{URL.revokeObjectURL(url);}
+  const id=scene.photoAssetId;
+  if(photoLoads.has(id))return photoLoads.get(id);
+  const task=(async()=>{
+    const asset=await getPhoto(id);if(!asset)return;
+    const objectUrl=asset.url?'':URL.createObjectURL(asset.blob),image=new Image();
+    try{
+      await new Promise((resolve,reject)=>{
+        image.onload=resolve;image.onerror=()=>reject(Error('Presenter image could not be loaded.'));
+        image.src=asset.url||objectUrl;
+      });
+      photoImages.set(id,image);
+    }finally{if(objectUrl)URL.revokeObjectURL(objectUrl);}
+  })();
+  photoLoads.set(id,task);
+  try{return await task;}finally{photoLoads.delete(id);}
 }
 async function refreshPhotoInfo(){
   const scene=selectedScene();if(!scene)return;
+  const id=scene.photoAssetId;
   $('remove-photo').disabled=!scene.photoAssetId;
   if(!scene.photoAssetId){$('photo-info').textContent='Using an illustrated presenter.';return;}
   try{
-    const photo=await getPhoto(scene.photoAssetId);
-    if(selectedScene()?.id!==scene.id)return;
+    const photo=await getPhoto(id);
+    if(selectedScene()?.id!==scene.id||selectedScene()?.photoAssetId!==id)return;
     $('photo-info').textContent=photo?'Photo attached: '+photo.name:'Photo missing on this device. Reattach it.';
     await loadPhoto(scene);
-    if(selectedScene()?.id===scene.id)drawCurrent();
-  }catch{if(selectedScene()?.id===scene.id)$('photo-info').textContent='Photo could not be loaded on this device.';}
+    if(selectedScene()?.id===scene.id&&selectedScene()?.photoAssetId===id)drawCurrent();
+  }catch{if(selectedScene()?.id===scene.id&&selectedScene()?.photoAssetId===id)$('photo-info').textContent='Photo could not be loaded. Check your connection and try again.';}
 }
 let capturedChunks=[];
 async function startMicRecording(){

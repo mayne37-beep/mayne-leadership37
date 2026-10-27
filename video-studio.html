@@ -56,7 +56,7 @@
 <div class="divider"></div>
 <details class="advanced-media video-asset-library" open>
 <summary>Asset Library · Characters & Leadership 101</summary>
-<p class="field-hint">Reuse lifelike presenters across scenes. Select a professional or casual outfit, or choose a background from Leadership 101. Imported characters stay on this device.</p>
+<p class="field-hint">Amara, Daniel, Sofia, Kenji, and Priya are ready to use on every device, each with professional and casual outfits. Select a presenter or a Leadership 101 background for your scene. Custom imported characters stay on this device.</p>
 <div class="asset-toolbar">
   <button id="asset-tab-characters" type="button" class="small-primary" aria-pressed="true">Characters</button>
   <button id="asset-tab-backgrounds" type="button" class="ghost" aria-pressed="false">Backgrounds</button>
@@ -67,12 +67,12 @@
   <button id="asset-import-button" class="ghost" type="button">+ Import character pack (.zip)</button>
   <input id="asset-pack-file" type="file" accept=".zip,application/zip" hidden>
 </div>
-<p class="field-hint" id="asset-count" role="status">Choose a character pack to add reusable presenters.</p>
+<p class="field-hint" id="asset-count" role="status">10 included outfits · 5 characters ready to use.</p>
 <div id="asset-gallery" class="asset-gallery" role="group" aria-label="Reusable video assets"></div>
 <div id="asset-backdrop-actions" class="audio-actions" hidden>
   <button id="asset-remove-background" class="ghost danger" type="button">Remove selected background</button>
 </div>
-<p class="field-hint" id="asset-selection-note">The character library is shared by all projects saved in this browser.</p>
+<p class="field-hint" id="asset-selection-note">Included characters are available to everyone on every device.</p>
 </details>
 <div class="divider"></div>
 <details class="advanced-media" open><summary>Real presenter image</summary>
@@ -109,5 +109,5 @@
 <div class="divider"></div>
 <div class="scene-actions"><button id="clone-scene" type="button" class="ghost">Duplicate scene</button><button id="remove-scene" type="button" class="ghost danger">Delete scene</button></div>
 </aside></main>
-<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. Audio, presenter photos and imported character packs are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips can be downloaded and then imported into individual scenes for video compositing.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
+<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. The five included characters load automatically on every device, and their outfit selections are included in JSON backups. Audio, uploaded presenter photos and custom imported character packs are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips can be downloaded and then imported into individual scenes for video compositing.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
 <script type="module" src="/assets/video-studio.js"></script></body></html>

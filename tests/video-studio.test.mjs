@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {BUILTIN_CHARACTERS,builtinPhoto,characterLibrary} from '../assets/video-studio-library-core.js';
 import {demoProject,makeScene,normalizeScene,normalizeProject,newProject,totalSeconds,clock,
   MAX_SCENES,safeProjectExport,parseProjectImport,localRenderManifest,PALETTES} from '../assets/video-studio-core.js';
 
@@ -80,4 +82,51 @@ test('Leadership 101 background assets are known and imported project URLs are v
  const merged=mergeCharacters(people,additions);
  assert.equal(merged.length,1);
  assert.equal(Object.keys(merged[0].variants).length,2);
+});
+
+test('all ten included outfits resolve to permanent PNGs in the source character pack',async()=>{
+ const manifest=JSON.parse(await readFile(new URL('../assets/video-studio/manifest.json',import.meta.url)));
+ assert.equal(BUILTIN_CHARACTERS.length,5);
+ assert.deepEqual(BUILTIN_CHARACTERS.map(c=>c.name),['Amara','Daniel','Sofia','Kenji','Priya']);
+ for(const person of BUILTIN_CHARACTERS){
+  const original=manifest.characters.find(c=>c.id===person.id);
+  assert.ok(original);
+  for(const style of ['professional','casual']){
+   const variant=person.variants[style];
+   assert.equal(builtinPhoto(variant.assetId),variant);
+   assert.equal(variant.url,'/assets/video-studio/'+original.outfits[style]);
+   const image=await readFile(new URL('..'+variant.url,import.meta.url));
+   assert.equal(image.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+   assert.ok(image.length>100000);
+  }
+ }
+ for(const bad of ['javascript:alert(1)','https://example.com/image.png','/assets/video-studio/characters/amara-casual.png','mayne-character-unknown-casual'])
+  assert.equal(builtinPhoto(bad),null,'only known outfit IDs resolve');
+});
+
+test('included outfits travel between devices in backups and render jobs; custom media stays local',()=>{
+ const scenes=BUILTIN_CHARACTERS.flatMap(c=>Object.values(c.variants).map(v=>makeScene({photoAssetId:v.assetId})));
+ scenes.push(makeScene({photoAssetId:'local-photo',audioAssetId:'local-audio',videoAssetId:'local-video'}));
+ const project=normalizeProject({scenes});
+ const exported=safeProjectExport(project),imported=parseProjectImport(exported),job=localRenderManifest(project);
+ for(let i=0;i<10;i++){
+  assert.equal(imported.scenes[i].photoAssetId,scenes[i].photoAssetId);
+  assert.equal(job.project.scenes[i].presenterImage,builtinPhoto(scenes[i].photoAssetId).url);
+  assert.equal(job.project.scenes[i].needsMedia.photo,false);
+ }
+ assert.equal(exported.project.scenes[10].photoAssetId,'');
+ assert.equal(imported.scenes[10].audioAssetId,'');
+ assert.equal(imported.scenes[10].videoAssetId,'');
+ assert.equal(job.project.scenes[10].needsMedia.photo,true);
+ assert.equal(parseProjectImport({format:'mayne-video-project',version:1,project:{scenes:[{photoAssetId:'https://example.com/presenter.png'}]}}).scenes[0].photoAssetId,'');
+});
+
+test('included characters stay available with a full or previously imported catalog',()=>{
+ const full=Array.from({length:80},(_,i)=>({id:'custom-'+i,name:'Custom '+i,variants:{casual:{assetId:'local-photo-'+i}}}));
+ const available=characterLibrary(full);
+ assert.equal(available.length,85,'all eighty custom characters remain available alongside the included five');
+ assert.deepEqual(available.slice(0,5).map(c=>c.id),BUILTIN_CHARACTERS.map(c=>c.id));
+ const previous=characterLibrary([{id:'amara',name:'Amara',variants:{casual:{assetId:'previous-local-photo'}}}]);
+ assert.equal(previous.length,5,'reimporting the original pack does not duplicate included identities');
+ assert.equal(previous[0].variants.casual.assetId,'mayne-character-amara-casual');
 });

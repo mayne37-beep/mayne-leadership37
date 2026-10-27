@@ -1,4 +1,4 @@
-import {CHARACTER_CATALOG_KEY,LEADERSHIP_BACKGROUNDS,validatedBackground,normalizeCharacters,mergeCharacters} from './video-studio-library-core.js';
+import {CHARACTER_CATALOG_KEY,builtinPhoto,characterLibrary,LEADERSHIP_BACKGROUNDS,validatedBackground,normalizeCharacters,mergeCharacters} from './video-studio-library-core.js';
 
 const cachedBackgrounds=new Map(),backgroundLoads=new Map();
 export async function preloadBackground(scene){
@@ -44,7 +44,7 @@ export function initAssetLibrary(config){
   const figure=document.createElement('span');figure.className='asset-thumb';
   const img=document.createElement('img');img.alt='';img.loading='lazy';
   if(url)img.src=url;
-  if(assetId){
+  if(assetId&&!url){
    void config.readPhoto(assetId).then(photo=>{
     if(!photo?.blob||!figure.isConnected)return;
     const objectUrl=URL.createObjectURL(photo.blob);
@@ -68,17 +68,19 @@ export function initAssetLibrary(config){
   $('asset-import-actions').hidden=!isPeople;
   $('asset-backdrop-actions').hidden=isPeople;
   $('asset-selection-note').textContent=isPeople
-   ?'Choose a professional or casual look for the active scene. Your installed characters can be reused in all local projects.'
+   ?'Choose a professional or casual look for the active scene. The five included characters are available on every device. Custom imports stay on this device.'
    :'Reused from existing Leadership 101 course artwork. Pick a background to apply it to the active scene.';
   let count=0;
   if(isPeople){
-   for(const person of characters){
+   // Keep the included identities available even if an older copy of this pack was imported.
+   const available=characterLibrary(characters);
+   for(const person of available){
     for(const style of ['professional','casual']){
      const variant=person.variants?.[style];if(!variant)continue;
      if(term&&!(person.name+' '+person.description+' '+style).toLowerCase().includes(term))continue;
      count++;
      out.append(card({title:person.name,detail:style==='professional'?'Professional':'Casual',
-      assetId:variant.assetId,active:scene?.photoAssetId===variant.assetId},()=>{
+      assetId:variant.assetId,url:builtinPhoto(variant.assetId)?.url,active:scene?.photoAssetId===variant.assetId},()=>{
       if(!config.editable()||!config.getScene())return;
       config.getScene().photoAssetId=variant.assetId;
       config.commit();config.photoChanged();config.redraw();render();
@@ -86,7 +88,7 @@ export function initAssetLibrary(config){
      }));
     }
    }
-   $('asset-count').textContent=count+' outfits · '+characters.length+' characters installed';
+   $('asset-count').textContent=count+' outfits · '+available.length+' characters available';
   }else{
    for(const bg of LEADERSHIP_BACKGROUNDS){
     if(term&&!bg.name.toLowerCase().includes(term))continue;
@@ -103,9 +105,7 @@ export function initAssetLibrary(config){
   }
   if(count===0){
    const note=document.createElement('p');note.className='asset-library-empty';
-   note.textContent=isPeople&&!characters.length
-    ?'No characters installed yet. Download your Presenter Assets ZIP from ChatGPT, then choose Import character pack to add the five realistic presenters and their ten looks.'
-    :'No assets match that search.';
+   note.textContent='No assets match that search.';
    out.append(note);
   }
  }
