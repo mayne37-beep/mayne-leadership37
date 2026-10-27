@@ -27,7 +27,7 @@ jobs:
       - run: npm run check:video
       - run: npm ci
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install chromium
       - name: Smoke test actual browser preview and export
         run: node tests/video-studio-browser.mjs
       - name: Ensure editor and authoring assets can be deployed
