@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {demoProject,makeScene,normalizeScene,normalizeProject,newProject,totalSeconds,clock,
-  MAX_SCENES,safeProjectExport,parseProjectImport,PALETTES} from '../assets/video-studio-core.js';
+  MAX_SCENES,safeProjectExport,parseProjectImport,localRenderManifest,PALETTES} from '../assets/video-studio-core.js';
 
 test('demo launches with Task vs. Relationship and four playable scenes',()=>{
  const p=demoProject();assert.match(p.name,/Task vs\. Relationship/);
@@ -50,4 +50,17 @@ test('moving-video scene attributes are bounded and survive model normalization'
  const bad=normalizeScene({videoMode:'strange',videoFit:'broken',videoMuted:'true',videoTrimStart:-8});
  assert.equal(bad.videoMode,'presenter');assert.equal(bad.videoFit,'cover');
  assert.equal(bad.videoMuted,false);assert.equal(bad.videoTrimStart,0);
+});
+
+
+test('local GPU manifest retains scripts, design and voice while omitting device-only IDs',()=>{
+ const p=demoProject();p.scenes[0].localVoice='bm_george';
+ p.scenes[0].audioAssetId='device-audio-123';p.scenes[0].photoAssetId='device-photo-456';
+ const job=localRenderManifest(p);
+ assert.equal(job.version,1);assert.equal(job.format,'mayne-local-video-job');
+ assert.equal(job.project.scenes[0].voice,'bm_george');
+ assert.equal(job.project.scenes[0].needsMedia.audio,true);
+ assert.equal(job.project.scenes[0].needsMedia.photo,true);
+ assert.ok(!JSON.stringify(job).includes('device-audio-123'));
+ assert.ok(!JSON.stringify(job).includes('device-photo-456'));
 });
