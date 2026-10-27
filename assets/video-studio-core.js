@@ -19,7 +19,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',...overrides
   };
   return normalizeScene(s);
 }
@@ -34,7 +34,8 @@ export function normalizeScene(raw={}){
     layout:LAYOUTS.includes(s.layout)?s.layout:'presenter-right',
     theme:THEMES.includes(s.theme)?s.theme:'navy',
     presenter:['Alex','Jordan','None'].includes(s.presenter)?s.presenter:'Alex',
-    audioAssetId:txt(s.audioAssetId,100)
+    audioAssetId:txt(s.audioAssetId,100),
+    photoAssetId:txt(s.photoAssetId,100)
   };
 }
 export function normalizeProject(raw={}){
@@ -73,13 +74,13 @@ export function clock(secs){ const n=Math.max(0,Math.floor(secs));return Math.fl
 export function safeProjectExport(project){
   const clean=normalizeProject(project);
   // Local IndexedDB audio keys are not portable. Users must reattach audio after import.
-  clean.scenes.forEach(s=>s.audioAssetId='');
+  clean.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';});
   return { format:'mayne-video-project',version:1,project:clean };
 }
 export function parseProjectImport(obj){
   if(!obj||obj.format!=='mayne-video-project'||obj.version!==1||!obj.project) throw Error('Not a supported Mayne Video Studio project file.');
   const project=normalizeProject(obj.project);
   project.id=makeId();
-  project.scenes.forEach(s=>s.audioAssetId='');
+  project.scenes.forEach(s=>{s.audioAssetId='';s.photoAssetId='';});
   return project;
 }
