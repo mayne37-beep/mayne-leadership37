@@ -33,3 +33,24 @@
 .free-voice-panel .audio-actions button{font-size:.78rem}
 #free-model-progress{padding:9px 11px;background:#0c1d2c;border:1px solid #344f56;border-radius:8px;line-height:1.45;}
 #free-voice{width:100%}
+
+
+/* Shared scene assets: photo presenters and existing Leadership 101 backgrounds */
+.video-asset-library{background:linear-gradient(155deg,#172b42,#14253b);border-color:#4c6884}
+.asset-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:11px 0}
+.asset-toolbar button,.asset-import-actions button{font-size:.79rem;width:100%;padding:10px}
+.asset-import-actions{margin:10px 0 3px}
+.asset-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:480px;overflow-y:auto;padding:6px 3px 8px}
+.asset-card{min-width:0;min-height:156px;text-align:left;overflow:hidden;border:1px solid #465d7c;background:#1b304b;color:#e5f0fd;border-radius:10px;cursor:pointer;padding:6px}
+.asset-card:hover{border-color:#dfb865}
+.asset-card.active{border:2px solid #e5b968;background:#243c57}
+.asset-thumb{display:flex;align-items:center;justify-content:center;width:100%;height:118px;overflow:hidden;border-radius:7px;background-color:#d8e0ed;background-image:linear-gradient(45deg,#dbe4ef 25%,transparent 25%),linear-gradient(-45deg,#dbe4ef 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#dbe4ef 75%),linear-gradient(-45deg,transparent 75%,#dbe4ef 75%);background-position:0 0,0 8px,8px -8px,-8px 0;background-size:16px 16px}
+.asset-thumb img{width:100%;height:100%;object-fit:contain}
+.asset-card.background-card .asset-thumb img{object-fit:cover}
+.asset-card strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:5px 2px 1px;font-size:.79rem}
+.asset-card small{display:block;color:#b5c9e1;font-size:.7rem;margin:0 2px 4px}
+.asset-library-empty{grid-column:1/-1;padding:15px 10px;border:1px dashed #60728d;border-radius:9px;color:#cbdaeb;font-size:.83rem;line-height:1.5}
+#asset-count,#asset-selection-note{line-height:1.45}
+@media(max-width:760px){.asset-gallery{max-height:360px}.asset-card{min-height:146px}.asset-thumb{height:102px}}
+
+.audio-actions[hidden],.asset-import-actions[hidden]{display:none!important}

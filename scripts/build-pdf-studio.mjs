@@ -54,3 +54,6 @@ console.log('Leadership 101 live classroom client bundled.');
 
 await build({entryPoints:[path.join(root,'src/leadership101-builder.js')],outfile:path.join(out,'assets/leadership101-builder.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022']});
 console.log('Leadership 101 visual scenario builder compiled.');
+
+await build({entryPoints:[path.join(root,'src/video-studio-character-import.js')],outfile:path.join(out,'assets/video-studio-character-import.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022']});
+console.log('Video Studio character ZIP import module built.');
