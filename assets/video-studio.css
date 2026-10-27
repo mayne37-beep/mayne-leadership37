@@ -54,3 +54,14 @@
 @media(max-width:760px){.asset-gallery{max-height:360px}.asset-card{min-height:146px}.asset-thumb{height:102px}}
 
 .audio-actions[hidden],.asset-import-actions[hidden]{display:none!important}
+
+
+/* Character expressions and pose catalog, v2 */
+.asset-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:11px 0 14px}
+.asset-filter-grid label{font-size:.72rem;color:#cad9ee;line-height:1.4}
+.asset-filter-grid label:last-child{grid-column:1/-1}
+.asset-filter-grid select{display:block;width:100%;margin-top:4px;font-size:.81rem;min-width:0}
+.concept-asset{border-style:dashed;border-color:#7989a0}
+.concept-asset .asset-thumb{background:#d6dbe3}
+.concept-asset small{color:#fed49f;font-size:.69rem}
+@media(max-width:760px){.asset-filter-grid{grid-template-columns:1fr}.asset-filter-grid label:last-child{grid-column:auto}}

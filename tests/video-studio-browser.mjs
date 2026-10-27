@@ -76,7 +76,7 @@ try{
     zip.file('characters/test-presenter-casual.png',png);
     const archive=await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
     await page.locator('#asset-pack-file').setInputFiles({name:'mayne-presenters.zip',mimeType:'application/zip',buffer:archive});
-    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('12 outfits'),{timeout:16000});
+    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('12 looks'),{timeout:16000});
     assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'custom professional and casual outfits appear alongside the ten included outfits');
     await page.getByRole('button',{name:'Use Studio Test Presenter Professional',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
@@ -84,6 +84,35 @@ try{
     await page.locator('#project-choice option').first().waitFor({state:'attached'});
     assert.equal(await page.locator('#asset-gallery .asset-card').count(),12,'included and imported character library is reusable after reload');
     assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected character outfit persists');
+
+    // Phase 6: variant pack extends an existing included character, without replacing native originals.
+    const extension=new JSZip();
+    extension.file('manifest.json',JSON.stringify({format:'mayne-video-character-pack',version:2,characters:[{
+       id:'amara',name:'Amara',description:'Leadership presenter',outfits:{},
+       looks:{professional:{friendly:{path:'variations/amara/professional/friendly.png',quality:'concept'}},
+              casual:{explaining:{path:'variations/amara/casual/explaining.png',quality:'concept'}}}
+    }]}));
+    extension.file('variations/amara/professional/friendly.png',png);
+    extension.file('variations/amara/casual/explaining.png',png);
+    const zipV2=await extension.generateAsync({type:'nodebuffer',compression:'DEFLATE'});
+    await page.locator('#asset-pack-file').setInputFiles({name:'character-variations-v2.zip',mimeType:'application/zip',buffer:zipV2});
+    await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent?.includes('14 looks'),{timeout:16000});
+    await page.locator('#asset-character-filter').selectOption('amara');
+    await page.locator('#asset-outfit-filter').selectOption('professional');
+    await page.locator('#asset-variant-filter').selectOption('friendly');
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),1,'Amara friendly variant is discoverable');
+    assert.match(await page.locator('#asset-gallery .asset-card').first().innerText(),/Concept preview/i);
+    await page.locator('#asset-gallery .asset-card').first().click();
+    await page.waitForFunction(()=>document.querySelector('#photo-info')?.textContent?.includes('Photo attached'),{timeout:16000});
+    await page.reload();
+    await page.locator('#project-choice option').first().waitFor({state:'attached'});
+    await page.locator('#asset-character-filter').selectOption('amara');
+    await page.locator('#asset-outfit-filter').selectOption('professional');
+    await page.locator('#asset-variant-filter').selectOption('friendly');
+    assert.equal(await page.locator('#asset-gallery .asset-card.active').count(),1,'selected pose survives reload');
+    await page.locator('#asset-variant-filter').selectOption('base');
+    assert.equal(await page.locator('#asset-gallery .asset-card').count(),1,'original production cutout remains selectable');
+
   }
 
   await page.locator('#add-scene').click();

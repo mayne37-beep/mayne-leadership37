@@ -2,7 +2,7 @@
 
 The website is deployed from `mayne37-beep/mayne-leadership37` to the existing Vercel project `mayne-leadership37`. Production: https://www.mayneleadership.com.
 
-## Video Studio (Phases 1–5: free speech and reusable assets)
+## Video Studio (Phases 1–6: reusable characters, expressions and poses)
 
 Open `video-studio.html` from the Create page. This browser-first video authoring prototype includes scene storyboards, selectable illustrated presenters and themes, editable scripts and timings, narration previews through browser speech synthesis, per-scene audio uploads in IndexedDB, and native browser MediaRecorder export (MP4 only when the browser supports it; otherwise WebM). Starter storyboard: **Leadership 101 — Task vs. Relationship**.
 
@@ -98,3 +98,9 @@ Exports include editable JSON with uploaded assets, self-contained HTML, web ZIP
 Existing static lesson text/images can be copied into editable blocks. Existing scripted tools can be embedded and retain their own editing controls; their custom source code is not automatically converted into studio forms. Proprietary Articulate AI, content libraries, Review 360, localization, native Rise project import, xAPI, and cmi5 are not included. Embedded sites may reject framing, and custom code requires an accessibility review by its author.
 
 Verified: all block renderers and authoring forms; autosave and draft recovery logic; knowledge checks, quiz scoring, branching, sorting, gates, reflections, and course completion; exported HTML execution; both SCORM manifest formats and mock LMS initialization/reporting; signed-cookie verification; and the live database draft/save/publish gateway. Full browser visual QA and a target-LMS conformance test were not available.
+
+### Phase 6: expressions and poses
+
+The Characters tab now includes person, outfit and expression/pose filters. Character pack v2 supports eight named variants per outfit (`neutral`, `friendly`, `confident`, `thoughtful`, `concerned`, `enthusiastic`, `explaining`, `listening`) alongside the original full-body `professional` and `casual` production images. A new v2 ZIP supplied in the related ChatGPT conversation provides **80 individual concept-quality JPEG pose/expression crops** and the original **10 high-resolution PNG cutouts**. The low-resolution crops originated in an AI concept contact sheet; they are **not** production-quality transparent presenter assets, and the Studio explicitly labels them as previews. Select original full-body variants for finished full-screen video until individually generated and verified high-resolution poses are available.
+
+The v2 ZIP is imported through **Asset Library → Import character pack**. It installs extra variants into browser IndexedDB and preserves the original five built-in identities rather than replacing or duplicating them. User-customized pose assets remain device-local until they are separately uploaded as permanent website assets. Portable project JSON excludes locally stored binary images. Future high-resolution images can use the same v2 manifest structure and variant keys.
