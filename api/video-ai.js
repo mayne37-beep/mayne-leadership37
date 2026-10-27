@@ -35,7 +35,8 @@ export default async function handler(req,res){
   const action=String(req.method==='POST'?req.body?.action:req.query?.action||'status');
   const voiceKey=process.env.ELEVENLABS_API_KEY;
   const avatarKey=process.env.HEYGEN_API_KEY;
-  if(action==='status'&&req.method==='GET')return send(200,{speech:!!voiceKey,avatars:!!avatarKey});
+  if(action==='status'&&req.method==='GET')return send(200,{speech:!!voiceKey,avatars:!!avatarKey,
+    paidEnabled:process.env.VIDEO_AI_PAID_ENABLED==='true'});
   try{
     if(action==='voices'&&req.method==='GET'){
       if(!voiceKey)return send(503,{error:'ElevenLabs is not connected. Configure ELEVENLABS_API_KEY in Vercel.'});
@@ -49,6 +50,7 @@ export default async function handler(req,res){
       return send(200,{voices});
     }
     if(action==='speech'&&req.method==='POST'){
+      if(process.env.VIDEO_AI_PAID_ENABLED!=='true')return send(503,{error:'Paid AI generation is disabled by the site owner.'});
       if(!voiceKey)return send(503,{error:'ElevenLabs is not connected. Configure ELEVENLABS_API_KEY in Vercel.'});
       const text=typeof req.body?.text==='string'?req.body.text.trim():'';
       const voiceId=cleanId(req.body?.voiceId);
@@ -81,6 +83,7 @@ export default async function handler(req,res){
       return send(200,{avatars,voices});
     }
     if(action==='avatar-generate'&&req.method==='POST'){
+      if(process.env.VIDEO_AI_PAID_ENABLED!=='true')return send(503,{error:'Paid AI generation is disabled by the site owner.'});
       if(!avatarKey)return send(503,{error:'HeyGen is not connected. Configure HEYGEN_API_KEY in Vercel.'});
       const avatarId=cleanId(req.body?.avatarId),voiceId=cleanId(req.body?.voiceId);
       const script=typeof req.body?.text==='string'?req.body.text.trim():'';
