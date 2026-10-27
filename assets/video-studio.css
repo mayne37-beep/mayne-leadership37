@@ -52,3 +52,5 @@
 .asset-library-empty{grid-column:1/-1;padding:15px 10px;border:1px dashed #60728d;border-radius:9px;color:#cbdaeb;font-size:.83rem;line-height:1.5}
 #asset-count,#asset-selection-note{line-height:1.45}
 @media(max-width:760px){.asset-gallery{max-height:360px}.asset-card{min-height:146px}.asset-thumb{height:102px}}
+
+.audio-actions[hidden],.asset-import-actions[hidden]{display:none!important}
