@@ -1,4 +1,5 @@
 // Pure project model shared by the browser editor and Node tests.
+import {validatedBackground} from './video-studio-library-core.js';
 export const STORAGE_KEY = 'mayne-video-studio-projects-v1';
 export const MAX_SCENES = 40;
 export const LAYOUTS = ['presenter-right','presenter-left','title','split','text-only'];
@@ -19,7 +20,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...overrides
   };
   return normalizeScene(s);
 }
@@ -36,6 +37,7 @@ export function normalizeScene(raw={}){
     presenter:['Alex','Jordan','None'].includes(s.presenter)?s.presenter:'Alex',
     audioAssetId:txt(s.audioAssetId,100),
     photoAssetId:txt(s.photoAssetId,100),
+    backgroundImage:validatedBackground(s.backgroundImage),
     videoAssetId:txt(s.videoAssetId,100),
     videoMode:s.videoMode==='full'?'full':'presenter',
     videoFit:s.videoFit==='contain'?'contain':'cover',
@@ -99,7 +101,7 @@ export function localRenderManifest(raw){
   format:'mayne-local-video-job',version:1,generatedAt:new Date().toISOString(),
   project:{name:p.name,id:p.id,scenes:p.scenes.map(s=>({
    id:s.id,title:s.title,subtitle:s.subtitle,script:s.script,
-   duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,
+   duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,backgroundImage:s.backgroundImage,
    voice:s.localVoice,videoMode:s.videoMode,videoFit:s.videoFit,
    videoTrimStart:s.videoTrimStart,videoMuted:s.videoMuted,
    needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId),video:Boolean(s.videoAssetId)}
