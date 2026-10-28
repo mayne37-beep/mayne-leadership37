@@ -163,15 +163,18 @@ try{
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be added');
   await page.locator('#clone-scene').click();
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),6,'scene can be duplicated');
+  // Explicitly approve the destructive confirmation in the automated browser.
+  await page.evaluate(()=>{window.confirm=message=>{window.__sceneRemoveConfirm=message;return true;};});
   await page.locator('#remove-scene').click();
   try{
-    await page.waitForFunction(()=>document.querySelectorAll('#scene-list [role=listitem]').length===5,{timeout:2500});
+    await page.waitForFunction(()=>document.querySelectorAll('#scene-list [role=listitem]').length===5,null,{timeout:3500});
   }catch(error){
     console.error('SCENE REMOVE DIAGNOSTICS',await page.evaluate(()=>({
       sceneCount:document.querySelectorAll('#scene-list [role=listitem]').length,
       status:document.querySelector('#status')?.textContent,
       removeDisabled:document.querySelector('#remove-scene')?.disabled,
       previewDisabled:document.querySelector('#stop-preview')?.disabled,
+      confirmCalled:window.__sceneRemoveConfirm,
       title:document.querySelector('#scene-title')?.value
     })));
     throw error;
