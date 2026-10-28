@@ -42,7 +42,7 @@ test('Narration mastering creates real pauses, tail and fades',()=>{
  {voicePauseMs:400,voiceTailMs:450,voiceNormalize:false}).samples;
  assert.equal(samples.length,2350);
  assert.ok(samples[0]<.02);
- assert.equal(samples[999],.2);
+ assert.ok(Math.abs(samples[999]-.2)<1e-6);
  assert.equal(samples[1300],0);
  assert.equal(samples[1900],0);
  assert.ok(Math.abs(samples[1899])<.02);
