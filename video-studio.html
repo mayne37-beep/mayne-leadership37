@@ -103,6 +103,39 @@
 <div class="two-fields"><div><label class="field-label" for="scene-theme">Color theme</label><select id="scene-theme"><option value="navy">Midnight navy</option><option value="blue">Clear blue</option><option value="sunset">Sunset</option><option value="forest">Forest</option><option value="slate">Slate</option></select></div>
 <div><label class="field-label" for="scene-presenter">Illustrated presenter</label><select id="scene-presenter"><option value="Alex">Alex</option><option value="Jordan">Jordan</option><option value="None">No presenter</option></select></div></div>
 <div class="divider"></div>
+<fieldset class="scene-motion-fields" aria-describedby="scene-motion-hint">
+<legend><span class="motion-sparkle" aria-hidden="true">✦</span> Motion &amp; scene transitions</legend>
+<p id="scene-motion-hint" class="field-hint">Animate words and presenters, then choose how the next scene enters. Effects run during preview and in exported video.</p>
+<div class="two-fields">
+ <div><label class="field-label" for="scene-title-motion">Words appear</label><select id="scene-title-motion">
+  <option value="none">Still / no animation</option><option value="fade">Fade in</option>
+  <option value="rise">Float up</option><option value="slide-left">Slide into place</option>
+  <option value="typewriter">Typewriter reveal</option>
+ </select></div>
+ <div><label class="field-label" for="scene-presenter-motion">Presenter enters</label><select id="scene-presenter-motion">
+  <option value="none">Still / no animation</option><option value="fade">Fade in</option>
+  <option value="slide-left">Enter from right</option><option value="slide-right">Enter from left</option>
+  <option value="zoom">Zoom forward</option>
+ </select></div>
+</div>
+<div class="two-fields">
+ <div><label class="field-label" for="scene-transition">Scene transition</label><select id="scene-transition">
+  <option value="cut">Straight cut</option><option value="dissolve">Crossfade</option>
+  <option value="slide-left">Slide across</option><option value="wipe">Wipe across</option>
+  <option value="zoom">Zoom dissolve</option>
+ </select></div>
+ <div><label class="field-label" for="scene-motion-duration">Motion timing</label><select id="scene-motion-duration">
+  <option value="0.3">Quick · 0.3 sec</option><option value="0.5">Snappy · 0.5 sec</option>
+  <option value="0.8">Standard · 0.8 sec</option><option value="1.2">Smooth · 1.2 sec</option>
+  <option value="1.8">Cinematic · 1.8 sec</option>
+ </select></div>
+</div>
+<div class="audio-actions motion-actions">
+ <button type="button" id="scene-motion-preview" class="small-primary">▶ Preview from this scene</button>
+ <button type="button" id="scene-motion-apply-all" class="ghost">Apply effects to all scenes</button>
+</div>
+</fieldset>
+<div class="divider"></div>
 <details class="advanced-media" open><summary>Moving presenter video · Phase 3</summary>
 <p class="field-hint">Bring MP4 or WebM video into a scene—including a talking-avatar video downloaded from HeyGen. It plays in the storyboard and is composited into the video export, including its audio unless muted.</p>
 <label class="field-label" for="scene-video">Import talking-presenter or other video clip</label><input id="scene-video" type="file" accept="video/mp4,video/webm,.mp4,.webm">
