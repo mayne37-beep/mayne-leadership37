@@ -176,7 +176,15 @@ function animatedParagraph(text,x,y,width,font,color,lineHeight,maxLines,motion,
   ctx.save();
   ctx.globalAlpha*=state.opacity;
   ctx.translate(state.x,state.y);
-  paintParagraph(visibleText(text,motion,time,duration,delay),x,y,width,font,color,lineHeight,maxLines);
+  const displayed=visibleText(text,motion,time,duration,delay);
+  if(motion==='bullet-build'){
+    let yOffset=0,remaining=maxLines;
+    for(const line of displayed.split('\n')){
+      if(!remaining)break;
+      const drawn=paintParagraph(line,x,y+yOffset,width,font,color,lineHeight,remaining);
+      yOffset+=drawn;remaining-=drawn/lineHeight;
+    }
+  }else paintParagraph(displayed,x,y,width,font,color,lineHeight,maxLines);
   ctx.restore();
 }
 function presenter(x,y,scale=1,variant='Alex'){
@@ -674,13 +682,16 @@ function wire(){
     });
   }
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']]){
-    $(id).addEventListener('change',e=>{
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],
+    ['scene-motion-delay','motionDelay'],['scene-subtitle-delay','subtitleDelay']]){
+    $(id).addEventListener(id.includes('delay')?'input':'change',e=>{
       if(recording)return;
-      selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
+      const scene=selectedScene();if(!scene)return;
+      const numeric=['motionDuration','motionDelay','subtitleDelay'].includes(key);
+      scene[key]=numeric?Number(e.target.value):e.target.value;
       timelineSeek=null;touch();renderScenes();drawCurrent();
       refreshMotionTimeline();
-      status('Scene motion updated. Use Preview from this scene to see the effect.','success');
+      if(!id.includes('delay'))status('Scene motion updated. Use Preview from this scene to see the effect.','success');
     });
   }
   $('scene-motion-preview').addEventListener('click',()=>{
