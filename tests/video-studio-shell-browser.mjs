@@ -34,13 +34,13 @@ try{
   await page.locator('#home-new-button').click();
   assert.equal(await page.locator('#workspace').isVisible(),true,'new video opens the editor');
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),1,'blank template contains one editable scene');
-  assert.equal(await page.locator('#editor-tab-scene').getAttribute('aria-selected'),'true');
-  assert.equal(await page.locator('#editor-tab-voice').isVisible(),true);
-  await page.locator('#editor-tab-characters').click();
+  assert.equal(await page.locator('[data-tool-tab="scene"]').getAttribute('aria-selected'),'true');
+  assert.equal(await page.locator('[data-tool-tab="voice"]').isVisible(),true);
+  await page.locator('[data-tool-tab="characters"]').click();
   assert.equal(await page.locator('#asset-gallery').isVisible(),true,'asset library is opened with a single tab click');
-  await page.locator('#editor-tab-voice').click();
+  await page.locator('[data-tool-tab="voice"]').click();
   assert.equal(await page.locator('#free-generate').isVisible(),true,'free narration available within focused voice tab');
-  await page.locator('#editor-tab-media').click();
+  await page.locator('[data-tool-tab="media"]').click();
   assert.equal(await page.locator('#scene-video').isVisible(),true,'video import available');
   await page.locator('#editor-show-all').check();
   assert.equal(await page.locator('#scene-title').isVisible(),true,'all tools reveals text editing');
