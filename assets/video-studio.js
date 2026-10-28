@@ -101,7 +101,7 @@ function populateEditor(){
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']])$(id).value=String(s[key]);
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],['scene-motion-delay','motionDelay'],['scene-subtitle-delay','subtitleDelay']])$(id).value=String(s[key]);
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -206,7 +206,7 @@ function paintScene(s,secs=0,index=0){
     animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
     animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else if(s.layout==='text-only'){
-    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration);
+    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
     animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else{
     const left=s.layout==='presenter-left',split=s.layout==='split';
@@ -232,7 +232,7 @@ function paintScene(s,secs=0,index=0){
     }else if(!hasVideo&&s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
     ctx.restore();
-    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration);
+    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
     animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }
   ctx.fillStyle='#ffffff20';ctx.fillRect(70,645,1140,3);
@@ -684,6 +684,8 @@ function wire(){
       candidate.presenterMotion=scene.presenterMotion;
       candidate.transition=scene.transition;
       candidate.motionDuration=scene.motionDuration;
+      candidate.motionDelay=scene.motionDelay;
+      candidate.subtitleDelay=scene.subtitleDelay;
     }
     timelineSeek=null;touch();renderScenes();drawCurrent();
     status('Motion presets applied to all '+p.scenes.length+' scenes.','success');
