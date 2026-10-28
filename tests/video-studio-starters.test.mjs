@@ -34,8 +34,14 @@ test('quick starts all include real editable projects without subscriptions',()=
  }
  assert.equal(starterProject('coaching').scenes.length,4);
  assert.equal(starterProject('training').scenes.length,4);
- assert.equal(starterProject('conflict').scenes.length,12);
+ assert.equal(starterProject('conflict').scenes.length,20);
  assert.ok(starterProject('conflict').scenes.some(s=>s.script.includes('Thomas Kilmann')));
+ const conflict=starterProject('conflict');
+ assert.equal(conflict.scenes.filter(s=>s.title.startsWith('Sofia |')).length,3);
+ assert.equal(conflict.scenes.filter(s=>s.title.startsWith('Daniel |')).length,3);
+ assert.ok(conflict.scenes.filter(s=>s.title.startsWith('Sofia |')).every(s=>s.localVoice==='af_bella'));
+ assert.ok(conflict.scenes.filter(s=>s.title.startsWith('Daniel |')).every(s=>s.localVoice==='am_michael'));
+ assert.ok(conflict.scenes.find(s=>s.title.includes('workable agreement')));
  assert.equal(starterProject('leadership').scenes.length,4);
  assert.equal(starterProject('blank').scenes[0].script,'');
  assert.throws(()=>starterProject('unknown'),/Unknown/);

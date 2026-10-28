@@ -31,7 +31,7 @@ try{
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert.ok(overflow<=3,'home fits '+width+'px, overflow '+overflow);
   await page.locator('[data-template="conflict"]').click();
-  assert.equal(await page.locator('#scene-list [role="listitem"]').count(),12,'conflict starter loads its complete lesson');
+  assert.equal(await page.locator('#scene-list [role="listitem"]').count(),20,'enhanced conflict starter loads its complete lesson');
   assert.match(await page.locator('#project-name').inputValue(),/Managing Conflict/);
   await page.locator('#editor-back-home').click();
   // Blank projects start without a prompt, from the primary create action.
