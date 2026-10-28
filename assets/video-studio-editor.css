@@ -574,3 +574,9 @@
  display:inline-block;flex:0 0 18px;margin:2px 0 0;
  border-radius:4px;
 }
+
+/* One-click, locally stored Kokoro narration ZIP import. */
+.editor-active .voice-pack-import{border:1px solid #dce5f2;background:#f8faff;border-radius:12px;padding:13px;margin:14px 0}
+.editor-active .voice-pack-import label{display:block;font-size:.78rem;color:#354f7a;font-weight:750}
+.editor-active .voice-pack-import input[type=file]{display:block;width:100%;max-width:100%;padding:8px 0;font-size:.73rem;color:#405570}
+.editor-active #narration-pack-info{line-height:1.5;font-size:.73rem}
