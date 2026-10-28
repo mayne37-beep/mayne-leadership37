@@ -3,7 +3,7 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice,normalizeSpeechOptions} from './video-studio-free-core.js';
 import {wireProjectNarration} from './video-studio-project-narration.js';
-import {entranceState,visibleText,transitionState} from './video-studio-motion.js';
+import {entranceState,visibleText,transitionState,cueTiming,moveCue,splitBullets,bulletRevealState,MOTION_TRACKS} from './video-studio-motion.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
 import {storyboardFromText,starterProject} from './video-studio-starters.js';
@@ -168,6 +168,29 @@ function animatedParagraph(text,x,y,width,font,color,lineHeight,maxLines,motion,
   paintParagraph(visibleText(text,motion,time,duration,delay),x,y,width,font,color,lineHeight,maxLines);
   ctx.restore();
 }
+
+function animatedMessage(scene,text,x,y,width,font,color,lineHeight,maxLines,time){
+ const cue=cueTiming(scene,'subtitle');
+ const mode=scene.subtitleMotion==='inherit'?scene.titleMotion:scene.subtitleMotion;
+ if(mode!=='bullets'){
+  animatedParagraph(text,x,y,width,font,color,lineHeight,maxLines,mode,time,cue.duration,cue.start);
+  return;
+ }
+ const points=bulletRevealState(scene,time);
+ const fontSize=scene.layout==='title'?29:28;
+ const line=Math.min(46,Math.max(35,Math.floor((630-y)/Math.max(1,points.length))));
+ points.forEach((point,i)=>{
+  if(point.opacity<=0)return;
+  ctx.save();
+  ctx.globalAlpha*=point.opacity;
+  ctx.fillStyle=(PALETTES[scene.theme]||PALETTES.navy).accent;
+  ctx.beginPath();ctx.arc(x+7,y+i*line+14+point.offset,5,0,Math.PI*2);ctx.fill();
+  paintParagraph(point.text,x+25,y+i*line+point.offset,width-31,
+    fontSize+'px system-ui',color,Math.min(line,38),1);
+  ctx.restore();
+ });
+}
+
 function presenter(x,y,scale=1,variant='Alex'){
   ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
   circle(165,265,205,'#ffffff12');
@@ -203,18 +226,19 @@ function paintScene(s,secs=0,index=0){
   paintParagraph('MAYNE LEADERSHIP  /  VIDEO STUDIO',89,61,445,'bold 18px system-ui',p.soft,25,1);
   ctx.fillStyle=p.accent;ctx.fillRect(70,117,68,7);
   if(s.layout==='title'){
-    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,cueTiming(s,'title').duration,cueTiming(s,'title').start);
+    animatedMessage(s,s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,secs);
   }else if(s.layout==='text-only'){
-    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,cueTiming(s,'title').duration,cueTiming(s,'title').start);
+    animatedMessage(s,s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,secs);
   }else{
     const left=s.layout==='presenter-left',split=s.layout==='split';
     const presenterX=left?80:split?827:860;
     const textX=left?525:95;
     const maxWidth=split?700:670;
     const photo=photoImages.get(s.photoAssetId);
-    const motion=entranceState(s.presenterMotion,secs,s.motionDuration,.12);
+    const presenterCue=cueTiming(s,'presenter');
+    const motion=entranceState(s.presenterMotion,secs,presenterCue.duration,presenterCue.start);
     ctx.save();
     ctx.globalAlpha*=motion.opacity;
     // Transform the entire media/presenter block without changing text alignment.
@@ -232,8 +256,8 @@ function paintScene(s,secs=0,index=0){
     }else if(!hasVideo&&s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
     ctx.restore();
-    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,cueTiming(s,'title').duration,cueTiming(s,'title').start);
+    animatedMessage(s,s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,secs);
   }
   ctx.fillStyle='#ffffff20';ctx.fillRect(70,645,1140,3);
   ctx.fillStyle=p.accent;ctx.fillRect(70,645,Math.min(1140,1140*secs/Math.max(1,s.duration)),3);
