@@ -33,6 +33,31 @@ try{
   // Blank projects start without a prompt, from the primary create action.
   await page.locator('#home-new-button').click();
   assert.equal(await page.locator('#workspace').isVisible(),true,'new video opens the editor');
+  // The editor, not just its home screen, uses the modern light workspace.
+  const editorStyle=await page.evaluate(()=>{
+   const stage=getComputedStyle(document.querySelector('.stage'));
+   const projects=getComputedStyle(document.querySelector('.projects'));
+   const inspector=getComputedStyle(document.querySelector('.inspector'));
+   const frame=getComputedStyle(document.querySelector('.canvas-shell'));
+   return {stage:stage.backgroundColor,projects:projects.backgroundColor,inspector:inspector.backgroundColor,
+      frame:frame.borderTopColor,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth};
+  });
+  assert.equal(editorStyle.stage,'rgb(241, 243, 248)','scene preview is on a light canvas workspace');
+  assert.equal(editorStyle.projects,'rgb(251, 252, 255)','scenes use a light side panel');
+  assert.equal(editorStyle.inspector,'rgb(255, 255, 255)','editor inspector matches home styling');
+  assert.ok(editorStyle.overflow<=3,'redesigned editor fits '+width+'px, overflow '+editorStyle.overflow);
+  assert.equal(await page.locator('.scene-thumb').count(),1,'filmstrip-style scene thumbnail is displayed');
+  assert.equal(await page.locator('#stage-choose-character').isVisible(),true);
+  await page.locator('#stage-choose-character').click();
+  assert.equal(await page.locator('#asset-gallery').isVisible(),true,'preview shortcut opens real presenter assets');
+  await page.locator('#stage-edit-script').click();
+  assert.equal(await page.locator('#scene-script').isVisible(),true,'preview shortcut opens editable script');
+  await page.locator('#stage-add-narration').click();
+  assert.equal(await page.locator('#free-generate').isVisible(),true,'preview shortcut opens free AI narration');
+  await page.locator('#stage-add-video').click();
+  assert.equal(await page.locator('#scene-video').isVisible(),true,'preview shortcut opens clip upload');
+  await page.locator('[data-tool-tab="scene"]').click();
+
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),1,'blank template contains one editable scene');
   assert.equal(await page.locator('[data-tool-tab="scene"]').getAttribute('aria-selected'),'true');
   assert.equal(await page.locator('[data-tool-tab="voice"]').isVisible(),true);
@@ -54,6 +79,11 @@ try{
   await page.locator('.home-make').click();
   await page.waitForFunction(()=>document.querySelector('#project-name').value.startsWith('Leadership lesson'));
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'script becomes four editable scenes');
+  assert.equal(await page.locator('.scene-thumb').count(),4,'all four scenes have thumbnails');
+  assert.equal(await page.locator('.timeline-segment').count(),4,'all scenes are visible in the timeline');
+  const colors=await page.locator('.timeline-segment').evaluateAll(nodes=>nodes.map(n=>n.style.getPropertyValue('--scene-bg')));
+  assert.equal(new Set(colors).size>=2,true,'timeline is visually distinguished by scene theme');
+
   assert.match(await page.locator('#scene-script').inputValue(),/Leaders set direction clearly/);
   await page.locator('#editor-back-home').click();
   await page.locator('[data-template="coaching"]').click();
