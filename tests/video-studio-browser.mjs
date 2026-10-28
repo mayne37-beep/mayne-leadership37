@@ -63,6 +63,20 @@ try{
   await page.locator('#scene-presenter-motion').selectOption('slide-left');
   await page.locator('#scene-transition').selectOption('wipe');
   await page.locator('#scene-motion-duration').selectOption('1.2');
+  await page.evaluate(()=>{
+    for(const [id,value] of [['scene-motion-delay','2.3'],['scene-subtitle-delay','1.4']]){
+      const slider=document.getElementById(id);
+      slider.value=value;
+      slider.dispatchEvent(new Event('input',{bubbles:true}));
+    }
+  });
+  assert.equal(await page.locator('#motion-delay-value').innerText(),'2.3s','title timing slider updates immediately');
+  assert.equal(await page.locator('#subtitle-delay-value').innerText(),'1.4s','subtitle timing slider updates immediately');
+  const tracks=await page.evaluate(()=>({
+    title:document.querySelector('#motion-title-track').style.left,
+    subtitle:document.querySelector('#motion-subtitle-track').style.left
+  }));
+  assert.notEqual(tracks.title,tracks.subtitle,'timing tracks visually separate title and subtitle');
   const left=page.locator('#video-timeline button').first();
   const bbox=await left.boundingBox();
   await left.click({position:{x:1,y:Math.min(12,bbox.height/2)}});
@@ -85,6 +99,14 @@ try{
   assert.equal(await page.locator('#scene-title-motion').inputValue(),'typewriter','motion saved in browser');
   assert.equal(await page.locator('#scene-transition').inputValue(),'wipe','transition saved in browser');
   assert.equal(await page.locator('#scene-presenter-motion').inputValue(),'slide-left','presenter entrance saved in browser');
+  assert.equal(await page.locator('#scene-motion-delay').inputValue(),'2.3','title timing survives project reload');
+  assert.equal(await page.locator('#scene-subtitle-delay').inputValue(),'1.4','subtitle timing survives project reload');
+  const sceneTimings=await page.evaluate(()=>{
+    const all=JSON.parse(localStorage.getItem('mayne-video-studio-projects-v1'))||[];
+    return all[0]?.scenes?.map(s=>({title:s.motionDelay,subtitle:s.subtitleDelay}));
+  });
+  assert.equal(sceneTimings.length,4);
+  assert.ok(sceneTimings.every(x=>x.title===2.3&&x.subtitle===1.4),'apply-to-all copies motion offsets');
   await page.locator('#video-timeline button').nth(1).click();
   assert.match(await page.locator('#scene-title').inputValue(),/Task-oriented behaviors/);
   await page.locator('#scene-list [role="listitem"]').first().locator('button').first().click();
