@@ -129,7 +129,7 @@ try{
  await page.waitForFunction(()=>document.querySelector('#photo-info').textContent==='Photo attached: Priya (Casual)');
  assert.ok(await page.getByRole('button',{name:'Use Priya Casual',exact:true}).evaluate(b=>b.classList.contains('active')),'JSON restores the same outfit on a different device');
 
- const project=safeProjectExport(normalizeProject({name:'All ten included outfits',scenes:outfits.map(v=>makeScene({title:v.name,subtitle:'Permanent website presenter',duration:3,photoAssetId:v.assetId}))}));
+ const project=safeProjectExport(normalizeProject({name:'All ten included outfits',scenes:outfits.map(v=>makeScene({title:v.name,subtitle:'Permanent website presenter',duration:3,photoAssetId:v.assetId,titleMotion:'none',presenterMotion:'none',transition:'cut'}))}));
  await importProject(page,project);
  // Start from a freshly imported storyboard so later scenes have never been selected.
  await page.locator('#play-preview').click();
@@ -177,7 +177,7 @@ try{
  assert.equal(poseFrames.size,8);
  assert.equal(await expansionPage.evaluate(()=>localStorage.getItem('mayne-video-character-library-v1')),null,'all eighty expressions need no ZIP or local catalog');
  console.log('All eighty permanent expression/pose JPEG previews and selections passed.');
- const expandedProject=safeProjectExport(normalizeProject({name:'Eight included expressions and poses',scenes:representative.map(v=>makeScene({title:v.name,subtitle:'Included expression and pose',duration:3,photoAssetId:v.assetId}))}));
+ const expandedProject=safeProjectExport(normalizeProject({name:'Eight included expressions and poses',scenes:representative.map(v=>makeScene({title:v.name,subtitle:'Included expression and pose',duration:3,photoAssetId:v.assetId,titleMotion:'none',presenterMotion:'none',transition:'cut'}))}));
  await importProject(expansionPage,expandedProject);
  const expandedDownload=expansionPage.waitForEvent('download');await expansionPage.locator('#save-json').click();
  const expandedBackup=JSON.parse(await readFile(await (await expandedDownload).path(),'utf8'));
