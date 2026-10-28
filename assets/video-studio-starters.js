@@ -1,6 +1,7 @@
 // Deterministic, offline storyboard starters for a no-subscription video editor.
 // This module does not call any generative AI; it preserves the author's words.
 import {makeScene,normalizeProject,demoProject,makeId} from './video-studio-core.js';
+import {conflictLeadershipProject} from './video-studio-conflict.js';
 
 export const STARTER_MODES=Object.freeze([
  {id:'video',name:'Video',subtitle:'Build a video from your script'},
@@ -10,6 +11,7 @@ export const STARTER_MODES=Object.freeze([
 ]);
 export const STARTER_TEMPLATES=Object.freeze([
  {id:'leadership',title:'Leadership 101',subtitle:'A four-scene task and relationship lesson',art:'amara-professional.png'},
+ {id:'conflict',title:'Managing Conflict',subtitle:'A twelve-scene Leadership 101 teaching video',art:'priya-professional.png'},
  {id:'coaching',title:'Coaching conversation',subtitle:'Four steps to a better coaching discussion',art:'sofia-professional.png'},
  {id:'training',title:'Process walkthrough',subtitle:'Introduce, demonstrate, practice and recap',art:'daniel-professional.png'},
  {id:'blank',title:'Blank canvas',subtitle:'Design your video from scratch',art:'kenji-professional.png'}
@@ -57,6 +59,7 @@ export function storyboardFromText(raw,{mode='video',name=''}={}){
   scenes});
 }
 export function starterProject(template){
+ if(template==='conflict')return conflictLeadershipProject();
  if(template==='leadership'){
    const p=demoProject();p.id=makeId();p.name='Leadership 101 — Task vs. Relationship';
    p.scenes=p.scenes.map(s=>({...s,id:makeId()}));return p;
