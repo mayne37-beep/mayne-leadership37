@@ -1,6 +1,7 @@
 // Pure project model shared by the browser editor and Node tests.
 import {validatedBackground,builtinPhoto} from './video-studio-library-core.js';
 import {DEFAULT_SPEECH,normalizeSpeechOptions} from './video-studio-free-core.js';
+import {normalizeMotionOptions} from './video-studio-motion.js';
 export const STORAGE_KEY = 'mayne-video-studio-projects-v1';
 export const MAX_SCENES = 40;
 export const LAYOUTS = ['presenter-right','presenter-left','title','split','text-only'];
@@ -21,7 +22,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,titleMotion:'rise',presenterMotion:'slide-right',transition:'dissolve',motionDuration:.8,...overrides
   };
   return normalizeScene(s);
 }
@@ -45,7 +46,8 @@ export function normalizeScene(raw={}){
     videoMuted:s.videoMuted===true,
     localVoice:/^(?:af|am|bf|bm)_[a-z]+$/.test(s.localVoice||'')?s.localVoice:'af_heart',
     videoTrimStart:Math.max(0,Math.min(120,Number(s.videoTrimStart)||0)),
-    ...normalizeSpeechOptions(s)
+    ...normalizeSpeechOptions(s),
+    ...normalizeMotionOptions(s)
   };
 }
 export function normalizeProject(raw={}){
@@ -106,6 +108,7 @@ export function localRenderManifest(raw){
    duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,backgroundImage:s.backgroundImage,
    voice:s.localVoice,voiceSpeed:s.voiceSpeed,voicePauseMs:s.voicePauseMs,voiceTailMs:s.voiceTailMs,voiceNormalize:s.voiceNormalize,videoMode:s.videoMode,videoFit:s.videoFit,
    videoTrimStart:s.videoTrimStart,videoMuted:s.videoMuted,
+   titleMotion:s.titleMotion,presenterMotion:s.presenterMotion,transition:s.transition,motionDuration:s.motionDuration,
    presenterImage:builtinPhoto(s.photoAssetId)?.url||'',
    needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId)&&!builtinPhoto(s.photoAssetId),video:Boolean(s.videoAssetId)}
   }))}
