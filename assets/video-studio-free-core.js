@@ -59,7 +59,7 @@ export function validLocalVoice(value){
 
 // Speech settings stored on each scene. No cloud generation required.
 export const DEFAULT_SPEECH=Object.freeze({
- voiceSpeed:0.96,voicePauseMs:380,voiceTailMs:450,voiceNormalize:true
+ voiceSpeed:0.96,voicePauseMs:400,voiceTailMs:450,voiceNormalize:true
 });
 export function normalizeSpeechOptions(raw={}){
  const v=raw&&typeof raw==='object'?raw:{};
