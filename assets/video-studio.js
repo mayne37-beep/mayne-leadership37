@@ -4,6 +4,8 @@ import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,s
 import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
+import {storyboardFromText,starterProject} from './video-studio-starters.js';
+import {initStudioShell} from './video-studio-shell.js';
 
 const $ = id => document.getElementById(id);
 const canvas=$('video-canvas'),ctx=canvas.getContext('2d');
@@ -11,7 +13,7 @@ let projects=[],projectId='',sceneId='',playback=null,recording=false,audioPlayi
 let timelineSeek=null,micRecorder=null,micStream=null,avatarJobId='';
 const photoImages=new Map(),photoLoads=new Map();
 let previewRequest=0;
-let renderVideos=null,assetLibrary=null;
+let renderVideos=null,assetLibrary=null,studioShell=null;
 let freeWorker=null,freeBusy=false,freeFile=null,freeTask=null;
 const selectedProject=()=>projects.find(p=>p.id===projectId);
 const selectedScene=()=>selectedProject()?.scenes.find(s=>s.id===sceneId);
@@ -38,7 +40,7 @@ function load(){
 }
 function touch(){
   const p=selectedProject();if(p)p.updatedAt=new Date().toISOString();
-  persist();
+  persist();studioShell?.refresh();
 }
 function renderProjectChoice(){
   const node=$('project-choice');node.replaceChildren();
@@ -96,7 +98,7 @@ function selectProject(id){
   timelineSeek=null;avatarJobId='';$('check-avatar').disabled=true;
   if(!projects.some(p=>p.id===id))return;
   stopPreview();stopAudio();stopClips();projectId=id;sceneId=selectedProject().scenes[0].id;
-  persist();renderProjectChoice();renderScenes();populateEditor();drawCurrent();
+  persist();renderProjectChoice();renderScenes();populateEditor();drawCurrent();studioShell?.refresh();
 }
 function refreshAll(){renderProjectChoice();renderScenes();populateEditor();drawCurrent();}
 function rounded(x,y,w,h,r,fill){
@@ -1008,4 +1010,25 @@ function wirePhaseTwo(){
 }
 
 load();wire();refreshAll();
+studioShell=initStudioShell({
+  projects:()=>projects,
+  current:selectedProject,
+  openProject:selectProject,
+  clock,
+  duration:totalSeconds,
+  busy:()=>recording||micRecorder?.state==='recording',
+  message:status,
+  createFromTemplate:id=>{
+    if(recording||micRecorder?.state==='recording')throw Error('Finish recording or exporting first.');
+    if(projects.length>=40)throw Error('Maximum 40 local projects. Export and remove older projects first.');
+    const p=starterProject(id);projects.push(p);selectProject(p.id);
+    status('New '+p.name+' video ready to edit.','success');
+  },
+  createFromText:(script,mode)=>{
+    if(recording||micRecorder?.state==='recording')throw Error('Finish recording or exporting first.');
+    if(projects.length>=40)throw Error('Maximum 40 local projects. Export and remove older projects first.');
+    const p=storyboardFromText(script,{mode});projects.push(p);selectProject(p.id);
+    status('Storyboard created from your script. Add a presenter and narration, then export.','success');
+  }
+});
 if(!storageOK)status('Storage unavailable; export JSON backups to keep your projects.','error');
