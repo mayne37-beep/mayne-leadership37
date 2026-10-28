@@ -71,13 +71,13 @@ export function demoProject(){
     id:makeId(),name:'Leadership 101 — Task vs. Relationship',
     scenes:[
       { id:makeId(),title:'Task vs. Relationship',subtitle:'Effective leaders balance results with people.',
-        script:'Leadership requires attention to both the work that must be done and the people doing it. The most effective approach depends on the situation.',duration:9,layout:'presenter-right',theme:'navy',presenter:'Alex' },
+        script:'Leadership requires attention to both the work that must be done and the people doing it. The most effective approach depends on the situation.',duration:9,layout:'presenter-right',theme:'navy',presenter:'Alex',titleMotion:'rise',presenterMotion:'fade',transition:'dissolve',motionDuration:.8 },
       { id:makeId(),title:'Task-oriented behaviors',subtitle:'Clarify goals, define roles, and monitor progress.',
-        script:'Task-oriented leadership focuses on setting expectations, establishing priorities, coordinating activities, and ensuring work is accomplished.',duration:10,layout:'split',theme:'blue',presenter:'Jordan' },
+        script:'Task-oriented leadership focuses on setting expectations, establishing priorities, coordinating activities, and ensuring work is accomplished.',duration:10,layout:'split',theme:'blue',presenter:'Jordan',titleMotion:'slide-left',presenterMotion:'slide-right',transition:'slide-left',motionDuration:.8 },
       { id:makeId(),title:'Relationship-oriented behaviors',subtitle:'Build trust, listen, coach, and support.',
-        script:'Relationship-oriented leadership emphasizes trust, employee development, open communication, and a supportive working environment.',duration:10,layout:'presenter-left',theme:'forest',presenter:'Alex' },
+        script:'Relationship-oriented leadership emphasizes trust, employee development, open communication, and a supportive working environment.',duration:10,layout:'presenter-left',theme:'forest',presenter:'Alex',titleMotion:'rise',presenterMotion:'fade',transition:'wipe',motionDuration:.8 },
       { id:makeId(),title:'Balance both approaches',subtitle:'Ask: What does this team need from me right now?',
-        script:'Strong leaders adapt their emphasis. A new team may need clear direction, while an experienced team may benefit most from coaching and autonomy.',duration:10,layout:'title',theme:'sunset',presenter:'None' }
+        script:'Strong leaders adapt their emphasis. A new team may need clear direction, while an experienced team may benefit most from coaching and autonomy.',duration:10,layout:'title',theme:'sunset',presenter:'None',titleMotion:'typewriter',presenterMotion:'none',transition:'dissolve',motionDuration:1.2 }
     ]
   });
 }
