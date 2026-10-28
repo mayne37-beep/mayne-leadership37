@@ -204,8 +204,10 @@ try{
  const freePage=await freeCtx.newPage(),freeErrors=[];
  freePage.on('pageerror',err=>freeErrors.push(err.message));
  await freePage.addInitScript(()=>{
+   window.__voiceRequests=[];
    window.Worker=class MockKokoroWorker {
      postMessage(input){
+       window.__voiceRequests.push(input);
        const rate=24000,size=rate,bytes=44+size*2;
        const buffer=new ArrayBuffer(bytes),d=new DataView(buffer);
        const str=(o,s)=>{for(let i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i));};
@@ -223,6 +225,22 @@ try{
  await freePage.locator('#project-choice option').first().waitFor({state:'attached'});
  assert.equal(await freePage.locator('#free-voice option').count()>5,true,'free voice catalog has choices');
  await freePage.locator('#free-voice').selectOption('bm_george');
+ await freePage.locator('#voice-speed').fill('0.88');
+ await freePage.locator('#voice-pause').fill('600');
+ await freePage.locator('#voice-tail').fill('700');
+ await freePage.locator('#voice-normalize').uncheck();
+ assert.equal(await freePage.locator('#voice-speed-value').innerText(),'0.88×','speed updates in UI');
+ assert.equal(await freePage.locator('#voice-pause-value').innerText(),'600 ms','pause updates in UI');
+ await freePage.locator('#voice-line').selectOption('0');
+ await freePage.locator('#voice-preview-line').click();
+ await freePage.waitForFunction(()=>document.querySelector('#free-model-progress')?.textContent?.includes('Phrase preview playing'),{timeout:12000});
+ assert.equal(await freePage.locator('#remove-audio').isEnabled(),false,'phrase audition does not replace existing narration');
+ const audition=await freePage.evaluate(()=>window.__voiceRequests.at(-1));
+ assert.equal(audition.voiceSpeed,.88);
+ assert.equal(audition.voicePauseMs,600);
+ assert.equal(audition.voiceTailMs,700);
+ assert.equal(audition.voiceNormalize,false);
+
  await freePage.locator('#free-generate').click();
  await freePage.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.includes('Attached: free-kokoro-'),{timeout:15000});
  assert.equal(await freePage.locator('#free-download').isEnabled(),true,'downloaded WAV is retained on page');
@@ -232,6 +250,11 @@ try{
  assert.match((await renderManifest).suggestedFilename(),/-gpu-render-job\.json$/);
  await freePage.reload();
  await freePage.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.includes('Attached: free-kokoro-'));
+ assert.equal(await freePage.locator('#voice-speed').inputValue(),'0.88','speaking speed persists after reload');
+ assert.equal(await freePage.locator('#voice-pause').inputValue(),'600','phrase pause persists after reload');
+ assert.equal(await freePage.locator('#voice-tail').inputValue(),'700','ending pause persists after reload');
+ assert.equal(await freePage.locator('#voice-normalize').isChecked(),false,'loudness preference persists');
+
  assert.equal(await freePage.locator('#free-voice').inputValue(),'bm_george','scene voice persists');
  // The complete Conflict video uses Kokoro's dedicated Sofia, Daniel and supervisor voices.
  await freePage.locator('#top-home').click();
