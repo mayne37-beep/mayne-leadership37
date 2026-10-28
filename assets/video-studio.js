@@ -2,6 +2,7 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
+import {wireProjectNarration} from './video-studio-project-narration.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
 import {storyboardFromText,starterProject} from './video-studio-starters.js';
@@ -493,6 +494,13 @@ function wire(){
   $('project-choice').addEventListener('change',e=>selectProject(e.target.value));
   wirePhaseTwo();
   wireFreeSpeech();
+  wireProjectNarration({
+    getProject:selectedProject,
+    getSelectedScene:selectedScene,
+    putAudio,makeId,persist,renderScenes,refreshAudioInfo,status,
+    busy:()=>freeBusy||recording||micRecorder?.state==='recording',
+    setBusy:value=>{freeBusy=value;}
+  });
   assetLibrary=initAssetLibrary({
     getScene:selectedScene,
     savePhoto:putPhoto,
