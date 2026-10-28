@@ -12,7 +12,7 @@ test('script-to-scenes keeps authored content and creates individually editable 
  assert.equal(project.scenes[0].layout,'presenter-right');
  assert.equal(project.scenes[1].layout,'split');
 });
-test('paragraph split respects author's original material',()=>{
+test('paragraph split respects the original authored material',()=>{
  const parts=scriptChunks('Welcome to the program.\n\nWe will discuss coaching.\n\nPlease try the exercise.');
  assert.deepEqual(parts,['Welcome to the program.','We will discuss coaching.','Please try the exercise.']);
  assert.throws(()=>scriptChunks(''),/Add a script/);
