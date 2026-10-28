@@ -225,9 +225,11 @@ try{
  await freePage.locator('#project-choice option').first().waitFor({state:'attached'});
  assert.equal(await freePage.locator('#free-voice option').count()>5,true,'free voice catalog has choices');
  await freePage.locator('#free-voice').selectOption('bm_george');
- await freePage.locator('#voice-speed').fill('0.88');
- await freePage.locator('#voice-pause').fill('600');
- await freePage.locator('#voice-tail').fill('700');
+ await freePage.evaluate(()=>{
+  for(const [id,value] of [['voice-speed','0.88'],['voice-pause','600'],['voice-tail','700']]){
+   const control=document.getElementById(id);control.value=value;control.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+ });
  await freePage.locator('#voice-normalize').uncheck();
  assert.equal(await freePage.locator('#voice-speed-value').innerText(),'0.88×','speed updates in UI');
  assert.equal(await freePage.locator('#voice-pause-value').innerText(),'600 ms','pause updates in UI');
