@@ -110,7 +110,7 @@
  <div><label class="field-label" for="scene-title-motion">Words appear</label><select id="scene-title-motion">
   <option value="none">Still / no animation</option><option value="fade">Fade in</option>
   <option value="rise">Float up</option><option value="slide-left">Slide into place</option>
-  <option value="typewriter">Typewriter reveal</option>
+  <option value="typewriter">Typewriter reveal</option><option value="word-by-word">Word-by-word reveal</option><option value="bullet-build">Build bullet points</option>
  </select></div>
  <div><label class="field-label" for="scene-presenter-motion">Presenter enters</label><select id="scene-presenter-motion">
   <option value="none">Still / no animation</option><option value="fade">Fade in</option>
@@ -129,6 +129,15 @@
   <option value="0.8">Standard · 0.8 sec</option><option value="1.2">Smooth · 1.2 sec</option>
   <option value="1.8">Cinematic · 1.8 sec</option>
  </select></div>
+</div>
+<div class="motion-timeline" aria-label="Text animation timing">
+ <div class="motion-timeline-header"><strong>Animation timeline</strong><span>Drag a handle to change when text appears</span></div>
+ <label for="scene-motion-delay">Title starts <output id="motion-delay-value" for="scene-motion-delay">0.0s</output></label>
+ <input type="range" id="scene-motion-delay" min="0" max="15" step=".1" value="0">
+ <label for="scene-subtitle-delay">Subtitle delay after title <output id="subtitle-delay-value" for="scene-subtitle-delay">0.3s</output></label>
+ <input type="range" id="scene-subtitle-delay" min="0" max="15" step=".1" value=".3">
+ <div class="motion-timeline-tracks" aria-hidden="true"><div class="motion-track"><span>Title</span><i id="motion-title-track"></i></div><div class="motion-track"><span>Subtitle</span><i id="motion-subtitle-track"></i></div></div>
+ <p class="field-hint">Text reveals are timed relative to the scene. For bullet builds, separate points with new lines or • symbols. Timing is preserved in video exports.</p>
 </div>
 <div class="audio-actions motion-actions">
  <button type="button" id="scene-motion-preview" class="small-primary">▶ Preview from this scene</button>
