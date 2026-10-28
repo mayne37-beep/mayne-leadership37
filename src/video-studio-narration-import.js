@@ -6,7 +6,7 @@ export const NARRATION_PACK_FORMAT='mayne-conflict-kokoro-narration';
 export async function readNarrationPack(file,scenes){
  if(!file||file.size===0||file.size>115*1024*1024)throw Error('Narration ZIP must be smaller than 115 MB.');
  if(!Array.isArray(scenes)||scenes.length<1||scenes.length>40)throw Error('Open a valid video project first.');
- const zip=await JSZip.loadAsync(file,{checkCRC32:true});
+ const zip=await JSZip.loadAsync(await file.arrayBuffer(),{checkCRC32:true});
  const files=Object.values(zip.files);
  if(files.length>55)throw Error('Narration ZIP has too many files.');
  const item=zip.file('manifest.json');if(!item)throw Error('Narration ZIP is missing manifest.json.');
