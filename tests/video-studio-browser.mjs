@@ -41,6 +41,13 @@ try{
   if(!painted)console.error('CANVAS DIAGNOSTICS',JSON.stringify({errors,canvasInfo,status:await page.locator('#status').innerText(),options:await page.locator('#project-choice option').count()}));
   assert.ok(painted,'canvas drew its scene');
   const horizontal=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+  if(horizontal>2){
+    const suspects=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(node=>{
+      const r=node.getBoundingClientRect(),cs=getComputedStyle(node);
+      return r.width>0&&r.right>innerWidth+2&&cs.display!=='none'&&cs.visibility!=='hidden';
+    }).slice(0,20).map(el=>el.tagName.toLowerCase()+'#'+el.id+'.'+String(el.className).slice(0,60)+':'+Math.round(el.getBoundingClientRect().right)));
+    console.error('Responsive overflow suspects at '+width+': '+suspects.join(' | '));
+  }
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
   await page.locator('#video-timeline button').nth(1).click();
   assert.match(await page.locator('#scene-title').inputValue(),/Task-oriented behaviors/);
