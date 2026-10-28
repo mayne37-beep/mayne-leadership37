@@ -96,12 +96,23 @@ function renderScenes(){
   $('play-time').textContent='0:00 / '+clock(totalSeconds(p));
   renderTimeline();
 }
+function refreshMotionTimeline(){
+ const scene=selectedScene();if(!scene)return;
+ for(const [id,value] of [['motion-delay-value',scene.motionDelay],['subtitle-delay-value',scene.subtitleDelay]])
+   $(id).textContent=Number(value).toFixed(1)+'s';
+ const total=Math.max(1,scene.duration),length=Math.max(.3,scene.motionDuration);
+ for(const [id,start] of [['motion-title-track',scene.motionDelay],['motion-subtitle-track',scene.motionDelay+scene.subtitleDelay]]){
+   const bar=$(id);bar.style.left=(Math.min(100,start/total*100))+'%';
+   bar.style.width=(Math.max(1,Math.min(100-start/total*100,length/total*100)))+'%';
+ }
+}
 function populateEditor(){
   const p=selectedProject(),s=selectedScene();
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
     ['scene-transition','transition'],['scene-motion-duration','motionDuration'],['scene-motion-delay','motionDelay'],['scene-subtitle-delay','subtitleDelay']])$(id).value=String(s[key]);
+  refreshMotionTimeline();
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -668,6 +679,7 @@ function wire(){
       if(recording)return;
       selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
       timelineSeek=null;touch();renderScenes();drawCurrent();
+      refreshMotionTimeline();
       status('Scene motion updated. Use Preview from this scene to see the effect.','success');
     });
   }
