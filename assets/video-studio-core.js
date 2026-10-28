@@ -49,8 +49,7 @@ export function normalizeScene(raw={}){
     visualStyle:s.visualStyle==='light'?'light':'standard',
     characterFraming:['full','torso','close'].includes(s.characterFraming)?s.characterFraming:'full',
     characterReactionSequence:Array.isArray(s.characterReactionSequence)
-      ?s.characterReactionSequence.slice(0,3).map(x=>String(x||''))
-        .filter(x=>['neutral','friendly','confident','thoughtful','concerned','enthusiastic','explaining','listening'].includes(x))
+      ?s.characterReactionSequence.slice(0,3).map(x=>['neutral','friendly','confident','thoughtful','concerned','enthusiastic','explaining','listening'].includes(x)?x:'')
       :[],
     ...normalizeSpeechOptions(s),
     ...normalizeMotionOptions(s)
