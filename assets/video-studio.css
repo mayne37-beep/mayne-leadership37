@@ -191,3 +191,8 @@ body.home-active{background:#f7f8fc;color:#1a2942}
  .editor-active .topbar .beta{display:none}
  .studio-editor-toolbar{padding:10px 12px}
 }
+
+/* Lesson starter featured alongside other video templates */
+.home-template-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:1130px){.home-template-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.home-template-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -34,6 +34,8 @@ test('quick starts all include real editable projects without subscriptions',()=
  }
  assert.equal(starterProject('coaching').scenes.length,4);
  assert.equal(starterProject('training').scenes.length,4);
+ assert.equal(starterProject('conflict').scenes.length,12);
+ assert.ok(starterProject('conflict').scenes.some(s=>s.script.includes('Thomas Kilmann')));
  assert.equal(starterProject('leadership').scenes.length,4);
  assert.equal(starterProject('blank').scenes[0].script,'');
  assert.throws(()=>starterProject('unknown'),/Unknown/);
