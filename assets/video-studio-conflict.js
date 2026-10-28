@@ -6,8 +6,12 @@ const chapter=(title,subtitle,script,theme,layout,person='',duration=25)=>({
  title,subtitle,script,theme,layout,duration,
  photoAssetId:person?'mayne-character-'+person+'-professional':'',
  presenter:person?'Alex':'None',
- localVoice:'af_heart'
+ localVoice:({sofia:'af_bella',daniel:'am_michael',priya:'af_heart',amara:'af_nova',kenji:'am_fenrir'})[person]||'af_heart'
 });
+
+const dialogue=(name,subtitle,script,person,emotion='thoughtful',duration=22)=>chapter(
+ name,emotion.toUpperCase()+' · '+subtitle,script,person==='sofia'?'sunset':person==='daniel'?'slate':'navy',
+ person==='sofia'?'presenter-left':'presenter-right',person,duration);
 
 export const CONFLICT_VIDEO_SCENES=Object.freeze([
  chapter('Conflict is a leadership signal',
@@ -22,13 +26,38 @@ export const CONFLICT_VIDEO_SCENES=Object.freeze([
 
  chapter('A deadline. Two perspectives.',
  'Sofia needs an answer. Daniel needs reliable information.',
- 'Imagine Sofia and Daniel are preparing a team deliverable. Sofia says Daniel keeps missing deadlines. Daniel says changes are happening without his input. Their meetings are becoming tense. Both want to succeed, but each sees a different cause. The leader must understand the issue without deciding who is wrong too soon.',
+ 'Sofia and Daniel are preparing a time-sensitive deliverable. Sofia is accountable for the deadline. Daniel provides the technical information. As requirements change, communication breaks down. Watch how a task disagreement becomes personal, then notice how the supervisor helps them recover.',
  'slate','presenter-right','sofia',25),
+
+ dialogue('Sofia | I am under pressure',
+ 'The delivery deadline is approaching.',
+ 'Daniel, I need the completed numbers today. This is the third time I have had to ask. I cannot explain another delay to the customer.',
+ 'sofia','concerned',18),
+
+ dialogue('Daniel | Requirements keep changing',
+ 'He has not had the full picture.',
+ 'I want to meet the deadline, Sofia, but the requirements changed again yesterday. I cannot finish accurate numbers when the scope changes without warning.',
+ 'daniel','defensive',20),
+
+ dialogue('Sofia | The disagreement escalates',
+ 'A task issue becomes personal.',
+ 'You always have an excuse. If you communicated better, we would not be in this position. I need accountability, not another explanation.',
+ 'sofia','frustrated',17),
+
+ dialogue('Daniel | The relationship is damaged',
+ 'He starts defending his character.',
+ 'That is unfair. You send changes after I have started the work. I am doing my best, and it feels like you have already decided I am the problem.',
+ 'daniel','hurt',19),
 
  chapter('Your first move?',
  'A: Pick a side. B: Ignore it. C: Listen and clarify.',
  'Pause and choose your first move. Would you tell the team who is right, hope the disagreement resolves itself, or meet with each person and clarify the facts? The strongest starting point is usually to listen, lower the temperature, and identify the shared problem. The goal is not to win the argument. It is to improve the work and the relationship.',
  'sunset','title','',26),
+
+ dialogue('Supervisor | Reset the conversation',
+ 'Acknowledge frustration without taking sides.',
+ 'I can hear that both of you are frustrated. I want us to step away from blame and understand the work. Let us talk about the deadline, the changes, and what each of you needs to succeed.',
+ 'priya','calm',25),
 
  chapter('Five ways people handle conflict',
  'Avoid · Accommodate · Compete · Compromise · Collaborate',
@@ -50,6 +79,16 @@ export const CONFLICT_VIDEO_SCENES=Object.freeze([
  'Positions are what people demand. Interests are why those demands matter. Sofia wants a firm deadline because she is accountable to the customer. Daniel needs earlier notice because late changes create rework. The leader can respect both interests without endorsing blame. Ask, what do you need in order to succeed?',
  'blue','presenter-left','sofia',24),
 
+ dialogue('Sofia | From blame to interests',
+ 'She explains why the deadline matters.',
+ 'The customer has promised to use these numbers on Friday. I need a reliable date, and I need to know early if something will change. I do not want to surprise them.',
+ 'sofia','listening',23),
+
+ dialogue('Daniel | What he really needs',
+ 'The true obstacle becomes clearer.',
+ 'I can deliver reliable numbers if we agree on the requirements first. When a new request arrives, I need someone to tell me what changes and what gets deprioritized.',
+ 'daniel','explaining',23),
+
  chapter('3 · Generate options together',
  'Look beyond either-or decisions.',
  'Invite both employees to suggest options before judging them. They might agree on a shared change log, a weekly planning check-in, or a cutoff for new requirements. Build on their ideas. Then use objective criteria such as quality requirements, workload, customer needs, and actual deadlines to choose a workable plan.',
@@ -60,21 +99,26 @@ export const CONFLICT_VIDEO_SCENES=Object.freeze([
  'A good conversation is not enough. Agree on who owns each task, what will happen next, and when progress will be checked. For example, Sofia shares changes by noon, Daniel confirms the revised schedule by three, and both review open questions each Thursday. Revisit the agreement in two weeks and adjust what is not working.',
  'slate','presenter-right','kenji',25),
 
+ dialogue('A workable agreement',
+ 'Sofia and Daniel commit to clear shared expectations.',
+ 'Here is our agreement. Sofia will document changes by noon. Daniel will flag the impact and confirm the revised deadline by three. You will review open issues together each Thursday. We will check progress in two weeks.',
+ 'priya','confident',29),
+
  chapter('What a leader can actually say',
  'Facts + curiosity + shared next step.',
- 'Here is one way to begin. I have noticed tension during our status meetings and two late updates. I want to understand what is getting in the way for each of you. What are you experiencing? What matters most to the outcome? What can we agree to change this week? This keeps the conversation focused on responsibility and joint problem solving.',
+ 'I noticed our last two status meetings became tense, and we had two late updates. I want to understand the facts without placing blame. Sofia, what deadline are you responsible for? Daniel, which changes affected the work? What solution will you both commit to, and when should we check progress?',
  'navy','presenter-left','priya',26),
 
  chapter('Apply it to your next conversation',
  'Be clear. Stay calm. Build a constructive agreement.',
- 'Think of a low-risk disagreement in your own workplace. Is the real issue task related, relationship related, or both? Which conflict approach fits the situation? What interests are underneath the positions? Choose one respectful question you can ask, and one follow-up action that will make progress visible. Conflict handled well can strengthen trust and performance.',
+ 'Before your next difficult conversation, pause and identify whether the disagreement concerns tasks, relationships, or both. Think about the five Thomas Kilmann approaches. Listen for the interests underneath each position. Ask a neutral question, agree on a specific action, and schedule a follow-up. You are not trying to win a conflict. You are helping your team move forward together.',
  'sunset','title','',28)
 ]);
 
 export function conflictLeadershipProject(){
  return normalizeProject({
   id:makeId(),
-  name:'Leadership 101 — Managing Conflict: From Tension to Teamwork',
+  name:'Leadership 101 — Managing Conflict: From Tension to Teamwork (Enhanced)',
   scenes:CONFLICT_VIDEO_SCENES.map(c=>makeScene({...c,id:makeId()}))
  });
 }
