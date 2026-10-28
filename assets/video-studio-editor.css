@@ -580,3 +580,17 @@
 .editor-active .voice-pack-import label{display:block;font-size:.78rem;color:#354f7a;font-weight:750}
 .editor-active .voice-pack-import input[type=file]{display:block;width:100%;max-width:100%;padding:8px 0;font-size:.73rem;color:#405570}
 .editor-active #narration-pack-info{line-height:1.5;font-size:.73rem}
+
+
+/* Author-controlled animation and transition panel. */
+.editor-active .scene-motion-fields{border:1px solid #d9e2f5;border-radius:13px;padding:14px 13px 15px;margin:12px 0;background:linear-gradient(140deg,#f8faff,#f2f5ff);min-width:0}
+.editor-active .scene-motion-fields legend{font-weight:800;font-size:.87rem;color:#3a4fb3;padding:0 6px}
+.editor-active .motion-sparkle{color:#6c65d9}
+.editor-active .scene-motion-fields .field-hint{margin:4px 0 13px;line-height:1.5}
+.editor-active .scene-motion-fields .two-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:9px}
+.editor-active .scene-motion-fields .two-fields>div{min-width:0}
+.editor-active .scene-motion-fields select{width:100%;min-width:0;max-width:100%;padding:9px 8px;font-size:.77rem}
+.editor-active .scene-motion-fields .field-label{font-size:.74rem}
+.editor-active .motion-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.editor-active .motion-actions button{flex:1 1 135px;white-space:normal;font-size:.75rem;line-height:1.4}
+@media(max-width:470px){.editor-active .scene-motion-fields .two-fields{grid-template-columns:minmax(0,1fr)}}

@@ -58,6 +58,33 @@ try{
     console.error('Responsive overflow suspects at '+width+': '+suspects.join(' | '),JSON.stringify(bounds));
   }
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
+  // Actual motion UI, deterministic canvas pixels and persistence.
+  await page.locator('#scene-title-motion').selectOption('typewriter');
+  await page.locator('#scene-presenter-motion').selectOption('slide-left');
+  await page.locator('#scene-transition').selectOption('wipe');
+  await page.locator('#scene-motion-duration').selectOption('1.2');
+  const left=page.locator('#video-timeline button').first();
+  const bbox=await left.boundingBox();
+  await left.click({position:{x:1,y:Math.min(12,bbox.height/2)}});
+  const sample=()=>page.evaluate(()=>{
+    const ctx=document.querySelector('#video-canvas').getContext('2d');
+    const data=ctx.getImageData(100,230,550,180).data;
+    let sum=0;for(let i=0;i<data.length;i+=40)sum=(sum+data[i]+data[i+1]+data[i+2])>>>0;
+    return sum;
+  });
+  const early=await sample();
+  await left.click({position:{x:Math.max(2,bbox.width*.35),y:Math.min(12,bbox.height/2)}});
+  const after=await sample();
+  assert.notEqual(after,early,'typewriter reveals additional text as the playhead advances');
+  await page.locator('#scene-motion-apply-all').click();
+  assert.match(await page.locator('#status').innerText(),/Motion presets applied to all 4 scenes/);
+  await page.locator('#scene-motion-preview').click();
+  await page.waitForFunction(()=>document.querySelector('#stop-preview')?.disabled===false);
+  await page.locator('#stop-preview').click();
+  await page.reload();
+  assert.equal(await page.locator('#scene-title-motion').inputValue(),'typewriter','motion saved in browser');
+  assert.equal(await page.locator('#scene-transition').inputValue(),'wipe','transition saved in browser');
+  assert.equal(await page.locator('#scene-presenter-motion').inputValue(),'slide-left','presenter entrance saved in browser');
   await page.locator('#video-timeline button').nth(1).click();
   assert.match(await page.locator('#scene-title').inputValue(),/Task-oriented behaviors/);
   await page.locator('#scene-list [role="listitem"]').first().locator('button').first().click();
@@ -136,7 +163,22 @@ try{
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be added');
   await page.locator('#clone-scene').click();
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),6,'scene can be duplicated');
+  // Explicitly approve the destructive confirmation in the automated browser.
+  await page.evaluate(()=>{window.confirm=message=>{window.__sceneRemoveConfirm=message;return true;};});
   await page.locator('#remove-scene').click();
+  try{
+    await page.waitForFunction(()=>document.querySelectorAll('#scene-list [role=listitem]').length===5,null,{timeout:3500});
+  }catch(error){
+    console.error('SCENE REMOVE DIAGNOSTICS',await page.evaluate(()=>({
+      sceneCount:document.querySelectorAll('#scene-list [role=listitem]').length,
+      status:document.querySelector('#status')?.textContent,
+      removeDisabled:document.querySelector('#remove-scene')?.disabled,
+      previewDisabled:document.querySelector('#stop-preview')?.disabled,
+      confirmCalled:window.__sceneRemoveConfirm,
+      title:document.querySelector('#scene-title')?.value
+    })));
+    throw error;
+  }
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be removed');
   const jsonDownload=page.waitForEvent('download');
   await page.locator('#save-json').click();

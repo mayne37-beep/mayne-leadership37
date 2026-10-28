@@ -1,6 +1,7 @@
 // Pure project model shared by the browser editor and Node tests.
 import {validatedBackground,builtinPhoto} from './video-studio-library-core.js';
 import {DEFAULT_SPEECH,normalizeSpeechOptions} from './video-studio-free-core.js';
+import {normalizeMotionOptions} from './video-studio-motion.js';
 export const STORAGE_KEY = 'mayne-video-studio-projects-v1';
 export const MAX_SCENES = 40;
 export const LAYOUTS = ['presenter-right','presenter-left','title','split','text-only'];
@@ -21,7 +22,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,titleMotion:'rise',presenterMotion:'slide-right',transition:'dissolve',motionDuration:.8,...overrides
   };
   return normalizeScene(s);
 }
@@ -45,7 +46,8 @@ export function normalizeScene(raw={}){
     videoMuted:s.videoMuted===true,
     localVoice:/^(?:af|am|bf|bm)_[a-z]+$/.test(s.localVoice||'')?s.localVoice:'af_heart',
     videoTrimStart:Math.max(0,Math.min(120,Number(s.videoTrimStart)||0)),
-    ...normalizeSpeechOptions(s)
+    ...normalizeSpeechOptions(s),
+    ...normalizeMotionOptions(s)
   };
 }
 export function normalizeProject(raw={}){
@@ -69,13 +71,13 @@ export function demoProject(){
     id:makeId(),name:'Leadership 101 — Task vs. Relationship',
     scenes:[
       { id:makeId(),title:'Task vs. Relationship',subtitle:'Effective leaders balance results with people.',
-        script:'Leadership requires attention to both the work that must be done and the people doing it. The most effective approach depends on the situation.',duration:9,layout:'presenter-right',theme:'navy',presenter:'Alex' },
+        script:'Leadership requires attention to both the work that must be done and the people doing it. The most effective approach depends on the situation.',duration:9,layout:'presenter-right',theme:'navy',presenter:'Alex',titleMotion:'rise',presenterMotion:'fade',transition:'dissolve',motionDuration:.8 },
       { id:makeId(),title:'Task-oriented behaviors',subtitle:'Clarify goals, define roles, and monitor progress.',
-        script:'Task-oriented leadership focuses on setting expectations, establishing priorities, coordinating activities, and ensuring work is accomplished.',duration:10,layout:'split',theme:'blue',presenter:'Jordan' },
+        script:'Task-oriented leadership focuses on setting expectations, establishing priorities, coordinating activities, and ensuring work is accomplished.',duration:10,layout:'split',theme:'blue',presenter:'Jordan',titleMotion:'slide-left',presenterMotion:'slide-right',transition:'slide-left',motionDuration:.8 },
       { id:makeId(),title:'Relationship-oriented behaviors',subtitle:'Build trust, listen, coach, and support.',
-        script:'Relationship-oriented leadership emphasizes trust, employee development, open communication, and a supportive working environment.',duration:10,layout:'presenter-left',theme:'forest',presenter:'Alex' },
+        script:'Relationship-oriented leadership emphasizes trust, employee development, open communication, and a supportive working environment.',duration:10,layout:'presenter-left',theme:'forest',presenter:'Alex',titleMotion:'rise',presenterMotion:'fade',transition:'wipe',motionDuration:.8 },
       { id:makeId(),title:'Balance both approaches',subtitle:'Ask: What does this team need from me right now?',
-        script:'Strong leaders adapt their emphasis. A new team may need clear direction, while an experienced team may benefit most from coaching and autonomy.',duration:10,layout:'title',theme:'sunset',presenter:'None' }
+        script:'Strong leaders adapt their emphasis. A new team may need clear direction, while an experienced team may benefit most from coaching and autonomy.',duration:10,layout:'title',theme:'sunset',presenter:'None',titleMotion:'typewriter',presenterMotion:'none',transition:'dissolve',motionDuration:1.2 }
     ]
   });
 }
@@ -106,6 +108,7 @@ export function localRenderManifest(raw){
    duration:s.duration,layout:s.layout,theme:s.theme,presenter:s.presenter,backgroundImage:s.backgroundImage,
    voice:s.localVoice,voiceSpeed:s.voiceSpeed,voicePauseMs:s.voicePauseMs,voiceTailMs:s.voiceTailMs,voiceNormalize:s.voiceNormalize,videoMode:s.videoMode,videoFit:s.videoFit,
    videoTrimStart:s.videoTrimStart,videoMuted:s.videoMuted,
+   titleMotion:s.titleMotion,presenterMotion:s.presenterMotion,transition:s.transition,motionDuration:s.motionDuration,
    presenterImage:builtinPhoto(s.photoAssetId)?.url||'',
    needsMedia:{audio:Boolean(s.audioAssetId),photo:Boolean(s.photoAssetId)&&!builtinPhoto(s.photoAssetId),video:Boolean(s.videoAssetId)}
   }))}

@@ -3,6 +3,7 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice,normalizeSpeechOptions} from './video-studio-free-core.js';
 import {wireProjectNarration} from './video-studio-project-narration.js';
+import {entranceState,visibleText,transitionState} from './video-studio-motion.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
 import {storyboardFromText,starterProject} from './video-studio-starters.js';
@@ -99,6 +100,8 @@ function populateEditor(){
   const p=selectedProject(),s=selectedScene();
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
+  for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration']])$(id).value=String(s[key]);
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -156,6 +159,15 @@ function paintParagraph(text,x,y,width,font,color,lineHeight,maxLines=5){
   lines.forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight));
   return lines.length*lineHeight;
 }
+function animatedParagraph(text,x,y,width,font,color,lineHeight,maxLines,motion,time,duration,delay=0){
+  const state=entranceState(motion,time,duration,delay);
+  if(state.opacity<=0)return;
+  ctx.save();
+  ctx.globalAlpha*=state.opacity;
+  ctx.translate(state.x,state.y);
+  paintParagraph(visibleText(text,motion,time,duration,delay),x,y,width,font,color,lineHeight,maxLines);
+  ctx.restore();
+}
 function presenter(x,y,scale=1,variant='Alex'){
   ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
   circle(165,265,205,'#ffffff12');
@@ -172,10 +184,9 @@ function presenter(x,y,scale=1,variant='Alex'){
   ctx.strokeStyle='#6c3e37';ctx.lineWidth=5;ctx.beginPath();ctx.arc(168,150,26,0.19*Math.PI,.81*Math.PI);ctx.stroke();
   ctx.restore();
 }
-function drawScene(s,secs=0,index=0){
+function paintScene(s,secs=0,index=0){
   if(!ctx||!s)return;
   const p=PALETTES[s.theme]||PALETTES.navy;
-  ctx.clearRect(0,0,1280,720);
   const gradient=ctx.createLinearGradient(0,0,1280,720);gradient.addColorStop(0,p.bg);gradient.addColorStop(1,p.bg2);
   ctx.fillStyle=gradient;ctx.fillRect(0,0,1280,720);
   drawBackground(ctx,s);
@@ -192,17 +203,25 @@ function drawScene(s,secs=0,index=0){
   paintParagraph('MAYNE LEADERSHIP  /  VIDEO STUDIO',89,61,445,'bold 18px system-ui',p.soft,25,1);
   ctx.fillStyle=p.accent;ctx.fillRect(70,117,68,7);
   if(s.layout==='title'){
-    paintParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3);
-    paintParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3);
+    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration);
+    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,.28);
   }else if(s.layout==='text-only'){
-    paintParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3);
-    paintParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4);
+    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration);
+    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,.28);
   }else{
     const left=s.layout==='presenter-left',split=s.layout==='split';
     const presenterX=left?80:split?827:860;
     const textX=left?525:95;
     const maxWidth=split?700:670;
     const photo=photoImages.get(s.photoAssetId);
+    const motion=entranceState(s.presenterMotion,secs,s.motionDuration,.12);
+    ctx.save();
+    ctx.globalAlpha*=motion.opacity;
+    // Transform the entire media/presenter block without changing text alignment.
+    ctx.translate(presenterX+172,380);
+    ctx.scale(motion.scale,motion.scale);
+    ctx.translate(-(presenterX+172),-380);
+    ctx.translate(motion.x,motion.y);
     const hasVideo=s.videoAssetId&&s.videoMode==='presenter'&&drawVideo(ctx,source,presenterX,177,345,414,s.videoFit);
     if(!hasVideo && photo && photo.complete && photo.naturalWidth){
       const x=presenterX,y=177,w=345,h=414;
@@ -212,24 +231,67 @@ function drawScene(s,secs=0,index=0){
       ctx.restore();
     }else if(!hasVideo&&s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
-    paintParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3);
-    paintParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4);
+    ctx.restore();
+    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration);
+    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,.28);
   }
   ctx.fillStyle='#ffffff20';ctx.fillRect(70,645,1140,3);
   ctx.fillStyle=p.accent;ctx.fillRect(70,645,Math.min(1140,1140*secs/Math.max(1,s.duration)),3);
   paintParagraph('LEADERSHIP 101  •  '+String(index+1).padStart(2,'0'),74,668,520,'bold 17px system-ui',p.soft,22,1);
   paintParagraph(clock(secs)+' / '+clock(s.duration),1081,668,160,'17px system-ui',p.soft,22,1);
 }
+function drawScene(scene,seconds=0,index=0,previous=null){
+  if(!ctx||!scene)return;
+  const at=Math.max(0,Math.min(Number(seconds)||0,scene.duration));
+  const trans=previous?transitionState(scene,at):{kind:'cut',progress:1};
+  const progress=trans.progress;
+  ctx.save();
+  ctx.clearRect(0,0,1280,720);
+  if(trans.kind==='cut'||progress>=1){
+    paintScene(scene,at,index);
+  }else if(trans.kind==='dissolve'){
+    paintScene(previous,previous.duration,Math.max(0,index-1));
+    ctx.globalAlpha=progress;
+    paintScene(scene,at,index);
+  }else if(trans.kind==='slide-left'){
+    ctx.save();
+    ctx.beginPath();ctx.rect(0,0,1280,720);ctx.clip();
+    ctx.translate(-1280*progress,0);
+    paintScene(previous,previous.duration,Math.max(0,index-1));
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();ctx.rect(0,0,1280,720);ctx.clip();
+    ctx.translate(1280*(1-progress),0);
+    paintScene(scene,at,index);
+    ctx.restore();
+  }else if(trans.kind==='wipe'){
+    paintScene(previous,previous.duration,Math.max(0,index-1));
+    ctx.save();ctx.beginPath();ctx.rect(0,0,1280*progress,720);ctx.clip();
+    paintScene(scene,at,index);ctx.restore();
+  }else if(trans.kind==='zoom'){
+    paintScene(previous,previous.duration,Math.max(0,index-1));
+    ctx.save();
+    ctx.globalAlpha=progress;
+    ctx.translate(640,360);const scale=1.10-.10*progress;ctx.scale(scale,scale);ctx.translate(-640,-360);
+    paintScene(scene,at,index);
+    ctx.restore();
+  }else paintScene(scene,at,index);
+  ctx.restore();
+}
 function drawCurrent(){
   const p=selectedProject();if(!p)return;
   const scene=selectedScene();
+  // During removal, the selected scene may briefly be absent until replacement is selected.
+  if(!scene)return;
   if(scene?.backgroundImage&&!hasBackgroundLoaded(scene)){
     void preloadBackground(scene).then(()=>{
       if(selectedScene()?.id===scene.id)drawCurrent();
     }).catch(()=>{});
   }
   const i=p.scenes.findIndex(s=>s.id===sceneId);
-  drawScene(scene,timelineSeek?.id===sceneId?timelineSeek.offset:0,i);
+  // Editing should show the fully composed frame, while seek and playback show actual motion.
+  const elapsed=timelineSeek?.id===sceneId?timelineSeek.offset:Math.min(scene.duration,3);
+  drawScene(scene,elapsed,i,p.scenes[i-1]||null);
 }
 function download(blob,name){
   const url=URL.createObjectURL(blob),a=document.createElement('a');
@@ -330,7 +392,7 @@ async function beginPreview(){
       stopAudio();stopClips();previewSceneAudio(scenes[state.index]);elapsed=(now-state.start)/1000;
       void startPreviewVideo(scenes[state.index],0);
     }
-    drawScene(scenes[state.index],elapsed,state.index);
+    drawScene(scenes[state.index],elapsed,state.index,scenes[state.index-1]||null);
     $('stage-label').textContent='Playing scene '+(state.index+1);
     $('play-time').textContent=clock(state.total+elapsed)+' / '+clock(totalSeconds(p));
     setTimelineProgress(state.index,elapsed);
@@ -496,7 +558,7 @@ async function exportVideo(){
         }
         startClip(p.scenes[index]);elapsed=(now-start)/1000;
       }
-      drawScene(p.scenes[index],elapsed,index);
+      drawScene(p.scenes[index],elapsed,index,p.scenes[index-1]||null);
       $('play-time').textContent=clock(total+elapsed)+' / '+clock(seconds);
       setTimelineProgress(index,elapsed);
       status('Rendering scene '+(index+1)+' of '+p.scenes.length+' · '+Math.floor((total+elapsed)/seconds*100)+'%. Keep tab visible.');
@@ -600,6 +662,32 @@ function wire(){
       selectedScene()[key]=value;touch();renderScenes();drawCurrent();
     });
   }
+  for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration']]){
+    $(id).addEventListener('change',e=>{
+      if(recording)return;
+      selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
+      timelineSeek=null;touch();renderScenes();drawCurrent();
+      status('Scene motion updated. Use Preview from this scene to see the effect.','success');
+    });
+  }
+  $('scene-motion-preview').addEventListener('click',()=>{
+    if(recording)return;
+    timelineSeek={id:sceneId,offset:0};
+    void beginPreview();
+  });
+  $('scene-motion-apply-all').addEventListener('click',()=>{
+    if(recording)return;
+    const scene=selectedScene(),p=selectedProject();
+    for(const candidate of p.scenes){
+      candidate.titleMotion=scene.titleMotion;
+      candidate.presenterMotion=scene.presenterMotion;
+      candidate.transition=scene.transition;
+      candidate.motionDuration=scene.motionDuration;
+    }
+    timelineSeek=null;touch();renderScenes();drawCurrent();
+    status('Motion presets applied to all '+p.scenes.length+' scenes.','success');
+  });
   $('add-scene').addEventListener('click',()=>{
     if(recording)return;const p=selectedProject();if(p.scenes.length>=MAX_SCENES)return status('Maximum 40 scenes per video.','error');
     const scene=makeScene({title:'Scene '+(p.scenes.length+1),theme:'blue'});
