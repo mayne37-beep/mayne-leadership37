@@ -233,6 +233,24 @@ try{
  await freePage.reload();
  await freePage.waitForFunction(()=>document.querySelector('#audio-info')?.textContent?.includes('Attached: free-kokoro-'));
  assert.equal(await freePage.locator('#free-voice').inputValue(),'bm_george','scene voice persists');
+ // The complete Conflict video uses Kokoro's dedicated Sofia, Daniel and supervisor voices.
+ await freePage.locator('#top-home').click();
+ await freePage.locator('[data-template="conflict"]').click();
+ await freePage.waitForFunction(()=>document.querySelectorAll('#scene-list [role="listitem"]').length===20);
+ await freePage.locator('[data-tool-tab="voice"]').click();
+ await freePage.locator('#free-generate-project').click();
+ await freePage.waitForFunction(()=>document.querySelector('#free-model-progress')?.textContent?.includes('saved for 20 scenes'),{timeout:30000});
+ const voices=await freePage.evaluate(()=>{
+   const projects=JSON.parse(localStorage.getItem('mayne-video-studio-projects-v1'));
+   const project=projects.find(p=>p.name.includes('Managing Conflict'));
+   return project?.scenes.map(s=>({title:s.title,voice:s.localVoice,hasAudio:Boolean(s.audioAssetId)}));
+ });
+ assert.equal(voices.length,20);
+ assert.ok(voices.every(s=>s.hasAudio),'the 20 scene narration jobs were saved');
+ assert.ok(voices.some(s=>s.title.startsWith('Sofia |')&&s.voice==='af_bella'),'Sofia has her own voice');
+ assert.ok(voices.some(s=>s.title.startsWith('Daniel |')&&s.voice==='am_michael'),'Daniel has his own voice');
+ assert.equal(await freePage.locator('#free-generate-project').isEnabled(),true,'controls unlock after batch generation');
+
  assert.deepEqual(freeErrors,[],'no errors in local free narration integration');
  await freeCtx.close();
 
