@@ -5,7 +5,7 @@ import {makeScene,normalizeScene,safeProjectExport,parseProjectImport,normalizeP
 
 test('scene effects reject invalid presets and constrain motion duration',()=>{
  assert.deepEqual(normalizeMotionOptions({titleMotion:'<script>',presenterMotion:'fake',transition:'bogus',motionDuration:99}),
- {titleMotion:'none',presenterMotion:'none',transition:'cut',motionDuration:2});
+ {titleMotion:'none',presenterMotion:'none',transition:'cut',motionDuration:2,motionDelay:0,subtitleDelay:.3});
  assert.equal(normalizeMotionOptions({motionDuration:-1}).motionDuration,.3);
  assert.equal(normalizeMotionOptions({motionDuration:'bad'}).motionDuration,.8);
  const fresh=makeScene();
@@ -44,4 +44,14 @@ test('motion metadata survives save import/export and future render jobs',()=>{
  const job=localRenderManifest(project);
  assert.equal(job.project.scenes[0].transition,'wipe');
  assert.equal(job.project.scenes[0].titleMotion,'typewriter');
+});
+
+test('word and bullet reveals are deterministic and timing survives project backup',()=>{
+ assert.equal(visibleText('One two three','word-by-word',0,1),'');
+ assert.equal(visibleText('One two three','word-by-word',1,1),'One two three');
+ assert.equal(visibleText('First\nSecond','bullet-build',1,1),'• First\n• Second');
+ const project=normalizeProject({scenes:[makeScene({titleMotion:'word-by-word',motionDelay:2.5,subtitleDelay:1.4})]});
+ const restored=parseProjectImport(safeProjectExport(project));
+ assert.equal(restored.scenes[0].motionDelay,2.5);
+ assert.equal(restored.scenes[0].subtitleDelay,1.4);
 });
