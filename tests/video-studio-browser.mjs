@@ -164,6 +164,18 @@ try{
   await page.locator('#clone-scene').click();
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),6,'scene can be duplicated');
   await page.locator('#remove-scene').click();
+  try{
+    await page.waitForFunction(()=>document.querySelectorAll('#scene-list [role=listitem]').length===5,{timeout:2500});
+  }catch(error){
+    console.error('SCENE REMOVE DIAGNOSTICS',await page.evaluate(()=>({
+      sceneCount:document.querySelectorAll('#scene-list [role=listitem]').length,
+      status:document.querySelector('#status')?.textContent,
+      removeDisabled:document.querySelector('#remove-scene')?.disabled,
+      previewDisabled:document.querySelector('#stop-preview')?.disabled,
+      title:document.querySelector('#scene-title')?.value
+    })));
+    throw error;
+  }
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),5,'scene can be removed');
   const jsonDownload=page.waitForEvent('download');
   await page.locator('#save-json').click();
