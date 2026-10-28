@@ -559,3 +559,11 @@
 .voice-line-section .audio-actions{margin-top:8px}
 .voice-line-section .audio-actions button{font-size:.75rem}
 @media(max-width:640px){.voice-director-head{display:block}.voice-director-head span{display:block;margin-top:3px}}
+
+/* Keep long phrase titles and paired audio buttons inside narrow mobile inspectors. */
+.voice-director-controls{grid-template-columns:minmax(0,1fr);min-width:0;max-width:100%}
+.voice-director-controls>*,.voice-line-section{min-width:0;max-width:100%}
+.voice-director-controls input[type=range],.voice-line-section select{min-width:0;max-width:100%}
+.voice-line-section .audio-actions{display:flex;flex-wrap:wrap}
+.voice-line-section .audio-actions button{min-width:0;white-space:normal}
+@media(max-width:440px){.voice-line-section .audio-actions button{flex:1 1 100%}}
