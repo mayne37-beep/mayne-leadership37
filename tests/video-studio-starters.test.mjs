@@ -50,12 +50,16 @@ test('quick starts all include real editable projects without subscriptions',()=
 test('Managing Conflict starter applies editable motion to all twenty scenes without altering scripts',()=>{
  const c=starterProject('conflict');
  assert.equal(c.scenes.length,20);
- assert.match(c.name,/Animated Motion Edition/);
+ assert.match(c.name,/White Expressive Edition/);
  assert.ok(c.scenes.some(s=>s.titleMotion==='word-by-word'));
  assert.ok(c.scenes.some(s=>s.titleMotion==='bullet-build'));
  assert.ok(c.scenes.every(s=>s.motionDuration>=.3&&s.motionDuration<=2));
  assert.ok(c.scenes.every(s=>s.subtitleDelay>=0&&s.motionDelay>=0));
  assert.equal(new Set(c.scenes.map(s=>s.transition)).size,4);
+ assert.ok(c.scenes.every(scene=>scene.visualStyle==='light'));
+ assert.equal(c.scenes[3].characterFraming,'torso');
+ assert.deepEqual(c.scenes[3].characterReactionSequence,['concerned','explaining','concerned']);
+ assert.ok(c.scenes.filter(scene=>scene.photoAssetId).every(scene=>scene.characterReactionSequence.length>=1));
  assert.equal(c.scenes[3].duration,11);
  assert.equal(c.scenes[9].duration,32);
  assert.match(c.scenes[9].subtitle,/Collaborate/);
