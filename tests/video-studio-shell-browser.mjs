@@ -56,7 +56,6 @@ try{
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'script becomes four editable scenes');
   assert.match(await page.locator('#scene-script').inputValue(),/Leaders set direction clearly/);
   await page.locator('#editor-back-home').click();
-  await page.locator('#home-template-grid').count().catch(()=>{});
   await page.locator('[data-template="coaching"]').click();
   assert.match(await page.locator('#project-name').inputValue(),/Coaching conversation/);
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'coaching starter contains real scenes');
