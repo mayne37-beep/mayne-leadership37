@@ -46,7 +46,16 @@ try{
       const r=node.getBoundingClientRect(),cs=getComputedStyle(node);
       return r.width>0&&r.right>innerWidth+2&&cs.display!=='none'&&cs.visibility!=='hidden';
     }).slice(0,20).map(el=>el.tagName.toLowerCase()+'#'+el.id+'.'+String(el.className).slice(0,60)+':'+Math.round(el.getBoundingClientRect().right)));
-    console.error('Responsive overflow suspects at '+width+': '+suspects.join(' | '));
+    const bounds=await page.evaluate(()=>({
+      innerWidth,htmlWidth:document.documentElement.clientWidth,
+      scrollWidth:document.documentElement.scrollWidth,
+      bodyWidth:document.body.scrollWidth,
+      widest:[...document.querySelectorAll('*')].filter(el=>{
+        const style=getComputedStyle(el);
+        return style.display!=='none'&&el.scrollWidth>el.clientWidth+8&&el.clientWidth>20;
+      }).slice(0,16).map(el=>el.tagName.toLowerCase()+'#'+el.id+'.'+el.className+':'+el.clientWidth+'/'+el.scrollWidth)
+    }));
+    console.error('Responsive overflow suspects at '+width+': '+suspects.join(' | '),JSON.stringify(bounds));
   }
   assert.ok(horizontal<=2,'no horizontal overflow at '+width+': '+horizontal);
   await page.locator('#video-timeline button').nth(1).click();
