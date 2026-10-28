@@ -26,10 +26,14 @@ try{
   await page.goto(url);
   await page.locator('#home-title').waitFor({state:'visible'});
   assert.equal(await page.locator('#workspace').isVisible(),false,'editor starts hidden');
-  assert.equal(await page.locator('.home-template').count(),4,'four functional starter choices');
+  assert.equal(await page.locator('.home-template').count(),5,'five functional starter choices');
   assert.equal(await page.locator('#home-recent-list .home-recent-card').count(),1,'previous starter project visible as recent');
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert.ok(overflow<=3,'home fits '+width+'px, overflow '+overflow);
+  await page.locator('[data-template="conflict"]').click();
+  assert.equal(await page.locator('#scene-list [role="listitem"]').count(),12,'conflict starter loads its complete lesson');
+  assert.match(await page.locator('#project-name').inputValue(),/Managing Conflict/);
+  await page.locator('#editor-back-home').click();
   // Blank projects start without a prompt, from the primary create action.
   await page.locator('#home-new-button').click();
   assert.equal(await page.locator('#workspace').isVisible(),true,'new video opens the editor');
@@ -72,7 +76,7 @@ try{
   assert.equal(await page.locator('#scene-video').isVisible(),true,'all tools reveals video');
   await page.locator('#editor-back-home').click();
   assert.equal(await page.locator('#studio-home').isVisible(),true);
-  assert.ok(await page.locator('#home-recent-list .home-recent-card').count()>=2,'new video appears in Recents');
+  assert.ok(await page.locator('#home-recent-list .home-recent-card').count()>=3,'conflict and new projects appear in Recents');
   // Real scene script-to-storyboard flow. No paid AI dependency.
   await page.locator('[data-mode="lesson"]').click();
   await page.locator('#home-script').fill('Leaders set direction clearly. Supervisors listen to team concerns. Employees build trust by following through. Practice the approach with one decision.');
