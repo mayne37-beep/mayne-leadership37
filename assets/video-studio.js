@@ -96,12 +96,23 @@ function renderScenes(){
   $('play-time').textContent='0:00 / '+clock(totalSeconds(p));
   renderTimeline();
 }
+function refreshMotionTimeline(){
+ const scene=selectedScene();if(!scene)return;
+ for(const [id,value] of [['motion-delay-value',scene.motionDelay],['subtitle-delay-value',scene.subtitleDelay]])
+   $(id).textContent=Number(value).toFixed(1)+'s';
+ const total=Math.max(1,scene.duration),length=Math.max(.3,scene.motionDuration);
+ for(const [id,start] of [['motion-title-track',scene.motionDelay],['motion-subtitle-track',scene.motionDelay+scene.subtitleDelay]]){
+   const bar=$(id);bar.style.left=(Math.min(100,start/total*100))+'%';
+   bar.style.width=(Math.max(1,Math.min(100-start/total*100,length/total*100)))+'%';
+ }
+}
 function populateEditor(){
   const p=selectedProject(),s=selectedScene();
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']])$(id).value=String(s[key]);
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],['scene-motion-delay','motionDelay'],['scene-subtitle-delay','subtitleDelay']])$(id).value=String(s[key]);
+  refreshMotionTimeline();
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -165,7 +176,15 @@ function animatedParagraph(text,x,y,width,font,color,lineHeight,maxLines,motion,
   ctx.save();
   ctx.globalAlpha*=state.opacity;
   ctx.translate(state.x,state.y);
-  paintParagraph(visibleText(text,motion,time,duration,delay),x,y,width,font,color,lineHeight,maxLines);
+  const displayed=visibleText(text,motion,time,duration,delay);
+  if(motion==='bullet-build'){
+    let yOffset=0,remaining=maxLines;
+    for(const line of displayed.split('\n')){
+      if(!remaining)break;
+      const drawn=paintParagraph(line,x,y+yOffset,width,font,color,lineHeight,remaining);
+      yOffset+=drawn;remaining-=drawn/lineHeight;
+    }
+  }else paintParagraph(displayed,x,y,width,font,color,lineHeight,maxLines);
   ctx.restore();
 }
 function presenter(x,y,scale=1,variant='Alex'){
@@ -203,11 +222,11 @@ function paintScene(s,secs=0,index=0){
   paintParagraph('MAYNE LEADERSHIP  /  VIDEO STUDIO',89,61,445,'bold 18px system-ui',p.soft,25,1);
   ctx.fillStyle=p.accent;ctx.fillRect(70,117,68,7);
   if(s.layout==='title'){
-    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
+    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else if(s.layout==='text-only'){
-    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
+    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else{
     const left=s.layout==='presenter-left',split=s.layout==='split';
     const presenterX=left?80:split?827:860;
@@ -232,8 +251,8 @@ function paintScene(s,secs=0,index=0){
     }else if(!hasVideo&&s.presenter!=='None')presenter(presenterX,185,split?.92:1.03,s.presenter);
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
     ctx.restore();
-    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
+    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }
   ctx.fillStyle='#ffffff20';ctx.fillRect(70,645,1140,3);
   ctx.fillStyle=p.accent;ctx.fillRect(70,645,Math.min(1140,1140*secs/Math.max(1,s.duration)),3);
@@ -663,12 +682,16 @@ function wire(){
     });
   }
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']]){
-    $(id).addEventListener('change',e=>{
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],
+    ['scene-motion-delay','motionDelay'],['scene-subtitle-delay','subtitleDelay']]){
+    $(id).addEventListener(id.includes('delay')?'input':'change',e=>{
       if(recording)return;
-      selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
+      const scene=selectedScene();if(!scene)return;
+      const numeric=['motionDuration','motionDelay','subtitleDelay'].includes(key);
+      scene[key]=numeric?Number(e.target.value):e.target.value;
       timelineSeek=null;touch();renderScenes();drawCurrent();
-      status('Scene motion updated. Use Preview from this scene to see the effect.','success');
+      refreshMotionTimeline();
+      if(!id.includes('delay'))status('Scene motion updated. Use Preview from this scene to see the effect.','success');
     });
   }
   $('scene-motion-preview').addEventListener('click',()=>{
@@ -684,6 +707,8 @@ function wire(){
       candidate.presenterMotion=scene.presenterMotion;
       candidate.transition=scene.transition;
       candidate.motionDuration=scene.motionDuration;
+      candidate.motionDelay=scene.motionDelay;
+      candidate.subtitleDelay=scene.subtitleDelay;
     }
     timelineSeek=null;touch();renderScenes();drawCurrent();
     status('Motion presets applied to all '+p.scenes.length+' scenes.','success');

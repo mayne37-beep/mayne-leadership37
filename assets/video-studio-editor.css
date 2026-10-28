@@ -594,3 +594,14 @@
 .editor-active .motion-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
 .editor-active .motion-actions button{flex:1 1 135px;white-space:normal;font-size:.75rem;line-height:1.4}
 @media(max-width:470px){.editor-active .scene-motion-fields .two-fields{grid-template-columns:minmax(0,1fr)}}
+
+
+.motion-timeline{margin:14px 0;padding:13px;border-radius:12px;background:#f5f8ff;border:1px solid #dbe5f4}
+.motion-timeline-header{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.76rem;margin-bottom:10px}
+.motion-timeline-header span{color:#5d6e86;font-size:.7rem}
+.motion-timeline label{display:flex;justify-content:space-between;align-items:center;font-size:.77rem;margin:9px 0 3px}
+.motion-timeline input[type=range]{display:block;width:100%;accent-color:#4c67d4}
+.motion-timeline-tracks{margin:12px 0;padding:8px 10px;background:#e8eefb;border-radius:9px}
+.motion-track{position:relative;height:28px;margin:5px 0;border-radius:5px;background:#d8e2f4}
+.motion-track span{position:absolute;left:7px;top:5px;font-size:11px;color:#293d61;z-index:2}
+.motion-track i{position:absolute;top:3px;bottom:3px;border-radius:4px;background:#829ce4;opacity:.75;pointer-events:none}
