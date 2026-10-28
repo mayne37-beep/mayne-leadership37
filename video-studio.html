@@ -110,7 +110,7 @@
  <div><label class="field-label" for="scene-title-motion">Words appear</label><select id="scene-title-motion">
   <option value="none">Still / no animation</option><option value="fade">Fade in</option>
   <option value="rise">Float up</option><option value="slide-left">Slide into place</option>
-  <option value="typewriter">Typewriter reveal</option>
+  <option value="typewriter">Typewriter reveal</option><option value="word-by-word">Reveal words one by one</option>
  </select></div>
  <div><label class="field-label" for="scene-presenter-motion">Presenter enters</label><select id="scene-presenter-motion">
   <option value="none">Still / no animation</option><option value="fade">Fade in</option>
@@ -129,6 +129,26 @@
   <option value="0.8">Standard · 0.8 sec</option><option value="1.2">Smooth · 1.2 sec</option>
   <option value="1.8">Cinematic · 1.8 sec</option>
  </select></div>
+</div>
+<div class="motion-advanced">
+ <label class="field-label" for="scene-subtitle-motion">Supporting message effect</label>
+ <select id="scene-subtitle-motion">
+  <option value="inherit">Match heading effect</option>
+  <option value="none">Show immediately</option><option value="fade">Fade in</option>
+  <option value="rise">Float up</option><option value="typewriter">Typewriter</option>
+  <option value="word-by-word">Reveal words one by one</option>
+  <option value="bullets">Stagger bullet points</option>
+ </select>
+ <p class="field-hint">For staggered bullets, type up to four lines in <strong>On-screen message</strong>, one point per line. Use the animation timeline to choose when each element begins and how long its reveal takes.</p>
+ <div class="motion-timing-board" aria-label="Editable animation timeline">
+  <div class="motion-timing-title"><strong>Animation timeline</strong><span id="motion-timing-total">0–10 seconds</span></div>
+  <div id="motion-timing-tracks" class="motion-timing-tracks" role="group" aria-label="Drag animation bars to shift their start; drag an edge to change reveal duration"></div>
+  <div class="motion-scrub"><label for="motion-scrub">Inspect animation at <output id="motion-scrub-time" for="motion-scrub">0.0 s</output></label>
+   <input type="range" id="motion-scrub" min="0" max="10" step=".05" value="0">
+  </div>
+  <p class="field-hint">Drag a colored bar to reposition it, or its right edge to resize. Use arrow keys on a selected bar or handle for precise adjustments. The timing is based on each scene's duration, so it follows the narration timeline; individual words are distributed across the reveal, not automatically transcribed from speech.</p>
+  <button class="ghost motion-sync-preset" id="motion-pace-narration" type="button">Spread reveals across scene narration</button>
+ </div>
 </div>
 <div class="audio-actions motion-actions">
  <button type="button" id="scene-motion-preview" class="small-primary">▶ Preview from this scene</button>
