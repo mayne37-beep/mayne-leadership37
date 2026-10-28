@@ -59,7 +59,25 @@ function renderScenes(){
     const detail=document.createElement('small');detail.textContent=clock(s.duration)+' · '+s.layout.replaceAll('-',' ');
     data.append(title,detail);
     if(s.videoAssetId){const marker=document.createElement('small');marker.className='clip-marker';marker.textContent='▶ Moving clip';data.append(marker);}
-    select.append(number,data);
+    const thumb=document.createElement('span');
+    thumb.className='scene-thumb';
+    const palette=PALETTES[s.theme]||PALETTES.navy;
+    thumb.style.setProperty('--scene-bg',palette.bg);
+    thumb.style.setProperty('--scene-bg2',palette.bg2);
+    thumb.style.setProperty('--scene-accent',palette.accent);
+    const thumbText=document.createElement('span');
+    thumbText.className='scene-thumb-text';
+    thumbText.textContent=s.title;
+    thumb.append(thumbText);
+    const builtIn=builtinPhoto(s.photoAssetId);
+    if(builtIn?.url){
+      const image=document.createElement('img');
+      image.src=builtIn.url;
+      image.alt='';
+      image.loading='lazy';
+      thumb.append(image);
+    }
+    select.append(thumb,number,data);
     select.addEventListener('click',()=>selectScene(s.id));
     const reorder=document.createElement('span');reorder.className='reorder';
     for(const [delta,label,symbol] of [[-1,'Move scene up','▲'],[1,'Move scene down','▼']]){
@@ -584,6 +602,9 @@ function renderTimeline(){
     const b=document.createElement('button');b.type='button';
     b.className='timeline-segment'+(s.id===sceneId?' active':'');
     b.style.flexGrow=String(s.duration);
+    const palette=PALETTES[s.theme]||PALETTES.navy;
+    b.style.setProperty('--scene-bg',palette.bg);
+    b.style.setProperty('--scene-bg2',palette.bg2);
     b.title='Seek within scene '+(i+1)+': '+s.title;
     const title=document.createElement('strong');title.textContent=(i+1)+'. '+s.title;
     const detail=document.createElement('small');detail.textContent=clock(s.duration);

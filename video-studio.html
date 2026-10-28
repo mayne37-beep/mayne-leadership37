@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0c1930"><meta name="description" content="Design and export leadership training videos in the Mayne Leadership Video Studio.">
 <title>AI Video Studio · Mayne Leadership</title>
-<link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
+<link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"><link rel="stylesheet" href="/assets/video-studio-editor.css"></head>
 <body><a class="skip" href="#workspace">Skip to video editor</a>
 <header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
 <div class="bar-title"><strong>Video Studio</strong><span class="beta">Create · Edit · Export</span></div>
@@ -64,19 +64,25 @@
 </main>
 <main id="workspace" class="workspace" hidden>
 <aside class="projects panel" aria-label="Projects and scenes">
-<div class="pane-heading"><div><span class="eyebrow">YOUR WORKSPACE</span><h1>Video projects</h1></div><button id="new-project" class="icon-button" title="New project" aria-label="New project">＋</button></div>
+<div class="pane-heading"><div><span class="eyebrow">MY WORKSPACE</span><h1>Video projects</h1></div><button id="new-project" class="icon-button" title="New project" aria-label="New project">＋</button></div>
 <label for="project-choice" class="small-label">Open project</label><select id="project-choice" aria-label="Open project"></select>
 <div class="project-actions"><button id="duplicate-project" class="ghost" type="button">Duplicate</button><button id="delete-project" class="ghost danger" type="button">Delete</button></div>
 <div class="divider"></div>
-<div class="pane-heading"><h2>Scenes</h2><button class="small-primary" id="add-scene" type="button">+ Add scene</button></div>
-<p class="sidebar-hint">Reorder, duplicate, and customize every scene.</p><div id="scene-list" class="scene-list" role="list" aria-label="Video scenes"></div>
+<div class="pane-heading"><h2>Your scenes</h2><button class="small-primary" id="add-scene" type="button">+ Add scene</button></div>
+<p class="sidebar-hint">Choose a scene, rearrange your story, and build a video.</p><div id="scene-list" class="scene-list" role="list" aria-label="Video scenes"></div>
 <div class="sidebar-bottom"><div id="scene-total" class="total"></div><p>Project changes save in this browser. Download a JSON backup to move between devices.</p>
 <button id="save-json" class="ghost" type="button">Export project JSON</button><button id="save-render-job" class="ghost" type="button">Download future GPU render job</button><button id="import-json" class="ghost" type="button">Import project JSON</button><input id="json-file" type="file" accept=".json,application/json" hidden></div>
 </aside>
 <section class="stage panel" aria-labelledby="preview-title">
-<div class="pane-heading stage-head"><div><span class="eyebrow">VIDEO PREVIEW</span><h2 id="preview-title">Storyboard</h2></div><span class="stage-label" id="stage-label">Scene 1</span></div>
-<div class="canvas-shell"><canvas id="video-canvas" width="1280" height="720" aria-label="Visual preview of selected video scene">Your browser does not support canvas preview.</canvas></div>
-<section class="timeline-section" aria-label="Video scene timeline"><div class="timeline-heading"><strong>Scene timeline</strong><span id="timeline-cursor">0:00</span></div><div id="video-timeline" class="video-timeline" role="group" aria-label="Select a scene or seek within it"></div></section>
+<div class="pane-heading stage-head"><div><span class="eyebrow">YOUR CANVAS · 16:9 LANDSCAPE</span><h2 id="preview-title">Scene preview</h2></div><span class="stage-label" id="stage-label">Scene 1</span></div>
+<div class="stage-quick-actions" aria-label="Quick scene editing tools">
+ <button id="stage-choose-character" type="button">◉ Change presenter</button>
+ <button id="stage-edit-script" type="button">✎ Edit script</button>
+ <button id="stage-add-narration" type="button">♫ Add voice</button>
+ <button id="stage-add-video" type="button">▣ Add video</button>
+ </div>
+ <div class="canvas-shell"><canvas id="video-canvas" width="1280" height="720" aria-label="Visual preview of selected video scene">Your browser does not support canvas preview.</canvas></div>
+<section class="timeline-section" aria-label="Video scene timeline"><div class="timeline-heading"><strong>Storyboard timeline</strong><span id="timeline-cursor">0:00</span></div><div id="video-timeline" class="video-timeline" role="group" aria-label="Select a scene or seek within it"></div></section>
 <div class="playbar"><button id="play-preview" class="primary" type="button">▶ Play storyboard</button><button id="stop-preview" class="ghost" type="button" disabled>■ Stop</button>
 <span id="play-time" class="time">0:00 / 0:39</span><div class="playbar-right"><button id="speak-scene" class="ghost" type="button">♫ Preview voice</button></div></div>
 <div class="export-box"><div><strong>Render video</strong><p>Export a real video using your scene durations. Free AI narration, microphone recordings and imported audio are included in exported videos after they are attached to scenes. Browser speech previews alone are not recorded.</p></div>
@@ -84,7 +90,7 @@
 <p class="status" id="status" role="status" aria-live="polite">Ready. Edit your storyboard to get started.</p>
 <details class="help-details"><summary>Video export and compatibility</summary><p>Rendering uses your own browser, not a remote AI service. MP4 output is available only if the browser supports MP4 recording; otherwise an actual WebM video is created. Keep this tab visible while rendering. Video export may not be supported by all browsers, and very long projects may use significant memory. Photo presenters, shared characters, Leadership 101 backgrounds and scene timeline are included. Kokoro voice generation runs on your device at no provider charge. Optional ElevenLabs and HeyGen integrations still require server-side credentials and owner consent to enable paid generation. Download generated HeyGen clips, then import them in Moving presenter video to composite the footage and its sound into your final export. Cloud projects and local AI lip-sync are not included.</p></details>
 </section>
-<aside class="inspector panel" aria-label="Selected scene editor"><div class="pane-heading"><div><span class="eyebrow">SCENE SETTINGS</span><h2>Edit scene</h2></div><span id="editor-scene-index" class="counter">01 / 04</span></div>
+<aside class="inspector panel" aria-label="Selected scene editor"><div class="pane-heading"><div><span class="eyebrow">CUSTOMIZE YOUR VIDEO</span><h2>Scene settings</h2></div><span id="editor-scene-index" class="counter">01 / 04</span></div>
 <label class="field-label" for="project-name">Video project title</label><input type="text" id="project-name" maxlength="120">
 <div class="divider"></div>
 <label class="field-label" for="scene-title">Scene heading</label><input id="scene-title" maxlength="115">

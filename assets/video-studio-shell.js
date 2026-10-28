@@ -121,6 +121,23 @@ export function initStudioShell(api){
  topHome.addEventListener('click',showHome);
  $('editor-preview').addEventListener('click',()=>$('play-preview').click());
  $('editor-export').addEventListener('click',()=>$('render-video').click());
+ const sceneShortcuts={
+  'stage-choose-character':'characters',
+  'stage-edit-script':'scene',
+  'stage-add-narration':'voice',
+  'stage-add-video':'media'
+ };
+ for(const [id,panel] of Object.entries(sceneShortcuts)){
+  $(id).addEventListener('click',()=>{
+   tabs.activate(panel);
+   const focusId=panel==='scene'?'scene-script':panel==='voice'?'free-voice':panel==='media'?'scene-video':'asset-search';
+   const focusNode=$(focusId);
+   if(focusNode){
+    focusNode.scrollIntoView({block:'nearest',behavior:'instant'});
+    focusNode.focus({preventScroll:true});
+   }
+  });
+ }
  search.addEventListener('input',recentCards);
  home.querySelectorAll('[data-home-target]').forEach(b=>b.addEventListener('click',()=>{
   const item=b.dataset.homeTarget;
