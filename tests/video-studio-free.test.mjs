@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {splitNarration,pcmToWav,validLocalVoice,LOCAL_VOICES,MAX_LOCAL_SCRIPT} from '../assets/video-studio-free-core.js';
+import {splitNarration,pcmToWav,validLocalVoice,LOCAL_VOICES,MAX_LOCAL_SCRIPT,DEFAULT_SPEECH,normalizeSpeechOptions,finishNarration} from '../assets/video-studio-free-core.js';
 
 test('speaker catalog includes distinct accents and validates selections',()=>{
  assert.ok(LOCAL_VOICES.length>=6);
@@ -29,4 +29,25 @@ test('speech PCM is encoded as a standard playable 16-bit mono WAV',()=>{
  assert.equal(data.getInt16(46,true),32767);
  assert.equal(data.getInt16(48,true),-32768);
  assert.throws(()=>pcmToWav([],24000),/No voice data/);
+});
+
+test('Voice Director validates speech settings',()=>{
+ assert.equal(normalizeSpeechOptions({}).voiceSpeed,DEFAULT_SPEECH.voiceSpeed);
+ assert.equal(normalizeSpeechOptions({voiceSpeed:9}).voiceSpeed,1.2);
+ assert.equal(normalizeSpeechOptions({voicePauseMs:5000}).voicePauseMs,1000);
+ assert.equal(normalizeSpeechOptions({voiceNormalize:false}).voiceNormalize,false);
+});
+test('Narration mastering creates real pauses, tail and fades',()=>{
+ const samples=finishNarration([new Float32Array(1000).fill(.2),new Float32Array(500).fill(-.2)],1000,
+ {voicePauseMs:400,voiceTailMs:450,voiceNormalize:false}).samples;
+ assert.equal(samples.length,2350);
+ assert.ok(samples[0]<.02);
+ assert.equal(samples[999],.2);
+ assert.equal(samples[1300],0);
+ assert.equal(samples[1900],0);
+ assert.ok(Math.abs(samples[1899])<.02);
+ const a=finishNarration([new Float32Array(500).fill(.07)],1000,{voiceNormalize:true,voiceTailMs:0}).samples;
+ const b=finishNarration([new Float32Array(500).fill(.07)],1000,{voiceNormalize:false,voiceTailMs:0}).samples;
+ assert.ok(a[200]>b[200]);
+ assert.ok(a.every(n=>Math.abs(n)<=.9));
 });
