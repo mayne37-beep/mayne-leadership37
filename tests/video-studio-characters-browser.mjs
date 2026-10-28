@@ -28,7 +28,7 @@ const sampleCanvas=()=>{
 };
 const distance=(a,b)=>a.reduce((sum,v,i)=>sum+Math.abs(v-b[i]),0)/a.length;
 async function ready(page){
- await page.goto(base+'/video-studio.html');
+ await page.goto(base+'/video-studio.html?edit=1&all=1');
  await page.locator('#project-choice option').first().waitFor({state:'attached'});
 }
 async function importProject(page,payload){

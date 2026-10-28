@@ -2,7 +2,7 @@
 
 The website is deployed from `mayne37-beep/mayne-leadership37` to the existing Vercel project `mayne-leadership37`. Production: https://www.mayneleadership.com.
 
-## Video Studio (Phases 1–6: reusable characters, expressions and poses)
+## Video Studio (Phase 7: redesigned video workspace)
 
 Open `video-studio.html` from the Create page. This browser-first video authoring prototype includes scene storyboards, selectable illustrated presenters and themes, editable scripts and timings, narration previews through browser speech synthesis, per-scene audio uploads in IndexedDB, and native browser MediaRecorder export (MP4 only when the browser supports it; otherwise WebM). Starter storyboard: **Leadership 101 — Task vs. Relationship**.
 
@@ -106,3 +106,11 @@ The Characters tab now includes person, outfit and expression/pose filters. Char
 The supplied v2 expansion is now included as permanent website assets: all **80 expression/pose previews** and **10 original cutouts** load automatically on every device, with no ZIP import. Included selections survive portable project JSON and resolve in local render manifests. The source JPEGs and source manifest are preserved unchanged under `assets/video-studio`.
 
 **Asset Library → Import character pack** remains available for custom v1/v2 packs. It installs custom variants into browser IndexedDB and preserves the original five built-in identities. Custom pose overrides retain their existing device-local behavior; portable project JSON excludes locally stored binary images. Future high-resolution images can use the same v2 manifest structure and variant keys.
+
+### Phase 7 — creation dashboard and focused editing workspace
+
+The Video Studio now opens on a lighter, Synthesia-inspired **home dashboard** with a script-to-storyboard input, distinct Video / Leadership lesson / Scenario / Voiceover modes, four complete launchable starters, locally saved recent projects with filtering, and prominent access to characters and voices. **This is a deterministic script organizer, not an AI scriptwriter:** entered narration is divided into editable scenes without generating new text, and short topic outlines remain editable rather than being passed off as AI-created content.
+
+Click a recent project or a starter to enter the same preserved full-featured editor. In the editor, right-side tools are organized under **Edit, Assets, Voice, Video, More** tabs. **Show all tools** expands the inspector for experienced authors. Use **Home** to return to Recents without deleting a project. Browser-local media and exports continue to work; audio and video files still do not sync between devices. For tests or bookmarked direct editor access use `video-studio.html?edit=1` (optional `&all=1` to show expanded editing tools).
+
+Verification: `node tests/video-studio-shell-browser.mjs` exercises the home, responsive layout, real template creation, script-to-scene rendering, project search, saved-project reopening, tabs and the all-tools option alongside the existing video export tests.

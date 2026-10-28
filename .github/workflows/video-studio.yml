@@ -1,4 +1,4 @@
-name: Video Studio Phase 1
+name: Video Studio
 on:
   push:
     paths:
@@ -34,6 +34,8 @@ jobs:
       - run: npx playwright install chromium
       - name: Smoke test actual browser preview and export
         run: node tests/video-studio-browser.mjs
+      - name: Test redesigned homepage, storyboard creation, and responsive editor
+        run: node tests/video-studio-shell-browser.mjs
       - name: Verify included characters on new devices and in rendered video
         run: node tests/video-studio-characters-browser.mjs
       - name: Ensure editor and authoring assets can be deployed
