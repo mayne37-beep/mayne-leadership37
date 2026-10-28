@@ -5,9 +5,64 @@
 <link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/video-studio.css"></head>
 <body><a class="skip" href="#workspace">Skip to video editor</a>
 <header class="topbar"><a class="brand" href="/create.html"><img src="/assets/jm-leadership-logo.svg" width="38" height="38" alt=""><span>MAYNE<strong>LEADERSHIP</strong></span></a>
-<div class="bar-title"><strong>Video Studio</strong><span class="beta">Phase 6 · Expressions & poses</span></div>
+<div class="bar-title"><strong>Video Studio</strong><span class="beta">Create · Edit · Export</span></div>
 <nav aria-label="Studio navigation"><a href="/create.html">← All studios</a><button type="button" id="help-button" class="ghost">How it works</button></nav></header>
-<main id="workspace" class="workspace">
+
+<main id="studio-home" class="studio-home">
+ <aside class="home-sidebar" aria-label="Studio navigation">
+  <div class="home-sidebar-label">WORKSPACE</div>
+  <button class="home-nav-link active" type="button" data-home-target="home">⌂ <span>Home</span></button>
+  <button class="home-nav-link" type="button" data-home-target="recent">▦ <span>My videos</span></button>
+  <div class="home-sidebar-label">CREATE</div>
+  <button class="home-nav-link" type="button" data-home-target="templates">◫ <span>Templates</span></button>
+  <button class="home-nav-link" type="button" data-home-target="characters">◉ <span>Characters & assets</span></button>
+  <button class="home-nav-link" type="button" data-home-target="voice">♫ <span>AI voiceover</span></button>
+  <div class="home-sidebar-foot"><span>● Browser-first creator</span><small>Local projects · Free voice generation · Your creativity</small></div>
+ </aside>
+ <div class="home-main">
+  <div class="home-toolbar">
+   <span class="home-breadcrumb">WORKSPACE <b>/</b> VIDEO STUDIO</span>
+   <div class="home-tools"><input id="home-search" aria-label="Search videos" type="search" placeholder="⌕ Search videos">
+    <button id="home-new-button" type="button" class="home-primary">＋ New video</button></div>
+  </div>
+  <section class="home-hero" aria-labelledby="home-title">
+   <div class="home-hero-inside">
+    <div class="home-eyebrow">✦ MAYNE LEADERSHIP VIDEO STUDIO</div>
+    <h1 id="home-title">What will you create today?</h1>
+    <p class="home-lead">Turn your leadership expertise into engaging training videos, one scene at a time.</p>
+    <div id="home-modes" class="home-modes" role="group" aria-label="Select video type">
+     <button class="home-mode active" type="button" data-mode="video" aria-pressed="true">▣ Video</button>
+     <button class="home-mode" type="button" data-mode="lesson" aria-pressed="false">♧ Leadership lesson</button>
+     <button class="home-mode" type="button" data-mode="scenario" aria-pressed="false">◇ Scenario</button>
+     <button class="home-mode" type="button" data-mode="voiceover" aria-pressed="false">♫ Voiceover</button>
+    </div>
+    <form id="home-prompt-form" class="home-compose">
+     <label for="home-script" class="visually-hidden">Your narration script or lesson outline</label>
+     <textarea id="home-script" rows="4" maxlength="10000" placeholder="Paste your narration script, or outline what you want to teach..."></textarea>
+     <div class="home-compose-foot"><span>▣ Landscape 16:9 <em>•</em> Editable scenes</span>
+      <button class="home-primary home-make" type="submit">Create storyboard ↗</button>
+     </div>
+    </form>
+    <p id="home-prompt-note" class="home-note" role="status">Your words become editable scenes. No paid AI script-writing service required.</p>
+   </div>
+  </section>
+  <section id="home-templates-section" class="home-section" aria-labelledby="home-templates-title">
+   <div class="home-section-head"><div><span class="home-section-eyebrow">QUICK STARTS</span><h2 id="home-templates-title">Start with something great</h2></div><small>Pick a starting point</small></div>
+   <div class="home-template-grid">
+    <button class="home-template" type="button" data-template="leadership"><span class="home-template-art art-lavender"><img src="/assets/video-studio/characters/amara-professional.png" alt="" loading="lazy"></span><span class="home-template-caption"><strong>Leadership 101</strong><small>Task and relationship leadership</small><span>↗</span></span></button>
+    <button class="home-template" type="button" data-template="coaching"><span class="home-template-art art-peach"><img src="/assets/video-studio/characters/sofia-professional.png" alt="" loading="lazy"></span><span class="home-template-caption"><strong>Coaching conversation</strong><small>Coach through a real dialogue</small><span>↗</span></span></button>
+    <button class="home-template" type="button" data-template="training"><span class="home-template-art art-mint"><img src="/assets/video-studio/characters/daniel-professional.png" alt="" loading="lazy"></span><span class="home-template-caption"><strong>Process walkthrough</strong><small>Teach a step-by-step workflow</small><span>↗</span></span></button>
+    <button class="home-template" type="button" data-template="blank"><span class="home-template-art art-blue"><span class="home-big-plus">＋</span></span><span class="home-template-caption"><strong>Blank canvas</strong><small>Build from a fresh scene</small><span>↗</span></span></button>
+   </div>
+  </section>
+  <section id="home-recent-section" class="home-section" aria-labelledby="home-recent-title">
+   <div class="home-section-head"><div><span class="home-section-eyebrow">YOUR WORK</span><h2 id="home-recent-title">Recent videos</h2></div><small id="home-recent-count"></small></div>
+   <div id="home-recent-list" class="home-recent-list"></div>
+  </section>
+  <footer class="home-footer">MAYNE LEADERSHIP <span>•</span> Learn it. Lead it. Live it.</footer>
+ </div>
+</main>
+<main id="workspace" class="workspace" hidden>
 <aside class="projects panel" aria-label="Projects and scenes">
 <div class="pane-heading"><div><span class="eyebrow">YOUR WORKSPACE</span><h1>Video projects</h1></div><button id="new-project" class="icon-button" title="New project" aria-label="New project">＋</button></div>
 <label for="project-choice" class="small-label">Open project</label><select id="project-choice" aria-label="Open project"></select>
@@ -130,5 +185,5 @@
 <div class="divider"></div>
 <div class="scene-actions"><button id="clone-scene" type="button" class="ghost">Duplicate scene</button><button id="remove-scene" type="button" class="ghost danger">Delete scene</button></div>
 </aside></main>
-<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio is an editable, local-first video storyboard and renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. The five included characters load automatically on every device, and their outfit selections are included in JSON backups. Audio, uploaded presenter photos and custom imported character packs are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips can be downloaded and then imported into individual scenes for video compositing.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
+<dialog id="help-dialog"><h2>About Mayne Leadership Video Studio</h2><p>The studio includes a home dashboard, reusable templates, focused editing panels, and a local-first video renderer. Start with the included <strong>Task vs. Relationship</strong> sample, write a script for each scene, select a design, and set its duration.</p><p>Voice preview uses your browser's built-in speech engine. To hear narration in an exported video, upload an audio recording for each scene. The five included characters load automatically on every device, and their outfit selections are included in JSON backups. Audio, uploaded presenter photos and custom imported character packs are stored on this device using IndexedDB and are not included in JSON backups.</p><p><strong>Important:</strong> Illustrated presenters are static stylized visuals, not talking AI avatars. Realistic photo presenters can be uploaded; AI narration and talking-video generation require the server-side provider integrations to be configured. Generated talking-avatar clips can be downloaded and then imported into individual scenes for video compositing.</p><button id="close-help" class="primary" type="button">Got it</button></dialog>
 <script type="module" src="/assets/video-studio.js"></script></body></html>
