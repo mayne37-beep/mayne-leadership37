@@ -115,10 +115,30 @@ export const CONFLICT_VIDEO_SCENES=Object.freeze([
  'sunset','title','',28)
 ]);
 
+// Matching defaults for the 20-scene Kokoro narration release (actual voice lengths rounded up).
+// These settings are editable. Existing projects are not modified.
+export const CONFLICT_ANIMATED_DURATIONS=Object.freeze([
+ 24,26,25,11,13,12,14,26,14,32,27,28,27,13,14,24,25,19,22,29
+]);
+const CONFLICT_BULLET_SUBTITLES=Object.freeze({
+  7:'• Pick a side • Ignore the disagreement • Listen and clarify',
+  9:'• Avoid or accommodate • Compete or compromise • Collaborate',
+  10:'• Speak from observable facts • Regulate your response • Invite solutions'
+});
 export function conflictLeadershipProject(){
  return normalizeProject({
   id:makeId(),
-  name:'Leadership 101 — Managing Conflict: From Tension to Teamwork (Enhanced)',
-  scenes:CONFLICT_VIDEO_SCENES.map(c=>makeScene({...c,id:makeId()}))
+  name:'Leadership 101 — Managing Conflict: Animated Motion Edition',
+  scenes:CONFLICT_VIDEO_SCENES.map((c,i)=>makeScene({
+   ...c,id:makeId(),
+   duration:CONFLICT_ANIMATED_DURATIONS[i],
+   titleMotion:Object.hasOwn(CONFLICT_BULLET_SUBTITLES,i)?'bullet-build':i===3||i===4||i===5||i===6?'fade':'word-by-word',
+   subtitle:Object.hasOwn(CONFLICT_BULLET_SUBTITLES,i)?CONFLICT_BULLET_SUBTITLES[i]:c.subtitle,
+   presenterMotion:i%4===0?'zoom':i%2===0?'slide-left':'slide-right',
+   transition:['dissolve','slide-left','wipe','zoom'][i%4],
+   motionDuration:[1.2,1.5,1.8][i%3],
+   motionDelay:i>=3&&i<=6?.1:.3,
+   subtitleDelay:i===7||i===9||i===10?.8:.4
+  }))
  });
 }
