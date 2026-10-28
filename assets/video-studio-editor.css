@@ -542,3 +542,20 @@
 @media(prefers-reduced-motion:reduce){
  .editor-active *{scroll-behavior:auto!important}
 }
+
+
+/* Voice Director — editing controls shared with the light video workspace */
+.voice-director-controls{background:#f7f9ff;border:1px solid #dfe6f7;border-radius:13px;padding:14px;margin:12px 0;display:grid;gap:7px}
+.voice-director-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:8px}
+.voice-director-head strong{font-size:.91rem;color:#3449a2}
+.voice-director-head span{font-size:.7rem;color:#78859a}
+.voice-director-controls label:not(.voice-director-check){display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.77rem;font-weight:700;color:#3f526e;margin-top:6px}
+.voice-director-controls output{font-variant-numeric:tabular-nums;color:#4d64d5;font-weight:800}
+.voice-director-controls input[type=range]{accent-color:#5366d7;padding:0;border:0;width:100%;background:transparent;min-height:27px;box-shadow:none}
+.voice-director-check{display:flex;align-items:flex-start;gap:9px;margin-top:11px;color:#445671;font-size:.76rem;line-height:1.45}
+.voice-director-check input{flex:none;margin-top:3px;accent-color:#5269d7}
+.voice-line-section{margin-top:12px;padding-top:11px;border-top:1px solid #dfe6f4}
+.voice-line-section select{font-size:.77rem;width:100%}
+.voice-line-section .audio-actions{margin-top:8px}
+.voice-line-section .audio-actions button{font-size:.75rem}
+@media(max-width:640px){.voice-director-head{display:block}.voice-director-head span{display:block;margin-top:3px}}
