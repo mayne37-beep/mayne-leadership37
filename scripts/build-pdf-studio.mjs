@@ -57,3 +57,8 @@ console.log('Leadership 101 visual scenario builder compiled.');
 
 await build({entryPoints:[path.join(root,'src/video-studio-character-import.js')],outfile:path.join(out,'assets/video-studio-character-import.js'),bundle:true,minify:true,format:'esm',platform:'browser',target:['es2022']});
 console.log('Video Studio character ZIP import module built.');
+
+await build({entryPoints:[path.join(root,'src','video-studio-narration-import.js')],
+ outfile:path.join(out,'assets','video-studio-narration-import.js'),bundle:true,
+ minify:true,format:'esm',platform:'browser',target:['es2022']});
+console.log('Video Studio complete narration-pack importer built.');

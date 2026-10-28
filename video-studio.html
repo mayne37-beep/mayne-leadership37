@@ -187,6 +187,11 @@
 <button class="ghost" type="button" id="free-download" disabled>Download WAV</button>
 <button class="ghost" type="button" id="free-generate-project">Generate voices for ALL scenes</button>
 <button class="ghost danger" type="button" id="free-cancel" disabled hidden>Stop generation</button></div>
+<div class="voice-pack-import">
+ <label for="narration-pack-file" class="field-label">Already generated audio for every scene?</label>
+ <input id="narration-pack-file" type="file" accept=".zip,application/zip">
+ <p class="field-hint" id="narration-pack-info">Import a complete Kokoro WAV ZIP to attach all matching scene narrations in one step. Use the original 20-scene Managing Conflict project; scripts must match.</p>
+</div>
 <p class="field-hint" id="free-model-progress" role="status" aria-live="polite">Generate a single scene or the whole video with your voice settings. Preview individual phrases first. Audio is saved on this device, and original recordings are left intact until replacement succeeds. Kokoro can control speed and silence; emotions are guided by script and voice choice, not guaranteed by the model.</p>
 </details>
 <div class="divider"></div>

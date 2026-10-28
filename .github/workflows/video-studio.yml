@@ -33,6 +33,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npx playwright install chromium
+      - name: Verify complete Kokoro audio pack import
+        run: node --test tests/video-studio-narration-import.test.mjs
       - name: Smoke test actual browser preview and export
         run: node tests/video-studio-browser.mjs
       - name: Test redesigned homepage, storyboard creation, and responsive editor
