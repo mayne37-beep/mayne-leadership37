@@ -3,7 +3,8 @@ import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
 import {LOCAL_VOICES,splitNarration,validLocalVoice,normalizeSpeechOptions} from './video-studio-free-core.js';
 import {wireProjectNarration} from './video-studio-project-narration.js';
-import {entranceState,visibleText,transitionState,cueTiming,moveCue,splitBullets,bulletRevealState,MOTION_TRACKS} from './video-studio-motion.js';
+import {entranceState,visibleText,transitionState,cueTiming,bulletRevealState,splitBullets,moveCue} from './video-studio-motion.js';
+import {wireMotionTimeline} from './video-studio-motion-timeline.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
 import {storyboardFromText,starterProject} from './video-studio-starters.js';
@@ -15,7 +16,7 @@ let projects=[],projectId='',sceneId='',playback=null,recording=false,audioPlayi
 let timelineSeek=null,micRecorder=null,micStream=null,avatarJobId='';
 const photoImages=new Map(),photoLoads=new Map();
 let previewRequest=0;
-let renderVideos=null,assetLibrary=null,studioShell=null;
+let renderVideos=null,assetLibrary=null,studioShell=null,motionTimeline=null;
 let freeWorker=null,freeBusy=false,freeFile=null,freeTask=null;
 const selectedProject=()=>projects.find(p=>p.id===projectId);
 const selectedScene=()=>selectedProject()?.scenes.find(s=>s.id===sceneId);
@@ -101,7 +102,7 @@ function populateEditor(){
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']])$(id).value=String(s[key]);
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],['scene-subtitle-motion','subtitleMotion']])$(id).value=String(s[key]);
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -116,6 +117,7 @@ function populateEditor(){
   assetLibrary?.refresh();
   freeFile=null;
   $('free-download').disabled=true;
+  motionTimeline?.render();
 }
 function selectScene(id){
   if(recording)return;
@@ -603,6 +605,22 @@ async function exportVideo(){
   }
 }
 function wire(){
+  motionTimeline=wireMotionTimeline({
+    getScene:selectedScene,
+    canEdit:()=>!recording&&micRecorder?.state!=='recording',
+    onChange:()=>{touch();drawCurrent();},
+    onScrub:seconds=>{
+      if(recording)return;
+      if(playback)stopPreview();
+      const scene=selectedScene(),project=selectedProject();
+      if(!scene||!project)return;
+      timelineSeek={id:scene.id,offset:seconds};
+      drawCurrent();
+      const index=project.scenes.findIndex(s=>s.id===scene.id);
+      setTimelineProgress(index,seconds);
+      void previewClipFrame(scene,seconds);
+    }
+  });
   $('project-choice').addEventListener('change',e=>selectProject(e.target.value));
   wirePhaseTwo();
   wireFreeSpeech();
@@ -683,18 +701,41 @@ function wire(){
       if(recording)return;
       let value=e.target.value;
       if(key==='duration')value=Math.min(120,Math.max(3,Number(value)||3));
-      selectedScene()[key]=value;touch();renderScenes();drawCurrent();
+      selectedScene()[key]=value;touch();renderScenes();
+      if(key==='duration')motionTimeline?.render();
+      drawCurrent();
     });
   }
   for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
-    ['scene-transition','transition'],['scene-motion-duration','motionDuration']]){
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration'],
+    ['scene-subtitle-motion','subtitleMotion']]){
     $(id).addEventListener('change',e=>{
       if(recording)return;
-      selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
-      timelineSeek=null;touch();renderScenes();drawCurrent();
+      const scene=selectedScene();
+      scene[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
+      if(key==='motionDuration'){
+        scene.titleDuration=scene.motionDuration;scene.subtitleDuration=scene.motionDuration;
+        scene.presenterDuration=scene.motionDuration;
+      }
+      timelineSeek=null;touch();renderScenes();motionTimeline?.render();drawCurrent();
       status('Scene motion updated. Use Preview from this scene to see the effect.','success');
     });
   }
+  $('motion-pace-narration').addEventListener('click',()=>{
+    if(recording)return;
+    const scene=selectedScene();if(!scene)return;
+    const duration=scene.duration;
+    scene.titleMotion='word-by-word';
+    scene.subtitleMotion=splitBullets(scene.subtitle).length>1?'bullets':'word-by-word';
+    Object.assign(scene,moveCue(scene,'title',.35,Math.min(Math.max(1.8,duration*.30),duration-.6)));
+    const subtitleStart=Math.min(duration-1.2,Math.max(1.5,duration*.36));
+    Object.assign(scene,moveCue(scene,'subtitle',subtitleStart,Math.max(.3,duration-subtitleStart-.55)));
+    Object.assign(scene,moveCue(scene,'presenter',.15,Math.min(1.2,duration-.15)));
+    $('scene-title-motion').value=scene.titleMotion;
+    $('scene-subtitle-motion').value=scene.subtitleMotion;
+    touch();motionTimeline?.render();drawCurrent();
+    status('Animation cues spaced across scene narration. Drag bars to fine-tune the timing.','success');
+  });
   $('scene-motion-preview').addEventListener('click',()=>{
     if(recording)return;
     timelineSeek={id:sceneId,offset:0};
@@ -708,8 +749,12 @@ function wire(){
       candidate.presenterMotion=scene.presenterMotion;
       candidate.transition=scene.transition;
       candidate.motionDuration=scene.motionDuration;
+      candidate.subtitleMotion=scene.subtitleMotion;
+      for(const key of ['titleStart','titleDuration','subtitleStart','subtitleDuration','presenterStart','presenterDuration']){
+        candidate[key]=scene[key];
+      }
     }
-    timelineSeek=null;touch();renderScenes();drawCurrent();
+    timelineSeek=null;touch();renderScenes();motionTimeline?.render();drawCurrent();
     status('Motion presets applied to all '+p.scenes.length+' scenes.','success');
   });
   $('add-scene').addEventListener('click',()=>{
@@ -812,6 +857,7 @@ function setTimelineProgress(index,offset){
   });
   const p=selectedProject(),before=p.scenes.slice(0,index).reduce((sum,s)=>sum+s.duration,0);
   $('timeline-cursor').textContent=clock(before+offset)+' / '+clock(totalSeconds(p));
+  if(p.scenes[index]?.id===sceneId)motionTimeline?.updatePlayhead(offset);
 }
 async function putPhoto(key,file){
   const db=await openDb();
