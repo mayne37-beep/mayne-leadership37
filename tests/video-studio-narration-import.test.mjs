@@ -29,7 +29,7 @@ test('accepts real complete 20-scene narration with voice settings and safe WAVs
  assert.ok(imported.some(x=>x.voice==='am_michael'));
 });
 test('refuses any mismatch or partial narration pack',async()=>{
- await assert.rejects(()=>readNarrationPack(await makeZip({wrongTitle:true}),scenes),/has been edited/);
- await assert.rejects(()=>readNarrationPack(await makeZip({omitOne:true}),scenes),/Pack has 19 scenes/);
- await assert.rejects(()=>readNarrationPack(await makeZip(),scenes.slice(0,2)),/Pack has 20 scenes/);
+ await assert.rejects(async()=>readNarrationPack(await makeZip({wrongTitle:true}),scenes),/has been edited/);
+ await assert.rejects(async()=>readNarrationPack(await makeZip({omitOne:true}),scenes),/Pack has 19 scenes/);
+ await assert.rejects(async()=>readNarrationPack(await makeZip(),scenes.slice(0,2)),/Pack has 20 scenes/);
 });
