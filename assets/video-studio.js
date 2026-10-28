@@ -100,6 +100,8 @@ function populateEditor(){
   const p=selectedProject(),s=selectedScene();
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
+  for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration']])$(id).value=String(s[key]);
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
   $('voice-speed').value=s.voiceSpeed;
   $('voice-pause').value=s.voicePauseMs;
@@ -658,6 +660,32 @@ function wire(){
       selectedScene()[key]=value;touch();renderScenes();drawCurrent();
     });
   }
+  for(const [id,key] of [['scene-title-motion','titleMotion'],['scene-presenter-motion','presenterMotion'],
+    ['scene-transition','transition'],['scene-motion-duration','motionDuration']]){
+    $(id).addEventListener('change',e=>{
+      if(recording)return;
+      selectedScene()[key]=key==='motionDuration'?Number(e.target.value):e.target.value;
+      timelineSeek=null;touch();renderScenes();drawCurrent();
+      status('Scene motion updated. Use Preview from this scene to see the effect.','success');
+    });
+  }
+  $('scene-motion-preview').addEventListener('click',()=>{
+    if(recording)return;
+    timelineSeek={id:sceneId,offset:0};
+    void beginPreview();
+  });
+  $('scene-motion-apply-all').addEventListener('click',()=>{
+    if(recording)return;
+    const scene=selectedScene(),p=selectedProject();
+    for(const candidate of p.scenes){
+      candidate.titleMotion=scene.titleMotion;
+      candidate.presenterMotion=scene.presenterMotion;
+      candidate.transition=scene.transition;
+      candidate.motionDuration=scene.motionDuration;
+    }
+    timelineSeek=null;touch();renderScenes();drawCurrent();
+    status('Motion presets applied to all '+p.scenes.length+' scenes.','success');
+  });
   $('add-scene').addEventListener('click',()=>{
     if(recording)return;const p=selectedProject();if(p.scenes.length>=MAX_SCENES)return status('Maximum 40 scenes per video.','error');
     const scene=makeScene({title:'Scene '+(p.scenes.length+1),theme:'blue'});
