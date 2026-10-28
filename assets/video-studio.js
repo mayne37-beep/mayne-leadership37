@@ -520,6 +520,41 @@ function wire(){
   $('project-choice').addEventListener('change',e=>selectProject(e.target.value));
   wirePhaseTwo();
   wireFreeSpeech();
+  $('narration-pack-file').addEventListener('change',async event=>{
+    const file=event.target.files?.[0];event.target.value='';
+    if(!file)return;
+    if(freeBusy||recording||micRecorder?.state==='recording')
+      return status('Finish the active generation, recording, or export before importing narration.','error');
+    const project=selectedProject();if(!project)return;
+    const info=$('narration-pack-info'),picker=$('narration-pack-file');
+    freeBusy=true;picker.disabled=true;
+    try{
+      info.textContent='Validating the narration pack against '+project.scenes.length+' scene scripts…';
+      const {readNarrationPack}=await import('/assets/video-studio-narration-import.js');
+      const tracks=await readNarrationPack(file,project.scenes);
+      const mapped=[];
+      for(const item of tracks){
+        const audioId=makeId();
+        await putAudio(audioId,item.file);
+        mapped.push({item,audioId});
+      }
+      for(const {item,audioId} of mapped){
+        const scene=project.scenes.find(s=>s.id===item.sceneId);
+        scene.audioAssetId=audioId;
+        scene.localVoice=item.voice;
+        Object.assign(scene,item.settings);
+        if(!scene.videoAssetId)scene.duration=Math.min(120,Math.max(3,Math.ceil(item.durationSeconds)));
+      }
+      project.updatedAt=new Date().toISOString();
+      persist();renderScenes();populateEditor();drawCurrent();
+      await refreshAudioInfo();
+      const result='Imported '+tracks.length+' finished Kokoro scene narrations. Preview or Export video to hear the complete lesson.';
+      info.textContent=result;status(result,'success');
+    }catch(err){
+      const message='Narration import failed: '+(err?.message||'Invalid audio pack');
+      info.textContent=message;status(message,'error');
+    }finally{freeBusy=false;picker.disabled=false;}
+  });
   wireProjectNarration({
     getProject:selectedProject,
     getSelectedScene:selectedScene,
