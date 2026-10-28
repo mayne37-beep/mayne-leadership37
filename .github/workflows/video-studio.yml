@@ -5,6 +5,7 @@ on:
       - 'video-studio.html'
       - 'assets/video-studio*.js'
       - 'assets/video-studio.css'
+      - 'assets/video-studio-editor.css'
       - 'assets/video-studio/**'
       - 'tests/video-studio*.mjs'
       - 'tests/video-ai.test.mjs'
@@ -44,3 +45,4 @@ jobs:
           test -f assets/video-studio.js
           test -f assets/video-studio-core.js
           test -f assets/video-studio.css
+          test -f assets/video-studio-editor.css
