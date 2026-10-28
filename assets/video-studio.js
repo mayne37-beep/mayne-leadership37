@@ -364,6 +364,7 @@ async function exportVideo(){
   let media=null,recorder=null,stream=null,dest=null,ac=null,frame=0,currentAudio=null,currentUrl='',finished=false;
   let activeRenderVideo=null;
   const videoSources=new Map();
+  let compressor=null;
   function clearRenderedClips(){
     for(const clip of renderVideos?.values()||[]){
       clip.video.pause();clip.video.removeAttribute('src');clip.video.load();
@@ -398,6 +399,13 @@ async function exportVideo(){
     const AudioContextType=window.AudioContext||window.webkitAudioContext;
     if(AudioContextType){
       ac=new AudioContextType();await ac.resume();dest=ac.createMediaStreamDestination();
+      // Gentle shared dynamics control catches peaks from user-supplied clips.
+      if(typeof ac.createDynamicsCompressor==='function'){
+        compressor=ac.createDynamicsCompressor();
+        compressor.threshold.value=-18;compressor.knee.value=7;compressor.ratio.value=2.5;
+        compressor.attack.value=.006;compressor.release.value=.18;
+        compressor.connect(dest);
+      }
       // Keep the audio track producing samples when a scene has no narration.
       // Some recorders otherwise wait for audio forever and return an empty video.
       const silence=ac.createConstantSource();silence.offset.value=0;
@@ -428,10 +436,16 @@ async function exportVideo(){
           let route=videoSources.get(scene.videoAssetId);
           if(!route){
             const source=ac.createMediaElementSource(v),gain=ac.createGain();
-            source.connect(gain);gain.connect(dest);route={source,gain};
+            source.connect(gain);gain.connect(compressor||dest);route={source,gain};
             videoSources.set(scene.videoAssetId,route);
           }
-          route.gain.gain.value=scene.videoMuted?0:1;
+          const gain=route.gain.gain,now=ac.currentTime;
+        gain.cancelScheduledValues(now);gain.setValueAtTime(0,now);
+        if(!scene.videoMuted){
+          gain.linearRampToValueAtTime(1,now+.07);
+          gain.setValueAtTime(1,now+Math.max(.1,scene.duration-.2));
+          gain.linearRampToValueAtTime(0,now+Math.max(.17,scene.duration-.04));
+        }
         }else v.muted=Boolean(scene.videoMuted);
         v.play().catch(()=>{status('One video clip could not autoplay during export. Check the exported result.','error');});
         return;
@@ -439,7 +453,13 @@ async function exportVideo(){
       const clip=blobs.get(scene.audioAssetId);
       if(!clip||!dest||!ac)return;
       currentUrl=URL.createObjectURL(clip.blob);currentAudio=new Audio(currentUrl);
-      const source=ac.createMediaElementSource(currentAudio);source.connect(dest);
+      const source=ac.createMediaElementSource(currentAudio);
+      const volume=ac.createGain();source.connect(volume);volume.connect(compressor||dest);
+      const now=ac.currentTime,end=now+Math.max(.3,scene.duration);
+      volume.gain.setValueAtTime(0,now);
+      volume.gain.linearRampToValueAtTime(1,now+.07);
+      volume.gain.setValueAtTime(1,Math.max(now+.07,end-.22));
+      volume.gain.linearRampToValueAtTime(0,end-.04);
       currentAudio.play().catch(()=>{status('Could not include one narration clip. Video rendering continues.','error');});
     }
     function cleanup(){
