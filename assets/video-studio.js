@@ -281,6 +281,8 @@ function drawScene(scene,seconds=0,index=0,previous=null){
 function drawCurrent(){
   const p=selectedProject();if(!p)return;
   const scene=selectedScene();
+  // During removal, the selected scene may briefly be absent until replacement is selected.
+  if(!scene)return;
   if(scene?.backgroundImage&&!hasBackgroundLoaded(scene)){
     void preloadBackground(scene).then(()=>{
       if(selectedScene()?.id===scene.id)drawCurrent();
