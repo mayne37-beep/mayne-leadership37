@@ -26,7 +26,7 @@ try{
   const page=await ctx.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('dialog',d=>d.accept('Browser smoke video'));
-  await page.goto(base+'/video-studio.html');
+  await page.goto(base+'/video-studio.html?edit=1&all=1');
   await page.locator('#scene-title').waitFor();
   await page.locator('#project-choice option').first().waitFor({state:'attached',timeout:10000});
   assert.equal(await page.locator('#scene-list [role="listitem"]').count(),4,'starter storyboard has four scenes');
@@ -132,7 +132,7 @@ try{
  const page=await ctx.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  page.on('dialog',d=>d.accept('Smoke Video'));
- await page.goto(base+'/video-studio.html');
+ await page.goto(base+'/video-studio.html?edit=1&all=1');
  await page.locator('#new-project').click();
  await page.locator('#scene-duration').fill('3');
  await page.locator('#scene-duration').blur();
@@ -219,7 +219,7 @@ try{
      terminate(){}
    };
  });
- await freePage.goto(base+'/video-studio.html');
+ await freePage.goto(base+'/video-studio.html?edit=1&all=1');
  await freePage.locator('#project-choice option').first().waitFor({state:'attached'});
  assert.equal(await freePage.locator('#free-voice option').count()>5,true,'free voice catalog has choices');
  await freePage.locator('#free-voice').selectOption('bm_george');
