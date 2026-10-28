@@ -203,11 +203,11 @@ function paintScene(s,secs=0,index=0){
   paintParagraph('MAYNE LEADERSHIP  /  VIDEO STUDIO',89,61,445,'bold 18px system-ui',p.soft,25,1);
   ctx.fillStyle=p.accent;ctx.fillRect(70,117,68,7);
   if(s.layout==='title'){
-    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.title,104,241,1060,'bold 73px system-ui',p.ink,86,3,s.titleMotion,secs,s.motionDuration,s.motionDelay);
+    animatedParagraph(s.subtitle,107,501,980,'32px system-ui',p.soft,46,3,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else if(s.layout==='text-only'){
     animatedParagraph(s.title,95,203,1090,'bold 65px system-ui',p.ink,79,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.subtitle,99,436,1050,'32px system-ui',p.soft,48,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }else{
     const left=s.layout==='presenter-left',split=s.layout==='split';
     const presenterX=left?80:split?827:860;
@@ -233,7 +233,7 @@ function paintScene(s,secs=0,index=0){
     if(s.presenter==='None'&&!photo&&!hasVideo){rounded(820,175,310,330,42,'#ffffff16');paintParagraph('LEADERSHIP',861,313,245,'bold 36px system-ui',p.soft,46,1);}
     ctx.restore();
     animatedParagraph(s.title,textX,230,maxWidth,'bold 66px system-ui',p.ink,81,3,s.titleMotion,secs,s.motionDuration);
-    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,.28);
+    animatedParagraph(s.subtitle,textX+4,456,maxWidth-10,'31px system-ui',p.soft,46,4,s.titleMotion,secs,s.motionDuration,s.motionDelay+s.subtitleDelay);
   }
   ctx.fillStyle='#ffffff20';ctx.fillRect(70,645,1140,3);
   ctx.fillStyle=p.accent;ctx.fillRect(70,645,Math.min(1140,1140*secs/Math.max(1,s.duration)),3);
