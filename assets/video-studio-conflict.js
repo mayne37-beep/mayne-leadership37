@@ -120,6 +120,28 @@ export const CONFLICT_VIDEO_SCENES=Object.freeze([
 export const CONFLICT_ANIMATED_DURATIONS=Object.freeze([
  24,26,25,11,13,12,14,26,14,32,27,28,27,13,14,24,25,19,22,29
 ]);
+// Story beats for genuine included expression/pose images. Sequential looks are
+// displayed during the opening, middle and closing thirds of each scene.
+const CONFLICT_REACTION_SEQUENCE=Object.freeze({
+  0:['neutral','explaining','confident'],
+  1:['neutral','thoughtful','confident'],
+  2:['concerned','explaining','neutral'],
+  3:['concerned','explaining','concerned'],
+  4:['concerned','thoughtful','explaining'],
+  5:['concerned','explaining','concerned'],
+  6:['concerned','thoughtful','listening'],
+  8:['concerned','explaining','confident'],
+  10:['neutral','explaining','confident'],
+  11:['thoughtful','explaining','neutral'],
+  12:['concerned','thoughtful','confident'],
+  13:['thoughtful','explaining','friendly'],
+  14:['thoughtful','explaining','confident'],
+  15:['neutral','explaining','confident'],
+  16:['thoughtful','explaining','confident'],
+  17:['explaining','thoughtful','confident'],
+  18:['neutral','explaining','confident']
+});
+
 const CONFLICT_BULLET_SUBTITLES=Object.freeze({
   7:'• Pick a side • Ignore the disagreement • Listen and clarify',
   9:'• Avoid or accommodate • Compete or compromise • Collaborate',
@@ -128,10 +150,13 @@ const CONFLICT_BULLET_SUBTITLES=Object.freeze({
 export function conflictLeadershipProject(){
  return normalizeProject({
   id:makeId(),
-  name:'Leadership 101 — Managing Conflict: Animated Motion Edition',
+  name:'Leadership 101 — Managing Conflict: White Expressive Edition',
   scenes:CONFLICT_VIDEO_SCENES.map((c,i)=>makeScene({
    ...c,id:makeId(),
    duration:CONFLICT_ANIMATED_DURATIONS[i],
+   visualStyle:'light',
+   characterFraming:c.photoAssetId?'torso':'full',
+   characterReactionSequence:CONFLICT_REACTION_SEQUENCE[i]||[],
    titleMotion:Object.hasOwn(CONFLICT_BULLET_SUBTITLES,i)?'bullet-build':i===3||i===4||i===5||i===6?'fade':'word-by-word',
    subtitle:Object.hasOwn(CONFLICT_BULLET_SUBTITLES,i)?CONFLICT_BULLET_SUBTITLES[i]:c.subtitle,
    presenterMotion:i%4===0?'zoom':i%2===0?'slide-left':'slide-right',

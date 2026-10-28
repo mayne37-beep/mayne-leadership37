@@ -55,3 +55,21 @@ test('word and bullet reveals are deterministic and timing survives project back
  assert.equal(restored.scenes[0].motionDelay,2.5);
  assert.equal(restored.scenes[0].subtitleDelay,1.4);
 });
+
+test('light scenes preserve framing and reaction sequences across JSON roundtrips',()=>{
+ const scene=makeScene({visualStyle:'light',characterFraming:'torso',photoAssetId:'mayne-character-sofia-professional',
+  characterReactionSequence:['concerned','explaining','friendly']});
+ const restored=parseProjectImport(safeProjectExport(normalizeProject({scenes:[scene]}))).scenes[0];
+ assert.equal(restored.visualStyle,'light');
+ assert.equal(restored.characterFraming,'torso');
+ assert.deepEqual(restored.characterReactionSequence,['concerned','explaining','friendly']);
+ const legacy=normalizeScene({photoAssetId:'custom-portrait'});
+ assert.equal(legacy.visualStyle,'standard');
+ assert.equal(legacy.characterFraming,'full');
+ assert.deepEqual(legacy.characterReactionSequence,[]);
+ const hostile=normalizeScene({visualStyle:'<script>',characterFraming:'teleport',
+  characterReactionSequence:['javascript:alert(1)','friendly','unknown','explaining']});
+ assert.equal(hostile.visualStyle,'standard');
+ assert.equal(hostile.characterFraming,'full');
+ assert.deepEqual(hostile.characterReactionSequence,['','friendly','']);
+});

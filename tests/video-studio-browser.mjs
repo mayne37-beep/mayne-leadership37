@@ -342,6 +342,25 @@ try{
  await freePage.locator('#top-home').click();
  await freePage.locator('[data-template="conflict"]').click();
  await freePage.waitForFunction(()=>document.querySelectorAll('#scene-list [role="listitem"]').length===20);
+ assert.equal(await freePage.locator('#scene-visual-style').inputValue(),'light','new conflict starter uses the white style');
+ assert.equal(await freePage.locator('#scene-character-framing').inputValue(),'torso','conflict presenter is torso framed');
+ const reactionsBefore=await freePage.evaluate(()=>{
+   const project=JSON.parse(localStorage.getItem('mayne-video-studio-projects-v1')).find(p=>p.name.includes('Managing Conflict'));
+   return project.scenes[0].characterReactionSequence;
+ });
+ assert.deepEqual(reactionsBefore,['neutral','explaining','confident']);
+ await freePage.evaluate(()=>{
+   const set=(id,value)=>{const el=document.getElementById(id);el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));};
+   set('scene-reaction-2','listening');
+   set('scene-character-framing','close');
+ });
+ await freePage.waitForFunction(()=>{
+   const p=JSON.parse(localStorage.getItem('mayne-video-studio-projects-v1')).find(p=>p.name.includes('Managing Conflict'));
+   return p?.scenes[0]?.characterReactionSequence[1]==='listening'&&p?.scenes[0]?.characterFraming==='close';
+ });
+ await freePage.reload();
+ assert.equal(await freePage.locator('#scene-character-framing').inputValue(),'close','close-up preference saved after reload');
+ assert.equal(await freePage.locator('#scene-reaction-2').inputValue(),'listening','middle reaction saved after reload');
  await freePage.locator('[data-tool-tab="voice"]').click();
  await freePage.locator('#free-generate-project').click();
  await freePage.waitForFunction(()=>document.querySelector('#free-model-progress')?.textContent?.includes('saved for 20 scenes'),{timeout:30000});

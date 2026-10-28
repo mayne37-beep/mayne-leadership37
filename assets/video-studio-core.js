@@ -22,7 +22,7 @@ export function makeScene(overrides={}){
   const s={
     id:makeId(),title:'New Scene',subtitle:'Add the idea learners should remember.',
     script:'Write the narration for this scene.',duration:10,layout:'presenter-right',
-    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,titleMotion:'rise',presenterMotion:'slide-right',transition:'dissolve',motionDuration:.8,...overrides
+    theme:'navy',presenter:'Alex',audioAssetId:'',photoAssetId:'',backgroundImage:'',videoAssetId:'',videoMode:'presenter',videoFit:'cover',videoMuted:false,videoTrimStart:0,localVoice:'af_heart',...DEFAULT_SPEECH,titleMotion:'rise',presenterMotion:'slide-right',transition:'dissolve',motionDuration:.8,visualStyle:'standard',characterFraming:'full',characterReactionSequence:[],...overrides
   };
   return normalizeScene(s);
 }
@@ -46,6 +46,11 @@ export function normalizeScene(raw={}){
     videoMuted:s.videoMuted===true,
     localVoice:/^(?:af|am|bf|bm)_[a-z]+$/.test(s.localVoice||'')?s.localVoice:'af_heart',
     videoTrimStart:Math.max(0,Math.min(120,Number(s.videoTrimStart)||0)),
+    visualStyle:s.visualStyle==='light'?'light':'standard',
+    characterFraming:['full','torso','close'].includes(s.characterFraming)?s.characterFraming:'full',
+    characterReactionSequence:Array.isArray(s.characterReactionSequence)
+      ?s.characterReactionSequence.slice(0,3).map(x=>['neutral','friendly','confident','thoughtful','concerned','enthusiastic','explaining','listening'].includes(x)?x:'')
+      :[],
     ...normalizeSpeechOptions(s),
     ...normalizeMotionOptions(s)
   };

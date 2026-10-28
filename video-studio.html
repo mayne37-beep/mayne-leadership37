@@ -144,6 +144,25 @@
  <button type="button" id="scene-motion-apply-all" class="ghost">Apply effects to all scenes</button>
 </div>
 </fieldset>
+<fieldset class="scene-motion-fields" aria-describedby="character-shot-hint">
+<legend>Presentation style &amp; character reactions</legend>
+<p id="character-shot-hint" class="field-hint">Choose a light, white-background presentation and frame the character from the torso up. You can select three expression/pose photos to transition between during this scene. The effect is photographic, not lip-synced animation.</p>
+<div class="two-fields">
+<div><label for="scene-visual-style" class="field-label">Presentation background</label>
+<select id="scene-visual-style"><option value="standard">Original dark studio</option><option value="light">Clean white / light</option></select></div>
+<div><label for="scene-character-framing" class="field-label">Camera framing</label>
+<select id="scene-character-framing"><option value="full">Full presenter</option><option value="torso">Waist-up / torso</option><option value="close">Closer portrait</option></select></div>
+</div>
+<div class="two-fields">
+<div><label for="scene-reaction-1" class="field-label">Opening reaction</label>
+<select id="scene-reaction-1"><option value="">Use selected photo</option><option value="neutral">Neutral</option><option value="concerned">Concerned</option><option value="thoughtful">Thoughtful</option><option value="explaining">Explaining</option><option value="listening">Listening</option><option value="confident">Confident</option><option value="friendly">Friendly / smiling</option><option value="enthusiastic">Enthusiastic</option></select></div>
+<div><label for="scene-reaction-2" class="field-label">Middle reaction</label>
+<select id="scene-reaction-2"><option value="">Keep previous</option><option value="neutral">Neutral</option><option value="concerned">Concerned</option><option value="thoughtful">Thoughtful</option><option value="explaining">Explaining</option><option value="listening">Listening</option><option value="confident">Confident</option><option value="friendly">Friendly / smiling</option><option value="enthusiastic">Enthusiastic</option></select></div>
+</div>
+<label for="scene-reaction-3" class="field-label">Closing reaction</label>
+<select id="scene-reaction-3"><option value="">Keep previous</option><option value="neutral">Neutral</option><option value="concerned">Concerned</option><option value="thoughtful">Thoughtful</option><option value="explaining">Explaining</option><option value="listening">Listening</option><option value="confident">Confident</option><option value="friendly">Friendly / smiling</option><option value="enthusiastic">Enthusiastic</option></select>
+<p class="field-hint">Built-in characters include permanent reaction images. Use the Asset Library to choose Sofia, Daniel, Priya, Amara, or Kenji first. Existing scenes retain their current appearance until you change these options.</p>
+</fieldset>
 <div class="divider"></div>
 <details class="advanced-media" open><summary>Moving presenter video · Phase 3</summary>
 <p class="field-hint">Bring MP4 or WebM video into a scene—including a talking-avatar video downloaded from HeyGen. It plays in the storyboard and is composited into the video export, including its audio unless muted.</p>
