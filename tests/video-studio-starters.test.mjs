@@ -46,3 +46,19 @@ test('quick starts all include real editable projects without subscriptions',()=
  assert.equal(starterProject('blank').scenes[0].script,'');
  assert.throws(()=>starterProject('unknown'),/Unknown/);
 });
+
+test('Managing Conflict starter applies editable motion to all twenty scenes without altering scripts',()=>{
+ const c=starterProject('conflict');
+ assert.equal(c.scenes.length,20);
+ assert.match(c.name,/Animated Motion Edition/);
+ assert.ok(c.scenes.some(s=>s.titleMotion==='word-by-word'));
+ assert.ok(c.scenes.some(s=>s.titleMotion==='bullet-build'));
+ assert.ok(c.scenes.every(s=>s.motionDuration>=.3&&s.motionDuration<=2));
+ assert.ok(c.scenes.every(s=>s.subtitleDelay>=0&&s.motionDelay>=0));
+ assert.equal(new Set(c.scenes.map(s=>s.transition)).size,4);
+ assert.equal(c.scenes[3].duration,11);
+ assert.equal(c.scenes[9].duration,32);
+ assert.match(c.scenes[9].subtitle,/Collaborate/);
+ assert.match(c.scenes[9].script,/Thomas Kilmann/);
+ assert.ok(c.scenes.filter(s=>s.title.startsWith('Sofia |')).every(s=>s.localVoice==='af_bella'));
+});
