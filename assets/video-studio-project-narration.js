@@ -1,6 +1,6 @@
 // User-triggered, browser-only Kokoro narration for the *entire* storyboard.
 // Sequential worker requests avoid running multiple speech models simultaneously.
-import {splitNarration,validLocalVoice} from './video-studio-free-core.js';
+import {splitNarration,validLocalVoice,normalizeSpeechOptions} from './video-studio-free-core.js';
 const $=id=>document.getElementById(id);
 export function wireProjectNarration({getProject,getSelectedScene,putAudio,makeId,persist,renderScenes,refreshAudioInfo,status,busy,setBusy}){
  let worker=null,queue=[],done=0,total=0,stopped=false;
@@ -27,7 +27,7 @@ export function wireProjectNarration({getProject,getSelectedScene,putAudio,makeI
   const label='Scene '+(done+1)+' of '+total+' — '+job.title;
   note(label+' · Generating voice '+job.voice+' on this device…');
   status(label+' · Kokoro generation in progress');
-  worker.postMessage({action:'generate',voice:job.voice,text:job.script});
+  worker.postMessage({action:'generate',voice:job.voice,text:job.script,...normalizeSpeechOptions(job)});
   worker.currentJob=job;
  };
  $('free-generate-project').addEventListener('click',()=>{
@@ -35,7 +35,7 @@ export function wireProjectNarration({getProject,getSelectedScene,putAudio,makeI
   const project=getProject();if(!project)return;
   try{
    const jobs=project.scenes.map(s=>({
-    sceneId:s.id,title:s.title,voice:s.localVoice,script:s.script
+    sceneId:s.id,title:s.title,voice:s.localVoice,script:s.script,...normalizeSpeechOptions(s)
    }));
    for(const job of jobs){
     if(!validLocalVoice(job.voice))throw Error('Unsupported voice on '+job.title);

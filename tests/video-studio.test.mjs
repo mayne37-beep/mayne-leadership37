@@ -198,3 +198,23 @@ test('every included expression and pose is portable in project JSON and local r
   });
  }
 });
+
+test('per-scene Voice Director settings survive export, import and normalization',()=>{
+ const p=demoProject();
+ p.scenes[0].voiceSpeed=.86;
+ p.scenes[0].voicePauseMs=650;
+ p.scenes[0].voiceTailMs=800;
+ p.scenes[0].voiceNormalize=false;
+ const normalized=normalizeProject(p);
+ assert.equal(normalized.scenes[0].voiceSpeed,.86);
+ assert.equal(normalized.scenes[0].voicePauseMs,650);
+ const exported=safeProjectExport(normalized);
+ const imported=parseProjectImport(exported);
+ assert.equal(imported.scenes[0].voiceTailMs,800);
+ assert.equal(imported.scenes[0].voiceNormalize,false);
+ const manifest=localRenderManifest(normalized);
+ assert.equal(manifest.project.scenes[0].voiceSpeed,.86);
+ assert.equal(manifest.project.scenes[0].voicePauseMs,650);
+ const old=normalizeScene({title:'Older project'});
+ assert.ok(old.voiceSpeed>=.8&&old.voiceSpeed<=1.2);
+});

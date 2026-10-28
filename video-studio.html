@@ -167,11 +167,27 @@
 <p class="field-hint">No subscription, API key, or cloud AI processing. Kokoro runs on your device while the studio stays online. The first run downloads an open-source speech model (which can be large); future runs may reuse the browser cache. Desktop Chrome or Edge recommended.</p>
 <label for="free-voice" class="field-label">Free voice</label>
 <select id="free-voice"><option value="af_heart">Heart · US feminine</option><option value="am_michael">Michael · US masculine</option></select>
-<div class="audio-actions"><button class="primary" type="button" id="free-generate">Generate free narration</button>
+<div class="voice-director-controls" aria-label="Voice Director controls">
+<div class="voice-director-head"><strong>Voice Director</strong><span>Fine-tune each scene before generating</span></div>
+<label for="voice-speed">Speaking speed <output id="voice-speed-value" for="voice-speed">0.96×</output></label>
+<input id="voice-speed" type="range" min="0.80" max="1.20" step="0.02" value="0.96">
+<label for="voice-pause">Pause between phrases <output id="voice-pause-value" for="voice-pause">380 ms</output></label>
+<input id="voice-pause" type="range" min="0" max="1000" step="50" value="400">
+<label for="voice-tail">Pause after narration <output id="voice-tail-value" for="voice-tail">450 ms</output></label>
+<input id="voice-tail" type="range" min="0" max="1500" step="50" value="450">
+<label class="voice-director-check"><input id="voice-normalize" type="checkbox" checked> Match generated voice loudness and smooth audio edges</label>
+<div class="voice-line-section">
+<label for="voice-line">Audition an individual phrase</label>
+<select id="voice-line" aria-describedby="voice-line-help"><option value="">Choose a phrase</option></select>
+<div class="audio-actions"><button id="voice-preview-line" class="ghost" type="button">Generate &amp; listen to phrase</button><button id="voice-stop-preview" class="ghost" type="button">Stop playback</button></div>
+<p class="field-hint" id="voice-line-help">A phrase test uses the chosen voice settings without replacing the scene's saved narration. To replace a complete scene, use Regenerate scene below.</p>
+</div>
+</div>
+<div class="audio-actions"><button class="primary" type="button" id="free-generate">Generate / regenerate scene narration</button>
 <button class="ghost" type="button" id="free-download" disabled>Download WAV</button>
 <button class="ghost" type="button" id="free-generate-project">Generate voices for ALL scenes</button>
 <button class="ghost danger" type="button" id="free-cancel" disabled hidden>Stop generation</button></div>
-<p class="field-hint" id="free-model-progress" role="status" aria-live="polite">Ready. For your conflict lesson, use Generate voices for ALL scenes to assign a distinct voice to Sofia, Daniel, and the supervisor, and save narration into every scene. Downloads and synthesis run in this browser; keep this tab open. Maximum 1,200 characters per scene.</p>
+<p class="field-hint" id="free-model-progress" role="status" aria-live="polite">Generate a single scene or the whole video with your voice settings. Preview individual phrases first. Audio is saved on this device, and original recordings are left intact until replacement succeeds. Kokoro can control speed and silence; emotions are guided by script and voice choice, not guaranteed by the model.</p>
 </details>
 <div class="divider"></div>
 <label class="field-label" for="scene-audio">Recorded narration (optional)</label><input id="scene-audio" type="file" accept="audio/*"><div id="audio-info" class="audio-info">No narration attached.</div>

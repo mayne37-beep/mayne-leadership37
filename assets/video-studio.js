@@ -1,7 +1,7 @@
 import {STORAGE_KEY,MAX_SCENES,PALETTES,makeId,makeScene,newProject,demoProject,normalizeProject,clock,totalSeconds,safeProjectExport,parseProjectImport,localRenderManifest} from './video-studio-core.js';
 
 import {validateClip,saveClip,readClip,inspectVideoFile,ensureClip,currentClip,stopClips,setClipPosition,drawVideo} from './video-studio-clips.js';
-import {LOCAL_VOICES,splitNarration,validLocalVoice} from './video-studio-free-core.js';
+import {LOCAL_VOICES,splitNarration,validLocalVoice,normalizeSpeechOptions} from './video-studio-free-core.js';
 import {wireProjectNarration} from './video-studio-project-narration.js';
 import {initAssetLibrary,preloadBackground,drawBackground,hasBackgroundLoaded} from './video-studio-library.js';
 import {builtinPhoto} from './video-studio-library-core.js';
@@ -100,6 +100,12 @@ function populateEditor(){
   $('project-name').value=p.name;
   for(const [id,key] of Object.entries(sceneFields))$(id).value=s[key];
   $('free-voice').value=validLocalVoice(s.localVoice)?s.localVoice:'af_heart';
+  $('voice-speed').value=s.voiceSpeed;
+  $('voice-pause').value=s.voicePauseMs;
+  $('voice-tail').value=s.voiceTailMs;
+  $('voice-normalize').checked=s.voiceNormalize!==false;
+  refreshVoiceSettingsLabels();
+  updateVoiceLines();
   $('scene-audio').value='';
   refreshAudioInfo();
   void refreshPhotoInfo();
@@ -358,6 +364,7 @@ async function exportVideo(){
   let media=null,recorder=null,stream=null,dest=null,ac=null,frame=0,currentAudio=null,currentUrl='',finished=false;
   let activeRenderVideo=null;
   const videoSources=new Map();
+  let compressor=null;
   function clearRenderedClips(){
     for(const clip of renderVideos?.values()||[]){
       clip.video.pause();clip.video.removeAttribute('src');clip.video.load();
@@ -392,6 +399,13 @@ async function exportVideo(){
     const AudioContextType=window.AudioContext||window.webkitAudioContext;
     if(AudioContextType){
       ac=new AudioContextType();await ac.resume();dest=ac.createMediaStreamDestination();
+      // Gentle shared dynamics control catches peaks from user-supplied clips.
+      if(typeof ac.createDynamicsCompressor==='function'){
+        compressor=ac.createDynamicsCompressor();
+        compressor.threshold.value=-18;compressor.knee.value=7;compressor.ratio.value=2.5;
+        compressor.attack.value=.006;compressor.release.value=.18;
+        compressor.connect(dest);
+      }
       // Keep the audio track producing samples when a scene has no narration.
       // Some recorders otherwise wait for audio forever and return an empty video.
       const silence=ac.createConstantSource();silence.offset.value=0;
@@ -422,10 +436,16 @@ async function exportVideo(){
           let route=videoSources.get(scene.videoAssetId);
           if(!route){
             const source=ac.createMediaElementSource(v),gain=ac.createGain();
-            source.connect(gain);gain.connect(dest);route={source,gain};
+            source.connect(gain);gain.connect(compressor||dest);route={source,gain};
             videoSources.set(scene.videoAssetId,route);
           }
-          route.gain.gain.value=scene.videoMuted?0:1;
+          const gain=route.gain.gain,now=ac.currentTime;
+        gain.cancelScheduledValues(now);gain.setValueAtTime(0,now);
+        if(!scene.videoMuted){
+          gain.linearRampToValueAtTime(1,now+.07);
+          gain.setValueAtTime(1,now+Math.max(.1,scene.duration-.2));
+          gain.linearRampToValueAtTime(0,now+Math.max(.17,scene.duration-.04));
+        }
         }else v.muted=Boolean(scene.videoMuted);
         v.play().catch(()=>{status('One video clip could not autoplay during export. Check the exported result.','error');});
         return;
@@ -433,7 +453,13 @@ async function exportVideo(){
       const clip=blobs.get(scene.audioAssetId);
       if(!clip||!dest||!ac)return;
       currentUrl=URL.createObjectURL(clip.blob);currentAudio=new Audio(currentUrl);
-      const source=ac.createMediaElementSource(currentAudio);source.connect(dest);
+      const source=ac.createMediaElementSource(currentAudio);
+      const volume=ac.createGain();source.connect(volume);volume.connect(compressor||dest);
+      const now=ac.currentTime,end=now+Math.max(.3,scene.duration);
+      volume.gain.setValueAtTime(0,now);
+      volume.gain.linearRampToValueAtTime(1,now+.07);
+      volume.gain.setValueAtTime(1,Math.max(now+.07,end-.22));
+      volume.gain.linearRampToValueAtTime(0,end-.04);
       currentAudio.play().catch(()=>{status('Could not include one narration clip. Video rendering continues.','error');});
     }
     function cleanup(){
@@ -865,12 +891,59 @@ function finishFreeSpeech(){
   $('free-generate').disabled=false;
   freeTask=null;
 }
+
+function voiceSettingsFromEditor(){
+ return normalizeSpeechOptions({
+  voiceSpeed:$('voice-speed').value,voicePauseMs:$('voice-pause').value,
+  voiceTailMs:$('voice-tail').value,voiceNormalize:$('voice-normalize').checked
+ });
+}
+function refreshVoiceSettingsLabels(){
+ $('voice-speed-value').textContent=Number($('voice-speed').value).toFixed(2)+'×';
+ $('voice-pause-value').textContent=$('voice-pause').value+' ms';
+ $('voice-tail-value').textContent=$('voice-tail').value+' ms';
+}
+function updateVoiceLines(){
+ const list=$('voice-line');if(!list)return;
+ list.replaceChildren();
+ const text=selectedScene()?.script||'';
+ let chunks=[];
+ try{chunks=splitNarration(text);}catch{}
+ for(const [i,sentence] of chunks.entries()){
+  list.add(new Option((i+1)+'. '+sentence.slice(0,105),String(i)));
+ }
+ $('voice-preview-line').disabled=!chunks.length;
+}
+
 function wireFreeSpeech(){
   const choose=$('free-voice');
   const lastVoice=choose.value;
   choose.replaceChildren();
   for(const voice of LOCAL_VOICES)choose.add(new Option(voice.label,voice.id));
   choose.value=validLocalVoice(lastVoice)?lastVoice:'af_heart';
+  choose.addEventListener('change',()=>{
+    if(freeBusy)return;
+    const scene=selectedScene();if(!scene)return;
+    scene.localVoice=choose.value;touch();
+  });
+  for(const id of ['voice-speed','voice-pause','voice-tail','voice-normalize']){
+    $(id).addEventListener('input',()=>{
+      refreshVoiceSettingsLabels();
+      if(freeBusy)return;
+      const scene=selectedScene();if(!scene)return;
+      Object.assign(scene,voiceSettingsFromEditor());touch();
+    });
+  }
+  $('scene-script').addEventListener('input',updateVoiceLines);
+  $('voice-stop-preview').addEventListener('click',stopAudio);
+  $('voice-preview-line').addEventListener('click',()=>{
+    if(freeBusy||recording||micRecorder?.state==='recording')return;
+    const scene=selectedScene();if(!scene)return;
+    let sentences;try{sentences=splitNarration(scene.script);}catch(err){return status(err.message,'error');}
+    const line=sentences[Number($('voice-line').value)];
+    if(!line)return status('Select a phrase to audition.','error');
+    triggerFreeSpeech(scene,line,true);
+  });
   $('save-render-job').addEventListener('click',()=>{
     const job=localRenderManifest(selectedProject());
     download(new Blob([JSON.stringify(job,null,2)],{type:'application/json'}),safeFilename(selectedProject().name)+'-gpu-render-job.json');
@@ -879,13 +952,13 @@ function wireFreeSpeech(){
   $('free-download').addEventListener('click',()=>{
     if(freeFile)download(freeFile,'mayne-free-ai-narration.wav');
   });
-  $('free-generate').addEventListener('click',()=>{
+  $('free-generate').addEventListener('click',()=>triggerFreeSpeech(selectedScene(),selectedScene()?.script||'',false));
+  function triggerFreeSpeech(scene,text,previewOnly){
     if(freeBusy||recording||micRecorder?.state==='recording'){
       return status('Complete the current recording or export before generating free AI narration.','error');
     }
-    const scene=selectedScene();
     if(!scene)return;
-    const voice=choose.value,text=scene.script.trim();
+    const voice=choose.value;text=String(text).trim();
     let segments;
     try{
       if(!validLocalVoice(voice))throw Error('Choose a supported voice.');
@@ -907,9 +980,17 @@ function wireFreeSpeech(){
           }else if(response.type==='result'){
             const task=freeTask;
             if(!task)return;
-            freeModelNote('Saving generated narration…');
+            freeModelNote(task.previewOnly?'Auditioning selected phrase…':'Saving generated narration…');
             try{
               const blob=new Blob([response.buffer],{type:'audio/wav'});
+              if(task.previewOnly){
+                stopAudio();
+                const url=URL.createObjectURL(blob),audio=new Audio(url);
+                audio.onended=()=>{if(audioPlaying===audio)audioPlaying=null;URL.revokeObjectURL(url);};
+                await audio.play();audioPlaying=audio;
+                freeModelNote('Phrase preview playing. Regenerate the whole scene to save a replacement.');
+                return;
+              }
               if(blob.size>25*1024*1024)throw Error('Generated WAV exceeds the 25 MB local narration limit.');
               const file=new File([blob],'free-kokoro-'+response.voice+'.wav',{type:'audio/wav'});
               const id=makeId();
@@ -949,11 +1030,11 @@ function wireFreeSpeech(){
     $('free-generate').disabled=true;
     freeFile=null;$('free-download').disabled=true;
     scene.localVoice=voice;touch();
-    freeTask={projectId,sceneId:scene.id};
+    freeTask={projectId,sceneId:scene.id,previewOnly};
     freeModelNote('Starting Kokoro on this device… The first model download can take time.');
     status('Generating free narration for '+scene.title+'.');
-    freeWorker.postMessage({action:'generate',voice,text});
-  });
+    freeWorker.postMessage({action:'generate',voice,text,...voiceSettingsFromEditor()});
+  }
 }
 
 function wirePhaseThree(){

@@ -55,3 +55,58 @@ export function pcmToWav(chunks,sampleRate=24000){
 export function validLocalVoice(value){
  return LOCAL_VOICES.some(x=>x.id===value);
 }
+
+
+// Speech settings stored on each scene. No cloud generation required.
+export const DEFAULT_SPEECH=Object.freeze({
+ voiceSpeed:0.96,voicePauseMs:400,voiceTailMs:450,voiceNormalize:true
+});
+export function normalizeSpeechOptions(raw={}){
+ const v=raw&&typeof raw==='object'?raw:{};
+ const number=(value,fallback,min,max)=>Number.isFinite(Number(value))
+  ?Math.min(max,Math.max(min,Number(value))):fallback;
+ return {
+  voiceSpeed:Math.round(number(v.voiceSpeed,DEFAULT_SPEECH.voiceSpeed,.80,1.20)*100)/100,
+  voicePauseMs:Math.round(number(v.voicePauseMs,DEFAULT_SPEECH.voicePauseMs,0,1000)/50)*50,
+  voiceTailMs:Math.round(number(v.voiceTailMs,DEFAULT_SPEECH.voiceTailMs,0,1500)/50)*50,
+  voiceNormalize:v.voiceNormalize===false?false:true
+ };
+}
+// Add deliberate phrase/tail pauses, control signal peaks and soften beginning/end clicks.
+// Speech dynamics are unchanged in the underlying Kokoro model; this is post-processing.
+export function finishNarration(chunks,sampleRate=24000,options={}){
+ const opts=normalizeSpeechOptions(options);
+ if(!Array.isArray(chunks)||!chunks.length||!chunks.every(x=>x&&x.length))
+  throw Error('No speech samples were generated.');
+ const pauseSamples=Math.round(sampleRate*opts.voicePauseMs/1000);
+ const tailSamples=Math.round(sampleRate*opts.voiceTailMs/1000);
+ const total=chunks.reduce((n,x)=>n+x.length,tailSamples)+pauseSamples*(chunks.length-1);
+ if(total<=0||total>sampleRate*240)throw Error('Narration duration is too long.');
+ const output=new Float32Array(total);
+ let offset=0;
+ for(let i=0;i<chunks.length;i++){
+  output.set(chunks[i],offset);offset+=chunks[i].length;
+  if(i<chunks.length-1)offset+=pauseSamples;
+ }
+ if(opts.voiceNormalize){
+  let sum=0,peak=0;
+  // Compute level only on actual voice; gaps are excluded.
+  let count=0;
+  for(const chunk of chunks)for(const x of chunk){
+   const v=Number.isFinite(x)?x:0;
+   sum+=v*v;peak=Math.max(peak,Math.abs(v));count++;
+  }
+  const rms=Math.sqrt(sum/Math.max(1,count));
+  // Avoid wild amplification on nearly silent files.
+  const gain=rms>.005?Math.min(2.5,.16/rms,.87/Math.max(peak,.0001)):1;
+  for(let i=0;i<output.length;i++)output[i]=Math.max(-.9,Math.min(.9,output[i]*gain));
+ }
+ // 55 ms anti-click fade; no fades across intentional inter-sentence gaps.
+ const fade=Math.min(Math.round(sampleRate*.055),Math.floor(offset/3));
+ for(let i=0;i<fade;i++){
+  const gain=(i+1)/fade;
+  output[i]*=gain;
+  output[offset-1-i]*=gain;
+ }
+ return {samples:output,duration:output.length/sampleRate,settings:opts};
+}
