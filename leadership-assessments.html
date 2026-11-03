@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Leadership & Personality Dashboard</title>
+    <title>Leadership Assessment Studio | Mayne Leadership</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -218,106 +218,131 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
 @media print{.site-head,.assess-shell,.site-foot{display:none!important}}
 </style>
 <link rel="stylesheet" href="assets/assessment-pagination.css">
+<link rel="stylesheet" href="assets/assessment-dashboard.css">
 </head>
-<body data-active-tab="summary-tab"><header class="site-head"><div class="site-head-inner"><a class="site-brand" href="index.html"><img src="assets/jm-leadership-logo.svg" alt=""><span>MAYNE <b>LEADERSHIP</b></span></a><nav class="site-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="learning.html">Learning</a><a href="assessments.html" aria-current="page">Assessments</a><a href="tools.html">Thinking Tools</a><a href="facilitation.html">Classroom Tools</a><a href="booking-demo.html">Classroom Calendar</a><a class="contact" href="contact.html">Get in touch ↗</a></nav></div></header><div class="assess-shell"><section class="assess-hero"><div class="assess-kicker">INDIVIDUAL ASSESSMENT STUDIO</div><h1>Build your leadership profile.</h1><p>Explore eight perspectives on how you think, learn, communicate, work, navigate conflict, and lead. Complete one assessment or build a comprehensive profile across all eight.</p><div class="assess-pills"><span class="assess-pill">8 ASSESSMENTS</span><span class="assess-pill">PRIVATE IN YOUR BROWSER</span><span class="assess-pill">SAVE & RETURN</span><span class="assess-pill">PRINTABLE RESULTS</span></div></section></div>
+<body data-active-tab="summary-tab"><a class="studio-skip" href="#assessment-workspace">Skip to assessments</a><header class="site-head"><div class="site-head-inner"><a class="site-brand" href="index.html"><img src="assets/jm-leadership-logo.svg" alt=""><span>MAYNE <b>LEADERSHIP</b></span></a><nav class="site-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="learning.html">Learning</a><a href="assessments.html" aria-current="page">Assessments</a><a href="tools.html">Thinking Tools</a><a href="facilitation.html">Classroom Tools</a><a href="booking-demo.html">Classroom Calendar</a><a class="contact" href="contact.html">Get in touch ↗</a></nav></div></header><div class="assess-shell"><section class="assess-hero" aria-labelledby="studioTitle"><div><div class="assess-kicker">INDIVIDUAL ASSESSMENT STUDIO</div><h1 id="studioTitle">Build your leadership profile.</h1><p>Get to know how you think, communicate, learn, and lead. Explore eight perspectives and turn self-awareness into everyday action.</p><div class="assess-pills"><span class="assess-pill">8 PERSPECTIVES</span><span class="assess-pill">YOUR PACE</span><span class="assess-pill">PRIVATE IN YOUR BROWSER</span></div></div><div class="hero-orbit" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="78" stroke="white" stroke-opacity=".2"/><circle cx="100" cy="100" r="48" fill="white" fill-opacity=".07" stroke="white" stroke-opacity=".13"/><path d="M100 22v30m55-7-21 21m44 34h-30m7 55-21-21m-34 44v-30m-55 7 21-21m-44-34h30m-7-55 21 21" stroke="white" stroke-opacity=".2"/><g fill="#e8c875"><circle cx="100" cy="22" r="6"/><circle cx="155" cy="45" r="6"/><circle cx="178" cy="100" r="6"/><circle cx="155" cy="155" r="6"/><circle cx="100" cy="178" r="6"/><circle cx="45" cy="155" r="6"/><circle cx="22" cy="100" r="6"/><circle cx="45" cy="45" r="6"/></g></svg><span>You</span></div></section></div>
 
 <button id="backToTopBtn" onclick="scrollToTop()" title="Go to top">↑ Top</button>
 
-<div class="container">
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">Display</button>
-    <h1>Leadership & Personality Dashboard</h1>
+<main class="container" id="assessment-workspace" tabindex="-1">
+    <div class="workspace-toolbar"><span class="workspace-label">YOUR LEADERSHIP WORKSPACE</span><div class="workspace-tools">
+      <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-pressed="false">Dark mode</button>
+      <details class="report-menu" id="reportMenu"><summary>Save &amp; reports</summary><div class="report-menu-panel"><div class="summary-actions">
+        <button type="button" onclick="exportDataToJSON()" class="btn-submit">Save progress file</button>
+        <button type="button" onclick="document.getElementById('importJsonFile').click()" class="btn-submit">Load progress file</button>
+        <button type="button" onclick="window.print()" class="btn-submit">Print / save PDF</button>
+        <button type="button" onclick="exportDataToCSV()" class="btn-submit">Export results as CSV</button>
+        <input type="file" id="importJsonFile" accept=".json" hidden onchange="importDataFromJSON(event)">
+      </div><p class="report-help">Save a progress file before leaving. Load it to continue later or on another device.</p></div></details>
+    </div></div>
     
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab('summary-tab', this)">Summary</button>
-        <button class="tab-btn" onclick="openTab('mbti-tab', this)">MBTI</button>
-        <button class="tab-btn" onclick="openTab('ennea-tab', this)">Enneagram</button>
-        <button class="tab-btn" onclick="openTab('genius-tab', this)">Genius</button>
-        <button class="tab-btn" onclick="openTab('strength-tab', this)">Strengths</button>
-        <button class="tab-btn" onclick="openTab('disc-tab', this)">DiSC</button>
-        <button class="tab-btn" onclick="openTab('kolb-tab', this)">Kolb</button>
-        <button class="tab-btn" onclick="openTab('tki-tab', this)">TKI</button>
-        <button class="tab-btn" onclick="openTab('eq-tab', this)">EQ</button>
+    <div class="tabs" role="tablist" aria-label="Leadership assessments">
+        <button type="button" class="tab-btn active" id="tab-summary" role="tab" aria-controls="summary-tab" aria-selected="true" tabindex="0" data-assessment-tab="summary" onclick="openTab('summary-tab', this)">Overview<span>Your profile</span></button>
+        <button type="button" class="tab-btn" id="tab-mbti" role="tab" aria-controls="mbti-tab" aria-selected="false" tabindex="-1" data-assessment-tab="mbti" onclick="openTab('mbti-tab', this)">Personality<span>MBTI</span></button>
+        <button type="button" class="tab-btn" id="tab-ennea" role="tab" aria-controls="ennea-tab" aria-selected="false" tabindex="-1" data-assessment-tab="ennea" onclick="openTab('ennea-tab', this)">Motivators<span>Enneagram</span></button>
+        <button type="button" class="tab-btn" id="tab-genius" role="tab" aria-controls="genius-tab" aria-selected="false" tabindex="-1" data-assessment-tab="genius" onclick="openTab('genius-tab', this)">Work energy<span>Genius</span></button>
+        <button type="button" class="tab-btn" id="tab-strength" role="tab" aria-controls="strength-tab" aria-selected="false" tabindex="-1" data-assessment-tab="strength" onclick="openTab('strength-tab', this)">Strengths<span>Your contribution</span></button>
+        <button type="button" class="tab-btn" id="tab-disc" role="tab" aria-controls="disc-tab" aria-selected="false" tabindex="-1" data-assessment-tab="disc" onclick="openTab('disc-tab', this)">Communication<span>DiSC</span></button>
+        <button type="button" class="tab-btn" id="tab-kolb" role="tab" aria-controls="kolb-tab" aria-selected="false" tabindex="-1" data-assessment-tab="kolb" onclick="openTab('kolb-tab', this)">Learning<span>Kolb</span></button>
+        <button type="button" class="tab-btn" id="tab-tki" role="tab" aria-controls="tki-tab" aria-selected="false" tabindex="-1" data-assessment-tab="tki" onclick="openTab('tki-tab', this)">Conflict<span>TKI</span></button>
+        <button type="button" class="tab-btn" id="tab-eq" role="tab" aria-controls="eq-tab" aria-selected="false" tabindex="-1" data-assessment-tab="eq" onclick="openTab('eq-tab', this)">Emotions<span>EQ</span></button>
     </div>
 
     <!-- ============================================== -->
     <!-- SUMMARY TAB -->
     <!-- ============================================== -->
-    <div id="summary-tab" class="tab-content active">
-        <div class="intro">
-            <h2>Comprehensive Leadership Profile</h2>
-            <p>This dashboard summarizes your results across all 8 assessments. Complete the assessments on the other tabs to build your full visual profile here.</p>
-        </div>
+    <div id="summary-tab" class="tab-content active" role="tabpanel" aria-labelledby="tab-summary">
+        <div class="profile-overview"><section class="profile-progress" aria-labelledby="profileHeading"><div class="profile-progress-top"><div><span class="studio-eyebrow">YOUR PROFILE</span><h2 id="profileHeading"><span id="profileCompleted">0</span> of 8 assessments completed</h2></div><span class="profile-percentage" id="profilePercentage" aria-hidden="true">0%</span></div><div class="profile-segments" id="profileSegments" role="progressbar" aria-label="Completed assessments" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span class="profile-segment" data-assessment="mbti" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="ennea" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="genius" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="strength" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="disc" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="kolb" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="tki" data-state="not-started" aria-hidden="true"></span><span class="profile-segment" data-assessment="eq" data-state="not-started" aria-hidden="true"></span></div><p class="profile-progress-note" id="profileProgressNote" aria-live="polite">Start with any assessment. Each one adds a different perspective to your profile.</p></section>
+        <section class="next-assessment" aria-labelledby="featuredTitle"><div><span class="studio-eyebrow" id="featuredEyebrow">A GOOD PLACE TO START</span><h2 id="featuredTitle">Start with how you communicate.</h2><p id="featuredCopy">Understand your behavioral preferences and how you connect with other people.</p><span class="featured-meta" id="featuredMeta">DiSC · 50 questions · Est. 8–12 min</span></div><button type="button" class="studio-primary" id="featuredAction">Begin DiSC →</button></section></div>
+        <div class="assessment-grid-heading"><div><h2>Explore your assessments</h2><p>Choose a perspective that interests you. Complete them in any order.</p></div><span>Self-awareness starts with curiosity.</span></div>
 
         <div class="style-descriptions grid-2">
-            <div class="summary-card" style="border-top: 4px solid var(--mbti-dark);">
-                <h3 style="color: var(--mbti-dark);">Myers-Briggs Type (MBTI): The "Who"</h3>
+            <div class="summary-card" data-assessment="mbti" data-state="not-started" style="--card-accent:#6b5fa6;--card-soft:#f1eef9">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Personality preferences</h3><span class="assessment-tool-name">MBTI</span><p class="assessment-purpose">Explore how you take in information, make decisions, and organize your world.</p>
                 <div id="sum-mbti-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example MBTI chart"></figure>
                 <div id="sum-mbti-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="mbtiChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('mbtiChartSummary', 'MBTI_Profile.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin MBTI assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--ennea-dark);">
-                <h3 style="color: var(--ennea-dark);">Enneagram / Motivators: The "Why"</h3>
+            <div class="summary-card" data-assessment="ennea" data-state="not-started" style="--card-accent:#9e526e;--card-soft:#faeef2">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Core motivators</h3><span class="assessment-tool-name">Enneagram</span><p class="assessment-purpose">Reflect on the motivations and patterns that influence your everyday choices.</p>
                 <div id="sum-ennea-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example Enneagram chart"></figure>
                 <div id="sum-ennea-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="enneaChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('enneaChartSummary', 'Enneagram_Motivators.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin Enneagram assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--genius-dark);">
-                <h3 style="color: var(--genius-dark);">Working Genius: The "What"</h3>
+            <div class="summary-card" data-assessment="genius" data-state="not-started" style="--card-accent:#9b651e;--card-soft:#fbf3e7">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Working genius</h3><span class="assessment-tool-name">Working Genius</span><p class="assessment-purpose">Discover the kinds of work that give you energy and help you contribute.</p>
                 <div id="sum-genius-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example Working Genius chart"></figure>
                 <div id="sum-genius-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="geniusChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('geniusChartSummary', 'Working_Genius.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin Working Genius assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
             
-            <div class="summary-card" style="border-top: 4px solid var(--strength-dark);">
-                <h3 style="color: var(--strength-dark);">StrengthsFinder: The "How"</h3>
+            <div class="summary-card" data-assessment="strength" data-state="not-started" style="--card-accent:#486aa4;--card-soft:#edf2fa">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Leadership strengths</h3><span class="assessment-tool-name">StrengthsFinder</span><p class="assessment-purpose">See how you tend to execute, influence, build relationships, and think strategically.</p>
                 <div id="sum-strength-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example StrengthsFinder chart"></figure>
                 <div id="sum-strength-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="strengthChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('strengthChartSummary', 'Leadership_Strengths.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin StrengthsFinder assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--disc-dark);">
-                <h3 style="color: var(--disc-dark);">DiSC Profile: The "How"</h3>
+            <div class="summary-card" data-assessment="disc" data-state="not-started" style="--card-accent:#28776c;--card-soft:#eaf5f1">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Communication style</h3><span class="assessment-tool-name">DiSC</span><p class="assessment-purpose">Understand your behavioral preferences and how you connect with other people.</p>
                 <div id="sum-disc-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example DiSC chart"></figure>
                 <div id="sum-disc-chart-wrap" class="summary-chart-container" style="display:none;">
                     <div class="summary-quadrant-labels disc-labels"><div class="quad-label quad-top-left">D</div><div class="quad-label quad-top-right">i</div><div class="quad-label quad-bottom-left">C</div><div class="quad-label quad-bottom-right">S</div></div>
                     <canvas id="discChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('discChartSummary', 'DiSC_Profile.png')">⬇ Save Chart Image</button>
                 </div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin DiSC assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--kolb-dark);">
-                <h3 style="color: var(--kolb-dark);">Kolb Learning Style: The "How"</h3>
+            <div class="summary-card" data-assessment="kolb" data-state="not-started" style="--card-accent:#a15c47;--card-soft:#fbf0ec">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Learning approach</h3><span class="assessment-tool-name">Kolb</span><p class="assessment-purpose">Explore how experience, reflection, ideas, and practice support your learning.</p>
                 <div id="sum-kolb-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example Kolb chart"></figure>
                 <div id="sum-kolb-chart-wrap" class="summary-chart-container" style="display:none;">
                     <div class="summary-quadrant-labels kolb-labels"><div class="quad-label quad-top-left">Acc</div><div class="quad-label quad-top-right">Div</div><div class="quad-label quad-bottom-left">Con</div><div class="quad-label quad-bottom-right">Ass</div></div>
                     <canvas id="kolbChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('kolbChartSummary', 'Kolb_Learning_Style.png')">⬇ Save Chart Image</button>
                 </div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin Kolb assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--tki-dark);">
-                <h3 style="color: var(--tki-dark);">Conflict Style (TKI): The "When"</h3>
+            <div class="summary-card" data-assessment="tki" data-state="not-started" style="--card-accent:#506481;--card-soft:#edf1f7">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Conflict approach</h3><span class="assessment-tool-name">TKI</span><p class="assessment-purpose">Recognize how you respond to disagreement and consider other approaches.</p>
                 <div id="sum-tki-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example TKI chart"></figure>
                 <div id="sum-tki-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="tkiChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('tkiChartSummary', 'Conflict_Style.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin TKI assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
 
-            <div class="summary-card" style="border-top: 4px solid var(--eq-dark);">
-                <h3 style="color: var(--eq-dark);">Emotional Intelligence: The "How Well"</h3>
+            <div class="summary-card" data-assessment="eq" data-state="not-started" style="--card-accent:#30748f;--card-soft:#eaf4f8">
+                <div class="card-topline"><span class="assessment-icon" aria-hidden="true"></span><span class="assessment-status">Not started</span></div>
+                <h3>Emotional intelligence</h3><span class="assessment-tool-name">EQ</span><p class="assessment-purpose">Reflect on emotional awareness, self-management, and your relationships.</p>
                 <div id="sum-eq-content"><p class="not-completed">Assessment not yet completed.</p></div>
+                <figure class="assessment-preview" aria-label="Example EQ chart"></figure>
                 <div id="sum-eq-chart-wrap" class="summary-chart-container" style="display:none;"><canvas id="eqChartSummary"></canvas><button type="button" class="btn-download-chart" onclick="downloadChart('eqChartSummary', 'Emotional_Intelligence_Profile.png')">⬇ Save Chart Image</button></div>
+                <div class="card-footer"><div class="card-meta"><span class="card-question-count"></span><span class="card-duration"></span></div><button type="button" class="card-action" aria-label="Begin EQ assessment"><span>Begin assessment</span><span aria-hidden="true">→</span></button></div>
             </div>
         </div>
 
-        <!-- NEW: Export & Import UI -->
-        <div class="summary-actions">
-            <button onclick="window.print()" class="btn-submit" style="background: var(--text-muted);">🖨️ Print / PDF</button>
-            <button onclick="exportDataToCSV()" class="btn-submit" style="background: var(--text-muted);">📊 Export CSV</button>
-            <button onclick="exportDataToJSON()" class="btn-submit" style="background: var(--summary-dark);">💾 Save Progress</button>
-            <button onclick="document.getElementById('importJsonFile').click()" class="btn-submit" style="background: var(--mbti-dark);">📂 Load Progress</button>
-            <input type="file" id="importJsonFile" accept=".json" style="display:none" onchange="importDataFromJSON(event)">
-        </div>
+
     </div>
 
     <!-- ============================================== -->
     <!-- MBTI TAB -->
     <!-- ============================================== -->
-    <div id="mbti-tab" class="tab-content">
+    <div id="mbti-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-mbti">
         <div class="intro">
             <h2>Myers-Briggs Type (MBTI): The "Who"</h2>
             <div class="intro-subtext">Your baseline personality and cognitive wiring.</div>
@@ -390,7 +415,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- ENNEAGRAM TAB -->
     <!-- ============================================== -->
-    <div id="ennea-tab" class="tab-content">
+    <div id="ennea-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-ennea">
         <div class="intro">
             <h2>Enneagram / Motivators: The "Why"</h2>
             <div class="intro-subtext">Your core drivers and underlying motivations.</div>
@@ -451,7 +476,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- WORKING GENIUS TAB -->
     <!-- ============================================== -->
-    <div id="genius-tab" class="tab-content">
+    <div id="genius-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-genius">
         <div class="intro">
             <h2>Working Genius: The "What"</h2>
             <div class="intro-subtext">The specific stages of work that energize you.</div>
@@ -539,7 +564,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- STRENGTHS TAB -->
     <!-- ============================================== -->
-    <div id="strength-tab" class="tab-content">
+    <div id="strength-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-strength">
         <div class="intro">
             <h2>StrengthsFinder: The "How"</h2>
             <div class="intro-subtext">How you naturally excel and apply your talents.</div>
@@ -615,7 +640,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- DiSC TAB -->
     <!-- ============================================== -->
-    <div id="disc-tab" class="tab-content">
+    <div id="disc-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-disc">
         <div class="intro">
             <h2>DiSC Profile: The "How"</h2>
             <div class="intro-subtext">How you naturally behave and communicate with others.</div>
@@ -697,7 +722,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- KOLB TAB -->
     <!-- ============================================== -->
-    <div id="kolb-tab" class="tab-content">
+    <div id="kolb-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-kolb">
         <div class="intro">
             <h2>Kolb Learning Style: The "How"</h2>
             <div class="intro-subtext">How you best absorb information and learn.</div>
@@ -778,7 +803,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- TKI TAB -->
     <!-- ============================================== -->
-    <div id="tki-tab" class="tab-content">
+    <div id="tki-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-tki">
         <div class="intro">
             <h2>Conflict Style (TKI): The "When"</h2>
             <div class="intro-subtext">How you react when disagreements or tension arise.</div>
@@ -860,7 +885,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     <!-- ============================================== -->
     <!-- EQ TAB -->
     <!-- ============================================== -->
-    <div id="eq-tab" class="tab-content">
+    <div id="eq-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-eq">
         <div class="intro">
             <h2>Emotional Intelligence: The "How Well"</h2>
             <div class="intro-subtext">How effectively you regulate your emotions and navigate team dynamics.</div>
@@ -934,7 +959,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
         </div>
     </div>
 
-</div>
+</main>
 
 <script>
     // ==========================================
@@ -1006,7 +1031,9 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
 
     function renderQuestions(questionsArray, containerId, radioPrefix) {
         const container = document.getElementById(containerId);
-        shuffleArray(questionsArray).forEach((q, index) => {
+        // Rating arrays are already shuffled by their callers and used in that same
+        // order for scoring. A second shuffle would attach ratings to other questions.
+        questionsArray.forEach((q, index) => {
             container.insertAdjacentHTML('beforeend', `
                 <div class="question-group">
                     <div class="question-text">${index + 1}. ${q.text}</div>
@@ -1074,7 +1101,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
         document.querySelectorAll(`#${type}QuestionsContainer .options label`).forEach(l => l.classList.remove('selected'));
         const resultsDiv = document.getElementById(type + 'Results');
         resultsDiv.classList.remove('show');
-        setTimeout(() => { resultsDiv.style.display = 'none'; }, 600);
+        setTimeout(() => { if (!resultsDiv.classList.contains('show')) resultsDiv.style.display = 'none'; }, 600);
         
         let totalQs = 20;
         if(type === 'kolb' || type === 'strength') totalQs = 24;
@@ -1097,6 +1124,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
         
         document.getElementById('sum-' + type + '-content').innerHTML = '<p class="not-completed">Assessment not yet completed.</p>';
         document.getElementById('sum-' + type + '-chart-wrap').style.display = 'none';
+        document.dispatchEvent(new CustomEvent('assessment:summary-updated'));
         if (!silent) scrollToTop();
     }
 
@@ -1154,6 +1182,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
         if(summaryData.kolb.style) document.getElementById('sum-kolb-content').innerHTML = `<div class="sum-label">Primary Learning Style</div><div class="sum-val" style="color: var(--active-color);">${summaryData.kolb.style}</div>`;
         if(summaryData.tki.style) document.getElementById('sum-tki-content').innerHTML = `<div class="sum-label">Default Conflict Mode</div><div class="sum-val" style="color: var(--active-color);">${summaryData.tki.style}</div>`;
         if(summaryData.eq.highest) document.getElementById('sum-eq-content').innerHTML = `<div class="sum-label">Strongest Area</div><div class="sum-val" style="color: var(--active-color);">${summaryData.eq.highest}</div><div class="sum-label" style="margin-top: 10px;">Area for Growth</div><div class="sum-val" style="color: var(--text-muted); font-size: 1.05em;">${summaryData.eq.lowest}</div>`;
+        document.dispatchEvent(new CustomEvent('assessment:summary-updated'));
     }
 
     // ==========================================
@@ -1161,11 +1190,18 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     // ==========================================
     function exportDataToJSON() {
         const state = {
-            version: 1,
-            answers: {}
+            version: 2,
+            answers: {},
+            questionAnswers: []
         };
         document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
             state.answers[radio.name] = radio.value;
+            const question = radio.closest('.question-group');
+            state.questionAnswers.push({
+                assessment: radio.closest('form').id.replace(/Form$/, ''),
+                question: question.querySelector('.question-text').textContent.replace(/^\s*\d+\.\s*/, '').trim(),
+                value: radio.value
+            });
         });
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
         const link = document.createElement('a');
@@ -1188,9 +1224,23 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
                 ['mbti', 'ennea', 'genius', 'strength', 'disc', 'kolb', 'tki', 'eq'].forEach(type => resetAssessment(type, true));
                 
                 // 2. Restore selections
-                for (const [name, value] of Object.entries(state.answers || {})) {
-                    const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
-                    if (radio) radio.checked = true;
+                if (state.version === 2 && Array.isArray(state.questionAnswers)) {
+                    // Question order is randomized on each visit. Match the question itself,
+                    // so a saved answer follows the same question on another visit or device.
+                    const allowed = ['mbti', 'ennea', 'genius', 'strength', 'disc', 'kolb', 'tki', 'eq'];
+                    for (const saved of state.questionAnswers) {
+                        if (!allowed.includes(saved.assessment)) continue;
+                        const questions = document.querySelectorAll('#' + saved.assessment + 'QuestionsContainer .question-group');
+                        const question = Array.from(questions).find(q => q.querySelector('.question-text').textContent.replace(/^\s*\d+\.\s*/, '').trim() === saved.question);
+                        const radio = question && Array.from(question.querySelectorAll('input[type="radio"]')).find(r => r.value === String(saved.value));
+                        if (radio) radio.checked = true;
+                    }
+                } else {
+                    // Keep previously downloaded version 1 progress files readable.
+                    for (const [name, value] of Object.entries(state.answers || {})) {
+                        const radio = Array.from(document.querySelectorAll('input[type="radio"]')).find(r => r.name === name && r.value === String(value));
+                        if (radio) radio.checked = true;
+                    }
                 }
                 
                 // 3. Update Progress Bars
@@ -1831,6 +1881,7 @@ body{padding:0!important;background:#f5f9fc!important;color:#173958!important;fo
     });
 </script>
 <script src="assets/assessment-pagination.js" defer></script>
+<script src="assets/assessment-dashboard.js" defer></script>
 
 <div class="site-foot">These tools are intended for leadership development and self-reflection. Results should be used as prompts for learning rather than diagnostic or employment-selection measures.</div></body>
 </html>
