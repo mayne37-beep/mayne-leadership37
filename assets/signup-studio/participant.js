@@ -3,13 +3,14 @@ import { byId, button, copyField, eventBanner, field, inviteUrl, node, notice, r
 const invite = new URLSearchParams(location.search).get('id') || '';
 const fragment = new URLSearchParams(location.hash.slice(1)).get('reservation');
 const storageKey = 'signup-studio-reservation:' + invite;
-const validProof = /^[a-f0-9]{64}$/;
+const validProof = /^(?:[a-f0-9]{32}\.)?[a-f0-9]{64}$/;
 let proof = validProof.test(fragment || '') ? fragment : storedProof();
 let sheet;
 let screen = 'slots';
 let selected = new Set();
 let busy = false;
 let nameDraft = '';
+let emailDraft = '';
 
 const booking = byId('booking');
 
@@ -121,8 +122,10 @@ function choices() {
 
 function review() {
   const changing = sheet.reservation && !sheet.reservation.cancelled;
+  const askForEmail = sheet.collectEmail && !sheet.reservation?.hasEmail;
   const section = panel(changing ? 'Review your changes' : 'Review your sign-up',
-    'Your name is shared with the organizer.');
+    askForEmail ? 'The organizer can use your name and email to contact you about this event.' :
+      'Your reservation is shared with the organizer.');
   const list = node(section, 'ul');
   for (const slot of sheet.slots.filter(slot => selected.has(slot.id))) {
     node(list, 'li', slot.label + ' · ' + slotTime(slot));
@@ -130,10 +133,16 @@ function review() {
   const form = node(section, 'form');
   const name = changing ? null : field(form, 'Your name', nameDraft, { maxLength: 80, required: true, placeholder: 'First and last name' });
   if (name) name.autocomplete = 'name';
+  const email = askForEmail ? field(form, 'Your email', emailDraft, { type: 'email', maxLength: 254, required: true }) : null;
+  if (email) {
+    email.autocomplete = 'email';
+    if (sheet.emailReady) node(form, 'p', 'Use an inbox you can access for confirmation and change notices.', 'muted');
+  }
   const actions = node(form, 'div', '', 'row');
   node(actions, 'button', changing ? 'Save changes' : 'Confirm sign-up');
   button(actions, 'Back to slots', () => {
     if (name) nameDraft = name.value;
+    if (email) emailDraft = email.value;
     screen = changing ? 'edit' : 'slots';
     render();
     notice();
@@ -141,17 +150,25 @@ function review() {
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (name) nameDraft = name.value.trim();
+    if (email) emailDraft = email.value.trim();
     if (!changing && !nameDraft) { notice('Enter your name to continue.', true); return; }
     if (!proof) proof = secretKey();
     remember();
     run(async () => {
-      sheet = await api(changing ? 'change' : 'reserve', { name: nameDraft, slots: [...selected] });
+      sheet = await api(changing ? 'change' : 'reserve', { name: nameDraft, email: emailDraft, slots: [...selected] });
       screen = 'slots';
       selected.clear();
       render();
-      return sheet.reservation?.cancelled ? 'This reservation was already canceled.' : changing ? 'Your reservation was updated.' : 'Your reservation is confirmed.';
+      return withEmailStatus(sheet.reservation?.cancelled ? 'This reservation was already canceled.' :
+        changing ? 'Your reservation was updated.' : 'Your reservation is confirmed.');
     }, true);
   });
+}
+
+function withEmailStatus(message) {
+  if (sheet.emailStatus === 'accepted') return message + ' Check your inbox for the email.';
+  if (sheet.emailStatus === 'pending') return message + ' The email notice is pending.';
+  return message;
 }
 
 function receipt() {
@@ -160,6 +177,8 @@ function receipt() {
     const section = panel('Reservation canceled', 'The organizer can offer those spots to other participants.');
     if (sheet.status === 'open') button(section, 'Start a new sign-up', () => {
       proof = '';
+      nameDraft = '';
+      emailDraft = '';
       remember();
       sheet.reservation = null;
       selected.clear();
@@ -188,7 +207,7 @@ function receipt() {
     run(async () => {
       sheet = await api('cancel');
       render();
-      return 'Your reservation was canceled.';
+      return withEmailStatus('Your reservation was canceled.');
     });
   }, 'secondary');
 }

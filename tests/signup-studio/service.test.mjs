@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createSignupService } from '../../src/signup-studio/service.js';
+import { resendMailer } from '../../src/signup-studio/mail.js';
 
 function testStore() {
   const data = new Map();
@@ -29,8 +30,8 @@ const details = {
   })),
 };
 
-function fixture() {
-  const service = createSignupService(testStore(), 'test-signup-secret');
+function fixture(mailer) {
+  const service = createSignupService(testStore(), 'test-signup-secret', mailer);
   return {
     service,
     admin: (action, payload, workspaceKey = WORKSPACE) => service({ action, payload, workspaceKey, authorized: true }),
@@ -55,6 +56,101 @@ test('blank workspace, draft publication and organizer/guest separation', async 
   assert.equal(view.reservation, null);
   await admin('archive', { id: ID, revision: published.revision });
   await assert.rejects(guest('view', { invite: published.invite }), { status: 404 });
+});
+
+const contact = { collectEmail: true, organizerEmail: 'organizer@example.test' };
+const guestEmail = 'guest+signup@example.test';
+
+async function publishWithEmail(admin) {
+  const draft = await admin('save', { id: ID, revision: 0, details, contact });
+  return admin('publish', { id: ID, revision: draft.revision });
+}
+
+test('sign-ups and reservation changes send private, scoped email notices', async () => {
+  const sent = [];
+  const { admin, guest } = fixture(async batch => sent.push(...batch.messages));
+  const sheet = await publishWithEmail(admin);
+  const payload = { invite: sheet.invite, proof: PROOF, name: 'Test Guest', slots: [FIRST] };
+  await assert.rejects(guest('reserve', payload), { status: 400 });
+  await assert.rejects(guest('reserve', { ...payload, email: 'x@example.test,other@example.test' }), { status: 400 });
+  assert.equal(sent.length, 0);
+  const booked = await guest('reserve', { ...payload, email: guestEmail });
+  assert.equal(booked.emailStatus, 'accepted');
+  assert.deepEqual(sent.map(message => message.to), [contact.organizerEmail, guestEmail]);
+  assert.doesNotMatch(JSON.stringify(sent[0]), /Test Guest|guest\+signup|#reservation/);
+  const proof = sent[1].text.match(/#reservation=([a-f0-9.]+)/)[1];
+  assert.match(proof, /^[a-f0-9]{32}\.[a-f0-9]{64}$/);
+  await guest('reserve', { ...payload, email: guestEmail });
+  assert.equal(sent.length, 2);
+  const roster = await admin('get', { id: ID });
+  assert.equal(roster.reservations[0].email, guestEmail);
+  assert.equal(roster.pendingEmails, 0);
+  assert.doesNotMatch(JSON.stringify(roster), new RegExp(proof));
+  const view = await guest('view', { invite: sheet.invite });
+  assert.equal(view.reservation, null);
+  assert.equal(view.collectEmail, true);
+  assert.doesNotMatch(JSON.stringify(view), /example\.test|Test Guest|mailOutbox/);
+  const managed = await guest('view', { invite: sheet.invite, proof });
+  assert.equal(managed.reservation.id, booked.reservation.id);
+  assert.equal(managed.reservation.hasEmail, true);
+  assert.equal(managed.reservation.email, undefined);
+  assert.equal((await guest('view', { invite: sheet.invite, proof: proof.slice(0, -1) + (proof.endsWith('0') ? '1' : '0') })).reservation, null);
+
+  await guest('change', { invite: sheet.invite, proof, slots: [SECOND] });
+  assert.equal(sent[2].to, guestEmail);
+  assert.match(sent[2].subject, /Reservation updated/);
+  assert.match(sent[2].text, /Afternoon/);
+  const saved = await admin('save', {
+    id: ID, revision: roster.revision, details: { ...details, location: 'Room 2' },
+  });
+  assert.equal(saved.contact.organizerEmail, contact.organizerEmail);
+  assert.match(sent[3].subject, /Event details updated/);
+  assert.match(sent[3].text, /Room 2/);
+  await admin('save', {
+    id: ID, revision: saved.revision, details: { ...details, location: 'Room 2', theme: 'baking' },
+  });
+  assert.equal(sent.length, 4);
+  await admin('remove', { id: ID, reservation: booked.reservation.id });
+  assert.match(sent[4].subject, /Reservation canceled/);
+  assert.equal((await guest('view', { invite: sheet.invite, proof })).reservation.cancelled, true);
+});
+
+test('failed email preserves the booking and retries the same provider idempotency key', async () => {
+  let available = false;
+  const requests = [];
+  const send = resendMailer('test-only', 'bookings@example.test', async (url, request) => {
+    const messages = JSON.parse(request.body);
+    requests.push({ url, idempotency: request.headers['Idempotency-Key'], messages });
+    if (!available) return new Response(null, { status: 503 });
+    return Response.json({ data: messages.map((_, index) => ({ id: String(index) })) });
+  });
+  const { admin, guest } = fixture(send);
+  const { invite } = await publishWithEmail(admin);
+  const payload = { invite, proof: PROOF, name: 'Test Guest', email: guestEmail, slots: [FIRST] };
+  const booked = await guest('reserve', payload);
+  assert.equal(booked.emailStatus, 'pending');
+  assert.equal(booked.slots[0].remaining, 0);
+  assert.equal((await admin('get', { id: ID })).pendingEmails, 2);
+  available = true;
+  const retried = await admin('retry-email', { id: ID });
+  assert.equal(retried.pendingEmails, 0);
+  assert.equal(retried.reservations.length, 1);
+  assert.equal(requests[0].url, 'https://api.resend.com/emails/batch');
+  assert.deepEqual(requests[0], requests[1]);
+  assert(requests[1].messages.every(message => message.to.length === 1 && !('reservation' in message)));
+  await guest('reserve', payload);
+  assert.equal(requests.length, 2);
+});
+
+test('email collection and private roster contact work before a sender is configured', async () => {
+  const { admin, guest } = fixture();
+  const { invite } = await publishWithEmail(admin);
+  const receipt = await guest('reserve', { invite, proof: PROOF, name: 'Test Guest', email: guestEmail, slots: [FIRST] });
+  assert.equal(receipt.emailReady, false);
+  assert.equal(receipt.emailStatus, undefined);
+  const roster = await admin('get', { id: ID });
+  assert.equal(roster.reservations[0].email, guestEmail);
+  assert.equal(roster.pendingEmails, 0);
 });
 
 test('simultaneous booking has one winner and retry does not duplicate it', async () => {

@@ -1,13 +1,17 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { bookingAlert, emailAddress, EMAIL_RETRY_MS, reservationNotice, reservationUrl } from './mail.js';
 
-const ADMIN = new Set(['list', 'get', 'save', 'publish', 'close', 'archive', 'restore', 'add', 'move', 'remove']);
+const ADMIN = new Set(['list', 'get', 'save', 'publish', 'close', 'archive', 'restore', 'add', 'move', 'remove', 'retry-email']);
 const PARTICIPANT = new Set(['view', 'reserve', 'change', 'cancel']);
 const ID = /^[a-f0-9]{32}$/;
 const KEY = /^[a-f0-9]{64}$/;
 const INVITE = /^[a-f0-9]{96}$/;
+const MANAGE = /^([a-f0-9]{32})\.([a-f0-9]{64})$/;
 const THEMES = new Set(['general', 'coaching', 'baking', 'volunteer', 'sports', 'celebration']);
 const MAX_SLOTS = 100;
 const MAX_RESERVATIONS = 2000;
+const MAIL_BATCH_SIZE = 50;
+const MAIL_QUEUE_LIMIT = 2500;
 const CONFLICT = 'This sheet changed in another tab. Reload the saved sheet before making further edits.';
 
 export class SignupError extends Error {
@@ -27,6 +31,18 @@ function readText(value, max, label, required = false) {
     fail(400, required ? `Enter ${label} (up to ${max} characters).` : `Keep ${label} under ${max} characters.`);
   }
   return value.trim();
+}
+
+function readEmail(value, label, required = false) {
+  if (!required && (value === undefined || value === '')) return '';
+  const address = emailAddress(value);
+  if (!address) fail(400, 'Enter a valid ' + label + ' email address.');
+  return address;
+}
+
+function contactSettings(value = { collectEmail: false }) {
+  if (!value || typeof value.collectEmail !== 'boolean') fail(400, 'Choose valid email settings.');
+  return { collectEmail: value.collectEmail, organizerEmail: readEmail(value.organizerEmail, 'organizer') };
 }
 
 function eventDetails(value) {
@@ -100,6 +116,20 @@ function visibleReservation(reservation) {
   };
 }
 
+const mailQueue = event => event.mailOutbox || [];
+const mailCount = batches => batches.reduce((total, batch) => total + batch.messages.length, 0);
+
+function affectedReservations(event, details) {
+  const current = event.details;
+  const eventChanged = ['title', 'description', 'location', 'zone'].some(field => current[field] !== details[field]);
+  const updatedSlots = new Map(details.slots.map(slot => [slot.id, slot]));
+  const changedSlots = new Set(current.slots.filter(slot => {
+    const next = updatedSlots.get(slot.id);
+    return next && ['label', 'date', 'start', 'end', 'detail'].some(field => slot[field] !== next[field]);
+  }).map(slot => slot.id));
+  return event.reservations.filter(r => !r.cancelled && r.email && (eventChanged || r.slots.some(id => changedSlots.has(id))));
+}
+
 function summary(event) {
   return {
     id: event.id, title: event.details.title, status: event.status, updated: event.updated,
@@ -108,8 +138,9 @@ function summary(event) {
   };
 }
 
-export function createSignupService(store, secret) {
+export function createSignupService(store, secret, mailer = null) {
   const stamp = ref => createHmac('sha256', secret).update('signup-studio:invitation:' + ref).digest('hex').slice(0, 32);
+  const manageStamp = (ref, id) => createHmac('sha256', secret).update('signup-studio:reservation:' + ref + ':' + id).digest('hex');
 
   function eventPath(workspace, id) {
     return workspace + '/' + id + '.json';
@@ -129,14 +160,20 @@ export function createSignupService(store, secret) {
     return {
       ...summary(event), revision: event.revision, details: { ...event.details, slots: capacitySlots(event) },
       invite: event.published && event.status !== 'archived' ? ref + stamp(ref) : '',
-      reservations: event.reservations.filter(r => !r.cancelled).map(visibleReservation),
+      reservations: event.reservations.filter(r => !r.cancelled).map(r => ({ ...visibleReservation(r), email: r.email || '' })),
+      contact: event.contact || contactSettings(),
+      emailReady: !!mailer,
+      pendingEmails: mailCount(mailQueue(event)),
+      missedEmails: event.missedEmails || 0,
     };
   }
 
   function participantSheet(event, reservation) {
     return {
       ...event.details, slots: capacitySlots(event), status: event.status,
-      reservation: visibleReservation(reservation) || null,
+      collectEmail: !!event.contact?.collectEmail,
+      emailReady: !!mailer,
+      reservation: reservation ? { ...visibleReservation(reservation), hasEmail: !!reservation.email } : null,
     };
   }
 
@@ -155,6 +192,66 @@ export function createSignupService(store, secret) {
     fail(409, 'This sheet is busy. Try your last action again.');
   }
 
+  function guestMail(ref, event, reservation, type) {
+    if (!mailer || !reservation.email) return null;
+    const link = type === 'archived' ? '' :
+      reservationUrl(ref + stamp(ref), reservation.id + '.' + manageStamp(ref, reservation.id));
+    return reservationNotice(event, reservation, type, link);
+  }
+
+  function queueMail(event, messages) {
+    if (!mailer) return;
+    const items = messages.filter(Boolean);
+    if (!items.length) return;
+    const now = Date.now();
+    const prior = mailQueue(event);
+    const fresh = prior.filter(batch => now - batch.queuedAt < EMAIL_RETRY_MS);
+    const accepted = items.slice(0, Math.max(0, MAIL_QUEUE_LIMIT - mailCount(fresh)));
+    const missed = mailCount(prior) - mailCount(fresh) + items.length - accepted.length;
+    event.missedEmails = (event.missedEmails || 0) + missed;
+    event.mailOutbox = fresh;
+    for (let i = 0; i < accepted.length; i += MAIL_BATCH_SIZE) {
+      event.mailOutbox.push({ id: newId(), queuedAt: now, messages: accepted.slice(i, i + MAIL_BATCH_SIZE) });
+    }
+  }
+
+  async function deliverMail(path, event) {
+    const accepted = new Set();
+    if (!mailer || !mailQueue(event).length) return accepted;
+    const expired = new Set();
+    const deadline = AbortSignal.timeout(6000);
+    for (const batch of mailQueue(event)) {
+      if (Date.now() - batch.queuedAt >= EMAIL_RETRY_MS) {
+        expired.add(batch.id);
+        continue;
+      }
+      if (deadline.aborted) break;
+      try {
+        await mailer(batch, deadline);
+        accepted.add(batch.id);
+      } catch {
+        // The booking is already saved. Keep the same batch and idempotency key for a retry.
+        break;
+      }
+    }
+    if (accepted.size || expired.size) {
+      try {
+        const latest = await change(path, current => {
+          const pending = mailQueue(current);
+          const missed = mailCount(pending.filter(batch => expired.has(batch.id)));
+          current.missedEmails = (current.missedEmails || 0) + missed;
+          current.mailOutbox = pending.filter(batch => !accepted.has(batch.id) && !expired.has(batch.id));
+          return { value: current, write: current.mailOutbox.length !== pending.length };
+        });
+        event.mailOutbox = latest.mailOutbox;
+        event.missedEmails = latest.missedEmails;
+      } catch {
+        // Provider idempotency also covers a retry after an interrupted storage acknowledgment.
+      }
+    }
+    return accepted;
+  }
+
   async function admin(action, payload, workspace) {
     if (action === 'list') {
       const paths = await store.list(workspace + '/');
@@ -163,21 +260,32 @@ export function createSignupService(store, secret) {
         const batch = await Promise.all(paths.slice(offset, offset + 8).map(path => store.read(path)));
         events.push(...batch.filter(Boolean).map(({ event }) => summary(event)));
       }
-      return { sheets: events.sort((a, b) => b.updated.localeCompare(a.updated)) };
+      return { sheets: events.sort((a, b) => b.updated.localeCompare(a.updated)), emailReady: !!mailer };
     }
     const id = payload.id;
     if (!matches(ID, id)) fail(400, 'Choose a valid sheet.');
     const path = eventPath(workspace, id);
+    const ref = workspace + id;
     if (action === 'get') return organizerSheet((await read(path)).event, workspace);
+    if (action === 'retry-email') {
+      if (!mailer) fail(503, 'Automatic email is waiting for sender setup.');
+      const { event } = await read(path);
+      await deliverMail(path, event);
+      return organizerSheet(event, workspace);
+    }
     if (action === 'save' && payload.revision === 0) {
       const details = eventDetails(payload.details);
       const existing = await store.read(path);
       if (existing) return organizerSheet(existing.event, workspace);
-      const event = { id, details, revision: 1, status: 'draft', published: false, updated: new Date().toISOString(), reservations: [] };
+      const event = {
+        id, details, contact: contactSettings(payload.contact), revision: 1, status: 'draft', published: false,
+        updated: new Date().toISOString(), reservations: [],
+      };
       if (!await store.write(path, event, null)) return organizerSheet((await read(path)).event, workspace);
       return organizerSheet(event, workspace);
     }
-    return change(path, event => {
+    const event = await change(path, event => {
+      const messages = [];
       if (['save', 'publish', 'close', 'archive', 'restore'].includes(action)) {
         if (event.revision !== payload.revision) fail(409, CONFLICT);
         if (action === 'save') {
@@ -189,17 +297,30 @@ export function createSignupService(store, secret) {
             if (!target || target.capacity < count) fail(409, 'Move or remove reservations before deleting a slot or lowering its capacity.');
           }
           if (event.published && !details.slots.length) fail(400, 'Keep at least one slot on a published sheet.');
+          const affected = event.published && mailer ? affectedReservations(event, details) : [];
           event.details = details;
+          if (payload.contact !== undefined) event.contact = contactSettings(payload.contact);
+          for (const reservation of affected) messages.push(guestMail(ref, event, reservation, 'event'));
         } else if (action === 'publish') {
           if (event.status === 'archived' || !event.details.slots.length) {
             fail(409, 'Restore the sheet if needed and save at least one slot before publishing.');
           }
           event.status = 'open';
+          if (!event.published) {
+            for (const reservation of event.reservations.filter(r => !r.cancelled)) {
+              messages.push(guestMail(ref, event, reservation, 'confirmed'));
+            }
+          }
           event.published = true;
         } else if (action === 'close' && event.status === 'open') {
           event.status = 'closed';
         } else if (action === 'archive' && event.status !== 'archived') {
           event.status = 'archived';
+          if (event.published) {
+            for (const reservation of event.reservations.filter(r => !r.cancelled)) {
+              messages.push(guestMail(ref, event, reservation, 'archived'));
+            }
+          }
         } else if (action === 'restore' && event.status === 'archived') {
           event.status = event.published ? 'closed' : 'draft';
         } else {
@@ -213,56 +334,68 @@ export function createSignupService(store, secret) {
         if (action === 'add') {
           if (!matches(ID, payload.reservation)) fail(400, 'Invalid reservation ID.');
           if (reservations.some(r => r.id === payload.reservation)) {
-            return { value: organizerSheet(event, workspace), write: false };
+            return { value: event, write: false };
           }
           if (reservations.length >= MAX_RESERVATIONS) fail(409, 'This sheet has reached its reservation limit.');
           const name = readText(payload.name, 80, 'the participant name', true);
           validateChoices(event, [payload.slot]);
-          reservations.push({ id: payload.reservation, name, slots: [payload.slot] });
+          const added = { id: payload.reservation, name, email: readEmail(payload.email, 'participant'), slots: [payload.slot] };
+          reservations.push(added);
+          if (event.published) messages.push(guestMail(ref, event, added, 'confirmed'));
         } else if (!reservation) {
           fail(404, 'That reservation is unavailable.');
         } else if (action === 'remove') {
+          if (event.published) messages.push(guestMail(ref, event, reservation, 'canceled'));
           cancelReservation(reservation);
         } else {
           if (!reservation.slots.includes(payload.from)) fail(409, 'This reservation changed. Reload the roster.');
           const slots = reservation.slots.map(slot => slot === payload.from ? payload.to : slot);
           validateChoices(event, slots, reservation);
           reservation.slots = slots;
+          if (event.published) messages.push(guestMail(ref, event, reservation, 'changed'));
         }
       }
       event.updated = new Date().toISOString();
-      return { value: organizerSheet(event, workspace) };
+      queueMail(event, messages);
+      return { value: event };
     });
+    await deliverMail(path, event);
+    return organizerSheet(event, workspace);
   }
 
   function cancelReservation(reservation) {
     reservation.cancelled = true;
     reservation.slots = [];
     reservation.name = '';
+    delete reservation.email;
   }
 
   async function guest(action, payload) {
     const path = invitePath(payload.invite);
+    const ref = payload.invite.slice(0, 64);
     const proof = matches(KEY, payload.proof) ? hash('signup-studio:guest:' + payload.proof) : '';
+    const manage = typeof payload.proof === 'string' ? MANAGE.exec(payload.proof) : null;
+    const manageId = manage && timingSafeEqual(Buffer.from(manage[2], 'hex'), Buffer.from(manageStamp(ref, manage[1]), 'hex')) ? manage[1] : '';
     function current(event) {
       if (event.status !== 'open' && event.status !== 'closed') fail(404, 'This invitation is unavailable.');
-      const reservation = proof && event.reservations.find(r => r.proof === proof);
-      return reservation || null;
+      return event.reservations.find(r => (proof && r.proof === proof) || (manageId && r.id === manageId)) || null;
     }
 
     if (action === 'view') {
       const { event } = await read(path);
       return participantSheet(event, current(event));
     }
-    if (!proof) fail(400, 'Open your private reservation link to continue.');
-    return change(path, event => {
+    if (!proof && !manageId) fail(400, 'Open your private reservation link to continue.');
+    const { event, reservation } = await change(path, event => {
       let reservation = current(event);
       if (action === 'reserve' && reservation) {
-        return { value: participantSheet(event, reservation), write: false };
+        return { value: { event, reservation }, write: false };
       }
-      if (action !== 'reserve' && !reservation) fail(404, 'This reservation could not be found.');
+      if ((action !== 'reserve' || !proof) && !reservation) fail(404, 'This reservation could not be found.');
+      const messages = [];
       if (action === 'cancel') {
-        if (reservation.cancelled) return { value: participantSheet(event, reservation), write: false };
+        if (reservation.cancelled) return { value: { event, reservation }, write: false };
+        messages.push(guestMail(ref, event, reservation, 'canceled'));
         cancelReservation(reservation);
       } else {
         if (event.status !== 'open') fail(409, 'This event is closed to new or changed reservations.');
@@ -270,14 +403,26 @@ export function createSignupService(store, secret) {
         validateChoices(event, payload.slots, reservation);
         if (action === 'reserve') {
           if (event.reservations.length >= MAX_RESERVATIONS) fail(409, 'This sheet has reached its reservation limit.');
-          reservation = { id: newId(), name: readText(payload.name, 80, 'your name', true), proof, slots: payload.slots };
+          const email = event.contact?.collectEmail ? readEmail(payload.email, 'participant', true) : '';
+          reservation = { id: newId(), name: readText(payload.name, 80, 'your name', true), email, proof, slots: payload.slots };
           event.reservations.push(reservation);
+          messages.push(bookingAlert(event), guestMail(ref, event, reservation, 'confirmed'));
         } else {
+          const email = reservation.email || (event.contact?.collectEmail ? readEmail(payload.email, 'participant', true) : '');
+          if (email === (reservation.email || '') && reservation.slots.length === payload.slots.length &&
+              payload.slots.every(id => reservation.slots.includes(id))) return { value: { event, reservation }, write: false };
+          reservation.email = email;
           reservation.slots = payload.slots;
+          messages.push(guestMail(ref, event, reservation, 'changed'));
         }
       }
-      return { value: participantSheet(event, reservation) };
+      queueMail(event, messages);
+      return { value: { event, reservation } };
     });
+    const ownBatches = mailQueue(event).filter(batch => batch.messages.some(message => message.reservation === reservation.id));
+    const accepted = await deliverMail(path, event);
+    const emailStatus = ownBatches.length ? (ownBatches.every(batch => accepted.has(batch.id)) ? 'accepted' : 'pending') : undefined;
+    return { ...participantSheet(event, reservation), emailStatus };
   }
 
   return async ({ action, payload, workspaceKey, authorized }) => {
