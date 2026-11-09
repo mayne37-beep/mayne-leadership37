@@ -2,15 +2,17 @@ import { BlobPreconditionFailedError, get, list, put } from '@vercel/blob';
 
 export function blobSignupStore(token, environment) {
   const root = `sign-up-studio/v1/${environment}/`;
+  async function read(path) {
+    const result = await get(root + path, {
+      access: 'private', token, useCache: false, abortSignal: AbortSignal.timeout(7000),
+    });
+    if (!result) return null;
+    if (!result.stream || !result.blob.etag) throw new Error('Sign-up data could not be read consistently.');
+    return { event: await new Response(result.stream).json(), etag: result.blob.etag };
+  }
+
   return {
-    async read(path) {
-      const result = await get(root + path, {
-        access: 'private', token, useCache: false, abortSignal: AbortSignal.timeout(7000),
-      });
-      if (!result) return null;
-      if (!result.stream || !result.blob.etag) throw new Error('Sign-up data could not be read consistently.');
-      return { event: await new Response(result.stream).json(), etag: result.blob.etag };
-    },
+    read,
 
     async write(path, event, etag) {
       const options = {
@@ -22,7 +24,10 @@ export function blobSignupStore(token, environment) {
         return true;
       } catch (error) {
         if (error instanceof BlobPreconditionFailedError) return false;
-        if (!etag && /blob already exists/i.test(error.message || '')) return false;
+        // A failed request can return a generic SDK error after another write
+        // won. Only treat it as a conflict after observing a newer version.
+        const latest = await read(path).catch(() => null);
+        if (latest && latest.etag !== etag) return false;
         throw error;
       }
     },
