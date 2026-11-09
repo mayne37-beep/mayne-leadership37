@@ -1,0 +1,11 @@
+.signup-main { max-width: 58rem; padding-block: 3rem 5rem; }
+.signup-main h1 { overflow-wrap: anywhere; }
+.signup-main #details { white-space: pre-wrap; overflow-wrap: anywhere; }
+.signup-main section, .signup-main form { border: 1px solid #a9b7ca; border-radius: 1rem; padding: 1.25rem; margin-block: 1rem; }
+.signup-main label { display: grid; gap: .3rem; margin-block: .75rem; font-weight: 600; }
+.signup-main input, .signup-main textarea, .signup-main button { font: inherit; border: 1px solid #60738b; border-radius: .4rem; padding: .55rem .7rem; }
+.signup-main input, .signup-main textarea { width: 100%; color: #10243c; background: white; }
+.signup-main button { color: white; background: #17395f; cursor: pointer; margin: .2rem .45rem .2rem 0; }
+.signup-main button:disabled { opacity: .65; cursor: default; }
+.signup-main fieldset { border: 1px solid #a9b7ca; padding: .5rem 1rem; margin-bottom: .75rem; }
+.signup-main #status { min-height: 1.6em; font-weight: 600; }
