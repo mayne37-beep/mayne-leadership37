@@ -4,6 +4,10 @@ import { next } from '@vercel/functions';
 // Exact student entry pages remain publicly available by design.
 // Instructor consoles, administration, site pages and other resources are PIN-protected.
 const PUBLIC_PAGES = new Set([
+  '/signup.html',
+  '/api/event-signups',
+  '/assets/event-signups.css',
+  '/assets/event-signups.js',
   '/systems-mapping-join.html',
   '/api/systems-studio',
   '/assets/systems-mapping-studio.css',
