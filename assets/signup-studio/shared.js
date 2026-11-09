@@ -9,6 +9,19 @@ export const themes = {
 
 export const statuses = { draft: 'Draft', open: 'Open', closed: 'Closed', archived: 'Archived' };
 
+export function normalizeMeetingUrl(value) {
+  if (typeof value !== 'string') return null;
+  const text = value.trim();
+  if (!text) return '';
+  if (text.length > 2048 || !/^https:\/\/[^/]/i.test(text) || /[\\\s\x00-\x1f\x7f]/.test(text)) return null;
+  try {
+    const url = new URL(text);
+    return url.username || url.password || url.href.length > 2048 ? null : url.href;
+  } catch {
+    return null;
+  }
+}
+
 export const byId = id => document.getElementById(id);
 export const uid = () => crypto.randomUUID().replaceAll('-', '');
 export const secretKey = () => Array.from(crypto.getRandomValues(new Uint8Array(32)), value => value.toString(16).padStart(2, '0')).join('');
@@ -116,6 +129,13 @@ export function eventBanner(parent, details, compact = false) {
   if (details.location || details.zone) {
     const meta = node(banner, 'div', '', 'row');
     for (const text of [details.location, details.zone].filter(Boolean)) node(meta, 'span', text, 'pill');
+  }
+  const meeting = normalizeMeetingUrl(details.meetingUrl);
+  if (meeting) {
+    const link = node(node(banner, 'div', '', 'row actions'), 'a', 'Join meeting', 'button-link secondary');
+    link.href = meeting;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
   }
 }
 

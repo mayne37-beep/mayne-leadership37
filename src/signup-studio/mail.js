@@ -55,7 +55,7 @@ const reservationCopy = {
 export function reservationNotice(event, reservation, type, url) {
   if (!reservation.email) return null;
   const [heading, intro] = reservationCopy[type];
-  const { title, location, zone, slots } = event.details;
+  const { title, location, zone, meetingUrl, slots } = event.details;
   const lines = [intro, '', singleLine(title)];
   if (type !== 'canceled' && type !== 'archived') {
     if (location) lines.push('Location: ' + singleLine(location));
@@ -63,6 +63,7 @@ export function reservationNotice(event, reservation, type, url) {
     const booked = slots.filter(slot => reservation.slots.includes(slot.id));
     lines.push('', ...booked.slice(0, 12).map(slot => '- ' + slotLabel(slot)));
     if (booked.length > 12) lines.push('See your reservation page for the remaining slots.');
+    if (meetingUrl) lines.push('', 'Join the meeting', meetingUrl);
   }
   if (url) lines.push('', 'View your private reservation', url, '', 'Keep this link private.');
   return { to: reservation.email, subject: heading + ' · ' + singleLine(title), text: lines.join('\n'), reservation: reservation.id };

@@ -24,7 +24,7 @@ function blankSlot() {
 function blankSheet() {
   return {
     id: uid(), revision: 0, status: 'draft', reservations: [],
-    details: { title: '', description: '', location: '', zone: '', bannerLabel: '', theme: 'general', slots: [] },
+    details: { title: '', description: '', location: '', zone: '', meetingUrl: '', bannerLabel: '', theme: 'general', slots: [] },
     contact: { collectEmail: true, organizerEmail: '' },
   };
 }
@@ -364,6 +364,12 @@ function renderEditor() {
   const place = node(info, 'div', '', 'grid');
   const location = field(place, 'Location or meeting details', original.location, { maxLength: 160 });
   const zone = field(place, 'Time zone label', original.zone, { maxLength: 60, placeholder: 'e.g. Central Time' });
+  const meetingUrl = field(info, 'Meeting link (optional)', original.meetingUrl, {
+    type: 'url', maxLength: 2048, placeholder: 'https://…',
+  });
+  const meetingHelp = node(info, 'p', 'Use the HTTPS join link from Teams, Zoom, or another meeting service. Anyone with the invite can open it.', 'muted');
+  meetingHelp.id = 'meeting-link-help';
+  meetingUrl.setAttribute('aria-describedby', meetingHelp.id);
   const appearance = node(info, 'details', '', 'bulk');
   node(appearance, 'summary', 'Banner appearance');
   const appearanceGrid = node(appearance, 'div', '', 'grid');
@@ -418,7 +424,7 @@ function renderEditor() {
   function details() {
     return {
       title: title.value.trim(), description: description.value.trim(), location: location.value.trim(),
-      zone: zone.value.trim(), theme: theme.value, bannerLabel: bannerLabel.value.trim(),
+      zone: zone.value.trim(), meetingUrl: meetingUrl.value.trim(), theme: theme.value, bannerLabel: bannerLabel.value.trim(),
       slots: [...entries.values()].map(read => read()),
     };
   }

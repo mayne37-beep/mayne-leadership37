@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { normalizeMeetingUrl } from '../../assets/signup-studio/shared.js';
 import { bookingAlert, emailAddress, EMAIL_RETRY_MS, reservationNotice, reservationUrl } from './mail.js';
 
 const ADMIN = new Set(['list', 'get', 'save', 'publish', 'close', 'archive', 'restore', 'add', 'move', 'remove', 'retry-email']);
@@ -45,7 +46,7 @@ function contactSettings(value = { collectEmail: false }) {
   return { collectEmail: value.collectEmail, organizerEmail: readEmail(value.organizerEmail, 'organizer') };
 }
 
-function eventDetails(value) {
+function eventDetails(value, previousMeetingUrl = '') {
   if (!value || !Array.isArray(value.slots) || value.slots.length > MAX_SLOTS) {
     fail(400, `Add up to ${MAX_SLOTS} slots per sheet.`);
   }
@@ -74,11 +75,14 @@ function eventDetails(value) {
     };
   });
   if (!THEMES.has(value.theme)) fail(400, 'Choose an available banner theme.');
+  const meetingUrl = value.meetingUrl === undefined ? previousMeetingUrl : normalizeMeetingUrl(value.meetingUrl);
+  if (meetingUrl === null) fail(400, 'Enter a valid HTTPS meeting link or leave it blank.');
   return {
     title: readText(value.title, 120, 'an event title', true),
     description: readText(value.description, 2000, 'event instructions'),
     location: readText(value.location, 160, 'the location'),
     zone: readText(value.zone, 60, 'the time zone label'),
+    meetingUrl,
     bannerLabel: readText(value.bannerLabel, 60, 'the banner label'),
     theme: value.theme,
     slots,
@@ -121,7 +125,8 @@ const mailCount = batches => batches.reduce((total, batch) => total + batch.mess
 
 function affectedReservations(event, details) {
   const current = event.details;
-  const eventChanged = ['title', 'description', 'location', 'zone'].some(field => current[field] !== details[field]);
+  const eventChanged = ['title', 'description', 'location', 'zone', 'meetingUrl']
+    .some(field => (current[field] || '') !== details[field]);
   const updatedSlots = new Map(details.slots.map(slot => [slot.id, slot]));
   const changedSlots = new Set(current.slots.filter(slot => {
     const next = updatedSlots.get(slot.id);
@@ -290,7 +295,7 @@ export function createSignupService(store, secret, mailer = null) {
         if (event.revision !== payload.revision) fail(409, CONFLICT);
         if (action === 'save') {
           if (event.status === 'archived') fail(409, 'Restore the sheet before editing it.');
-          const details = eventDetails(payload.details);
+          const details = eventDetails(payload.details, event.details.meetingUrl);
           const occupied = counts(event);
           for (const [slot, count] of occupied) {
             const target = details.slots.find(item => item.id === slot);
