@@ -57,6 +57,9 @@
     }
   ],
   "functions": {
+    "api/signup-studio.js": {
+      "maxDuration": 30
+    },
     "api/challenge.js": {
       "includeFiles": "dist/**",
       "maxDuration": 30

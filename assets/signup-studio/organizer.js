@@ -25,6 +25,7 @@ function blankSheet() {
   return {
     id: uid(), revision: 0, status: 'draft', reservations: [],
     details: { title: '', description: '', location: '', zone: '', bannerLabel: '', theme: 'general', slots: [] },
+    contact: { collectEmail: true, organizerEmail: '' },
   };
 }
 
@@ -36,6 +37,7 @@ let dirty = false;
 let busy = false;
 let listError = false;
 let persistent = true;
+let emailReady = null;
 
 const workspace = byId('workspace');
 const editor = byId('editor');
@@ -74,18 +76,21 @@ function requireSaved() {
 
 async function loadSheets() {
   try {
-    ({ sheets } = await api('list', {}));
+    ({ sheets, emailReady } = await api('list', {}));
     listError = false;
   } catch (error) {
     listError = true;
     throw error;
   } finally {
     renderRail();
+    const note = byId('email-delivery-note');
+    if (note) note.textContent = emailDeliveryNote();
   }
 }
 
 function openSheet(next, focus = false) {
   sheet = next;
+  if (typeof next.emailReady === 'boolean') emailReady = next.emailReady;
   dirty = false;
   renderRail();
   renderEditor();
@@ -145,6 +150,7 @@ function renderWorkspaceTools() {
       if (!data.sheets.length && key !== workspaceKey) return 'No saved sheets were found for that key.';
       workspaceKey = key;
       sheets = data.sheets;
+      emailReady = data.emailReady;
       listError = false;
       remember();
       openSheet(blankSheet(), true);
@@ -285,6 +291,30 @@ function preview(details) {
   dialog.showModal();
 }
 
+function emailDeliveryNote() {
+  if (emailReady === null) return 'Checking automatic email availability…';
+  return emailReady ?
+    'Automatic emails are available. Participants who provide an address get confirmations and change notices.' :
+    'Automatic emails are waiting for sender setup. You can collect addresses and email participants from the roster.';
+}
+
+function renderEmailStatus(parent) {
+  if (!sheet.pendingEmails && !sheet.missedEmails) return;
+  const section = panel(parent, 'Email status');
+  if (sheet.missedEmails) {
+    node(section, 'p', `Notices without confirmed sending · ${sheet.missedEmails}`, 'muted');
+  }
+  if (!sheet.pendingEmails) return;
+  node(section, 'p', `Pending notices · ${sheet.pendingEmails}`, 'muted');
+  if (emailReady) button(section, 'Retry pending emails', () => {
+    if (!requireSaved()) return;
+    run(async () => {
+      updated(await api('retry-email', { id: sheet.id }));
+      return sheet.pendingEmails ? 'Some notices are still pending.' : 'The pending email queue has been processed.';
+    });
+  }, 'secondary');
+}
+
 function renderEditor() {
   const heading = byId('title');
   heading.textContent = sheet.details.title || 'Create a sign-up';
@@ -301,6 +331,7 @@ function renderEditor() {
       const copy = blankSheet();
       copy.details = { ...structuredClone(sheet.details), title: sheet.title.slice(0, 113) + ' (copy)' };
       copy.details.slots = copy.details.slots.map(slot => ({ ...slot, id: uid(), remaining: slot.capacity }));
+      copy.contact = { ...sheet.contact };
       openSheet(copy, true);
       dirty = true;
       notice('Copy created. Save it as a new draft.');
@@ -311,6 +342,7 @@ function renderEditor() {
     if (sheet.status === 'archived') {
       button(strip, 'Restore sheet', () => stateAction('restore', 'Sheet restored.'), 'secondary');
       panel(editor, 'This sheet is archived', 'Restore it to edit the details or reopen registration.');
+      renderEmailStatus(editor);
       renderRoster(editor);
       return;
     }
@@ -323,6 +355,7 @@ function renderEditor() {
   }
 
   renderShare(editor);
+  renderEmailStatus(editor);
   const form = node(editor, 'form');
   const info = panel(form, 'Event details', 'Tell participants what they’re signing up for.');
   const original = sheet.details;
@@ -346,6 +379,17 @@ function renderEditor() {
   theme.addEventListener('change', showTheme);
   bannerLabel.addEventListener('input', showTheme);
   showTheme();
+
+  const emails = panel(form, 'Email notifications');
+  node(emails, 'p', emailDeliveryNote(), 'muted').id = 'email-delivery-note';
+  const organizerEmail = field(emails, 'Organizer alert email', sheet.contact?.organizerEmail || '', { type: 'email', maxLength: 254 });
+  organizerEmail.autocomplete = 'email';
+  node(emails, 'p', 'Enter an inbox you manage to receive a notice for each new sign-up.', 'muted');
+  const emailChoice = node(emails, 'label', '', 'row');
+  const collectEmail = node(emailChoice, 'input');
+  collectEmail.type = 'checkbox';
+  collectEmail.checked = !!sheet.contact?.collectEmail;
+  emailChoice.append('Require participant email at sign-up');
 
   const slots = panel(form, 'Sign-up slots', 'Add sessions, volunteer roles, items, or appointments. Dates and times are optional.');
   const entries = new Map();
@@ -386,9 +430,10 @@ function renderEditor() {
     event.preventDefault();
     const publish = event.submitter?.value === 'publish';
     const input = details();
+    const contact = { organizerEmail: organizerEmail.value.trim(), collectEmail: collectEmail.checked };
     if (publish && !input.slots.length) { notice('Add at least one slot before publishing.', true); return; }
     run(async () => {
-      const saved = await api('save', { id: sheet.id, revision: sheet.revision, details: input });
+      const saved = await api('save', { id: sheet.id, revision: sheet.revision, details: input, contact });
       updated(saved);
       if (publish) {
         updated(await api('publish', { id: sheet.id, revision: sheet.revision }));
@@ -403,7 +448,7 @@ function renderEditor() {
 }
 
 function renderRoster(parent) {
-  const roster = panel(parent, 'Roster', 'Participant names are visible here in the organizer workspace.');
+  const roster = panel(parent, 'Roster', 'Participant names and email addresses are private to this workspace.');
   const lookup = new Map(sheet.details.slots.map(slot => [slot.id, slot]));
   if (lookup.size) {
     const list = node(roster, 'ul');
@@ -430,17 +475,28 @@ function renderRoster(parent) {
     node(add, 'summary', 'Add a participant manually');
     const row = node(add, 'div', '', 'grid');
     const name = field(row, 'Participant name', '', { maxLength: 80 });
+    const email = field(row, 'Participant email (optional)', '', { type: 'email', maxLength: 254 });
     const slot = choice(row, 'Slot');
     const reservation = uid();
     button(add, 'Add reservation', () => {
       if (!name.value.trim() || !slot.value) { notice('Enter a name and choose an open slot.', true); return; }
-      rosterAction('add', { name: name.value.trim(), slot: slot.value, reservation }, 'Reservation added.');
+      if (!email.reportValidity()) return;
+      rosterAction('add', { name: name.value.trim(), email: email.value.trim(), slot: slot.value, reservation }, 'Reservation added.');
     }, 'secondary');
   }
   if (!sheet.reservations.length) node(roster, 'p', 'No reservations yet.', 'muted');
   for (const reservation of sheet.reservations) {
     const item = node(roster, 'fieldset', '', 'roster-row');
     node(item, 'legend', reservation.name);
+    if (reservation.email) {
+      const contact = node(item, 'div', '', 'row');
+      node(contact, 'span', reservation.email, 'preserve');
+      const link = node(contact, 'a', 'Email participant');
+      link.href = 'mailto:' + encodeURIComponent(reservation.email).replace('%40', '@') +
+        '?subject=' + encodeURIComponent(sheet.title.replace(/[\r\n]/g, ' '));
+    } else {
+      node(item, 'p', 'No email on file.', 'meta');
+    }
     const list = node(item, 'ul');
     for (const id of reservation.slots) node(list, 'li', lookup.get(id).label + ' · ' + slotTime(lookup.get(id)));
     if (sheet.status === 'archived') continue;
@@ -463,11 +519,11 @@ function renderRoster(parent) {
   }
   button(roster, 'Export roster CSV', () => {
     const csv = value => '"' + String(value).replace(/^[\s\uFEFF]*[=+@-]/, "'$&").replaceAll('"', '""') + '"';
-    const rows = [['Participant', 'Slot', 'Date', 'Start', 'End']];
+    const rows = [['Participant', 'Email', 'Slot', 'Date', 'Start', 'End']];
     for (const reservation of sheet.reservations) {
       for (const id of reservation.slots) {
         const slot = lookup.get(id);
-        rows.push([reservation.name, slot.label, slot.date, slot.start, slot.end]);
+        rows.push([reservation.name, reservation.email || '', slot.label, slot.date, slot.start, slot.end]);
       }
     }
     const url = URL.createObjectURL(new Blob([rows.map(row => row.map(csv).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' }));

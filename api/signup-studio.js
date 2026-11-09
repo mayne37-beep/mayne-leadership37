@@ -1,6 +1,7 @@
 import { authorized } from './lesson-studio.js';
 import { createSignupService, SignupError } from '../src/signup-studio/service.js';
 import { blobSignupStore } from '../src/signup-studio/storage.js';
+import { resendMailer } from '../src/signup-studio/mail.js';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'private, no-store');
@@ -27,7 +28,9 @@ export default async function handler(req, res) {
   const token = process.env.BLOB_READ_WRITE_TOKEN;
   if (!secret || !token) return reply(503, { error: 'Sign-Up Studio storage is temporarily unavailable.' });
   const environment = process.env.VERCEL_ENV === 'production' ? 'production' : 'preview';
-  const service = createSignupService(blobSignupStore(token, environment), secret);
+  const mailer = environment === 'production' ?
+    resendMailer(process.env.RESEND_API_KEY, process.env.SIGNUP_STUDIO_FROM_EMAIL) : null;
+  const service = createSignupService(blobSignupStore(token, environment), secret, mailer);
   try {
     const data = await service({
       action, payload, workspaceKey: /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization || '')?.[1],
