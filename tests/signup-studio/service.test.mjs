@@ -66,6 +66,33 @@ async function publishWithEmail(admin) {
   return admin('publish', { id: ID, revision: draft.revision });
 }
 
+test('meeting links reach the participant invite and update notices', async () => {
+  const sent = [];
+  const { admin, guest } = fixture(async batch => sent.push(...batch.messages));
+  const save = (revision, meetingUrl) => admin('save', { id: ID, revision, details: { ...details, meetingUrl }, contact });
+  for (const invalid of ['javascript:alert(1)', 'http://example.test/join', 'https://user:pass@example.test/join']) {
+    await assert.rejects(save(0, invalid), { status: 400 });
+  }
+  const meeting = 'https://example.test/join?passcode=a%2Bb#meeting';
+  const draft = await save(0, meeting);
+  const { invite, revision } = await admin('publish', { id: ID, revision: draft.revision });
+  assert.equal((await guest('view', { invite })).meetingUrl, meeting);
+  await guest('reserve', { invite, proof: PROOF, name: 'Test Guest', email: guestEmail, slots: [FIRST] });
+  assert(sent[1].text.includes(meeting));
+
+  const previousClientSave = await admin('save', { id: ID, revision, details });
+  assert.equal(previousClientSave.details.meetingUrl, meeting);
+  assert.equal(sent.length, 2);
+  const replacement = 'https://example.test/another-meeting';
+  const changed = await save(previousClientSave.revision, replacement);
+  assert.equal((await guest('view', { invite })).meetingUrl, replacement);
+  assert.equal(sent[2].to, guestEmail);
+  assert(sent[2].text.includes(replacement));
+  await save(changed.revision, '');
+  assert.equal((await guest('view', { invite })).meetingUrl, '');
+  assert(!sent[3].text.includes(replacement));
+});
+
 test('sign-ups and reservation changes send private, scoped email notices', async () => {
   const sent = [];
   const { admin, guest } = fixture(async batch => sent.push(...batch.messages));
