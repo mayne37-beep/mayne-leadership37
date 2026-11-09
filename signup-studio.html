@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Sign-Up Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eff3f7;color:#172e45;font:16px/1.55 system-ui,sans-serif}header{background:#102a43;color:white;padding:16px max(5vw,16px);display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}header strong{letter-spacing:.08em}main{width:min(1050px,94%);margin:26px auto 64px}.hero{background:linear-gradient(120deg,#123353,#234f70);color:white;border-radius:20px;padding:clamp(22px,5vw,54px);margin-bottom:20px}.hero p{max-width:62ch}.eyebrow{color:#ffcf87;font-weight:750;letter-spacing:.16em;font-size:.75rem}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;margin-bottom:12px}h2{font-size:1.5rem}.panel,article{background:white;border:1px solid #d5e1ea;border-radius:14px;padding:22px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,205px),1fr));gap:12px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.tag{border-radius:99px;background:#e1edf6;padding:4px 12px;font-weight:650;font-size:.87rem;color:#173854}.muted{color:#425e74}.hero .muted{color:#e1edf6}button,input,select,textarea{font:inherit}button{border:1px solid #224c6c;border-radius:8px;background:#224c6c;color:white;padding:8px 14px;cursor:pointer;font-weight:650}button.alt{color:#173854;background:#fff}button:disabled{opacity:.62;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #bb741e;outline-offset:3px}input,select,textarea{padding:8px;border:1px solid #8299ac;border-radius:7px;width:100%;background:white;color:#172e45}input[type=checkbox]{width:auto;min-width:18px;min-height:18px}label{display:block;font-weight:650;margin-bottom:8px}label input,label textarea,label select{margin-top:3px}small{display:block}.slot{display:grid;grid-template-columns:minmax(140px,1fr) minmax(180px,2fr) auto;align-items:center;gap:14px;padding:14px 0;border-top:1px solid #dce6ed}.slot p{margin:0}.slot strong{display:block}.actions{margin-top:16px}fieldset{border:1px solid #d5e1ea;border-radius:10px;margin:12px 0;padding:12px}legend{font-weight:700}#notice{min-height:1.5em;font-weight:650;margin:12px 0}.preview{font-size:.85rem;background:#ffd891;color:#20374b;padding:4px 10px;border-radius:99px;font-weight:700}@media(max-width:600px){.slot{grid-template-columns:1fr}.panel{padding:15px}}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(115deg,var(--theme-dark,#123353),var(--theme-accent,#234f70))}.hero h1{overflow-wrap:anywhere}.hero-mark{position:absolute;right:4%;bottom:-.17em;font-size:clamp(5rem,20vw,14rem);line-height:1;opacity:.16;z-index:-1;pointer-events:none}.hero .eyebrow{color:#fff2cf}.theme-card{padding:14px;border-radius:10px;background:linear-gradient(115deg,var(--theme-dark),var(--theme-accent));color:white;margin-block:10px 18px}.theme-card p{margin:0}
+</style></head><body>
+<header><strong>SIGN-UP STUDIO</strong><span class="preview">STANDALONE PREVIEW</span></header>
+<main>
+<div class="hero" id="banner"><span id="banner-mark" class="hero-mark" aria-hidden="true"></span><p class="eyebrow" id="banner-label">EVENT SIGN-UPS</p><h1 id="heading">Community Workshop</h1><p id="description"></p><div id="summary" class="row"></div></div>
+<nav class="row" aria-label="Preview mode"><button id="guest" type="button">Participant view</button><button id="host" class="alt" type="button">Organizer studio</button></nav>
+<p id="notice" role="status"></p><div id="screen"></div>
+<p class="muted">Preview data stays in this browser. Use sample names to test the experience.</p>
+</main>
+<script>
+'use strict';
+const sample = {
+  title:'Community Workshop', description:'Choose a workshop session or lend a hand as a volunteer. Select the slots you want, then confirm your sign-up.',
+  location:'Community Training Room', zone:'Central Time', closed:false,
+  slots:[
+    {id:'a',label:'Morning workshop',date:'2027-02-12',start:'09:00',end:'10:30',capacity:8,detail:'Practice leading a coaching conversation.',demo:5},
+    {id:'b',label:'Afternoon workshop',date:'2027-02-12',start:'13:00',end:'14:30',capacity:8,detail:'Same workshop, later session.',demo:3},
+    {id:'c',label:'Check-in volunteer',date:'2027-02-12',start:'08:30',end:'09:00',capacity:2,detail:'Welcome attendees and help them find their seats.',demo:2},
+    {id:'d',label:'Bring a facilitation resource',date:'',start:'',end:'',capacity:4,detail:'Bring a resource you’re willing to share with the group.',demo:0}
+  ], reservations:[]
+};
+const themes={
+  general:{label:'General',dark:'#20354d',accent:'#38627b',icon:'📋'},
+  coaching:{label:'Coaching',dark:'#173c34',accent:'#297059',icon:'💬'},
+  baking:{label:'Baking',dark:'#5b2d36',accent:'#994c54',icon:'🧁'},
+  volunteer:{label:'Volunteering',dark:'#30345f',accent:'#56549b',icon:'🤝'},
+  sports:{label:'Sports',dark:'#20343a',accent:'#4e602e',icon:'🏆'},
+  celebration:{label:'Celebration',dark:'#492849',accent:'#873968',icon:'🎉'}
+};
+function applyTheme(node,theme){
+  node.style.setProperty('--theme-dark',theme.dark);
+  node.style.setProperty('--theme-accent',theme.accent);
+}
+const key='mayne-signups-standalone-v1';
+const $ = id => document.getElementById(id);
+let board=structuredClone(sample), persistent=true, mode='guest', selected=new Set();
+let active='sample', sheets={sample:board};
+try {
+  const saved=JSON.parse(localStorage.getItem(key));
+  if(saved?.sheets){({active,sheets}=saved);board=sheets[active];}
+  else if(saved){board=sheets.sample=saved;}
+} catch { persistent=false; }
+
+const el=(parent,tag,text='')=>{const node=document.createElement(tag);node.textContent=text;parent.append(node);return node;};
+function button(parent,label,action,secondary=false){const b=el(parent,'button',label);b.type='button';if(secondary)b.className='alt';b.onclick=action;return b;}
+function field(parent,label,value='',type='text'){
+  const l=el(parent,'label',label);
+  const input=el(l,type==='textarea'?'textarea':'input');
+  if(type!=='textarea')input.type=type;
+  input.value=value;return input;
+}
+function notice(message){$('notice').textContent=message;}
+function save(){try{sheets[active]=board;localStorage.setItem(key,JSON.stringify({active,sheets}));}catch{persistent=false;}}
+function update(message){save();render();notice(message+(persistent?'':' Changes last only until you close or reload this tab.'));}
+function used(slot){return (slot.demo||0)+board.reservations.filter(r=>r.slot===slot.id).length;}
+function dateLabel(date){return date?new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(new Date(date+'T12:00:00')):'Any date';}
+function timeLabel(time){if(!time)return '';const [h,m]=time.split(':').map(Number);return (h%12||12)+':'+String(m).padStart(2,'0')+(h<12?' AM':' PM');}
+function when(slot){return [dateLabel(slot.date),[timeLabel(slot.start),timeLabel(slot.end)].filter(Boolean).join(' – ')].filter(Boolean).join(' · ');}
+function render(){
+  const theme=themes[board.theme]||themes.general;
+  applyTheme($('banner'),theme);
+  $('banner-mark').textContent=theme.icon;
+  $('banner-label').textContent=board.bannerLabel || (theme===themes.general?'EVENT SIGN-UPS':theme.label.toUpperCase()+' SIGN-UPS');
+  $('heading').textContent=board.title;
+  $('description').textContent=board.description;
+  $('summary').replaceChildren();
+  for(const text of [board.location,board.zone,board.closed?'Registration closed':'Registration open'].filter(Boolean)) el($('summary'),'span',text).className='tag';
+  for(const name of ['guest','host']){$(name).setAttribute('aria-pressed',String(mode===name));$(name).className=mode===name?'':'alt';}
+  $('screen').replaceChildren();
+  if(mode==='guest')guest();else organizer();
+}
+function guest(){
+  const panel=el($('screen'),'section');panel.className='panel';
+  el(panel,'h2','Available slots');
+  el(panel,'p',board.closed?'This sign-up is closed. You can still cancel an existing reservation.':'Choose one or more slots. Your name appears in the organizer’s roster.');
+  const form=el(panel,'form');
+  const unavailable=board.closed||board.draft||board.archived;
+  if(board.draft||board.archived)el(panel,'p','This sheet is visible here for preview. Registration is unavailable.');
+  const ordered=[...board.slots].sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')||a.start.localeCompare(b.start));
+  for(const slot of ordered){
+    const row=el(form,'div');row.className='slot';
+    const date=el(row,'p',when(slot));date.className='muted';
+    const text=el(row,'div');el(text,'strong',slot.label);el(text,'small',slot.detail);
+    const choice=el(row,'label');
+    const available=Math.max(0,slot.capacity-used(slot));
+    const check=el(choice,'input');check.type='checkbox';check.checked=selected.has(slot.id);check.disabled=unavailable||available===0;
+    check.onchange=()=>{if(check.checked)selected.add(slot.id);else selected.delete(slot.id);};
+    choice.append(' '+(available?available+' open':'Full'));
+    check.setAttribute('aria-label',slot.label+', '+when(slot)+', '+(available?available+' open':'full'));
+  }
+  const next=button(form,'Continue to sign up',()=>{
+    if(!selected.size){notice('Select at least one available slot.');return;}
+    if(form.querySelector('fieldset'))return;
+    const confirm=el(form,'fieldset');el(confirm,'legend','Confirm your selection');
+    el(confirm,'p',board.slots.filter(s=>selected.has(s.id)).map(s=>s.label).join(' · '));
+    const name=field(confirm,'Name');name.required=true;name.maxLength=80;name.focus();
+    const submit=el(confirm,'button','Confirm sign-up');submit.type='submit';
+    form.onsubmit=event=>{
+      event.preventDefault();
+      const chosen=board.slots.filter(s=>selected.has(s.id));
+      if(!name.value.trim()||!chosen.length||unavailable||chosen.some(s=>used(s)>=s.capacity)){notice('Enter your name and select available slots.');return;}
+      for(const s of chosen)board.reservations.push({id:uid(),slot:s.id,name:name.value.trim(),self:true});
+      selected.clear();update('You’re signed up. Your reservations are listed below.');
+    };
+    for(const check of form.querySelectorAll('input[type=checkbox]'))check.disabled=true;
+    next.disabled=true;
+    button(confirm,'Back to slots',()=>{render();notice('');},true);
+  });
+  next.disabled=unavailable||!board.slots.some(s=>used(s)<s.capacity);
+  const mine=el($('screen'),'section');mine.className='panel';
+  el(mine,'h2','Reservations on this browser');
+  if(!board.reservations.length)el(mine,'p','Your confirmed sign-ups will appear here.');
+  for(const r of board.reservations.filter(r=>r.self!==false)){
+    const slot=board.slots.find(s=>s.id===r.slot);
+    const item=el(mine,'div');item.className='row';
+    el(item,'span',r.name+' · '+slot.label+' · '+when(slot));
+    button(item,'Cancel reservation',()=>{if(window.confirm('Release this spot?')){board.reservations=board.reservations.filter(x=>x.id!==r.id);update('Reservation canceled.');}},true);
+  }
+}
+function uid(){return crypto.randomUUID?.() || Array.from(crypto.getRandomValues(new Uint32Array(4)),n=>n.toString(16)).join('-');}
+function organizer(){
+  const dashboard=el($('screen'),'section');dashboard.className='panel';
+  el(dashboard,'h2','Your sign-up sheets');
+  const sheetPicker=el(el(dashboard,'label','Current sheet'),'select');
+  for(const [id,sheet] of Object.entries(sheets)){
+    el(sheetPicker,'option',sheet.title+(sheet.archived?' (archived)':sheet.draft?' (draft)':'')).value=id;
+  }
+  sheetPicker.value=active;
+  sheetPicker.onchange=()=>{active=sheetPicker.value;board=sheets[active];selected.clear();update('Sheet opened.');};
+  const controls=el(dashboard,'div');controls.className='row';
+  function openNew(sheet){
+    active=uid();board=sheet;sheets[active]=sheet;selected.clear();update('Draft created.');
+  }
+  button(controls,'New sheet',()=>openNew({
+    title:'Untitled sign-up',description:'',location:'',zone:'',slots:[],reservations:[],draft:true,closed:false
+  }));
+  button(controls,'Duplicate sheet',()=>openNew({...structuredClone(board),title:board.title+' (copy)',
+    slots:board.slots.map(s=>({...s,demo:0})),reservations:[],draft:true,archived:false,closed:false}),true);
+  button(controls,board.archived?'Restore sheet':'Archive sheet',()=>{
+    board.archived=!board.archived;selected.clear();update(board.archived?'Sheet archived.':'Sheet restored.');
+  },true);
+  if(board.draft&&!board.archived)button(controls,'Open locally for sign-ups',()=>{
+    if(!board.slots.length){notice('Save at least one slot first.');return;}
+    board.draft=false;update('Registration opened in this browser.');
+  });
+
+  const panel=el($('screen'),'section');panel.className='panel';
+  el(panel,'h2','Build your sign-up');
+  const form=el(panel,'form');
+  const title=field(form,'Event title',board.title);title.required=true;title.maxLength=120;
+  const desc=field(form,'Event instructions',board.description,'textarea');desc.maxLength=800;
+  const basics=el(form,'div');basics.className='grid';
+  const location=field(basics,'Location or meeting details',board.location);
+  const zone=field(basics,'Time zone label',board.zone);
+  const appearance=el(form,'fieldset');
+  el(appearance,'legend','Banner appearance');
+  const settings=el(appearance,'div');settings.className='grid';
+  const picker=el(el(settings,'label','Event theme'),'select');
+  for(const [id,theme] of Object.entries(themes))el(picker,'option',theme.label).value=id;
+  picker.value=Object.hasOwn(themes,board.theme)?board.theme:'general';
+  const bannerLabel=field(settings,'Banner label (optional)',board.bannerLabel||'');
+  bannerLabel.maxLength=60;
+  const swatch=el(appearance,'div');swatch.className='theme-card';swatch.setAttribute('aria-live','polite');
+  const preview=()=>{
+    const theme=themes[picker.value];
+    applyTheme(swatch,theme);
+    swatch.textContent=theme.icon+'  '+(bannerLabel.value.trim()||theme.label+' sign-ups');
+  };
+  picker.onchange=preview;
+  bannerLabel.oninput=preview;
+  preview();
+  const slots=el(form,'div');
+  const entries=new Map();
+  function slotEditor(s){
+    const box=el(slots,'fieldset');el(box,'legend','Slot');
+    const group=el(box,'div');group.className='grid';
+    const label=field(group,'Role or session',s.label);label.required=true;label.maxLength=120;
+    const date=field(group,'Date (optional)',s.date,'date');
+    const start=field(group,'Start time',s.start,'time');
+    const end=field(group,'End time',s.end,'time');
+    const cap=field(group,'Capacity',s.capacity,'number');cap.min=String(Math.max(1,used(s)));cap.max='200';cap.required=true;
+    const detail=field(box,'Slot instructions',s.detail);
+    entries.set(s.id,()=>({...s,label:label.value.trim(),date:date.value,start:start.value,end:end.value,capacity:cap.valueAsNumber,detail:detail.value.trim()}));
+    const remove=button(box,'Remove slot',()=>{entries.delete(s.id);box.remove();},true);remove.disabled=used(s)>0;
+  }
+  board.slots.forEach(slotEditor);
+  const bulk=el(form,'fieldset');el(bulk,'legend','Generate time slots');
+  const bulkGrid=el(bulk,'div');bulkGrid.className='grid';
+  const bulkLabel=field(bulkGrid,'Slot name','Appointment');
+  const bulkDate=field(bulkGrid,'Date','','date');
+  const bulkStart=field(bulkGrid,'From','09:00','time');
+  const bulkEnd=field(bulkGrid,'Until','12:00','time');
+  const duration=field(bulkGrid,'Minutes per slot','30','number');
+  const bulkCapacity=field(bulkGrid,'Spots per slot','1','number');
+  button(bulk,'Generate slots',()=>{
+    const minutes=value=>{const [h,m]=value.split(':').map(Number);return h*60+m;};
+    const clock=value=>String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
+    const start=minutes(bulkStart.value),end=minutes(bulkEnd.value),step=duration.valueAsNumber;
+    const capacity=bulkCapacity.valueAsNumber,label=bulkLabel.value.trim();
+    const count=Math.floor((end-start)/step);
+    if(!label||!bulkDate.value||!Number.isInteger(step)||step<1||!Number.isInteger(count)||count<1||count>100||
+       !Number.isInteger(capacity)||capacity<1||capacity>200){
+      notice('Enter a name, date, valid time range and capacity. Generate up to 100 slots at a time.');return;
+    }
+    for(let i=0;i<count;i++)slotEditor({id:uid(),label,date:bulkDate.value,start:clock(start+i*step),
+      end:clock(start+(i+1)*step),capacity,detail:'',demo:0});
+    notice(count+' slots added. Save the event to keep them.');
+  },true);
+
+  const actions=el(form,'div');actions.className='row actions';
+  button(actions,'Add a slot',()=>slotEditor({id:uid(),label:'',date:'',start:'',end:'',capacity:1,detail:'',demo:0}),true);
+  el(actions,'button','Save event');
+  form.onsubmit=event=>{
+    event.preventDefault();
+    const revised=[...entries.values()].map(read=>read());
+    if(!title.value.trim()||!revised.length||revised.some(s=>!s.label||(s.end&&(!s.start||s.end<=s.start)))){
+      notice('Enter a title and at least one named slot. End times must follow start times.');return;
+    }
+    board={...board,title:title.value.trim(),description:desc.value.trim(),location:location.value.trim(),zone:zone.value.trim(),theme:picker.value,bannerLabel:bannerLabel.value.trim(),slots:revised};
+    selected.clear();update('Event saved. Open Participant view to review it.');
+  };
+  const roster=el($('screen'),'section');roster.className='panel';el(roster,'h2','Registration and roster');
+  el(roster,'p','Sample bookings contribute to the displayed counts.');
+  for(const s of board.slots){
+    const names=board.reservations.filter(r=>r.slot===s.id).map(r=>r.name);
+    const line=el(roster,'p');el(line,'strong',s.label+' · '+used(s)+' / '+s.capacity+' filled');
+    if(names.length)el(line,'small',names.join(', '));
+  }
+  function destination(parent,label,except){
+    const select=el(el(parent,'label',label),'select');
+    el(select,'option','Select an open slot').value='';
+    for(const slot of board.slots.filter(s=>s.id!==except&&used(s)<s.capacity)){
+      el(select,'option',slot.label+' · '+when(slot)).value=slot.id;
+    }
+    return select;
+  }
+  const add=el(roster,'fieldset');el(add,'legend','Add someone manually');
+  const name=field(add,'Participant name');name.maxLength=80;
+  const target=destination(add,'Slot');
+  button(add,'Add reservation',()=>{
+    if(!name.value.trim()||!target.value){notice('Enter a name and choose an open slot.');return;}
+    board.reservations.push({id:uid(),slot:target.value,name:name.value.trim(),self:false});
+    update('Reservation added.');
+  });
+  for(const reservation of board.reservations){
+    const item=el(roster,'fieldset');
+    el(item,'legend',reservation.name+' · '+board.slots.find(s=>s.id===reservation.slot).label);
+    const move=destination(item,'Move to',reservation.slot);
+    button(item,'Move reservation',()=>{
+      if(!move.value){notice('Choose another open slot.');return;}
+      reservation.slot=move.value;update('Reservation moved.');
+    });
+    button(item,'Remove reservation',()=>{
+      if(window.confirm('Remove this reservation and release the spot?')){
+        board.reservations=board.reservations.filter(r=>r.id!==reservation.id);update('Reservation removed.');
+      }
+    },true);
+  }
+  const rosterControls=el(roster,'div');rosterControls.className='row';
+  button(rosterControls,board.closed?'Reopen registration':'Close registration',()=>{board.closed=!board.closed;selected.clear();update(board.closed?'Registration closed.':'Registration reopened.');});
+  button(rosterControls,'Export preview roster',()=>{
+    const csv=v=>'"'+String(v).replace(/^[\s\uFEFF]*[=+@-]/,"'$&").replaceAll('"','""')+'"';
+    const lines=[['Slot','Date','Name'],...board.reservations.map(r=>{const s=board.slots.find(s=>s.id===r.slot);return [s.label,s.date,r.name];})];
+    const url=URL.createObjectURL(new Blob([lines.map(line=>line.map(csv).join(',')).join('\r\n')],{type:'text/csv'}));
+    const a=document.createElement('a');a.href=url;a.download='signup-studio-roster.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  },true);
+  if(active==='sample')button(rosterControls,'Reset sample event',()=>{if(window.confirm('Reset this preview and remove its sample reservations and edits?')){board=structuredClone(sample);selected.clear();update('Sample event reset.');}},true);
+}
+$('guest').onclick=()=>{mode='guest';selected.clear();notice('');render();};
+$('host').onclick=()=>{mode='host';notice('');render();};
+render();
+</script></body></html>
