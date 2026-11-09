@@ -4,9 +4,9 @@ import { del } from '@vercel/blob';
 import { createSignupService } from '../src/signup-studio/service.js';
 import { blobSignupStore } from '../src/signup-studio/storage.js';
 
-assert.equal(process.env.VERCEL_ENV, 'preview');
+if (process.env.VERCEL_ENV === 'production') process.exit(10);
 const token = process.env.BLOB_READ_WRITE_TOKEN;
-assert.ok(token, 'Preview storage binding is available');
+if (!token) process.exit(11);
 const random = size => randomBytes(size).toString('hex');
 const scope = 'qa-' + random(16);
 const workspaceKey = random(32);
@@ -16,24 +16,39 @@ const namespace = createHash('sha256').update('signup-studio:organizer:' + works
 const service = createSignupService(blobSignupStore(token, scope), random(32));
 const admin = (action, payload) => service({ action, payload, workspaceKey, authorized: true });
 const guest = (action, payload) => service({ action, payload });
+let stage = 12;
+let failure;
 try {
   const draft = await admin('save', { id, revision: 0, details: {
     title: 'Synthetic storage QA', description: '', theme: 'general', bannerLabel: '', location: '', zone: '',
     slots: [{ id: slot, label: 'Synthetic slot', capacity: 1, date: '', start: '', end: '', detail: '' }],
   } });
+  stage = 13;
   assert.equal((await admin('list', {})).sheets[0].id, id);
+  stage = 14;
   const { invite } = await admin('publish', { id, revision: draft.revision });
+  stage = 15;
   const proofs = [random(32), random(32)];
   const result = await Promise.allSettled(proofs.map(proof => guest('reserve', { invite, proof, name: 'Synthetic guest', slots: [slot] })));
   assert.equal(result.filter(outcome => outcome.status === 'fulfilled').length, 1);
   assert.equal(result.find(outcome => outcome.status === 'rejected').reason.status, 409);
+  stage = 16;
   const view = await guest('view', { invite });
   assert.equal(view.slots[0].remaining, 0);
   assert.equal(view.reservation, null);
   const winner = result.findIndex(outcome => outcome.status === 'fulfilled');
+  stage = 17;
   const canceled = await guest('cancel', { invite, proof: proofs[winner] });
   assert.equal(canceled.slots[0].remaining, 1);
   console.log('Sign-Up Studio private storage smoke passed');
-} finally {
-  await del('sign-up-studio/v1/' + scope + '/' + namespace + '/' + id + '.json', { token });
+} catch (error) {
+  failure = stage;
+  console.log('Storage check stage', stage, error.name);
 }
+try {
+  await del('sign-up-studio/v1/' + scope + '/' + namespace + '/' + id + '.json', { token });
+} catch (error) {
+  failure ||= 18;
+  console.log('Storage check cleanup', error.name);
+}
+if (failure) process.exit(failure);
