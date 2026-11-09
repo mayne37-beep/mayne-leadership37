@@ -27,11 +27,23 @@ try {
   assert.equal((await admin('list', {})).sheets[0].id, id);
   stage = 14;
   const { invite } = await admin('publish', { id, revision: draft.revision });
+  stage = 51;
+  assert.equal((await guest('view', { invite })).status, 'open');
   stage = 15;
   const proofs = [random(32), random(32)];
   const result = await Promise.allSettled(proofs.map(proof => guest('reserve', { invite, proof, name: 'Synthetic guest', slots: [slot] })));
-  assert.equal(result.filter(outcome => outcome.status === 'fulfilled').length, 1);
-  assert.equal(result.find(outcome => outcome.status === 'rejected').reason.status, 409);
+  const wins = result.filter(outcome => outcome.status === 'fulfilled').length;
+  const losing = result.find(outcome => outcome.status === 'rejected')?.reason;
+  if (wins === 2) { stage = 52; throw new Error('Both reservations were accepted'); }
+  if (wins === 0) {
+    stage = losing?.status === 404 ? 53 : losing?.status === 409 ? 54 : losing?.name === 'BlobPreconditionFailedError' ? 55 : 56;
+    throw new Error('Neither reservation was accepted');
+  }
+  if (losing?.status !== 409) {
+    stage = losing?.name === 'BlobUnknownError' ? 57 : losing?.name === 'BlobPreconditionFailedError' ? 58 :
+      /precondition|412|etag/i.test(losing?.message) ? 59 : losing?.status === 404 ? 60 : 61;
+    throw new Error('Unexpected response for the second reservation');
+  }
   stage = 16;
   const view = await guest('view', { invite });
   assert.equal(view.slots[0].remaining, 0);
