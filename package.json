@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/check-signup-studio-storage.mjs && node scripts/build-pdf-studio.mjs",
+    "build": "node scripts/check-signup-studio-storage.mjs && node scripts/check-signup-studio-flow.mjs && node scripts/build-pdf-studio.mjs",
     "check:pdf": "node scripts/check-pdf-studio.mjs",
     "check:word": "node scripts/check-word-converter.mjs",
     "test:challenge": "node --test tests/challenge/model.test.mjs",
