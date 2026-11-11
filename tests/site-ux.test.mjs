@@ -23,15 +23,15 @@ test('unified navigation and footer on category and landing pages',()=>{
   }
  }
 });
-test('homepage has six quick launches and an all-resources path',()=>{
+test('homepage has seven quick launches and an all-resources path',()=>{
  const doc=new JSDOM(read('index.html')).window.document;
- assert.equal(doc.querySelectorAll('.quick-launch-grid > a').length,6);
+ assert.equal(doc.querySelectorAll('.quick-launch-grid > a').length,7);
  assert.ok(doc.querySelector('.catalog-promo a[href="catalog.html"]'));
 });
 test('catalog covers five categories, contains only working links and searches correctly',()=>{
  const dom=new JSDOM(read('catalog.html'),{url:'https://mayneleadership.com/catalog.html',runScripts:'outside-only'});
  const doc=dom.window.document;
- assert.equal(doc.querySelectorAll('.catalog-card').length,45);
+ assert.equal(doc.querySelectorAll('.catalog-card').length,46);
  assert.equal(doc.querySelectorAll('.catalog-filter').length,6);
  const paths=new Set();
  for(const card of doc.querySelectorAll('.catalog-card')){
@@ -40,17 +40,17 @@ test('catalog covers five categories, contains only working links and searches c
   assert.ok(!paths.has(href),'duplicate catalog link: '+href);paths.add(href);
  }
  dom.window.eval(read('assets/catalog.js'));
- assert.equal(doc.getElementById('catalog-count').textContent,'45 resources found');
+ assert.equal(doc.getElementById('catalog-count').textContent,'46 resources found');
  const assessments=doc.querySelector('[data-catalog-filter="assessments"]');
  assessments.click();
- assert.equal(doc.getElementById('catalog-count').textContent,'5 resources found');
+ assert.equal(doc.getElementById('catalog-count').textContent,'6 resources found');
  assert.equal(assessments.getAttribute('aria-pressed'),'true');
  const input=doc.getElementById('catalog-search');
  input.value='360';input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
  assert.equal(doc.getElementById('catalog-count').textContent,'1 resource found');
  assert.ok(dom.window.location.search.includes('category=assessments'));
  doc.getElementById('catalog-reset').click();
- assert.equal(doc.getElementById('catalog-count').textContent,'45 resources found');
+ assert.equal(doc.getElementById('catalog-count').textContent,'46 resources found');
  assert.equal(input.value,'');
  dom.window.close();
 });

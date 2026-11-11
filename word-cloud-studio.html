@@ -53,8 +53,21 @@
 <div class="menu presentation-menu hidden" id="presentationMenu" role="menu" aria-label="Presentation options"><button data-action="present"><span data-icon="play"></span>Present in this window</button><button data-action="audience-window"><span data-icon="monitor"></span>Open projector window</button><button data-action="response-screen"><span data-icon="comment"></span>Open local response screen</button><button data-action="print"><span data-icon="print"></span>Print current slide</button></div>
 <input type="file" id="projectFile" accept="application/json,.json" hidden><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp" hidden>
 <dialog class="modal" id="resultsDialog" aria-labelledby="resultsTitle"><div class="modal-head"><h2 id="resultsTitle">Results</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close results"><span data-icon="close"></span></button></div><div class="modal-body"><div class="results-summary" id="resultsSummary"></div><input id="resultSearch" class="result-search" type="search" placeholder="Find a response" aria-label="Filter results"><div class="table-wrap" id="resultTable"></div></div><div class="modal-foot"><button class="button secondary" data-action="csv"><span data-icon="download"></span>Export CSV</button><button class="button primary" data-action="close-dialog">Done</button></div></dialog>
-<dialog class="modal" id="helpDialog" aria-labelledby="helpTitle"><div class="modal-head"><h2 id="helpTitle">Using Classroom Response Studio</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close help"><span data-icon="close"></span></button></div><div class="modal-body help-copy"><p><strong>Start with a blank slide.</strong> Open the pencil tool to choose a question type and write your question. Open the speech bubble to enter responses. Repeated words become larger; multiword phrases stay together.</p><p><strong>Choose your look.</strong> The sparkle opens themes. The paint tool lets you change the background, heading, word colors, font, images, and cloud layout. The panel closes with its × button or by clicking its selected tool.</p><p><strong>Control the reveal.</strong> Choose instant responses, responses on click, or private responses in Edit or Interaction. “Reveal responses” shows everything received so far. Private responses are available in View results, and stay off the slide.</p><p><strong>Present.</strong> Start presentation for a clean, full-screen slide. For a second monitor, use the arrow beside it and open the projector window; move that window onto your display. Changes in this editor update that projector window.</p><p><strong>Collect live student responses.</strong> Add a question, then select Start live session to generate a QR code and student link. Students respond from their own phones or computers without signing in. In Live session, choose Instructor-paced to keep students on your slide or Self-paced to let them use Previous and Next. You can switch during a session using the same QR code. Responses update automatically. Pause or end a session in Live session; use Clear results to let students respond again using the same link. Each session expires after seven days.</p><p><strong>Teacher controls.</strong> Keep this teacher tab open while presenting. Its session key is saved only in this browser and is never included in student links or exported copies. Reopen this page in the same browser to resume managing a session.</p><p><strong>Local entry.</strong> The speech bubble still lets you enter individual responses or paste one participant per line on this computer.</p><p><strong>Change slide order.</strong> Open Slides, then drag a slide preview or use the up and down arrows. The current slide stays selected.</p><p><strong>Keep your work.</strong> Your draft autosaves in this browser. To keep a named presentation for later, open My Projects and choose Save project. Choose Save class results to keep student responses. Export is optional and gives you a portable backup.</p><p><strong>Keyboard shortcuts</strong></p><ul><li><kbd>P</kbd> start presentation · <kbd>Esc</kbd> exit or close a panel</li><li><kbd>←</kbd> / <kbd>→</kbd> previous / next slide during presentation</li><li><kbd>R</kbd> reveal / hide results · <kbd>F</kbd> full screen</li><li><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>S</kbd> save an HTML copy</li></ul><p class="small">No student account or installation is required. Live responses need an internet connection. Blank slides intentionally have no message in the middle.</p></div><div class="modal-foot"><button class="button primary" data-action="close-dialog">Got it</button></div></dialog>
+<dialog class="modal" id="helpDialog" aria-labelledby="helpTitle"><div class="modal-head"><h2 id="helpTitle">Using Classroom Response Studio</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close help"><span data-icon="close"></span></button></div><div class="modal-body help-copy"><p><strong>Start with a blank slide.</strong> Open the pencil tool to choose a question type and write your question. Open the speech bubble to enter responses. Repeated words become larger; multiword phrases stay together.</p><p><strong>Choose your look.</strong> The sparkle opens themes. The paint tool lets you change the background, heading, word colors, font, images, and cloud layout. The panel closes with its × button or by clicking its selected tool.</p><p><strong>Control the reveal.</strong> Choose instant responses, responses on click, or private responses in Edit or Interaction. “Reveal responses” shows everything received so far. Private responses are available in View results, and stay off the slide.</p><p><strong>Present.</strong> Start presentation for a clean, full-screen slide. For a second monitor, use the arrow beside it and open the projector window; move that window onto your display. Changes in this editor update that projector window.</p><p><strong>Collect live student responses.</strong> Add a question, then select Start live session to generate a QR code and student link. Students respond from their own phones or computers without signing in. In Live session, choose Instructor-paced to keep students on your slide or Self-paced to let them use Previous and Next. You can switch during a session using the same QR code. Responses update automatically. Pause or end a session in Live session; use Clear results to let students respond again using the same link. Each session expires after seven days.</p><p><strong>Teacher controls.</strong> Keep this teacher tab open while presenting. Its session key is saved only in this browser and is never included in student links or exported copies. Reopen this page in the same browser to resume managing a session.</p><p><strong>Local entry.</strong> The speech bubble still lets you enter individual responses or paste one participant per line on this computer.</p><p><strong>Change slide order.</strong> Open Slides, then drag a slide preview or use the up and down arrows. The current slide stays selected.</p><p><strong>Keep your work.</strong> Your draft autosaves in this browser. To use your projects on another computer, open My Projects, sign in, and select Save to website. Open My Projects on the other computer and sign in with the same account. Use Copy browser projects to move saved projects from this browser to the website. Save class results keeps student responses in this browser. Import and export let you work with portable backups.</p><p><strong>Keyboard shortcuts</strong></p><ul><li><kbd>P</kbd> start presentation · <kbd>Esc</kbd> exit or close a panel</li><li><kbd>←</kbd> / <kbd>→</kbd> previous / next slide during presentation</li><li><kbd>R</kbd> reveal / hide results · <kbd>F</kbd> full screen</li><li><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>S</kbd> save an HTML copy</li></ul><p class="small">No student account or installation is required. Live responses need an internet connection. Blank slides intentionally have no message in the middle.</p></div><div class="modal-foot"><button class="button primary" data-action="close-dialog">Got it</button></div></dialog>
 <input id="libraryFile" type="file" accept=".json,application/json" hidden>
+<dialog class="modal" id="websiteSignInDialog" aria-labelledby="websiteSignInTitle">
+  <form id="websiteSignInForm">
+    <div class="modal-head"><h2 id="websiteSignInTitle">Sign in to My Projects</h2><button type="button" class="icon-btn" data-action="close-dialog" aria-label="Cancel sign-in"><span data-icon="close"></span></button></div>
+    <div class="modal-body">
+      <p class="small">Use your Mayne Leadership account, including the account you use for SMART Goals or Learning Studio.</p>
+      <label class="field"><span>Email</span><input name="email" type="email" autocomplete="username" required></label>
+      <label class="field"><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="small gap"><a href="smart-goals.html" target="_blank" rel="noopener">Create an account or reset your password</a></p>
+      <p id="websiteSignInStatus" class="library-error" role="status"></p>
+    </div>
+    <div class="modal-foot"><button type="submit" class="button primary">Sign in</button></div>
+  </form>
+</dialog>
 <dialog class="modal" id="countdownDialog" aria-labelledby="countdownDialogTitle"><div class="modal-head"><h2 id="countdownDialogTitle">Countdown</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close countdown controls"><span data-icon="close"></span></button></div><div id="countdownDialogContent" class="modal-body"></div></dialog>
 <dialog class="modal" id="pacingDialog" aria-labelledby="pacingDialogTitle"><div class="modal-head"><h2 id="pacingDialogTitle">Student pacing</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close student pacing"><span data-icon="close"></span></button></div><div id="pacingDialogContent" class="modal-body"></div><div class="modal-foot"><button class="button primary" data-action="close-dialog">Done</button></div></dialog>
 <dialog class="modal" id="libraryRenameDialog" aria-labelledby="libraryRenameTitle"><div class="modal-head"><h2 id="libraryRenameTitle">Rename saved item</h2><button class="icon-btn" data-action="close-dialog" aria-label="Cancel rename"><span data-icon="close"></span></button></div><div class="modal-body"><label for="libraryRenameInput">Name</label><input id="libraryRenameInput" maxlength="100" type="text"></div><div class="modal-foot"><button class="button secondary" data-action="close-dialog">Cancel</button><button id="libraryRenameSave" class="button primary" data-action="library-rename-save">Save name</button></div></dialog>
@@ -1101,21 +1114,25 @@ const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math
 function blankSlide(){return{...ClassroomCore.defaults(),id:uid(),question:'',headingLabel:'',info:'',joiningText:'',responseLimit:5,mode:'instant',revealed:0,clickSnapshot:null,resultsVisible:true,accepting:true,mergeCase:true,showJoining:false,showCount:false,bg:themes[0].bg,fg:themes[0].fg,colors:[...themes[0].colors],font:'Trebuchet MS',headingScale:1,wordScale:1,orientation:'horizontal',shape:'ellipse',maxWords:120,showLogo:false,logoText:'',logoImage:'',contentImage:'',backgroundImage:'',imageDim:20,hiddenTerms:[],responses:[],shuffle:0};}
 const blankProject=()=>({format:'word-cloud-studio',version:1,id:uid(),name:'',pacing:'instructor',active:0,updatedAt:Date.now(),slides:[blankSlide()]});
 let project, panel=null, cloudCache=new Map(), confirmTask=null, imageTarget='', audienceWindow=null, presenterActive=false, toastTimer, saveTimer, controlsTimer, lastPanelButton=null;
-let activityEditing=null;
+let activityEditing=null, websiteEditing=null;
 const storageKey='word-cloud-studio:'+location.pathname;
 try{
   const embedded=JSON.parse($('embedded-project').textContent);
   const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
   const useDraft=saved&&(!embedded||saved.updatedAt>=embedded.updatedAt);
   project=validateProject(useDraft?saved:embedded||blankProject());
-  if(useDraft)activityEditing=saved.savedActivityId;
+ if(useDraft){
+   activityEditing=saved.savedActivityId;
+   const ref=saved.savedWebsiteProject;
+   if(ref&&['id','userId','revision'].every(key=>typeof ref[key]==='string'))websiteEditing=ref;
+ }
 }catch{project=blankProject();}
 function slide(){return project.slides[project.active];}
 function normalizeWord(t,s){let clean=String(t).normalize('NFKC').trim().replace(/\s+/g,' ');return s.mergeCase?clean.toLocaleLowerCase():clean;}
 function aggregate(s,all=false){let list=all?s.responses:(s.mode==='private'||!s.resultsVisible?[]:s.mode==='click'?(s.clickSnapshot??s.responses.slice(0,s.revealed)):s.responses),map=new Map();for(const r of list)for(const text of r.words){const key=normalizeWord(text,s);if(!key)continue;let term=map.get(key);if(term)term.count++;else map.set(key,{key,text:text.trim().replace(/\s+/g,' '),count:1});}return [...map.values()].filter(x=>all||!s.hiddenTerms.includes(x.key)).sort((a,b)=>b.count-a.count||a.key.localeCompare(b.key));}
 function baseValidateProject(raw){if(!raw||raw.format!=='word-cloud-studio'||raw.version!==1||!Array.isArray(raw.slides)||raw.slides.length<1||raw.slides.length>100)throw Error('Choose a Classroom Response Studio JSON project.');let out=blankProject();out.id=typeof raw.id==='string'?raw.id:uid();out.name=String(raw.name||'').slice(0,100);out.updatedAt=Number(raw.updatedAt)||Date.now();out.active=Math.max(0,Math.min(raw.slides.length-1,Math.floor(Number(raw.active)||0)));out.slides=raw.slides.map(a=>{let s=blankSlide();for(const k of ['id','question','headingLabel','info','joiningText','logoText'])if(typeof a[k]==='string')s[k]=a[k].slice(0,k==='question'?220:k==='id'?100:500);for(const k of ['resultsVisible','accepting','mergeCase','showJoining','showCount','showLogo'])if(typeof a[k]==='boolean')s[k]=a[k];for(const k of ['bg','fg'])if(/^#[a-f\d]{6}$/i.test(a[k]))s[k]=a[k];if(Array.isArray(a.colors)&&a.colors.length===5&&a.colors.every(c=>/^#[a-f\d]{6}$/i.test(c)))s.colors=[...a.colors];for(const k of ['logoImage','contentImage','backgroundImage'])if(typeof a[k]==='string'&&/^data:image\/(png|jpeg|webp);base64,[a-z\d+/=]+$/i.test(a[k])&&a[k].length<8500000)s[k]=a[k];for(const [k,min,max]of [['responseLimit',1,10],['revealed',0,50000],['headingScale',.65,1.3],['wordScale',.6,1.5],['maxWords',10,250],['shuffle',0,1000000],['imageDim',0,80]])if(Number.isFinite(Number(a[k])))s[k]=Math.max(min,Math.min(max,Number(a[k])));s.responseLimit=Math.round(s.responseLimit);s.maxWords=Math.round(s.maxWords);if(['instant','click','private'].includes(a.mode))s.mode=a.mode;if(['horizontal','mixed'].includes(a.orientation))s.orientation=a.orientation;if(['ellipse','rectangle'].includes(a.shape))s.shape=a.shape;if(['Trebuchet MS','Arial','Georgia','Verdana'].includes(a.font))s.font=a.font;if(Array.isArray(a.hiddenTerms))s.hiddenTerms=a.hiddenTerms.filter(x=>typeof x==='string').slice(0,10000);if(Array.isArray(a.responses)){if(a.responses.length>50000)throw Error('This project has too many responses.');s.responses=a.responses.filter(r=>Array.isArray(r.words)).map(r=>({id:typeof r.id==='string'?r.id:uid(),at:Number(r.at)||0,words:r.words.filter(t=>typeof t==='string').map(t=>t.trim().slice(0,65)).filter(Boolean).slice(0,10)})).filter(r=>r.words.length);}if(Array.isArray(a.clickSnapshot))s.clickSnapshot=a.clickSnapshot.slice(0,50000).filter(r=>r&&typeof r.id==='string'&&Array.isArray(r.words)).map(r=>({id:r.id,at:Number(r.at)||0,words:r.words.filter(w=>typeof w==='string').map(w=>w.slice(0,65)).slice(0,10)}));s.revealed=Math.floor(Math.min(s.revealed,s.responses.length));return s;});return out;}
 function toast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').classList.remove('hidden');toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3800);}
-function storeDraft(){localStorage.setItem(storageKey,JSON.stringify({...project,savedActivityId:activityEditing}));}
+function storeDraft(){localStorage.setItem(storageKey,JSON.stringify({...project,savedActivityId:activityEditing,savedWebsiteProject:websiteEditing}));}
 function persist(){project.updatedAt=Date.now();clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{storeDraft();$('saveStatus').textContent='Draft saved in this browser';}catch{$('saveStatus').textContent='Draft autosave unavailable';toast('Draft storage is unavailable or full. Save to My Projects or download a copy.');}},220);}
 // Reserve a little space around each complete word, including the gaps between letters.
 function hash(str){let h=2166136261;for(let i=0;i<str.length;i++)h=Math.imul(h^str.charCodeAt(i),16777619);return h>>>0;}
@@ -1197,7 +1214,7 @@ else if(panel==='design'){html=designSection(s)+layoutSection(s);}
 else if(panel==='interact'){html=`<section class="section"><h3>Response controls</h3>${switchControl('Accept responses','accepting',s.accepting)}<div class="gap">${switchControl('Show results on the slide','resultsVisible',s.resultsVisible)}</div><button class="button primary full gap" data-action="reveal" ${s.mode==='private'?'disabled':''}>${s.mode==='click'&&(hasPending(s)||!s.resultsVisible)?'Reveal responses':s.resultsVisible?'Hide responses':'Show responses'}</button><p class="small gap">${s.mode==='private'?'Private mode keeps responses off the slide.':s.mode==='click'?`${pendingCount(s)} participant submissions have not been revealed.`:'You can hide results while people are responding.'}</p><button class="button secondary full gap" data-action="response-screen">Open local response screen</button></section>`+joiningSection(s)+modeSection(s);}
 else if(panel==='responses'){html=`<section class="section"><div class="row"><h3>Enter responses</h3><span class="badge">This computer</span></div><p class="small gap">Enter one participant’s words or phrases at a time.</p>${entryForm(s)}</section><section class="section"><h3>Paste several participants</h3><p class="small">One participant per line. Separate their entries with commas. Multiword phrases stay together.</p><textarea id="bulkResponses" class="gap" rows="5" maxlength="200000" placeholder="One participant per line" aria-label="Bulk responses" ${s.accepting?'':'disabled'}></textarea><button class="button secondary full gap" data-action="bulk" ${s.accepting?'':'disabled'}>Add pasted responses</button></section><section class="section"><div class="row"><h3>Results</h3><b>${s.responses.length} participants</b></div><div class="response-actions gap"><button class="button secondary" data-action="results">View results</button><button class="button secondary" data-action="clear">Clear results</button></div><p class="small gap">Repeated entries increase a word’s size. Hide individual words in View results.</p></section>`;}
 $('drawerContent').innerHTML=html;}
-function openPanel(name,force=false){closeMenus();if(panel===name&&!force){closePanel();return;}lastPanelButton=name==='library'?$('projectsButton'):document.querySelector(`.tool-rail [data-panel="${name}"]`);panel=name;$('drawer').classList.remove('hidden');$('projectsButton').setAttribute('aria-expanded',String(name==='library'));document.querySelectorAll('.rail-button').forEach(b=>{let active=b.dataset.panel===name;b.classList.toggle('active',active);b.setAttribute('aria-expanded',String(active));});renderPanel();}
+function openPanel(name,force=false){closeMenus();if(panel===name&&!force){closePanel();return;}lastPanelButton=name==='library'?$('projectsButton'):document.querySelector(`.tool-rail [data-panel="${name}"]`);panel=name;$('drawer').classList.remove('hidden');$('projectsButton').setAttribute('aria-expanded',String(name==='library'));document.querySelectorAll('.rail-button').forEach(b=>{let active=b.dataset.panel===name;b.classList.toggle('active',active);b.setAttribute('aria-expanded',String(active));});renderPanel();if(name==='library'&&libraryTab==='website'&&!libraryBusy)loadWebsiteProjects();}
 function closePanel(){panel=null;$('drawer').classList.add('hidden');$('projectsButton').setAttribute('aria-expanded','false');document.querySelectorAll('.rail-button').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-expanded','false');});if(lastPanelButton)lastPanelButton.focus({preventScroll:true});}
 function stageMarkup(s,c){return `${countdownMarkup(s)}${stageLiveJoin(s)}${s.backgroundImage?`<img class="stage-background" src="${s.backgroundImage}" alt=""><div class="stage-shade" style="opacity:${s.imageDim/100}"></div>`:''}${s.headingLabel?`<div class="slide-label">${esc(s.headingLabel)}</div>`:''}${s.question?`<h1 class="slide-title">${esc(s.question)}</h1>`:''}${s.showLogo?(s.logoImage?`<img class="slide-logo" src="${s.logoImage}" alt="Presentation logo">`:s.logoText?`<div class="logo-text">${esc(s.logoText)}</div>`:''):''}${s.contentImage?`<img class="content-image" src="${s.contentImage}" alt="Question illustration">`:''}<div class="cloud-box">${c.svg}</div>${s.showJoining&&s.joiningText?`<div class="slide-joining">${esc(s.joiningText)}</div>`:''}${s.info?`<div class="slide-instructions">${esc(s.info)}</div>`:''}${s.showCount?`<div class="slide-participants">${icon('user')}${s.responses.length}</div>`:''}`;}
 function fitHeading(root){const title=root.querySelector('.slide-title');if(!title||!root.clientWidth)return;let px=parseFloat(getComputedStyle(title).fontSize),floor=root.clientWidth*.016;while(title.scrollHeight>title.clientHeight+1&&px>floor){px-=1;title.style.fontSize=px+'px';}}
@@ -1495,54 +1512,141 @@ function pageResponses(delta){const s=slide(),max=Math.max(0,Math.ceil(Classroom
 function rememberResultBars(root){const view=root.ownerDocument.defaultView||window;return new Map([...root.querySelectorAll('.result-bar')].map(n=>[n.dataset.resultKey,{transform:view.getComputedStyle(n).transform,height:Number(n.dataset.height),width:Number(n.dataset.width)}]));}
 function animateResultBars(root,old){const view=root.ownerDocument.defaultView||window;if(view.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;for(const n of root.querySelectorAll('.result-bar')){if(!n.animate)continue;const target=`translate(${n.dataset.x}px, ${n.dataset.y}px)`,previous=old.get(n.dataset.resultKey);n.animate([{transform:previous?`${previous.transform} scale(${previous.width/Number(n.dataset.width)}, ${previous.height/Number(n.dataset.height)})`:target+' scale(1, .05)',opacity:previous?1:0},{transform:target,opacity:1}],{duration:1400,easing:'cubic-bezier(.22,.61,.36,1)'});}}
 
-// Saved activities are local to the teacher's browser. Teacher capabilities stay separate.
+// Browser projects and class archives retain their original storage.
 const activityStore=ActivityLibraryCore.openStore(),localCountdownKey='mayne-classroom-countdowns:v1';
-let libraryItems=[],libraryLoaded=false,libraryLoading=false,libraryBusy=false,libraryError='',libraryTab='activity',localCountdowns={},lastCountdownState='';
+const websiteEnabled=location.protocol==='https:'||(location.protocol==='http:'&&['localhost','127.0.0.1'].includes(location.hostname));
+let libraryItems=[],libraryLoaded=false,libraryLoadTask,libraryBusy=false,libraryError='',libraryTab=websiteEnabled?'website':'activity',localCountdowns={},lastCountdownState='';
+let websiteClient,websiteUser,websiteClientLoading=false,websiteLoading=false,websiteLoaded=false,websiteItems=[],websiteError='';
+let renameTarget;
 try{const saved=JSON.parse(localStorage.getItem(localCountdownKey)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))localCountdowns=saved;}catch{}
 function libraryName(){return String($('libraryName')?.value||project.name||'Untitled project').trim().slice(0,100)||'Untitled project';}
 function savedProject(){return libraryItems.find(r=>r.kind==='activity'&&r.id===activityEditing);}
-function libraryCard(r){
-  const count=r.project.slides.reduce((n,s)=>n+s.responses.length,0);
-  const types=[...new Set(r.project.slides.map(s=>ClassroomCore.types[s.type]))].join(' · ');
-  const disabled=libraryBusy?'disabled':'';
-  return `<article class="library-card"><div class="library-card-top"><h3>${esc(r.name)}</h3><button class="icon-btn" data-action="library-rename" data-id="${esc(r.id)}" aria-label="Rename ${esc(r.name)}" ${disabled}>${icon('pencil')}</button></div>
-    <p class="small">${r.project.slides.length} ${r.project.slides.length===1?'slide':'slides'}${r.kind==='session'?` · ${count} ${count===1?'response':'responses'}`:''}</p><p class="small library-types">${esc(types)}</p>
-    <p class="library-date">${r.kind==='session'?'Class saved':'Updated'} ${esc(new Date(r.updatedAt).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}))}</p>
-    <div class="library-card-actions">${r.kind==='activity'?`<button class="button primary" data-action="library-edit" data-id="${esc(r.id)}" ${disabled}>Edit project</button><button class="button secondary" data-action="library-start" data-id="${esc(r.id)}" ${disabled}>Start new class</button>`:`<button class="button secondary" data-action="library-results" data-id="${esc(r.id)}" ${disabled}>Open results</button><button class="button secondary" data-action="library-start" data-id="${esc(r.id)}" ${disabled}>Reuse</button>`}
-      <button class="icon-btn danger" data-action="library-delete" data-id="${esc(r.id)}" aria-label="Delete saved ${esc(r.name)}" ${disabled}>${icon('trash')}</button></div></article>`;
+function editingWebsiteProject(){return websiteEditing?.userId===websiteUser?.id?websiteEditing:null;}
+function repaintLibrary(){if(panel==='library')renderPanel();}
+function websiteAccountChanged(user){
+  const previous=websiteUser;
+  websiteUser=user;
+  if(previous!==undefined&&previous?.id===user?.id)return;
+  websiteItems=[];
+  websiteLoaded=false;
+  websiteLoading=false;
+  websiteError='';
+  if(user&&panel==='library')loadWebsiteProjects();
+  repaintLibrary();
+}
+async function loadWebsiteClient(){
+  if(!websiteEnabled||websiteClient||websiteClientLoading)return;
+  websiteClientLoading=true;
+  websiteError='';
+  try{
+    const {openWebsiteProjects}=await import('/assets/classroom-projects.js');
+    websiteClient=openWebsiteProjects(websiteAccountChanged);
+  }catch{
+    websiteError='Could not open website projects. Check your connection and try again.';
+  }finally{
+    websiteClientLoading=false;
+    repaintLibrary();
+  }
+}
+async function loadWebsiteProjects(){
+  if(!websiteClient){await loadWebsiteClient();return;}
+  if(!websiteUser||websiteLoading)return;
+  const userId=websiteUser.id;
+  websiteLoading=true;
+  websiteError='';
+  repaintLibrary();
+  try{
+    const items=await websiteClient.list(userId);
+    if(websiteUser?.id===userId){
+      websiteItems=items;
+      websiteLoaded=true;
+    }
+  }catch(error){
+    if(websiteUser?.id===userId)websiteError=error.message;
+  }finally{
+    if(websiteUser?.id===userId){websiteLoading=false;repaintLibrary();}
+  }
+}
+function selectLibraryTab(tab){
+  libraryTab=tab;
+  repaintLibrary();
+  if(tab==='website')loadWebsiteProjects();
+}
+function browserProjectsToCopy(){
+  const uploaded=new Set(websiteItems.map(r=>r.id));
+  return libraryItems.filter(r=>r.kind==='activity'&&!uploaded.has(r.id));
+}
+function libraryCard(r,website){
+  const slides=r.project?.slides,slideCount=website?r.slide_count:slides.length;
+  const session=!website&&r.kind==='session';
+  const count=session?slides.reduce((n,s)=>n+s.responses.length,0):0;
+  const types=slides?[...new Set(slides.map(s=>ClassroomCore.types[s.type]))].join(' · '):'';
+  const attrs=`data-id="${esc(r.id)}" ${website?'data-website':''} ${libraryBusy||(website&&websiteLoading)?'disabled':''}`;
+  return `<article class="library-card"><div class="library-card-top"><h3>${esc(r.name)}</h3><button class="icon-btn" data-action="library-rename" ${attrs} aria-label="Rename ${esc(r.name)}">${icon('pencil')}</button></div>
+    <p class="small">${slideCount} ${slideCount===1?'slide':'slides'}${session?` · ${count} ${count===1?'response':'responses'}`:''}</p>${types?`<p class="small library-types">${esc(types)}</p>`:''}
+    <p class="library-date">${session?'Class saved':'Updated'} ${esc(new Date(website?r.updated_at:r.updatedAt).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}))}</p>
+    <div class="library-card-actions"><button class="button primary" data-action="${session?'library-results':'library-edit'}" ${attrs}>${session?'Open results':'Edit project'}</button><button class="button secondary" data-action="library-start" ${attrs}>${session?'Reuse':'Start new class'}</button>
+      <button class="icon-btn danger" data-action="library-delete" ${attrs} aria-label="Delete saved ${esc(r.name)}">${icon('trash')}</button></div></article>`;
+}
+function websiteAccountPanel(){
+  if(!websiteUser)return '';
+  const count=browserProjectsToCopy().length;
+  return `<p class="small library-storage">Signed in as <strong style="overflow-wrap:anywhere">${esc(websiteUser.email)}</strong></p>
+    <div class="library-save-actions">
+      ${websiteLoaded&&count?`<button class="button secondary" data-action="library-website-copy" ${libraryBusy||websiteLoading?'disabled':''}>Copy ${count} browser ${count===1?'project':'projects'} to website</button>`:''}
+      <button class="button secondary" data-action="library-website-sign-out" ${libraryBusy?'disabled':''}>Sign out</button>
+    </div>`;
 }
 function libraryPanel(){
   const projects=libraryItems.filter(r=>r.kind==='activity'),classes=libraryItems.filter(r=>r.kind==='session');
-  const showProjects=libraryTab==='activity';
-  const items=(showProjects?projects:classes).sort((a,b)=>b.updatedAt-a.updatedAt);
-  const disabled=libraryBusy||!libraryLoaded?'disabled':'';
-  return `<section class="section"><h3>Save your presentation</h3><p class="small">Save the slides and their order for reuse. Choose Save class results to keep student responses.</p>
+  const website=libraryTab==='website',showProjects=libraryTab==='activity';
+  const items=website?websiteItems:(showProjects?projects:classes).sort((a,b)=>b.updatedAt-a.updatedAt);
+  const disabled=libraryBusy||!libraryLoaded?'disabled':'',ref=editingWebsiteProject();
+  const onlineDisabled=libraryBusy||websiteLoading||(websiteUser?!websiteLoaded:websiteUser===undefined)?'disabled':'';
+  const saveProject=website?
+    `<button class="button primary" data-action="library-website-save" ${onlineDisabled}>${websiteUser?(ref?'Update on website':'Save to website'):'Sign in to save'}</button>
+    ${websiteUser&&ref?`<button class="button secondary" data-action="library-website-save-copy" ${onlineDisabled}>Save as copy</button>`:''}`:
+    `<button class="button primary" data-action="library-save" ${disabled}>${savedProject()?'Update browser project':websiteEnabled?'Save in this browser':'Save project'}</button>`;
+  const tab=(kind,label)=>`<button class="${libraryTab===kind?'current':''}" aria-pressed="${libraryTab===kind}" data-action="library-tab" data-kind="${kind}" ${libraryBusy?'disabled':''}>${label}</button>`;
+  const loading=website?websiteClientLoading||websiteLoading:libraryLoadTask;
+  const error=website?(websiteError||libraryError):libraryError;
+  const empty=website?(websiteUser?'Website projects will appear here after you save them.':'Sign in to access your projects on another computer.'):
+    (showProjects?'Projects saved in this browser will appear here.':'Select Save class results to keep a copy of the questions and responses.');
+  return `<section class="section"><h3>Save your presentation</h3>
     <label class="field"><span>Project name</span><input id="libraryName" type="text" maxlength="100" value="${esc(project.name)}" placeholder="For example, Leadership check-in"></label>
-    <div class="library-save-actions"><button class="button primary" data-action="library-save" ${disabled}>${savedProject()?'Update project':'Save project'}</button><button class="button secondary" data-action="library-archive" ${disabled}>Save class results</button></div>
-    <p class="small library-storage">Saved in this browser. Export a backup to move projects to another device or browser.</p>
-    ${libraryError?`<p class="library-error" role="alert">${esc(libraryError)}</p><button class="button secondary gap" data-action="library-retry">Try again</button>`:''}</section>
-    <section class="section"><div class="library-tabs" role="group" aria-label="Saved work"><button class="${showProjects?'current':''}" aria-pressed="${showProjects}" data-action="library-tab" data-kind="activity">Projects (${projects.length})</button><button class="${showProjects?'':'current'}" aria-pressed="${!showProjects}" data-action="library-tab" data-kind="session">Saved classes (${classes.length})</button></div>
-    <div class="library-list">${libraryLoading?'<p class="small">Opening My Projects…</p>':items.length?items.map(libraryCard).join(''):`<div class="library-empty"><b>${showProjects?'Your projects will appear here':'Your saved classes will appear here'}</b><p class="small">${showProjects?'Build your slides, then select Save project.':'Select Save class results to keep a copy of the questions and responses.'}</p></div>`}</div></section>
-    <section class="section"><h3>Library backup</h3><div class="response-actions gap"><button class="button secondary" data-action="library-export" ${!libraryLoaded||libraryBusy||!libraryItems.length?'disabled':''}>${icon('download')}Export library</button><button class="button secondary" data-action="library-import" ${libraryBusy?'disabled':''}>${icon('upload')}Import library</button></div><p class="small gap">Backups include projects and saved class responses.</p></section>`;
+    <div class="library-save-actions">${saveProject}<button class="button secondary" data-action="library-archive" ${disabled}>Save class results</button></div>
+    ${website?websiteAccountPanel():`<p class="small library-storage">${showProjects?'These project copies are stored in this browser.':'Class results are stored in this browser.'}</p>`}
+    ${error?`<p class="library-error" role="alert">${esc(error)}</p>`:''}
+    ${website&&websiteError?'<button class="button secondary gap" data-action="library-website-refresh">Retry website connection</button>':''}
+    ${!website&&!libraryLoaded&&libraryError?'<button class="button secondary gap" data-action="library-retry">Try again</button>':''}</section>
+    <section class="section"><div class="library-tabs" role="group" aria-label="Saved work">${websiteEnabled?tab('website','On website'):''}${tab('activity','This browser ('+projects.length+')')}${tab('session','Saved classes ('+classes.length+')')}</div>
+    <div class="library-list">${loading?'<p class="small gap" role="status">Opening My Projects…</p>':items.length?items.map(r=>libraryCard(r,website)).join(''):`<div class="library-empty"><p class="small">${empty}</p></div>`}</div></section>
+    <section class="section"><h3>Library backup</h3><div class="response-actions gap">
+      <button class="button secondary" data-action="library-export" ${libraryBusy||(website?(websiteLoading||!websiteItems.length):!libraryItems.length)?'disabled':''}>${icon('download')}${website?'Export website projects':'Export library'}</button>
+      <button class="button secondary" data-action="library-import" ${libraryBusy?'disabled':''}>${icon('upload')}Import library</button>
+    </div><p class="small gap">${website?'Imports go to This browser. You can copy those projects to the website.':'Browser backups include projects and saved class responses.'}</p></section>`;
 }
-async function loadLibrary(){
-  if(libraryLoading)return;
-  libraryLoading=true;libraryError='';
-  try{
-    const items=await activityStore.list();
-    libraryItems=items.map(r=>({...r,project:validateProject(r.project)}));
-    // Older browser drafts have no saved activity reference. Recover it by deck ID.
-    if(activityEditing===undefined){
-      const matches=libraryItems.filter(r=>r.kind==='activity'&&r.project.id===project.id);
-      activityEditing=matches.sort((a,b)=>b.updatedAt-a.updatedAt)[0]?.id??null;
-    }
-    libraryLoaded=true;
-  }catch(e){libraryError=e.message||'Could not open My Projects.';}
-  finally{libraryLoading=false;if(panel==='library')renderPanel();}
+function loadLibrary(){
+  if(libraryLoadTask)return libraryLoadTask;
+  libraryError='';
+  libraryLoadTask=(async()=>{
+    try{
+      const items=await activityStore.list();
+      libraryItems=items.map(r=>({...r,project:validateProject(r.project)}));
+      // Older browser drafts have no saved activity reference. Recover it by deck ID.
+      if(activityEditing===undefined){
+        const matches=libraryItems.filter(r=>r.kind==='activity'&&r.project.id===project.id);
+        activityEditing=matches.sort((a,b)=>b.updatedAt-a.updatedAt)[0]?.id??null;
+      }
+      libraryLoaded=true;
+    }catch(e){libraryError=e.message||'Could not open My Projects.';}
+    finally{libraryLoadTask=null;repaintLibrary();}
+  })();
+  return libraryLoadTask;
 }
 async function runLibrary(work){
   if(libraryBusy)return;
-  const name=libraryName(),restoreSaveFocus=document.activeElement?.dataset.action==='library-save';
+  const name=libraryName(),focusedAction=document.activeElement?.dataset.action;
   libraryBusy=true;libraryError='';
   if(panel==='library'){
     drawerContent.setAttribute('aria-busy','true');
@@ -1555,7 +1659,9 @@ async function runLibrary(work){
     drawerContent.removeAttribute('aria-busy');
     if(panel==='library'){
       renderPanel();
-      if(restoreSaveFocus&&document.activeElement===document.body)drawerContent.querySelector('[data-action="library-save"]')?.focus();
+      if(focusedAction?.startsWith('library-')&&document.activeElement===document.body){
+        drawerContent.querySelector(`[data-action="${focusedAction}"]:not(:disabled)`)?.focus();
+      }
     }
   }
 }
@@ -1575,19 +1681,193 @@ async function saveActivity(name){
     if(owner.name===originalName){owner.name=name;render();}
     persist();
   }
-  toast('Saved to My Projects.');
+  toast('Project saved in this browser.');
+}
+function requireWebsiteUser(userId){
+  if(!userId||websiteUser?.id!==userId)throw Error('Sign in to the account that owns this project.');
+  return userId;
+}
+function rememberWebsiteItem(record){
+  const {project:_,alreadyExists,...summary}=record;
+  websiteItems=[summary,...websiteItems.filter(item=>item.id!==summary.id)];
+}
+function setWebsiteEditing(userId,record){
+  websiteEditing={id:record.id,userId,revision:record.revision};
+}
+async function saveWebsiteProject(name,asCopy=false){
+  const userId=requireWebsiteUser(websiteUser?.id),owner=project,originalName=project.name;
+  const prior=asCopy?null:editingWebsiteProject();
+  if(!prior&&websiteItems.length>=500)throw Error('Keep up to 500 projects on the website.');
+  const candidateId=activityEditing||owner.id;
+  const id=prior?.id||(asCopy||websiteItems.some(item=>item.id===candidateId)?uid():candidateId);
+  const snapshot=ActivityLibraryCore.activity(owner,validateProject);
+  snapshot.name=name;
+  const record=await websiteClient.save(userId,{id,name,project:snapshot},prior?.revision);
+  requireWebsiteUser(userId);
+  rememberWebsiteItem(record);
+  if(project===owner){
+    setWebsiteEditing(userId,record);
+    if(owner.name===originalName){owner.name=name;render();}
+    persist();
+  }
+  toast('Project saved to the website.');
+}
+async function copyBrowserProjects(){
+  const userId=requireWebsiteUser(websiteUser?.id),owner=project;
+  const projects=browserProjectsToCopy();
+  let copied=0,failed=0,firstError='';
+  for(const item of projects){
+    requireWebsiteUser(userId);
+    try{
+      if(websiteItems.length>=500)throw Error('Keep up to 500 projects on the website.');
+      const snapshot=ActivityLibraryCore.activity(item.project,validateProject);
+      const record=await websiteClient.save(userId,{id:item.id,name:item.name,project:snapshot},null,{skipExisting:true});
+      requireWebsiteUser(userId);
+      rememberWebsiteItem(record);
+      if(!record.alreadyExists&&project===owner&&activityEditing===item.id&&!editingWebsiteProject()){
+        setWebsiteEditing(userId,record);
+        persist();
+      }
+      copied++;
+    }catch(error){
+      failed++;
+      firstError||=error.message;
+    }
+  }
+  const message=`${copied} browser ${copied===1?'project is':'projects are'} now available on the website.`;
+  if(failed)throw Error(`${message} ${failed} could not be copied. ${firstError}`);
+  toast(message);
+}
+function showWebsiteSignIn(){
+  $('websiteSignInStatus').textContent='';
+  $('websiteSignInDialog').showModal();
+}
+async function signInToWebsite(event){
+  event.preventDefault();
+  const form=event.currentTarget,submit=form.querySelector('button[type="submit"]');
+  const status=$('websiteSignInStatus'),fields=new FormData(form);
+  submit.disabled=true;
+  status.textContent='Signing in…';
+  try{
+    await websiteClient.signIn(String(fields.get('email')).trim(),String(fields.get('password')));
+    $('websiteSignInDialog').close();
+  }catch(error){
+    status.textContent=error.message||'Could not sign in. Try again.';
+  }finally{
+    form.elements.password.value='';
+    submit.disabled=false;
+  }
 }
 function hasClassWork(){return Boolean(project.name||project.slides.some(s=>s.question||s.responses.length||s.pinImage||s.contentImage||s.backgroundImage)||project.slides.length>1);}
 async function archiveClass(name){if(!hasClassWork())return;const id='session:'+project.id,prior=libraryItems.find(r=>r.id===id),p=ActivityLibraryCore.snapshot(project,validateProject),record={id,kind:'session',name:name||prior?.name||((project.name||'Untitled class')+' · '+new Date().toLocaleDateString()),project:p,createdAt:prior?.createdAt||Date.now(),updatedAt:Date.now()};await activityStore.put(record);libraryItems=[...libraryItems.filter(r=>r.id!==id),record];return record;}
-async function leaveCurrentClass(){const owner=project;if(!libraryLoaded)await loadLibrary();if(!libraryLoaded)throw Error(libraryError||'Open the library before starting a new class.');await archiveClass();const b=liveOf();if(b&&['open','paused'].includes(b.status)){if(livePending.has(bindingKey()))throw Error('Wait for the live session update, then try again.');await controlLive(null,'ended');if(project!==owner||b.status!=='ended')throw Error('The live session could not be closed. Your current class is still open.');await archiveClass();}if(project!==owner)throw Error('Your current class changed. Try again.');for(const key of Object.keys(localCountdowns))if(key.startsWith(owner.id+':'))delete localCountdowns[key];try{saveLocalCountdowns();}catch{}}
-async function openLibraryItem(id,mode){const item=libraryItems.find(r=>r.id===id);if(!item)throw Error('This saved item is unavailable.');const next=mode==='results'?ActivityLibraryCore.snapshot(item.project,validateProject):ActivityLibraryCore.activity(item.project,validateProject,true);await leaveCurrentClass();next.name=item.name;project=next;activityEditing=mode==='edit'&&item.kind==='activity'?item.id:null;cloudCache.clear();lastCountdownState='';changed(true);closePanel();toast(mode==='results'?'Saved class results opened.':mode==='edit'?'Project opened. Use Update project to keep your edits.':'New class ready. Select Start live session to generate its QR code.');}
-function confirmLibraryOpen(b,mode){const r=libraryItems.find(r=>r.id===b.dataset.id);if(!r)return;const text=mode==='results'?'Open the saved questions and responses for this class?':mode==='edit'?'Open the saved presentation for editing?':'Open these questions with fresh responses?';askConfirm(mode==='results'?'Open saved results?':mode==='edit'?'Edit this project?':'Start a new class?',text+' Your current class results will be saved, and its active student link will close.',mode==='results'?'Open results':mode==='edit'?'Edit project':'Start new class',()=>runLibrary(()=>openLibraryItem(r.id,mode)));}
-function newProject(){askConfirm('Start a blank presentation?','Your current class results will be saved in the library, and its active student link will close.','Start blank',()=>runLibrary(async()=>{await leaveCurrentClass();project=blankProject();activityEditing=null;cloudCache.clear();lastCountdownState='';changed();closePanel();toast('New blank presentation ready.');}));}
-function renameLibraryItem(b){const r=libraryItems.find(r=>r.id===b.dataset.id);if(!r)return;$('libraryRenameInput').value=r.name;$('libraryRenameSave').dataset.id=r.id;$('libraryRenameDialog').showModal();$('libraryRenameInput').focus();}
-async function commitLibraryRename(b){const name=$('libraryRenameInput').value.trim().slice(0,100),r=libraryItems.find(r=>r.id===b.dataset.id);if(!r||!name){toast('Enter a name for this saved item.');return;}await runLibrary(async()=>{const next={...r,name,project:{...r.project,name},updatedAt:Date.now()};await activityStore.put(next);libraryItems=libraryItems.map(x=>x.id===r.id?next:x);if(activityEditing===r.id&&project.name===r.name){project.name=name;persist();render();}$('libraryRenameDialog').close();toast('Saved item renamed.');});}
-function deleteLibraryItem(b){const r=libraryItems.find(r=>r.id===b.dataset.id);if(!r)return;askConfirm('Delete saved '+(r.kind==='activity'?'project':'class')+'?','Remove “'+r.name+'” from this browser’s library? Your open presentation stays in place.','Delete',()=>runLibrary(async()=>{await activityStore.remove(r.id);libraryItems=libraryItems.filter(x=>x.id!==r.id);if(activityEditing===r.id){activityEditing=null;persist();}toast('Saved item deleted.');}));}
-function exportLibrary(){if(!libraryLoaded||!libraryItems.length)return;download(new Blob([JSON.stringify({format:'classroom-activity-library',version:1,items:libraryItems},null,2)],{type:'application/json'}),'Classroom_Response_Library.json');toast('Library backup downloaded.');}
-async function importLibrary(file){if(!file)return;if(file.size>100*1024*1024){toast('Choose a library backup smaller than 100 MB.');return;}try{const records=ActivityLibraryCore.parseBackup(JSON.parse(await file.text()),validateProject);if(!records.length){toast('This library backup is empty.');return;}await runLibrary(async()=>{if(!libraryLoaded)await loadLibrary();if(!libraryLoaded)throw Error(libraryError);if(libraryItems.length+records.length>500)throw Error('Keep up to 500 saved items in this library.');await activityStore.putMany(records);libraryItems.push(...records);openPanel('library',true);toast(records.length+' saved items imported.');});}catch(e){toast(e.message||'Could not import this library.');}}
+async function leaveCurrentClass(){const owner=project;if(hasClassWork()&&!libraryLoaded){await loadLibrary();if(!libraryLoaded)throw Error(libraryError||'Open the library before starting a new class.');}await archiveClass();const b=liveOf();if(b&&['open','paused'].includes(b.status)){if(livePending.has(bindingKey()))throw Error('Wait for the live session update, then try again.');await controlLive(null,'ended');if(project!==owner||b.status!=='ended')throw Error('The live session could not be closed. Your current class is still open.');await archiveClass();}if(project!==owner)throw Error('Your current class changed. Try again.');for(const key of Object.keys(localCountdowns))if(key.startsWith(owner.id+':'))delete localCountdowns[key];try{saveLocalCountdowns();}catch{}}
+function librarySelection(button){
+  const website=button.hasAttribute('data-website');
+  const item=(website?websiteItems:libraryItems).find(r=>r.id===button.dataset.id);
+  return item?{item,userId:website?websiteUser?.id:null,website}:null;
+}
+async function openLibraryItem({item,userId,website},mode){
+  if(website)item=await websiteClient.get(requireWebsiteUser(userId),item.id);
+  const next=mode==='results'?ActivityLibraryCore.snapshot(item.project,validateProject):ActivityLibraryCore.activity(item.project,validateProject,true);
+  if(website)requireWebsiteUser(userId);
+  await leaveCurrentClass();
+  if(website)requireWebsiteUser(userId);
+  next.name=item.name;
+  project=next;
+  activityEditing=mode==='edit'&&!website?item.id:null;
+  websiteEditing=null;
+  if(website&&mode==='edit'){rememberWebsiteItem(item);setWebsiteEditing(userId,item);}
+  cloudCache.clear();
+  lastCountdownState='';
+  changed(true);
+  closePanel();
+  toast(mode==='results'?'Saved class results opened.':mode==='edit'?'Project opened for editing.':'New class ready. Select Start live session to generate its QR code.');
+}
+function confirmLibraryOpen(b,mode){
+  const selection=librarySelection(b);
+  if(!selection)return;
+  const title=mode==='results'?'Open saved results':mode==='edit'?'Edit project':'Start new class';
+  const prompt=mode==='results'?'Open the saved questions and responses for this class?':mode==='edit'?'Open the saved presentation for editing?':'Open these questions with fresh responses?';
+  const details=hasClassWork()?' Your current class results will be saved in this browser, and its active student link will close.':'';
+  askConfirm(title+'?',prompt+details,title,()=>runLibrary(()=>openLibraryItem(selection,mode)));
+}
+function newProject(){askConfirm('Start a blank presentation?','Your current class results will be saved in this browser, and its active student link will close.','Start blank',()=>runLibrary(async()=>{await leaveCurrentClass();project=blankProject();activityEditing=null;websiteEditing=null;cloudCache.clear();lastCountdownState='';changed();closePanel();toast('New blank presentation ready.');}));}
+function renameLibraryItem(b){
+  renameTarget=librarySelection(b);
+  if(!renameTarget)return;
+  $('libraryRenameInput').value=renameTarget.item.name;
+  $('libraryRenameDialog').showModal();
+  $('libraryRenameInput').focus();
+}
+async function commitLibraryRename(){
+  const name=$('libraryRenameInput').value.trim().slice(0,100);
+  if(!renameTarget||!name){toast('Enter a name for this saved item.');return;}
+  const {item,userId,website}=renameTarget;
+  await runLibrary(async()=>{
+    let isEditing;
+    if(website){
+      const record=await websiteClient.rename(requireWebsiteUser(userId),item,name);
+      requireWebsiteUser(userId);
+      rememberWebsiteItem(record);
+      const ref=editingWebsiteProject();
+      isEditing=ref?.id===item.id&&ref.revision===item.revision;
+      if(isEditing)setWebsiteEditing(userId,record);
+    }else{
+      const record={...item,name,project:{...item.project,name},updatedAt:Date.now()};
+      await activityStore.put(record);
+      libraryItems=libraryItems.map(x=>x.id===item.id?record:x);
+      isEditing=activityEditing===item.id;
+    }
+    if(isEditing){
+      if(project.name===item.name){project.name=name;render();}
+      persist();
+    }
+    $('libraryRenameDialog').close();
+    toast('Saved item renamed.');
+  });
+}
+function deleteLibraryItem(b){
+  const selection=librarySelection(b);
+  if(!selection)return;
+  const {item,userId,website}=selection;
+  askConfirm('Delete saved '+(item.kind==='session'?'class':'project')+'?',
+    'Remove “'+item.name+'” '+(website?'from your website projects?':'from this browser’s library?')+' Your open presentation stays in place.',
+    'Delete',()=>runLibrary(async()=>{
+      if(website){
+        await websiteClient.remove(requireWebsiteUser(userId),item);
+        requireWebsiteUser(userId);
+        websiteItems=websiteItems.filter(r=>r.id!==item.id);
+        if(editingWebsiteProject()?.id===item.id){websiteEditing=null;persist();}
+      }else{
+        await activityStore.remove(item.id);
+        libraryItems=libraryItems.filter(r=>r.id!==item.id);
+        if(activityEditing===item.id){activityEditing=null;persist();}
+      }
+      toast('Saved item deleted.');
+    }));
+}
+function downloadLibraryBackup(items,filename){
+  download(new Blob([JSON.stringify({format:'classroom-activity-library',version:1,items},null,2)],{type:'application/json'}),filename);
+  toast('Library backup downloaded.');
+}
+function exportLibrary(){
+  if(libraryTab!=='website'){
+    if(libraryItems.length)downloadLibraryBackup(libraryItems,'Classroom_Response_Library.json');
+    return;
+  }
+  return runLibrary(async()=>{
+    const userId=requireWebsiteUser(websiteUser?.id),items=[];
+    for(const {id} of websiteItems){
+      const row=await websiteClient.get(requireWebsiteUser(userId),id);
+      const snapshot=ActivityLibraryCore.activity(row.project,validateProject);
+      snapshot.name=row.name;
+      items.push({id,kind:'activity',name:row.name,project:snapshot,createdAt:Date.parse(row.created_at),updatedAt:Date.parse(row.updated_at)});
+    }
+    requireWebsiteUser(userId);
+    downloadLibraryBackup(items,'Classroom_Response_Website_Projects.json');
+  });
+}
+async function importLibrary(file){if(!file)return;if(file.size>100*1024*1024){toast('Choose a library backup smaller than 100 MB.');return;}try{const records=ActivityLibraryCore.parseBackup(JSON.parse(await file.text()),validateProject);if(!records.length){toast('This library backup is empty.');return;}await runLibrary(async()=>{if(!libraryLoaded)await loadLibrary();if(!libraryLoaded)throw Error(libraryError);if(libraryItems.length+records.length>500)throw Error('Keep up to 500 saved items in this library.');await activityStore.putMany(records);libraryItems.push(...records);libraryTab='activity';openPanel('library',true);toast(records.length+' saved items imported into this browser.');});}catch(e){toast(e.message||'Could not import this library.');}}
 
 function countdownKey(s=slide()){return project.id+':'+s.id;}
 function timerOf(s=slide()){const b=sharedOf();return b&&['open','paused'].includes(b.status)?b.timers?.[s.id]||null:localCountdowns[countdownKey(s)]||null;}
@@ -1599,7 +1879,23 @@ function countdownMarkup(s){const t=timerOf(s);if(!t||t.show===false)return '';c
 function durationInputs(seconds,kind){const p=CountdownCore.parts(seconds);return `<div class="duration-fields" data-time-input="${kind}">${['hours','minutes','seconds'].map(unit=>`<label><span>${unit[0].toUpperCase()+unit.slice(1)}</span><input type="number" min="0" max="${unit==='hours'?8760:31536000}" step="1" inputmode="numeric" data-timer-unit="${unit}" value="${p[unit]}" aria-label="${kind==='add'?'Add time, ':''}${unit}"></label>`).join('')}</div>`;}
 function readDuration(editor,kind='duration'){const root=editor.querySelector('[data-time-input="'+kind+'"]');return CountdownCore.duration(...['hours','minutes','seconds'].map(unit=>root.querySelector('[data-timer-unit="'+unit+'"]').value));}
 function countdownPanel(){const s=slide(),t=timerOf(s),state=CountdownCore.phase(t,timerNow()),busy=livePending.has(bindingKey());return `<div data-timer-editor><section class="section"><h3>Countdown for this slide</h3><p class="small">${esc(s.question||'Untitled slide')}</p><div class="countdown-readout"><b data-countdown-value>${CountdownCore.format(t?CountdownCore.remaining(t,timerNow()):s.timerDuration)}</b><span data-countdown-state>${state==='finished'?'Time is up':state==='paused'?'Paused':state==='running'?'Running':'Ready'}</span></div><h3>Enter any duration</h3>${durationInputs(s.timerDuration,'duration')}<p class="small gap">Hours, minutes, and seconds are yours to choose. Reset uses the duration above.</p><div class="countdown-actions gap"><button class="button primary" data-action="timer-start" ${busy||state==='running'?'disabled':''} data-countdown-start>${state==='paused'?'Resume':state==='finished'?'Restart':'Start'}</button><button class="button secondary" data-action="timer-pause" ${busy||state!=='running'?'disabled':''} data-countdown-pause>Pause</button><button class="button secondary" data-action="timer-reset" ${busy?'disabled':''}>Reset</button></div></section><section class="section"><h3>Add time</h3>${durationInputs(60,'add')}<button class="button secondary full gap" data-action="timer-extend" ${busy?'disabled':''}>${icon('plus')}Add entered time</button><p class="small gap">Add time while running or paused. Adding time after it ends restarts the clock.</p></section><section class="section"><label class="switch"><span>Show countdown on slide and student page</span><input type="checkbox" data-timer-option="timerShow" ${s.timerShow?'checked':''}><span class="track"></span></label><div class="gap"><label class="switch"><span>Close responses when time runs out</span><input type="checkbox" data-timer-option="timerAutoClose" ${s.timerAutoClose?'checked':''}><span class="track"></span></label></div><p class="small gap">${sharedOf()&&['open','paused'].includes(sharedOf().status)?'Students see the same clock. Response closing is enforced even if you close this tab.':liveOf()?.engine==='legacy'?'Create a presentation session in Live session to share the clock with students.':'Start a live session to share this clock with students.'} Each slide has its own countdown.</p></section></div>`;}
-function renderStudioPanel(){if(panel==='library'){$('drawerTitle').textContent='My Projects';if(!libraryLoaded&&!libraryLoading&&!libraryError)loadLibrary();$('drawerContent').innerHTML=libraryPanel();}else{$('drawerTitle').textContent='Countdown';$('drawerContent').innerHTML=countdownPanel();}}
+function renderStudioPanel(){
+  const content=$('drawerContent');
+  if(panel!=='library'){
+    $('drawerTitle').textContent='Countdown';
+    content.innerHTML=countdownPanel();
+    return;
+  }
+  $('drawerTitle').textContent='My Projects';
+  if(!libraryLoaded&&!libraryLoadTask&&!libraryError)loadLibrary();
+  const input=$('libraryName'),focused=input&&document.activeElement===input;
+  const editedName=input&&input.value!==input.defaultValue?input.value:undefined;
+  const selection=focused?[input.selectionStart,input.selectionEnd]:null;
+  content.innerHTML=libraryPanel();
+  const next=$('libraryName');
+  if(editedName!==undefined&&editedName!==project.name)next.value=editedName;
+  if(selection){next.focus({preventScroll:true});next.setSelectionRange(...selection);}
+}
 function showCountdownDialog(){$('countdownDialogContent').innerHTML=countdownPanel();$('countdownDialog').showModal();tickCountdown();}
 async function controlCountdown(action,editor,extra={}){const s=slide(),owner=project,b=sharedOf(),key=bindingKey();if(livePending.has(key)){toast('Wait for the session update, then try again.');return;}let duration=s.timerDuration,add;try{if(editor&&action!=='configure')duration=readDuration(editor);if(action==='extend')add=editor?readDuration(editor,'add'):extra.add;}catch(e){toast(e.message);return;}s.timerDuration=duration;const opts={duration,add,autoClose:s.timerAutoClose,show:s.timerShow,...extra};
   if(b&&['open','paused'].includes(b.status)){clearTimeout(settingsTimers.get(key));livePending.add(key);b.generation=(b.generation||0)+1;try{if(b.config!==liveConfig()){const config=liveConfig(),snapshot=await liveAPI('crs_control_session',{p_session_id:b.id,p_host_token:b.token,p_deck:liveDeck(),p_active_slide:s.id,p_status:null,p_action:null,p_pacing:project.pacing});b.config=config;b.dirty=false;applySharedSnapshot(b,snapshot,owner);}const data=await liveAPI('crs_control_timer',{p_session_id:b.id,p_host_token:b.token,p_slide_id:s.id,p_action:action,p_duration_seconds:duration,p_add_seconds:add||null,p_auto_close:opts.autoClose,p_show:opts.show});applySharedSnapshot(b,data,owner);}catch(e){toast(e.message);return;}finally{livePending.delete(key);if(project===owner&&b.config!==liveConfig())queueLiveSettings(slide());}}
@@ -1609,7 +1905,11 @@ function tickCountdown(){const s=slide(),t=timerOf(s),now=timerNow(),state=Count
   const key=project.id+':'+s.id+':'+closed+':'+state;if(key!==lastCountdownState){lastCountdownState=key;if(state==='finished'&&t&&!sharedOf()){t.state='finished';t.remaining=0;t.deadline=null;try{saveLocalCountdowns();}catch{}}document.querySelectorAll('form[data-form="responses"]').forEach(form=>{const paused=closed||!s.accepting||liveOf(s)?.status==='paused',submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=paused;const status=form.querySelector('.form-status');if(status)status.textContent=closed?'Time is up. Responses are closed.':paused?'Responses are currently paused.':'';});if(panel==='responses'){const bulk=$('bulkResponses');if(bulk)bulk.disabled=closed||!s.accepting||liveOf(s)?.status==='paused';}if(state==='finished')toast(closed?'Time is up. Responses are closed.':'Time is up.');}}
 
 const actions={
-'library-save':()=>runLibrary(saveActivity),'library-archive':()=>runLibrary(async name=>{await archiveClass(name);libraryTab='session';toast('Class results saved.');}),'library-tab':b=>{libraryTab=b.dataset.kind;renderPanel();},'library-retry':loadLibrary,
+'library-save':()=>runLibrary(saveActivity),'library-archive':()=>runLibrary(async name=>{await archiveClass(name);libraryTab='session';toast('Class results saved.');}),'library-tab':b=>selectLibraryTab(b.dataset.kind),'library-retry':loadLibrary,
+'library-website-save':()=>websiteUser?runLibrary(saveWebsiteProject):showWebsiteSignIn(),
+'library-website-save-copy':()=>runLibrary(name=>saveWebsiteProject(name,true)),
+'library-website-copy':()=>runLibrary(copyBrowserProjects),'library-website-refresh':loadWebsiteProjects,
+'library-website-sign-out':()=>runLibrary(async()=>{await websiteClient.signOut();websiteAccountChanged(null);}),
 'library-start':b=>confirmLibraryOpen(b,'start'),'library-edit':b=>confirmLibraryOpen(b,'edit'),'library-results':b=>confirmLibraryOpen(b,'results'),'library-rename':renameLibraryItem,'library-rename-save':commitLibraryRename,'library-delete':deleteLibraryItem,'library-export':exportLibrary,'library-import':()=>{$('libraryFile').value='';$('libraryFile').click();},
 'pacing-controls':showPacingDialog,'timer-controls':showCountdownDialog,'timer-start':b=>controlCountdown('start',b.closest('[data-timer-editor]')),'timer-pause':b=>controlCountdown('pause',b.closest('[data-timer-editor]')),'timer-reset':b=>controlCountdown('reset',b.closest('[data-timer-editor]')),'timer-extend':b=>controlCountdown('extend',b.closest('[data-timer-editor]')),
 
@@ -1671,9 +1971,11 @@ document.addEventListener('submit',e=>{const form=e.target;if(form.dataset.form!
 $('confirmButton').addEventListener('click',()=>{const task=confirmTask;confirmTask=null;$('confirmDialog').close();if(task)task();});
 
 $('libraryFile').addEventListener('change',e=>importLibrary(e.target.files[0]));
+$('websiteSignInForm').addEventListener('submit',signInToWebsite);
+$('websiteSignInDialog').addEventListener('close',()=>{$('websiteSignInForm').elements.password.value='';});
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset.timerUnit&&t.closest('[data-time-input="duration"]')){try{slide().timerDuration=readDuration(t.closest('[data-timer-editor]'));persist();}catch(error){toast(error.message);}}if(t.dataset.timerOption){const s=slide(),key=t.dataset.timerOption,previous=s[key];s[key]=t.checked;controlCountdown('configure',null).then(()=>{if(sharedOf()&&['open','paused'].includes(sharedOf().status)&&Boolean(timerOf(s)?.[key==='timerShow'?'show':'auto_close'])!==s[key]){s[key]=previous;renderPanel();}});}});
 $('imageFile').addEventListener('change',e=>loadImage(e.target.files[0]));
-$('projectFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;if(file.size>40*1024*1024){toast('Choose a project smaller than 40 MB.');return;}try{const next=validateProject(JSON.parse(await file.text()));askConfirm('Open this project?','This will replace the current presentation in this browser. Save it to My Projects first if you want to reuse it.','Open project',()=>{project=next;activityEditing=null;cloudCache.clear();changed(true);toast('Project imported.');});}catch(error){toast(error.message||'Could not open this project.');}});
+$('projectFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;if(file.size>40*1024*1024){toast('Choose a project smaller than 40 MB.');return;}try{const next=validateProject(JSON.parse(await file.text()));askConfirm('Open this project?','This will replace the current presentation in this browser. Save it to My Projects first if you want to reuse it.','Open project',()=>{project=next;activityEditing=null;websiteEditing=null;cloudCache.clear();changed(true);toast('Project imported.');});}catch(error){toast(error.message||'Could not open this project.');}});
 document.addEventListener('keydown',e=>{const typing=e.target.matches('input,textarea,select,[contenteditable="true"]');if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveHTML();return;}if(e.key==='Escape'){if(document.querySelector('dialog[open]'))return;if(presenterActive){exitPresentation();return;}closeMenus();if(panel)closePanel();return;}if(typing||document.querySelector('dialog[open]'))return;let key=e.key.toLowerCase();if(key==='p'&&!presenterActive){e.preventDefault();startPresentation();}if(presenterActive){showControls();if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();chooseSlide(project.active+1);}if(e.key==='ArrowLeft'){e.preventDefault();chooseSlide(project.active-1);}if(key==='r')reveal();if(key==='f')toggleFullscreen();if(slide().type==='open'&&e.key==='ArrowDown'){e.preventDefault();pageResponses(1);}if(slide().type==='open'&&e.key==='ArrowUp'){e.preventDefault();pageResponses(-1);}}});
 $('presenter').addEventListener('pointermove',showControls);$('presenter').addEventListener('pointerdown',showControls);$('presenterControls').addEventListener('focusin',showControls);
 document.addEventListener('fullscreenchange',()=>{if(presenterActive&&!document.fullscreenElement)showControls();});
