@@ -64,3 +64,10 @@ await build({entryPoints:[path.join(root,'src','video-studio-narration-import.js
  outfile:path.join(out,'assets','video-studio-narration-import.js'),bundle:true,
  minify:true,format:'esm',platform:'browser',target:['es2022']});
 console.log('Video Studio complete narration-pack importer built.');
+
+await build({
+  entryPoints: [path.join(root, 'src', 'live-classroom', 'App.jsx')],
+  outfile: path.join(out, 'assets', 'live-classroom.js'),
+  bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
+});
+console.log('Live Classroom meeting client built.');

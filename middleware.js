@@ -6,6 +6,10 @@ import { next } from '@vercel/functions';
 const PUBLIC_PAGES = new Set([
   '/signup.html',
   '/api/signup-studio',
+  '/live-classroom.html',
+  '/api/live-classroom',
+  '/assets/live-classroom.css',
+  '/assets/live-classroom.js',
   '/assets/signup-studio/studio.css',
   '/assets/signup-studio/shared.js',
   '/assets/signup-studio/participant.js',
