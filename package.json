@@ -28,6 +28,7 @@
     "check:video": "node --check assets/video-studio.js && node --check assets/video-studio-core.js && node --check assets/video-studio-motion.js && node --check assets/video-studio-starters.js && node --check assets/video-studio-conflict.js && node --check assets/video-studio-project-narration.js && node --check assets/video-studio-shell.js && node --check assets/video-studio-clips.js && node --check assets/video-studio-library-core.js && node --check assets/video-studio-library.js && node --check src/video-studio-character-import.js && node --check src/video-studio-narration-import.js && node --check assets/video-studio-free-core.js && node --check assets/video-studio-free-worker.js && node --test tests/video-studio-motion.test.mjs tests/video-studio.test.mjs tests/video-studio-free.test.mjs tests/video-studio-starters.test.mjs && node --test tests/video-ai.test.mjs"
   },
   "dependencies": {
+    "@daily-co/daily-js": "0.95.0",
     "@embedpdf/pdfium": "2.15.1",
     "@matbee/libreoffice-converter": "2.7.2",
     "@supabase/auth-js": "2.108.0",

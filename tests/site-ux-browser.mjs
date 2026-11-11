@@ -49,7 +49,7 @@ try{
   await page.locator('#catalog-search').fill('360');
   assert.equal(await page.locator('.catalog-card:visible').count(),1);
   await page.locator('#catalog-clear').click();
-  assert.equal(await page.locator('.catalog-card:visible').count(),5);
+  assert.equal(await page.locator('.catalog-card:visible').count(),6);
   await context.close();
  }
  console.log('Site responsive browser checks passed at 375, 768 and 1280 px.');

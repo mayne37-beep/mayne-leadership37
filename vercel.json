@@ -57,6 +57,9 @@
     }
   ],
   "functions": {
+    "api/live-classroom.js": {
+      "maxDuration": 30
+    },
     "api/signup-studio.js": {
       "maxDuration": 30
     },
