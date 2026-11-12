@@ -14,7 +14,8 @@ async function classroomDatabase(){
       language sql immutable as $$ select sha256(convert_to(value,'UTF8')); $$;
   `);
   for(const file of ['classroom_response_studio.sql','classroom_response_countdown.sql',
-    'classroom_response_pacing.sql','migrations/202611120001_live_dot_voting.sql']){
+    'classroom_response_pacing.sql','migrations/202611120001_live_dot_voting.sql',
+    'migrations/20261112033855_bike_trail_classroom_controls.sql']){
     await db.exec(await readFile(new URL('../../supabase/'+file,import.meta.url),'utf8'));
   }
   return db;
@@ -119,7 +120,7 @@ test('existing clients, pause, expiry, and per-question countdowns retain their 
   }finally{await db.close();}
 });
 
-function browser(html,path,db,errors,requests,stopPolling){
+function browser(html,path,db,errors,requests,stopPolling,sharedStorage){
   const virtualConsole=new VirtualConsole();
   virtualConsole.on('jsdomError',error=>errors.push(error));
   return new JSDOM(html,{
@@ -128,6 +129,13 @@ function browser(html,path,db,errors,requests,stopPolling){
     pretendToBeVisual:true,
     virtualConsole,
     beforeParse(window){
+      if(sharedStorage){
+        Object.defineProperty(window,'localStorage',{value:{
+          getItem:key=>sharedStorage.get(key)??null,
+          setItem:(key,value)=>sharedStorage.set(key,String(value)),
+          removeItem:key=>sharedStorage.delete(key)
+        }});
+      }
       const intervals=[],setInterval=window.setInterval.bind(window);
       window.setInterval=(...args)=>{
         const id=setInterval(...args);
@@ -187,7 +195,7 @@ test('Bike Trail uses one code for private submissions, two-dot ballots, and the
     const first=launch(respond,'word-cloud-respond.html?code='+code);
     const second=launch(respond,'word-cloud-respond.html?code='+code);
     const question=win=>win.document.querySelector('#question').textContent;
-    const saved=win=>win.document.querySelector('#noticeTitle').textContent.includes('saved');
+    const saved=win=>/saved|submitted/i.test(win.document.querySelector('#noticeTitle').textContent);
     await eventually(()=>[first,second].every(w=>question(w)==='What problem do you see on the bike trail?'),'Students joined on the first question');
     type(first,'[name="text"]','People report hazards and disagree about passing.');
     submitForm(first);
@@ -221,7 +229,7 @@ test('Bike Trail uses one code for private submissions, two-dot ballots, and the
     assert.equal(ballotSnapshot.dot_tally,null);
     const firstProposal=ballotSnapshot.slide.choices[0].id;
     await assert.rejects(submit(db,{code},ballotSnapshot,{dots:{[firstProposal]:1}}),/Allocate both dots/);
-    await assert.rejects(submit(db,{code},ballotSnapshot,{dots:{[firstProposal]:3}}),/available proposal/);
+    await assert.rejects(submit(db,{code},ballotSnapshot,{dots:{[firstProposal]:3}}),/ballot allotment/);
     const steps=win=>[...win.document.querySelectorAll('[data-dot-step="1"]')];
     steps(first)[0].click();
     submitForm(first);
@@ -269,10 +277,11 @@ test('Bike Trail uses one code for private submissions, two-dot ballots, and the
 });
 
 async function originalBikeTrailPage(){
-  const [html, live] = await Promise.all(['bike-trail-dot-voting.html','assets/bike-trail-live.js'].map(path=>
+  const [html, classroom, live] = await Promise.all(['bike-trail-dot-voting.html','assets/bike-trail-classroom.js','assets/bike-trail-live.js'].map(path=>
     readFile(new URL('../../'+path,import.meta.url),'utf8')
   ));
-  return html.replace('<script src="assets/bike-trail-live.js"></script>', '<script>'+live+'</script>');
+  return html.replace('<script src="assets/bike-trail-classroom.js"></script>', '<script>'+classroom+'</script>')
+    .replace('<script src="assets/bike-trail-live.js?v=classroom-controls"></script>', '<script>'+live+'</script>');
 }
 
 test('the original Bike Trail page retains the worked example and both in-person voting methods',async()=>{
@@ -286,20 +295,35 @@ test('the original Bike Trail page retains the worked example and both in-person
     click(host,'#vote-tab');
     type(host,'#proposal-1','Improve hazard reporting');
     type(host,'#proposal-2','Clarify passing');
+    click(host,'#add-proposal');type(host,'#proposal-3','Widen the path');
+    click(host,'#add-proposal');type(host,'#proposal-4','Update the signs');
+    click(host,'#add-proposal');type(host,'#proposal-5','Offer trail maps');
+    assert.match(host.document.querySelector('#suggested-dots').textContent,/5 proposals.*3 dots/);
+    assert.equal(host.document.querySelector('#dot-budget').value,'2');
+    type(host,'#dot-budget','4');
     type(host,'#voters','1');
     click(host,'#start-vote');
     click(host,'#handoff-primary');
     const add=host.document.querySelector('#ballot-proposals button[aria-label^="Add dot"]');
-    add.click();add.click();
+    add.click();add.click();add.click();
+    assert.equal(host.document.querySelector('#submit-ballot').disabled,true);
+    assert.equal(host.document.querySelector('#dots-left').textContent,'1 dot left');
+    add.click();
+    assert.equal(add.disabled,true);
     click(host,'#submit-ballot');
     click(host,'#handoff-primary');
-    assert.equal(host.document.querySelector('#results-summary').textContent,'1 ballot recorded · 2 dots');
+    assert.equal(host.document.querySelector('#results-summary').textContent,'1 ballot recorded · 4 dots');
     host.confirm=()=>true;
     click(host,'#new-round');
     click(host,'input[value=tally]');
+    type(host,'#voters','2');
+    type(host,'#dot-budget','3');
     click(host,'#start-vote');
-    type(host,'#tally-1','1');type(host,'#tally-2','1');
+    type(host,'#tally-1','3');
+    assert.equal(host.document.querySelector('#submit-tally').disabled,true);
+    type(host,'#tally-2','3');
     click(host,'#submit-tally');
+    assert.equal(host.document.querySelector('#results-summary').textContent,'2 ballots recorded · 6 dots');
     assert.equal(host.document.querySelector('#discussion-choice legend').textContent,'Tie for first');
     assert.deepEqual(errors,[]);
   }finally{
@@ -308,22 +332,23 @@ test('the original Bike Trail page retains the worked example and both in-person
   }
 });
 
-test('the original instructor page runs the live exercise using its own setup and results',{timeout:55000},async()=>{
+test('the original instructor page runs the live exercise using its own setup and results',{timeout:70000},async()=>{
   const db=await classroomDatabase(),browsers=[],errors=[],requests=[],stopPolling=[];
   try{
     await db.exec('set role anon');
     const [page,respond]=await Promise.all([originalBikeTrailPage(),readFile(new URL('../../word-cloud-respond.html',import.meta.url),'utf8')]);
-    const launch=(html,path)=>{
-      const win=browser(html,path,db,errors,requests,stopPolling).window;
+    const launch=(html,path,storage)=>{
+      const win=browser(html,path,db,errors,requests,stopPolling,storage).window;
       browsers.push(win);
       return win;
     };
-    const instructor=launch(page,'bike-trail-dot-voting.html');
+    const sharedStorage=new Map();
+    const instructor=launch(page,'bike-trail-dot-voting.html',sharedStorage);
     const find=(win,label)=>[...win.document.querySelectorAll('button')].find(node=>node.textContent===label);
     const press=(win,label)=>{const node=find(win,label);assert.ok(node&&!node.disabled,label);node.click();};
     const title=()=>instructor.document.querySelector('#stage-title')?.textContent;
     const question=win=>win.document.querySelector('#question').textContent;
-    const saved=win=>win.document.querySelector('#noticeTitle').textContent.includes('saved');
+    const saved=win=>/saved|submitted/i.test(win.document.querySelector('#noticeTitle').textContent);
     const written=(win,value)=>{type(win,'[name=text]',value);submitForm(win);};
 
     click(instructor,'input[value=live]');
@@ -332,13 +357,20 @@ test('the original instructor page runs the live exercise using its own setup an
     const link=new URL(instructor.document.querySelector('.live-join a').href);
     const code=link.searchParams.get('code');
     assert.match(code,/^\d{7}$/);
+    const displayLink=new URL([...instructor.document.querySelectorAll('.live-join a')].find(a=>a.textContent==='Open class display').href);
+    const display=launch(page,displayLink.pathname.slice(1)+displayLink.search,sharedStorage);
+    const refreshDisplay=()=>display.dispatchEvent(new display.StorageEvent('storage',{key:'bike-trail-class-display-v1'}));
+    assert.equal(display.document.querySelector('#class-display-title').textContent,'What problem do you see on the bike trail?');
     const students=[1,2].map(()=>launch(respond,link.pathname.slice(1)+link.search));
     await eventually(()=>students.every(win=>question(win)==='What problem do you see on the bike trail?'),'Students begin with the individual problem');
     written(students[0],'The shared trail feels crowded at busy times.');
     await eventually(()=>instructor.document.querySelector('.live-responses')?.textContent.includes('crowded'),'Problem response appears on the original page');
 
+    type(students[1],'[name=text]','An unsent draft.');
     press(instructor,'Who is involved?');
     await eventually(()=>students.every(win=>question(win)==='Who is involved or affected?'),'Stakeholder prompt follows the instructor');
+    assert.equal(students[1].document.querySelector('#status').textContent,'New question. Your previous draft is saved on this device.');
+    assert.equal(students[0].document.querySelector('#status').textContent,'New question. Your previous response was submitted to the instructor.');
     written(students[0],'Walkers, cyclists, runners and trail managers.');
     await eventually(()=>saved(students[0]),'Stakeholder response saved');
     press(instructor,'Proposals');
@@ -351,8 +383,30 @@ test('the original instructor page runs the live exercise using its own setup an
     const labels=[...instructor.document.querySelectorAll('.proposal-edit input')].map(input=>input.value);
     assert.deepEqual(new Set(labels),new Set(['Explain passing and yielding.','Improve hazard reporting.']));
     type(instructor,'#problem','How can we make the trail safer for everyone?');
+    type(instructor,'#expected-voters','2');
+    type(instructor,'#dot-budget','3');
+    const normalFetch=instructor.fetch;
+    let dropped=false;
+    instructor.fetch=async(url,options)=>{
+      const reply=await normalFetch(url,options);
+      if(!dropped&&reply.ok&&url.endsWith('/crs_bike_trail_control')&&JSON.parse(options.body).p_active_slide==='ballot'){
+        dropped=true;
+        throw new instructor.TypeError('Test connection dropped after the server accepted the ballot.');
+      }
+      return reply;
+    };
     click(instructor,'#start-vote');
-    await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The original page opens voting for both devices');
+    await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The instructor recovers the ballot that students received');
+    assert.equal(dropped,true);
+    assert.match(instructor.document.querySelector('#live-vote-instructions').textContent,/3 dots/);
+    assert.equal(students[0].document.querySelector('[data-dot-budget]').textContent,'3 dots left');
+    refreshDisplay();
+    assert.equal(display.document.querySelector('#class-display-proposals').children.length,2);
+    assert.equal(display.document.querySelector('#class-display-proposals .result-count'),null);
+    const resumed=launch(page,'bike-trail-dot-voting.html',sharedStorage);
+    await eventually(()=>resumed.document.querySelector('#stage-title')?.textContent==='Voting is open'&&
+      find(resumed,'Close voting')?.disabled===false,'A fresh instructor tab restores the current ballot controls');
+    assert.equal(new URL(resumed.document.querySelector('.live-join a').href).searchParams.get('code'),code);
     press(instructor,'Close voting');
     await eventually(()=>title()==='Voting is closed','An empty ballot can be closed');
     press(instructor,'Edit setup');
@@ -362,18 +416,21 @@ test('the original instructor page runs the live exercise using its own setup an
     await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The ballot reopens under the same code');
     for(const [index,win] of students.entries()){
       const add=win.document.querySelectorAll('[data-dot-step="1"]')[index];
-      add.click();add.click();
+      add.click();add.click();add.click();
       submitForm(win);
     }
     await eventually(()=>students.every(saved),'Both ballots are accepted');
-    await eventually(()=>instructor.document.querySelector('[data-live-data="vote"]')?.textContent==='2 ballots submitted','Only the ballot count is shown while voting');
+    await eventually(()=>instructor.document.querySelector('[data-live-data="vote"]')?.textContent==='2 of 2 ballots submitted','Only the ballot count is shown while voting');
     assert.equal(instructor.document.querySelector('#ranked-proposals'),null);
     assert.ok(students.every(win=>win.document.querySelector('#dotResults').hidden));
     press(instructor,'Close voting');
     await eventually(()=>title()==='Voting is closed'&&students.every(win=>win.document.querySelector('#noticeTitle').textContent==='Voting is closed.'),'Closing keeps the totals hidden');
     press(instructor,'Reveal tally');
     await eventually(()=>title()==='Vote results'&&students.every(win=>!win.document.querySelector('#dotResults').hidden),'The original Results screen and student tally appear together');
-    assert.equal(instructor.document.querySelector('#results-summary').textContent,'2 ballots recorded · 4 dots');
+    assert.equal(instructor.document.querySelector('#results-summary').textContent,'2 ballots recorded · 6 dots');
+    assert.match(students[0].document.querySelector('#dotResults').textContent,/2 ballots submitted/);
+    refreshDisplay();
+    assert.deepEqual([...display.document.querySelectorAll('#class-display-proposals .result-count')].map(el=>el.textContent),['3 dots','3 dots']);
     assert.equal(instructor.document.querySelector('#discussion-choice legend').textContent,'Tie for first');
     assert.equal(find(instructor,'Open Gradients of Agreement').disabled,true);
     click(instructor,'input[name=discussion-proposal]');
@@ -385,28 +442,64 @@ test('the original instructor page runs the live exercise using its own setup an
     const ratingsTotal=()=>agreementChart().querySelector('[data-agreement-total]').textContent;
     const rate=(win,level)=>{
       click(win,`.scale-question input[value="${level}"]`);
+      if(level===3)assert.equal(win.document.querySelector('[data-scale-selection]').textContent,'3 — Support with reservations');
       submitForm(win);
     };
     const chart=agreementChart();
     assert.deepEqual([...chart.querySelectorAll('.live-agreement-number')].map(tick=>tick.textContent),
       ['1','2','3','4','5','6','7','8']);
-    assert.equal(ratingsTotal(),'0 ratings submitted');
+    assert.equal(ratingsTotal(),'0 of 2 ratings submitted');
     rate(students[0],3);
-    await eventually(()=>ratingsTotal()==='1 rating submitted'&&height(3)==='25%','The first rating raises its bar');
+    await eventually(()=>ratingsTotal()==='1 of 2 ratings submitted'&&height(3)==='25%','The first rating raises its bar');
     rate(students[1],7);
-    await eventually(()=>ratingsTotal()==='2 ratings submitted'&&height(7)==='25%','Ratings appear in separate columns');
+    await eventually(()=>ratingsTotal()==='2 of 2 ratings submitted'&&height(7)==='25%','Ratings appear in separate columns');
     rate(students[0],7);
     await eventually(()=>height(3)==='0%'&&height(7)==='50%','An updated rating lowers one bar and raises the other');
     assert.equal(agreementChart(),chart,'The same chart updates as ratings change');
     assert.equal(chart.querySelector('[data-agreement-level="7"] .live-agreement-count').textContent,'2');
+    refreshDisplay();
+    assert.equal(display.document.querySelector('[data-live-agreement]'),null);
+    press(instructor,'Reveal agreement results');
+    await eventually(()=>!find(instructor,'Reveal agreement results'),'The instructor can reveal the chart');
+    refreshDisplay();
+    assert.equal(display.document.querySelector('[data-agreement-level="7"] .live-agreement-count').textContent,'2');
+    await eventually(()=>students.every(win=>win.document.querySelector('#submitButton').disabled),'Revealing results closes ratings');
     press(instructor,'Collect reasons and reservations');
     await eventually(()=>students.every(win=>question(win)==='What’s your reason or reservation?'),'Reservation prompt follows the instructor');
     assert.equal(height(7),'50%','The agreement chart remains visible for the debrief');
     written(students[0],'Check if signs would address the cause of conflicts.');
     await eventually(()=>instructor.document.querySelector('.live-responses')?.textContent.includes('cause of conflicts'),'Instructor receives the reservation for the debrief');
+    press(instructor,'Use as concern');
+    const concern='Check if signs would address the cause of conflicts.';
+    assert.equal(instructor.document.querySelector('#shifting-the-burden-concern').value,concern);
+    refreshDisplay();
+    assert.equal(display.document.body.textContent.includes(concern),false);
+    press(instructor,'Save debrief');
+    assert.match(instructor.document.querySelector('#saved-debriefs').textContent,/cause of conflicts/);
+    let downloaded;
+    instructor.URL.createObjectURL=blob=>{downloaded=blob;return 'blob:https://www.mayneleadership.com/debrief-test';};
+    instructor.URL.revokeObjectURL=()=>{};
+    instructor.HTMLAnchorElement.prototype.click=function(){};
+    press(instructor,'Download debrief');
+    const exportText=await new Promise((resolve,reject)=>{
+      const reader=new instructor.FileReader();
+      reader.onload=()=>resolve(reader.result);
+      reader.onerror=reject;
+      reader.readAsText(downloaded);
+    });
+    assert.match(exportText,/3 dots per student/);
+    assert.match(exportText,/Gradients of Agreement/);
+    assert.match(exportText,/Concern for Shifting the Burden/);
+    assert.ok(exportText.includes(concern));
     instructor.confirm=()=>true;
+    press(instructor,'End live session');
+    await eventually(()=>students.every(win=>win.document.querySelector('#noticeTitle').textContent==='This session has ended.'),'Ending the session closes the student code');
+    assert.equal(height(7),'50%','The chart stays available after the session ends');
     click(instructor,'#new-round');
-    await eventually(()=>title()==='Prepare the vote'&&students.every(win=>win.document.querySelector('#noticeTitle').textContent==='This session has ended.'),'Starting a new round closes the old student code');
+    await eventually(()=>title()==='Prepare the vote','A new round returns to setup');
+    const afterClass=launch(page,'bike-trail-dot-voting.html',sharedStorage);
+    assert.match(afterClass.document.querySelector('#saved-debriefs').textContent,/cause of conflicts/);
+    assert.equal(afterClass.document.querySelector('#saved-debriefs [data-agreement-level="7"] .live-agreement-count').textContent,'2');
     assert.deepEqual(errors,[]);
   }finally{
     stopPolling.forEach(stop=>stop());
@@ -415,4 +508,42 @@ test('the original instructor page runs the live exercise using its own setup an
     browsers.forEach(win=>win.close());
     await db.close();
   }
+});
+
+test('a live session can be retried and its allotment is locked once a ballot is submitted',async()=>{
+  const db=await classroomDatabase();
+  try{
+    await db.exec('set role anon');
+    const liveDeck=[
+      {id:'problem',type:'open',question:'What problem do you see?',info:'',accepting:true,openLimit:500},
+      {id:'ballot',type:'dotvote',question:'Which proposal should the group discuss?',info:'',accepting:true,
+        dotRevealed:false,dotBudget:1,choices:[{id:'a',label:'First'},{id:'b',label:'Second'}]}
+    ];
+    const args={p_deck:JSON.stringify(liveDeck),p_host_token:host};
+    const room=await rpc(db,'crs_bike_trail_start',args);
+    const retry=await rpc(db,'crs_bike_trail_start',args);
+    assert.equal(retry.id,room.id);
+    assert.equal(retry.code,room.code);
+    const update=(revision,next=null)=>rpc(db,'crs_bike_trail_control',{
+      p_session_id:room.id,p_host_token:host,p_expected_revision:revision,
+      p_deck:next?JSON.stringify(next):null,p_active_slide:'ballot',p_status:null
+    });
+    const opened=await update(room.revision);
+    const outdated=await update(room.revision);
+    assert.equal(outdated.conflict,true);
+    assert.equal(outdated.active_slide_id,'ballot');
+    const ballot=await snapshot(db,room.code,'ballot');
+    assert.equal(ballot.slide.dotBudget,1);
+    await assert.rejects(submit(db,room,ballot,{dots:{a:1,b:1}}),/Place your dot/);
+    const accepted=await submit(db,room,ballot,{dots:{a:1}});
+    assert.deepEqual(accepted.my_answer,{dots:{a:1}});
+    const changed=liveDeck.map(slide=>slide.id==='ballot'?{...slide,dotBudget:3}:slide);
+    await assert.rejects(update(opened.revision,changed),/Clear this slide’s results/);
+    const masked=await rpc(db,'crs_bike_trail_state',{p_session_id:room.id,p_host_token:host,p_known_revision:room.revision});
+    assert.equal(masked.deck[1].dotBudget,1);
+    assert.deepEqual(masked.responses.find(response=>response.kind==='dotvote').answer,{});
+    const revealed=liveDeck.map(slide=>slide.id==='ballot'?{...slide,accepting:false,dotRevealed:true}:slide);
+    await update(opened.revision,revealed);
+    assert.deepEqual((await snapshot(db,room.code,'ballot')).dot_tally,{ballots:1,counts:{a:1}});
+  }finally{await db.close();}
 });

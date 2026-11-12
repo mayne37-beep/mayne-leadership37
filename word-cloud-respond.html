@@ -31,6 +31,14 @@ fieldset#studentFields{border:0;padding:0;margin:0;min-width:0}.entry-inputs{dis
 .dot-tally{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .dot-tally th,.dot-tally td{padding:8px;text-align:left;vertical-align:top}
 .dot-tally td{border-top:1px solid var(--line,#dbe3ef);overflow-wrap:anywhere}
+
+[data-labeled-scale] .scale-buttons{display:grid;grid-template-columns:repeat(var(--scale-levels),minmax(0,1fr));gap:4px}
+[data-labeled-scale] .scale-buttons label{min-width:0}
+[data-labeled-scale] .scale-buttons span{min-height:44px;padding-inline:0}
+.scale-selection{margin:.65rem 0 .3rem;font-weight:700;overflow-wrap:anywhere}
+.scale-label-guide{font-size:.875rem;margin:.4rem 0 .1rem}
+.scale-label-guide summary{cursor:pointer;font-weight:650}
+.scale-label-guide ol{margin:.4rem 0;padding-left:1.55rem}
 </style>
 </head>
 <body>
@@ -67,15 +75,18 @@ const ClassroomCore=(()=>{
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const uid=()=>crypto.randomUUID(),num=(v,lo,hi,fallback)=>Number.isFinite(Number(v))?Math.max(lo,Math.min(hi,Number(v))):fallback;
   const item=()=>({id:uid(),label:''});
-  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,dotRevealed:false,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true,timerDuration:120,timerAutoClose:false,timerShow:true};}
+  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,dotRevealed:false,dotBudget:2,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true,timerDuration:120,timerAutoClose:false,timerShow:true};}
+  function dotBudget(s){return Number.isInteger(s.dotBudget)&&s.dotBudget>=1&&s.dotBudget<=99?s.dotBudget:2;}
   function fields(raw){
     const s=defaults();if(Object.hasOwn(types,raw.type))s.type=raw.type;
     for(const k of ['multiple','percentages','dotRevealed','showAverage','timerAutoClose','timerShow'])if(typeof raw[k]==='boolean')s[k]=raw[k];
+    s.dotBudget=dotBudget(raw);
     s.timerDuration=Math.round(num(raw.timerDuration,1,31536000,120));
     if(['bars','doughnut'].includes(raw.chart))s.chart=raw.chart;if(s.multiple)s.chart='bars';
     for(const k of ['scaleLow','scaleHigh','xLabel','yLabel','xLow','xHigh','yLow','yHigh'])if(typeof raw[k]==='string')s[k]=raw[k].slice(0,80);
     for(const k of ['choices','statements'])if(Array.isArray(raw[k])){const seen=new Set();s[k]=raw[k].slice(0,10).map(x=>{let id=typeof x?.id==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&!['__proto__','constructor','prototype'].includes(x.id)&&!seen.has(x.id)?x.id:uid();seen.add(id);return{id,label:String(x?.label||'').slice(0,160)};});if(!s[k].length)s[k]=[item()];}
     s.scaleMin=Math.round(num(raw.scaleMin,0,9,1));s.scaleMax=Math.round(num(raw.scaleMax,s.scaleMin+1,10,5));
+    if(Array.isArray(raw.scaleLabels)&&raw.scaleLabels.length===s.scaleMax-s.scaleMin+1&&raw.scaleLabels.every(label=>typeof label==='string'&&label.trim()))s.scaleLabels=raw.scaleLabels.map(label=>label.trim().slice(0,100));
     s.openLimit=Math.round(num(raw.openLimit,100,2000,1000));s.openPage=Math.round(num(raw.openPage,0,12500,0));s.pinAspect=num(raw.pinAspect,.05,20,16/9);
     for(const axis of ['x','y']){s[axis+'Min']=num(raw[axis+'Min'],-1000,999,0);s[axis+'Max']=num(raw[axis+'Max'],s[axis+'Min']+.01,1000,10);}
     if(typeof raw.pinImage==='string'&&/^data:image\/(png|jpeg|webp);base64,[a-z\d+/=]+$/i.test(raw.pinImage)&&raw.pinImage.length<2500000)s.pinImage=raw.pinImage;
@@ -85,8 +96,11 @@ const ClassroomCore=(()=>{
   }
   function config(s){
     const out={id:s.id,type:s.type||'wordcloud',question:s.question.trim(),info:s.info||'',accepting:s.accepting!==false};
-    const keys={wordcloud:['responseLimit'],poll:['choices','multiple'],open:['openLimit'],scale:['statements','scaleMin','scaleMax','scaleLow','scaleHigh'],ranking:['choices'],dotvote:['choices','dotRevealed'],pin:['pinImage','pinAspect'],xy:['xLabel','yLabel','xMin','xMax','yMin','yMax','xLow','xHigh','yLow','yHigh']};
-    for(const k of keys[out.type]||[])out[k]=s[k];return out;
+    const keys={wordcloud:['responseLimit'],poll:['choices','multiple'],open:['openLimit'],scale:['statements','scaleMin','scaleMax','scaleLow','scaleHigh'],ranking:['choices'],dotvote:['choices','dotRevealed','dotBudget'],pin:['pinImage','pinAspect'],xy:['xLabel','yLabel','xMin','xMax','yMin','yMax','xLow','xHigh','yLow','yHigh']};
+    for(const k of keys[out.type]||[])out[k]=s[k];
+    if(out.type==='dotvote')out.dotBudget=dotBudget(s);
+    if(out.type==='scale'&&s.scaleLabels)out.scaleLabels=s.scaleLabels;
+    return out;
   }
   function ready(s){
     if(!s.question?.trim())return 'Write a question first.';
@@ -101,8 +115,11 @@ const ClassroomCore=(()=>{
     if(type==='poll'){const ids=Array.isArray(a.choice_ids)?a.choice_ids:[],valid=new Set(s.choices.map(x=>x.id));if(!ids.length||(!s.multiple&&ids.length!==1)||new Set(ids).size!==ids.length||ids.some(x=>!valid.has(x)))throw Error(s.multiple?'Select at least one choice.':'Select one choice.');return{choice_ids:ids};}
     if(type==='dotvote'){
       const entries=a.dots&&typeof a.dots==='object'&&!Array.isArray(a.dots)?Object.entries(a.dots):[],choices=new Set(s.choices.map(c=>c.id));
-      if(entries.some(([id,n])=>!choices.has(id)||!Number.isInteger(n)||n<1||n>2)
-        ||entries.reduce((total,[,n])=>total+n,0)!==2)throw Error('Allocate both dots before submitting.');
+      const budget=dotBudget(s);
+      if(entries.some(([id,n])=>!choices.has(id)||!Number.isInteger(n)||n<1||n>budget)
+        ||entries.reduce((total,[,n])=>total+n,0)!==budget){
+        throw Error(budget===1?'Place your dot before submitting.':budget===2?'Allocate both dots before submitting.':'Allocate all '+budget+' dots before submitting.');
+      }
       return {dots:Object.fromEntries(entries)};
     }
     if(type==='open'){const text=typeof a.text==='string'?a.text.trim():'';if(!text)throw Error('Write a response first.');if(text.length>s.openLimit)throw Error('Your response is too long.');return{text};}
@@ -152,19 +169,36 @@ const ClassroomCore=(()=>{
     const type=s.type||'wordcloud';
     if(type==='wordcloud')return `<div class="entry-inputs">${Array.from({length:s.responseLimit},(_,i)=>`<input class="response-input" name="word${i}" type="text" maxlength="65" placeholder="Response ${i+1}" aria-label="Response ${i+1}" autocomplete="off" value="${esc(a.words?.[i]||'')}">`).join('')}</div>`;
     if(type==='poll')return `<div class="answer-options">${s.choices.map((c,i)=>`<label class="answer-option"><input type="${s.multiple?'checkbox':'radio'}" name="choice" value="${esc(c.id)}" ${a.choice_ids?.includes(c.id)?'checked':''} ${s.multiple?'':'required'}><span class="answer-letter">${String.fromCharCode(65+i)}</span><span>${esc(c.label||'Choice '+(i+1))}</span></label>`).join('')}</div><p class="small muted">${s.multiple?'Select all choices that apply.':'Select one choice.'}</p>`;
-    if(type==='dotvote')return `<p class="small muted">Put both dots on one proposal or split them between two.</p>
-      <p class="dot-budget" data-dot-budget role="status">2 dots left</p>
-      <div class="dot-ballot">${s.choices.map((c,i)=>`<div class="dot-choice">
+    if(type==='dotvote'){
+      const budget=dotBudget(s);
+      return `<p class="small muted">${budget===1?'Place your dot on one proposal.':'Use all '+budget+' dots. You can put them on one proposal or spread them across several.'}</p>
+      <p class="dot-budget" data-dot-budget="${budget}" role="status"></p>
+      <div class="dot-ballot">${s.choices.map((c,i)=>{
+        const saved=a.dots?.[c.id],dots=Number.isInteger(saved)&&saved>=0&&saved<=budget?saved:0;
+        return `<div class="dot-choice">
         <span><b>Proposal ${i+1}</b><span>${esc(c.label)}</span></span>
         <div class="dot-stepper">
           <button class="button secondary" type="button" data-dot-step="-1" aria-label="Remove a dot from proposal ${i+1}">−</button>
-          <output data-dot-value aria-label="Dots on proposal ${i+1}">${a.dots?.[c.id]||0}</output>
+          <output data-dot-value aria-label="Dots on proposal ${i+1}">${dots}</output>
           <button class="button secondary" type="button" data-dot-step="1" aria-label="Add a dot to proposal ${i+1}">+</button>
-          <input type="hidden" data-dot-choice="${esc(c.id)}" value="${a.dots?.[c.id]||0}">
+          <input type="hidden" data-dot-choice="${esc(c.id)}" value="${dots}">
         </div>
-      </div>`).join('')}</div>`;
+      </div>`;}).join('')}</div>`;
+    }
     if(type==='open')return `<label class="field"><span>Your response</span><textarea class="open-answer" name="text" rows="6" maxlength="${s.openLimit}" placeholder="Share your thoughts" required>${esc(a.text||'')}</textarea></label><p class="small muted" data-text-count>${(a.text||'').length} / ${s.openLimit} characters</p>`;
-    if(type==='scale')return s.statements.map(st=>`<fieldset class="scale-question"><legend>${esc(st.label||'Statement')}</legend><div class="scale-buttons">${Array.from({length:s.scaleMax-s.scaleMin+1},(_,i)=>{const n=i+s.scaleMin;return `<label><input type="radio" name="rating_${esc(st.id)}" value="${n}" ${a.ratings?.[st.id]===n?'checked':''} required><span>${n}</span></label>`;}).join('')}</div><div class="scale-ends"><span>${esc(s.scaleLow)}</span><span>${esc(s.scaleHigh)}</span></div></fieldset>`).join('');
+    if(type==='scale'){
+      const labels=Array.isArray(s.scaleLabels)&&s.scaleLabels.length===s.scaleMax-s.scaleMin+1?s.scaleLabels:null;
+      return s.statements.map(st=>{
+        const buttons=Array.from({length:s.scaleMax-s.scaleMin+1},(_,i)=>{
+          const n=i+s.scaleMin,label=labels?.[i];
+          return `<label><input type="radio" name="rating_${esc(st.id)}" value="${n}" ${label?`data-scale-label="${esc(label)}" aria-label="${n} — ${esc(label)}"`:''} ${a.ratings?.[st.id]===n?'checked':''} required><span>${n}</span></label>`;
+        }).join('');
+        const guide=labels?`<p class="scale-selection" data-scale-selection aria-live="polite"></p>
+          <details class="scale-label-guide"><summary>All rating levels</summary><ol start="${s.scaleMin}">${labels.map(label=>`<li>${esc(label)}</li>`).join('')}</ol></details>`:
+          `<div class="scale-ends"><span>${esc(s.scaleLow)}</span><span>${esc(s.scaleHigh)}</span></div>`;
+        return `<fieldset class="scale-question" ${labels?`data-labeled-scale style="--scale-levels:${labels.length}"`:''}><legend>${esc(st.label||'Statement')}</legend><div class="scale-buttons">${buttons}</div>${guide}</fieldset>`;
+      }).join('');
+    }
     if(type==='ranking'){const order=a.order?.length===s.choices.length?a.order:s.choices.map(c=>c.id);return `<p class="small muted">Move your highest priority to the top. Drag items or use the arrows.</p><ol class="ranking-input">${order.map(id=>{const c=s.choices.find(x=>x.id===id);return c?`<li draggable="true" data-choice-id="${esc(id)}"><span class="drag-grip" aria-hidden="true">⠿</span><span class="rank-label">${esc(c.label||'Ranking item')}</span><button type="button" data-rank="up" aria-label="Move ${esc(c.label)} up">↑</button><button type="button" data-rank="down" aria-label="Move ${esc(c.label)} down">↓</button></li>`:'';}).join('')}</ol>`;}
     if(type==='pin')return s.pinImage?`<p class="small muted">Tap or click the image to place your pin. Use the arrow keys to adjust it.</p><div class="pin-input" tabindex="0" role="group" aria-label="Select a position on the image"><img src="${esc(s.pinImage)}" alt="Image for placing your response pin"><span class="pin-marker" hidden aria-hidden="true"></span><input type="hidden" name="pinX" value="${a.x??''}"><input type="hidden" name="pinY" value="${a.y??''}"></div><div class="pin-selection"><span class="small muted" data-pin-label>No position selected</span><button class="button secondary" type="button" data-pin-center>Place pin in center</button></div>`:'<p class="small muted">Upload an image in Edit before collecting responses.</p>';
     if(type==='xy')return ['x','y'].map(axis=>`<label class="axis-entry"><span><b>${esc(s[axis+'Label'])}</b><output>${a[axis]??((s[axis+'Min']+s[axis+'Max'])/2)}</output></span><input type="range" name="${axis}" min="${s[axis+'Min']}" max="${s[axis+'Max']}" step="any" value="${a[axis]??((s[axis+'Min']+s[axis+'Max'])/2)}"><span class="scale-ends"><span>${esc(s[axis+'Low'])} (${s[axis+'Min']})</span><span>${esc(s[axis+'High'])} (${s[axis+'Max']})</span></span></label>`).join('')+'<div class="xy-input-preview" aria-label="Your position on the quadrant"><span class="xy-input-dot"></span></div>';
@@ -177,7 +211,7 @@ const ClassroomCore=(()=>{
   function paintDotBallot(form){
     const budget=form.querySelector('[data-dot-budget]');
     if(!budget)return;
-    const remaining=2-Object.values(readDotBallot(form).dots).reduce((total,n)=>total+n,0);
+    const remaining=Number(budget.dataset.dotBudget)-Object.values(readDotBallot(form).dots).reduce((total,n)=>total+n,0);
     const message=remaining===1?'1 dot left':remaining+' dots left';
     if(budget.textContent!==message)budget.textContent=message;
     for(const row of form.querySelectorAll('.dot-choice')){
@@ -199,7 +233,13 @@ const ClassroomCore=(()=>{
     if(s.type==='xy')a={x:Number(form.querySelector('[name="x"]').value),y:Number(form.querySelector('[name="y"]').value)};
     return normalizeAnswer(s,a);
   }
+  function paintScaleSelection(group){
+    const selected=group.querySelector('input[data-scale-label]:checked'),status=group.querySelector('[data-scale-selection]');
+    const message=selected?selected.value+' — '+selected.dataset.scaleLabel:'Choose a rating to see its meaning.';
+    if(status.textContent!==message)status.textContent=message;
+  }
   function refreshForms(root){
+    for(const group of root.querySelectorAll('[data-labeled-scale]'))paintScaleSelection(group);
     for(const form of root.querySelectorAll('form'))paintDotBallot(form);
     for(const wrap of root.querySelectorAll('.pin-input')){const x=wrap.querySelector('[name="pinX"]'),y=wrap.querySelector('[name="pinY"]'),marker=wrap.querySelector('.pin-marker'),set=x.value!==''&&y.value!=='';marker.hidden=!set;if(set){marker.style.left=x.value+'%';marker.style.top=y.value+'%';}const label=wrap.parentElement.querySelector('[data-pin-label]');if(label)label.textContent=set?`Selected: ${Number(x.value).toFixed(1)}%, ${Number(y.value).toFixed(1)}%`:'No position selected';}
     for(const form of root.querySelectorAll('form')){const x=form.querySelector('input[name="x"]'),y=form.querySelector('input[name="y"]');if(x&&y){for(const el of [x,y])el.closest('.axis-entry').querySelector('output').textContent=Number(el.value).toFixed(1);const dot=form.querySelector('.xy-input-dot');if(dot){dot.style.left=((Number(x.value)-Number(x.min))/(Number(x.max)-Number(x.min))*100)+'%';dot.style.bottom=((Number(y.value)-Number(y.min))/(Number(y.max)-Number(y.min))*100)+'%';}}}
@@ -219,6 +259,7 @@ const ClassroomCore=(()=>{
       }
       const b=e.target.closest('[data-rank]');if(b){const li=b.closest('li'),list=li.parentElement;if(b.dataset.rank==='up'&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);if(b.dataset.rank==='down'&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);return;}const center=e.target.closest('[data-pin-center]');if(center){const wrap=center.closest('form').querySelector('.pin-input');place(wrap,50,50);wrap.focus();return;}const wrap=e.target.closest('.pin-input');if(wrap){const rect=wrap.querySelector('img').getBoundingClientRect();if(rect.width&&rect.height)place(wrap,(e.clientX-rect.left)/rect.width*100,(e.clientY-rect.top)/rect.height*100);}});
     root.addEventListener('keydown',e=>{if(e.target.closest('fieldset[disabled]'))return;const wrap=e.target.closest('.pin-input');if(!wrap||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key))return;e.preventDefault();let x=Number(wrap.querySelector('[name="pinX"]').value||50),y=Number(wrap.querySelector('[name="pinY"]').value||50);if(e.key==='ArrowLeft')x--;if(e.key==='ArrowRight')x++;if(e.key==='ArrowUp')y--;if(e.key==='ArrowDown')y++;place(wrap,x,y);});
+    root.addEventListener('change',e=>{if(e.target.matches('[data-scale-label]'))paintScaleSelection(e.target.closest('[data-labeled-scale]'));});
     root.addEventListener('input',e=>{if(e.target.matches('input[type="range"][name="x"],input[type="range"][name="y"]'))refreshForms(root);if(e.target.matches('.open-answer')){const counter=e.target.closest('form').querySelector('[data-text-count]');if(counter)counter.textContent=e.target.value.length+' / '+e.target.maxLength+' characters';}});
     root.addEventListener('dragstart',e=>{const li=e.target.closest('.ranking-input li');if(!li)return;if(li.closest('fieldset[disabled]')){e.preventDefault();return;}dragging=li;e.dataTransfer?.setData('text/plain',li.dataset.choiceId);li.classList.add('dragging');});
     root.addEventListener('dragover',e=>{if(dragging&&e.target.closest('.ranking-input'))e.preventDefault();});
@@ -316,18 +357,27 @@ function common(next){$('joinForm').hidden=true;$('responseArea').hidden=false;$
 function questionShape(s,revision){
   const shape={...ClassroomCore.config(s)};
   if(s.type!=='dotvote')delete shape.question;
+  if(shape.dotBudget===2)delete shape.dotBudget;
   delete shape.info;delete shape.accepting;delete shape.dotRevealed;
   if(s.type==='pin'){delete shape.pinImage;shape.imageRevision=revision;}
   return JSON.stringify(shape);
 }
 function draftKey(sessionId,slideId){return 'mayne-classroom-draft:'+sessionId+':'+slideId;}
+function draftHasInput(s,answer){
+  if(s.type==='wordcloud')return answer.words.some(word=>word.trim());
+  if(s.type==='open')return Boolean(answer.text.trim());
+  if(s.type==='ranking')return answer.order.some((id,index)=>id!==s.choices[index]?.id);
+  if(s.type==='xy')return answer.x!==(s.xMin+s.xMax)/2||answer.y!==(s.yMin+s.yMax)/2;
+  return Object.values(answer).some(value=>value!=null&&(typeof value!=='object'||Object.keys(value).length>0));
+}
 function rememberDraft(){
   if(code.length!==7||!session||!currentSlide)return;
   const key=draftKey(session.id,session.active_slide_id),answer=draftAnswer(currentSlide);
   const retry=pending?.code===session.code&&pending.slide_id===session.active_slide_id&&pending.epoch===session.epoch?pending:null;
   try{
-    if(equalAnswer(answer,session.my_answer)&&!retry)sessionStorage.removeItem(key);
-    else sessionStorage.setItem(key,JSON.stringify({epoch:session.epoch,shape:questionShape(currentSlide,session.revision),answer,pending:retry}));
+    if(equalAnswer(answer,session.my_answer)&&!retry){sessionStorage.removeItem(key);return false;}
+    sessionStorage.setItem(key,JSON.stringify({epoch:session.epoch,shape:questionShape(currentSlide,session.revision),answer,pending:retry}));
+    return Boolean(retry||draftHasInput(currentSlide,answer));
   }catch{}
 }
 function storedDraft(next,shape){
@@ -387,7 +437,7 @@ function renderDotResults(s,next){
 function renderClassroom(next){
  if(next!==session&&Number.isFinite(Date.parse(next.server_now)))serverOffset=Date.parse(next.server_now)-Date.now();
  const prior=session,oldSlide=currentSlide,same=prior?.id===next.id&&prior.active_slide_id===next.active_slide_id&&prior.epoch===next.epoch;
- if(prior&&!same)rememberDraft();
+ const draftSaved=prior&&!same&&rememberDraft();
  if(next.slide)currentSlide={...ClassroomCore.defaults(),...next.slide};if(!currentSlide)return;
  const s=currentSlide;session=next;common(next);$('question').textContent=s.question||'Your teacher is preparing this question';$('questionType').textContent=ClassroomCore.types[s.type];$('instructions').textContent=s.info||'';$('instructions').hidden=!s.info;
  const shape=questionShape(s,next.revision);
@@ -399,18 +449,22 @@ function renderClassroom(next){
    const answer=unchanged?draftAnswer(oldSlide):cached?.answer||retry?.answer||next.my_answer||{};
    pending=retry||null;savePending();
    $('inputs').innerHTML=ClassroomCore.formFields(s,answer);lastFormKey=key;ClassroomCore.refreshForms(document);
-   if(prior&&!same)status(prior.active_slide_id===next.active_slide_id?'Your teacher cleared this question. You can respond again.':next.pacing==='self'?'Submit your answer before moving to another question.':'New question. Your previous answer is saved.');
+   if(prior&&!same){
+     const previous=draftSaved?' Your previous draft is saved on this device.':prior.my_answer?' Your previous response was submitted to the instructor.':'';
+     status(prior.active_slide_id===next.active_slide_id?'Your teacher cleared this question. You can respond again.':'New question.'+previous);
+     $('question').focus({preventScroll:true});
+   }
  }
  renderNavigation();renderDotResults(s,next);
- const timedOut=CountdownCore.closed(next.timer,Date.now()+serverOffset),open=next.status==='open'&&next.ready&&!timedOut,ended=['ended','expired'].includes(next.status),voting=s.type==='dotvote';lastTimerClosed=timedOut;$('responseForm').hidden=ended||!next.ready||(voting&&Boolean(next.dot_tally));$('studentFields').disabled=!open||submitting||navigating;$('submitButton').disabled=!open||submitting||navigating;$('submitButton').textContent=submitting?'Sending…':voting?(next.my_answer?'Update ballot':'Submit two dots'):next.my_answer?'Update response':'Submit response';$('refreshButton').classList.toggle('hidden',open);$('remaining').hidden=s.type!=='wordcloud'||ended||!next.ready;$('remaining').textContent=`Enter up to ${s.responseLimit} words or phrases. Blank boxes are skipped.`;paintStudentTimer();
- if(ended)notice('This session has ended.','Your answers have been saved. Ask your teacher for a new link to join another session.');
+ const timedOut=CountdownCore.closed(next.timer,Date.now()+serverOffset),open=next.status==='open'&&next.ready&&!timedOut,ended=['ended','expired'].includes(next.status),voting=s.type==='dotvote';lastTimerClosed=timedOut;$('responseForm').hidden=ended||!next.ready||(voting&&Boolean(next.dot_tally));$('studentFields').disabled=!open||submitting||navigating;$('submitButton').disabled=!open||submitting||navigating;$('submitButton').textContent=submitting?'Sending…':voting?(next.my_answer?'Update ballot':'Submit ballot'):next.my_answer?'Update response':'Submit response';$('refreshButton').classList.toggle('hidden',open);$('remaining').hidden=s.type!=='wordcloud'||ended||!next.ready;$('remaining').textContent=`Enter up to ${s.responseLimit} words or phrases. Blank boxes are skipped.`;paintStudentTimer();
+ if(ended)notice('This session has ended.','Ask your teacher for a new link to join another session.');
  else if(!next.ready)notice('Your teacher is preparing this question.','Keep this page open. The question will appear here when it is ready.');
  else if(voting&&next.dot_tally)notice('The tally is ready.',next.my_answer?'Your ballot is saved. Review the ranked proposals and follow the group discussion.':'Review the ranked proposals and follow the group discussion.',true);
  else if(voting&&!open)notice('Voting is closed.',next.my_answer?'Your ballot is saved. Your instructor will reveal the tally.':'Keep this page open for your instructor.');
  else if(timedOut)notice('Time is up.','Responses for this question are closed. Your draft stays here if your teacher adds more time.');
  else if(!open)notice('Responses are paused.','Keep this page open. Your draft stays here while you wait for your teacher to resume.');
- else if(voting&&next.my_answer)notice('Your ballot is saved.','You can update your dots while voting is open.',true);
- else if(next.my_answer){const complete=next.pacing==='self'&&next.slides?.length&&next.slides.every(q=>q.answered);notice(complete?'All responses saved.':'Thank you! Your response is saved.',next.pacing==='self'?'Use Previous and Next to review your answers or continue to another question.':'You can update your answer below. Keep this page open for the next question.',true);}
+ else if(voting&&next.my_answer)notice('Ballot submitted to instructor.','You can update your dots while voting is open.',true);
+ else if(next.my_answer){const complete=next.pacing==='self'&&next.slides?.length&&next.slides.every(q=>q.answered);notice(complete?'All responses submitted.':'Response submitted to instructor.',next.pacing==='self'?'Use Previous and Next to review your answers or continue to another question.':'You can update your answer below. Keep this page open for the next question.',true);}
  else $('notice').classList.add('hidden');
  if(pending?.code===code&&pending.slide_id===next.active_slide_id&&pending.epoch===next.epoch&&equalAnswer(pending.answer,next.my_answer)){pending=null;savePending();status('Thank you. Your response was received.');rememberDraft();}
 }

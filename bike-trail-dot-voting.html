@@ -267,7 +267,22 @@
       .tabs button { padding-inline: .65rem; }
       .sample-ballots { font-size: .9rem; }
     }
-    .live-method-selected { grid-template-columns: minmax(0, 1fr); }
+    .live-method-selected { grid-template-columns: 9.5rem minmax(0, 1fr); }
+    @media (max-width: 490px) {
+      .live-method-selected { grid-template-columns: minmax(0, 1fr); }
+    }
+    textarea.text-input { font: inherit; resize: vertical; }
+    .saved-debriefs { margin-top: 1.15rem; }
+    .saved-debrief { margin-top: .75rem; padding-top: .7rem; border-top: 1px solid var(--border); }
+    .saved-debrief summary { cursor: pointer; font-weight: 700; overflow-wrap: anywhere; }
+    .saved-debrief > .small { margin-top: .65rem; }
+    .class-display-page #class-display-stage { color: var(--accent-dark); font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 750; }
+    .class-display-page #class-display-title { margin-top: .3rem; }
+    .class-display-page .stage-lead, .class-display-page .tally-status { font-size: clamp(1rem, 2.5vw, 1.35rem); }
+    .class-display-page .live-join { margin-block: 1.1rem; padding: 1rem 1.3rem; }
+    .class-display-page .live-code { font-size: clamp(2rem, 7vw, 4.5rem); }
+    .class-display-page .result-row { background: var(--surface); font-size: clamp(1rem, 2.5vw, 1.35rem); }
+    .class-display-page .live-agreement { --plot-height: clamp(9rem, 24vh, 14rem); }
     .live-section { border-top: 1px solid var(--border); margin-top: 1.15rem; padding-top: 1.05rem; }
     .live-section > p, .live-section > button { margin-top: .55rem; }
     .live-join { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .85rem; padding: .75rem .9rem; margin: .7rem 0; border: 1px solid var(--border); border-radius: .75rem; background: var(--wash); }
@@ -417,6 +432,7 @@
         <section class="panel stage" id="stage" aria-labelledby="stage-title"></section>
         <aside class="panel side" id="guide" aria-labelledby="guide-title"></aside>
       </div>
+      <section id="saved-debriefs" class="panel stage saved-debriefs" aria-label="Saved debriefs" hidden></section>
     </section>
     <section id="example-panel" role="tabpanel" aria-labelledby="example-tab" tabindex="0" hidden>
       <div class="layout">
@@ -489,10 +505,19 @@
         <button class="quiet" type="button" id="add-proposal">+ Add proposal</button>
       </div>
       <ol class="option-list" id="proposal-inputs"></ol>
+      <div class="field">
+        <label for="dot-budget">Dots per student</label>
+        <input class="number-input" id="dot-budget" name="dotBudget" type="number" inputmode="numeric" min="1" max="99" step="1" aria-describedby="suggested-dots" required>
+        <p id="suggested-dots" class="hint" aria-live="polite"></p>
+      </div>
       <div class="setup-bottom">
         <div class="field" id="voters-field">
           <label for="voters">Voters</label>
           <input class="number-input" id="voters" name="voters" type="number" inputmode="numeric" min="1" max="999" step="1" required>
+        </div>
+        <div class="field" id="expected-voters-field" hidden>
+          <label for="expected-voters">Expected voters <span class="optional">(optional)</span></label>
+          <input class="number-input" id="expected-voters" name="expectedVoters" type="number" inputmode="numeric" min="1" max="2000" step="1">
         </div>
         <fieldset>
           <legend>Voting method</legend>
@@ -518,8 +543,8 @@
     </ol>
     <p class="small">Steve Bates, <cite>The Washington Post</cite>, May 15, 1993</p>
     <div class="section-rule">
-      <h3>Two dots per voter</h3>
-      <p>Place both dots on one proposal or split them between two.</p>
+      <h3>Set the dot allotment</h3>
+      <p>Suggested allotments use half the number of proposals plus one, with halves rounded down. The Bike Trail exercise starts with two dots per voter.</p>
     </div>
   </template>
 
@@ -545,10 +570,10 @@
     <div class="ballot-head">
       <div>
         <h2 id="stage-title" tabindex="-1"></h2>
-        <p class="stage-lead">Use both dots. You can put them on the same proposal.</p>
+        <p class="stage-lead" id="ballot-instructions"></p>
       </div>
       <div class="budget">
-        <div class="budget-dots" aria-hidden="true"><span></span><span></span></div>
+        <div class="budget-dots" aria-hidden="true"></div>
         <span class="budget-text" id="dots-left" aria-live="polite"></span>
       </div>
     </div>
@@ -576,12 +601,12 @@
 
   <template id="tally-guide">
     <h2 id="guide-title">Collect the dots first</h2>
-    <p>Ask each voter to decide privately where to place their two dots. After everyone casts their vote, count the dots on each proposal.</p>
+    <p>Ask each voter to decide privately where to place their allotted dots. After everyone casts their vote, count the dots on each proposal.</p>
   </template>
 
   <template id="live-vote-view">
     <h2 id="stage-title" tabindex="-1"></h2>
-    <p class="stage-lead">Students use two dots to choose which proposal the group will discuss first.</p>
+    <p class="stage-lead" id="live-vote-instructions"></p>
     <div class="problem" data-problem hidden><span class="small">Group problem</span><p></p></div>
     <ol class="ballot-list" id="live-ballot-proposals" aria-label="Proposals on the ballot"></ol>
     <p class="tally-status" data-live-data="vote" aria-live="polite"></p>
@@ -592,7 +617,7 @@
 
   <template id="live-vote-guide">
     <h2 id="guide-title">Voting on your own device</h2>
-    <p>Put both dots on one proposal or split them between two. Close voting when the group is ready and reveal the tally to discuss the result.</p>
+    <p>Close voting when the group is ready. Reveal the tally to discuss which proposal the group will consider first.</p>
   </template>
 
   <template id="results-view">
@@ -617,28 +642,41 @@
     </div>
   </template>
 
+  <template id="class-display-view">
+    <p class="small" id="class-display-stage">Bike Trail Dot Voting</p>
+    <h1 id="class-display-title">Waiting for the instructor</h1>
+    <p class="stage-lead" id="class-display-instructions"></p>
+    <div id="class-display-join"></div>
+    <p class="tally-status" id="class-display-progress" role="status" hidden></p>
+    <ol class="results-list" id="class-display-proposals" aria-label="Proposals" hidden></ol>
+    <div id="class-display-agreement"></div>
+  </template>
+
   <script src="assets/vendor/qrcode.min.js"></script>
-  <script src="assets/bike-trail-live.js"></script>
+  <script src="assets/bike-trail-classroom.js"></script>
+  <script src="assets/bike-trail-live.js?v=classroom-controls"></script>
   <script>
     "use strict";
 
-    const DOTS = 2;
+    const DEFAULT_DOTS = 2;
     const STORAGE_KEY = "bike-trail-dot-voting-v1";
     const stage = document.querySelector("#stage");
     const guide = document.querySelector("#guide");
     const steps = [...document.querySelectorAll("[data-step]")];
-    const liveAvailable = typeof createBikeTrailLive === "function";
+    const liveAvailable = typeof createBikeTrailLive === "function" && typeof BikeTrailClassroom === "object";
+    const displayId = new URLSearchParams(location.search).get("class-display");
+    const classDisplay = liveAvailable && /^[a-f0-9-]{36}$/i.test(displayId || "");
 
     function newSession() {
       return {
-        setup: { problem: "", voters: "4", method: "device", proposals: ["", ""] },
+        setup: { problem: "", voters: "4", expectedVoters: "", dotBudget: String(DEFAULT_DOTS),
+          method: "device", proposals: ["", ""] },
         round: null
       };
     }
 
-    function readSession() {
+    function validSession(saved) {
       try {
-        const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
         if (!saved) return newSession();
         const { setup, round } = saved;
         if (!setup || typeof setup.problem !== "string" || typeof setup.voters !== "string" ||
@@ -646,7 +684,12 @@
             setup.proposals.length < 2 || !setup.proposals.every(name => typeof name === "string")) {
           return newSession();
         }
+        setup.dotBudget = typeof setup.dotBudget === "string" ? setup.dotBudget : String(DEFAULT_DOTS);
+        setup.expectedVoters = typeof setup.expectedVoters === "string" ? setup.expectedVoters : "";
         if (round) {
+          round.dotBudget = round.dotBudget ?? DEFAULT_DOTS;
+          if (!validBudget(round.dotBudget)) return { setup, round: null };
+          setup.dotBudget = String(round.dotBudget);
           const voters = Number(setup.voters);
           const size = setup.proposals.length;
           const validCounts = Array.isArray(round.counts) && round.counts.length === size &&
@@ -656,7 +699,7 @@
           const isLive = setup.method === "live";
           if ((!isLive && (!Number.isInteger(voters) || voters < 1 || voters > 999)) ||
               !validCounts || !validEntries || !Number.isInteger(round.ballots) ||
-              round.ballots < 0 || round.ballots > (isLive ? 2000 : voters) || sum(round.counts) !== round.ballots * DOTS ||
+              round.ballots < 0 || round.ballots > (isLive ? 2000 : voters) || sum(round.counts) !== round.ballots * round.dotBudget ||
               typeof round.complete !== "boolean" || (round.complete && round.ballots === 0)) {
             return { setup, round: null };
           }
@@ -667,10 +710,16 @@
       }
     }
 
-    let session = readSession();
+    function readSession() {
+      try { return validSession(JSON.parse(sessionStorage.getItem(STORAGE_KEY))); }
+      catch { return newSession(); }
+    }
+
+    let session = classDisplay ? null : readSession();
     let ballot = null;
-    const live = liveAvailable ? createBikeTrailLive({
-      stage, getSession: () => session, saveSession, render, showTemplate, showGuide, showProblem, element, button
+    const live = liveAvailable && !classDisplay ? createBikeTrailLive({
+      stage, getSession: () => session, restoreSession: saved => { session = validSession(saved); },
+      saveSession, render, showTemplate, showGuide, showProblem, element, button
     }) : null;
 
     function saveSession() {
@@ -679,6 +728,15 @@
       } catch {
         // The exercise still runs when browser storage is unavailable.
       }
+      live?.saveDraft();
+    }
+
+    function validBudget(number) {
+      return Number.isInteger(number) && number >= 1 && number <= 99;
+    }
+
+    function proposalKey(name) {
+      return name.trim().toLocaleLowerCase().replace(/\s+/g, " ");
     }
 
     function sum(numbers) {
@@ -745,6 +803,7 @@
         else renderHandoff();
       }
       if (focus) stage.querySelector("#stage-title").focus();
+      if (liveAvailable) BikeTrailClassroom.renderArchive();
     }
 
     function renderSetup() {
@@ -757,12 +816,25 @@
       const error = stage.querySelector("#setup-error");
       form.elements.problem.value = setup.problem;
       form.elements.voters.value = setup.voters;
+      form.elements.expectedVoters.value = setup.expectedVoters;
+      form.elements.dotBudget.value = setup.dotBudget;
       form.elements.method.value = setup.method;
       start.textContent = setup.method === "tally" ? "Open tally" : "Start voting";
+
+      function showSuggestion() {
+        const count = new Set(setup.proposals.map(proposalKey).filter(Boolean)).size;
+        const suggested = Math.floor(count / 2) + 1;
+        const hint = stage.querySelector("#suggested-dots");
+        const text = count < 2 ? "Add two proposals to see a suggested allotment."
+          : "For " + count + " proposals, the suggested allotment is " + suggested + " dots per student.";
+        if (hint.textContent !== text) hint.textContent = text;
+      }
 
       function saveField() {
         setup.problem = form.elements.problem.value;
         setup.voters = form.elements.voters.value;
+        setup.expectedVoters = form.elements.expectedVoters.value;
+        setup.dotBudget = form.elements.dotBudget.value;
         setup.method = form.elements.method.value;
         start.textContent = setup.method === "tally" ? "Open tally" : "Start voting";
         error.hidden = true;
@@ -785,7 +857,7 @@
         input.value = proposal;
         input.addEventListener("input", () => {
           setup.proposals[index] = input.value;
-          saveSession();
+          showSuggestion();
         });
         const remove = button("Remove", "quiet remove", () => {
           setup.proposals.splice(index, 1);
@@ -812,7 +884,7 @@
         saveField();
         const proposals = setup.proposals.map(proposal => proposal.trim()).filter(Boolean);
         const voters = Number(setup.voters);
-        const distinct = new Set(proposals.map(proposal => proposal.toLowerCase().replace(/\s+/g, " ")));
+        const distinct = new Set(proposals.map(proposalKey));
         if (proposals.length < 2 || distinct.size !== proposals.length) {
           error.textContent = proposals.length < 2 ? "Enter at least two proposals." : "Give each proposal a distinct name.";
           error.hidden = false;
@@ -820,14 +892,29 @@
           stage.querySelector("#proposal-" + (blank < 0 ? 1 : blank + 1)).focus();
           return;
         }
+        const dotBudget = Number(setup.dotBudget);
+        if (!validBudget(dotBudget) || form.elements.dotBudget.validity.badInput) {
+          error.textContent = "Enter a whole number from 1 to 99 for dots per student.";
+          error.hidden = false;
+          form.elements.dotBudget.focus();
+          return;
+        }
         if (setup.method === "live" && live) {
+          const expected = Number(setup.expectedVoters);
+          if (form.elements.expectedVoters.validity.badInput ||
+              (setup.expectedVoters && (!Number.isInteger(expected) || expected < 1 || expected > 2000))) {
+            error.textContent = "Enter a whole number from 1 to 2,000 for expected voters, or leave it blank.";
+            error.hidden = false;
+            form.elements.expectedVoters.focus();
+            return;
+          }
           const problem = setup.problem.trim();
           if (problem.length > 220 || proposals.length > 10 || proposals.some(proposal => proposal.length > 160)) {
             error.textContent = "Use up to 220 characters for the problem and two to ten proposals of up to 160 characters each.";
             error.hidden = false;
             return;
           }
-          live.startVote(problem, proposals);
+          live.startVote(problem, proposals, dotBudget, expected || null);
           return;
         }
         if (!Number.isInteger(voters) || voters < 1 || voters > 999 || form.elements.voters.validity.badInput) {
@@ -840,6 +927,7 @@
         setup.problem = setup.problem.trim();
         setup.voters = String(voters);
         session.round = {
+          dotBudget,
           counts: proposals.map(() => 0),
           entries: proposals.map(() => ""),
           ballots: 0,
@@ -849,6 +937,7 @@
         saveSession();
         render();
       });
+      showSuggestion();
       live?.setup(form);
     }
 
@@ -910,7 +999,12 @@
       stage.querySelector("#stage-title").textContent = "Voter " + (session.round.ballots + 1) + " of " + session.setup.voters;
       const proposals = stage.querySelector("#ballot-proposals");
       const submit = stage.querySelector("#submit-ballot");
-      const budgetDots = [...stage.querySelectorAll(".budget-dots span")];
+      const budget = session.round.dotBudget;
+      stage.querySelector("#ballot-instructions").textContent = budget === 1
+        ? "Place your dot on one proposal."
+        : "Use all " + budget + " dots. You can put them on one proposal or spread them across several.";
+      const budgetDots = budget <= 10 ? Array.from({ length: budget }, () => element("span", "")) : [];
+      stage.querySelector(".budget-dots").replaceChildren(...budgetDots);
       const controls = session.setup.proposals.map((proposal, index) => {
         const row = element("li", "vote-row");
         const group = element("div", "vote-controls");
@@ -921,7 +1015,7 @@
           updateControls();
         });
         const add = button("+", "secondary", () => {
-          if (sum(ballot) < DOTS) ballot[index] += 1;
+          if (sum(ballot) < budget) ballot[index] += 1;
           updateControls();
         });
         remove.setAttribute("aria-label", "Remove dot from proposal " + (index + 1) + ", " + proposal);
@@ -933,7 +1027,7 @@
       });
 
       function updateControls() {
-        const left = DOTS - sum(ballot);
+        const left = budget - sum(ballot);
         stage.querySelector("#dots-left").textContent = dotLabel(left) + " left";
         budgetDots.forEach((dot, index) => { dot.dataset.available = String(index < left); });
         controls.forEach(({ count, remove, add }, index) => {
@@ -950,7 +1044,7 @@
         render();
       });
       submit.addEventListener("click", () => {
-        if (!ballot || sum(ballot) !== DOTS) return;
+        if (!ballot || sum(ballot) !== budget) return;
         ballot.forEach((count, index) => { session.round.counts[index] += count; });
         session.round.ballots += 1;
         ballot = null;
@@ -968,7 +1062,7 @@
       const list = stage.querySelector("#tally-proposals");
       const submit = stage.querySelector("#submit-tally");
       const status = stage.querySelector("#tally-status");
-      const expected = Number(session.setup.voters) * DOTS;
+      const expected = Number(session.setup.voters) * session.round.dotBudget;
       const inputs = session.setup.proposals.map((proposal, index) => {
         const row = element("li", "vote-row");
         const id = "tally-" + (index + 1);
@@ -1038,7 +1132,8 @@
         : leading.find(result => result.index === session.round.discussionIndex);
       const lines = ["Bike Trail Dot Voting", ""];
       if (session.setup.problem) lines.push("Group problem", session.setup.problem, "");
-      lines.push(session.round.ballots + " ballot(s) recorded", dotLabel(sum(session.round.counts)), "", "Ranked tally");
+      lines.push(session.round.ballots + " ballot(s) recorded",
+        dotLabel(session.round.dotBudget) + " per student", dotLabel(sum(session.round.counts)), "", "Ranked tally");
       ranked.forEach(({ proposal, index, dots }) => {
         lines.push("Proposal " + (index + 1) + "  |  " + dotLabel(dots) + "  |  " + proposal);
       });
@@ -1203,10 +1298,15 @@
       updateProgress();
     }
 
-    setupTabs();
-    setupWorkedExample();
-    render(false);
-    live?.connect();
+    if (classDisplay) {
+      BikeTrailClassroom.openDisplay(displayId);
+    } else {
+      live?.restore();
+      setupTabs();
+      setupWorkedExample();
+      render(false);
+      live?.connect();
+    }
   </script>
 </body>
 </html>
