@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Bike Trail Dot Voting</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f5ef;
+      --surface: #fff;
+      --ink: #162b26;
+      --muted: #4c6058;
+      --border: #d5ded7;
+      --accent: #175e4a;
+      --accent-dark: #114737;
+      --wash: #edf4ed;
+      --dot: #aa4a29;
+      --error: #9b2b24;
+      --radius: 1.25rem;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--page);
+      line-height: 1.5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; min-width: 0; }
+    h1, h2, h3, h4, p, ol { margin: 0; }
+    button, input { font: inherit; }
+    input { min-width: 0; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid #266f58; outline-offset: 3px; }
+    h2[tabindex="-1"]:focus { outline: none; }
+
+    .shell { width: min(100% - 3rem, 69rem); margin-inline: auto; }
+    .masthead { border-bottom: 1px solid var(--border); }
+    .masthead-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      min-height: 4rem;
+    }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; }
+    .brand-dots { display: inline-flex; align-items: center; gap: .25rem; }
+    .brand-dots span { width: .56rem; height: .56rem; border-radius: 50%; background: var(--dot); }
+    .course { color: var(--muted); font-size: .875rem; }
+    main { padding-block: 2.45rem 3rem; }
+    h1 {
+      font-size: clamp(2.2rem, 5.2vw, 3.65rem);
+      line-height: 1.05;
+      letter-spacing: -.055em;
+      overflow-wrap: anywhere;
+    }
+    h2 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); line-height: 1.2; letter-spacing: -.025em; }
+    h3 { font-size: 1rem; line-height: 1.25; }
+    .intro { margin-top: .6rem; color: var(--muted); }
+    .tabs {
+      display: flex;
+      gap: .3rem;
+      width: max-content;
+      max-width: 100%;
+      margin-block: 1.25rem .9rem;
+      padding: .28rem;
+      border: 1px solid var(--border);
+      border-radius: .85rem;
+      background: var(--surface);
+    }
+    .tabs button { padding-inline: .8rem; }
+    .tabs button[aria-selected="true"] { color: #fff; background: var(--accent); }
+    .tabs button[aria-selected="false"]:hover { background: var(--wash); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .55rem;
+      padding: 0;
+      list-style: none;
+      margin-block: .95rem 1.25rem;
+    }
+    .steps li {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      border-top: 3px solid var(--border);
+      padding: .6rem .2rem .15rem;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .steps li[aria-current="step"] { border-color: var(--accent); color: var(--ink); }
+    .steps li[data-complete="true"] { border-color: #79a491; }
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex: 0 0 1.55rem;
+      height: 1.55rem;
+      border-radius: 50%;
+      background: #e5ebe4;
+      font-size: .83rem;
+    }
+    .steps li[aria-current="step"] .step-number { background: var(--accent); color: #fff; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, .39fr); gap: 1.15rem; align-items: start; }
+    .layout:has(aside[hidden]) { grid-template-columns: minmax(0, 1fr); }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+    .stage { padding: clamp(1rem, 3vw, 1.75rem); min-width: 0; box-shadow: 0 8px 26px #253e2d0b; }
+    .side { padding: 1.25rem; background: var(--wash); }
+    .side h2 { font-size: 1.2rem; }
+    .side p, .side li { margin-top: .6rem; }
+    .side ol, .side ul { padding-left: 1.3rem; }
+    .side .section-rule { border-top: 1px solid var(--border); margin-top: 1.2rem; padding-top: 1.1rem; }
+    .small, .hint { color: var(--muted); font-size: .875rem; }
+    .stage-lead { margin-top: .45rem; color: var(--muted); }
+    .field { display: grid; gap: .35rem; margin-top: 1.1rem; }
+    label, legend { font-weight: 650; }
+    .optional { font-weight: 400; color: var(--muted); font-size: .875rem; }
+    .text-input, .number-input {
+      width: 100%;
+      min-height: 2.75rem;
+      padding: .58rem .72rem;
+      border: 1px solid #acbeb2;
+      border-radius: .65rem;
+      color: var(--ink);
+      background: var(--surface);
+    }
+    .text-input::placeholder { color: #607169; }
+    .number-input { max-width: 7rem; font-variant-numeric: tabular-nums; }
+    .options-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: 1.05rem; }
+    .option-list, .ballot-list, .results-list { list-style: none; padding: 0; display: grid; gap: .55rem; margin-top: .55rem; }
+    .proposal-edit { display: grid; grid-template-columns: 1.8rem minmax(0, 1fr) auto; align-items: center; gap: .45rem; }
+    .proposal-number {
+      display: grid;
+      place-items: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: .48rem;
+      background: #e8f0e9;
+      color: var(--accent-dark);
+      font-weight: 750;
+      font-size: .85rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .setup-bottom { display: grid; grid-template-columns: 7rem minmax(0, 1fr); align-items: start; gap: 1rem; margin-top: 1.15rem; }
+    .setup-bottom .field { margin-top: 0; }
+    fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
+    legend { padding: 0; margin-bottom: .35rem; }
+    .methods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+    .method, .tie-choice {
+      display: flex;
+      align-items: flex-start;
+      gap: .55rem;
+      padding: .65rem .7rem;
+      border: 1px solid var(--border);
+      border-radius: .65rem;
+      cursor: pointer;
+    }
+    .method:has(input:checked), .tie-choice:has(input:checked) { border-color: var(--accent); background: var(--wash); }
+    .method input, .tie-choice input { flex: 0 0 auto; margin: .25rem 0 0; accent-color: var(--accent); }
+    .method span { display: block; line-height: 1.3; }
+    .method .hint { margin-top: .23rem; font-weight: 400; }
+    .actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .55rem; margin-top: 1.25rem; }
+    .actions.spread { justify-content: space-between; }
+    button {
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: .65rem;
+      min-height: 2.75rem;
+      padding: .53rem .9rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      background: transparent;
+    }
+    button:disabled { cursor: default; opacity: .47; }
+    .primary { background: var(--accent); color: #fff; }
+    .primary:hover:not(:disabled) { background: var(--accent-dark); }
+    .secondary { border-color: #aabeb0; background: #fff; }
+    .secondary:hover:not(:disabled), .quiet:hover:not(:disabled) { background: var(--wash); }
+    .quiet { padding-inline: .52rem; }
+    .remove { color: var(--muted); font-size: .88rem; }
+    .error { color: var(--error); font-weight: 650; margin-top: .8rem; }
+    .problem { background: var(--wash); border-left: 3px solid var(--accent); border-radius: .4rem; padding: .7rem .9rem; margin-top: 1rem; }
+    .problem p { overflow-wrap: anywhere; }
+    .problem .small { font-weight: 650; }
+    .handoff-meter { margin-block: 1rem .3rem; }
+    progress { width: 100%; height: .72rem; display: block; accent-color: var(--accent); }
+    .ballot-head { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: .8rem; }
+    .budget { display: grid; justify-items: center; gap: .25rem; padding: .55rem .75rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--wash); }
+    .budget-dots { display: flex; gap: .35rem; }
+    .budget-dots span { width: .72rem; height: .72rem; border-radius: 50%; border: 1.5px solid var(--dot); }
+    .budget-dots span[data-available="true"] { background: var(--dot); }
+    .budget-text { font-weight: 700; font-size: .88rem; }
+    .ballot-list, .results-list { margin-top: 1rem; }
+    .vote-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: .65rem;
+      padding: .62rem .7rem;
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+    }
+    .proposal-text { overflow-wrap: anywhere; font-weight: 650; }
+    .vote-controls { display: flex; align-items: center; gap: .25rem; }
+    .vote-controls button { width: 2.75rem; padding: 0; font-size: 1.25rem; line-height: 1; }
+    .vote-count { min-width: 1.25rem; text-align: center; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .tally-status { margin-top: 1rem; padding: .65rem .8rem; background: var(--wash); border-radius: .65rem; font-weight: 650; }
+    .result-row { padding: .7rem .8rem; border: 1px solid var(--border); border-radius: .75rem; }
+    .result-row[data-leading="true"] { border-color: #90b3a0; background: #f3f8f4; }
+    .result-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .55rem; align-items: center; }
+    .result-count { font-weight: 750; font-variant-numeric: tabular-nums; }
+    .bar-track { margin-top: .58rem; height: .53rem; border-radius: 999px; background: #dfe9e0; overflow: hidden; }
+    .bar { display: block; height: 100%; border-radius: inherit; background: #527b68; }
+    .result-row[data-leading="true"] .bar { background: var(--accent); }
+    .result-pick { margin-top: 1.1rem; }
+    .tie-choices { display: grid; gap: .5rem; margin-top: .55rem; }
+    .leading-text { margin-top: .35rem; font-weight: 750; overflow-wrap: anywhere; }
+    .example-section { margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--border); }
+    .example-section h3 { font-size: 1.18rem; letter-spacing: -.015em; }
+    .example-section .problem { margin-top: .55rem; }
+    .example-section > p, .example-debrief p { margin-top: .6rem; }
+    .example-proposals { display: grid; gap: .5rem; list-style: none; padding: 0; margin-top: .65rem; }
+    .example-proposals li {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: .6rem;
+      padding: .7rem .8rem;
+      border: 1px solid var(--border);
+      border-radius: .7rem;
+    }
+    .example-proposals h4 { font-size: 1rem; }
+    .example-proposals p { margin-top: .22rem; color: var(--muted); }
+    .sample-ballots { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: .8rem; }
+    .sample-ballots caption { text-align: left; color: var(--muted); font-size: .875rem; margin-bottom: .35rem; }
+    .sample-ballots th, .sample-ballots td {
+      padding: .48rem .35rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .sample-ballots th:first-child { text-align: left; }
+    .sample-ballots thead, .sample-ballots tfoot { background: var(--wash); }
+    .sample-ballots tfoot td { font-weight: 750; }
+    .example-debrief { margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--border); border-radius: .7rem; background: var(--wash); }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 1.5rem, 69rem); }
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      main { padding-block: 1.6rem 2rem; }
+      .course { display: none; }
+    }
+    @media (max-width: 490px) {
+      .setup-bottom { grid-template-columns: minmax(0, 1fr); }
+      .methods { grid-template-columns: minmax(0, 1fr); }
+      .vote-row { column-gap: .45rem; }
+      .vote-controls { gap: .15rem; }
+      .remove { font-size: .8rem; }
+      .steps li { font-size: .9rem; gap: .35rem; }
+      .tabs button { padding-inline: .65rem; }
+      .sample-ballots { font-size: .9rem; }
+    }
+    .live-method-selected { grid-template-columns: minmax(0, 1fr); }
+    .live-section { border-top: 1px solid var(--border); margin-top: 1.15rem; padding-top: 1.05rem; }
+    .live-section > p, .live-section > button { margin-top: .55rem; }
+    .live-join { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .85rem; padding: .75rem .9rem; margin: .7rem 0; border: 1px solid var(--border); border-radius: .75rem; background: var(--wash); }
+    .live-join-details { min-width: 0; }
+    .live-code { display: block; font-size: clamp(1.45rem, 6vw, 2rem); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+    .live-qr { background: var(--surface); padding: .4rem; border-radius: .4rem; }
+    .live-qr img, .live-qr canvas { display: block; }
+    .live-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; margin-top: .45rem; }
+    .live-actions button[aria-pressed="true"] { border-color: var(--accent); background: var(--wash); }
+    .live-link { color: var(--accent-dark); font-weight: 700; text-underline-offset: .2rem; }
+    .live-feedback { margin-block: .65rem; }
+    .live-responses { margin-block: .4rem; padding: 0; list-style: none; max-height: 18rem; overflow: auto; }
+    .live-responses li { border-top: 1px solid var(--border); padding: .55rem .2rem; overflow-wrap: anywhere; }
+    .live-responses button { display: block; }
+    .live-ratings { padding-left: 1.5rem; margin-top: .4rem; }
+    .live-ratings li { padding-block: .15rem; }
+    .live-ratings b { margin-left: .4rem; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <div class="brand"><span class="brand-dots" aria-hidden="true"><span></span><span></span></span>Leader Metacognition</div>
+      <span class="course">Solutions Capabilities 101</span>
+    </div>
+  </header>
+  <main class="shell">
+    <h1>Bike Trail Dot Voting</h1>
+    <p class="intro">Choose which proposal the group will discuss first.</p>
+    <div class="tabs" role="tablist" aria-label="Dot voting activity">
+      <button type="button" id="vote-tab" role="tab" aria-selected="true" aria-controls="vote-panel" data-tab="vote-panel">Run vote</button>
+      <button type="button" id="example-tab" role="tab" aria-selected="false" aria-controls="example-panel" data-tab="example-panel" tabindex="-1">Worked example</button>
+    </div>
+    <section id="vote-panel" role="tabpanel" aria-labelledby="vote-tab" tabindex="0">
+      <ol class="steps" aria-label="Exercise progress">
+        <li data-step="prepare"><span class="step-number" aria-hidden="true">1</span>Prepare</li>
+        <li data-step="vote"><span class="step-number" aria-hidden="true">2</span>Vote</li>
+        <li data-step="results"><span class="step-number" aria-hidden="true">3</span>Results</li>
+      </ol>
+      <div class="layout">
+        <section class="panel stage" id="stage" aria-labelledby="stage-title"></section>
+        <aside class="panel side" id="guide" aria-labelledby="guide-title"></aside>
+      </div>
+    </section>
+    <section id="example-panel" role="tabpanel" aria-labelledby="example-tab" tabindex="0" hidden>
+      <div class="layout">
+        <article class="panel stage" aria-labelledby="example-title">
+          <h2 id="example-title">Worked example</h2>
+          <p class="stage-lead">Use this after participants have shared their own ideas.</p>
+          <section class="example-section" aria-labelledby="example-problem-title">
+            <h3 id="example-problem-title">Frame the group problem</h3>
+            <div class="problem"><p>People on the Mount Vernon Trail face recurring conflicts where cyclists, runners, walkers, and skaters share a narrow, crowded path. Repeated tack incidents add an immediate safety hazard.</p></div>
+            <p>Consider what each group of trail users needs and what the National Park Service and U.S. Park Police can do.</p>
+          </section>
+          <section class="example-section" aria-labelledby="example-proposals-title">
+            <h3 id="example-proposals-title">Combine and number the proposals</h3>
+            <p>Group ideas with the same purpose. For instance, put signs, trail etiquette reminders, and outreach together under proposal 2.</p>
+            <ol class="example-proposals" id="example-proposals">
+              <li><span class="proposal-number" aria-hidden="true">1</span><div><h4>Respond to immediate hazards</h4><p>Make it easy to report hazards and coordinate prompt trail checks and cleanup.</p></div></li>
+              <li><span class="proposal-number" aria-hidden="true">2</span><div><h4>Clarify how to share the trail</h4><p>Pilot clear passing and yielding guidance in busy areas and explain it to trail users.</p></div></li>
+              <li><span class="proposal-number" aria-hidden="true">3</span><div><h4>Redesign crowded sections</h4><p>Study where widening the path or separating uses could reduce conflicts.</p></div></li>
+            </ol>
+          </section>
+          <section class="example-section" aria-labelledby="example-ballots-title">
+            <h3 id="example-ballots-title">Walk through the sample vote</h3>
+            <p>Ask which proposal the group should discuss first. Each voter uses two dots and can put both on one proposal or split them between two.</p>
+            <table class="sample-ballots" id="example-table" hidden>
+              <caption>Dots placed on each proposal</caption>
+              <thead><tr><th scope="col">Voter</th><th scope="col">Proposal 1</th><th scope="col">Proposal 2</th><th scope="col">Proposal 3</th></tr></thead>
+              <tbody id="example-ballots"></tbody>
+              <tfoot id="example-totals" hidden></tfoot>
+            </table>
+            <p class="tally-status" id="example-status" aria-live="polite"></p>
+            <div class="actions">
+              <button class="quiet" type="button" id="reset-example" hidden>Restart example</button>
+              <button class="primary" type="button" id="next-example">Show ballot 1</button>
+            </div>
+            <div class="example-debrief" id="example-debrief" hidden>
+              <h4 id="example-result-title" tabindex="-1">Proposal for discussion</h4>
+              <p class="leading-text" id="example-result"></p>
+              <p>Use Gradients of Agreement to see how strongly people support the proposal. A question to carry forward is “How would we know whether passing and yielding guidance reduced conflicts?”</p>
+            </div>
+          </section>
+        </article>
+        <aside class="panel side" aria-labelledby="case-evidence-title">
+          <h2 id="case-evidence-title">What the article reports</h2>
+          <ul>
+            <li>Trail users described conflicts and collisions on the shared path.</li>
+            <li>Repeated tack incidents caused flat tires. The motive was uncertain.</li>
+            <li>The National Park Service estimated at least 2,500 users on a sunny weekend day.</li>
+          </ul>
+          <p class="small">Steve Bates, <cite>The Washington Post</cite>, May 15, 1993</p>
+          <div class="section-rule">
+            <h3>Ask before voting</h3>
+            <p>Which part of the problem does each proposal address? How might your vote change if the group’s priority were immediate hazard removal?</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <noscript><p class="error">Enable JavaScript in your browser to run the exercise.</p></noscript>
+  </main>
+
+  <template id="setup-view">
+    <h2 id="stage-title" tabindex="-1">Prepare the vote</h2>
+    <p class="stage-lead">Enter the proposals after the group combines similar ideas.</p>
+    <form id="setup-form" novalidate>
+      <div class="field">
+        <label for="problem">Group problem statement <span class="optional">(optional)</span></label>
+        <input class="text-input" id="problem" name="problem" maxlength="280" placeholder="What problem are we trying to solve?">
+      </div>
+      <div class="options-head">
+        <h3>Proposals</h3>
+        <button class="quiet" type="button" id="add-proposal">+ Add proposal</button>
+      </div>
+      <ol class="option-list" id="proposal-inputs"></ol>
+      <div class="setup-bottom">
+        <div class="field" id="voters-field">
+          <label for="voters">Voters</label>
+          <input class="number-input" id="voters" name="voters" type="number" inputmode="numeric" min="1" max="999" step="1" required>
+        </div>
+        <fieldset>
+          <legend>Voting method</legend>
+          <div class="methods">
+            <label class="method"><input type="radio" name="method" value="device"><span>Pass one device<span class="hint">One ballot at a time</span></span></label>
+            <label class="method"><input type="radio" name="method" value="tally"><span>Enter a tally<span class="hint">Dots collected separately</span></span></label>
+            <label class="method" id="live-method" hidden><input type="radio" name="method" value="live"><span>Join by code<span class="hint">Students vote on their own devices</span></span></label>
+          </div>
+        </fieldset>
+      </div>
+      <section class="live-section" id="live-prep" hidden></section>
+      <p id="setup-error" class="error" role="alert" hidden></p>
+      <div class="actions"><button class="primary" id="start-vote" type="submit">Start voting</button></div>
+    </form>
+  </template>
+
+  <template id="setup-guide">
+    <h2 id="guide-title">Before voting</h2>
+    <ol>
+      <li>Read <cite>Bike Trail Turns into Mean Street</cite>.</li>
+      <li>Write down the problem, who is involved, and a proposed solution.</li>
+      <li>Share your responses, then combine similar proposals.</li>
+    </ol>
+    <p class="small">Steve Bates, <cite>The Washington Post</cite>, May 15, 1993</p>
+    <div class="section-rule">
+      <h3>Two dots per voter</h3>
+      <p>Place both dots on one proposal or split them between two.</p>
+    </div>
+  </template>
+
+  <template id="handoff-view">
+    <h2 id="stage-title" tabindex="-1"></h2>
+    <p class="stage-lead" id="handoff-instruction"></p>
+    <div class="handoff-meter">
+      <label for="ballot-progress" id="ballot-progress-label"></label>
+      <progress id="ballot-progress"></progress>
+    </div>
+    <div class="actions spread">
+      <button class="quiet" type="button" id="handoff-secondary"></button>
+      <button class="primary" type="button" id="handoff-primary"></button>
+    </div>
+  </template>
+
+  <template id="handoff-guide">
+    <h2 id="guide-title">Pass the device</h2>
+    <p>Let each person make their choices privately. Share the screen again when the group is ready to see the totals.</p>
+  </template>
+
+  <template id="ballot-view">
+    <div class="ballot-head">
+      <div>
+        <h2 id="stage-title" tabindex="-1"></h2>
+        <p class="stage-lead">Use both dots. You can put them on the same proposal.</p>
+      </div>
+      <div class="budget">
+        <div class="budget-dots" aria-hidden="true"><span></span><span></span></div>
+        <span class="budget-text" id="dots-left" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="problem" data-problem hidden><span class="small">Group problem</span><p></p></div>
+    <ol class="ballot-list" id="ballot-proposals"></ol>
+    <div class="actions spread">
+      <button class="quiet" type="button" id="return-handoff">Back to handoff</button>
+      <button class="primary" type="button" id="submit-ballot" disabled>Submit ballot</button>
+    </div>
+  </template>
+
+  <template id="tally-view">
+    <h2 id="stage-title" tabindex="-1">Enter the group tally</h2>
+    <p class="stage-lead">Enter how many dots each proposal received.</p>
+    <div class="problem" data-problem hidden><span class="small">Group problem</span><p></p></div>
+    <form id="tally-form" novalidate>
+      <ol class="ballot-list" id="tally-proposals"></ol>
+      <p class="tally-status" id="tally-status" aria-live="polite"></p>
+      <div class="actions spread">
+        <button class="quiet" type="button" id="edit-tally-setup">Edit setup</button>
+        <button class="primary" type="submit" id="submit-tally" disabled>View results</button>
+      </div>
+    </form>
+  </template>
+
+  <template id="tally-guide">
+    <h2 id="guide-title">Collect the dots first</h2>
+    <p>Ask each voter to decide privately where to place their two dots. After everyone casts their vote, count the dots on each proposal.</p>
+  </template>
+
+  <template id="live-vote-view">
+    <h2 id="stage-title" tabindex="-1"></h2>
+    <p class="stage-lead">Students use two dots to choose which proposal the group will discuss first.</p>
+    <div class="problem" data-problem hidden><span class="small">Group problem</span><p></p></div>
+    <ol class="ballot-list" id="live-ballot-proposals" aria-label="Proposals on the ballot"></ol>
+    <p class="tally-status" data-live-data="vote" aria-live="polite"></p>
+    <div id="live-vote-join"></div>
+    <p class="error" data-live-error role="alert" hidden></p>
+    <div class="actions spread" id="live-vote-actions"></div>
+  </template>
+
+  <template id="live-vote-guide">
+    <h2 id="guide-title">Voting on your own device</h2>
+    <p>Put both dots on one proposal or split them between two. Close voting when the group is ready and reveal the tally to discuss the result.</p>
+  </template>
+
+  <template id="results-view">
+    <h2 id="stage-title" tabindex="-1">Vote results</h2>
+    <p class="stage-lead" id="results-summary"></p>
+    <div class="problem" data-problem hidden><span class="small">Group problem</span><p></p></div>
+    <ol class="results-list" id="ranked-proposals" aria-label="Proposals ranked by dots"></ol>
+    <div class="result-pick" id="discussion-choice"></div>
+    <section class="live-section" id="live-debrief" hidden></section>
+    <div class="actions spread">
+      <button class="quiet" type="button" id="new-round">New round</button>
+      <button class="secondary" type="button" id="download-tally">Download tally</button>
+    </div>
+  </template>
+
+  <template id="results-guide">
+    <h2 id="guide-title">Discuss the proposal</h2>
+    <p>Use <strong>Gradients of Agreement</strong> to rate support for the proposal on the 1–8 scale. Invite people with the strongest reservations to explain their ratings first.</p>
+    <div class="section-rule">
+      <h3>Carry it forward</h3>
+      <p>Record the proposal and one concern to revisit in the Shifting the Burden exercise.</p>
+    </div>
+  </template>
+
+  <script src="assets/vendor/qrcode.min.js"></script>
+  <script src="assets/bike-trail-live.js"></script>
+  <script>
+    "use strict";
+
+    const DOTS = 2;
+    const STORAGE_KEY = "bike-trail-dot-voting-v1";
+    const stage = document.querySelector("#stage");
+    const guide = document.querySelector("#guide");
+    const steps = [...document.querySelectorAll("[data-step]")];
+    const liveAvailable = typeof createBikeTrailLive === "function";
+
+    function newSession() {
+      return {
+        setup: { problem: "", voters: "4", method: "device", proposals: ["", ""] },
+        round: null
+      };
+    }
+
+    function readSession() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+        if (!saved) return newSession();
+        const { setup, round } = saved;
+        if (!setup || typeof setup.problem !== "string" || typeof setup.voters !== "string" ||
+            !(liveAvailable ? ["device", "tally", "live"] : ["device", "tally"]).includes(setup.method) || !Array.isArray(setup.proposals) ||
+            setup.proposals.length < 2 || !setup.proposals.every(name => typeof name === "string")) {
+          return newSession();
+        }
+        if (round) {
+          const voters = Number(setup.voters);
+          const size = setup.proposals.length;
+          const validCounts = Array.isArray(round.counts) && round.counts.length === size &&
+            round.counts.every(count => Number.isInteger(count) && count >= 0);
+          const validEntries = Array.isArray(round.entries) && round.entries.length === size &&
+            round.entries.every(value => typeof value === "string");
+          const isLive = setup.method === "live";
+          if ((!isLive && (!Number.isInteger(voters) || voters < 1 || voters > 999)) ||
+              !validCounts || !validEntries || !Number.isInteger(round.ballots) ||
+              round.ballots < 0 || round.ballots > (isLive ? 2000 : voters) || sum(round.counts) !== round.ballots * DOTS ||
+              typeof round.complete !== "boolean" || (round.complete && round.ballots === 0)) {
+            return { setup, round: null };
+          }
+        }
+        return saved;
+      } catch {
+        return newSession();
+      }
+    }
+
+    let session = readSession();
+    let ballot = null;
+    const live = liveAvailable ? createBikeTrailLive({
+      stage, getSession: () => session, saveSession, render, showTemplate, showGuide, showProblem, element, button
+    }) : null;
+
+    function saveSession() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+      } catch {
+        // The exercise still runs when browser storage is unavailable.
+      }
+    }
+
+    function sum(numbers) {
+      return numbers.reduce((total, number) => total + number, 0);
+    }
+
+    function dotLabel(number) {
+      return number + (number === 1 ? " dot" : " dots");
+    }
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function button(label, className, handler) {
+      const control = element("button", className, label);
+      control.type = "button";
+      control.addEventListener("click", handler);
+      return control;
+    }
+
+    function showTemplate(target, id) {
+      target.replaceChildren(document.getElementById(id).content.cloneNode(true));
+    }
+
+    function showGuide(id) {
+      guide.hidden = !id;
+      if (id) showTemplate(guide, id);
+      else guide.replaceChildren();
+    }
+
+    function showProblem() {
+      const box = stage.querySelector("[data-problem]");
+      box.hidden = !session.setup.problem;
+      box.querySelector("p").textContent = session.setup.problem;
+    }
+
+    function setProgress(active) {
+      const current = steps.findIndex(step => step.dataset.step === active);
+      steps.forEach((step, index) => {
+        step.dataset.complete = String(index < current);
+        if (index === current) step.setAttribute("aria-current", "step");
+        else step.removeAttribute("aria-current");
+      });
+    }
+
+    function render(focus = true) {
+      if (session.setup.method === "live" && live?.voting()) {
+        setProgress("vote");
+        live.renderVoting();
+      } else if (!session.round) {
+        setProgress("prepare");
+        renderSetup();
+      } else if (session.round.complete) {
+        setProgress("results");
+        renderResults();
+      } else {
+        setProgress("vote");
+        if (session.setup.method === "tally") renderTally();
+        else if (ballot) renderBallot();
+        else renderHandoff();
+      }
+      if (focus) stage.querySelector("#stage-title").focus();
+    }
+
+    function renderSetup() {
+      showTemplate(stage, "setup-view");
+      showGuide("setup-guide");
+      const setup = session.setup;
+      const form = stage.querySelector("#setup-form");
+      const list = stage.querySelector("#proposal-inputs");
+      const start = stage.querySelector("#start-vote");
+      const error = stage.querySelector("#setup-error");
+      form.elements.problem.value = setup.problem;
+      form.elements.voters.value = setup.voters;
+      form.elements.method.value = setup.method;
+      start.textContent = setup.method === "tally" ? "Open tally" : "Start voting";
+
+      function saveField() {
+        setup.problem = form.elements.problem.value;
+        setup.voters = form.elements.voters.value;
+        setup.method = form.elements.method.value;
+        start.textContent = setup.method === "tally" ? "Open tally" : "Start voting";
+        error.hidden = true;
+        saveSession();
+        live?.setup(form);
+      }
+
+      setup.proposals.forEach((proposal, index) => {
+        const row = element("li", "proposal-edit");
+        const id = "proposal-" + (index + 1);
+        const label = element("label", "proposal-number");
+        label.htmlFor = id;
+        const number = element("span", "", index + 1);
+        number.setAttribute("aria-hidden", "true");
+        label.append(number, element("span", "visually-hidden", "Proposal " + (index + 1)));
+        const input = element("input", "text-input");
+        input.id = id;
+        input.maxLength = 180;
+        input.placeholder = "Enter a proposal";
+        input.value = proposal;
+        input.addEventListener("input", () => {
+          setup.proposals[index] = input.value;
+          saveSession();
+        });
+        const remove = button("Remove", "quiet remove", () => {
+          setup.proposals.splice(index, 1);
+          saveSession();
+          render(false);
+          const next = Math.min(index + 1, setup.proposals.length);
+          stage.querySelector("#proposal-" + next).focus();
+        });
+        remove.setAttribute("aria-label", "Remove proposal " + (index + 1));
+        remove.disabled = setup.proposals.length <= 2;
+        row.append(label, input, remove);
+        list.append(row);
+      });
+
+      form.addEventListener("input", saveField);
+      stage.querySelector("#add-proposal").addEventListener("click", () => {
+        setup.proposals.push("");
+        saveSession();
+        render(false);
+        stage.querySelector("#proposal-" + setup.proposals.length).focus();
+      });
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        saveField();
+        const proposals = setup.proposals.map(proposal => proposal.trim()).filter(Boolean);
+        const voters = Number(setup.voters);
+        const distinct = new Set(proposals.map(proposal => proposal.toLowerCase().replace(/\s+/g, " ")));
+        if (proposals.length < 2 || distinct.size !== proposals.length) {
+          error.textContent = proposals.length < 2 ? "Enter at least two proposals." : "Give each proposal a distinct name.";
+          error.hidden = false;
+          const blank = setup.proposals.findIndex(proposal => !proposal.trim());
+          stage.querySelector("#proposal-" + (blank < 0 ? 1 : blank + 1)).focus();
+          return;
+        }
+        if (setup.method === "live" && live) {
+          const problem = setup.problem.trim();
+          if (problem.length > 220 || proposals.length > 10 || proposals.some(proposal => proposal.length > 160)) {
+            error.textContent = "Use up to 220 characters for the problem and two to ten proposals of up to 160 characters each.";
+            error.hidden = false;
+            return;
+          }
+          live.startVote(problem, proposals);
+          return;
+        }
+        if (!Number.isInteger(voters) || voters < 1 || voters > 999 || form.elements.voters.validity.badInput) {
+          error.textContent = "Enter a whole number from 1 to 999 for the number of voters.";
+          error.hidden = false;
+          form.elements.voters.focus();
+          return;
+        }
+        setup.proposals = proposals;
+        setup.problem = setup.problem.trim();
+        setup.voters = String(voters);
+        session.round = {
+          counts: proposals.map(() => 0),
+          entries: proposals.map(() => ""),
+          ballots: 0,
+          complete: false,
+          discussionIndex: null
+        };
+        saveSession();
+        render();
+      });
+      live?.setup(form);
+    }
+
+    function goToSetup() {
+      ballot = null;
+      session.round = null;
+      saveSession();
+      render();
+    }
+
+    function finishRound() {
+      session.round.complete = true;
+      saveSession();
+      render();
+    }
+
+    function renderHandoff() {
+      showTemplate(stage, "handoff-view");
+      showGuide("handoff-guide");
+      const recorded = session.round.ballots;
+      const expected = Number(session.setup.voters);
+      const done = recorded === expected;
+      const primary = stage.querySelector("#handoff-primary");
+      const secondary = stage.querySelector("#handoff-secondary");
+      stage.querySelector("#stage-title").textContent = done ? "All ballots recorded" : "Ready for voter " + (recorded + 1);
+      stage.querySelector("#handoff-instruction").textContent = done
+        ? "Return the device to the facilitator to view the group tally."
+        : "Hand the device to the next participant and open their ballot.";
+      stage.querySelector("#ballot-progress-label").textContent = recorded + " of " + expected + " ballots recorded";
+      const progress = stage.querySelector("#ballot-progress");
+      progress.max = expected;
+      progress.value = recorded;
+      primary.textContent = done ? "View results" : "Open ballot";
+      primary.addEventListener("click", () => {
+        if (done) finishRound();
+        else {
+          ballot = session.setup.proposals.map(() => 0);
+          render();
+        }
+      });
+      secondary.hidden = done;
+      if (recorded === 0) {
+        secondary.textContent = "Edit setup";
+        secondary.addEventListener("click", goToSetup);
+      } else if (!done) {
+        secondary.textContent = "Close voting early";
+        secondary.addEventListener("click", () => {
+          if (window.confirm("Close voting with " + recorded + " of " + expected + " ballots recorded?")) {
+            finishRound();
+          }
+        });
+      }
+    }
+
+    function renderBallot() {
+      showTemplate(stage, "ballot-view");
+      showGuide(null);
+      showProblem();
+      stage.querySelector("#stage-title").textContent = "Voter " + (session.round.ballots + 1) + " of " + session.setup.voters;
+      const proposals = stage.querySelector("#ballot-proposals");
+      const submit = stage.querySelector("#submit-ballot");
+      const budgetDots = [...stage.querySelectorAll(".budget-dots span")];
+      const controls = session.setup.proposals.map((proposal, index) => {
+        const row = element("li", "vote-row");
+        const group = element("div", "vote-controls");
+        const count = element("span", "vote-count", "0");
+        count.setAttribute("aria-label", "0 dots on proposal " + (index + 1));
+        const remove = button("−", "secondary", () => {
+          if (ballot[index] > 0) ballot[index] -= 1;
+          updateControls();
+        });
+        const add = button("+", "secondary", () => {
+          if (sum(ballot) < DOTS) ballot[index] += 1;
+          updateControls();
+        });
+        remove.setAttribute("aria-label", "Remove dot from proposal " + (index + 1) + ", " + proposal);
+        add.setAttribute("aria-label", "Add dot to proposal " + (index + 1) + ", " + proposal);
+        group.append(remove, count, add);
+        row.append(element("span", "proposal-number", index + 1), element("span", "proposal-text", proposal), group);
+        proposals.append(row);
+        return { count, remove, add };
+      });
+
+      function updateControls() {
+        const left = DOTS - sum(ballot);
+        stage.querySelector("#dots-left").textContent = dotLabel(left) + " left";
+        budgetDots.forEach((dot, index) => { dot.dataset.available = String(index < left); });
+        controls.forEach(({ count, remove, add }, index) => {
+          count.textContent = ballot[index];
+          count.setAttribute("aria-label", dotLabel(ballot[index]) + " on proposal " + (index + 1));
+          remove.disabled = ballot[index] === 0;
+          add.disabled = left === 0;
+        });
+        submit.disabled = left !== 0;
+      }
+
+      stage.querySelector("#return-handoff").addEventListener("click", () => {
+        ballot = null;
+        render();
+      });
+      submit.addEventListener("click", () => {
+        if (!ballot || sum(ballot) !== DOTS) return;
+        ballot.forEach((count, index) => { session.round.counts[index] += count; });
+        session.round.ballots += 1;
+        ballot = null;
+        saveSession();
+        render();
+      });
+      updateControls();
+    }
+
+    function renderTally() {
+      showTemplate(stage, "tally-view");
+      showGuide("tally-guide");
+      showProblem();
+      const form = stage.querySelector("#tally-form");
+      const list = stage.querySelector("#tally-proposals");
+      const submit = stage.querySelector("#submit-tally");
+      const status = stage.querySelector("#tally-status");
+      const expected = Number(session.setup.voters) * DOTS;
+      const inputs = session.setup.proposals.map((proposal, index) => {
+        const row = element("li", "vote-row");
+        const id = "tally-" + (index + 1);
+        const label = element("label", "proposal-text", proposal);
+        label.htmlFor = id;
+        const input = element("input", "number-input");
+        input.id = id;
+        input.type = "number";
+        input.inputMode = "numeric";
+        input.min = "0";
+        input.max = String(expected);
+        input.step = "1";
+        input.value = session.round.entries[index];
+        input.placeholder = "0";
+        input.setAttribute("aria-label", "Dots for proposal " + (index + 1) + ", " + proposal);
+        row.append(element("span", "proposal-number", index + 1), label, input);
+        list.append(row);
+        return input;
+      });
+
+      function updateStatus() {
+        session.round.entries = inputs.map(input => input.value);
+        const counts = inputs.map(input => Number(input.value));
+        const invalid = inputs.some(input => !input.validity.valid);
+        const entered = sum(counts);
+        const difference = expected - entered;
+        let detail = "Ready to view results.";
+        if (difference > 0) detail = dotLabel(difference) + " left to enter.";
+        if (difference < 0) detail = dotLabel(-difference) + " over the expected total.";
+        status.textContent = invalid
+          ? "Enter a whole number between 0 and " + expected + " for each proposal."
+          : entered + " of " + expected + " dots entered. " + detail;
+        submit.disabled = invalid || difference !== 0;
+        saveSession();
+        return counts;
+      }
+
+      form.addEventListener("input", updateStatus);
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        const counts = updateStatus();
+        if (submit.disabled) return;
+        session.round.counts = counts;
+        session.round.ballots = Number(session.setup.voters);
+        finishRound();
+      });
+      stage.querySelector("#edit-tally-setup").addEventListener("click", () => {
+        if (!inputs.some(input => Number(input.value) > 0) ||
+            window.confirm("Return to setup and clear the dots entered for this round?")) {
+          goToSetup();
+        }
+      });
+      updateStatus();
+    }
+
+    function rankedProposals() {
+      return session.setup.proposals.map((proposal, index) => ({
+        proposal,
+        index,
+        dots: session.round.counts[index]
+      })).sort((a, b) => b.dots - a.dots || a.index - b.index);
+    }
+
+    function downloadResults(ranked, leading) {
+      const selected = leading.length === 1
+        ? leading[0]
+        : leading.find(result => result.index === session.round.discussionIndex);
+      const lines = ["Bike Trail Dot Voting", ""];
+      if (session.setup.problem) lines.push("Group problem", session.setup.problem, "");
+      lines.push(session.round.ballots + " ballot(s) recorded", dotLabel(sum(session.round.counts)), "", "Ranked tally");
+      ranked.forEach(({ proposal, index, dots }) => {
+        lines.push("Proposal " + (index + 1) + "  |  " + dotLabel(dots) + "  |  " + proposal);
+      });
+      if (leading.length > 1) {
+        lines.push("", "Tie for first", ...leading.map(result => result.proposal));
+      }
+      if (selected) lines.push("", "Proposal for discussion", selected.proposal);
+      const url = URL.createObjectURL(new Blob([lines.join("\n") + "\n"], { type: "text/plain;charset=utf-8" }));
+      const link = element("a");
+      link.href = url;
+      link.download = "Bike_Trail_Dot_Voting_Results.txt";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function renderResults() {
+      showTemplate(stage, "results-view");
+      showGuide("results-guide");
+      showProblem();
+      const ranked = rankedProposals();
+      const leading = ranked.filter(result => result.dots === ranked[0].dots);
+      const total = sum(session.round.counts);
+      const ballots = session.round.ballots;
+      stage.querySelector("#results-summary").textContent =
+        ballots + (ballots === 1 ? " ballot" : " ballots") + " recorded · " + dotLabel(total);
+      const list = stage.querySelector("#ranked-proposals");
+      ranked.forEach(({ proposal, index, dots }) => {
+        const row = element("li", "result-row");
+        row.dataset.leading = String(dots === ranked[0].dots);
+        const top = element("div", "result-top");
+        top.append(element("span", "proposal-number", index + 1),
+          element("span", "proposal-text", proposal), element("span", "result-count", dotLabel(dots)));
+        const track = element("div", "bar-track");
+        track.setAttribute("aria-hidden", "true");
+        const bar = element("span", "bar");
+        bar.style.width = (dots / total * 100) + "%";
+        track.append(bar);
+        row.append(top, track);
+        list.append(row);
+      });
+
+      const choice = stage.querySelector("#discussion-choice");
+      if (leading.length === 1) {
+        choice.append(element("h3", "", "Proposal for discussion"),
+          element("p", "leading-text", leading[0].proposal));
+      } else {
+        const fieldset = element("fieldset");
+        const legend = element("legend", "", "Tie for first");
+        const options = element("div", "tie-choices");
+        leading.forEach(({ proposal, index }) => {
+          const label = element("label", "tie-choice");
+          const input = element("input");
+          input.type = "radio";
+          input.name = "discussion-proposal";
+          input.checked = session.round.discussionIndex === index;
+          input.addEventListener("change", () => {
+            session.round.discussionIndex = index;
+            saveSession();
+          });
+          label.append(input, element("span", "proposal-text", proposal));
+          options.append(label);
+        });
+        fieldset.append(legend, element("p", "hint", "Choose one of the tied proposals for discussion."), options);
+        choice.append(fieldset);
+      }
+
+      if (session.setup.method === "live") live?.renderDebrief(ranked, leading);
+      stage.querySelector("#new-round").addEventListener("click", () => {
+        if (window.confirm("Start a new round with the same setup and clear this round’s tally?")) {
+          if (session.setup.method === "live" && live) live.newRound(goToSetup);
+          else goToSetup();
+        }
+      });
+      stage.querySelector("#download-tally").addEventListener("click", () => downloadResults(ranked, leading));
+    }
+
+    function setupTabs() {
+      const tabs = [...document.querySelectorAll("[data-tab]")];
+      function selectTab(selected) {
+        tabs.forEach(tab => {
+          const active = tab === selected;
+          tab.setAttribute("aria-selected", String(active));
+          tab.tabIndex = active ? 0 : -1;
+          document.getElementById(tab.dataset.tab).hidden = !active;
+        });
+      }
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectTab(tab));
+        tab.addEventListener("keydown", event => {
+          let target = index;
+          if (event.key === "ArrowLeft") target = (index + tabs.length - 1) % tabs.length;
+          else if (event.key === "ArrowRight") target = (index + 1) % tabs.length;
+          else if (event.key === "Home") target = 0;
+          else if (event.key === "End") target = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          selectTab(tabs[target]);
+          tabs[target].focus();
+        });
+      });
+    }
+
+    function setupWorkedExample() {
+      const ballots = [[0, 2, 0], [1, 1, 0], [0, 1, 1], [0, 0, 2], [2, 0, 0]];
+      const proposals = [...document.querySelectorAll("#example-proposals h4")].map(title => title.textContent);
+      const totals = proposals.map((_, index) => sum(ballots.map(ballot => ballot[index])));
+      const leader = totals.indexOf(Math.max(...totals));
+      const table = document.getElementById("example-table");
+      const body = document.getElementById("example-ballots");
+      const foot = document.getElementById("example-totals");
+      const status = document.getElementById("example-status");
+      const next = document.getElementById("next-example");
+      const reset = document.getElementById("reset-example");
+      const debrief = document.getElementById("example-debrief");
+      let shown = 0;
+
+      function tallyRow(label, counts) {
+        const row = element("tr");
+        const heading = element("th", "", label);
+        heading.scope = "row";
+        row.append(heading, ...counts.map(count => element("td", "", count)));
+        return row;
+      }
+
+      function updateProgress() {
+        table.hidden = shown === 0;
+        reset.hidden = shown === 0;
+        status.textContent = shown + " of " + ballots.length + " sample ballots shown";
+        next.textContent = shown === ballots.length ? "Reveal tally" : "Show ballot " + (shown + 1);
+      }
+
+      next.addEventListener("click", () => {
+        if (shown < ballots.length) {
+          body.append(tallyRow("Voter " + (shown + 1), ballots[shown]));
+          shown += 1;
+          updateProgress();
+          return;
+        }
+        foot.replaceChildren(tallyRow("Totals", totals));
+        foot.hidden = false;
+        status.textContent = ballots.length + " sample ballots · " + dotLabel(sum(totals));
+        document.getElementById("example-result").textContent =
+          "Proposal " + (leader + 1) + " received " + totals[leader] + " of " + sum(totals) +
+          " dots. Discuss “" + proposals[leader] + "” first.";
+        debrief.hidden = false;
+        next.hidden = true;
+        document.getElementById("example-result-title").focus();
+      });
+
+      reset.addEventListener("click", () => {
+        shown = 0;
+        body.replaceChildren();
+        foot.replaceChildren();
+        foot.hidden = true;
+        debrief.hidden = true;
+        next.hidden = false;
+        updateProgress();
+        next.focus();
+      });
+      updateProgress();
+    }
+
+    setupTabs();
+    setupWorkedExample();
+    render(false);
+    live?.connect();
+  </script>
+</body>
+</html>

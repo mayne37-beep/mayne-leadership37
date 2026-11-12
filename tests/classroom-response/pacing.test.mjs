@@ -267,3 +267,128 @@ test('Bike Trail uses one code for private submissions, two-dot ballots, and the
     await db.close();
   }
 });
+
+async function originalBikeTrailPage(){
+  const [html, live] = await Promise.all(['bike-trail-dot-voting.html','assets/bike-trail-live.js'].map(path=>
+    readFile(new URL('../../'+path,import.meta.url),'utf8')
+  ));
+  return html.replace('<script src="assets/bike-trail-live.js"></script>', '<script>'+live+'</script>');
+}
+
+test('the original Bike Trail page retains the worked example and both in-person voting methods',async()=>{
+  const errors=[],stop=[],page=await originalBikeTrailPage();
+  const host=browser(page,'bike-trail-dot-voting.html',null,errors,[],stop).window;
+  try{
+    click(host,'#example-tab');
+    assert.equal(host.document.querySelector('#example-panel').hidden,false);
+    for(let ballot=0;ballot<6;ballot++)click(host,'#next-example');
+    assert.deepEqual([...host.document.querySelectorAll('#example-totals td')].map(cell=>cell.textContent),['3','4','3']);
+    click(host,'#vote-tab');
+    type(host,'#proposal-1','Improve hazard reporting');
+    type(host,'#proposal-2','Clarify passing');
+    type(host,'#voters','1');
+    click(host,'#start-vote');
+    click(host,'#handoff-primary');
+    const add=host.document.querySelector('#ballot-proposals button[aria-label^="Add dot"]');
+    add.click();add.click();
+    click(host,'#submit-ballot');
+    click(host,'#handoff-primary');
+    assert.equal(host.document.querySelector('#results-summary').textContent,'1 ballot recorded · 2 dots');
+    host.confirm=()=>true;
+    click(host,'#new-round');
+    click(host,'input[value=tally]');
+    click(host,'#start-vote');
+    type(host,'#tally-1','1');type(host,'#tally-2','1');
+    click(host,'#submit-tally');
+    assert.equal(host.document.querySelector('#discussion-choice legend').textContent,'Tie for first');
+    assert.deepEqual(errors,[]);
+  }finally{
+    stop.forEach(clear=>clear());
+    host.close();
+  }
+});
+
+test('the original instructor page runs the live exercise using its own setup and results',{timeout:55000},async()=>{
+  const db=await classroomDatabase(),browsers=[],errors=[],requests=[],stopPolling=[];
+  try{
+    await db.exec('set role anon');
+    const [page,respond]=await Promise.all([originalBikeTrailPage(),readFile(new URL('../../word-cloud-respond.html',import.meta.url),'utf8')]);
+    const launch=(html,path)=>{
+      const win=browser(html,path,db,errors,requests,stopPolling).window;
+      browsers.push(win);
+      return win;
+    };
+    const instructor=launch(page,'bike-trail-dot-voting.html');
+    const find=(win,label)=>[...win.document.querySelectorAll('button')].find(node=>node.textContent===label);
+    const press=(win,label)=>{const node=find(win,label);assert.ok(node&&!node.disabled,label);node.click();};
+    const title=()=>instructor.document.querySelector('#stage-title')?.textContent;
+    const question=win=>win.document.querySelector('#question').textContent;
+    const saved=win=>win.document.querySelector('#noticeTitle').textContent.includes('saved');
+    const written=(win,value)=>{type(win,'[name=text]',value);submitForm(win);};
+
+    click(instructor,'input[value=live]');
+    press(instructor,'Create live session');
+    await eventually(()=>instructor.document.querySelector('.live-join a'),'Session code and link appear on the original page');
+    const link=new URL(instructor.document.querySelector('.live-join a').href);
+    const code=link.searchParams.get('code');
+    assert.match(code,/^\d{7}$/);
+    const students=[1,2].map(()=>launch(respond,link.pathname.slice(1)+link.search));
+    await eventually(()=>students.every(win=>question(win)==='What problem do you see on the bike trail?'),'Students begin with the individual problem');
+    written(students[0],'The shared trail feels crowded at busy times.');
+    await eventually(()=>instructor.document.querySelector('.live-responses')?.textContent.includes('crowded'),'Problem response appears on the original page');
+
+    press(instructor,'Who is involved?');
+    await eventually(()=>students.every(win=>question(win)==='Who is involved or affected?'),'Stakeholder prompt follows the instructor');
+    written(students[0],'Walkers, cyclists, runners and trail managers.');
+    await eventually(()=>saved(students[0]),'Stakeholder response saved');
+    press(instructor,'Proposals');
+    await eventually(()=>students.every(win=>question(win)==='What solution would you propose?'),'Proposal prompt follows the instructor');
+    written(students[0],'Explain passing and yielding.');
+    written(students[1],'Improve hazard reporting.');
+    await eventually(()=>instructor.document.querySelectorAll('.live-responses button').length===2,'Both suggestions appear for grouping');
+    instructor.document.querySelector('.live-responses li:nth-child(1) button').click();
+    instructor.document.querySelector('.live-responses li:nth-child(2) button').click();
+    const labels=[...instructor.document.querySelectorAll('.proposal-edit input')].map(input=>input.value);
+    assert.deepEqual(new Set(labels),new Set(['Explain passing and yielding.','Improve hazard reporting.']));
+    type(instructor,'#problem','How can we make the trail safer for everyone?');
+    click(instructor,'#start-vote');
+    await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The original page opens voting for both devices');
+    for(const [index,win] of students.entries()){
+      const add=win.document.querySelectorAll('[data-dot-step="1"]')[index];
+      add.click();add.click();
+      submitForm(win);
+    }
+    await eventually(()=>students.every(saved),'Both ballots are accepted');
+    await eventually(()=>instructor.document.querySelector('[data-live-data="vote"]')?.textContent==='2 ballots submitted','Only the ballot count is shown while voting');
+    assert.equal(instructor.document.querySelector('#ranked-proposals'),null);
+    assert.ok(students.every(win=>win.document.querySelector('#dotResults').hidden));
+    press(instructor,'Close voting');
+    await eventually(()=>title()==='Voting is closed'&&students.every(win=>win.document.querySelector('#noticeTitle').textContent==='Voting is closed.'),'Closing keeps the totals hidden');
+    press(instructor,'Reveal tally');
+    await eventually(()=>title()==='Vote results'&&students.every(win=>!win.document.querySelector('#dotResults').hidden),'The original Results screen and student tally appear together');
+    assert.equal(instructor.document.querySelector('#results-summary').textContent,'2 ballots recorded · 4 dots');
+    assert.equal(instructor.document.querySelector('#discussion-choice legend').textContent,'Tie for first');
+    assert.equal(find(instructor,'Open Gradients of Agreement').disabled,true);
+    click(instructor,'input[name=discussion-proposal]');
+    press(instructor,'Open Gradients of Agreement');
+    await eventually(()=>students.every(win=>question(win)==='How much do you support the selected proposal?'),'The chosen proposal opens its 1–8 agreement rating');
+    assert.equal(students[0].document.querySelector('.scale-question legend').textContent,labels[0]);
+    click(students[0],'.scale-question input[value="3"]');
+    submitForm(students[0]);
+    await eventually(()=>instructor.document.querySelector('[data-live-data=debrief]')?.textContent.includes('1 rating submitted'),'Agreement rating arrives on the original page');
+    press(instructor,'Collect reasons and reservations');
+    await eventually(()=>students.every(win=>question(win)==='What’s your reason or reservation?'),'Reservation prompt follows the instructor');
+    written(students[0],'Check if signs would address the cause of conflicts.');
+    await eventually(()=>instructor.document.querySelector('.live-responses')?.textContent.includes('cause of conflicts'),'Instructor receives the reservation for the debrief');
+    instructor.confirm=()=>true;
+    click(instructor,'#new-round');
+    await eventually(()=>title()==='Prepare the vote'&&students.every(win=>win.document.querySelector('#noticeTitle').textContent==='This session has ended.'),'Starting a new round closes the old student code');
+    assert.deepEqual(errors,[]);
+  }finally{
+    stopPolling.forEach(stop=>stop());
+    await db.query('select 1');
+    await new Promise(resolve=>setImmediate(resolve));
+    browsers.forEach(win=>win.close());
+    await db.close();
+  }
+});

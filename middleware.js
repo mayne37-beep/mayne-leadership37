@@ -161,7 +161,8 @@ export default async function middleware(request) {
     if (access) return redirect(go, request);
     return next();
   }
-  if (access) return next();
-  const dest = safeReturnPath(url.pathname + url.search);
+  const oldBikeTrailLink = path === '/word-cloud-studio.html' && url.searchParams.get('activity') === 'bike-trail';
+  if (access) return oldBikeTrailLink ? redirect('/bike-trail-dot-voting.html', request) : next();
+  const dest = oldBikeTrailLink ? '/bike-trail-dot-voting.html' : safeReturnPath(url.pathname + url.search);
   return redirect('/access.html?next=' + encodeURIComponent(dest), request);
 }
