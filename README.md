@@ -8,7 +8,7 @@ Open **Classroom → Live Classroom** and sign in with a Mayne Learning instruct
 
 ### Video service setup
 
-Set `DAILY_API_KEY` (sensitive) and `DAILY_ROOM_ORIGIN` (the Daily domain, such as `https://your-team.daily.co`) on the Vercel project. Use the key and domain from the same Daily account. Invitations are signed with the existing `LEADERSHIP_ACCESS_SECRET`, or an optional dedicated `LIVE_CLASSROOM_SIGNING_KEY`. Keep both keys server-side. The page shows a setup notice until the required values are present.
+Set `DAILY_API_KEY` as a sensitive Production environment variable on the Vercel project, then redeploy. The meeting API looks up the room domain from the Daily account for that key. To pin an existing domain, optionally set `DAILY_ROOM_ORIGIN` to the same account’s URL, such as `https://your-team.daily.co`. Invitations are signed with the existing `LEADERSHIP_ACCESS_SECRET` or an optional dedicated `LIVE_CLASSROOM_SIGNING_KEY`. Keep both keys server-side.
 
 Optional `DAILY_RECORDING_ENABLED=true` and `DAILY_CAPTIONS_ENABLED=true` enable organizer controls for the Daily account's billable cloud recording and transcription features. For production verification, join from separate instructor and guest browsers and confirm audio, video, sharing, lobby admission, breakout return and end meeting. Run `node --test tests/live-classroom/api.test.mjs` for room ownership, invitation and scheduling checks.
 

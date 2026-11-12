@@ -33,9 +33,9 @@ async function call(action, data = {}, authorization, headers = {}) {
   return { status, body };
 }
 
-test('guests inspect invitations but only the organizer can manage a private room', async t => {
+test('a Daily key discovers the domain and only the organizer can manage private rooms', async t => {
   const env = {
-    DAILY_API_KEY: 'sample-server-key', DAILY_ROOM_ORIGIN: daily, LIVE_CLASSROOM_SIGNING_KEY: 'sample-signature-key',
+    DAILY_API_KEY: 'sample-server-key', DAILY_ROOM_ORIGIN: '', LIVE_CLASSROOM_SIGNING_KEY: 'sample-signature-key',
     DAILY_RECORDING_ENABLED: 'true',
   };
   const oldEnv = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
@@ -49,10 +49,12 @@ test('guests inspect invitations but only the organizer can manage a private roo
   assert.equal((await call('status')).body.configured, false);
   assert.equal((await call('create')).status, 503);
   Object.assign(process.env, env);
+  assert.equal((await call('status')).body.configured, true);
 
   const rooms = new Map();
   const tokens = [];
   let createCount = 0;
+  let domainLookups = 0;
   t.mock.method(globalThis, 'fetch', async (url, options = {}) => {
     const address = new URL(url);
     if (address.hostname.endsWith('.supabase.co')) {
@@ -63,6 +65,12 @@ test('guests inspect invitations but only the organizer can manage a private roo
     }
     assert.equal(options.headers.Authorization, 'Bearer sample-server-key');
     const path = address.pathname;
+    if (path === '/v1/') {
+      assert.equal(options.method, 'GET');
+      domainLookups++;
+      if (domainLookups === 1) return Response.json({}, { status: 429 });
+      return Response.json({ domain_name: 'sample', config: {} });
+    }
     if (path === '/v1/rooms') {
       const { name, privacy, properties } = JSON.parse(options.body);
       if (rooms.has(name)) return Response.json({}, { status: 400 });
@@ -92,7 +100,14 @@ test('guests inspect invitations but only the organizer can manage a private roo
   assert.equal((await call('create', { title: 'Class', nonce })).status, 401);
   assert.equal((await call('create', { title: 'Class', nonce }, auth.student)).status, 403);
   assert.equal((await call('create', { title: 'Class', nonce }, auth.organizer, { origin: 'https://different.example' })).status, 403);
-  const { body: entry } = await call('create', { title: 'Leadership Workshop', nonce }, auth.organizer);
+  assert.equal(domainLookups, 0);
+  const firstTry = await call('create', { title: 'Leadership Workshop', nonce }, auth.organizer);
+  assert.equal(firstTry.status, 429);
+  assert.equal(createCount, 0);
+  const created = await call('create', { title: 'Leadership Workshop', nonce }, auth.organizer);
+  assert.equal(created.status, 200);
+  const { body: entry } = created;
+  assert.equal(entry.url, daily + '/' + entry.room);
   assert.equal(rooms.get(entry.room).privacy, 'private');
   assert.equal(rooms.get(entry.room).config.enable_knocking, true);
   assert.equal(rooms.get(entry.room).config.enable_recording, 'cloud');
@@ -104,6 +119,7 @@ test('guests inspect invitations but only the organizer can manage a private roo
   const guest = await call('inspect', { invite: entry.invite });
   assert.equal(guest.status, 200);
   assert.equal(guest.body.title, 'Leadership Workshop');
+  assert.equal(guest.body.url, entry.url);
   assert.equal(guest.body.token, undefined);
   const corrupt = entry.invite.slice(0, -1) + (entry.invite.endsWith('a') ? 'b' : 'a');
   assert.equal((await call('inspect', { invite: corrupt })).status, 404);
@@ -125,6 +141,7 @@ test('guests inspect invitations but only the organizer can manage a private roo
   assert.equal(ended.body.ended, true);
   assert.equal(rooms.size, 0);
   assert.equal((await call('host', input, auth.organizer)).status, 410);
+  assert.equal(domainLookups, 2);
 });
 
 test('scheduled rooms set the provider start time and cannot be opened early', async t => {
