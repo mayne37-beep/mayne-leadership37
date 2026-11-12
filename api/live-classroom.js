@@ -7,6 +7,9 @@ const NONCE = /^[a-f0-9]{32}$/;
 const RECORDING_ID = /^[a-f0-9-]{36}$/i;
 const DAY = 86400;
 const PROVIDER = 'https://api.daily.co/v1';
+const DAILY_ORIGIN = /^https:\/\/[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.daily\.co$/i;
+const ORIGIN_CACHE_MS = 5 * 60 * 1000;
+let dailyOriginCache;
 const now = () => Math.floor(Date.now() / 1000);
 
 class MeetingError extends Error {
@@ -18,11 +21,11 @@ class MeetingError extends Error {
 
 function settings() {
   const origin = process.env.DAILY_ROOM_ORIGIN?.trim().replace(/\/$/, '') || '';
-  const key = process.env.DAILY_API_KEY;
+  const key = process.env.DAILY_API_KEY?.trim();
   const secret = process.env.LIVE_CLASSROOM_SIGNING_KEY || process.env.LEADERSHIP_ACCESS_SECRET;
   return {
     key, origin, secret,
-    configured: Boolean(key && secret && /^https:\/\/[a-z0-9][a-z0-9-]*\.daily\.co$/i.test(origin)),
+    configured: Boolean(key && secret && (!origin || DAILY_ORIGIN.test(origin))),
     recording: process.env.DAILY_RECORDING_ENABLED === 'true',
     captions: process.env.DAILY_CAPTIONS_ENABLED === 'true',
   };
@@ -89,19 +92,44 @@ async function daily(config, path, method = 'GET', data, allowMissing = false) {
   if (!response.ok) {
     if (response.status === 404) throw new MeetingError(410, 'This meeting has ended.');
     if (response.status === 429) throw new MeetingError(429, 'The video service is busy. Try again in a moment.');
+    if (response.status === 401 || response.status === 403) {
+      throw new MeetingError(502, 'Daily rejected the video service credentials. Contact the site administrator.');
+    }
     throw new MeetingError(502, 'The video service could not complete this action. Try again.');
   }
   return response.status === 204 ? {} : response.json();
 }
 
-function publicMeeting(config, meeting, invite) {
+async function dailyOrigin(config) {
+  if (config.origin) return config.origin;
+  if (dailyOriginCache?.key === config.key && dailyOriginCache.expiresAt > Date.now()) {
+    return dailyOriginCache.lookup;
+  }
+
+  const lookup = daily(config, '/').then(({ domain_name }) => {
+    const origin = typeof domain_name === 'string' ? 'https://' + domain_name.toLowerCase() + '.daily.co' : '';
+    if (!DAILY_ORIGIN.test(origin)) throw new MeetingError(502, 'Daily did not return a valid room domain.');
+    return origin;
+  });
+  const entry = { key: config.key, expiresAt: Date.now() + ORIGIN_CACHE_MS, lookup };
+  dailyOriginCache = entry;
+  try { return await lookup; }
+  catch (error) {
+    if (dailyOriginCache === entry) dailyOriginCache = undefined;
+    throw error;
+  }
+}
+
+async function publicMeeting(config, meeting, invite) {
+  const origin = await dailyOrigin(config);
   return {
-    ...meeting, invite, url: config.origin + '/' + meeting.room,
+    ...meeting, invite, url: origin + '/' + meeting.room,
     recording: config.recording, captions: config.captions,
   };
 }
 
 async function ensureRoom(config, name, start, end, breakout = false) {
+  const origin = await dailyOrigin(config);
   const properties = {
     exp: end,
     eject_at_room_exp: true,
@@ -120,7 +148,7 @@ async function ensureRoom(config, name, start, end, breakout = false) {
     room = await daily(config, '/rooms/' + name, 'GET', undefined, true);
     if (!room) throw error;
   }
-  if (room.name !== name || room.privacy !== 'private' || room.url !== config.origin + '/' + name || !room.config?.exp) {
+  if (room.name !== name || room.privacy !== 'private' || room.url !== origin + '/' + name || !room.config?.exp) {
     throw new MeetingError(503, 'The video room domain could not be verified.');
   }
   return room;
@@ -199,8 +227,11 @@ async function hostAction(config, action, input, actor) {
   const roomPath = '/rooms/' + meeting.room;
   if (action === 'host') {
     const room = await daily(config, roomPath);
-    return { ...publicMeeting(config, meeting, input.invite), token: await meetingToken(config, meeting.room, meeting.end, true),
-      locked: room.config?.enable_knocking === false };
+    const details = await publicMeeting(config, meeting, input.invite);
+    return {
+      ...details, token: await meetingToken(config, meeting.room, meeting.end, true),
+      locked: room.config?.enable_knocking === false,
+    };
   }
   if (action === 'lock') {
     if (typeof input.locked !== 'boolean') throw new MeetingError(400, 'Choose whether to lock the meeting.');
@@ -256,7 +287,7 @@ export default async function handler(req, res) {
     if (action === 'inspect') {
       const meeting = parseInvite(config, input.invite);
       if (meeting.end <= now()) throw new MeetingError(410, 'This meeting has ended.');
-      return send(200, publicMeeting(config, meeting, input.invite));
+      return send(200, await publicMeeting(config, meeting, input.invite));
     }
     const actor = await instructor(req.headers.authorization);
     return send(200, await hostAction(config, action, input, actor));
