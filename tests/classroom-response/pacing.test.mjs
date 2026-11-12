@@ -380,11 +380,28 @@ test('the original instructor page runs the live exercise using its own setup an
     press(instructor,'Open Gradients of Agreement');
     await eventually(()=>students.every(win=>question(win)==='How much do you support the selected proposal?'),'The chosen proposal opens its 1–8 agreement rating');
     assert.equal(students[0].document.querySelector('.scale-question legend').textContent,labels[0]);
-    click(students[0],'.scale-question input[value="3"]');
-    submitForm(students[0]);
-    await eventually(()=>instructor.document.querySelector('[data-live-data=debrief]')?.textContent.includes('1 rating submitted'),'Agreement rating arrives on the original page');
+    const agreementChart=()=>instructor.document.querySelector('[data-live-agreement]');
+    const height=(level)=>agreementChart().querySelector(`[data-agreement-level="${level}"]`).style.getPropertyValue('--agreement-height');
+    const ratingsTotal=()=>agreementChart().querySelector('[data-agreement-total]').textContent;
+    const rate=(win,level)=>{
+      click(win,`.scale-question input[value="${level}"]`);
+      submitForm(win);
+    };
+    const chart=agreementChart();
+    assert.deepEqual([...chart.querySelectorAll('.live-agreement-number')].map(tick=>tick.textContent),
+      ['1','2','3','4','5','6','7','8']);
+    assert.equal(ratingsTotal(),'0 ratings submitted');
+    rate(students[0],3);
+    await eventually(()=>ratingsTotal()==='1 rating submitted'&&height(3)==='25%','The first rating raises its bar');
+    rate(students[1],7);
+    await eventually(()=>ratingsTotal()==='2 ratings submitted'&&height(7)==='25%','Ratings appear in separate columns');
+    rate(students[0],7);
+    await eventually(()=>height(3)==='0%'&&height(7)==='50%','An updated rating lowers one bar and raises the other');
+    assert.equal(agreementChart(),chart,'The same chart updates as ratings change');
+    assert.equal(chart.querySelector('[data-agreement-level="7"] .live-agreement-count').textContent,'2');
     press(instructor,'Collect reasons and reservations');
     await eventually(()=>students.every(win=>question(win)==='What’s your reason or reservation?'),'Reservation prompt follows the instructor');
+    assert.equal(height(7),'50%','The agreement chart remains visible for the debrief');
     written(students[0],'Check if signs would address the cause of conflicts.');
     await eventually(()=>instructor.document.querySelector('.live-responses')?.textContent.includes('cause of conflicts'),'Instructor receives the reservation for the debrief');
     instructor.confirm=()=>true;

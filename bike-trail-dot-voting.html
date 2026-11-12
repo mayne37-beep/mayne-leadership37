@@ -282,9 +282,115 @@
     .live-responses { margin-block: .4rem; padding: 0; list-style: none; max-height: 18rem; overflow: auto; }
     .live-responses li { border-top: 1px solid var(--border); padding: .55rem .2rem; overflow-wrap: anywhere; }
     .live-responses button { display: block; }
-    .live-ratings { padding-left: 1.5rem; margin-top: .4rem; }
-    .live-ratings li { padding-block: .15rem; }
-    .live-ratings b { margin-left: .4rem; font-variant-numeric: tabular-nums; }
+    .live-agreement {
+      --plot-height: clamp(6.5rem, 18vw, 10rem);
+      --plot-headroom: 1.4rem;
+      margin: 1rem 0 .75rem;
+      padding: clamp(.6rem, 2vw, 1rem);
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      background: #f8faf7;
+    }
+    .live-agreement-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: .25rem .6rem;
+    }
+    .live-agreement-plot {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .45rem;
+      margin: .75rem 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .live-agreement-axis {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      min-width: 2ch;
+      height: calc(var(--plot-height) + 1em);
+      margin-top: calc(var(--plot-headroom) - .5em);
+      color: var(--muted);
+      font-size: .75rem;
+      line-height: 1;
+    }
+    .live-agreement-bars {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      padding: 0;
+      list-style: none;
+    }
+    .live-agreement-bars::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      top: var(--plot-headroom);
+      height: var(--plot-height);
+      border-top: 1px solid var(--border);
+      border-bottom: 2px solid #789181;
+      background: linear-gradient(var(--border), var(--border)) center / 100% 1px no-repeat;
+      pointer-events: none;
+    }
+    .live-agreement-column { min-width: 0; text-align: center; }
+    .live-agreement-track {
+      position: relative;
+      height: var(--plot-height);
+      margin-top: var(--plot-headroom);
+    }
+    .live-agreement-bar {
+      position: absolute;
+      bottom: 1px;
+      left: 50%;
+      width: min(58%, 2.5rem);
+      height: var(--agreement-height, 0%);
+      transform: translateX(-50%);
+      border-radius: .32rem .32rem 0 0;
+      background: var(--accent);
+      transition: height .25s ease-out;
+    }
+    .live-agreement-count {
+      position: absolute;
+      inset-inline: 0;
+      bottom: calc(var(--agreement-height, 0%) + .24rem);
+      font-size: clamp(.66rem, 2.75vw, .86rem);
+      line-height: 1.1;
+      transition: bottom .25s ease-out;
+    }
+    .live-agreement-number {
+      position: relative;
+      display: block;
+      padding-top: .32rem;
+      color: var(--accent-dark);
+      font-weight: 750;
+    }
+    .live-agreement-number::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: .26rem;
+      background: #789181;
+    }
+    .live-agreement-key {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+      gap: .38rem .85rem;
+      padding: .7rem 0 0;
+      border-top: 1px solid var(--border);
+      list-style: none;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+    .live-agreement-key li { display: flex; align-items: baseline; gap: .45rem; }
+    .live-agreement-key b { color: var(--accent-dark); }
+    @media (prefers-reduced-motion: reduce) {
+      .live-agreement-bar, .live-agreement-count { transition: none; }
+    }
   </style>
 </head>
 <body>

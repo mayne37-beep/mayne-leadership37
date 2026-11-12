@@ -286,10 +286,78 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
     target.append(list);
   }
 
+  function agreementChart() {
+    const figure = element("figure", "live-agreement");
+    figure.dataset.liveAgreement = "";
+    figure.setAttribute("aria-labelledby", "agreement-chart-title");
+    const caption = element("figcaption", "live-agreement-caption");
+    const title = element("h4", "", "Gradients of Agreement");
+    title.id = "agreement-chart-title";
+    title.tabIndex = -1;
+    const total = element("span", "small");
+    total.dataset.agreementTotal = "";
+    total.setAttribute("aria-live", "polite");
+    caption.append(title, total);
+
+    const plot = element("div", "live-agreement-plot");
+    plot.setAttribute("aria-hidden", "true");
+    const axis = element("div", "live-agreement-axis");
+    for (let tick = 0; tick < 3; tick++) axis.append(element("span", ""));
+    const bars = element("ol", "live-agreement-bars");
+    const key = element("ol", "live-agreement-key");
+    gradients.forEach((label, index) => {
+      const level = index + 1;
+      const column = element("li", "live-agreement-column");
+      const track = element("div", "live-agreement-track");
+      track.dataset.agreementLevel = level;
+      track.append(element("span", "live-agreement-bar"), element("b", "live-agreement-count"));
+      column.append(track, element("span", "live-agreement-number", level));
+      bars.append(column);
+
+      const item = element("li", "");
+      const count = element("span", "visually-hidden");
+      count.dataset.agreementCount = "";
+      item.append(element("b", "", level), element("span", "", label), count);
+      key.append(item);
+    });
+    plot.append(axis, bars);
+    figure.append(caption, plot, key);
+    return figure;
+  }
+
+  function paintAgreementChart(figure) {
+    const counts = gradients.map(() => 0);
+    for (const { answer } of rows("agreement", "scale")) {
+      const level = answer.ratings?.support;
+      if (Number.isInteger(level) && level >= 1 && level <= counts.length) counts[level - 1] += 1;
+    }
+    const signature = counts.join(",");
+    if (responseSignatures.get(figure) === signature) return;
+    responseSignatures.set(figure, signature);
+    const total = counts.reduce((sum, count) => sum + count, 0);
+    const ceiling = Math.max(4, Math.ceil(Math.max(...counts) / 4) * 4);
+    const summary = figure.querySelector("[data-agreement-total]");
+    const message = total + (total === 1 ? " rating submitted" : " ratings submitted");
+    if (summary.textContent !== message) summary.textContent = message;
+    figure.querySelectorAll(".live-agreement-axis span").forEach((tick, index) => {
+      tick.textContent = ceiling * (1 - index / 2);
+    });
+    const accessibleCounts = figure.querySelectorAll("[data-agreement-count]");
+    figure.querySelectorAll("[data-agreement-level]").forEach((track, index) => {
+      const count = counts[index];
+      track.style.setProperty("--agreement-height", (100 * count / ceiling) + "%");
+      track.querySelector(".live-agreement-count").textContent = count;
+      accessibleCounts[index].textContent = ", " + count + (count === 1 ? " rating" : " ratings");
+    });
+  }
+
   function paint() {
     paintError();
+    if (!room) return;
+    const agreement = stage.querySelector("[data-live-agreement]");
+    if (agreement) paintAgreementChart(agreement);
     const target = stage.querySelector("[data-live-data]");
-    if (!target || !room) return;
+    if (!target) return;
     if (target.dataset.liveData === "vote") {
       const count = rows("ballot", "dotvote").length;
       const text = count + (count === 1 ? " ballot submitted" : " ballots submitted");
@@ -303,23 +371,11 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
       }
       return;
     }
-    const ratings = room.active === "agreement";
-    const current = rows(room.active, ratings ? "scale" : "open");
+    const current = rows(room.active, "open");
     const signature = JSON.stringify([room.active, current.map(item => item.answer)]);
     if (responseSignatures.get(target) === signature || target.contains(document.activeElement)) return;
     responseSignatures.set(target, signature);
-    if (ratings) {
-      const counts = gradients.map((_, index) => current.filter(row => row.answer.ratings?.support === index + 1).length);
-      const list = element("ol", "live-ratings");
-      gradients.forEach((label, index) => {
-        const row = element("li", "", label + " ");
-        row.append(element("b", "", counts[index]));
-        list.append(row);
-      });
-      target.replaceChildren(element("p", "small", current.length + (current.length === 1 ? " rating submitted" : " ratings submitted")), list);
-    } else {
-      listWritten(target, current, room.active === "suggestions");
-    }
+    listWritten(target, current, room.active === "suggestions");
   }
 
   function startVote(problem, proposals) {
@@ -392,11 +448,14 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
     const controls = element("div", "live-actions");
     const published = room.deck.find(slide => slide.id === "agreement").accepting;
     if (!published) {
-      const openAgreement = command("Open Gradients of Agreement", "primary", () => run(async () => {
+      const openAgreement = command("Open Gradients of Agreement", "primary", async () => {
         const choice = selected();
         if (!choice) return;
-        await control("agreement", amend("agreement", { accepting: true, statements: [{ id: "support", label: choice.proposal }] }));
-      }));
+        await run(() => control("agreement", amend("agreement", {
+          accepting: true, statements: [{ id: "support", label: choice.proposal }]
+        })));
+        stage.querySelector("#agreement-chart-title")?.focus();
+      });
       const updateSelection = () => { openAgreement.disabled = busy || !selected(); };
       stage.querySelector("#discussion-choice").addEventListener("change", updateSelection);
       updateSelection();
@@ -419,7 +478,8 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
       if (window.confirm("End this session? The tally will stay available on this device.")) run(end);
     }));
     root.append(controls);
-    if (published) {
+    if (published) root.append(agreementChart());
+    if (room.active === "reservation") {
       const data = element("div", "live-feedback");
       data.dataset.liveData = "debrief";
       root.append(data);
