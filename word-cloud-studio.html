@@ -32,6 +32,26 @@
 @media(max-width:650px){.presenter-controls{flex-wrap:wrap;justify-content:center;width:max-content}.topbar .present-main{font-size:0;padding:0}.present-main::before{content:"";display:inline-block;border:7px solid transparent;border-left:11px solid currentColor;border-right:0}.rail-button{width:clamp(34px,calc((100vw - 40px)/8),44px)}}
 @media(max-width:430px){.top-actions{flex-wrap:wrap;gap:5px}.library-launch{font-size:13px;padding:9px}.library-launch svg{display:none}.live-launch{font-size:12px;padding:9px 8px}.slide-item{grid-template-columns:62px minmax(0,1fr);gap:5px 9px}.slide-thumb{grid-row:span 2}.slide-actions{justify-content:flex-end}}
 @media(max-width:350px){.drawer{top:196px}}
+
+.dot-ballot{display:grid;gap:8px}
+.dot-choice{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line,#cbd5e1);border-radius:10px;padding:10px 12px;min-width:0}
+.dot-choice>span{display:grid;gap:4px;overflow-wrap:anywhere}
+.dot-choice b{font-size:.8rem}
+.dot-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.dot-stepper button{min-width:40px;min-height:42px;padding:4px 8px;font-size:1.2rem}
+.dot-stepper output{min-width:1.2em;text-align:center;font-variant-numeric:tabular-nums}
+.dot-budget{margin:8px 0;font-weight:700}
+@media(max-width:380px){.dot-choice{align-items:flex-start;flex-direction:column}}
+
+.dot-controls .item-editor{margin-top:10px}
+.dot-controls .section:last-child{margin-bottom:0}
+.dot-tally{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.dot-tally th,.dot-tally td{padding:9px 8px;text-align:left;vertical-align:top}
+.dot-tally th:first-child,.dot-tally td:first-child{width:3rem}
+.dot-tally td{border-top:1px solid var(--line,#dbe3ef);overflow-wrap:anywhere}
+.dot-proposals{max-height:250px;overflow:auto;padding:0;margin:8px 0;list-style:none}
+.dot-proposals li{display:grid;gap:6px;padding:10px 0;border-top:1px solid var(--line,#dbe3ef);overflow-wrap:anywhere}
+.dot-proposals button{justify-self:start}
 </style>
 </head>
 <body>
@@ -42,14 +62,14 @@
  <div class="top-actions"><span id="saveStatus" class="file-status">Draft autosaves here</span><button id="projectsButton" class="button secondary library-launch" data-action="panel" data-panel="library" aria-controls="drawer" aria-expanded="false"><span data-icon="library"></span><span class="library-label">My Projects</span></button><button id="liveSessionButton" class="button live-launch" data-action="panel" data-panel="live">Start live session</button><button id="moreButton" class="icon-btn round" data-action="menu" data-menu="fileMenu" aria-label="File and export menu" aria-expanded="false"><span data-icon="more"></span></button><div class="present-group"><button class="present-main" data-action="present" title="Start presentation (P)">Start presentation</button><button id="presentMoreButton" class="present-more" data-action="menu" data-menu="presentationMenu" aria-label="Presentation options" aria-expanded="false"><span data-icon="chevron"></span></button></div></div>
 </header>
 <main class="workspace">
- <div class="results-banner"><button class="slide-counter" data-action="panel" data-panel="slides" aria-label="Manage slides"><span data-icon="slides"></span><span id="slideCount">1 / 1</span></button><p id="resultsMessage">You have results from <strong>0 participants.</strong></p><div class="banner-tools"><button class="text-btn" data-action="results"><span data-icon="chart"></span>View results</button><button class="text-btn" data-action="clear"><span data-icon="reset"></span>Clear results</button></div></div>
+ <div class="results-banner"><button class="slide-counter" data-action="panel" data-panel="slides" aria-label="Manage slides"><span data-icon="slides"></span><span id="slideCount">1 / 1</span></button><p id="resultsMessage">You have results from <strong>0 participants.</strong></p><div class="banner-tools"><button id="dotVotingControls" class="text-btn" data-action="dot-controls" hidden>Dot voting controls</button><button class="text-btn" data-action="results"><span data-icon="chart"></span>View results</button><button class="text-btn" data-action="clear"><span data-icon="reset"></span>Clear results</button></div></div>
  <div class="canvas-area"><div class="canvas-frame"><div id="editorStage" class="stage" aria-label="Classroom response slide preview"></div></div></div>
  <div class="under-canvas"><span id="canvasHint">Blank slide · add a question or responses using the tools on the right.</span><div class="canvas-nav"><span id="layoutStatus" class="layout-status"></span><button data-open-page data-action="open-prev" class="icon-btn" aria-label="Previous response cards" hidden>↑</button><button data-open-page data-action="open-next" class="icon-btn" aria-label="Next response cards" hidden>↓</button><button class="icon-btn" id="previousSlide" data-action="previous" aria-label="Previous slide"><span data-icon="back"></span></button><span id="navCount">1 / 1</span><button class="icon-btn" id="nextSlide" data-action="next" aria-label="Next slide"><span data-icon="forward"></span></button><button class="icon-btn" data-action="add-slide" aria-label="Add a question slide"><span data-icon="plus"></span></button></div></div>
 </main>
 <nav class="tool-rail" aria-label="Slide tools"><div class="rail-group"><button class="rail-button" data-action="panel" data-panel="themes" data-tip="Themes" aria-label="Themes" aria-expanded="false"><span class="spark"></span></button></div><div class="rail-group"><button class="rail-button" data-action="panel" data-panel="live" data-tip="Live session & QR code" aria-label="Live session and QR code" aria-expanded="false"><span data-icon="qr"></span></button><button class="rail-button" data-action="panel" data-panel="edit" data-tip="Edit" aria-label="Edit question and settings" aria-expanded="false"><span data-icon="pencil"></span></button><button class="rail-button" data-action="panel" data-panel="responses" data-tip="Responses" aria-label="Add responses" aria-expanded="false"><span data-icon="comment"></span></button><div class="rail-rule"></div><button class="rail-button" data-action="panel" data-panel="timer" data-tip="Countdown" aria-label="Countdown" aria-expanded="false"><span data-icon="clock"></span></button><button class="rail-button" data-action="panel" data-panel="interact" data-tip="Interaction" aria-label="Interaction and visibility" aria-expanded="false"><span data-icon="hand"></span></button><button class="rail-button" data-action="panel" data-panel="design" data-tip="Design" aria-label="Design and colors" aria-expanded="false"><span data-icon="paint"></span></button><button class="rail-button" data-action="panel" data-panel="slides" data-tip="Slides" aria-label="Slides" aria-expanded="false"><span data-icon="layout"></span></button></div></nav>
 <aside class="drawer hidden" id="drawer" aria-labelledby="drawerTitle"><div class="drawer-head"><h2 id="drawerTitle">Edit</h2><button class="icon-btn" data-action="close-panel" aria-label="Close settings"><span data-icon="close"></span></button></div><div id="drawerContent" class="drawer-content"></div></aside>
 <button class="help-button" data-action="help" aria-label="Help">?</button>
-<div class="menu hidden" id="fileMenu" role="menu" aria-label="File menu"><button data-action="save-html"><span data-icon="save"></span>Save a copy (.html)</button><button data-action="export-project"><span data-icon="download"></span>Export project (.json)</button><button data-action="import-project"><span data-icon="upload"></span>Import project</button><div class="rule"></div><button data-action="csv"><span data-icon="chart"></span>Export results (.csv)</button><button data-action="png"><span data-icon="image"></span>Download slide (.png)</button><button data-action="svg"><span data-icon="image"></span>Download slide (.svg)</button><div class="rule"></div><button data-action="new-project" class="danger"><span data-icon="plus"></span>New blank presentation</button></div>
+<div class="menu hidden" id="fileMenu" role="menu" aria-label="File menu"><button data-action="save-html"><span data-icon="save"></span>Save a copy (.html)</button><button data-action="export-project"><span data-icon="download"></span>Export project (.json)</button><button data-action="import-project"><span data-icon="upload"></span>Import project</button><div class="rule"></div><button data-action="csv"><span data-icon="chart"></span>Export results (.csv)</button><button data-action="png"><span data-icon="image"></span>Download slide (.png)</button><button data-action="svg"><span data-icon="image"></span>Download slide (.svg)</button><div class="rule"></div><button data-action="dot-template"><span data-icon="chart"></span>Live Dot Voting</button><button data-action="new-project" class="danger"><span data-icon="plus"></span>New blank presentation</button></div>
 <div class="menu presentation-menu hidden" id="presentationMenu" role="menu" aria-label="Presentation options"><button data-action="present"><span data-icon="play"></span>Present in this window</button><button data-action="audience-window"><span data-icon="monitor"></span>Open projector window</button><button data-action="response-screen"><span data-icon="comment"></span>Open local response screen</button><button data-action="print"><span data-icon="print"></span>Print current slide</button></div>
 <input type="file" id="projectFile" accept="application/json,.json" hidden><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp" hidden>
 <dialog class="modal" id="resultsDialog" aria-labelledby="resultsTitle"><div class="modal-head"><h2 id="resultsTitle">Results</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close results"><span data-icon="close"></span></button></div><div class="modal-body"><div class="results-summary" id="resultsSummary"></div><input id="resultSearch" class="result-search" type="search" placeholder="Find a response" aria-label="Filter results"><div class="table-wrap" id="resultTable"></div></div><div class="modal-foot"><button class="button secondary" data-action="csv"><span data-icon="download"></span>Export CSV</button><button class="button primary" data-action="close-dialog">Done</button></div></dialog>
@@ -67,6 +87,11 @@
     </div>
     <div class="modal-foot"><button type="submit" class="button primary">Sign in</button></div>
   </form>
+</dialog>
+<dialog class="modal" id="dotVotingDialog" aria-labelledby="dotVotingTitle">
+  <div class="modal-head"><h2 id="dotVotingTitle">Dot voting controls</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close dot voting controls"><span data-icon="close"></span></button></div>
+  <div id="dotVotingContent" class="modal-body dot-controls"></div>
+  <div class="modal-foot"><button class="button primary" data-action="close-dialog">Done</button></div>
 </dialog>
 <dialog class="modal" id="countdownDialog" aria-labelledby="countdownDialogTitle"><div class="modal-head"><h2 id="countdownDialogTitle">Countdown</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close countdown controls"><span data-icon="close"></span></button></div><div id="countdownDialogContent" class="modal-body"></div></dialog>
 <dialog class="modal" id="pacingDialog" aria-labelledby="pacingDialogTitle"><div class="modal-head"><h2 id="pacingDialogTitle">Student pacing</h2><button class="icon-btn" data-action="close-dialog" aria-label="Close student pacing"><span data-icon="close"></span></button></div><div id="pacingDialogContent" class="modal-body"></div><div class="modal-foot"><button class="button primary" data-action="close-dialog">Done</button></div></dialog>
@@ -919,14 +944,14 @@ var qrcodegen;
 <script id="classroom-response-core">
 'use strict';
 const ClassroomCore=(()=>{
-  const types={wordcloud:'Word cloud',poll:'Polling',open:'Open-ended question',scale:'Scales',ranking:'Ranking',pin:'Pin on an image',xy:'XY quadrant chart'};
+  const types={wordcloud:'Word cloud',poll:'Polling',open:'Open-ended question',scale:'Scales',ranking:'Ranking',dotvote:'Dot voting',pin:'Pin on an image',xy:'XY quadrant chart'};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const uid=()=>crypto.randomUUID(),num=(v,lo,hi,fallback)=>Number.isFinite(Number(v))?Math.max(lo,Math.min(hi,Number(v))):fallback;
   const item=()=>({id:uid(),label:''});
-  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true,timerDuration:120,timerAutoClose:false,timerShow:true};}
+  function defaults(){return{type:'wordcloud',choices:[item(),item(),item()],multiple:false,chart:'bars',percentages:false,dotRevealed:false,statements:[item()],scaleMin:1,scaleMax:5,scaleLow:'Strongly disagree',scaleHigh:'Strongly agree',openLimit:1000,openPage:0,hiddenResponses:[],pinImage:'',pinAspect:16/9,xLabel:'X axis',yLabel:'Y axis',xMin:0,xMax:10,yMin:0,yMax:10,xLow:'Low',xHigh:'High',yLow:'Low',yHigh:'High',quadrants:['','','',''],showAverage:true,timerDuration:120,timerAutoClose:false,timerShow:true};}
   function fields(raw){
     const s=defaults();if(Object.hasOwn(types,raw.type))s.type=raw.type;
-    for(const k of ['multiple','percentages','showAverage','timerAutoClose','timerShow'])if(typeof raw[k]==='boolean')s[k]=raw[k];
+    for(const k of ['multiple','percentages','dotRevealed','showAverage','timerAutoClose','timerShow'])if(typeof raw[k]==='boolean')s[k]=raw[k];
     s.timerDuration=Math.round(num(raw.timerDuration,1,31536000,120));
     if(['bars','doughnut'].includes(raw.chart))s.chart=raw.chart;if(s.multiple)s.chart='bars';
     for(const k of ['scaleLow','scaleHigh','xLabel','yLabel','xLow','xHigh','yLow','yHigh'])if(typeof raw[k]==='string')s[k]=raw[k].slice(0,80);
@@ -941,12 +966,12 @@ const ClassroomCore=(()=>{
   }
   function config(s){
     const out={id:s.id,type:s.type||'wordcloud',question:s.question.trim(),info:s.info||'',accepting:s.accepting!==false};
-    const keys={wordcloud:['responseLimit'],poll:['choices','multiple'],open:['openLimit'],scale:['statements','scaleMin','scaleMax','scaleLow','scaleHigh'],ranking:['choices'],pin:['pinImage','pinAspect'],xy:['xLabel','yLabel','xMin','xMax','yMin','yMax','xLow','xHigh','yLow','yHigh']};
+    const keys={wordcloud:['responseLimit'],poll:['choices','multiple'],open:['openLimit'],scale:['statements','scaleMin','scaleMax','scaleLow','scaleHigh'],ranking:['choices'],dotvote:['choices','dotRevealed'],pin:['pinImage','pinAspect'],xy:['xLabel','yLabel','xMin','xMax','yMin','yMax','xLow','xHigh','yLow','yHigh']};
     for(const k of keys[out.type]||[])out[k]=s[k];return out;
   }
   function ready(s){
     if(!s.question?.trim())return 'Write a question first.';
-    if(['poll','ranking'].includes(s.type)&&(s.choices.length<2||s.choices.some(x=>!x.label.trim())))return 'Add at least two choices and give each one a label.';
+    if(['poll','ranking','dotvote'].includes(s.type)&&(s.choices.length<2||s.choices.some(x=>!x.label.trim())))return 'Add at least two choices and give each one a label.';
     if(s.type==='scale'&&(!s.statements.length||s.statements.some(x=>!x.label.trim())))return 'Write a label for every scale statement.';
     if(s.type==='pin'&&!s.pinImage)return 'Upload the image your students will pin.';
     return '';
@@ -955,6 +980,12 @@ const ClassroomCore=(()=>{
     if(!a||typeof a!=='object')throw Error('Choose a response before submitting.');const type=s.type||'wordcloud';
     if(type==='wordcloud'){const words=(Array.isArray(a.words)?a.words:[]).filter(x=>typeof x==='string').map(x=>x.trim().replace(/\s+/g,' ').slice(0,65)).filter(Boolean);if(!words.length)throw Error('Enter at least one word or phrase.');if(words.length>s.responseLimit)throw Error('Too many words for this question.');return{words};}
     if(type==='poll'){const ids=Array.isArray(a.choice_ids)?a.choice_ids:[],valid=new Set(s.choices.map(x=>x.id));if(!ids.length||(!s.multiple&&ids.length!==1)||new Set(ids).size!==ids.length||ids.some(x=>!valid.has(x)))throw Error(s.multiple?'Select at least one choice.':'Select one choice.');return{choice_ids:ids};}
+    if(type==='dotvote'){
+      const entries=a.dots&&typeof a.dots==='object'&&!Array.isArray(a.dots)?Object.entries(a.dots):[],choices=new Set(s.choices.map(c=>c.id));
+      if(entries.some(([id,n])=>!choices.has(id)||!Number.isInteger(n)||n<1||n>2)
+        ||entries.reduce((total,[,n])=>total+n,0)!==2)throw Error('Allocate both dots before submitting.');
+      return {dots:Object.fromEntries(entries)};
+    }
     if(type==='open'){const text=typeof a.text==='string'?a.text.trim():'';if(!text)throw Error('Write a response first.');if(text.length>s.openLimit)throw Error('Your response is too long.');return{text};}
     if(type==='scale'){const ratings={};for(const st of s.statements){const value=a.ratings?.[st.id];if(typeof value!=='number'||!Number.isInteger(value)||value<s.scaleMin||value>s.scaleMax)throw Error('Choose a rating for each statement.');ratings[st.id]=value;}return{ratings};}
     if(type==='ranking'){const order=Array.isArray(a.order)?a.order:[],valid=new Set(s.choices.map(x=>x.id));if(order.length!==valid.size||new Set(order).size!==valid.size||order.some(x=>!valid.has(x)))throw Error('Rank every item once.');return{order};}
@@ -967,11 +998,22 @@ const ClassroomCore=(()=>{
     else if(raw.answer&&typeof raw.answer==='object'&&JSON.stringify(raw.answer).length<15000)answer=JSON.parse(JSON.stringify(raw.answer));else return null;
     return{id:typeof raw.id==='string'?raw.id.slice(0,150):uid(),at:Number(raw.at)||0,kind,answer,words:kind==='wordcloud'?answer.words:[]};
   }
-  function visible(s,all=false){let rows=all?s.responses:(s.mode==='private'||!s.resultsVisible?[]:s.mode==='click'?(s.clickSnapshot??s.responses.slice(0,s.revealed)):s.responses);return rows.filter(r=>(r.kind||'wordcloud')===(s.type||'wordcloud')&&(all||!(s.hiddenResponses||[]).includes(r.id)));}
+  function visible(s,all=false){if(s.type==='dotvote')return s.dotRevealed?s.responses.filter(r=>r.kind==='dotvote'):[];let rows=all?s.responses:(s.mode==='private'||!s.resultsVisible?[]:s.mode==='click'?(s.clickSnapshot??s.responses.slice(0,s.revealed)):s.responses);return rows.filter(r=>(r.kind||'wordcloud')===(s.type||'wordcloud')&&(all||!(s.hiddenResponses||[]).includes(r.id)));}
+  function rankDots(choices,counts){
+    const rows=choices.map((c,i)=>({...c,number:i+1,count:counts[c.id]||0}))
+      .sort((a,b)=>b.count-a.count||a.number-b.number);
+    return rows.map(row=>({...row,rank:rows.findIndex(other=>other.count===row.count)+1}));
+  }
+  function dotTally(choices,ballots){
+    const counts=Object.fromEntries(choices.map(c=>[c.id,0]));
+    for(const ballot of ballots)for(const [id,n] of Object.entries(ballot.answer.dots))counts[id]+=n;
+    return rankDots(choices,counts);
+  }
   function summarize(s,rows=visible(s)){
     const valid=[],historical=s.type==='open'?{...s,openLimit:2000}:s;for(const r of rows){try{valid.push({...r,answer:normalizeAnswer(historical,r.answer||{words:r.words})});}catch{}}
     const out={rows:valid,total:valid.length};
     if(s.type==='poll'){out.items=s.choices.map(c=>({...c,count:valid.filter(r=>r.answer.choice_ids.includes(c.id)).length}));}
+    if(s.type==='dotvote')out.items=dotTally(s.choices,valid);
     if(s.type==='ranking'){out.items=s.choices.map(c=>{let points=0,ranks=0,first=0;for(const r of valid){const index=r.answer.order.indexOf(c.id);points+=s.choices.length-index;ranks+=index+1;if(!index)first++;}return{...c,points,mean:valid.length?ranks/valid.length:null,first};}).sort((a,b)=>b.points-a.points||s.choices.findIndex(c=>c.id===a.id)-s.choices.findIndex(c=>c.id===b.id));}
     if(s.type==='scale'){out.items=s.statements.map(st=>{const counts=Array.from({length:s.scaleMax-s.scaleMin+1},()=>0);let total=0;for(const r of valid){const n=r.answer.ratings[st.id];counts[n-s.scaleMin]++;total+=n;}return{...st,counts,mean:valid.length?total/valid.length:null};});}
     if(['pin','xy'].includes(s.type))out.average=valid.length?{x:valid.reduce((n,r)=>n+r.answer.x,0)/valid.length,y:valid.reduce((n,r)=>n+r.answer.y,0)/valid.length}:null;
@@ -981,6 +1023,7 @@ const ClassroomCore=(()=>{
     const a=r.answer||{words:r.words},label=id=>s.choices.find(x=>x.id===id)?.label||'Removed choice';
     if((r.kind||'wordcloud')==='wordcloud')return(a.words||[]).join(', ');
     if(r.kind==='poll')return(a.choice_ids||[]).map(label).join('; ');
+    if(r.kind==='dotvote')return Object.entries(a.dots||{}).map(([id,n])=>label(id)+' ('+n+')').join(', ');
     if(r.kind==='open')return String(a.text||'');
     if(r.kind==='ranking')return(a.order||[]).map((id,i)=>(i+1)+'. '+label(id)).join('; ');
     if(r.kind==='scale')return s.statements.map(st=>st.label+': '+(a.ratings?.[st.id]??'—')).join('; ');
@@ -990,6 +1033,17 @@ const ClassroomCore=(()=>{
     const type=s.type||'wordcloud';
     if(type==='wordcloud')return `<div class="entry-inputs">${Array.from({length:s.responseLimit},(_,i)=>`<input class="response-input" name="word${i}" type="text" maxlength="65" placeholder="Response ${i+1}" aria-label="Response ${i+1}" autocomplete="off" value="${esc(a.words?.[i]||'')}">`).join('')}</div>`;
     if(type==='poll')return `<div class="answer-options">${s.choices.map((c,i)=>`<label class="answer-option"><input type="${s.multiple?'checkbox':'radio'}" name="choice" value="${esc(c.id)}" ${a.choice_ids?.includes(c.id)?'checked':''} ${s.multiple?'':'required'}><span class="answer-letter">${String.fromCharCode(65+i)}</span><span>${esc(c.label||'Choice '+(i+1))}</span></label>`).join('')}</div><p class="small muted">${s.multiple?'Select all choices that apply.':'Select one choice.'}</p>`;
+    if(type==='dotvote')return `<p class="small muted">Put both dots on one proposal or split them between two.</p>
+      <p class="dot-budget" data-dot-budget role="status">2 dots left</p>
+      <div class="dot-ballot">${s.choices.map((c,i)=>`<div class="dot-choice">
+        <span><b>Proposal ${i+1}</b><span>${esc(c.label)}</span></span>
+        <div class="dot-stepper">
+          <button class="button secondary" type="button" data-dot-step="-1" aria-label="Remove a dot from proposal ${i+1}">−</button>
+          <output data-dot-value aria-label="Dots on proposal ${i+1}">${a.dots?.[c.id]||0}</output>
+          <button class="button secondary" type="button" data-dot-step="1" aria-label="Add a dot to proposal ${i+1}">+</button>
+          <input type="hidden" data-dot-choice="${esc(c.id)}" value="${a.dots?.[c.id]||0}">
+        </div>
+      </div>`).join('')}</div>`;
     if(type==='open')return `<label class="field"><span>Your response</span><textarea class="open-answer" name="text" rows="6" maxlength="${s.openLimit}" placeholder="Share your thoughts" required>${esc(a.text||'')}</textarea></label><p class="small muted" data-text-count>${(a.text||'').length} / ${s.openLimit} characters</p>`;
     if(type==='scale')return s.statements.map(st=>`<fieldset class="scale-question"><legend>${esc(st.label||'Statement')}</legend><div class="scale-buttons">${Array.from({length:s.scaleMax-s.scaleMin+1},(_,i)=>{const n=i+s.scaleMin;return `<label><input type="radio" name="rating_${esc(st.id)}" value="${n}" ${a.ratings?.[st.id]===n?'checked':''} required><span>${n}</span></label>`;}).join('')}</div><div class="scale-ends"><span>${esc(s.scaleLow)}</span><span>${esc(s.scaleHigh)}</span></div></fieldset>`).join('');
     if(type==='ranking'){const order=a.order?.length===s.choices.length?a.order:s.choices.map(c=>c.id);return `<p class="small muted">Move your highest priority to the top. Drag items or use the arrows.</p><ol class="ranking-input">${order.map(id=>{const c=s.choices.find(x=>x.id===id);return c?`<li draggable="true" data-choice-id="${esc(id)}"><span class="drag-grip" aria-hidden="true">⠿</span><span class="rank-label">${esc(c.label||'Ranking item')}</span><button type="button" data-rank="up" aria-label="Move ${esc(c.label)} up">↑</button><button type="button" data-rank="down" aria-label="Move ${esc(c.label)} down">↓</button></li>`:'';}).join('')}</ol>`;}
@@ -997,7 +1051,26 @@ const ClassroomCore=(()=>{
     if(type==='xy')return ['x','y'].map(axis=>`<label class="axis-entry"><span><b>${esc(s[axis+'Label'])}</b><output>${a[axis]??((s[axis+'Min']+s[axis+'Max'])/2)}</output></span><input type="range" name="${axis}" min="${s[axis+'Min']}" max="${s[axis+'Max']}" step="any" value="${a[axis]??((s[axis+'Min']+s[axis+'Max'])/2)}"><span class="scale-ends"><span>${esc(s[axis+'Low'])} (${s[axis+'Min']})</span><span>${esc(s[axis+'High'])} (${s[axis+'Max']})</span></span></label>`).join('')+'<div class="xy-input-preview" aria-label="Your position on the quadrant"><span class="xy-input-dot"></span></div>';
     return '';
   }
+  function readDotBallot(form){
+    return {dots:Object.fromEntries([...form.querySelectorAll('[data-dot-choice]')]
+      .map(input=>[input.dataset.dotChoice,Number(input.value)]).filter(([,n])=>n>0))};
+  }
+  function paintDotBallot(form){
+    const budget=form.querySelector('[data-dot-budget]');
+    if(!budget)return;
+    const remaining=2-Object.values(readDotBallot(form).dots).reduce((total,n)=>total+n,0);
+    const message=remaining===1?'1 dot left':remaining+' dots left';
+    if(budget.textContent!==message)budget.textContent=message;
+    for(const row of form.querySelectorAll('.dot-choice')){
+      const value=Number(row.querySelector('[data-dot-choice]').value);
+      const output=row.querySelector('[data-dot-value]');
+      if(output.value!==String(value))output.value=String(value);
+      row.querySelector('[data-dot-step="-1"]').disabled=value===0;
+      row.querySelector('[data-dot-step="1"]').disabled=remaining===0;
+    }
+  }
   function readForm(form,s){
+    if(s.type==='dotvote')return normalizeAnswer(s,readDotBallot(form));
     let a={};if(s.type==='wordcloud'||!s.type)a={words:[...form.querySelectorAll('.response-input')].map(x=>x.value)};
     if(s.type==='poll')a={choice_ids:[...form.querySelectorAll('input[name="choice"]:checked')].map(x=>x.value)};
     if(s.type==='open')a={text:form.querySelector('[name="text"]').value};
@@ -1008,6 +1081,7 @@ const ClassroomCore=(()=>{
     return normalizeAnswer(s,a);
   }
   function refreshForms(root){
+    for(const form of root.querySelectorAll('form'))paintDotBallot(form);
     for(const wrap of root.querySelectorAll('.pin-input')){const x=wrap.querySelector('[name="pinX"]'),y=wrap.querySelector('[name="pinY"]'),marker=wrap.querySelector('.pin-marker'),set=x.value!==''&&y.value!=='';marker.hidden=!set;if(set){marker.style.left=x.value+'%';marker.style.top=y.value+'%';}const label=wrap.parentElement.querySelector('[data-pin-label]');if(label)label.textContent=set?`Selected: ${Number(x.value).toFixed(1)}%, ${Number(y.value).toFixed(1)}%`:'No position selected';}
     for(const form of root.querySelectorAll('form')){const x=form.querySelector('input[name="x"]'),y=form.querySelector('input[name="y"]');if(x&&y){for(const el of [x,y])el.closest('.axis-entry').querySelector('output').textContent=Number(el.value).toFixed(1);const dot=form.querySelector('.xy-input-dot');if(dot){dot.style.left=((Number(x.value)-Number(x.min))/(Number(x.max)-Number(x.min))*100)+'%';dot.style.bottom=((Number(y.value)-Number(y.min))/(Number(y.max)-Number(y.min))*100)+'%';}}}
   }
@@ -1015,7 +1089,16 @@ const ClassroomCore=(()=>{
   function wire(root){
     if(wired.has(root))return;wired.add(root);let dragging=null;
     const place=(wrap,x,y)=>{wrap.querySelector('[name="pinX"]').value=Math.max(0,Math.min(100,x)).toFixed(2);wrap.querySelector('[name="pinY"]').value=Math.max(0,Math.min(100,y)).toFixed(2);refreshForms(root);};
-    root.addEventListener('click',e=>{if(e.target.closest('fieldset[disabled]'))return;const b=e.target.closest('[data-rank]');if(b){const li=b.closest('li'),list=li.parentElement;if(b.dataset.rank==='up'&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);if(b.dataset.rank==='down'&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);return;}const center=e.target.closest('[data-pin-center]');if(center){const wrap=center.closest('form').querySelector('.pin-input');place(wrap,50,50);wrap.focus();return;}const wrap=e.target.closest('.pin-input');if(wrap){const rect=wrap.querySelector('img').getBoundingClientRect();if(rect.width&&rect.height)place(wrap,(e.clientX-rect.left)/rect.width*100,(e.clientY-rect.top)/rect.height*100);}});
+    root.addEventListener('click',e=>{if(e.target.closest('fieldset[disabled]'))return;
+      const step=e.target.closest('[data-dot-step]');
+      if(step){
+        if(step.disabled)return;
+        const input=step.closest('.dot-choice').querySelector('[data-dot-choice]');
+        input.value=String(Number(input.value)+Number(step.dataset.dotStep));
+        paintDotBallot(step.closest('form'));
+        return;
+      }
+      const b=e.target.closest('[data-rank]');if(b){const li=b.closest('li'),list=li.parentElement;if(b.dataset.rank==='up'&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);if(b.dataset.rank==='down'&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);return;}const center=e.target.closest('[data-pin-center]');if(center){const wrap=center.closest('form').querySelector('.pin-input');place(wrap,50,50);wrap.focus();return;}const wrap=e.target.closest('.pin-input');if(wrap){const rect=wrap.querySelector('img').getBoundingClientRect();if(rect.width&&rect.height)place(wrap,(e.clientX-rect.left)/rect.width*100,(e.clientY-rect.top)/rect.height*100);}});
     root.addEventListener('keydown',e=>{if(e.target.closest('fieldset[disabled]'))return;const wrap=e.target.closest('.pin-input');if(!wrap||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key))return;e.preventDefault();let x=Number(wrap.querySelector('[name="pinX"]').value||50),y=Number(wrap.querySelector('[name="pinY"]').value||50);if(e.key==='ArrowLeft')x--;if(e.key==='ArrowRight')x++;if(e.key==='ArrowUp')y--;if(e.key==='ArrowDown')y++;place(wrap,x,y);});
     root.addEventListener('input',e=>{if(e.target.matches('input[type="range"][name="x"],input[type="range"][name="y"]'))refreshForms(root);if(e.target.matches('.open-answer')){const counter=e.target.closest('form').querySelector('[data-text-count]');if(counter)counter.textContent=e.target.value.length+' / '+e.target.maxLength+' characters';}});
     root.addEventListener('dragstart',e=>{const li=e.target.closest('.ranking-input li');if(!li)return;if(li.closest('fieldset[disabled]')){e.preventDefault();return;}dragging=li;e.dataTransfer?.setData('text/plain',li.dataset.choiceId);li.classList.add('dragging');});
@@ -1036,6 +1119,26 @@ const ClassroomCore=(()=>{
     const stats=summarize(s),fg=s.fg,colors=s.colors;let body='',label=stats.total+' participants';const W=1100,H=450;
     if(s.type==='poll'&&s.chart==='doughnut'&&!s.multiple){let angle=-Math.PI/2;const cx=320,cy=215,r=174,inner=98;body+=`<circle cx="${cx}" cy="${cy}" r="${(r+inner)/2}" fill="none" stroke="${fg}" stroke-opacity=".14" stroke-width="${r-inner}"/>`;for(let i=0;i<stats.items.length;i++){const it=stats.items[i],fraction=stats.total?it.count/stats.total:0,start=angle,end=angle+fraction*Math.PI*2;if(fraction){const arc=(radius,a)=>[cx+Math.cos(a)*radius,cy+Math.sin(a)*radius];if(fraction>=.99999)body+=`<circle cx="${cx}" cy="${cy}" r="${(r+inner)/2}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="${r-inner}"/>`;else{const a=arc(r,start),b=arc(r,end),c=arc(inner,end),d=arc(inner,start);body+=`<path d="M${a}A${r},${r} 0 ${fraction>.5?1:0} 1 ${b}L${c}A${inner},${inner} 0 ${fraction>.5?1:0} 0 ${d}Z" fill="${colors[i%colors.length]}" stroke="${s.bg}" stroke-width="2"/>`;}angle=end;}const y=80+i*Math.min(48,310/stats.items.length),fontSize=stats.items.length>7?14:19;body+=`<rect x="560" y="${y-14}" width="16" height="16" rx="4" fill="${colors[i%colors.length]}"/><text x="592" y="${y}" font-size="${fontSize}">${stats.total?Math.round(fraction*100):0}%</text>`+textLines(it.label||'Choice '+(i+1),655,y,390,fontSize,2,s.font);}body+=`<text x="${cx}" y="${cy+2}" text-anchor="middle" font-size="45" font-weight="600">${stats.total}</text><text x="${cx}" y="${cy+30}" text-anchor="middle" font-size="17">responses</text>`;}
     else if(s.type==='poll'){const n=stats.items.length,gap=n>6?12:20,bw=Math.min(230,(1000-gap*(n-1))/n),start=(W-(bw*n+gap*(n-1)))/2,max=Math.max(1,...stats.items.map(x=>x.count));body+='<path d="M40 330H1060" stroke="'+fg+'" stroke-opacity=".2"/>';stats.items.forEach((it,i)=>{const h=it.count/max*275,x=start+i*(bw+gap),value=s.percentages?(stats.total?Math.round(it.count/stats.total*100):0)+'%':it.count;body+=`<g class="result-bar" data-result-key="${esc(it.id)}" data-x="${x}" data-y="330" data-height="${Math.max(1,h)}" data-width="${bw}" transform="translate(${x} 330)"><rect x="0" y="${-h}" width="${bw}" height="${h}" rx="8" fill="${colors[i%colors.length]}"/></g><text x="${x+bw/2}" y="${315-h}" text-anchor="middle" font-size="24" font-weight="600">${value}</text>`+textLines(it.label||'Choice '+(i+1),x+bw/2,359,bw,Math.min(19,bw/5),4,s.font,'middle');});if(s.multiple&&s.percentages)label+=' · percentage of participants';}
+    else if(s.type==='dotvote'){
+      const rows=s.dotRevealed?stats.items:s.choices.map((c,i)=>({...c,number:i+1}));
+      const max=Math.max(1,...stats.items.map(row=>row.count)),rowHeight=Math.min(68,378/rows.length);
+      const ballots=s.responses.filter(r=>r.kind==='dotvote').length;
+      rows.filter(row=>row.label.trim()).forEach((row,i)=>{
+        const y=30+i*rowHeight,size=Math.min(23,rowHeight*.43);
+        body+=`<text x="30" y="${y}" font-size="${size}" font-weight="600">${row.number}.</text>`;
+        body+=textLines(row.label,78,y,s.dotRevealed?610:960,size,2,s.font);
+        if(s.dotRevealed){
+          const width=240*row.count/max;
+          body+=`<rect x="715" y="${y-size*.72}" width="${width}" height="${Math.min(18,rowHeight*.4)}" rx="5" fill="${colors[i%colors.length]}"/>
+            <text x="974" y="${y}" font-size="${size}">${row.count}</text>
+            <text x="1070" y="${y}" font-size="${size*.86}" text-anchor="end">#${row.rank}</text>`;
+        }
+      });
+      label=`${ballots} ${ballots===1?'ballot':'ballots'} submitted`;
+      if(s.dotRevealed&&ballots)label+=stats.items[0].count===stats.items[1]?.count?' · Tie for first':' · Ranked by total dots';
+      else if(!s.dotRevealed)label+=s.accepting?' · Voting open':' · Voting closed';
+      body+=`<text x="550" y="430" text-anchor="middle" font-size="22">${esc(label)}</text>`;
+    }
     else if(s.type==='ranking'){const n=stats.items.length,rowH=Math.min(78,410/n),max=Math.max(1,...stats.items.map(x=>x.points));stats.items.forEach((it,i)=>{const y=28+i*rowH,height=Math.min(36,rowH*.47),width=it.points/max*530;body+=`<text x="25" y="${y+20}" font-size="23" font-weight="600">${i+1}</text>`+textLines(it.label||'Ranking item',76,y+20,390,Math.min(20,rowH*.4),2,s.font)+`<g class="result-bar" data-result-key="${esc(it.id)}" data-x="490" data-y="${y+height}" data-height="${height}" data-width="${Math.max(1,width)}" transform="translate(490 ${y+height})"><rect y="${-height}" width="${width}" height="${height}" rx="6" fill="${colors[i%colors.length]}"/></g><text x="${505+width}" y="${y+height*.72}" font-size="17">${it.points} pts</text>`;});label+=' · first place earns the most points';}
     else if(s.type==='scale'){const count=stats.items.length,rowH=Math.min(100,370/count),left=45,right=1055,width=right-left;stats.items.forEach((it,i)=>{const top=18+i*rowH,base=top+rowH*.72,color=colors[i%colors.length],max=Math.max(1,...it.counts),height=Math.min(35,rowH*(count>7?.13:.3)),markerSize=Math.min(21,rowH*.2);body+=textLines(it.label||'Statement '+(i+1),left,top+Math.min(18,rowH*.35),width,Math.min(22,rowH*.4),1,s.font);if(stats.total){let path=`M${left} ${base}`;it.counts.forEach((value,j)=>{const x=left+j/(it.counts.length-1)*width,y=base-value/max*height;path+=`L${x} ${y}`;});path+=`L${right} ${base}Z`;body+=`<path d="${path}" fill="${color}" fill-opacity=".28"/>`;}body+=`<path d="M${left} ${base}H${right}" stroke="${fg}" stroke-opacity=".14" stroke-width="6" stroke-linecap="round"/>`;if(it.mean!==null){const x=left+(it.mean-s.scaleMin)/(s.scaleMax-s.scaleMin)*width;body+=`<path d="M${left} ${base}H${x}" stroke="${color}" stroke-width="6" stroke-linecap="round"/>`+dot('scale:'+it.id,x,base,markerSize,color,`<circle r="${markerSize}" fill="${color}" stroke="${s.bg}" stroke-width="3"/><text y="6" text-anchor="middle" fill="${s.bg}" font-size="${Math.min(16,markerSize*.76)}" font-weight="600">${it.mean.toFixed(1)}</text>`);}});body+=`<text x="45" y="431" font-size="18">${esc(s.scaleLow)} (${s.scaleMin})</text><text x="1055" y="431" text-anchor="end" font-size="18">${esc(s.scaleHigh)} (${s.scaleMax})</text>`;}
     else if(s.type==='open'){const page=Math.min(s.openPage||0,Math.max(0,Math.ceil(stats.rows.length/4)-1)),rows=stats.rows.slice(page*4,page*4+4);rows.forEach((r,i)=>{const x=25+(i%2)*540,y=12+Math.floor(i/2)*218;body+=`<rect x="${x}" y="${y}" width="510" height="202" rx="15" fill="${fg}" fill-opacity=".06" stroke="${fg}" stroke-opacity=".18"/><rect x="${x}" y="${y}" width="5" height="202" rx="2" fill="${colors[(page*4+i)%colors.length]}"/><text x="${x+22}" y="${y+29}" font-size="13" opacity=".65">RESPONSE ${page*4+i+1}</text>`+textLines(r.answer.text,x+22,y+62,465,22,5,s.font);});label=stats.total?`${page*4+1}–${Math.min(page*4+4,stats.total)} of ${stats.total} responses`:'0 responses';}
@@ -1043,7 +1146,7 @@ const ClassroomCore=(()=>{
     else if(s.type==='xy'){const x=155,y=28,w=800,h=350,px=value=>x+(value-s.xMin)/(s.xMax-s.xMin)*w,py=value=>y+h-(value-s.yMin)/(s.yMax-s.yMin)*h;body+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${fg}" fill-opacity=".025" stroke="${fg}" stroke-opacity=".4"/><path d="M${x+w/2} ${y}V${y+h}M${x} ${y+h/2}H${x+w}" stroke="${fg}" stroke-opacity=".28" stroke-dasharray="7 6"/>`;for(let i=0;i<4;i++){const q=s.quadrants[i];if(q)body+=textLines(q,x+(i%2)*w/2+18,y+Math.floor(i/2)*h/2+27,w/2-36,16,2,s.font);}body+=`<text x="${x}" y="${y+h+28}" font-size="17">${esc(s.xLow)} (${s.xMin})</text><text x="${x+w}" y="${y+h+28}" text-anchor="end" font-size="17">${esc(s.xHigh)} (${s.xMax})</text><text x="${x+w/2}" y="440" text-anchor="middle" font-size="22">${esc(s.xLabel)}</text><text x="${x-12}" y="${y+16}" text-anchor="end" font-size="15">${esc(s.yHigh)} (${s.yMax})</text><text x="${x-12}" y="${y+h}" text-anchor="end" font-size="15">${esc(s.yLow)} (${s.yMin})</text><text transform="translate(30 ${y+h/2}) rotate(-90)" text-anchor="middle" font-size="22">${esc(s.yLabel)}</text>`;stats.rows.forEach((r,i)=>body+=dot('xy:'+r.id,px(r.answer.x),py(r.answer.y),6,colors[i%colors.length]));if(s.showAverage&&stats.average)body+=dot('xy:average',px(stats.average.x),py(stats.average.y),11,fg,`<circle r="11" fill="${fg}" stroke="${s.bg}" stroke-width="3"/><path d="M-5 0H5M0-5V5" stroke="${s.bg}" stroke-width="2"/>`);if(s.showAverage&&stats.average)label+=` · average X ${stats.average.x.toFixed(1)}, Y ${stats.average.y.toFixed(1)}`;}
     return{svg:`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1100 450" role="img" aria-label="${esc(types[s.type]+': '+label)}"><g font-family="${esc(s.font)},Arial,sans-serif" fill="${fg}">${body}</g></svg>`,shown:stats.total,total:stats.total,label,stats};
   }
-  return Object.freeze({types,esc,defaults,fields,config,ready,normalizeAnswer,response,visible,summarize,answerText,formFields,readForm,wire,refreshForms,render});
+  return Object.freeze({types,esc,defaults,fields,config,ready,normalizeAnswer,response,visible,summarize,answerText,formFields,readForm,readDotBallot,rankDots,wire,refreshForms,render});
 })();
 
 </script>
@@ -1079,7 +1182,22 @@ const CountdownCore=(()=>{
 const ActivityLibraryCore=(()=>{
   const clone=v=>JSON.parse(JSON.stringify(v));
   function snapshot(project,validate){return validate(clone(project));}
-  function activity(project,validate,fresh=false){const p=snapshot(project,validate);if(fresh)p.id=crypto.randomUUID();p.active=0;p.updatedAt=Date.now();for(const s of p.slides){if(fresh)s.id=crypto.randomUUID();s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.revealed=0;s.clickSnapshot=null;s.openPage=0;s.accepting=true;s.resultsVisible=true;s.showJoining=false;}return p;}
+  function activity(project,validate,fresh=false){
+    const p=snapshot(project,validate),ids=new Map();
+    if(fresh){p.id=crypto.randomUUID();for(const s of p.slides)ids.set(s.id,crypto.randomUUID());}
+    const followups=new Set(p.slides.flatMap(s=>s.dotFlow?[s.dotFlow.agreement,s.dotFlow.reflection]:[]));
+    p.active=0;p.updatedAt=Date.now();
+    for(const s of p.slides){
+      s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.revealed=0;s.clickSnapshot=null;
+      s.openPage=0;s.accepting=s.type!=='dotvote'&&!followups.has(s.id);s.dotRevealed=false;
+      s.resultsVisible=true;s.showJoining=false;
+      if(fresh){
+        s.id=ids.get(s.id);
+        if(s.dotFlow)s.dotFlow=Object.fromEntries(Object.entries(s.dotFlow).map(([key,id])=>[key,ids.get(id)]));
+      }
+    }
+    return p;
+  }
   function parseBackup(raw,validate){if(!raw||raw.format!=='classroom-activity-library'||raw.version!==1||!Array.isArray(raw.items)||raw.items.length>500)throw Error('Choose a Classroom Response Studio library backup.');return raw.items.map(r=>{if(!r||!['activity','session'].includes(r.kind))throw Error('The library backup contains an invalid item.');const p=r.kind==='activity'?activity(r.project,validate):snapshot(r.project,validate);return{id:crypto.randomUUID(),kind:r.kind,name:String(r.name||p.name||'Untitled activity').slice(0,100),project:p,createdAt:Number(r.createdAt)||Date.now(),updatedAt:Number(r.updatedAt)||Date.now()};});}
   function openStore(){let databasePromise;
     const database=()=>databasePromise??=(new Promise((resolve,reject)=>{if(typeof indexedDB==='undefined'){reject(Error('Browser storage is unavailable. Your current project is still open; use Save a copy to keep it.'));return;}const request=indexedDB.open('mayne-classroom-activity-library',1);request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains('items'))request.result.createObjectStore('items',{keyPath:'id'});};request.onsuccess=()=>{const db=request.result;db.onversionchange=()=>{db.close();databasePromise=null;};resolve(db);};request.onerror=()=>reject(request.error||Error('Could not open the activity library.'));request.onblocked=()=>reject(Error('Close other Studio tabs and reopen the library.'));})).catch(e=>{databasePromise=null;throw e;});
@@ -1252,17 +1370,17 @@ function paintStage(root,s,c){
   stageCloudStates.set(root,{slideId:s.id,cloud:c});fitHeading(root);
 }
 function baseRender(){let s=slide(),c=resultsFor(s),count=`${project.active+1} / ${project.slides.length}`;$('docName').value=project.name;document.title=project.name?project.name+' · Classroom Response Studio':'Classroom Response Studio | Mayne Leadership';$('slideCount').textContent=count;$('navCount').textContent=count;$('presentCount').textContent=count;$('resultsMessage').innerHTML=`You have results from <strong>${s.responses.length} ${s.responses.length===1?'participant':'participants'}.</strong>`;paintStage($('editorStage'),s,c);paintStage($('presentationStage'),s,c);$('previousSlide').disabled=project.active===0;$('nextSlide').disabled=project.active===project.slides.length-1;document.querySelectorAll('.presenter-controls [data-action="previous"]').forEach(b=>b.disabled=project.active===0);document.querySelectorAll('.presenter-controls [data-action="next"]').forEach(b=>b.disabled=project.active===project.slides.length-1);$('canvasHint').textContent=!s.question&&!s.responses.length?'Blank slide · add a question or responses using the tools on the right.':s.mode==='private'?'Private responses · use View results to review them.':!s.resultsVisible?'Responses are hidden on the slide.':s.mode==='click'?`${pendingCount(s)} participant submissions waiting to be revealed.`:'Changes appear on the slide as responses are entered.';$('layoutStatus').textContent=c.total?`${c.shown} / ${c.total} unique words`:'';$('presentRevealText').textContent=s.mode==='private'?'Private':s.mode==='click'&&hasPending(s)?'Reveal':s.resultsVisible?'Hide':'Show';document.querySelector('#presenter [data-action="reveal"]').disabled=s.mode==='private';if($('resultsDialog').open)renderResults();syncAudience(s,c);updateLiveChrome();}
-function changed(rebuildPanel=false){persist();render();if(rebuildPanel)renderPanel();queueLiveSettings(slide());}
+function changed(rebuildPanel=false){persist();render();if(rebuildPanel){renderPanel();renderDotVotingDialog();}queueLiveSettings(slide());}
 function baseSetField(key,value){const s=slide();if(key==='responseLimit'){value=Math.max(1,Math.min(10,Math.round(Number(value)||1)));}if(key==='maxWords'){value=Math.max(10,Math.min(250,Math.round(Number(value)||120)));}if(['headingScale','wordScale','imageDim'].includes(key))value=Number(value);if(key==='mode'&&value==='click'){s.revealed=0;s.clickSnapshot=[];}if(key==='mergeCase')s.hiddenTerms=[];s[key]=value;changed(['responseLimit','mode'].includes(key));}
-function reveal(){let s=slide();if(s.mode==='private'){toast('Private responses are available in View results.');return;}if(s.mode==='click'&&(hasPending(s)||!s.resultsVisible)){s.revealed=s.responses.length;s.clickSnapshot=JSON.parse(JSON.stringify(s.responses));s.resultsVisible=true;toast('Responses revealed.');}else{s.resultsVisible=!s.resultsVisible;if(s.resultsVisible&&s.mode==='click')s.revealed=s.responses.length;s.clickSnapshot=JSON.parse(JSON.stringify(s.responses));}changed(panel==='interact');}
+function reveal(){let s=slide();if(s.type==='dotvote'){showDotVotingDialog();return;}if(s.mode==='private'){toast('Private responses are available in View results.');return;}if(s.mode==='click'&&(hasPending(s)||!s.resultsVisible)){s.revealed=s.responses.length;s.clickSnapshot=JSON.parse(JSON.stringify(s.responses));s.resultsVisible=true;toast('Responses revealed.');}else{s.resultsVisible=!s.resultsVisible;if(s.resultsVisible&&s.mode==='click')s.revealed=s.responses.length;s.clickSnapshot=JSON.parse(JSON.stringify(s.responses));}changed(panel==='interact');}
 function addParticipant(words){let s=slide();if(!s.accepting){toast('Responses are paused.');return false;}let clean=words.map(w=>w.trim().replace(/\s+/g,' ').slice(0,65)).filter(Boolean).slice(0,s.responseLimit);if(!clean.length){toast('Enter at least one word or phrase.');return false;}if(s.responses.length>=50000){toast('This slide has reached its response limit.');return false;}s.responses.push({id:uid(),at:Date.now(),words:clean});return true;}
 function csvLine(line){let cells=[],cell='',quote=false;for(let i=0;i<line.length;i++){let ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cell+='"';i++;}else quote=!quote;}else if(ch===','&&!quote){cells.push(cell);cell='';}else cell+=ch;}cells.push(cell);return cells;}
 function baseAddBulk(){const box=$('bulkResponses');if(!box)return;const lines=box.value.split(/\r?\n/).filter(l=>l.trim());if(!lines.length){toast('Paste at least one participant’s responses.');return;}if(lines.length>10000){toast('Add up to 10,000 participants at a time.');return;}let count=0,trimmed=0;for(const line of lines){const words=csvLine(line);if(words.filter(w=>w.trim()).length>slide().responseLimit)trimmed++;if(addParticipant(words))count++;}if(count){box.value='';changed();toast(`${count} participant ${count===1?'submission':'submissions'} added.${trimmed?' Extra entries beyond the per-participant limit were skipped.':''}`);}}
 function showResults(){closeMenus();$('resultSearch').value='';renderResults();$('resultsDialog').showModal();}
 function baseRenderResults(){const s=slide(),words=aggregate(s,true),entries=s.responses.reduce((n,r)=>n+r.words.length,0);$('resultsTitle').textContent='Results'+(s.question?' · '+s.question:'');$('resultsSummary').innerHTML=`<div class="mini-stat"><b>${s.responses.length}</b><span>Participants</span></div><div class="mini-stat"><b>${entries}</b><span>Entries</span></div><div class="mini-stat"><b>${words.length}</b><span>Unique words</span></div>`;let q=$('resultSearch').value.toLocaleLowerCase(),filtered=words.filter(w=>w.text.toLocaleLowerCase().includes(q));$('resultTable').innerHTML=filtered.length?`<table><thead><tr><th>Word or phrase</th><th>Count</th><th>On cloud</th></tr></thead><tbody>${filtered.map(w=>`<tr class="${s.hiddenTerms.includes(w.key)?'hidden-term':''}"><td>${esc(w.text)}</td><td>${w.count}</td><td><button class="button secondary" data-action="moderate" data-key="${esc(w.key)}" aria-label="${s.hiddenTerms.includes(w.key)?'Show':'Hide'} ${esc(w.text)}">${s.hiddenTerms.includes(w.key)?'Show':'Hide'}</button></td></tr>`).join('')}</tbody></table>`:`<div class="results-empty">${words.length?'No matching words.':'No responses yet. Enter responses using the speech bubble tool.'}</div>`;}
 function askConfirm(title,message,label,action){confirmTask=action;$('confirmTitle').textContent=title;$('confirmText').textContent=message;$('confirmButton').textContent=label;$('confirmDialog').showModal();}
-function clearResults(){if(liveOf()&&['open','paused'].includes(liveOf().status)){askConfirm('Clear results?','Remove all responses from this slide and let students submit again using the same QR code?','Clear results',()=>controlLive('clear'));return;}if(!slide().responses.length){toast('This slide is already blank.');return;}const id=slide().id;askConfirm('Clear results?','Remove all responses from this slide? Your question and design will stay in place.','Clear results',()=>{const s=project.slides.find(x=>x.id===id);if(s){delete localCountdowns[project.id+':'+s.id];try{saveLocalCountdowns();}catch{}s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.openPage=0;s.revealed=0;s.clickSnapshot=[];changed(true);toast('Results cleared.');}});}
-function chooseSlide(i){if(i<0||i>=project.slides.length)return;project.active=i;changed(true);if($('responseDialog').open)openResponseScreen(true);}
+function clearResults(){if(slide().type==='dotvote'){confirmClearDotVoting();return;}if(liveOf()&&['open','paused'].includes(liveOf().status)){askConfirm('Clear results?','Remove all responses from this slide and let students submit again using the same QR code?','Clear results',()=>controlLive('clear'));return;}if(!slide().responses.length){toast('This slide is already blank.');return;}const id=slide().id;askConfirm('Clear results?','Remove all responses from this slide? Your question and design will stay in place.','Clear results',()=>{const s=project.slides.find(x=>x.id===id);if(s){delete localCountdowns[project.id+':'+s.id];try{saveLocalCountdowns();}catch{}s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.openPage=0;s.revealed=0;s.clickSnapshot=[];changed(true);toast('Results cleared.');}});}
+function chooseSlide(i){if(i<0||i>=project.slides.length)return;if($('dotVotingDialog').open)$('dotVotingDialog').close();project.active=i;changed(true);if($('responseDialog').open)openResponseScreen(true);}
 function moveSlide(from,to){
   if(from===to||!project.slides[from]||!project.slides[to])return false;
   const current=slide();
@@ -1281,7 +1399,7 @@ function moveSlideByArrow(button){
   const sameDirection=row.querySelector(`[data-direction="${button.dataset.direction}"]:enabled`);
   (sameDirection||row.querySelector('[data-action="move-slide"]:enabled')).focus();
 }
-function addSlide(copyIndex=null){if(project.slides.length>=100){toast('You can keep up to 100 slides in one presentation.');return;}let s=copyIndex===null?blankSlide():JSON.parse(JSON.stringify(project.slides[copyIndex]));if(copyIndex!==null){s.id=uid();s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.openPage=0;s.revealed=0;s.clickSnapshot=[];}else{const current=slide();for(const k of ['bg','fg','colors','font','showLogo','logoText','logoImage','headingScale'])s[k]=JSON.parse(JSON.stringify(current[k]));}if(sharedOf()&&['open','paused'].includes(sharedOf().status))s.showJoining=true;project.slides.splice(project.active+1,0,s);project.active++;changed();openPanel(copyIndex===null?'edit':'slides',true);toast(copyIndex===null?'Blank slide added.':'Slide duplicated without responses.');}
+function addSlide(copyIndex=null){if(project.slides.length>=100){toast('You can keep up to 100 slides in one presentation.');return;}let s=copyIndex===null?blankSlide():JSON.parse(JSON.stringify(project.slides[copyIndex]));if(copyIndex!==null){s.id=uid();s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.openPage=0;s.revealed=0;s.clickSnapshot=[];if(s.type==='dotvote'){s.dotRevealed=false;s.accepting=false;delete s.dotFlow;}}else{const current=slide();for(const k of ['bg','fg','colors','font','showLogo','logoText','logoImage','headingScale'])s[k]=JSON.parse(JSON.stringify(current[k]));}if(sharedOf()&&['open','paused'].includes(sharedOf().status))s.showJoining=true;project.slides.splice(project.active+1,0,s);project.active++;changed();openPanel(copyIndex===null?'edit':'slides',true);toast(copyIndex===null?'Blank slide added.':'Slide duplicated without responses.');}
 function deleteSlide(){if(project.slides.length===1)return;const id=slide().id;askConfirm('Delete this slide?','The question, design, and responses on this slide will be removed.','Delete slide',()=>{let i=project.slides.findIndex(s=>s.id===id);if(i<0)return;project.slides.splice(i,1);project.active=Math.min(project.active,project.slides.length-1);changed(true);});}
 function applyAll(group){const s=slide(),keys=group==='joining'?['showJoining','joiningText']:group==='mode'?['mode']:['bg','fg','colors','font','headingScale','showLogo','logoText','logoImage','backgroundImage','imageDim'];for(const other of project.slides)if(other!==s){for(const k of keys)other[k]=JSON.parse(JSON.stringify(s[k]));if(group==='mode'&&s.mode==='click'){other.revealed=0;other.clickSnapshot=[];}}changed();toast(`Applied to all ${project.slides.length} ${project.slides.length===1?'slide':'slides'}.`);}
 function closeMenus(){document.querySelectorAll('.menu').forEach(m=>m.classList.add('hidden'));$('moreButton').setAttribute('aria-expanded','false');$('presentMoreButton').setAttribute('aria-expanded','false');}
@@ -1375,7 +1493,7 @@ async function changePacing(value){
 function openingQuestion(current){return project.pacing==='self'?project.slides.find(s=>!ClassroomCore.ready(s)):current;}
 function livePanel(s){
  const b=liveOf(s),busy=livePending.has(bindingKey(s));
- if(b?.engine==='legacy')return legacyPanel(s)+`<section class="section"><h3>Use all seven question types</h3><p class="small">This saved link belongs to a previous word-cloud session. Start a presentation session to collect answers across all your slides. Existing results stay in your project.</p><button class="button primary full gap" data-action="upgrade-session" ${busy?'disabled':''}>Create presentation QR code</button></section>`;
+ if(b?.engine==='legacy')return legacyPanel(s)+`<section class="section"><h3>Use all eight question types</h3><p class="small">This saved link belongs to a previous word-cloud session. Start a presentation session to collect answers across all your slides. Existing results stay in your project.</p><button class="button primary full gap" data-action="upgrade-session" ${busy?'disabled':''}>Create presentation QR code</button></section>`;
  if(!b||!['open','paused'].includes(b.status)){const opening=openingQuestion(s),incomplete=opening?ClassroomCore.ready(opening):'Add at least one complete question first.';return pacingSection(busy)+`<section class="section"><h3>Collect student responses</h3><p class="small">One QR code and link for your whole presentation. Choose whether students follow your slide or move through the questions themselves.</p><div class="note gap"><b>${ClassroomCore.types[opening?.type||s.type]}</b><p class="small">${esc(opening?.question||'Add your question in Edit.')}</p></div>${incomplete?`<p class="small gap">${esc(incomplete)}</p><button class="button secondary full" data-action="panel" data-panel="edit">Edit this question</button>`:''}<button class="button primary full gap" data-action="live-start" ${busy||incomplete?'disabled':''}>${busy?'Creating session…':'Generate QR code & student link'}</button>${b?'<p class="small gap">The previous session has ended. Its results remain saved in this project.</p>':''}<p class="small gap">No student accounts are needed. Sessions last seven days. Keep this teacher browser open while presenting.</p></section>`;}
  return pacingSection(busy)+`<section class="section"><div class="row"><h3>Student response link</h3><span class="badge">${b.status==='paused'?'Paused':'Live session'}</span></div><div class="join-qr">${qrSVG(liveJoinURL(b))}</div><p class="join-code"><span>Session code</span><b>${esc(b.code.slice(0,3))} ${esc(b.code.slice(3))}</b></p><label class="field"><span>Share this link with students</span><input id="studentJoinLink" readonly value="${esc(liveJoinURL(b))}"></label><div class="response-actions gap"><button class="button primary" data-action="live-copy">${icon('copy')}Copy link</button><a class="button secondary" href="${esc(liveJoinURL(b))}" target="_blank" rel="noopener">Open link ↗</a><button class="icon-btn secondary" data-action="live-qr" aria-label="Download QR code">${icon('download')}</button></div><div class="gap">${switchControl('Show QR code on this slide','showJoining',s.showJoining)}</div><p class="small gap">${b.pacing==='self'?'Students can move through the questions and revisit their answers.':'Students follow your current slide.'} Each student can update one answer per question.</p><p class="small gap" id="livePanelStatus" role="status">${esc(busy?'Updating session…':b.error||'Responses update automatically.')}</p></section><section class="section"><h3>Session controls</h3><button class="button secondary full" data-action="live-pause" ${busy?'disabled':''}>${b.status==='open'?'Pause all responses':'Resume all responses'}</button><button class="button secondary full gap danger" data-action="live-end" ${busy?'disabled':''}>End this session</button><p class="small gap">Clear results resets only the current slide. Your QR code and the other slides’ results stay available.</p></section>`;
 }
@@ -1392,9 +1510,24 @@ function applySharedSnapshot(b,data,owner=project){
  }
  b.status=data.status;b.pacing=data.pacing||'instructor';b.epochs=Object.fromEntries(project.slides.map(s=>[s.id,Number(data.epochs?.[s.id]||1)]));b.revision=data.revision;b.active_slide_id=data.active_slide_id;b.error=b.failedConfig===liveConfig()?(b.syncError||'Check the current question settings.'):'';
  try{saveBindings();}catch{}
- if(changedRows)persist();if(changedRows||changedTimer||oldStatus!==b.status||hadError){render();if(panel==='live'&&!$('drawerContent').contains(document.activeElement))renderPanel();}else updateLiveChrome();
+ if(changedRows)persist();if(changedRows||changedTimer||oldStatus!==b.status||hadError){render();if(panel==='live'&&!$('drawerContent').contains(document.activeElement))renderPanel();
+   if(changedRows&&$('dotVotingDialog').open)updateDotVotingStatus();
+ }else updateLiveChrome();
 }
 async function startLiveSession(){
+ const prior=sharedOf();
+ if((!prior||['ended','expired'].includes(prior.status))&&project.slides.some(s=>s.type==='dotvote'&&(s.responses.length||s.dotRevealed||s.accepting))){
+   await runLibrary(async()=>{
+     const next=ActivityLibraryCore.activity(project,validateProject,true);
+     await leaveCurrentClass();
+     project=next;
+     activityEditing=null;
+     websiteEditing=null;
+     changed(true);
+     await startLiveSession();
+   });
+   return;
+ }
  const s=slide(),owner=project,key='classroom:'+project.id;if(livePending.has(key))return;const opening=openingQuestion(s),incomplete=opening?ClassroomCore.ready(opening):'Add at least one complete question first.';if(incomplete){toast(incomplete);openPanel('edit',true);return;}
  try{saveBindings();}catch{toast('Enable browser storage to save the teacher controls for your session.');return;}
  livePending.add(key);if(panel)renderPanel();
@@ -1417,7 +1550,7 @@ function queueLiveSettings(s){
 }
 async function controlLive(action,status){
  const b=sharedOf();if(!b)return controlLegacyLive(action,status);const s=slide(),owner=project,key=bindingKey();if(livePending.has(key))return false;clearTimeout(settingsTimers.get(key));livePending.add(key);b.generation=(b.generation||0)+1;if(panel==='live')renderPanel();const config=liveConfig();
- try{const data=await liveAPI('crs_control_session',{p_session_id:b.id,p_host_token:b.token,p_deck:liveDeck(),p_active_slide:s.id,p_status:status||null,p_action:action==='clear'?'clear':null,p_pacing:project.pacing});if(action==='clear'){s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.revealed=0;s.clickSnapshot=[];s.openPage=0;}b.config=config;b.dirty=false;applySharedSnapshot(b,data,owner);if(project===owner){persist();toast(action==='clear'?'This slide’s results were cleared. Students can respond again.':status==='ended'?'Session ended. Results are saved.':status==='paused'?'All student responses paused.':action==='pacing'?(project.pacing==='self'?'Students can now advance through the questions.':'Students now follow your current slide.'):'Student responses resumed.');}return true;}
+ try{const data=await liveAPI('crs_control_session',{p_session_id:b.id,p_host_token:b.token,p_deck:liveDeck(),p_active_slide:s.id,p_status:status||null,p_action:['clear','dot-clear'].includes(action)?'clear':null,p_pacing:project.pacing});if(action==='clear'||action==='dot-clear'){s.responses=[];s.hiddenTerms=[];s.hiddenResponses=[];s.revealed=0;s.clickSnapshot=[];s.openPage=0;}b.config=config;b.dirty=false;applySharedSnapshot(b,data,owner);if(project===owner){persist();toast(action==='dot-clear'?'Ballots cleared. Review the proposals before opening voting again.':dotActionMessages[action]|| (action==='clear'?'This slide’s results were cleared. Students can respond again.':status==='ended'?'Session ended. Results are saved.':status==='paused'?'All student responses paused.':action==='pacing'?(project.pacing==='self'?'Students can now advance through the questions.':'Students now follow your current slide.'):'Student responses resumed.'));}return true;}
  catch(e){toast(e.message);return false;}finally{livePending.delete(key);if(project===owner){render();if(panel==='live'||panel==='interact')renderPanel();if(['open','paused'].includes(b.status)&&liveConfig()!==b.config)queueLiveSettings(slide());}}
 }
 
@@ -1432,25 +1565,38 @@ function validateProject(raw){
     if(!/^[A-Za-z0-9_-]{1,100}$/.test(s.id)||['__proto__','constructor','prototype'].includes(s.id)||ids.has(s.id))s.id=uid();ids.add(s.id);
     const historical={...s,responseLimit:10,openLimit:2000};const clean=rows=>(Array.isArray(rows)?rows:[]).slice(0,50000).map(ClassroomCore.response).filter(r=>{if(!r||r.kind!==s.type)return false;try{r.answer=ClassroomCore.normalizeAnswer(historical,r.answer);if(r.kind==='wordcloud')r.words=r.answer.words;return true;}catch{return false;}});
     s.responses=clean(a.responses);
+    if(s.type==='dotvote'){
+      if(s.dotRevealed)s.accepting=false;
+      else if(Array.isArray(a.responses)){
+        const redacted=a.responses.slice(0,50000).map(ClassroomCore.response).filter(r=>
+          r?.kind==='dotvote'&&r.id.startsWith('crs:')&&!Object.keys(r.answer).length);
+        s.responses.push(...redacted);
+      }
+      if(a.dotFlow&&['suggestions','agreement','reflection'].every(key=>typeof a.dotFlow[key]==='string')){
+        s.dotFlow=Object.fromEntries(['suggestions','agreement','reflection'].map(key=>[key,a.dotFlow[key]]));
+      }
+    }
     s.clickSnapshot=Array.isArray(a.clickSnapshot)?clean(a.clickSnapshot):null;
     s.revealed=Math.max(0,Math.min(s.responses.length,Math.floor(Number(a.revealed)||0)));
   }
+  for(const s of out.slides)if(s.dotFlow&&!Object.values(s.dotFlow).every(id=>ids.has(id)))delete s.dotFlow;
   return out;
 }
 function resultsFor(s){
   if(!s.type||s.type==='wordcloud')return cloud(s);
   const config=ClassroomCore.config(s);if(s.type==='pin')config.pinImage=imageSignature(s);
-  const key=JSON.stringify([config,s.font,s.bg,s.fg,s.colors,s.chart,s.percentages,s.openPage,s.quadrants,s.showAverage,ClassroomCore.visible(s)]),cached=resultCache.get(s);
+  const key=JSON.stringify([config,s.font,s.bg,s.fg,s.colors,s.chart,s.percentages,s.openPage,s.quadrants,s.showAverage,s.type==='dotvote'?s.responses.length:0,ClassroomCore.visible(s)]),cached=resultCache.get(s);
   if(cached?.key===key)return cached.result;
   const result=ClassroomCore.render(s);resultCache.set(s,{key,result});return result;
 }
-function itemEditor(s,key,label){const locked=s.responses.length>0;return `<div class="item-editor">${s[key].map((it,i)=>`<div class="choice-row"><span>${i+1}</span><input type="text" data-item-group="${key}" data-item-id="${esc(it.id)}" value="${esc(it.label)}" maxlength="160" aria-label="${label} ${i+1}" placeholder="${label} ${i+1}"><button class="icon-btn secondary" data-action="remove-item" data-group="${key}" data-id="${esc(it.id)}" aria-label="Remove ${label.toLowerCase()} ${i+1}" ${locked||s[key].length<=1?'disabled':''}>${icon('trash')}</button></div>`).join('')}</div><button class="button secondary full gap" data-action="add-item" data-group="${key}" ${locked||s[key].length>=10?'disabled':''}>${icon('plus')}Add ${label.toLowerCase()}</button>${locked?'<p class="small gap">Clear this slide’s results to add or remove items.</p>':''}`;}
+function itemEditor(s,key,label){const ballotLocked=s.type==='dotvote'&&dotVotingLocked(s),locked=s.responses.length>0||ballotLocked;return `<div class="item-editor">${s[key].map((it,i)=>`<div class="choice-row"><span>${i+1}</span><input type="text" data-item-group="${key}" data-item-id="${esc(it.id)}" value="${esc(it.label)}" maxlength="160" ${ballotLocked?'disabled':''} aria-label="${label} ${i+1}" placeholder="${label} ${i+1}"><button class="icon-btn secondary" data-action="remove-item" data-group="${key}" data-id="${esc(it.id)}" aria-label="Remove ${label.toLowerCase()} ${i+1}" ${locked||s[key].length<=1?'disabled':''}>${icon('trash')}</button></div>`).join('')}</div><button class="button secondary full gap" data-action="add-item" data-group="${key}" ${locked||s[key].length>=10?'disabled':''}>${icon('plus')}Add ${label.toLowerCase()}</button>${locked?`<p class="small gap">${ballotLocked?'Close voting to edit an unused ballot. Clear submitted ballots to change their proposals.':'Clear this slide’s results to add or remove items.'}</p>`:''}`;}
 function typeSettings(s){
   let html='',locked=s.responses.length>0,disabled=locked?'disabled':'';
   if(s.type==='wordcloud')html=`<div class="row"><span>Number of responses</span><input type="number" data-field="responseLimit" value="${s.responseLimit}" min="1" max="10" aria-label="Number of responses per participant"></div>`;
   if(s.type==='poll')html=`<h3>Answer choices</h3>${itemEditor(s,'choices','Choice')}<div class="gap">${switchControl('Allow multiple selections','multiple',s.multiple).replace('<input ','<input '+disabled+' ')}</div><label class="field"><span>Results display</span><select data-field="chart"><option value="bars" ${s.chart==='bars'?'selected':''}>Bar chart</option>${!s.multiple?`<option value="doughnut" ${s.chart==='doughnut'?'selected':''}>Doughnut chart</option>`:''}</select></label>${switchControl('Show percentages','percentages',s.percentages)}<p class="small gap">${s.multiple?'Percentages show the share of participants selecting each choice.':'Switch between counts and percentages.'}</p>`;
   if(s.type==='open')html=`${field('Maximum response length','openLimit',s.openLimit,'number','min="100" max="2000" step="100"')}<p class="small gap">Present four response cards at a time. Use View results to read full responses or hide individual cards.</p>`;
   if(s.type==='scale')html=`<h3>Statements to rate</h3>${itemEditor(s,'statements','Statement')}<div class="range-fields">${field('Lowest value','scaleMin',s.scaleMin,'number',`min="0" max="9" ${disabled}`)}${field('Highest value','scaleMax',s.scaleMax,'number',`min="1" max="10" ${disabled}`)}</div>${field('Low-end label','scaleLow',s.scaleLow,'text','maxlength="80"')}${field('High-end label','scaleHigh',s.scaleHigh,'text','maxlength="80"')}<p class="small gap">Use 1–5, 1–7, 1–10, or your own whole-number range. Results show the average and distribution for each statement.</p>`;
+  if(s.type==='dotvote')html=`<p class="small">Students allocate two dots per ballot. Open and close voting and reveal the ranked tally from Dot voting controls.</p>${itemEditor(s,'choices','Proposal')}<button class="button primary full gap" data-action="dot-controls">Dot voting controls</button>`;
   if(s.type==='ranking')html=`<h3>Items to rank</h3>${itemEditor(s,'choices','Item')}<p class="small gap">Students drag items or use arrows to put their highest priority first. The combined ranking awards the most points to first place.</p>`;
   if(s.type==='pin')html=`${imageRow(s,'pinImage','Image to pin')}<p class="small gap">Students select a location on this image. Each submission appears as a colored pin on the presentation.</p>${locked?'<p class="small">Clear the results before replacing the image.</p>':''}`;
   if(s.type==='xy')html=`${['x','y'].map(axis=>`<h3 class="gap">${axis.toUpperCase()} axis</h3>${field('Axis label',axis+'Label',s[axis+'Label'],'text','maxlength="80"')}<div class="range-fields">${field('Minimum',axis+'Min',s[axis+'Min'],'number',`min="-1000" max="999" step="any" ${disabled}`)}${field('Maximum',axis+'Max',s[axis+'Max'],'number',`min="-999" max="1000" step="any" ${disabled}`)}</div>${field('Low-end label',axis+'Low',s[axis+'Low'],'text','maxlength="80"')}${field('High-end label',axis+'High',s[axis+'High'],'text','maxlength="80"')}`).join('')}<h3 class="gap">Quadrant labels</h3>${['Upper left','Upper right','Lower left','Lower right'].map((label,i)=>`<label class="field"><span>${label}</span><input data-quadrant="${i}" value="${esc(s.quadrants[i])}" maxlength="80" placeholder="Optional label"></label>`).join('')}${switchControl('Show average position','showAverage',s.showAverage)}`;
@@ -1480,16 +1626,24 @@ function renderPanel(){
   if(panel==='library'||panel==='timer'){renderStudioPanel();return;}
   if(panel==='slides'){$('drawerTitle').textContent='Slides';$('drawerContent').innerHTML=slidesPanel();return;}
   if(!panel)return;baseRenderPanel();const s=slide();let html=null;
-  if(panel==='edit'){const locked=s.responses.length>0||liveOf(s)?.engine==='legacy';html=`<section class="section"><h3>Question</h3><label class="field"><span>Question type</span><select data-field="type" ${locked?'disabled':''}>${Object.entries(ClassroomCore.types).map(([key,label])=>`<option value="${key}" ${s.type===key?'selected':''}>${label}</option>`).join('')}</select></label>${locked?'<p class="small gap">Add a new slide, or clear this slide’s results, to use a different question type.</p>':''}${field('Your question','question',s.question,'textarea','rows="3" maxlength="220" placeholder="Type your question here"')}</section>`+typeSettings(s)+designSection(s,true)+joiningSection(s)+modeSection(s)+settingsSection(s);}
-  if(panel==='responses')html=`<section class="section"><div class="row"><h3>Enter responses</h3><span class="badge">This computer</span></div>${entryForm(s)}</section>${['wordcloud','open'].includes(s.type)?`<section class="section"><h3>Paste several participants</h3><p class="small">${s.type==='wordcloud'?'One participant per line. Separate words or phrases with commas.':'One written response per line.'}</p><textarea id="bulkResponses" class="gap" rows="5" maxlength="200000" placeholder="One participant per line" aria-label="Bulk responses" ${s.accepting?'':'disabled'}></textarea><button class="button secondary full gap" data-action="bulk" ${s.accepting?'':'disabled'}>Add pasted responses</button></section>`:''}<section class="section"><div class="row"><h3>Results</h3><b>${s.responses.length} participants</b></div><div class="response-actions gap"><button class="button secondary" data-action="results">View results</button><button class="button secondary" data-action="clear">Clear results</button></div><p class="small gap">Student responses arrive automatically during a live session.</p></section>`;
+  if(panel==='edit'){const ballotLocked=s.type==='dotvote'&&dotVotingLocked(s),locked=s.responses.length>0||ballotLocked||liveOf(s)?.engine==='legacy';html=`<section class="section"><h3>Question</h3><label class="field"><span>Question type</span><select data-field="type" ${locked?'disabled':''}>${Object.entries(ClassroomCore.types).map(([key,label])=>`<option value="${key}" ${s.type===key?'selected':''}>${label}</option>`).join('')}</select></label>${locked?'<p class="small gap">Add a new slide, or clear this slide’s results, to use a different question type.</p>':''}${field('Your question','question',s.question,'textarea',`rows="3" maxlength="220" placeholder="Type your question here" ${ballotLocked?'disabled':''}`)}</section>`+typeSettings(s)+designSection(s,true)+joiningSection(s)+(s.type==='dotvote'?'':modeSection(s))+settingsSection(s);}
+  if(panel==='responses'&&s.type==='dotvote')html=`<section class="section"><h3>Dot voting</h3><p class="small">Students use the session code or QR to submit ballots.</p><button class="button primary full gap" data-action="dot-controls">Dot voting controls</button></section>`;
+  else if(panel==='responses')html=`<section class="section"><div class="row"><h3>Enter responses</h3><span class="badge">This computer</span></div>${entryForm(s)}</section>${['wordcloud','open'].includes(s.type)?`<section class="section"><h3>Paste several participants</h3><p class="small">${s.type==='wordcloud'?'One participant per line. Separate words or phrases with commas.':'One written response per line.'}</p><textarea id="bulkResponses" class="gap" rows="5" maxlength="200000" placeholder="One participant per line" aria-label="Bulk responses" ${s.accepting?'':'disabled'}></textarea><button class="button secondary full gap" data-action="bulk" ${s.accepting?'':'disabled'}>Add pasted responses</button></section>`:''}<section class="section"><div class="row"><h3>Results</h3><b>${s.responses.length} participants</b></div><div class="response-actions gap"><button class="button secondary" data-action="results">View results</button><button class="button secondary" data-action="clear">Clear results</button></div><p class="small gap">Student responses arrive automatically during a live session.</p></section>`;
   if(html!==null)$('drawerContent').innerHTML=html;
   ClassroomCore.refreshForms($('drawerContent'));
 }
-function render(){const s=slide(),totalPages=s.type==='open'?Math.ceil(ClassroomCore.visible(s).length/4):0;if(s.type==='open')s.openPage=Math.min(s.openPage||0,Math.max(0,totalPages-1));baseRender();const c=resultsFor(s);if(s.type!=='wordcloud')$('layoutStatus').textContent=c.label;document.querySelectorAll('[data-open-page]').forEach(b=>{b.hidden=s.type!=='open'||totalPages<2;b.disabled=b.dataset.action==='open-prev'?!s.openPage:(s.openPage||0)>=totalPages-1;});ClassroomCore.refreshForms(document);tickCountdown();}
+function render(){const s=slide(),totalPages=s.type==='open'?Math.ceil(ClassroomCore.visible(s).length/4):0;if(s.type==='open')s.openPage=Math.min(s.openPage||0,Math.max(0,totalPages-1));baseRender();const c=resultsFor(s);$('dotVotingControls').hidden=s.type!=='dotvote';
+  if(s.type==='dotvote'){
+    $('presentRevealText').textContent='Dot voting';
+    updateDotVotingStatus();
+  }
+  if(s.type!=='wordcloud')$('layoutStatus').textContent=c.label;document.querySelectorAll('[data-open-page]').forEach(b=>{b.hidden=s.type!=='open'||totalPages<2;b.disabled=b.dataset.action==='open-prev'?!s.openPage:(s.openPage||0)>=totalPages-1;});ClassroomCore.refreshForms(document);tickCountdown();}
 function setField(key,value){
   const s=slide(),structural=['type','multiple','scaleMin','scaleMax','xMin','xMax','yMin','yMax'];
+  if(s.type==='dotvote'&&dotVotingLocked(s)&&['question','type'].includes(key))return;
+  if(s.type==='dotvote'&&key==='accepting'){showDotVotingDialog();return;}
   if(structural.includes(key)&&s.responses.length){toast('Clear this slide’s results before changing its response format.');renderPanel();return;}
-  if(key==='type'){if(!ClassroomCore.types[value]||liveOf(s)?.engine==='legacy')return;s.type=value;s.openPage=0;changed(true);return;}
+  if(key==='type'){if(!ClassroomCore.types[value]||liveOf(s)?.engine==='legacy')return;s.type=value;s.openPage=0;if(value==='dotvote'){s.accepting=false;s.dotRevealed=false;}changed(true);return;}
   if(['scaleMin','scaleMax','openLimit','xMin','xMax','yMin','yMax'].includes(key)){
     const n=Number(value);if(!Number.isFinite(n))return;
     if(key==='scaleMin'&&(n<0||n>=s.scaleMax||!Number.isInteger(n))||key==='scaleMax'&&(n>s.scaleMin+10||n>10||n<=s.scaleMin||!Number.isInteger(n))){toast('Choose an increasing whole-number scale between 0 and 10.');renderPanel();return;}
@@ -1503,11 +1657,25 @@ function setField(key,value){
 function addTypedAnswer(answer){const s=slide();if(!s.accepting||liveOf(s)?.status==='paused'||timerClosed(s)){toast(timerClosed(s)?'Time is up. Add time or reset the countdown to reopen responses.':'Responses are paused.');return false;}if(s.type==='wordcloud')return addParticipant(answer.words);if(s.responses.length>=50000){toast('This slide has reached its response limit.');return false;}s.responses.push({id:uid(),at:Date.now(),kind:s.type,answer:ClassroomCore.normalizeAnswer(s,answer),words:[]});return true;}
 function addBulk(){if(!slide().accepting||liveOf()?.status==='paused'||timerClosed()){toast(timerClosed()?'Time is up. Responses are closed.':'Responses are paused.');return;}if(slide().type!=='open'){baseAddBulk();return;}const box=$('bulkResponses'),lines=box.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!lines.length){toast('Paste at least one response.');return;}if(lines.length>10000){toast('Add up to 10,000 responses at a time.');return;}if(lines.some(x=>x.length>slide().openLimit)){toast('A response is longer than this slide’s character limit.');return;}let count=0;for(const text of lines)if(addTypedAnswer({text}))count++;if(count){box.value='';changed();toast(count+' participant responses added.');}}
 function renderResults(){
-  const s=slide();if(s.type==='wordcloud'){baseRenderResults();return;}const all=ClassroomCore.visible(s,true),q=$('resultSearch').value.toLocaleLowerCase(),rows=all.filter(r=>ClassroomCore.answerText(s,r).toLocaleLowerCase().includes(q));
+  const s=slide();
+  $('resultSearch').hidden=s.type==='dotvote';
+  if(s.type==='dotvote'){
+    $('resultsTitle').textContent='Dot voting results';
+    $('resultsSummary').innerHTML=`<div class="mini-stat"><b>${s.responses.length}</b><span>Ballots submitted</span></div>`;
+    $('resultTable').innerHTML=s.dotRevealed?dotTallyMarkup(s):'<p class="small">Close voting and select Reveal tally to see the ranked proposals.</p>';
+    return;
+  }if(s.type==='wordcloud'){baseRenderResults();return;}const all=ClassroomCore.visible(s,true),q=$('resultSearch').value.toLocaleLowerCase(),rows=all.filter(r=>ClassroomCore.answerText(s,r).toLocaleLowerCase().includes(q));
   $('resultsTitle').textContent='Results'+(s.question?' · '+s.question:'');$('resultsSummary').innerHTML=`<div class="mini-stat"><b>${all.length}</b><span>Participants</span></div><div class="mini-stat"><b>${ClassroomCore.visible(s).length}</b><span>On presentation</span></div><div class="mini-stat"><b>${ClassroomCore.types[s.type]}</b><span>Question type</span></div>`;
   $('resultTable').innerHTML=rows.length?`<table><thead><tr><th>Response</th><th>On presentation</th></tr></thead><tbody>${rows.map(r=>`<tr class="${s.hiddenResponses.includes(r.id)?'hidden-term':''}"><td class="answer-cell">${esc(ClassroomCore.answerText(s,r))}</td><td><button class="button secondary" data-action="moderate-response" data-id="${esc(r.id)}">${s.hiddenResponses.includes(r.id)?'Show':'Hide'}</button></td></tr>`).join('')}</tbody></table>`:'<div class="results-empty">'+(all.length?'No matching responses.':'No responses yet.')+'</div>';
 }
-function exportCSV(){if(project.slides.every(s=>s.type==='wordcloud')){baseExportCSV();return;}closeMenus();const rows=[['Slide','Question','Type','Response','Hidden','Submitted at']];for(const [index,s]of project.slides.entries())for(const r of s.responses)rows.push([index+1,s.question,ClassroomCore.types[r.kind||'wordcloud'],ClassroomCore.answerText(s,r),s.hiddenResponses.includes(r.id)?'Yes':'No',r.at?new Date(r.at).toISOString():'']);const quote=v=>'"'+String(v).replace(/"/g,'""')+'"',safe=v=>typeof v==='string'&&/^[=+@\-\t\r]/.test(v)?"'"+v:v;download(new Blob(['\ufeff'+rows.map(r=>r.map(v=>quote(safe(v))).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),fileName()+'_Results.csv');}
+function exportCSV(){if(project.slides.every(s=>s.type==='wordcloud')){baseExportCSV();return;}closeMenus();const rows=[['Slide','Question','Type','Response','Hidden','Submitted at']];for(const [index,s]of project.slides.entries()){
+  if(s.type==='dotvote'){
+    if(s.dotRevealed)for(const item of ClassroomCore.summarize(s).items)
+      rows.push([index+1,s.question,'Dot voting',`Proposal ${item.number} · ${item.label} · ${item.count} dots · rank ${item.rank}`,'No','']);
+    continue;
+  }
+  for(const r of s.responses)rows.push([index+1,s.question,ClassroomCore.types[r.kind||'wordcloud'],ClassroomCore.answerText(s,r),s.hiddenResponses.includes(r.id)?'Yes':'No',r.at?new Date(r.at).toISOString():'']);
+}const quote=v=>'"'+String(v).replace(/"/g,'""')+'"',safe=v=>typeof v==='string'&&/^[=+@\-\t\r]/.test(v)?"'"+v:v;download(new Blob(['\ufeff'+rows.map(r=>r.map(v=>quote(safe(v))).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),fileName()+'_Results.csv');}
 function pageResponses(delta){const s=slide(),max=Math.max(0,Math.ceil(ClassroomCore.visible(s).length/4)-1);s.openPage=Math.max(0,Math.min(max,(s.openPage||0)+delta));changed();}
 function rememberResultBars(root){const view=root.ownerDocument.defaultView||window;return new Map([...root.querySelectorAll('.result-bar')].map(n=>[n.dataset.resultKey,{transform:view.getComputedStyle(n).transform,height:Number(n.dataset.height),width:Number(n.dataset.width)}]));}
 function animateResultBars(root,old){const view=root.ownerDocument.defaultView||window;if(view.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;for(const n of root.querySelectorAll('.result-bar')){if(!n.animate)continue;const target=`translate(${n.dataset.x}px, ${n.dataset.y}px)`,previous=old.get(n.dataset.resultKey);n.animate([{transform:previous?`${previous.transform} scale(${previous.width/Number(n.dataset.width)}, ${previous.height/Number(n.dataset.height)})`:target+' scale(1, .05)',opacity:previous?1:0},{transform:target,opacity:1}],{duration:1400,easing:'cubic-bezier(.22,.61,.36,1)'});}}
@@ -1904,6 +2072,219 @@ async function controlCountdown(action,editor,extra={}){const s=slide(),owner=pr
 function tickCountdown(){const s=slide(),t=timerOf(s),now=timerNow(),state=CountdownCore.phase(t,now),left=t?CountdownCore.remaining(t,now):s.timerDuration,closed=CountdownCore.closed(t,now),busy=livePending.has(bindingKey());const roots=[document];if(audienceWindow&&!audienceWindow.closed)try{roots.push(audienceWindow.document);}catch{}for(const root of roots){root.querySelectorAll('[data-countdown-value]').forEach(n=>{n.textContent=CountdownCore.format(left);});root.querySelectorAll('[data-countdown-state]').forEach(n=>{n.textContent=state==='finished'?'Time is up':state==='paused'?'Paused':state==='running'?'Time remaining':'Ready';});root.querySelectorAll('.slide-countdown').forEach(n=>{n.classList.toggle('finished',state==='finished');n.classList.toggle('paused',state==='paused');});}document.querySelectorAll('[data-countdown-start]').forEach(n=>{n.disabled=busy||state==='running';n.textContent=state==='paused'?'Resume':state==='finished'?'Restart':'Start';});document.querySelectorAll('[data-countdown-pause]').forEach(n=>{n.disabled=busy||state!=='running';});
   const key=project.id+':'+s.id+':'+closed+':'+state;if(key!==lastCountdownState){lastCountdownState=key;if(state==='finished'&&t&&!sharedOf()){t.state='finished';t.remaining=0;t.deadline=null;try{saveLocalCountdowns();}catch{}}document.querySelectorAll('form[data-form="responses"]').forEach(form=>{const paused=closed||!s.accepting||liveOf(s)?.status==='paused',submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=paused;const status=form.querySelector('.form-status');if(status)status.textContent=closed?'Time is up. Responses are closed.':paused?'Responses are currently paused.':'';});if(panel==='responses'){const bulk=$('bulkResponses');if(bulk)bulk.disabled=closed||!s.accepting||liveOf(s)?.status==='paused';}if(state==='finished')toast(closed?'Time is up. Responses are closed.':'Time is up.');}}
 
+const agreementLabels=[
+  'Wholehearted endorsement','Agreement with a minor point of contention','Support with reservations',
+  'Abstain','More discussion needed','Don’t like but will support','Serious disagreement','Veto'
+];
+const agreementInstructions=agreementLabels.map((label,i)=>`${i+1} — ${label}`).join(' · ');
+const dotActionMessages={
+  'dot-open':'Voting is open. Students can submit both dots.',
+  'dot-close':'Voting is closed. Reveal the tally when you’re ready.',
+  'dot-reveal':'The ranked tally is visible to students.',
+  'dot-select':'Proposal selected for Gradients of Agreement.'
+};
+
+function newBikeTrailActivity(){
+  const makeSlide=(type,question,info,extra={})=>({...blankSlide(),type,question,info,showCount:true,...extra});
+  const individual={mode:'private'};
+  const problem=makeSlide('open','What problem do you see on the bike trail?',
+    'Read the Bike Trail Turns into Mean Street handout. Write the problem as you see it before hearing anyone else’s view.',individual);
+  const stakeholders=makeSlide('open','Who is involved or affected?',
+    'Identify the people or organizations involved. Whose perspective might be missing?',individual);
+  const suggestions=makeSlide('open','What solution would you propose?',
+    'Suggest one action the group could take. Describe what it would change.',individual);
+  const agreement=makeSlide('scale','How much do you support the selected proposal?',agreementInstructions,{
+    accepting:false,scaleMin:1,scaleMax:8,scaleLow:agreementLabels[0],scaleHigh:agreementLabels[7],
+    statements:[{id:uid(),label:'Wait for your instructor to select a proposal.'}]
+  });
+  const reflection=makeSlide('open','What’s your reason or reservation?',
+    'Describe what informed your rating. Identify a concern the group should carry into Shifting the Burden.',
+    {accepting:false});
+  const ballot=makeSlide('dotvote','','Which proposals best address the group’s problem? Use both dots.',{
+    accepting:false,choices:[{id:uid(),label:''},{id:uid(),label:''}],
+    dotFlow:{suggestions:suggestions.id,agreement:agreement.id,reflection:reflection.id}
+  });
+  return {...blankProject(),name:'Bike Trail · Live Dot Voting',
+    slides:[problem,stakeholders,suggestions,ballot,agreement,reflection]};
+}
+
+function openBikeTrailActivity(){
+  const launch=()=>runLibrary(async()=>{
+    await leaveCurrentClass();
+    project=newBikeTrailActivity();
+    activityEditing=null;
+    websiteEditing=null;
+    cloudCache.clear();
+    lastCountdownState='';
+    changed(true);
+    openPanel('live',true);
+    toast('Bike Trail activity ready. Generate the QR code to invite students.');
+  });
+  if(!hasClassWork()){launch();return;}
+  askConfirm('Open the Bike Trail activity?',
+    'Your current class results will be saved in this browser and its active student link will close.',
+    'Open activity',launch);
+}
+
+function dotVotingLocked(s){return s.accepting||s.dotRevealed||s.responses.length>0;}
+function dotFlowSlide(s,key){return project.slides.find(other=>other.id===s.dotFlow?.[key]);}
+function dotCanSelect(s){
+  const agreement=dotFlowSlide(s,'agreement'),reflection=dotFlowSlide(s,'reflection');
+  return agreement?.type==='scale'&&reflection?.type==='open'&&!agreement.responses.length&&!reflection.responses.length;
+}
+function dotTallyMarkup(s,select=false){
+  const stats=ClassroomCore.summarize(s);
+  if(!stats.total)return '<p class="small">No ballots were submitted.</p>';
+  const tied=stats.items.filter(item=>item.rank===1).length>1;
+  return `<p class="small">${tied?'Tie for first. Discuss what the leading proposals address before choosing one.':'Ranked by total dots.'}</p>
+    <table class="dot-tally"><thead><tr><th scope="col">Rank</th><th scope="col">Proposal</th><th scope="col">Dots</th></tr></thead>
+    <tbody>${stats.items.map(item=>`<tr><td>${item.rank}</td><td><b>${item.number}.</b> ${esc(item.label)}
+      ${select?`<div class="gap"><button class="button secondary" data-action="dot-select" data-id="${esc(item.id)}">Discuss proposal ${item.number}</button></div>`:''}
+    </td><td>${item.count}</td></tr>`).join('')}</tbody></table>`;
+}
+function suggestionList(s){
+  const source=dotFlowSlide(s,'suggestions');
+  if(source?.type!=='open')return '';
+  const unique=new Map();
+  for(const {answer} of source.responses){
+    const text=answer.text?.trim();
+    if(!text)continue;
+    const key=text.toLocaleLowerCase().replace(/\s+/g,' ');
+    const previous=unique.get(key);
+    unique.set(key,{text:previous?.text||text,count:(previous?.count||0)+1});
+  }
+  if(!unique.size)return '<p class="small">Student proposals appear here after they answer the solution question.</p>';
+  return `<ul class="dot-proposals">${[...unique.values()].map(({text,count})=>`<li><span>${esc(text)}${count>1?` <small>(${count} similar submissions)</small>`:''}</span>
+    <button class="button secondary" data-action="dot-add-suggestion" data-text="${esc(text)}" ${dotVotingLocked(s)?'disabled':''}>Use as a proposal</button></li>`).join('')}</ul>`;
+}
+function dotWorkedExample(){
+  return `<details class="section" data-dot-example><summary>Instructor worked example</summary>
+    <p class="small">The group might frame the problem as keeping the trail safe and usable when people travel at different speeds, disagree about passing, and report hazards such as tacks. Ask which parts of that framing the case supports.</p>
+    <ol class="small">
+      <li>Respond to immediate hazards and make reporting easier.</li>
+      <li>Clarify passing, yielding, and shared-use etiquette.</li>
+      <li>Redesign crowded trail sections.</li>
+    </ol>
+    <p class="small">Five example ballots put two dots on proposal 2, one each on 1 and 2, one each on 2 and 3, two on 3, and two on 1. Proposal 2 receives 4 dots. Proposals 1 and 3 tie with 3 each.</p>
+    <p class="small">Ask what a vote for proposal 2 assumes about why conflicts occur. Use Gradients of Agreement to surface a reservation. Carry that reservation into Shifting the Burden and ask which symptom the proposal addresses and what might keep the problem recurring.</p>
+  </details>`;
+}
+function updateDotVotingStatus(){
+  const s=slide(),dialog=$('dotVotingDialog');
+  if(!dialog.open||s.type!=='dotvote')return;
+  const count=dialog.querySelector('[data-dot-count]');
+  if(count){
+    const message=`${s.responses.length} ${s.responses.length===1?'ballot':'ballots'} submitted`;
+    if(count.textContent!==message)count.textContent=message;
+  }
+  const pending=livePending.has(bindingKey()),ready=ClassroomCore.ready(s);
+  const open=dialog.querySelector('[data-round="open"]'),reveal=dialog.querySelector('[data-round="reveal"]');
+  if(open)open.disabled=sharedOf()?.status!=='open'||Boolean(ready)||pending;
+  if(reveal)reveal.disabled=!s.responses.length||pending;
+  const help=dialog.querySelector('[data-dot-ready]');
+  if(help){
+    help.hidden=!ready;
+    help.textContent=!s.question.trim()?'Write the group problem statement before opening voting.':ready;
+  }
+  const suggestions=dialog.querySelector('[data-dot-suggestions]');
+  const responses=dotFlowSlide(s,'suggestions')?.responses||[];
+  if(suggestions&&suggestions.lastResponses!==responses&&!suggestions.contains(document.activeElement)){
+    suggestions.innerHTML=suggestionList(s);
+    suggestions.lastResponses=responses;
+  }
+}
+function renderDotVotingDialog(){
+  const dialog=$('dotVotingDialog'),s=slide();
+  if(!dialog.open||s.type!=='dotvote')return;
+  const root=$('dotVotingContent'),exampleOpen=root.querySelector('[data-dot-example]')?.open;
+  const suggestionsOpen=root.querySelector('[data-dot-source]')?.open;
+  const locked=dotVotingLocked(s),b=sharedOf(),pending=livePending.has(bindingKey());
+  const active=b&&['open','paused'].includes(b.status),ready=ClassroomCore.ready(s),canOpen=active&&b.status==='open'&&!ready&&!pending;
+  root.innerHTML=`<section class="section">
+    <div class="row"><h3>Ballot</h3><span class="badge">${s.dotRevealed?'Tally revealed':s.accepting?'Voting open':'Voting closed'}</span></div>
+    <p class="small" role="status" data-dot-count></p>
+    ${!active?'<p class="small">Start a live session to collect student ballots.</p>':b.status==='paused'?'<p class="small">Resume the live session before opening voting.</p>':''}
+    <div class="response-actions gap">
+      ${s.accepting?`<button class="button primary" data-action="dot-round" data-round="close" ${pending?'disabled':''}>Close voting</button>`:
+        !s.dotRevealed?`<button class="button primary" data-action="dot-round" data-round="open" ${canOpen?'':'disabled'}>Open voting</button><button class="button secondary" data-action="dot-round" data-round="reveal" ${pending||!s.responses.length?'disabled':''}>Reveal tally</button>`:''}
+      ${s.responses.length||s.dotRevealed?`<button class="button secondary" data-action="clear" ${pending?'disabled':''}>Clear ballots</button>`:''}
+    </div>
+    <p class="small gap" data-dot-ready hidden></p>
+    ${s.dotRevealed?dotTallyMarkup(s,dotCanSelect(s)):''}
+  </section>
+  <section class="section"><h3>Group problem and proposals</h3>
+    ${field('Group problem statement','question',s.question,'textarea',`rows="3" maxlength="220" ${locked?'disabled':''}`)}
+    ${itemEditor(s,'choices','Proposal')}
+    ${s.dotFlow?`<details class="gap" data-dot-source><summary>Student suggestions</summary><p class="small">Combine similar suggestions and edit the proposal wording with the group.</p><div data-dot-suggestions></div></details>`:''}
+  </section>${s.dotFlow?dotWorkedExample():''}`;
+  if(exampleOpen&&s.dotFlow)root.querySelector('[data-dot-example]').open=true;
+  if(suggestionsOpen&&s.dotFlow)root.querySelector('[data-dot-source]').open=true;
+  updateDotVotingStatus();
+}
+function showDotVotingDialog(){
+  if(slide().type!=='dotvote')return;
+  const dialog=$('dotVotingDialog');
+  if(!dialog.open)dialog.showModal();
+  renderDotVotingDialog();
+}
+async function setDotRound(phase){
+  const s=slide(),owner=project,b=sharedOf();
+  if(s.type!=='dotvote'||livePending.has(bindingKey())||!['open','close','reveal'].includes(phase))return;
+  if(phase==='open'&&(b?.status!=='open'||ClassroomCore.ready(s)||s.dotRevealed))return;
+  if(phase==='reveal'&&(s.accepting||!s.responses.length||s.dotRevealed))return;
+  const previous={accepting:s.accepting,dotRevealed:s.dotRevealed};
+  s.accepting=phase==='open';
+  s.dotRevealed=phase==='reveal';
+  if(b&&['open','paused'].includes(b.status)){
+    if(!await controlLive('dot-'+phase))Object.assign(s,previous);
+  }else toast(dotActionMessages['dot-'+phase]);
+  if(project===owner)changed(true);
+}
+function confirmClearDotVoting(){
+  const s=slide(),owner=project;
+  askConfirm('Clear these ballots?','Remove the current ballots and close voting. You can review the proposals and open a new round under the same code.',
+    'Clear ballots',async()=>{
+      if(project!==owner||slide()!==s||livePending.has(bindingKey()))return;
+      const previous={accepting:s.accepting,dotRevealed:s.dotRevealed},b=sharedOf();
+      s.accepting=false;s.dotRevealed=false;
+      if(b&&['open','paused'].includes(b.status)){
+        if(!await controlLive('dot-clear'))Object.assign(s,previous);
+      }else s.responses=[];
+      if(project===owner)changed(true);
+    });
+}
+function addDotSuggestion(button){
+  const s=slide();
+  if(s.type!=='dotvote'||dotVotingLocked(s))return;
+  const text=button.dataset.text.trim().slice(0,160),empty=s.choices.find(c=>!c.label.trim());
+  if(s.choices.some(c=>c.label.toLocaleLowerCase()===text.toLocaleLowerCase())){toast('This proposal is already on the ballot.');return;}
+  if(empty)empty.label=text;
+  else if(s.choices.length<10)s.choices.push({id:uid(),label:text});
+  else {toast('Use up to ten proposals. Combine or remove a proposal first.');return;}
+  changed(true);
+}
+async function discussDotProposal(button){
+  const s=slide(),owner=project;
+  if(!s.dotRevealed||!dotCanSelect(s)||livePending.has(bindingKey()))return;
+  const item=s.choices.find(c=>c.id===button.dataset.id);
+  if(!item)return;
+  const agreement=dotFlowSlide(s,'agreement'),reflection=dotFlowSlide(s,'reflection');
+  const previous={label:agreement.statements[0].label,agreement:agreement.accepting,info:reflection.info,reflection:reflection.accepting};
+  agreement.statements[0].label=item.label;
+  agreement.accepting=true;
+  reflection.info=`Proposal ${s.choices.indexOf(item)+1} — ${item.label}
+What informed your rating? Which concern should the group carry into Shifting the Burden?`;
+  reflection.accepting=true;
+  const b=sharedOf();
+  if(b&&['open','paused'].includes(b.status)&&!await controlLive('dot-select')){
+    agreement.statements[0].label=previous.label;agreement.accepting=previous.agreement;
+    reflection.info=previous.info;reflection.accepting=previous.reflection;
+    if(project===owner)changed(true);
+    return;
+  }
+  if(project===owner)chooseSlide(project.slides.indexOf(agreement));
+}
+
 const actions={
 'library-save':()=>runLibrary(saveActivity),'library-archive':()=>runLibrary(async name=>{await archiveClass(name);libraryTab='session';toast('Class results saved.');}),'library-tab':b=>selectLibraryTab(b.dataset.kind),'library-retry':loadLibrary,
 'library-website-save':()=>websiteUser?runLibrary(saveWebsiteProject):showWebsiteSignIn(),
@@ -1913,9 +2294,11 @@ const actions={
 'library-start':b=>confirmLibraryOpen(b,'start'),'library-edit':b=>confirmLibraryOpen(b,'edit'),'library-results':b=>confirmLibraryOpen(b,'results'),'library-rename':renameLibraryItem,'library-rename-save':commitLibraryRename,'library-delete':deleteLibraryItem,'library-export':exportLibrary,'library-import':()=>{$('libraryFile').value='';$('libraryFile').click();},
 'pacing-controls':showPacingDialog,'timer-controls':showCountdownDialog,'timer-start':b=>controlCountdown('start',b.closest('[data-timer-editor]')),'timer-pause':b=>controlCountdown('pause',b.closest('[data-timer-editor]')),'timer-reset':b=>controlCountdown('reset',b.closest('[data-timer-editor]')),'timer-extend':b=>controlCountdown('extend',b.closest('[data-timer-editor]')),
 
+'dot-template':openBikeTrailActivity,'dot-controls':showDotVotingDialog,
+'dot-round':b=>setDotRound(b.dataset.round),'dot-add-suggestion':addDotSuggestion,'dot-select':discussDotProposal,
 'upgrade-session':upgradeSession,'open-prev':()=>pageResponses(-1),'open-next':()=>pageResponses(1),
-'add-item':b=>{const key=b.dataset.group,s=slide();if(!['choices','statements'].includes(key)||s.responses.length||s[key].length>=10)return;s[key].push({id:uid(),label:''});changed(true);},
-'remove-item':b=>{const key=b.dataset.group,s=slide();if(!['choices','statements'].includes(key)||s.responses.length||s[key].length<=1)return;s[key]=s[key].filter(x=>x.id!==b.dataset.id);changed(true);},
+'add-item':b=>{const key=b.dataset.group,s=slide();if(!['choices','statements'].includes(key)||s.responses.length||(s.type==='dotvote'&&dotVotingLocked(s))||s[key].length>=10)return;s[key].push({id:uid(),label:''});changed(true);},
+'remove-item':b=>{const key=b.dataset.group,s=slide();if(!['choices','statements'].includes(key)||s.responses.length||(s.type==='dotvote'&&dotVotingLocked(s))||s[key].length<=1)return;s[key]=s[key].filter(x=>x.id!==b.dataset.id);changed(true);},
 'moderate-response':b=>{const s=slide(),id=b.dataset.id;s.hiddenResponses=s.hiddenResponses.includes(id)?s.hiddenResponses.filter(x=>x!==id):[...s.hiddenResponses,id];changed();},
 
 'live-start':startLiveSession,'live-copy':copyLiveLink,'live-pause':()=>controlLive('update',liveOf()?.status==='open'?'paused':'open'),'live-end':endLiveSession,'live-qr':()=>{const b=liveOf();if(b)download(new Blob([qrSVG(liveJoinURL(b))],{type:'image/svg+xml'}),'Word_Cloud_QR_'+b.code+'.svg');},'toggle-joining':()=>{slide().showJoining=!slide().showJoining;changed();},
@@ -1965,7 +2348,7 @@ drawerContent.addEventListener('drop',e=>{
   moveSlide(from,to);
 });
 document.addEventListener('dragend',()=>{draggedSlide=null;clearSlideDrop();});
-document.addEventListener('input',e=>{const t=e.target;if(t.dataset.itemGroup){const s=slide(),key=t.dataset.itemGroup,it=s[key]?.find(x=>x.id===t.dataset.itemId);if(it){it.label=t.value.slice(0,160);changed();}return;}if(t.dataset.quadrant!==undefined){slide().quadrants[Number(t.dataset.quadrant)]=t.value.slice(0,80);changed();return;}if(t===$('docName')){project.name=t.value;persist();document.title=project.name?project.name+' · Classroom Response Studio':'Classroom Response Studio | Mayne Leadership';return;}if(t===$('resultSearch')){renderResults();return;}if(t.hasAttribute('data-color')){slide().colors[Number(t.dataset.color)]=t.value;changed();return;}if(t.dataset.field&&t.type!=='checkbox'&&t.type!=='radio'&&t.tagName!=='SELECT'){if(t.type==='number')return;setField(t.dataset.field,t.value);}});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.itemGroup){const s=slide(),key=t.dataset.itemGroup,it=s[key]?.find(x=>x.id===t.dataset.itemId);if(it&&!(s.type==='dotvote'&&dotVotingLocked(s))){it.label=t.value.slice(0,160);changed();}return;}if(t.dataset.quadrant!==undefined){slide().quadrants[Number(t.dataset.quadrant)]=t.value.slice(0,80);changed();return;}if(t===$('docName')){project.name=t.value;persist();document.title=project.name?project.name+' · Classroom Response Studio':'Classroom Response Studio | Mayne Leadership';return;}if(t===$('resultSearch')){renderResults();return;}if(t.hasAttribute('data-color')){slide().colors[Number(t.dataset.color)]=t.value;changed();return;}if(t.dataset.field&&t.type!=='checkbox'&&t.type!=='radio'&&t.tagName!=='SELECT'){if(t.type==='number')return;setField(t.dataset.field,t.value);}});
 document.addEventListener('change',e=>{const t=e.target;if(t.hasAttribute('data-pacing')){changePacing(t.value);return;}if(t.dataset.field&&(t.type==='checkbox'||t.type==='radio'||t.tagName==='SELECT'||t.type==='number'))setField(t.dataset.field,t.type==='checkbox'?t.checked:t.value);});
 document.addEventListener('submit',e=>{const form=e.target;if(form.dataset.form!=='responses')return;e.preventDefault();try{const answer=ClassroomCore.readForm(form,slide());if(addTypedAnswer(answer)){form.reset();const list=form.querySelector('.ranking-input');if(list){const nodes=new Map([...list.children].map(n=>[n.dataset.choiceId,n]));for(const it of slide().choices)if(nodes.has(it.id))list.appendChild(nodes.get(it.id));}changed();ClassroomCore.refreshForms(form);form.querySelector('.form-status').textContent='Thank you. Response added. Ready for the next participant.';form.querySelector('.response-input')?.focus();if(panel==='responses'){const stat=$('drawerContent').querySelector('.section:last-child .row b');if(stat)stat.textContent=slide().responses.length+' participants';}}}catch(error){form.querySelector('.form-status').textContent=error.message;}});
 $('confirmButton').addEventListener('click',()=>{const task=confirmTask;confirmTask=null;$('confirmDialog').close();if(task)task();});
@@ -1981,7 +2364,12 @@ $('presenter').addEventListener('pointermove',showControls);$('presenter').addEv
 document.addEventListener('fullscreenchange',()=>{if(presenterActive&&!document.fullscreenElement)showControls();});
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{render();},100);});
 window.addEventListener('beforeunload',()=>{try{storeDraft();}catch{}});
-ClassroomCore.wire(document);hydrate();render();setInterval(tickCountdown,250);pollLive();setInterval(pollLive,1800);document.addEventListener('visibilitychange',()=>{if(!document.hidden){tickCountdown();pollLive();}});window.addEventListener('online',pollLive);
+ClassroomCore.wire(document);hydrate();render();
+if(new URLSearchParams(location.search).get('activity')==='bike-trail'){
+  const url=new URL(location.href);url.searchParams.delete('activity');history.replaceState(null,'',url);
+  openBikeTrailActivity();
+}
+setInterval(tickCountdown,250);pollLive();setInterval(pollLive,1800);document.addEventListener('visibilitychange',()=>{if(!document.hidden){tickCountdown();pollLive();}});window.addEventListener('online',pollLive);
 })();
 </script>
 </body>
