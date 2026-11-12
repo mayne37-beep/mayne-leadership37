@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Icon } from './icons.jsx';
 import { cleanText } from './shared.js';
 import { copyLink, displayTime, downloadCsv, guestLink, instructorAuth, newNonce, request } from './client.js';
-import { DeviceSelect, Modal } from './components.jsx';
+import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { Meeting } from './Meeting.jsx';
 
 const requestedInvite = new URLSearchParams(location.search).get('invite') || '';
@@ -307,15 +307,13 @@ function App() {
         {report && <div className="report-card"><span>Attendance from your last meeting</span>
           <button className="btn secondary" type="button" onClick={() => downloadCsv(report)}><Icon name="download" size={17} /> Download CSV</button></div>}
       </>}
-    {inviteFor && <Modal title="Meeting invitation" close={() => setInviteFor(null)}>
-      <p>{inviteFor.title} · {displayTime(inviteFor.start)}</p>
-      <label className="field">Guest link<input readOnly value={guestLink(inviteFor.invite)} onFocus={e => e.target.select()} /></label>
-      <div className="form-actions"><button className="btn primary" type="button" onClick={() => run(async () => {
-        await copyLink(guestLink(inviteFor.invite));
+    {inviteFor && <MeetingInvitation link={guestLink(inviteFor.invite)}
+      details={inviteFor.title + ' · ' + displayTime(inviteFor.start)} close={() => setInviteFor(null)}
+      onCopy={link => run(async () => {
+        await copyLink(link);
         setInviteFor(null);
         setMessage('Meeting link copied.');
-      })}>Copy link</button></div>
-    </Modal>}
+      })} />}
     {recordings && <Modal title="Meeting recordings" close={() => setRecordings(null)}>
       {recordings.items.length === 0 && <p>No cloud recordings yet. Processing can take a few minutes.</p>}
       <ul className="saved-meetings">{recordings.items.map(item => <li key={item.id}>
