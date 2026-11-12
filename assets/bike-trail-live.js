@@ -296,6 +296,11 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
       if (target.textContent !== text) target.textContent = text;
       const reveal = stage.querySelector("#reveal-live-tally");
       if (reveal) reveal.disabled = busy || count === 0;
+      const edit = stage.querySelector("#edit-live-ballot");
+      if (edit) {
+        edit.hidden = count > 0;
+        edit.disabled = busy || count > 0;
+      }
       return;
     }
     const ratings = room.active === "agreement";
@@ -369,7 +374,9 @@ function createBikeTrailLive({ stage, getSession, saveSession, render, showTempl
         if (!collectTally()) throw new Error("The tally is temporarily unavailable. Check the session again.");
       }, true));
       reveal.id = "reveal-live-tally";
-      controls.append(command("Reopen voting", "secondary", () => run(() => control("ballot", amend("ballot", { accepting: true })))),
+      const edit = command("Edit setup", "quiet", () => run(() => control("suggestions"), true));
+      edit.id = "edit-live-ballot";
+      controls.append(edit, command("Reopen voting", "secondary", () => run(() => control("ballot", amend("ballot", { accepting: true })))),
         reveal);
     }
     paint();

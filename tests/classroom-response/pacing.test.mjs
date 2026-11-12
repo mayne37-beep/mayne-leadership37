@@ -353,6 +353,13 @@ test('the original instructor page runs the live exercise using its own setup an
     type(instructor,'#problem','How can we make the trail safer for everyone?');
     click(instructor,'#start-vote');
     await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The original page opens voting for both devices');
+    press(instructor,'Close voting');
+    await eventually(()=>title()==='Voting is closed','An empty ballot can be closed');
+    press(instructor,'Edit setup');
+    await eventually(()=>title()==='Prepare the vote'&&students.every(win=>question(win)==='What solution would you propose?'),'The same code returns to preparation before any ballots');
+    assert.equal(new URL(instructor.document.querySelector('.live-join a').href).searchParams.get('code'),code);
+    click(instructor,'#start-vote');
+    await eventually(()=>title()==='Voting is open'&&students.every(win=>question(win).includes('safer for everyone')),'The ballot reopens under the same code');
     for(const [index,win] of students.entries()){
       const add=win.document.querySelectorAll('[data-dot-step="1"]')[index];
       add.click();add.click();
