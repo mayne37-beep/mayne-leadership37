@@ -10,6 +10,8 @@ const PUBLIC_PAGES = new Set([
   '/api/live-classroom',
   '/assets/live-classroom.css',
   '/assets/live-classroom.js',
+  '/assets/live-classroom-backgrounds/office.jpg',
+  '/assets/live-classroom-backgrounds/reading-room.jpg',
   '/assets/signup-studio/studio.css',
   '/assets/signup-studio/shared.js',
   '/assets/signup-studio/participant.js',
