@@ -11,7 +11,8 @@ export function cleanText(value, limit) {
 export function activityPath(value, origin) {
   const input = cleanText(value, 600);
   if (!input) return '';
-  if (/^[A-Z0-9]{6}$/i.test(input)) return '/word-cloud-respond.html?code=' + input.toUpperCase();
+  const directCode = input.replace(/\s/g, '');
+  if (/^\d{6,7}$/.test(directCode)) return '/word-cloud-respond.html?code=' + directCode;
   try {
     const url = new URL(input, origin);
     const site = new URL(origin);
@@ -22,8 +23,8 @@ export function activityPath(value, origin) {
        !url.port && !site.port);
     if (!sameSite || url.username || url.password) return '';
     const code = url.searchParams.get('code')?.replace(/\s/g, '');
-    if (url.pathname === '/word-cloud-respond.html' && /^[A-Z0-9]{6}$/i.test(code ?? '')) {
-      return '/word-cloud-respond.html?code=' + code.toUpperCase();
+    if (url.pathname === '/word-cloud-respond.html' && /^\d{6,7}$/.test(code ?? '')) {
+      return '/word-cloud-respond.html?code=' + code;
     }
     if (url.pathname === '/collaboration-join.html') {
       const data = new URLSearchParams(url.hash.slice(1));
