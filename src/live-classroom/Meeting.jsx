@@ -4,6 +4,7 @@ import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { activityPath, attendanceCsv, cleanText, reactions } from './shared.js';
 import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js';
 import { participantName, useCall } from './use-call.js';
+import { BackgroundSettings, backgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
@@ -184,7 +185,7 @@ function Chat({ items, send }) {
   </>;
 }
 
-function DeviceSettings({ preferences, setDevice, blur, setBlur }) {
+function DeviceSettings({ preferences, setDevice, children }) {
   const [devices, setDevices] = useState([]);
   useEffect(() => {
     const update = () => navigator.mediaDevices?.enumerateDevices().then(setDevices).catch(() => {});
@@ -197,7 +198,7 @@ function DeviceSettings({ preferences, setDevice, blur, setBlur }) {
     <DeviceSelect title="Microphone" devices={devices} kind="audioinput" value={preferences.microphone} onChange={v => setDevice('microphone', v)} />
     {typeof HTMLMediaElement.prototype.setSinkId === 'function' &&
       <DeviceSelect title="Speaker" devices={devices} kind="audiooutput" value={preferences.speaker} onChange={v => setDevice('speaker', v)} />}
-    <label className="check-field"><input type="checkbox" checked={blur} onChange={e => setBlur(e.target.checked)} /> Blur my background</label>
+    {children}
   </div>;
 }
 
@@ -276,7 +277,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [spotlight, setSpotlight] = useState('');
   const [hideSelf, setHideSelf] = useState(false);
   const [hideVideo, setHideVideo] = useState(false);
-  const [blur, setBlur] = useState(false);
+  const [background, setBackground] = useState(null);
+  const [customBackgrounds, setCustomBackgrounds] = useState(loadBackgrounds);
   const [caption, setCaption] = useState(null);
   const [showCaptions, setShowCaptions] = useState(true);
   const [audioBlocked, setAudioBlocked] = useState(false);
@@ -304,6 +306,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const setup = { invite: entry.invite, nonce: entry.nonce };
   const { ref, state, connect, disconnect, update } = useCall({
     onMessage: receive,
+    onBackgroundError: () => setBackground(null),
     onCaption: (event, person) => {
       const text = cleanText(event.text, 500);
       if (text) setCaption({ text, name: participantName(person), time: Date.now() });
@@ -314,14 +317,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const currentRoom = target.url;
   const local = state.participants.find(person => person.local);
   const activeCall = state.phase === 'connected';
+  const activeInstance = activeCall ? call() : null;
 
   useEffect(() => {
     setPin('');
     setSpotlight('');
     setCaption(null);
-    setBlur(false);
     setUnread(0);
-    connect(target, name, preferences);
+    connect(target, name, preferences, background ? backgroundSettings(background) : undefined);
   }, [target, name, connect]);
   useEffect(() => {
     const timer = setInterval(() => setTime(Date.now()), 1000);
@@ -441,10 +444,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   function toggleMenu(next) { setMenu(menu === next ? '' : next); }
 
   async function perform(operation) {
-    if (busy) return;
+    if (busy) return false;
     setBusy(true);
-    try { await operation(); }
-    catch (error) { setNotice(error?.message || 'This action could not be completed. Try again.'); }
+    try { await operation(); return true; }
+    catch (error) { setNotice(error?.message || 'This action could not be completed. Try again.'); return false; }
     finally { setBusy(false); }
   }
 
@@ -496,11 +499,17 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     });
   }
 
-  function setBackground(value) {
-    perform(async () => {
-      await call().updateInputSettings({ video: { processor: value ? { type: 'background-blur', config: {} } : { type: 'none' } } });
-      setBlur(value);
+  async function selectBackground(choice) {
+    if (!activeInstance || activeInstance !== call()) return false;
+    const applied = await perform(async () => {
+      try {
+        await activeInstance.updateInputSettings(backgroundSettings(choice));
+      } catch {
+        throw new Error('Could not apply the camera background. Try another image or try again.');
+      }
+      if (activeInstance === call()) setBackground(choice);
     });
+    return applied && activeInstance === call();
   }
 
   function move(destination) {
@@ -688,7 +697,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           spotlight={spotlight} setSpotlight={id => { setSpotlight(id); send('spotlight', { id }); }} />}
         {panel === 'chat' && <Chat items={chat[currentRoom] || []} send={sendChat} />}
         {panel === 'activity' && <Activity url={activity} host={host && !target.label} publish={publish} />}
-        {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice} blur={blur} setBlur={setBackground} />}
+        {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice}>
+          <BackgroundSettings supported={state.videoEffects} selected={background} select={selectBackground}
+            custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
+        </DeviceSettings>}
         {panel === 'rooms' && <Rooms host={host} groups={openGroups} current={target.label} incoming={incoming?.end * 1000 > time ? incoming : null}
           open={(count, minutes) => { if (!openGroups.length && groups.length) breakoutRound.current = null; openRooms(count, minutes); }}
           close={closeRooms} visit={destination => { setIncoming(null); move(destination); }} back={returnMain}

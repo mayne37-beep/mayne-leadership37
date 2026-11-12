@@ -3,18 +3,18 @@ import Daily from '@daily-co/daily-js';
 
 const initial = {
   phase: 'connecting', participants: [], waiting: [], speaker: '', audio: false,
-  video: false, sharing: false, recording: false, transcription: false, network: '', error: '',
+  video: false, videoEffects: false, sharing: false, recording: false, transcription: false, network: '', error: '',
 };
 
 export function participantName(participant) {
   return participant?.user_name?.trim().slice(0, 70) || 'Guest';
 }
 
-export function useCall({ onMessage, onCaption, onAttendance }) {
+export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError }) {
   const ref = useRef(null);
   const turn = useRef(0);
   const listeners = useRef(null);
-  listeners.current = { onMessage, onCaption, onAttendance };
+  listeners.current = { onMessage, onCaption, onAttendance, onBackgroundError };
   const [state, setState] = useState(initial);
   const update = useCallback(value => setState(prev => ({ ...prev, ...value })), []);
 
@@ -27,7 +27,7 @@ export function useCall({ onMessage, onCaption, onAttendance }) {
 
   useEffect(() => () => { disconnect().catch(() => {}); }, [disconnect]);
 
-  const connect = useCallback(async (target, name, preferences) => {
+  const connect = useCallback(async (target, name, preferences, inputSettings) => {
     const current = ++turn.current;
     const previous = ref.current;
     ref.current = null;
@@ -35,11 +35,14 @@ export function useCall({ onMessage, onCaption, onAttendance }) {
     try {
       if (previous && !previous.isDestroyed()) await previous.destroy();
       if (current !== turn.current) return;
-      if (!Daily.supportedBrowser().supported) {
+      const browser = Daily.supportedBrowser();
+      if (!browser.supported) {
         update({ phase: 'error', error: 'This browser does not support video meetings. Try a current version of Edge, Chrome, Firefox, or Safari.' });
         return;
       }
-      const call = Daily.createCallObject({ aboutClient: { app: 'Mayne Live Classroom' } });
+      const call = Daily.createCallObject({ aboutClient: { app: 'Mayne Live Classroom' },
+        ...(inputSettings && browser.supportsVideoProcessing ? { inputSettings } : {}),
+      });
       ref.current = call;
       const active = () => current === turn.current && ref.current === call;
       const on = (event, callback) => call.on(event, data => { if (active()) callback(data); });
@@ -58,7 +61,8 @@ export function useCall({ onMessage, onCaption, onAttendance }) {
         if (!admitted || entered) return;
         entered = true;
         const participants = Object.values(call.participants());
-        snapshot({ phase: 'connected', error: '', recording: participants.some(p => p.record) });
+        snapshot({ phase: 'connected', error: '', videoEffects: browser.supportsVideoProcessing,
+          recording: participants.some(p => p.record) });
         listeners.current.onAttendance('joined', participants, target);
       };
       on('joined-meeting', enter);
@@ -89,6 +93,11 @@ export function useCall({ onMessage, onCaption, onAttendance }) {
       });
       on('app-message', event => listeners.current.onMessage(event, call.participants(), target));
       on('camera-error', () => update({ error: 'Your camera or mic is unavailable. Check browser permissions and device settings.' }));
+      on('nonfatal-error', ({ type }) => {
+        if (type !== 'video-processor-error') return;
+        listeners.current.onBackgroundError();
+        update({ error: 'Camera effects stopped. Choose a background and turn your camera back on.' });
+      });
       on('screen-share-error', () => update({ error: 'Screen sharing did not start. Check browser permissions and try again.' }));
       on('error', ({ error }) => {
         const message = !admitted && error?.type === 'not-allowed'
