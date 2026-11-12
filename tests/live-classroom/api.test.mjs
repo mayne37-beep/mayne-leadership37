@@ -46,9 +46,13 @@ test('a Daily key discovers the domain and only the organizer can manage private
     }
   });
   delete process.env.DAILY_API_KEY;
-  assert.equal((await call('status')).body.configured, false);
+  const pending = await call('status');
+  assert.equal(pending.body.configured, false);
+  assert.equal(pending.body.setup, 'daily-key-missing');
   assert.equal((await call('create')).status, 503);
   Object.assign(process.env, env);
+  assert.equal((await call('status')).body.configured, true);
+  process.env.DAILY_ROOM_ORIGIN = daily + '/old-room';
   assert.equal((await call('status')).body.configured, true);
 
   const rooms = new Map();
