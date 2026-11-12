@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons.jsx';
-import { DeviceSelect, Modal } from './components.jsx';
+import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { activityPath, attendanceCsv, cleanText, reactions } from './shared.js';
 import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js';
 import { participantName, useCall } from './use-call.js';
@@ -701,14 +701,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         return track && <Track key={person.session_id + ':' + type} track={track} audio speaker={preferences.speaker} onBlocked={soundBlocked} />;
       }))}
     </div>
-    {inviteDialog && <Modal title="Meeting invitation" close={() => setInviteDialog(false)}>
-      <label className="field">Guest link<input readOnly value={guestLink(entry.invite)} onFocus={e => e.target.select()} /></label>
-      <div className="form-actions"><button className="btn primary" type="button" onClick={() => perform(async () => {
-        await copyLink(guestLink(entry.invite));
+    {inviteDialog && <MeetingInvitation link={guestLink(entry.invite)} close={() => setInviteDialog(false)}
+      onCopy={link => perform(async () => {
+        await copyLink(link);
         setInviteDialog(false);
         setNotice('Meeting link copied.');
-      })}>Copy link</button></div>
-    </Modal>}
+      })} />}
     {confirmation && <Modal title={confirmation.title} close={() => setConfirmation(null)}>
       {confirmation.detail && <p>{confirmation.detail}</p>}
       <div className="form-actions"><button type="button" className="btn secondary" onClick={() => setConfirmation(null)}>Cancel</button>
