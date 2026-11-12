@@ -20,12 +20,13 @@ class MeetingError extends Error {
 }
 
 function settings() {
-  const origin = process.env.DAILY_ROOM_ORIGIN?.trim().replace(/\/$/, '') || '';
+  const pinnedOrigin = process.env.DAILY_ROOM_ORIGIN?.trim().replace(/\/$/, '').toLowerCase() || '';
+  const origin = DAILY_ORIGIN.test(pinnedOrigin) ? pinnedOrigin : '';
   const key = process.env.DAILY_API_KEY?.trim();
   const secret = process.env.LIVE_CLASSROOM_SIGNING_KEY || process.env.LEADERSHIP_ACCESS_SECRET;
   return {
     key, origin, secret,
-    configured: Boolean(key && secret && (!origin || DAILY_ORIGIN.test(origin))),
+    configured: Boolean(key && secret),
     recording: process.env.DAILY_RECORDING_ENABLED === 'true',
     captions: process.env.DAILY_CAPTIONS_ENABLED === 'true',
   };
@@ -281,7 +282,12 @@ export default async function handler(req, res) {
   }
   const { action } = input;
   const config = settings();
-  if (action === 'status') return send(200, { configured: config.configured, recording: config.recording, captions: config.captions });
+  if (action === 'status') {
+    return send(200, {
+      configured: config.configured, recording: config.recording, captions: config.captions,
+      ...(!config.configured ? { setup: config.key ? 'site-settings-missing' : 'daily-key-missing' } : {}),
+    });
+  }
   if (!config.configured) return send(503, { error: 'Live Classroom is awaiting video service setup.' });
   try {
     if (action === 'inspect') {
