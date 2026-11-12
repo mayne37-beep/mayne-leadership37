@@ -174,8 +174,11 @@ test('scheduled rooms set the provider start time and cannot be opened early', a
 });
 
 test('activity links use the current website and attendance cells escape formulas', () => {
-  assert.equal(activityPath('ab12cd', origin), '/word-cloud-respond.html?code=AB12CD');
-  assert.equal(activityPath(origin + '/word-cloud-respond.html?code=abc123', origin), '/word-cloud-respond.html?code=ABC123');
-  assert.equal(activityPath('https://different.example/word-cloud-respond.html?code=ABC123', origin), '');
+  assert.equal(activityPath('012345', origin), '/word-cloud-respond.html?code=012345');
+  assert.equal(activityPath('123 4567', origin), '/word-cloud-respond.html?code=1234567');
+  assert.equal(activityPath(origin + '/word-cloud-respond.html?code=123%204567', origin), '/word-cloud-respond.html?code=1234567');
+  assert.equal(activityPath('https://mayneleadership.com/word-cloud-respond.html?code=1234567', 'https://www.mayneleadership.com'), '/word-cloud-respond.html?code=1234567');
+  assert.equal(activityPath('ab12cd', origin), '');
+  assert.equal(activityPath('https://different.example/word-cloud-respond.html?code=1234567', origin), '');
   assert.match(attendanceCsv([{ name: '=1+1', room: 'Main', joined: 0, left: 60000 }]), /"'=1\+1"/);
 });

@@ -243,16 +243,24 @@ function Rooms({ host, groups, current, incoming, open, close, visit, back, busy
   </div>;
 }
 
-function Activity({ url, host, publish }) {
+function Activity({ url, host, publish, studioConnection }) {
   const [input, setInput] = useState('');
+  const studioUrl = '/word-cloud-studio.html' + (studioConnection ? '?live-classroom=' + studioConnection : '');
   return <div className={url ? 'activity-content with-activity' : 'activity-content'}>
-    {host && <form className="activity-form" onSubmit={event => { event.preventDefault(); if (publish(input)) setInput(''); }}>
-      <label className="field">Activity join code or link<input placeholder="e.g., ABC123" value={input}
-        onChange={e => setInput(e.target.value)} maxLength={600} required /></label>
-      <p className="subtle">Use a Response Studio code or a Collaboration Canvas guest link.</p>
-      <div className="form-actions start"><button className="btn primary">Share activity</button>
-        {url && <button className="btn secondary" type="button" onClick={() => publish('')}>Remove</button>}</div>
-    </form>}
+    {host && <>
+      <section className="activity-launch">
+        <h3>Classroom Response Studio</h3>
+        <p className="subtle">{studioConnection ? 'Start or share a live session from the studio.' : 'Copy the student link from the studio to share it here.'}</p>
+        <a className="btn primary" href={studioUrl} target="_blank" rel="noopener noreferrer">Open Response Studio <Icon name="arrow" size={15} /></a>
+      </section>
+      <form className="activity-form" onSubmit={event => { event.preventDefault(); if (publish(input)) setInput(''); }}>
+        <label className="field">Student code or link<input placeholder="e.g., 1234567" value={input}
+          onChange={e => setInput(e.target.value)} maxLength={600} required /></label>
+        <p className="subtle">Use a Response Studio code or a Collaboration Canvas guest link.</p>
+        <div className="form-actions start"><button className="btn secondary">Share activity</button>
+          {url && <button className="btn secondary" type="button" onClick={() => publish('')}>Remove</button>}</div>
+      </form>
+    </>}
     {url ? <><a className="activity-link" href={url} target="_blank" rel="noreferrer">Open in a new tab <Icon name="arrow" size={15} /></a>
       <iframe title={url.startsWith('/collaboration-join.html') ? 'Collaboration Canvas whiteboard' : 'Classroom Response Studio activity'} src={url} /></> :
       !host && <p className="subtle">Activities shared by the instructor will appear here.</p>}
@@ -286,6 +294,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [chat, setChat] = useState({});
   const [unread, setUnread] = useState(0);
   const [activity, setActivity] = useState('');
+  const [studioConnection] = useState(() => host && typeof BroadcastChannel === 'function' ? newNonce() : '');
   const [groups, setGroups] = useState([]);
   const [incoming, setIncoming] = useState(null);
   const [locked, setLocked] = useState(main.locked);
@@ -302,6 +311,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const closing = useRef(false);
   const leaving = useRef(false);
   const chatLastSent = useRef(0);
+  const studioMessage = useRef(null);
   const soundBlocked = useRef(() => setAudioBlocked(true)).current;
   const setup = { invite: entry.invite, nonce: entry.nonce };
   const { ref, state, connect, disconnect, update } = useCall({
@@ -318,6 +328,16 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const local = state.participants.find(person => person.local);
   const activeCall = state.phase === 'connected';
   const activeInstance = activeCall ? call() : null;
+  studioMessage.current = (message, channel) => {
+    if (message?.type !== 'share' || typeof message.requestId !== 'string' || !/^[a-f0-9]{32}$/.test(message.requestId) ||
+        typeof message.code !== 'string' || !/^\d{6,7}$/.test(message.code)) return;
+    const shared = publish(message.code);
+    if (shared) {
+      setMenu('');
+      setPanel('activity');
+    }
+    channel.postMessage({ type: 'share-result', requestId: message.requestId, shared });
+  };
 
   useEffect(() => {
     setPin('');
@@ -337,6 +357,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     if (state.phase !== 'connected') return;
     if (!host && !target.label) send('request-state');
   }, [state.phase, target]);
+  useEffect(() => {
+    if (!studioConnection) return;
+    const channel = new BroadcastChannel('mayne-response-studio:' + studioConnection);
+    channel.onmessage = event => studioMessage.current(event.data, channel);
+    return () => channel.close();
+  }, [studioConnection]);
   useEffect(() => {
     if (closing.current || leaving.current || !target.label) return;
     if (state.phase === 'left' || state.phase === 'error' || time >= target.end * 1000) returnMain();
@@ -474,11 +500,20 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   function publish(value) {
     const url = activityPath(value, location.origin);
     if (value && !url) {
-      setNotice('Enter a Response Studio code or a student link from Response Studio or Collaboration Canvas.');
+      setNotice('Enter a six- or seven-digit Response Studio code or a student link from Response Studio or Collaboration Canvas.');
+      return false;
+    }
+    if (!host || target.label || !activeCall || leaving.current || closing.current) {
+      setNotice('Share activities from the main meeting while it is connected.');
+      return false;
+    }
+    try {
+      if (!send('activity', { url })) throw new Error('Meeting disconnected');
+    } catch {
+      setNotice('Could not share the activity. Check the meeting connection and try again.');
       return false;
     }
     setActivity(url);
-    if (!target.label) send('activity', { url });
     return true;
   }
 
@@ -696,7 +731,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           lowerHand={id => send('lower-hand', {}, id)} setPin={setPin} pin={pin}
           spotlight={spotlight} setSpotlight={id => { setSpotlight(id); send('spotlight', { id }); }} />}
         {panel === 'chat' && <Chat items={chat[currentRoom] || []} send={sendChat} />}
-        {panel === 'activity' && <Activity url={activity} host={host && !target.label} publish={publish} />}
+        {panel === 'activity' && <Activity url={activity} host={host && !target.label} publish={publish} studioConnection={studioConnection} />}
         {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice}>
           <BackgroundSettings supported={state.videoEffects} selected={background} select={selectBackground}
             custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
