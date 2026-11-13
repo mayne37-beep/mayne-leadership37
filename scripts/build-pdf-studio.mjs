@@ -75,7 +75,9 @@ console.log('Live Classroom meeting client built.');
 const visionPackage = path.dirname(require.resolve('@mediapipe/tasks-vision'));
 const visionOutput = path.join(out, 'assets', 'live-classroom-vision');
 await cp(path.join(visionPackage, 'wasm'), visionOutput, { recursive: true });
-await copyFile(path.join(root, 'vendor', 'live-classroom', 'person.tflite'), path.join(visionOutput, 'person.tflite'));
+for (const model of ['person.tflite', 'person-landscape.tflite']) {
+  await copyFile(path.join(root, 'vendor', 'live-classroom', model), path.join(visionOutput, model));
+}
 await copyFile(path.join(root, 'vendor', 'live-classroom', 'LICENSE.txt'), path.join(visionOutput, 'LICENSE.txt'));
 await build({
   entryPoints: [path.join(root, 'src', 'live-classroom', 'presenter-portrait.js')],

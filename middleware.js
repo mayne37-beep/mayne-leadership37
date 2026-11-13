@@ -12,6 +12,7 @@ const PUBLIC_PAGES = new Set([
   '/assets/live-classroom.js',
   '/assets/live-classroom-portrait.js',
   '/assets/live-classroom-vision/person.tflite',
+  '/assets/live-classroom-vision/person-landscape.tflite',
   '/assets/live-classroom-vision/vision_wasm_internal.js',
   '/assets/live-classroom-vision/vision_wasm_internal.wasm',
   '/assets/live-classroom-vision/vision_wasm_nosimd_internal.js',

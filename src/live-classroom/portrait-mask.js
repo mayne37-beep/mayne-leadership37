@@ -2,6 +2,19 @@ function clamp(value) {
   return Math.min(1, Math.max(0, value));
 }
 
+export function portraitCoverage(confidence) {
+  let area = 0;
+  for (let i = 0; i < confidence.length; i++) {
+    if (confidence[i] >= 0.6) area++;
+  }
+  return area / Math.max(1, confidence.length);
+}
+
+export function minimumPortraitCoverage(previousCoverage, elapsed) {
+  // A small fragment of a recent silhouette is usually a missed detection.
+  return Math.max(0.02, elapsed >= 0 && elapsed < 750 ? previousCoverage * 0.32 : 0);
+}
+
 export function writePortraitMask(confidence, history, image, elapsed, threshold, motionImage, previousMotionImage) {
   const { data, width, height } = image;
   // Blend small changes across frames. A strong change follows motion without a lingering outline.

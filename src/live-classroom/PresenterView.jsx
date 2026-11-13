@@ -9,8 +9,8 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
   const cameraVideo = useRef(null);
   const portrait = useRef(null);
   const [size, setSize] = useState(null);
-  const [cutoutReady, setCutoutReady] = useState(false);
-  const [cutoutFailed, setCutoutFailed] = useState(false);
+  const [cutoutStatus, setCutoutStatus] = useState('pending');
+  const cutoutReady = cutoutStatus === 'visible';
   const settings = useRef(null);
   settings.current = { coverage, backdropColor };
 
@@ -47,8 +47,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
   }, [camera, overlay]);
 
   useEffect(() => {
-    setCutoutReady(false);
-    setCutoutFailed(false);
+    setCutoutStatus('pending');
     if (!cutout) return;
 
     const video = cameraVideo.current;
@@ -59,6 +58,9 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
     let stopped = false;
     let processing = false;
     let lastTime = -1;
+    let lastCutout = -Infinity;
+    let showing = false;
+    let goodFrames = 0;
     const requestFrame = video.requestVideoFrameCallback?.bind(video) ?? requestAnimationFrame;
     const cancelFrame = video.cancelVideoFrameCallback?.bind(video) ?? cancelAnimationFrame;
 
@@ -69,8 +71,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
     }
     function fail() {
       stop();
-      setCutoutReady(false);
-      setCutoutFailed(true);
+      setCutoutStatus('unavailable');
     }
     async function processFrame(_now, metadata) {
       frame = requestFrame(processFrame);
@@ -82,15 +83,30 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
         const width = Math.min(720, video.videoWidth);
         const bitmap = await createImageBitmap(video, { resizeWidth: width, resizeHeight: Math.max(1, Math.round(width * video.videoHeight / video.videoWidth)) });
         const output = await processor.process(bitmap, { ...settings.current, timestamp: time * 1000 });
+        if (!output) {
+          goodFrames = 0;
+          if (!stopped && performance.now() - lastCutout >= 170) {
+            showing = false;
+            setCutoutStatus('searching');
+          }
+          return;
+        }
         try {
           if (stopped) return;
+          lastCutout = performance.now();
+          // Require two usable frames before returning from picture in picture.
+          goodFrames++;
+          if (!showing && goodFrames < 2) return;
           if (canvas.width !== output.width || canvas.height !== output.height) {
             canvas.width = output.width;
             canvas.height = output.height;
           }
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.drawImage(output, 0, 0);
-          setCutoutReady(true);
+          if (!showing) {
+            showing = true;
+            setCutoutStatus('visible');
+          }
         } finally {
           output.close();
         }
@@ -123,6 +139,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
     {!overlay && <div className="presenter-camera side-camera">
       <video ref={cameraVideo} autoPlay muted playsInline aria-label={name + '’s camera'} />
     </div>}
-    {cutout && cutoutFailed && <span className="presenter-notice" role="status">Weather view is unavailable on this device. Showing picture in picture.</span>}
+    {cutout && cutoutStatus === 'unavailable' && <span className="presenter-notice" role="status">Weather view is unavailable on this device. Showing picture in picture.</span>}
+    {cutout && cutoutStatus === 'searching' && <span className="presenter-notice" role="status">Camera outline lost. Showing picture in picture.</span>}
   </div>;
 }

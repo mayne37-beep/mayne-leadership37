@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { writePortraitMask } from '../../src/live-classroom/portrait-mask.js';
+import { minimumPortraitCoverage, portraitCoverage, writePortraitMask } from '../../src/live-classroom/portrait-mask.js';
 import { cameraPresentationSettings, coverageOption, validBackdropColor } from '../../src/live-classroom/camera-settings.js';
 import { writeBackdropMask } from '../../src/live-classroom/backdrop-mask.js';
 import { createPortraitEdgeRefiner } from '../../src/live-classroom/portrait-edges.js';
@@ -74,6 +74,17 @@ test('a moving foreground and a resumed feed clear stale mask pixels', () => {
   render([0, 0, 0, 0, 0, 0, 0.48, 1, 1, 1, 0, 0], 33, 'most');
   assert.ok(alpha(6) > balanced);
   assert.equal(alpha(2), 0);
+});
+
+test('automatic detection rejects a near-empty mask and a sudden loss of most of the portrait', () => {
+  const clear = new Float32Array(100).fill(0.96, 0, 24);
+  const weak = new Float32Array(100).fill(0.45);
+  const fragment = new Float32Array(100).fill(0.96, 0, 4);
+  const initial = portraitCoverage(clear);
+  assert.equal(initial, 0.24);
+  assert.ok(portraitCoverage(weak) < minimumPortraitCoverage(0, Infinity));
+  assert.ok(portraitCoverage(fragment) < minimumPortraitCoverage(initial, 60));
+  assert.ok(portraitCoverage(fragment) >= minimumPortraitCoverage(initial, 900));
 });
 
 test('solid backdrop removes the sampled hue in light and shadow and preserves a soft boundary', () => {

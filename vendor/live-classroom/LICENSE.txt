@@ -1,7 +1,8 @@
-MediaPipe Tasks Vision and MediaPipe Selfie Segmenter (square)
+MediaPipe Tasks Vision and MediaPipe Selfie Segmenter (square and landscape)
 Copyright Google LLC and the MediaPipe Authors
 Source: https://github.com/google-ai-edge/mediapipe
-Model: https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/1/selfie_segmenter.tflite
+Square model: https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/1/selfie_segmenter.tflite
+Landscape model: https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter_landscape/float16/1/selfie_segmenter_landscape.tflite
 
 
                                  Apache License
