@@ -4,6 +4,15 @@
   "framework": null,
   "headers": [
     {
+      "source": "/assets/live-classroom-document-converter.html",
+      "headers": [
+        {
+          "key": "Document-Isolation-Policy",
+          "value": "isolate-and-require-corp"
+        }
+      ]
+    },
+    {
       "source": "/word-to-pdf.html",
       "headers": [
         {
@@ -19,6 +28,10 @@
     {
       "source": "/assets/word-engine/(.*)",
       "headers": [
+        {
+          "key": "Document-Isolation-Policy",
+          "value": "isolate-and-require-corp"
+        },
         {
           "key": "Cross-Origin-Embedder-Policy",
           "value": "require-corp"

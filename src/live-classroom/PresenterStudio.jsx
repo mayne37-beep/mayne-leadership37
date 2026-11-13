@@ -72,7 +72,8 @@ export function PresenterStudio({ studio, cameraOn, turnCameraOn, sharing, stopS
               }} />
           </div>}
         </div>
-        {!hasVisibleSource && <p className="subtle studio-empty">Add a window or image, or turn on your camera.</p>}
+        {studio.restoringBackground ? <p className="subtle studio-empty" role="status">Restoring your background image…</p>
+          : !hasVisibleSource && <p className="subtle studio-empty">Add a window or image, or turn on your camera.</p>}
       </section>
       <section className="studio-controls" aria-label="Layer controls">
         <div className="studio-sources">

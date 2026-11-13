@@ -3,11 +3,12 @@ import QRCode from 'qrcode';
 import { Icon } from './icons.jsx';
 
 export function DeviceSelect({ title, devices, kind, value, onChange }) {
+  const available = devices.filter(d => d.kind === kind && d.deviceId && !['default', 'communications'].includes(d.deviceId));
   return <label className="field">{title}
-    <select value={value} onChange={e => onChange(e.target.value)}>
+    <select aria-label={title} value={value} onChange={e => onChange(e.target.value)}>
       <option value="">System default</option>
-      {devices.filter(d => d.kind === kind && d.deviceId && !['default', 'communications'].includes(d.deviceId))
-        .map((device, i) => <option key={device.deviceId} value={device.deviceId}>{device.label || title + ' ' + (i + 1)}</option>)}
+      {value && !available.some(device => device.deviceId === value) && <option value={value}>Previously selected</option>}
+      {available.map((device, i) => <option key={device.deviceId} value={device.deviceId}>{device.label || title + ' ' + (i + 1)}</option>)}
     </select>
   </label>;
 }

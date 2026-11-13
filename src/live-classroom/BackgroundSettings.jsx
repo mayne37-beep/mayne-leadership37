@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Icon } from './icons.jsx';
 import { newNonce } from './client.js';
 import { jpegPrefix } from './camera-settings.js';
+import { loadMeetingPreferences } from './preferences.js';
 
 const storagePrefix = 'mayne-live-classroom-background:';
 const office = '/assets/live-classroom-backgrounds/office.jpg';
@@ -27,6 +28,11 @@ export function loadBackgrounds() {
   } catch {
     return [];
   }
+}
+
+export function loadBackgroundChoice(custom) {
+  const { background } = loadMeetingPreferences();
+  return [...choices, ...custom].find(choice => choice.id !== 'none' && choice.id === background) ?? null;
 }
 
 async function readImage(file) {
