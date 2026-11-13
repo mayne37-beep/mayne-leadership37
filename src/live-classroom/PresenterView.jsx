@@ -59,28 +59,29 @@ export function PresenterView({ screen, camera, side, layout, name, coverage }) 
     let stopped = false;
     let processing = false;
     let lastTime = -1;
-    let lastSample = 0;
+    const requestFrame = video.requestVideoFrameCallback?.bind(video) ?? requestAnimationFrame;
+    const cancelFrame = video.cancelVideoFrameCallback?.bind(video) ?? cancelAnimationFrame;
 
     function stop() {
       stopped = true;
       processor?.close();
-      cancelAnimationFrame(frame);
+      cancelFrame(frame);
     }
     function fail() {
       stop();
       setCutoutReady(false);
       setCutoutFailed(true);
     }
-    async function processFrame(now) {
-      frame = requestAnimationFrame(processFrame);
-      if (processing || now - lastSample < 60 || video.readyState < 2 || video.currentTime === lastTime) return;
+    async function processFrame(_now, metadata) {
+      frame = requestFrame(processFrame);
+      const time = metadata?.mediaTime ?? video.currentTime;
+      if (processing || video.readyState < 2 || time === lastTime || (time > lastTime && time - lastTime < 0.0275)) return;
       processing = true;
-      lastSample = now;
-      lastTime = video.currentTime;
+      lastTime = time;
       try {
         const width = Math.min(720, video.videoWidth);
         const bitmap = await createImageBitmap(video, { resizeWidth: width, resizeHeight: Math.max(1, Math.round(width * video.videoHeight / video.videoWidth)) });
-        const output = await processor.process(bitmap, { coverage: coverageRef.current });
+        const output = await processor.process(bitmap, { coverage: coverageRef.current, timestamp: time * 1000 });
         try {
           if (stopped) return;
           if (canvas.width !== output.width || canvas.height !== output.height) {
@@ -103,7 +104,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage }) 
       if (!context || typeof createImageBitmap !== 'function' || typeof OffscreenCanvas !== 'function') throw new Error('Unsupported');
       processor = createPortraitProcessor();
       processor.initialized.then(() => {
-        if (!stopped) frame = requestAnimationFrame(processFrame);
+        if (!stopped) frame = requestFrame(processFrame);
       }).catch(() => { if (!stopped) fail(); });
     } catch { fail(); }
     return stop;

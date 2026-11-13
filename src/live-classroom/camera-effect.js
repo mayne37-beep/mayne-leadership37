@@ -68,7 +68,7 @@ export async function createCameraEffect({ choice, device, sourceTrack, getSetti
         const { value: frame, done } = await reader.read();
         if (done) throw new Error('The camera stopped.');
         try {
-          if (frame.timestamp >= frameTime && frame.timestamp - frameTime < 32000) continue;
+          if (frame.timestamp >= frameTime && frame.timestamp - frameTime < 27500) continue;
           frameTime = frame.timestamp;
           const scale = Math.min(1, 960 / frame.displayWidth, 720 / frame.displayHeight);
           const bitmap = await createImageBitmap(frame, {
@@ -77,7 +77,9 @@ export async function createCameraEffect({ choice, device, sourceTrack, getSetti
           });
           const background = image;
           image = null;
-          const output = await processor.process(bitmap, { ...getSettings(), effect: choice.id === 'blur' ? 'blur' : 'image' }, background);
+          const output = await processor.process(bitmap, {
+            ...getSettings(), timestamp: frame.timestamp / 1000, effect: choice.id === 'blur' ? 'blur' : 'image',
+          }, background);
           try {
             const result = new VideoFrame(output, { timestamp: frame.timestamp });
             try { await writer.write(result); } finally { result.close(); }
