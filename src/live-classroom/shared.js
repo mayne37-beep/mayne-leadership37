@@ -2,6 +2,19 @@ export const reactions = [
   ['👍', 'Like'], ['👏', 'Applause'], ['❤️', 'Love'], ['🎉', 'Celebrate'], ['😮', 'Surprised'],
 ];
 
+export const presenterLayouts = [
+  { id: 'standard', label: 'Standard', icon: 'present-standard' },
+  { id: 'side-by-side', label: 'Side by side', icon: 'present-side' },
+  { id: 'picture-in-picture', label: 'Picture in picture', icon: 'present-overlay' },
+  { id: 'weather', label: 'Weather view', icon: 'present-weather' },
+];
+
+export function presentationOf(participant) {
+  const data = participant?.userData?.presentation;
+  const layout = presenterLayouts.find(choice => choice.id === data?.layout)?.id ?? 'standard';
+  return { layout, side: data?.side === 'left' ? 'left' : 'right' };
+}
+
 export function cleanText(value, limit) {
   return typeof value === 'string'
     ? value.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, limit)
