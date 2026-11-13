@@ -260,8 +260,15 @@ export function usePresentationCollaboration({ call, local, shared, participants
     if (message.type === 'presentation-release' && current.controller === id && current.controlKey === message.controlKey) takeBack();
     if (message.type === 'presentation-page') {
       const next = readSlideCommand(current, message, id);
-      if (next !== null && file.status === 'live' && file.goTo(next)) {
-        commit({ page: next, pageVersion: current.pageVersion + 1, marks: hosted.current.marksByPage.get(next) ?? [] });
+      if (next !== null && file.status === 'live') {
+        const session = hosted.current;
+        const publishPage = changed => {
+          if (!changed || hosted.current !== session || session.board.page === next) return;
+          commit({ page: next, pageVersion: session.board.pageVersion + 1, marks: session.marksByPage.get(next) ?? [] });
+        };
+        const changed = file.goTo(next);
+        if (changed?.then) changed.then(publishPage);
+        else publishPage(changed);
       }
     }
     return true;

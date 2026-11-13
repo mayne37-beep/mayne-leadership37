@@ -4,19 +4,17 @@ const relationshipNamespaces = [
 ];
 const packageOrigin = 'https://powerpoint.invalid';
 
-async function readXml(zip, parser, part, maxBytes = 2 * 1024 * 1024) {
-  const entry = zip.file(part);
-  if (!entry || entry._data.uncompressedSize > maxBytes) return null;
-  const source = await entry.async('string');
-  if (/<!DOCTYPE/i.test(source)) return null;
+async function readXml(readText, parser, part, maxBytes = 2 * 1024 * 1024) {
+  const source = await readText(part, maxBytes);
+  if (!source || /<!DOCTYPE/i.test(source)) return null;
   const xml = parser.parseFromString(source, 'application/xml');
   return xml.getElementsByTagNameNS('*', 'parsererror').length ? null : xml.documentElement;
 }
 
-async function relationships(zip, parser, part) {
+async function relationships(readText, parser, part) {
   const slash = part.lastIndexOf('/');
   const path = part.slice(0, slash + 1) + '_rels/' + part.slice(slash + 1) + '.rels';
-  const xml = await readXml(zip, parser, path);
+  const xml = await readXml(readText, parser, path);
   const targets = new Map();
   for (const relationship of xml?.children ?? []) {
     const target = relationship.getAttribute('Target');
@@ -67,22 +65,33 @@ function bodyText(bodies) {
 }
 
 export async function readPowerPointSlides(zip, parser = new DOMParser()) {
+  return readSlideMetadata((part, maxBytes) => {
+    const entry = zip.file(part);
+    return entry && entry._data.uncompressedSize <= maxBytes ? entry.async('string') : null;
+  }, parser);
+}
+
+export async function readSlideMetadata(readText, parser = new DOMParser(), signal) {
   const part = 'ppt/presentation.xml';
-  const presentation = await readXml(zip, parser, part);
+  const presentation = await readXml(readText, parser, part);
   const list = presentation?.getElementsByTagNameNS(presentation.namespaceURI, 'sldIdLst')[0];
   if (!list?.children.length) return null;
-  const targets = await relationships(zip, parser, part);
+  const targets = await relationships(readText, parser, part);
   const slides = [];
   for (const id of list.children) {
     if (id.localName !== 'sldId') continue;
+    if (signal && slides.length && slides.length % 16 === 0) {
+      await new Promise(resolve => setTimeout(resolve, 0));
+      signal.throwIfAborted();
+    }
     const relationshipId = relationshipNamespaces.map(ns => id.getAttributeNS(ns, 'id')).find(Boolean);
     const target = targets.get(relationshipId);
     if (!isRelationship(target, 'slide')) return null;
-    const slide = await readXml(zip, parser, target.part, 8 * 1024 * 1024);
+    const slide = await readXml(readText, parser, target.part, 8 * 1024 * 1024);
     if (slide?.localName !== 'sld') return null;
-    const notesTarget = Array.from((await relationships(zip, parser, target.part)).values())
+    const notesTarget = Array.from((await relationships(readText, parser, target.part)).values())
       .find(relationship => isRelationship(relationship, 'notesSlide'));
-    const notesPage = notesTarget && await readXml(zip, parser, notesTarget.part);
+    const notesPage = notesTarget && await readXml(readText, parser, notesTarget.part);
     const notes = bodyText(placeholderBodies(notesPage, 'body'));
     slides.push({
       title: bodyText(placeholderBodies(slide, 'title', 'ctrTitle')).replace(/\s+/g, ' ').slice(0, 160),

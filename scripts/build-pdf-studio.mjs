@@ -69,15 +69,19 @@ await build({
   entryPoints: [path.join(root, 'src', 'live-classroom', 'App.jsx')],
   outfile: path.join(out, 'assets', 'live-classroom.js'),
   bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
-  external: ['/assets/live-classroom-document-renderer.js?v=2'],
+  external: ['/assets/live-classroom-document-renderer.js?v=2', '/assets/live-classroom-direct-powerpoint.js?v=1'],
 });
-for (const module of ['document-converter', 'document-renderer']) {
+for (const module of ['document-converter', 'document-renderer', 'direct-powerpoint']) {
   await build({
     entryPoints: [path.join(root, 'src', 'live-classroom', module + '.js')],
     outfile: path.join(out, 'assets', 'live-classroom-' + module + '.js'),
     bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
   });
 }
+await copyFile(path.join(path.dirname(require.resolve('@web-ppt/core/package.json')), 'LICENSE'),
+  path.join(licenseDir, 'web-ppt-MIT.txt'));
+await copyFile(path.join(path.dirname(require.resolve('fflate')), '..', 'LICENSE'),
+  path.join(licenseDir, 'fflate-MIT.txt'));
 console.log('Live Classroom meeting client built.');
 
 const visionPackage = path.dirname(require.resolve('@mediapipe/tasks-vision'));

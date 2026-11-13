@@ -3,6 +3,22 @@ export function screenTrack(call) {
   return track?.persistentTrack ?? track?.track;
 }
 
+export async function captureSlideshow() {
+  const stream = await navigator.mediaDevices.getDisplayMedia({
+    video: { displaySurface: 'window' },
+    audio: true,
+    monitorTypeSurfaces: 'exclude',
+    selfBrowserSurface: 'exclude',
+    surfaceSwitching: 'exclude',
+    systemAudio: 'exclude',
+    windowAudio: 'window',
+  });
+  const track = stream.getVideoTracks()[0];
+  if (track && ['window', 'browser'].includes(track.getSettings().displaySurface)) return stream;
+  stream.getTracks().forEach(item => item.stop());
+  throw new Error('Choose the slideshow window or tab so your notes stay private.');
+}
+
 export function publishPresentation(call, stream, signal, quality = 'motion-and-detail-balanced') {
   return new Promise((resolve, reject) => {
     const output = stream.getVideoTracks()[0];

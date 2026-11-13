@@ -17,6 +17,8 @@ import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, p
 import { loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
 import { DocumentControls, DocumentPresentation, PageControls } from './DocumentPresentation.jsx';
 import { PowerPointLinks, PowerPointNotes, PowerPointSlides, usePowerPointShortcuts } from './PowerPointPresenter.jsx';
+import { PowerPointSlideshow } from './PowerPointSlideshow.jsx';
+import { captureSlideshow, publishPresentation, screenTrack } from './presentation-stream.js';
 import { useDocumentPresentation } from './use-document-presentation.js';
 import { AnnotationLayer } from './AnnotationLayer.jsx';
 import { PresentationTools, SlideHandoff } from './PresentationTools.jsx';
@@ -418,6 +420,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [annotationEmoji, setAnnotationEmoji] = useState('👍');
   const [showPresenterView, setShowPresenterView] = useState(true);
   const [slideGrid, setSlideGrid] = useState(false);
+  const [slideshowDialog, setSlideshowDialog] = useState(false);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [visuals, setVisuals] = useState([]);
   const [chat, setChat] = useState({});
@@ -446,6 +449,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const stateRequests = useRef({ call: null, participants: new Set() });
   const previousRole = useRef(null);
   const studioMessage = useRef(null);
+  const slideshowSession = useRef(null);
   const soundBlocked = useRef(() => setAudioBlocked(true)).current;
   const cameraFailure = useRef(null);
   const restoreCamera = useRef(false);
@@ -483,7 +487,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const annotationBoard = collaboration.board;
   const delegated = Boolean(collaboration.controller);
   usePowerPointShortcuts({
-    active: powerpointOnStage && !delegated && !annotationEditing && !menu,
+    active: powerpointOnStage && !delegated && !annotationEditing && !menu && !filePresentation.rendering,
     page: filePresentation.deck?.page, count: filePresentation.deck?.count, goTo: filePresentation.goTo,
   });
   const canAnnotate = annotationBoard?.mode === 'everyone' ? canInteract :
@@ -546,6 +550,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   useEffect(() => { saveMeetingPreferences({ view, hideSelf, hideVideo, showCaptions }); }, [view, hideSelf, hideVideo, showCaptions]);
   useEffect(() => { setAnnotationEditing(false); }, [activeInstance, shared?.session_id, annotationBoard?.id]);
   useEffect(() => { if (!canAnnotate) setAnnotationEditing(false); }, [canAnnotate]);
+  useEffect(() => () => {
+    slideshowSession.current?.abort();
+    setSlideshowDialog(false);
+  }, [activeInstance, canPresent]);
   useEffect(() => {
     if (!livePowerPoint) {
       setShowPresenterView(true);
@@ -906,6 +914,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     leaving.current = true;
     studio.stop();
     filePresentation.stop();
+    slideshowSession.current?.abort();
     cameraEffects.stop();
     trackAttendance('left', state.participants, target);
     await disconnect().catch(() => {});
@@ -949,6 +958,57 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     setMenu('');
     filePresentation.openEditor();
   }
+  function openSlideshowShare() {
+    if (!canShare || state.sharing) return;
+    setMenu('');
+    if (filePresentation.open) filePresentation.closeEditor();
+    setSlideshowDialog(true);
+  }
+  async function shareSlideshow() {
+    const instance = call();
+    if (!participantCanSend(instance?.participants().local, 'screenVideo') || instance.localScreenVideo() ||
+        slideshowSession.current) return false;
+    const session = new AbortController();
+    slideshowSession.current = session;
+    let stream;
+    let previous;
+    let applied = false;
+    const stopped = () => session.abort();
+    session.signal.addEventListener('abort', () => {
+      const track = stream?.getVideoTracks()[0];
+      if (slideshowSession.current === session) slideshowSession.current = null;
+      instance.off('local-screen-share-stopped', stopped);
+      if (track && !instance.isDestroyed() && screenTrack(instance)?.id === track.id) {
+        try { instance.stopScreenShare(); } catch {}
+      }
+      stream?.getTracks().forEach(track => track.stop());
+      if (applied) updateLocalData({ presentation: previous ?? null }, instance).catch(() => {});
+    }, { once: true });
+    try {
+      stream = await captureSlideshow();
+      session.signal.throwIfAborted();
+      if (instance !== call() || instance.localScreenVideo() ||
+          !participantCanSend(instance.participants().local, 'screenVideo')) {
+        throw new Error('The meeting’s sharing status changed. Try again.');
+      }
+      const track = stream.getVideoTracks()[0];
+      track.contentHint = 'detail';
+      previous = instance.participants().local.userData?.presentation;
+      await updateLocalData({ presentation: { ...previous, layout: 'document' } }, instance);
+      applied = true;
+      if (session.signal.aborted) updateLocalData({ presentation: previous ?? null }, instance).catch(() => {});
+      session.signal.throwIfAborted();
+      instance.on('local-screen-share-stopped', stopped);
+      track.addEventListener('ended', stopped, { once: true });
+      await publishPresentation(instance, stream, session.signal);
+      return true;
+    } catch (failure) {
+      stream?.getTracks().forEach(track => track.stop());
+      session.abort();
+      if (['NotAllowedError', 'AbortError'].includes(failure.name)) return false;
+      throw failure;
+    }
+  }
   const memberTitle = target.label ? main.title + ' · ' + target.label : main.title;
   const displayedCaption = showCaptions && state.transcription && caption && time - caption.time < 9000 ? caption : null;
   const openGroups = groups.filter(group => group.end * 1000 > time);
@@ -956,7 +1016,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
     polls: 'Polls', devices: 'Device settings',
   };
-  const slideLinks = powerpointOnStage && !delegated && !annotationEditing && filePresentation.deck.links?.length
+  const slideLinks = powerpointOnStage && !delegated && !annotationEditing && !filePresentation.rendering && filePresentation.deck.links?.length
     ? <PowerPointLinks deck={filePresentation.deck} goTo={filePresentation.goTo} /> : null;
   const annotations = annotationBoard && annotationBoard.mode !== 'off' && <AnnotationLayer
     key={annotationBoard.id + ':' + annotationBoard.pageVersion + ':' + (canAnnotate && annotationEditing ? annotationTool : 'view')}
@@ -1088,11 +1148,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
                 perform(() => call().startScreenShare({ displayMediaOptions: { audio: true } }));
               } else if (canPresent) toggleMenu('share');
             }} />
-          {canShare && (studio.supported || filePresentation.supported) && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
+          {canShare && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
             onClick={() => toggleMenu('share')}><Icon name="down" size={15} /></button>}
           {canPresent && menu === 'share' && <Popover title="Share options">
             {filePresentation.supported && <MenuItem icon="present-standard" disabled={filePresentation.status !== 'idle'}
               onClick={openFilePresentation}>Present a file</MenuItem>}
+            {canShare && <MenuItem icon="present-side" disabled={state.sharing} onClick={openSlideshowShare}>Share PowerPoint slideshow</MenuItem>}
             {studio.supported && <MenuItem icon="layers" onClick={openPresenterStudio}>
               {studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>}
           </Popover>}
@@ -1195,7 +1256,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     {canPresent && studio.open && <PresenterStudio studio={studio} cameraOn={state.video} busy={busy} sharing={state.sharing}
       stopShare={() => perform(() => activeInstance.stopScreenShare())}
       turnCameraOn={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera))} />}
-    {canPresent && filePresentation.open && <DocumentPresentation presentation={filePresentation} sharing={state.sharing} />}
+    {canPresent && filePresentation.open && <DocumentPresentation presentation={filePresentation} sharing={state.sharing}
+      shareSlideshow={canShare ? openSlideshowShare : undefined} />}
+    {canShare && slideshowDialog && <PowerPointSlideshow share={shareSlideshow} close={() => setSlideshowDialog(false)} />}
     {inviteDialog && <MeetingInvitation link={guestLink(entry.invite)} close={() => setInviteDialog(false)}
       onCopy={link => perform(async () => {
         await copyLink(link);
