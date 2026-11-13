@@ -12,7 +12,12 @@ export const presenterLayouts = [
 export function presentationOf(participant) {
   const data = participant?.userData?.presentation;
   const layout = presenterLayouts.find(choice => choice.id === data?.layout)?.id ?? 'standard';
-  return { layout, side: data?.side === 'left' ? 'left' : 'right' };
+  return {
+    layout,
+    side: data?.side === 'left' ? 'left' : 'right',
+    mirror: data?.mirror === true,
+    composed: data?.layout === 'studio',
+  };
 }
 
 export function cleanText(value, limit) {
