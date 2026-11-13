@@ -4,8 +4,10 @@ import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { activityPath, attendanceCsv, cleanText, presentationOf, presenterLayouts, reactions } from './shared.js';
 import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js';
 import { participantName, useCall } from './use-call.js';
-import { BackgroundSettings, backgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
+import { BackgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
 import { PresenterView } from './PresenterView.jsx';
+import { backgroundSettings, blurOptions, coverageOptions } from './camera-settings.js';
+import { useCameraEffects } from './use-camera-effects.js';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
@@ -96,7 +98,8 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   return <div className="stage">
     {(shared || focus) ? <div className="focus-layout">
       {presenterCamera ? <PresenterView screen={playable(shared, 'screenVideo')} camera={presenterCamera}
-        side={side} layout={layout} name={participantName(shared)} /> : shared ? <Tile person={shared} screen /> : render(focus)}
+        side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage} />
+        : shared ? <Tile person={shared} screen /> : render(focus)}
       {shown.length > 1 && strip.length > 0 && <div className="filmstrip">{strip.map(render)}</div>}
     </div> : <div className="gallery" data-count={Math.max(1, tiles.length)}>{tiles.map(render)}</div>}
     {!shared && !focus && pageCount > 1 && <div className="page-controls">
@@ -208,6 +211,29 @@ function DeviceSettings({ preferences, setDevice, children }) {
   </div>;
 }
 
+function CameraEffectsSettings({ camera, cameraOn, settings, tune, busy, adjusting, advanced }) {
+  return <fieldset className="camera-effects-settings" disabled={busy}>
+    <legend>Camera effects</legend>
+    <div className="camera-effects-preview" role="group" aria-label="Camera preview">
+      {camera ? <Track track={camera} mirror label="Your camera preview" />
+        : <p className="subtle">{adjusting || cameraOn ? 'Preparing your camera…' : 'Turn on your camera to see the preview.'}</p>}
+    </div>
+    <label className="field">Subject outline
+      <select value={settings.coverage} onChange={event => tune({ coverage: event.target.value })}>
+        {coverageOptions.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
+      </select>
+    </label>
+    <p className="subtle">{advanced ? 'Use Keep more of me if your shoulders, hands, or hair fade into the background.'
+      : 'Subject outline applies to Weather view on this device.'}</p>
+    <label className="field">Blur strength
+      <select value={settings.blur} onChange={event => tune({ blur: event.target.value })}>
+        {blurOptions.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
+      </select>
+    </label>
+    {adjusting && <p className="subtle" role="status">Updating camera effects…</p>}
+  </fieldset>;
+}
+
 function Rooms({ host, groups, current, incoming, open, close, visit, back, busy, now, assign, participants }) {
   return <div className="side-content stack">
     {current && <div className="side-callout"><strong>{current}</strong>
@@ -291,7 +317,6 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [spotlight, setSpotlight] = useState('');
   const [hideSelf, setHideSelf] = useState(false);
   const [hideVideo, setHideVideo] = useState(false);
-  const [background, setBackground] = useState(null);
   const [customBackgrounds, setCustomBackgrounds] = useState(loadBackgrounds);
   const [caption, setCaption] = useState(null);
   const [showCaptions, setShowCaptions] = useState(true);
@@ -308,6 +333,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [confirmation, setConfirmation] = useState(null);
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
+  const [adjustingCamera, setAdjustingCamera] = useState(false);
   const [time, setTime] = useState(Date.now());
   const attendance = useRef(new Map());
   const started = useRef(Date.now());
@@ -319,10 +345,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const chatLastSent = useRef(0);
   const studioMessage = useRef(null);
   const soundBlocked = useRef(() => setAudioBlocked(true)).current;
+  const cameraFailure = useRef(null);
+  const restoreCamera = useRef(false);
   const setup = { invite: entry.invite, nonce: entry.nonce };
   const { ref, state, connect, disconnect, update, updateLocalData } = useCall({
     onMessage: receive,
-    onBackgroundError: () => setBackground(null),
+    onBackgroundError: () => cameraFailure.current?.(),
     onCaption: (event, person) => {
       const text = cleanText(event.text, 500);
       if (text) setCaption({ text, name: participantName(person), time: Date.now() });
@@ -333,6 +361,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const currentRoom = target.url;
   const activeCall = state.phase === 'connected';
   const activeInstance = activeCall ? call() : null;
+  const cameraEffects = useCameraEffects({ callRef: ref, notify: setNotice, nativeSupported: state.videoEffects,
+    sync: updateLocalData });
+  cameraFailure.current = cameraEffects.onDailyError;
+  const localCamera = playable(state.participants.find(person => person.local), 'video');
   studioMessage.current = (message, channel) => {
     if (message?.type !== 'share' || typeof message.requestId !== 'string' || !/^[a-f0-9]{32}$/.test(message.requestId) ||
         typeof message.code !== 'string' || !/^\d{6,7}$/.test(message.code)) return;
@@ -349,8 +381,21 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     setSpotlight('');
     setCaption(null);
     setUnread(0);
-    connect(target, name, preferences, background ? backgroundSettings(background) : undefined);
+    cameraEffects.stop();
+    const enhancedBackground = cameraEffects.enhanced && cameraEffects.choice;
+    restoreCamera.current = Boolean(enhancedBackground && preferences.video);
+    const input = !enhancedBackground && cameraEffects.choice
+      ? backgroundSettings(cameraEffects.choice, cameraEffects.settings.blur) : undefined;
+    connect(target, name, restoreCamera.current ? { ...preferences, video: false } : preferences, input, cameraEffects.settings.coverage);
   }, [target, name, connect]);
+  useEffect(() => {
+    if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
+    restoreCamera.current = false;
+    adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera));
+  }, [activeInstance, busy]);
+  useEffect(() => {
+    if (state.phase === 'left' || state.phase === 'error') cameraEffects.stop();
+  }, [state.phase, cameraEffects.stop]);
   useEffect(() => {
     const timer = setInterval(() => setTime(Date.now()), 1000);
     return () => clearInterval(timer);
@@ -533,23 +578,38 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   }
 
   function setDevice(key, value) {
+    if (key === 'camera') {
+      adjustCamera(async () => {
+        await cameraEffects.setCamera(activeInstance, value, state.video);
+        if (activeInstance === call()) setPreferences(old => ({ ...old, camera: value }));
+      });
+      return;
+    }
     perform(async () => {
-      if (key !== 'speaker') await call().setInputDevicesAsync({ [key === 'camera' ? 'videoDeviceId' : 'audioDeviceId']: value || null });
+      if (key === 'microphone') await call().setInputDevicesAsync({ audioDeviceId: value || null });
       setPreferences(old => ({ ...old, [key]: value }));
     });
   }
 
-  async function selectBackground(choice) {
+  async function adjustCamera(operation, allowBusy = false) {
     if (!activeInstance || activeInstance !== call()) return false;
-    const applied = await perform(async () => {
-      try {
-        await activeInstance.updateInputSettings(backgroundSettings(choice));
-      } catch {
-        throw new Error('Could not apply the camera background. Try another image or try again.');
-      }
-      if (activeInstance === call()) setBackground(choice);
+    if (allowBusy && busy) {
+      try { await operation(); return true; }
+      catch (error) { setNotice(error?.message || 'Could not update the camera. Try again.'); return false; }
+    }
+    return perform(async () => {
+      setAdjustingCamera(true);
+      try { await operation(); }
+      finally { setAdjustingCamera(false); }
     });
-    return applied && activeInstance === call();
+  }
+
+  function selectBackground(choice) {
+    return adjustCamera(async () => {
+      if (!(await cameraEffects.select(activeInstance, choice, preferences.camera, state.video))) {
+        throw new Error('The camera update was interrupted.');
+      }
+    });
   }
 
   function move(destination) {
@@ -595,6 +655,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   async function exit(ended = false) {
     if (leaving.current) return;
     leaving.current = true;
+    cameraEffects.stop();
     trackAttendance('left', state.participants, target);
     await disconnect().catch(() => {});
     onExit({ ended, attendance: host && attendance.current.size ? report(true) : '' });
@@ -717,7 +778,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         </div>
         <div className="tool-divider" />
         <Tool label="Camera" icon="camera" on={state.video} off={!state.video}
-          title={state.video ? 'Turn camera off' : 'Turn camera on'} onClick={() => perform(() => call().setLocalVideo(!state.video))} />
+          title={state.video ? 'Turn camera off' : 'Turn camera on'} disabled={adjustingCamera && !state.video}
+          onClick={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, !state.video, preferences.camera), state.video)} />
         <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
           onClick={() => perform(() => call().setLocalAudio(!state.audio))} />
         <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
@@ -760,7 +822,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         {panel === 'chat' && <Chat items={chat[currentRoom] || []} send={sendChat} />}
         {panel === 'activity' && <Activity url={activity} host={host && !target.label} publish={publish} studioConnection={studioConnection} />}
         {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice}>
-          <BackgroundSettings supported={state.videoEffects} selected={background} select={selectBackground}
+          {(state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
+            settings={cameraEffects.settings} tune={patch => adjustCamera(() => cameraEffects.tune(patch))}
+            busy={busy} adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
+          <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice} select={selectBackground}
             custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
         </DeviceSettings>}
         {panel === 'rooms' && <Rooms host={host} groups={openGroups} current={target.label} incoming={incoming?.end * 1000 > time ? incoming : null}

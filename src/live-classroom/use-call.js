@@ -47,12 +47,12 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
 
   useEffect(() => () => { disconnect().catch(() => {}); }, [disconnect]);
 
-  const connect = useCallback(async (target, name, preferences, inputSettings) => {
+  const connect = useCallback(async (target, name, preferences, inputSettings, cameraCoverage) => {
     const current = ++turn.current;
     const previous = ref.current;
     ref.current = null;
-    localData.current = initial.localData;
-    setState(initial);
+    localData.current = { ...initial.localData, cameraCoverage };
+    setState({ ...initial, localData: localData.current });
     try {
       if (previous && !previous.isDestroyed()) await previous.destroy();
       if (current !== turn.current) return;
