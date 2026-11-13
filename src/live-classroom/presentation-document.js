@@ -1,6 +1,16 @@
 import { matchPowerPointPages } from './powerpoint-metadata.js';
 
 export const documentAccept = '.pptx,.ppsx,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+export const isPowerPointFile = name => /\.pp[ts]x$/i.test(name);
+
+export function waitForDocument(task, signal) {
+  return new Promise((resolve, reject) => {
+    const cancel = () => reject(signal.reason);
+    if (signal.aborted) cancel();
+    else signal.addEventListener('abort', cancel, { once: true });
+    Promise.resolve(task).then(resolve, reject).finally(() => signal.removeEventListener('abort', cancel));
+  });
+}
 
 function convertDocument(file, signal, onProgress) {
   return new Promise((resolve, reject) => {
@@ -37,11 +47,19 @@ function convertDocument(file, signal, onProgress) {
   });
 }
 
-export async function loadPresentationDocument(file, signal, onProgress) {
+export async function loadPresentationDocument(file, signal, onProgress, convertPowerPoint = false) {
   if (!/\.(pptx|ppsx|pdf|docx)$/i.test(file.name)) throw new Error('Choose a PowerPoint, PDF, or Word file.');
-  if (!file.size || file.size > 25 * 1024 * 1024) throw new Error('Choose a file up to 25 MB.');
+  const powerpoint = isPowerPointFile(file.name);
+  const direct = powerpoint && !convertPowerPoint;
+  const limit = direct ? 100 : 25;
+  if (!file.size || file.size > limit * 1024 * 1024) throw new Error('Choose a file up to ' + limit + ' MB.');
   signal.throwIfAborted();
-  const powerpoint = /\.pp[ts]x$/i.test(file.name);
+  if (direct) {
+    onProgress('Opening PowerPoint…');
+    const { openDirectPowerPoint } = await import('/assets/live-classroom-direct-powerpoint.js?v=1');
+    signal.throwIfAborted();
+    return openDirectPowerPoint(file, signal);
+  }
   const converted = /\.pdf$/i.test(file.name)
     ? { pdf: new Uint8Array(await file.arrayBuffer()) } : await convertDocument(file, signal, onProgress);
   signal.throwIfAborted();

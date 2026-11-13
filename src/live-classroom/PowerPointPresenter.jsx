@@ -90,19 +90,20 @@ function SlideButton({ deck, index, render, goTo, delegated }) {
 }
 
 export function PowerPointSlides({ presentation, delegated, grid, closeGrid }) {
-  const { deck, renderPreview, goTo } = presentation;
+  const { deck, renderPreview, goTo, rendering } = presentation;
   const strip = useRef(null);
   useEffect(() => {
     strip.current.querySelector('[aria-current="step"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }, [deck.page]);
   const buttons = select => Array.from({ length: deck.count }, (_, index) => <SlideButton
-    key={index} deck={deck} index={index} render={renderPreview} delegated={delegated} goTo={select} />);
+    key={index} deck={deck} index={index} render={renderPreview} delegated={delegated || rendering} goTo={select} />);
 
   return <>
     <div className="powerpoint-filmstrip" role="group" aria-label="Slide thumbnails" ref={strip}>{buttons(goTo)}</div>
     {grid && <Modal title="Slide grid" className="powerpoint-grid-dialog" close={closeGrid}>
-      <div className="powerpoint-slide-grid">{buttons(index => {
-        if (index === deck.page || goTo(index)) closeGrid();
+      {rendering && <p className="subtle" role="status">Opening slide…</p>}
+      <div className="powerpoint-slide-grid">{buttons(async index => {
+        if (index === deck.page || await goTo(index)) closeGrid();
       })}</div>
     </Modal>}
   </>;

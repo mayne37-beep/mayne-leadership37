@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { cleanText } from './shared.js';
 import { participantCanSend } from './meeting-roles.js';
-import { loadPresentationDocument } from './presentation-document.js';
+import { isPowerPointFile, loadPresentationDocument, waitForDocument } from './presentation-document.js';
 import { publishPresentation, screenTrack } from './presentation-stream.js';
 
 function slideLinks(pages, index, canvas) {
@@ -13,6 +13,10 @@ function slideLinks(pages, index, canvas) {
   }
 }
 
+function slideDetails(pages, index, canvas, rendered) {
+  return { links: rendered?.links ?? slideLinks(pages, index, canvas), hints: rendered?.hints };
+}
+
 export function useDocumentPresentation({ call, allowed, notify, sync }) {
   const supported = typeof HTMLCanvasElement.prototype.captureStream === 'function';
   const [open, setOpen] = useState(false);
@@ -20,13 +24,24 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
   const [progress, setProgress] = useState('');
   const [error, setError] = useState('');
   const [status, setStatus] = useState('idle');
+  const [rendering, setRendering] = useState(false);
+  const [fallbackAvailable, setFallbackAvailable] = useState(false);
   const prepared = useRef(null);
   const importing = useRef(null);
+  const navigation = useRef(null);
   const output = useRef(null);
   const restoring = useRef(null);
   const preview = useRef(null);
+  const lastPowerPoint = useRef(null);
+
+  const cancelNavigation = useCallback(() => {
+    navigation.current?.abort();
+    navigation.current = null;
+    setRendering(false);
+  }, []);
 
   const stop = useCallback(() => {
+    cancelNavigation();
     const session = output.current;
     output.current = null;
     if (session) {
@@ -39,7 +54,7 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       if (session.applied) restoring.current = session.applied.then(session.restore).catch(() => {});
     }
     setStatus('idle');
-  }, []);
+  }, [cancelNavigation]);
 
   useEffect(() => () => {
     stop();
@@ -47,6 +62,8 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
     importing.current = null;
     prepared.current?.pages.close();
     prepared.current = null;
+    lastPowerPoint.current = null;
+    setFallbackAvailable(false);
     setOpen(false);
     setDeck(null);
     setProgress('');
@@ -70,25 +87,46 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
 
   function closeEditor() {
     if (status === 'starting') stop();
-    importing.current?.abort();
-    setProgress('');
+    cancelNavigation();
+    cancelImport();
     setOpen(false);
   }
 
-  async function choose(file) {
+  function cancelImport() {
+    importing.current?.abort();
+    importing.current = null;
+    setProgress('');
+  }
+
+  async function choose(file, convertPowerPoint = false) {
     if (!file || !allowed || !supported || importing.current || output.current) return;
+    cancelNavigation();
+    const powerpoint = isPowerPointFile(file.name);
+    lastPowerPoint.current = powerpoint && file.size <= 25 * 1024 * 1024 ? file : null;
+    setFallbackAvailable(Boolean(lastPowerPoint.current) && !convertPowerPoint);
     const operation = new AbortController();
     importing.current = operation;
     setError('');
     setProgress('Opening ' + cleanText(file.name, 90) + '…');
     let pages;
+    let timeout;
+    if (powerpoint && !convertPowerPoint) {
+      timeout = setTimeout(() => operation.abort(new Error('PowerPoint took too long to open. Share its slideshow window to present it now.')), 45000);
+    }
     try {
-      pages = await loadPresentationDocument(file, operation.signal, setProgress);
+      const loading = loadPresentationDocument(file, operation.signal, setProgress, convertPowerPoint).then(document => {
+        if (operation.signal.aborted) document.close();
+        operation.signal.throwIfAborted();
+        return document;
+      });
+      pages = await waitForDocument(loading, operation.signal);
       operation.signal.throwIfAborted();
       const pageCanvas = document.createElement('canvas');
       pageCanvas.width = 1920;
       pageCanvas.height = 1080;
-      pages.render(0, pageCanvas);
+      if (pages.direct) setProgress('Rendering the first slide…');
+      const rendered = await waitForDocument(pages.render(0, pageCanvas), operation.signal);
+      operation.signal.throwIfAborted();
       const canvas = document.createElement('canvas');
       canvas.width = pageCanvas.width;
       canvas.height = pageCanvas.height;
@@ -97,11 +135,15 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       prepared.current?.pages.close();
       prepared.current = { canvas, frame, pageCanvas, pages, page: 0 };
       setDeck({ name: cleanText(file.name, 90), page: 0, count: pages.count,
-        powerpoint: pages.powerpoint, slides: pages.slides, links: slideLinks(pages, 0, pageCanvas) });
+        powerpoint: pages.powerpoint, slides: pages.slides, direct: pages.direct,
+        ...slideDetails(pages, 0, pageCanvas, rendered) });
     } catch (failure) {
       pages?.close();
-      if (!operation.signal.aborted) setError(failure.message || 'The document could not be opened.');
+      if (importing.current === operation && operation.signal.reason?.name !== 'AbortError') {
+        setError(operation.signal.reason?.message || failure.message || 'The document could not be opened.');
+      }
     } finally {
+      clearTimeout(timeout);
       if (importing.current === operation) {
         importing.current = null;
         setProgress('');
@@ -112,29 +154,54 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
   const renderPreview = useCallback((page, canvas) => {
     const pages = prepared.current?.pages;
     if (!pages || page < 0 || page >= pages.count) return;
-    try { pages.render(page, canvas); } catch {}
+    try { Promise.resolve(pages.render(page, canvas)).catch(() => {}); } catch {}
   }, []);
 
   const goTo = useCallback(page => {
     const current = prepared.current;
-    if (!current || !Number.isInteger(page) || page < 0 || page >= current.pages.count || current.page === page) return false;
-    try {
-      current.pages.render(page, current.pageCanvas);
-      current.frame.drawImage(current.pageCanvas, 0, 0);
+    if (!current || !Number.isInteger(page) || page < 0 || page >= current.pages.count || current.page === page || navigation.current) return false;
+    function commit(canvas, rendered) {
+      current.frame.drawImage(canvas, 0, 0);
+      current.pageCanvas = canvas;
       current.page = page;
-      const links = slideLinks(current.pages, page, current.pageCanvas);
-      setDeck(previous => ({ ...previous, page, links }));
+      const details = slideDetails(current.pages, page, canvas, rendered);
+      setDeck(previous => ({ ...previous, page, ...details }));
       return true;
-    } catch {
-      const message = 'This page could not be displayed. Try another page.';
+    }
+    function failed() {
+      const message = 'This slide could not be displayed. Try another slide or share the slideshow window.';
       if (open) setError(message);
       else notify(message);
       return false;
     }
-  }, [open, notify]);
+    if (current.pages.direct) {
+      const operation = new AbortController();
+      navigation.current = operation;
+      setRendering(true);
+      const canvas = document.createElement('canvas');
+      canvas.width = current.canvas.width;
+      canvas.height = current.canvas.height;
+      const timeout = setTimeout(() => operation.abort(new Error('This slide took too long to open.')), 15000);
+      return waitForDocument(current.pages.render(page, canvas), operation.signal)
+        .then(rendered => commit(canvas, rendered))
+        .catch(() => operation.signal.reason?.name === 'AbortError' ? false : failed())
+        .finally(() => {
+          clearTimeout(timeout);
+          if (navigation.current === operation) cancelNavigation();
+        });
+    }
+    try {
+      current.pages.render(page, current.pageCanvas);
+      return commit(current.pageCanvas);
+    } catch {
+      if (open) setError('This page could not be displayed. Try another page.');
+      else notify('This page could not be displayed. Try another page.');
+      return false;
+    }
+  }, [open, notify, cancelNavigation]);
 
   async function start() {
-    if (!allowed || !call || !prepared.current || importing.current || output.current ||
+    if (!allowed || !call || !prepared.current || importing.current || output.current || navigation.current ||
         !participantCanSend(call.participants().local, 'screenVideo')) return;
     if (call.localScreenVideo()) {
       setError('Stop your current presentation before presenting this file.');
@@ -182,5 +249,6 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
     }
   }
 
-  return { supported, open, openEditor, closeEditor, deck, progress, error, status, preview, renderPreview, choose, goTo, start, stop };
+  return { supported, open, openEditor, closeEditor, cancelImport, deck, progress, error, status, preview, renderPreview, choose, goTo, start, stop,
+    rendering, fallbackAvailable, tryCompatibility: () => choose(lastPowerPoint.current, true) };
 }

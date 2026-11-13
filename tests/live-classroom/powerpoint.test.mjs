@@ -3,6 +3,7 @@ import test from 'node:test';
 import JSZip from 'jszip';
 import { JSDOM } from 'jsdom';
 import { matchPowerPointPages, readPowerPointSlides } from '../../src/live-classroom/powerpoint-metadata.js';
+import { waitForDocument } from '../../src/live-classroom/presentation-document.js';
 
 const presentationNs = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const drawingNs = 'http://schemas.openxmlformats.org/drawingml/2006/main';
@@ -62,4 +63,15 @@ test('speaker notes follow presentation order and resolve slide-specific relatio
   } finally {
     dom.window.close();
   }
+});
+
+test('canceling a preview releases the caller while a slow renderer is still pending', async () => {
+  let complete;
+  const render = new Promise(resolve => { complete = resolve; });
+  const operation = new AbortController();
+  const preview = waitForDocument(render, operation.signal);
+  operation.abort(new Error('Slide took too long'));
+  await assert.rejects(preview, /Slide took too long/);
+  complete('late frame');
+  assert.equal(await waitForDocument(Promise.resolve('new frame'), new AbortController().signal), 'new frame');
 });

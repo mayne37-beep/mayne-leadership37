@@ -14,10 +14,10 @@ export function PageControls({ deck, goTo, disabled }) {
   </div>;
 }
 
-export function DocumentPresentation({ presentation, sharing }) {
+export function DocumentPresentation({ presentation, sharing, shareSlideshow }) {
   const input = useRef(null);
-  const { deck, goTo, progress, error, status } = presentation;
-  const busy = Boolean(progress) || status === 'starting';
+  const { deck, goTo, progress, error, status, rendering, fallbackAvailable, tryCompatibility } = presentation;
+  const busy = Boolean(progress) || status === 'starting' || rendering;
   return <Modal title="Present a file" className="document-dialog" close={presentation.closeEditor}>
     <div className="document-import">
       <button className="btn secondary" type="button" disabled={busy || status !== 'idle'} onClick={() => input.current.click()}>
@@ -28,7 +28,7 @@ export function DocumentPresentation({ presentation, sharing }) {
         event.target.value = '';
         presentation.choose(file);
       }} />
-      <span className="subtle">PowerPoint (.pptx, .ppsx), PDF, or Word (.docx) · Up to 25 MB</span>
+      <span className="subtle">PowerPoint up to 100 MB · PDF or Word up to 25 MB</span>
     </div>
     {deck && <figure className="document-preview">
       <figcaption>{deck.name}</figcaption>
@@ -38,25 +38,40 @@ export function DocumentPresentation({ presentation, sharing }) {
     {deck?.powerpoint && <p className="subtle document-status">
       {deck.slides ? 'Speaker notes and slide previews are private. Attendees follow the slide you present.'
         : 'Speaker notes couldn’t be matched to the slides in this file.'}
-      {' Slides display as still images.'}
+      {deck.direct ? ' Slides open directly in your browser.' : ' Slides display as still images.'}
+    </p>}
+    {deck?.hints?.length > 0 && <p className="subtle document-status">
+      Use the PowerPoint slideshow for {new Intl.ListFormat('en').format(deck.hints)}.
+    </p>}
+    {deck?.direct && !deck.hints?.length && shareSlideshow && <p className="subtle document-status">
+      For PowerPoint’s original animations and media, share its slideshow window.
     </p>}
     {progress && <p className="subtle document-status" role="status">{progress}</p>}
+    {rendering && <p className="subtle document-status" role="status">Opening slide…</p>}
     {error && <p className="document-error" role="alert">{error}</p>}
-    {!deck && !progress && !error && <p className="subtle document-status">The room follows the pages you present. PowerPoint and Word imports work in current Chrome and Edge.</p>}
+    {!deck && !progress && !error && <p className="subtle document-status">Open a .pptx or .ppsx for private speaker notes and slide controls.</p>}
     {sharing && status === 'idle' && <p className="subtle document-status">Stop your current presentation to present this file.</p>}
     <div className="form-actions">
-      <button className="btn secondary" type="button" onClick={presentation.closeEditor}>{progress ? 'Cancel import' : 'Close'}</button>
+      <button className="btn secondary" type="button" onClick={progress ? presentation.cancelImport : presentation.closeEditor}>
+        {progress ? 'Cancel import' : 'Close'}
+      </button>
       <button className="btn primary" type="button" disabled={!deck || busy || sharing} onClick={presentation.start}>
         {status === 'starting' ? 'Starting…' : 'Present file'}
       </button>
     </div>
+    {((shareSlideshow && !sharing) || (fallbackAvailable && !busy)) && <div className="document-alternatives">
+      {shareSlideshow && !sharing && <button className="text-button" type="button" onClick={shareSlideshow}>Share PowerPoint slideshow</button>}
+      {fallbackAvailable && !busy && <button className="text-button" type="button"
+        title="Convert this PowerPoint to still pages" onClick={tryCompatibility}>Try compatibility mode</button>}
+    </div>}
   </Modal>;
 }
 
 export function DocumentControls({ presentation, delegated, presenterView, togglePresenterView, openGrid }) {
   return <div className="document-controls" aria-label="Live document controls" data-powerpoint={presentation.deck.powerpoint}>
     <span title={presentation.deck.name}>{presentation.deck.name}</span>
-    <PageControls deck={presentation.deck} goTo={presentation.goTo} disabled={delegated} />
+    <PageControls deck={presentation.deck} goTo={presentation.goTo} disabled={delegated || presentation.rendering} />
+    {presentation.rendering && <span className="subtle" role="status">Opening slide…</span>}
     {togglePresenterView && <>
       {presenterView && <button className="btn secondary" type="button" onClick={openGrid}><Icon name="view" size={16} />Slide grid</button>}
       <button className="btn secondary" type="button" aria-expanded={presenterView} onClick={togglePresenterView}>
