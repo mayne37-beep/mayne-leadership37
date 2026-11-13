@@ -6,7 +6,7 @@ import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js
 import { participantName, useCall } from './use-call.js';
 import { BackgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
 import { PresenterView } from './PresenterView.jsx';
-import { backgroundSettings, blurOptions, coverageOptions } from './camera-settings.js';
+import { backgroundSettings, blurOptions, cameraPresentationSettings, coverageOptions, sampleBackdropColor } from './camera-settings.js';
 import { useCameraEffects } from './use-camera-effects.js';
 
 const APP_MESSAGE = 'mayne-live-classroom';
@@ -98,7 +98,8 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   return <div className="stage">
     {(shared || focus) ? <div className="focus-layout">
       {presenterCamera ? <PresenterView screen={playable(shared, 'screenVideo')} camera={presenterCamera}
-        side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage} />
+        side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage}
+        backdropColor={shared.userData?.cameraBackdrop} />
         : shared ? <Tile person={shared} screen /> : render(focus)}
       {shown.length > 1 && strip.length > 0 && <div className="filmstrip">{strip.map(render)}</div>}
     </div> : <div className="gallery" data-count={Math.max(1, tiles.length)}>{tiles.map(render)}</div>}
@@ -211,20 +212,56 @@ function DeviceSettings({ preferences, setDevice, children }) {
   </div>;
 }
 
-function CameraEffectsSettings({ camera, cameraOn, settings, tune, busy, adjusting, advanced }) {
+function CameraEffectsSettings({ camera, rawCamera, cameraOn, settings, tune, busy, adjusting, advanced, background }) {
+  const [sampling, setSampling] = useState(false);
+  const preview = useRef(null);
+  const solid = settings.backdropMode === 'solid';
+  const sampleSource = cameraOn ? rawCamera ?? (background ? null : camera) : null;
+  const picking = solid && sampling && sampleSource;
+  const previewTrack = picking ? sampleSource : camera;
+
+  function sample(event) {
+    if (!picking || busy) return;
+    const color = sampleBackdropColor(preview.current?.querySelector('video'), event.clientX, event.clientY);
+    if (!color) return;
+    setSampling(false);
+    tune({ backdropColor: color });
+  }
+
   return <fieldset className="camera-effects-settings" disabled={busy}>
     <legend>Camera effects</legend>
-    <div className="camera-effects-preview" role="group" aria-label="Camera preview">
-      {camera ? <Track track={camera} mirror label="Your camera preview" />
+    <div ref={preview} className={'camera-effects-preview' + (picking ? ' sampling-backdrop' : '')}
+      role="group" aria-label="Camera preview" onPointerDown={sample}>
+      {previewTrack ? <Track track={previewTrack} mirror label="Your camera preview" />
         : <p className="subtle">{adjusting || cameraOn ? 'Preparing your camera…' : 'Turn on your camera to see the preview.'}</p>}
     </div>
+    <label className="field">Background removal
+      <select value={settings.backdropMode} onChange={event => {
+        setSampling(false);
+        tune({ backdropMode: event.target.value });
+      }}>
+        <option value="automatic">Automatic</option>
+        <option value="solid">Solid backdrop (green screen)</option>
+      </select>
+    </label>
+    {solid && <>
+      <div className="backdrop-controls">
+        <label className="field">Backdrop color
+          <input type="color" value={settings.backdropColor} onChange={event => tune({ backdropColor: event.target.value })} />
+        </label>
+        <button className="btn secondary" type="button" disabled={!sampleSource} aria-pressed={Boolean(picking)}
+          onClick={() => setSampling(!sampling)}>{picking ? 'Cancel sampling' : 'Sample from camera'}</button>
+      </div>
+      <p className="subtle">{picking ? 'Click the backdrop in your camera preview.' : 'Use an evenly lit backdrop with a color that differs from your hair, skin, and clothing.'}</p>
+      {background && <p className="subtle">Choose None under Video background to use the solid backdrop directly in Weather view.</p>}
+    </>}
     <label className="field">Subject outline
       <select value={settings.coverage} onChange={event => tune({ coverage: event.target.value })}>
         {coverageOptions.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
       </select>
     </label>
-    <p className="subtle">{advanced ? 'Start with Balanced for a steadier edge. Use Keep more of me if parts of your outline are cut off.'
-      : 'Subject outline applies to Weather view on this device.'}</p>
+    <p className="subtle">{advanced ? 'Use Keep more of me if the effect cuts into your outline.'
+      : 'Background removal and subject outline settings apply to Weather view on this device.'}</p>
     <label className="field">Blur strength
       <select value={settings.blur} onChange={event => tune({ blur: event.target.value })}>
         {blurOptions.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
@@ -386,7 +423,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     restoreCamera.current = Boolean(enhancedBackground && preferences.video);
     const input = !enhancedBackground && cameraEffects.choice
       ? backgroundSettings(cameraEffects.choice, cameraEffects.settings.blur) : undefined;
-    connect(target, name, restoreCamera.current ? { ...preferences, video: false } : preferences, input, cameraEffects.settings.coverage);
+    connect(target, name, restoreCamera.current ? { ...preferences, video: false } : preferences, input,
+      cameraPresentationSettings(cameraEffects.settings, cameraEffects.choice));
   }, [target, name, connect]);
   useEffect(() => {
     if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
@@ -824,7 +862,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice}>
           {(state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
             settings={cameraEffects.settings} tune={patch => adjustCamera(() => cameraEffects.tune(patch))}
-            busy={busy} adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
+            rawCamera={cameraEffects.rawCamera} background={cameraEffects.choice} busy={busy}
+            adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
           <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice} select={selectBackground}
             custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
         </DeviceSettings>}

@@ -57,7 +57,11 @@ export async function createCameraEffect({ choice, device, sourceTrack, getSetti
     track = new MediaStreamTrackGenerator({ kind: 'video' });
     reader = new MediaStreamTrackProcessor({ track: source, maxBufferSize: 1 }).readable.getReader();
     writer = track.writable.getWriter();
-    processor = createPortraitProcessor();
+    const effectSettings = () => {
+      const settings = getSettings();
+      return { ...settings, backdropColor: settings.backdropMode === 'solid' ? settings.backdropColor : null };
+    };
+    processor = createPortraitProcessor(effectSettings().backdropColor);
     await processor.initialized;
 
     const first = new Promise((resolve, reject) => { resolveFirst = resolve; rejectFirst = reject; });
@@ -78,7 +82,7 @@ export async function createCameraEffect({ choice, device, sourceTrack, getSetti
           const background = image;
           image = null;
           const output = await processor.process(bitmap, {
-            ...getSettings(), timestamp: frame.timestamp / 1000, effect: choice.id === 'blur' ? 'blur' : 'image',
+            ...effectSettings(), timestamp: frame.timestamp / 1000, effect: choice.id === 'blur' ? 'blur' : 'image',
           }, background);
           try {
             const result = new VideoFrame(output, { timestamp: frame.timestamp });
