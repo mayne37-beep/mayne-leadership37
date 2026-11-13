@@ -1,19 +1,27 @@
 import { FilesetResolver, ImageSegmenter } from '@mediapipe/tasks-vision';
 import { blurOption, coverageOption } from './camera-settings.js';
 import { writePortraitMask } from './portrait-mask.js';
+import { createPortraitEdgeRefiner } from './portrait-edges.js';
 
 const base = self.location.origin + '/assets/live-classroom-vision';
 const portrait = new OffscreenCanvas(1, 1);
 const portraitContext = portrait.getContext('2d');
 const inference = new OffscreenCanvas(1, 1);
-const inferenceContext = inference.getContext('2d', { alpha: false });
+const inferenceContext = inference.getContext('2d', { alpha: false, willReadFrequently: true });
 const maskCanvas = new OffscreenCanvas(1, 1);
 const maskContext = maskCanvas.getContext('2d');
+const guideCanvas = new OffscreenCanvas(1, 1);
+const guideContext = guideCanvas.getContext('2d', { alpha: false, willReadFrequently: true });
+const motionCanvas = new OffscreenCanvas(1, 1);
+const motionContext = motionCanvas.getContext('2d', { alpha: false, willReadFrequently: true });
 const composite = new OffscreenCanvas(1, 1);
 const compositeContext = composite.getContext('2d');
 let segmenter;
 let maskImage;
 let maskHistory;
+let previousGuide;
+let refinedMask;
+let refineEdges;
 let previousTimestamp = -Infinity;
 let background;
 
@@ -35,17 +43,35 @@ function draw(bitmap, mask, settings) {
     portrait.height = bitmap.height;
   }
   if (!maskImage || maskImage.width !== mask.width || maskImage.height !== mask.height) {
-    maskCanvas.width = mask.width;
-    maskCanvas.height = mask.height;
     maskImage = maskContext.createImageData(mask.width, mask.height);
     maskHistory = new Float32Array(mask.width * mask.height);
+    motionCanvas.width = mask.width;
+    motionCanvas.height = mask.height;
+    previousGuide = null;
     previousTimestamp = -Infinity;
+    refineEdges = null;
   }
+  motionContext.drawImage(inference, 0, 0, mask.width, mask.height);
+  const guide = motionContext.getImageData(0, 0, mask.width, mask.height).data;
   const timestamp = settings.timestamp ?? performance.now();
   writePortraitMask(mask.getAsFloat32Array(), maskHistory, maskImage, timestamp - previousTimestamp,
-    coverageOption(settings.coverage).threshold);
+    coverageOption(settings.coverage).threshold, guide, previousGuide);
   previousTimestamp = timestamp;
-  maskContext.putImageData(maskImage, 0, 0);
+  previousGuide = guide;
+  const scale = Math.min(1, Math.max(mask.width / bitmap.width, mask.height / bitmap.height, 540 / Math.max(bitmap.width, bitmap.height)));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+  if (!refineEdges || guideCanvas.width !== width || guideCanvas.height !== height) {
+    guideCanvas.width = width;
+    guideCanvas.height = height;
+    maskCanvas.width = width;
+    maskCanvas.height = height;
+    refinedMask = maskContext.createImageData(width, height);
+    refineEdges = createPortraitEdgeRefiner(maskImage, refinedMask);
+  }
+  guideContext.drawImage(bitmap, 0, 0, width, height);
+  refineEdges(guideContext.getImageData(0, 0, width, height).data);
+  maskContext.putImageData(refinedMask, 0, 0);
   portraitContext.globalCompositeOperation = 'source-over';
   portraitContext.clearRect(0, 0, portrait.width, portrait.height);
   portraitContext.drawImage(bitmap, 0, 0);
