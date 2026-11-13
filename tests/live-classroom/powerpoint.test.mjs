@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import JSZip from 'jszip';
 import { JSDOM } from 'jsdom';
+import middleware from '../../middleware.js';
 import { matchPowerPointPages, readPowerPointSlides } from '../../src/live-classroom/powerpoint-metadata.js';
 import { waitForDocument } from '../../src/live-classroom/presentation-document.js';
 
@@ -74,4 +75,10 @@ test('canceling a preview releases the caller while a slow renderer is still pen
   await assert.rejects(preview, /Slide took too long/);
   complete('late frame');
   assert.equal(await waitForDocument(Promise.resolve('new frame'), new AbortController().signal), 'new frame');
+});
+
+test('the browser player loads for meeting presenters without a site PIN cookie', async () => {
+  const response = await middleware(new Request('https://example.invalid/assets/live-classroom-direct-powerpoint.js?v=1'));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('x-middleware-next'), '1');
 });
