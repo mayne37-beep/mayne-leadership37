@@ -3,7 +3,7 @@ import { Modal } from './components.jsx';
 import { Icon } from './icons.jsx';
 import { documentAccept } from './presentation-document.js';
 
-function PageControls({ deck, goTo, disabled }) {
+export function PageControls({ deck, goTo, disabled }) {
   return <div className="document-page-controls" role="group" aria-label="Presentation pages">
     <button className="icon-button" type="button" aria-label="Previous page" disabled={disabled || deck.page === 0}
       onClick={() => goTo(deck.page - 1)}><Icon name="chevron" /></button>
@@ -47,10 +47,10 @@ export function DocumentPresentation({ presentation, sharing }) {
   </Modal>;
 }
 
-export function DocumentControls({ presentation }) {
+export function DocumentControls({ presentation, delegated }) {
   return <div className="document-controls" aria-label="Live document controls">
     <span title={presentation.deck.name}>{presentation.deck.name}</span>
-    <PageControls deck={presentation.deck} goTo={presentation.goTo} />
+    <PageControls deck={presentation.deck} goTo={presentation.goTo} disabled={delegated} />
     <button className="btn secondary" type="button" onClick={presentation.stop}>Stop presenting</button>
   </div>;
 }

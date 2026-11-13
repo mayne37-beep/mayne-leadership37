@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortraitProcessor } from './portrait-processor.js';
+import { containedSize } from './annotations.js';
 
-export function PresenterView({ screen, camera, side, layout, name, coverage, backdropColor, mirror }) {
+export function PresenterView({ screen, camera, side, layout, name, coverage, backdropColor, mirror, annotations }) {
   const overlay = layout !== 'side-by-side';
   const cutout = layout === 'weather';
   const surface = useRef(null);
@@ -18,10 +19,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
     const element = surface.current;
     const video = screenVideo.current;
     function resize() {
-      if (!video.videoWidth || !video.videoHeight) return;
-      const ratio = video.videoWidth / video.videoHeight;
-      const width = Math.min(element.clientWidth, element.clientHeight * ratio);
-      if (width > 0) setSize({ width, height: width / ratio });
+      setSize(containedSize(element.clientWidth, element.clientHeight, video.videoWidth, video.videoHeight));
     }
     const observer = new ResizeObserver(resize);
     observer.observe(element);
@@ -135,6 +133,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
           <video ref={cameraVideo} autoPlay muted playsInline className={cutout && cutoutReady ? 'cutout-source' : undefined} aria-label={name + '’s camera'} />
           {cutout && <canvas ref={portrait} hidden={!cutoutReady} aria-label={name + ' over the shared screen'} />}
         </div>}
+        {size && annotations}
       </div>
     </div>
     {!overlay && <div className="presenter-camera side-camera" data-mirror-camera={mirror ? 'true' : undefined}>
