@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { Icon } from './icons.jsx';
 
@@ -14,9 +14,9 @@ export function DeviceSelect({ title, devices, kind, value, onChange }) {
 
 export function Modal({ title, children, close, className = '' }) {
   const dialog = useRef(null);
-  useEffect(() => {
-    dialog.current.showModal();
+  useLayoutEffect(() => {
     const node = dialog.current;
+    node.showModal();
     return () => node.close();
   }, []);
   return <dialog className={`modal ${className}`} ref={dialog} aria-label={title} onCancel={event => { event.preventDefault(); close(); }}>

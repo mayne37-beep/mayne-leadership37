@@ -329,6 +329,10 @@ button svg, a svg { flex: none; }
 .modal h2 { font-size: 18px; letter-spacing: -.017em; }
 .modal p { margin-bottom: 10px; font-size: 14px; }
 .modal .form-actions { margin-top: 13px; }
+.poll-dialog { width: min(480px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+.poll-dialog::backdrop { background: #17151c74; }
+.poll-dialog .poll-panel { padding: 0; }
+.poll-dialog .field input { font-size: 16px; }
 .invite-qr { display: grid; justify-items: center; gap: 8px; margin: 14px 0 0; text-align: center; }
 .invite-qr img { width: 200px; max-width: 100%; height: auto; image-rendering: pixelated; }
 .invite-qr figcaption, .invite-qr-status { color: var(--subtle); font-size: 13px; }
