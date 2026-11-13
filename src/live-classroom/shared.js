@@ -17,7 +17,7 @@ export function presentationOf(participant) {
     layout,
     side: data?.side === 'left' ? 'left' : 'right',
     mirror: data?.mirror === true,
-    composed: data?.layout === 'studio',
+    composed: data?.layout === 'studio' || data?.layout === 'document',
   };
 }
 

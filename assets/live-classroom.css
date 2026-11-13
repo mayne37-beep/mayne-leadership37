@@ -333,6 +333,21 @@ button svg, a svg { flex: none; }
 .poll-dialog::backdrop { background: #17151c74; }
 .poll-dialog .poll-panel { padding: 0; }
 .poll-dialog .field input { font-size: 16px; }
+.document-dialog { width: min(660px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; }
+.document-converter-frame { position: fixed; top: 0; left: 0; width: 1px; height: 1px; border: 0; pointer-events: none; }
+.document-import, .document-page-controls, .document-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.document-preview { margin: 13px 0 0; display: grid; gap: 8px; }
+.document-preview figcaption { font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.document-preview canvas { width: 100%; height: min(44dvh, 330px); object-fit: contain; background: #1a191f;
+  border: 1px solid var(--line); border-radius: 6px; }
+.document-page-controls { justify-content: center; gap: 3px; font-size: 13px; white-space: nowrap; }
+.document-page-controls button:first-child svg { transform: rotate(90deg); }
+.document-page-controls button:last-child svg { transform: rotate(-90deg); }
+.document-dialog .document-status, .document-dialog .document-error { margin: 12px 0 0; }
+.document-dialog .document-error { color: #ffb9c0; }
+.document-controls { padding: 5px 12px; justify-content: center; background: #27262e; border-top: 1px solid var(--line); }
+.document-controls > span { max-width: min(48vw, 260px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.document-controls .btn { min-height: 30px; padding: 4px 9px; }
 .invite-qr { display: grid; justify-items: center; gap: 8px; margin: 14px 0 0; text-align: center; }
 .invite-qr img { width: 200px; max-width: 100%; height: auto; image-rendering: pixelated; }
 .invite-qr figcaption, .invite-qr-status { color: var(--subtle); font-size: 13px; }

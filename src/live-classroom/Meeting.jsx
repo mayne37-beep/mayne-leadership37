@@ -4,7 +4,7 @@ import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { activityPath, attendanceCsv, cleanText, presentationOf, presenterLayouts, reactions } from './shared.js';
 import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js';
 import { participantName, useCall } from './use-call.js';
-import { BackgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
+import { BackgroundSettings, loadBackgroundChoice, loadBackgrounds } from './BackgroundSettings.jsx';
 import { PresenterView } from './PresenterView.jsx';
 import { PresenterStudio } from './PresenterStudio.jsx';
 import { usePresenterStudio } from './use-presenter-studio.js';
@@ -14,6 +14,9 @@ import { PollResults, QuickPolls } from './QuickPolls.jsx';
 import { emptyPollDraft, readSharedPoll } from './quick-poll.js';
 import { useQuickPoll } from './use-quick-poll.js';
 import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, participantCanSend, participantRole } from './meeting-roles.js';
+import { loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
+import { DocumentControls, DocumentPresentation } from './DocumentPresentation.jsx';
+import { useDocumentPresentation } from './use-document-presentation.js';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
@@ -90,7 +93,7 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   const [page, setPage] = useState(0);
   const shown = participants.filter(person => !hideSelf || !person.local || participants.length === 1);
   const shares = participants.filter(person => playable(person, 'screenVideo'));
-  const shared = shares.find(person => person.userData?.presentation?.layout === 'studio') ?? shares[0];
+  const shared = shares.find(person => presentationOf(person).composed) ?? shares[0];
   const { layout, side, mirror, composed } = presentationOf(shared);
   const presenterCamera = !composed && layout !== 'standard' && shown.includes(shared) && (!hideVideo || shared.local)
     ? playable(shared, 'video') : null;
@@ -101,7 +104,8 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount - 1);
   const tiles = shown.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
-  const strip = shown.filter(person => person !== (composed || presenterCamera ? shared : shared ? null : focus));
+  const showCameraInStrip = shared?.userData?.presentation?.layout === 'document';
+  const strip = shown.filter(person => person !== ((composed && !showCameraInStrip) || presenterCamera ? shared : shared ? null : focus));
   const render = person => <Tile key={person.session_id} person={person} hidden={hideVideo}
     active={person.session_id === speaking?.session_id} focused={person.session_id === pin}
     onPin={() => setPin(person.session_id === pin ? '' : person.session_id)} />;
@@ -371,6 +375,7 @@ function callDuration(ms) {
 
 export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }) {
   const host = Boolean(entry.host);
+  const [savedPreferences] = useState(loadMeetingPreferences);
   const [preferences, setPreferences] = useState(initialPrefs);
   const [target, setTarget] = useState(main);
   const [panel, setPanel] = useState('');
@@ -378,14 +383,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [dismissedPollId, setDismissedPollId] = useState('');
   const [seenPollResults, setSeenPollResults] = useState('');
   const [menu, setMenu] = useState('');
-  const [view, setView] = useState('gallery');
+  const [view, setView] = useState(savedPreferences.view);
   const [pin, setPin] = useState('');
   const [spotlight, setSpotlight] = useState('');
-  const [hideSelf, setHideSelf] = useState(false);
-  const [hideVideo, setHideVideo] = useState(false);
+  const [hideSelf, setHideSelf] = useState(savedPreferences.hideSelf);
+  const [hideVideo, setHideVideo] = useState(savedPreferences.hideVideo);
   const [customBackgrounds, setCustomBackgrounds] = useState(loadBackgrounds);
   const [caption, setCaption] = useState(null);
-  const [showCaptions, setShowCaptions] = useState(true);
+  const [showCaptions, setShowCaptions] = useState(savedPreferences.showCaptions);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [visuals, setVisuals] = useState([]);
   const [chat, setChat] = useState({});
@@ -438,6 +443,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const canCamera = participantCanSend(local, 'video');
   const canMic = participantCanSend(local, 'audio');
   const canPresent = participantCanSend(local, 'screenVideo');
+  const filePresentation = useDocumentPresentation({ call: activeInstance, allowed: canPresent, notify: setNotice, sync: updateLocalData });
   const quick = useQuickPoll({
     callRef: ref, call: activeInstance, organizer, participants: state.participants,
     localPoll: state.localData.quickPoll, sync: updateLocalData, send, onShared: publishPollChat,
@@ -446,7 +452,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const pollPopupOpen = Boolean(votingPollId && votingPollId !== dismissedPollId);
   const sharedPollId = !organizer && quick.poll?.results ? quick.poll.id : '';
   const cameraEffects = useCameraEffects({ callRef: ref, notify: setNotice, nativeSupported: state.videoEffects,
-    sync: updateLocalData });
+    sync: updateLocalData, initialChoice: () => loadBackgroundChoice(customBackgrounds) });
   cameraFailure.current = cameraEffects.onDailyError;
   const localCamera = playable(local, 'video');
   const studio = usePresenterStudio({
@@ -481,11 +487,15 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     cameraEffects.stop();
     const enhancedBackground = cameraEffects.enhanced && cameraEffects.choice;
     restoreCamera.current = Boolean(enhancedBackground && preferences.video);
-    const input = !enhancedBackground && cameraEffects.choice
-      ? backgroundSettings(cameraEffects.choice, cameraEffects.settings.blur) : undefined;
+    let input;
+    if (!enhancedBackground && cameraEffects.choice) {
+      try { input = backgroundSettings(cameraEffects.choice, cameraEffects.settings.blur); }
+      catch { setNotice('The saved camera image could not be opened. Choose another background in Device settings.'); }
+    }
     connect(target, name, restoreCamera.current ? { ...preferences, video: false } : preferences, input,
-      cameraPresentationSettings(cameraEffects.settings, cameraEffects.choice));
+      { ...cameraPresentationSettings(cameraEffects.settings, cameraEffects.choice), presentation: loadMeetingPreferences().presentation });
   }, [target, name, connect]);
+  useEffect(() => { saveMeetingPreferences({ view, hideSelf, hideVideo, showCaptions }); }, [view, hideSelf, hideVideo, showCaptions]);
   useEffect(() => {
     if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
     restoreCamera.current = false;
@@ -758,7 +768,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     if (key === 'camera') {
       adjustCamera(async () => {
         await cameraEffects.setCamera(activeInstance, value, state.video);
-        if (activeInstance === call()) setPreferences(old => ({ ...old, camera: value }));
+        if (activeInstance === call()) {
+          setPreferences(old => ({ ...old, camera: value }));
+          saveMeetingPreferences({ camera: value });
+        }
       });
       return;
     }
@@ -766,6 +779,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       if (key === 'microphone' && !participantCanSend(call()?.participants().local, 'audio')) return;
       if (key === 'microphone') await call().setInputDevicesAsync({ audioDeviceId: value || null });
       setPreferences(old => ({ ...old, [key]: value }));
+      saveMeetingPreferences({ [key]: value });
     });
   }
 
@@ -834,6 +848,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     if (leaving.current) return;
     leaving.current = true;
     studio.stop();
+    filePresentation.stop();
     cameraEffects.stop();
     trackAttendance('left', state.participants, target);
     await disconnect().catch(() => {});
@@ -856,17 +871,26 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   function choosePresentation(patch) {
     if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
     setMenu('');
-    perform(() => updateLocalData({ presentation: {
+    const next = {
       layout: presentation.layout,
       side: presentation.side,
       mirror: presentation.mirror,
       ...patch,
-    } }));
+    };
+    perform(async () => {
+      await updateLocalData({ presentation: next }, activeInstance);
+      saveMeetingPreferences({ presentation: next });
+    });
   }
   function openPresenterStudio() {
     if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
     setMenu('');
     studio.openEditor();
+  }
+  function openFilePresentation() {
+    if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
+    setMenu('');
+    filePresentation.openEditor();
   }
   const memberTitle = target.label ? main.title + ' · ' + target.label : main.title;
   const displayedCaption = showCaptions && state.transcription && caption && time - caption.time < 9000 ? caption : null;
@@ -922,14 +946,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
             <MenuItem icon="people" selected={view === 'speaker' && !pin} onClick={() => { setView('speaker'); setPin(''); setMenu(''); }}>Speaker</MenuItem>
             <MenuItem icon="camera" selected={hideSelf} onClick={() => { setHideSelf(!hideSelf); setMenu(''); }}>Hide self view</MenuItem>
             <MenuItem icon="camera" selected={hideVideo} onClick={() => { setHideVideo(!hideVideo); setMenu(''); }}>Hide incoming video</MenuItem>
-            {canPresent && (canShare || state.sharing || studio.supported) &&
+            {canPresent && filePresentation.status === 'idle' && (canShare || state.sharing || studio.supported) &&
               <MenuItem icon="present-side" onClick={() => setMenu('presenter')}>Presenter layouts</MenuItem>}
             {document.fullscreenEnabled && <MenuItem icon="expand" onClick={() => {
               setMenu('');
               perform(() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
             }}>Toggle fullscreen</MenuItem>}
           </Popover>}
-          {canPresent && menu === 'presenter' && <Popover title="Presenter layouts">
+          {canPresent && filePresentation.status === 'idle' && menu === 'presenter' && <Popover title="Presenter layouts">
             <div className="presenter-options">
               <MenuItem icon="arrow" onClick={() => setMenu('view')}>Back to views</MenuItem>
               <p className="subtle">Choose what attendees see when you share your screen.</p>
@@ -989,18 +1013,23 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           }} />
         <div className="tool-wrap share-wrap" data-menu-root>
           <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
-            title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!canShare && !state.sharing}
+            title={state.sharing ? 'Stop screen sharing' : canShare || !canPresent ? 'Share screen' : 'Share options'}
+            disabled={!canShare && !state.sharing && !(canPresent && filePresentation.supported)}
             onClick={() => {
               if (studio.status !== 'idle') studio.stop();
+              else if (filePresentation.status !== 'idle') filePresentation.stop();
               else if (state.sharing) perform(() => call().stopScreenShare());
-              else if (participantCanSend(call()?.participants().local, 'screenVideo')) {
+              else if (canShare && participantCanSend(call()?.participants().local, 'screenVideo')) {
                 perform(() => call().startScreenShare({ displayMediaOptions: { audio: true } }));
-              }
+              } else if (canPresent) toggleMenu('share');
             }} />
-          {canPresent && studio.supported && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
+          {canShare && (studio.supported || filePresentation.supported) && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
             onClick={() => toggleMenu('share')}><Icon name="down" size={15} /></button>}
           {canPresent && menu === 'share' && <Popover title="Share options">
-            <MenuItem icon="layers" onClick={openPresenterStudio}>{studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>
+            {filePresentation.supported && <MenuItem icon="present-standard" disabled={filePresentation.status !== 'idle'}
+              onClick={openFilePresentation}>Present a file</MenuItem>}
+            {studio.supported && <MenuItem icon="layers" onClick={openPresenterStudio}>
+              {studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>}
           </Popover>}
         </div>
         <div className="leave-wrap tool-wrap" data-menu-root>
@@ -1074,6 +1103,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           {emoji}</span>)}</div>
       </div>
     </div>
+    {canPresent && filePresentation.status === 'live' && <DocumentControls presentation={filePresentation} />}
     <div className="meeting-audio" aria-hidden="true">
       {state.participants.filter(p => !p.local).flatMap(person => ['audio', 'screenAudio'].map(type => {
         const track = playable(person, type);
@@ -1083,6 +1113,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     {canPresent && studio.open && <PresenterStudio studio={studio} cameraOn={state.video} busy={busy} sharing={state.sharing}
       stopShare={() => perform(() => activeInstance.stopScreenShare())}
       turnCameraOn={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera))} />}
+    {canPresent && filePresentation.open && <DocumentPresentation presentation={filePresentation} sharing={state.sharing} />}
     {inviteDialog && <MeetingInvitation link={guestLink(entry.invite)} close={() => setInviteDialog(false)}
       onCopy={link => perform(async () => {
         await copyLink(link);

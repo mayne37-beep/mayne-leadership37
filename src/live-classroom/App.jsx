@@ -5,6 +5,7 @@ import { cleanText } from './shared.js';
 import { copyLink, displayTime, downloadCsv, guestLink, instructorAuth, newNonce, request } from './client.js';
 import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { Meeting } from './Meeting.jsx';
+import { availableDevice, deviceKinds, loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
 
 const requestedInvite = new URLSearchParams(location.search).get('invite') || '';
 const storageKey = id => 'mayne-live-classroom-rooms:' + id;
@@ -38,18 +39,28 @@ function Notice({ title, detail, children }) {
 
 function Prejoin({ meeting, host, onJoin, onBack, busy }) {
   const [name, setName] = useState(host ? 'Instructor' : '');
-  const [options, setOptions] = useState({ video: false, audio: false, camera: '', microphone: '', speaker: '' });
+  const [options, setOptions] = useState(() => {
+    const { camera, microphone, speaker } = loadMeetingPreferences();
+    return { camera, microphone, speaker, video: false, audio: false };
+  });
   const [devices, setDevices] = useState([]);
   const [error, setError] = useState('');
   const [time, setTime] = useState(Date.now());
   const video = useRef(null);
   const preview = useRef(null);
-  const setOption = (key, value) => setOptions(old => ({ ...old, [key]: value }));
+  const setOption = (key, value) => {
+    setOptions(old => ({ ...old, [key]: value }));
+    if (Object.hasOwn(deviceKinds, key)) saveMeetingPreferences({ [key]: value });
+  };
   const readDevices = () => navigator.mediaDevices?.enumerateDevices().then(setDevices).catch(() => {});
   useEffect(() => {
     readDevices();
+    navigator.mediaDevices?.addEventListener('devicechange', readDevices);
     const timer = setInterval(() => setTime(Date.now()), 1000);
-    return () => clearInterval(timer);
+    return () => {
+      navigator.mediaDevices?.removeEventListener('devicechange', readDevices);
+      clearInterval(timer);
+    };
   }, []);
   useEffect(() => {
     if (!options.video) return;
@@ -57,8 +68,10 @@ function Prejoin({ meeting, host, onJoin, onBack, busy }) {
     const node = video.current;
     (async () => {
       try {
+        const camera = availableDevice(options.camera, 'videoinput', await navigator.mediaDevices.enumerateDevices());
+        if (!active) return;
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: options.camera ? { deviceId: { exact: options.camera } } : true, audio: false,
+          video: camera ? { deviceId: { exact: camera } } : true, audio: false,
         });
         if (!active) return stream.getTracks().forEach(track => track.stop());
         preview.current = stream;
@@ -103,7 +116,10 @@ function Prejoin({ meeting, host, onJoin, onBack, busy }) {
         e.preventDefault();
         if (isOver || !ready || !cleanText(name, 70)) return;
         preview.current?.getTracks().forEach(track => track.stop());
-        onJoin(cleanText(name, 70), options);
+        const selectedDevices = Object.fromEntries(Object.entries(deviceKinds).map(([key, kind]) => [
+          key, availableDevice(options[key], kind, devices),
+        ]));
+        onJoin(cleanText(name, 70), { ...options, ...selectedDevices });
       }}>
         <label className="field">Display name<input required autoComplete="name" maxLength={70}
           placeholder="Enter your name" value={name} onChange={e => setName(e.target.value)} /></label>

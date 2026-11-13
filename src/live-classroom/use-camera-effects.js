@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createCameraEffect, supportsCameraEffects } from './camera-effect.js';
 import { backgroundSettings, cameraPresentationSettings, loadCameraSettings, saveCameraSettings } from './camera-settings.js';
+import { saveMeetingPreferences } from './preferences.js';
 
-export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
-  const [choice, setChoice] = useState(null);
+export function useCameraEffects({ callRef, notify, nativeSupported, sync, initialChoice }) {
+  const [choice, setChoice] = useState(initialChoice);
   const [settings, setSettings] = useState(loadCameraSettings);
   const [supported] = useState(supportsCameraEffects);
   const [basic, setBasic] = useState(false);
@@ -100,6 +101,7 @@ export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
     }
     if (!applied || callRef.current !== call) return false;
     setChoice(nextChoice);
+    saveMeetingPreferences({ background: nextChoice?.id ?? '' });
     return true;
   }
 

@@ -26,6 +26,20 @@ export function editSceneLayer(scene, id, patch) {
   return { ...scene, layers: { ...scene.layers, [id]: layer } };
 }
 
+export function restorePresenterScene(saved) {
+  const ids = initialScene.order;
+  const order = saved?.order;
+  if (!Array.isArray(order) || order.length !== ids.length || !ids.every(id => order.includes(id))) return initialScene;
+  return ids.reduce((scene, id) => {
+    const layer = saved.layers?.[id];
+    if (!layer || !['x', 'y', 'size'].every(field => Number.isFinite(layer[field]))) return scene;
+    return editSceneLayer(scene, id, {
+      x: layer.x, y: layer.y, size: layer.size, visible: layer.visible !== false,
+      ...(id === 'camera' ? { mirror: layer.mirror === true, cutout: layer.cutout !== false } : {}),
+    });
+  }, { ...initialScene, order });
+}
+
 export function moveSceneLayer(scene, id, direction) {
   const order = [...scene.order];
   const index = order.indexOf(id);

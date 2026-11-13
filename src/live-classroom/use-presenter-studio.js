@@ -1,48 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPresenterMixer, supportsPresenterStudio } from './presenter-mixer.js';
-import { editSceneLayer, initialScene } from './presenter-scene.js';
-
-function publishScreen(call, stream, signal) {
-  return new Promise((resolve, reject) => {
-    const output = stream.getVideoTracks()[0];
-    function finish(error) {
-      clearTimeout(timeout);
-      call.off('local-screen-share-started', started);
-      call.off('participant-updated', started);
-      call.off('local-screen-share-canceled', failed);
-      call.off('screen-share-error', failed);
-      signal.removeEventListener('abort', aborted);
-      if (error) reject(error);
-      else resolve();
-    }
-    function started() {
-      const track = call.participants().local?.tracks?.screenVideo;
-      if ((track?.persistentTrack ?? track?.track)?.id === output.id) finish();
-    }
-    function failed() { finish(new Error('The layered presentation could not be shared.')); }
-    function aborted() { finish(signal.reason); }
-    const timeout = setTimeout(failed, 10000);
-    call.on('local-screen-share-started', started);
-    call.on('participant-updated', started);
-    call.on('local-screen-share-canceled', failed);
-    call.on('screen-share-error', failed);
-    signal.addEventListener('abort', aborted, { once: true });
-    try {
-      signal.throwIfAborted();
-      call.startScreenShare({ mediaStream: stream, screenVideoSendSettings: 'motion-and-detail-balanced' });
-      started();
-    } catch (error) { finish(error); }
-  });
-}
+import { editSceneLayer, restorePresenterScene } from './presenter-scene.js';
+import { publishPresentation, screenTrack } from './presentation-stream.js';
+import { loadStudioScene, saveMeetingPreferences } from './preferences.js';
+import { loadStudioBackground, saveStudioBackground } from './studio-background.js';
 
 export function usePresenterStudio({ call, camera, cameraSettings, sync, notify }) {
   const [supported] = useState(supportsPresenterStudio);
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
-  const [scene, setScene] = useState(initialScene);
+  const [scene, setScene] = useState(() => restorePresenterScene(loadStudioScene()));
   const [slidesReady, setSlidesReady] = useState(false);
   const [picking, setPicking] = useState(false);
   const [background, setBackground] = useState(null);
+  const [restoringBackground, setRestoringBackground] = useState(false);
   const [error, setError] = useState('');
   const mixer = useRef(null);
   const editorOpen = useRef(false);
@@ -51,14 +22,14 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
   const output = useRef(null);
   const capture = useRef(null);
   const loadingImage = useRef(null);
+  const backgroundSource = useRef(null);
   const stoppedSharing = useRef(null);
 
   const stopOutput = useCallback((stopShare = false) => {
     const session = output.current;
     output.current = null;
     const call = session?.call;
-    const screen = call?.participants().local?.tracks?.screenVideo;
-    const ownsShare = session?.track && session.track.id === (screen?.persistentTrack ?? screen?.track)?.id;
+    const ownsShare = session?.track && session.track.id === screenTrack(call)?.id;
     if (stopShare && ownsShare && !call.isDestroyed()) {
       try { call.stopScreenShare(); } catch {}
     }
@@ -81,6 +52,8 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
     setPicking(false);
     setSlidesReady(false);
     setBackground(null);
+    setRestoringBackground(false);
+    backgroundSource.current = null;
   }, []);
 
   function releaseIfClosed() {
@@ -116,6 +89,7 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
       editorOpen.current = true;
       setError('');
       setOpen(true);
+      if (backgroundSource.current === null && !loadingImage.current) restoreBackground();
     } catch {
       notify('Presenter Studio could not open. Try again in Chrome or Edge.');
     }
@@ -134,7 +108,10 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
 
   const { coverage, backdropColor } = cameraSettings;
   useEffect(() => { mixer.current?.setSettings({ coverage, backdropColor }); }, [coverage, backdropColor]);
-  useEffect(() => { mixer.current?.setScene(scene); }, [scene]);
+  useEffect(() => {
+    mixer.current?.setScene(scene);
+    saveMeetingPreferences({ scene });
+  }, [scene]);
 
   function detachSlides() {
     source.current?.stop();
@@ -179,28 +156,52 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
     }
   }
 
+  async function restoreBackground() {
+    const operation = new AbortController();
+    loadingImage.current = operation;
+    setRestoringBackground(true);
+    try {
+      const file = await loadStudioBackground();
+      if (!operation.signal.aborted) await applyBackground(file, operation);
+    } catch {}
+    finally {
+      if (loadingImage.current === operation) {
+        loadingImage.current = null;
+        setRestoringBackground(false);
+      }
+    }
+  }
+
+  async function applyBackground(file, operation) {
+    let image = file ? await createImageBitmap(file) : null;
+    if (image && Math.max(image.width, image.height) > 1920) {
+      const original = image;
+      const scale = 1920 / Math.max(original.width, original.height);
+      try {
+        image = await createImageBitmap(original, {
+          resizeWidth: Math.max(1, Math.round(original.width * scale)),
+          resizeHeight: Math.max(1, Math.round(original.height * scale)),
+        });
+      } finally { original.close(); }
+    }
+    if (operation.signal.aborted || !mixer.current) { image?.close(); return false; }
+    mixer.current.setBackground(image);
+    backgroundSource.current = file ?? false;
+    setBackground(file?.name ?? null);
+    return true;
+  }
+
   async function chooseBackground(file) {
     loadingImage.current?.abort();
     const operation = new AbortController();
     loadingImage.current = operation;
+    setRestoringBackground(false);
     setError('');
     try {
-      let image = file ? await createImageBitmap(file) : null;
-      if (operation.signal.aborted || !mixer.current) { image?.close(); return; }
-      if (image && Math.max(image.width, image.height) > 1920) {
-        const original = image;
-        const scale = 1920 / Math.max(original.width, original.height);
-        try {
-          image = await createImageBitmap(original, {
-            resizeWidth: Math.max(1, Math.round(original.width * scale)),
-            resizeHeight: Math.max(1, Math.round(original.height * scale)),
-          });
-        } finally { original.close(); }
-      }
-      if (operation.signal.aborted || !mixer.current) { image?.close(); return; }
-      mixer.current.setBackground(image);
-      setBackground(file?.name ?? null);
+      if (!(await applyBackground(file, operation))) return;
       if (file) setScene(previous => editSceneLayer(previous, 'background', { visible: true }));
+      try { await saveStudioBackground(file); }
+      catch { if (!operation.signal.aborted) setError('This image is available now. Browser storage could not save the change.'); }
     } catch {
       if (!operation.signal.aborted) setError('Could not open that image. Choose a JPG, PNG, or WebP file.');
     } finally {
@@ -239,7 +240,7 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
       call.on('local-screen-share-stopped', ended);
       const stream = mixer.current.startOutput();
       session.track = stream.getVideoTracks()[0];
-      await publishScreen(call, stream, session.signal);
+      await publishPresentation(call, stream, session.signal);
       session.signal.throwIfAborted();
       setStatus('live');
       editorOpen.current = false;
@@ -261,7 +262,7 @@ export function usePresenterStudio({ call, camera, cameraSettings, sync, notify 
 
   return {
     supported, open, openEditor, closeEditor, status, error, scene, setScene, attachPreview,
-    slidesReady, picking, chooseSlides, detachSlides, background, chooseBackground,
+    slidesReady, picking, chooseSlides, detachSlides, background, restoringBackground, chooseBackground,
     start, stop,
   };
 }
