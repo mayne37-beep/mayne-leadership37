@@ -1,6 +1,6 @@
 import { validBackdropColor } from './camera-settings.js';
 
-const workerUrl = '/assets/live-classroom-portrait.js?v=5';
+const workerUrl = '/assets/live-classroom-portrait.js?v=6';
 
 export function createPortraitProcessor(backdropColor) {
   const worker = new Worker(validBackdropColor(backdropColor) ? workerUrl + '&mode=solid' : workerUrl);

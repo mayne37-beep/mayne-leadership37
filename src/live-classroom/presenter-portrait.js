@@ -1,7 +1,7 @@
 import { FilesetResolver, ImageSegmenter } from '@mediapipe/tasks-vision';
 import { blurOption, coverageOption, validBackdropColor } from './camera-settings.js';
 import { writeBackdropMask } from './backdrop-mask.js';
-import { writePortraitMask } from './portrait-mask.js';
+import { minimumPortraitCoverage, portraitCoverage, writePortraitMask } from './portrait-mask.js';
 import { createPortraitEdgeRefiner } from './portrait-edges.js';
 
 const base = self.location.origin + '/assets/live-classroom-vision';
@@ -17,7 +17,16 @@ const motionCanvas = new OffscreenCanvas(1, 1);
 const motionContext = motionCanvas.getContext('2d', { alpha: false, willReadFrequently: true });
 const composite = new OffscreenCanvas(1, 1);
 const compositeContext = composite.getContext('2d');
-let segmenter;
+const landscape = 'person-landscape.tflite';
+const square = 'person.tflite?v=2';
+const retryIntervalMs = 240;
+let wasm;
+const segmenters = new Map();
+let model = landscape;
+let lastRetry = -Infinity;
+let lastDetectedAt = -Infinity;
+let detectedArea = 0;
+let automaticAspect = 0;
 let maskImage;
 let maskHistory;
 let previousGuide;
@@ -28,20 +37,32 @@ let background;
 let backdropCanvas;
 let backdropContext;
 
-async function loadSegmenter() {
-  const wasm = await FilesetResolver.forVisionTasks(base);
-  return ImageSegmenter.createFromOptions(wasm, {
-    baseOptions: { modelAssetPath: base + '/person.tflite?v=2' },
+function segmenterFor(asset) {
+  if (segmenters.has(asset)) return segmenters.get(asset);
+  wasm ??= FilesetResolver.forVisionTasks(base);
+  const loading = wasm.then(files => ImageSegmenter.createFromOptions(files, {
+    baseOptions: { modelAssetPath: base + '/' + asset },
     canvas: new OffscreenCanvas(1, 1),
     runningMode: 'VIDEO',
     outputConfidenceMasks: true,
     outputCategoryMask: false,
-  });
+  }));
+  segmenters.set(asset, loading);
+  return loading;
 }
 
 async function start() {
-  if (new URL(self.location.href).searchParams.get('mode') !== 'solid') segmenter = await loadSegmenter();
+  if (new URL(self.location.href).searchParams.get('mode') !== 'solid') {
+    await segmenterFor(landscape).catch(() => {});
+  }
   self.postMessage({ ready: true });
+}
+
+function resetAutomaticHistory() {
+  previousTimestamp = -Infinity;
+  previousGuide = null;
+  lastDetectedAt = -Infinity;
+  lastRetry = -Infinity;
 }
 
 function drawPortrait(bitmap, alpha, settings) {
@@ -58,7 +79,7 @@ function drawPortrait(bitmap, alpha, settings) {
   self.postMessage({ bitmap: result }, [result]);
 }
 
-function drawAutomaticPortrait(bitmap, mask, settings) {
+function drawAutomaticPortrait(bitmap, mask, confidence, settings, timestamp) {
   if (!maskImage || maskImage.width !== mask.width || maskImage.height !== mask.height) {
     maskImage = maskContext.createImageData(mask.width, mask.height);
     maskHistory = new Float32Array(mask.width * mask.height);
@@ -70,8 +91,7 @@ function drawAutomaticPortrait(bitmap, mask, settings) {
   }
   motionContext.drawImage(inference, 0, 0, mask.width, mask.height);
   const guide = motionContext.getImageData(0, 0, mask.width, mask.height).data;
-  const timestamp = settings.timestamp ?? performance.now();
-  writePortraitMask(mask.getAsFloat32Array(), maskHistory, maskImage, timestamp - previousTimestamp,
+  writePortraitMask(confidence, maskHistory, maskImage, timestamp - previousTimestamp,
     coverageOption(settings.coverage).threshold, guide, previousGuide);
   previousTimestamp = timestamp;
   previousGuide = guide;
@@ -107,22 +127,33 @@ function drawSolidBackdropPortrait(bitmap, settings) {
   const pixels = backdropContext.getImageData(0, 0, width, height);
   writeBackdropMask(pixels.data, settings.backdropColor, coverageOption(settings.coverage).threshold);
   backdropContext.putImageData(pixels, 0, 0);
-  previousTimestamp = -Infinity;
-  previousGuide = null;
+  if (automaticAspect) {
+    automaticAspect = 0;
+    resetAutomaticHistory();
+  }
   drawPortrait(bitmap, backdropCanvas, settings);
 }
 
-function drawBackground(bitmap, settings) {
-  const { width, height } = bitmap;
+function sizeComposite(width, height) {
   if (composite.width !== width || composite.height !== height) {
     composite.width = width;
     composite.height = height;
   }
+}
+
+function drawBlur(bitmap, blur) {
+  const { width, height } = bitmap;
+  const radius = blurOption(blur).radius * width / 960;
+  compositeContext.filter = 'blur(' + radius + 'px)';
+  compositeContext.drawImage(bitmap, -radius * 2, -radius * 2, width + radius * 4, height + radius * 4);
+  compositeContext.filter = 'none';
+}
+
+function drawBackground(bitmap, settings) {
+  const { width, height } = bitmap;
+  sizeComposite(width, height);
   if (settings.effect === 'blur') {
-    const radius = blurOption(settings.blur).radius * width / 960;
-    compositeContext.filter = 'blur(' + radius + 'px)';
-    compositeContext.drawImage(bitmap, -radius * 2, -radius * 2, width + radius * 4, height + radius * 4);
-    compositeContext.filter = 'none';
+    drawBlur(bitmap, settings.blur);
   } else {
     const scale = Math.max(width / background.width, height / background.height);
     const imageWidth = background.width * scale;
@@ -131,6 +162,68 @@ function drawBackground(bitmap, settings) {
   }
   compositeContext.drawImage(portrait, 0, 0);
   return composite.transferToImageBitmap();
+}
+
+function tryAutomaticPortrait(segmenter, bitmap, settings, timestamp, minimum) {
+  let found = false;
+  segmenter.segmentForVideo(inference, performance.now(), ({ confidenceMasks }) => {
+    const mask = confidenceMasks?.at(-1);
+    const confidence = mask?.getAsFloat32Array();
+    if (!confidence) return;
+    const area = portraitCoverage(confidence);
+    if (area < minimum) return;
+    const elapsed = timestamp - lastDetectedAt;
+    detectedArea = elapsed >= 0 && elapsed < 750 ? detectedArea * 0.8 + area * 0.2 : area;
+    lastDetectedAt = timestamp;
+    drawAutomaticPortrait(bitmap, mask, confidence, settings, timestamp);
+    found = true;
+  });
+  return found;
+}
+
+async function drawAutomatic(bitmap, settings) {
+  const scale = Math.min(1, 320 / Math.max(bitmap.width, bitmap.height));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+  const aspect = width / height;
+  if (Math.abs(automaticAspect - aspect) > 0.02) {
+    automaticAspect = aspect;
+    model = width >= height ? landscape : square;
+    resetAutomaticHistory();
+  }
+  if (inference.width !== width || inference.height !== height) {
+    inference.width = width;
+    inference.height = height;
+  }
+  inferenceContext.drawImage(bitmap, 0, 0, width, height);
+  const timestamp = settings.timestamp ?? performance.now();
+  const minimum = minimumPortraitCoverage(detectedArea, timestamp - lastDetectedAt);
+  const currentSegmenter = await segmenterFor(model).catch(() => null);
+  if (currentSegmenter && tryAutomaticPortrait(currentSegmenter, bitmap, settings, timestamp, minimum)) return;
+
+  // Try the other portrait model only when the current one loses the outline.
+  if (timestamp - lastRetry >= retryIntervalMs || timestamp < lastRetry) {
+    lastRetry = timestamp;
+    const alternative = model === landscape ? square : landscape;
+    const otherSegmenter = await segmenterFor(alternative).catch(() => null);
+    if (!currentSegmenter && !otherSegmenter) throw new Error('Camera models are unavailable.');
+    if (otherSegmenter && tryAutomaticPortrait(otherSegmenter, bitmap, settings, timestamp, minimum)) {
+      model = alternative;
+      return;
+    }
+  }
+  previousTimestamp = -Infinity;
+  previousGuide = null;
+  if (!settings.effect) {
+    self.postMessage({ bitmap: null });
+    return;
+  }
+  // Keep a live camera image with blur if a virtual background loses the subject.
+  sizeComposite(bitmap.width, bitmap.height);
+  compositeContext.drawImage(bitmap, 0, 0);
+  drawBlur(bitmap, settings.effect === 'image' ? 'strong' : settings.blur);
+  const result = composite.transferToImageBitmap();
+  self.postMessage({ bitmap: result }, [result]);
 }
 
 self.onmessage = async ({ data: { bitmap, settings = {}, background: image } }) => {
@@ -143,19 +236,7 @@ self.onmessage = async ({ data: { bitmap, settings = {}, background: image } }) 
       drawSolidBackdropPortrait(bitmap, settings);
       return;
     }
-    segmenter ??= await loadSegmenter();
-    // The model uses a small input. Keep that work separate from the full-resolution camera image.
-    const scale = Math.min(1, 320 / Math.max(bitmap.width, bitmap.height));
-    const width = Math.max(1, Math.round(bitmap.width * scale));
-    const height = Math.max(1, Math.round(bitmap.height * scale));
-    if (inference.width !== width || inference.height !== height) {
-      inference.width = width;
-      inference.height = height;
-    }
-    inferenceContext.drawImage(bitmap, 0, 0, width, height);
-    segmenter.segmentForVideo(inference, performance.now(), ({ confidenceMasks }) => {
-      drawAutomaticPortrait(bitmap, confidenceMasks.at(-1), settings);
-    });
+    await drawAutomatic(bitmap, settings);
   } catch (error) {
     console.warn('Camera effects frame processing failed.', error);
     self.postMessage({ error: true });
