@@ -2,13 +2,17 @@ function clamp(value) {
   return Math.min(1, Math.max(0, value));
 }
 
-export function writePortraitMask(confidence, history, image, elapsed, threshold) {
+export function writePortraitMask(confidence, history, image, elapsed, threshold, motionImage, previousMotionImage) {
   const { data, width, height } = image;
   // Blend small changes across frames. A strong change follows motion without a lingering outline.
-  const blend = elapsed > 180 || elapsed <= 0 ? 1 : 1 - Math.exp(-elapsed / 85);
+  const blend = elapsed > 180 || elapsed <= 0 ? 1 : 1 - Math.exp(-elapsed / 140);
   for (let i = 0; i < confidence.length; i++) {
     const change = confidence[i] - history[i];
-    const motion = clamp((Math.abs(change) - 0.22) / 0.46);
+    const pixel = i * 4;
+    const colorChange = motionImage && previousMotionImage ? Math.abs(motionImage[pixel] - previousMotionImage[pixel]) +
+      Math.abs(motionImage[pixel + 1] - previousMotionImage[pixel + 1]) +
+      Math.abs(motionImage[pixel + 2] - previousMotionImage[pixel + 2]) : 0;
+    const motion = Math.max(clamp((Math.abs(change) - 0.24) / 0.52), clamp((colorChange - 48) / 120));
     history[i] += change * (blend + (1 - blend) * motion);
   }
 

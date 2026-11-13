@@ -1,4 +1,4 @@
-const workerUrl = '/assets/live-classroom-portrait.js?v=3';
+const workerUrl = '/assets/live-classroom-portrait.js?v=4';
 
 export function createPortraitProcessor() {
   const worker = new Worker(workerUrl);
