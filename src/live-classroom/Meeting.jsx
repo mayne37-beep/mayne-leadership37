@@ -10,12 +10,15 @@ import { PresenterStudio } from './PresenterStudio.jsx';
 import { usePresenterStudio } from './use-presenter-studio.js';
 import { backgroundSettings, blurOptions, cameraPresentationSettings, coverageOptions, sampleBackdropColor } from './camera-settings.js';
 import { useCameraEffects } from './use-camera-effects.js';
-import { QuickPolls } from './QuickPolls.jsx';
-import { emptyPollDraft } from './quick-poll.js';
+import { PollResults, QuickPolls } from './QuickPolls.jsx';
+import { emptyPollDraft, readSharedPoll } from './quick-poll.js';
 import { useQuickPoll } from './use-quick-poll.js';
+import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, participantCanSend, participantRole } from './meeting-roles.js';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
+const POLL_CHAT_HISTORY = 10;
+const EMPTY_CHAT = [];
 const palettes = ['lavender', 'blue', 'rose', 'green', 'gold'];
 
 function initials(name) {
@@ -76,7 +79,7 @@ function Tile({ person, active, screen = false, hidden = false, focused = false,
     {track ? <Track track={track} share={screen} mirror={!screen && person.local} label={label} /> : <Avatar name={name} />}
     <span className="tile-label">{screen ? name + ' is sharing' : label}
       {!screen && !person.audio && <Icon name="mic" off size={14} />}</span>
-    {person.userData?.raised && <span className="hand-badge" title="Hand raised" aria-label="Hand raised">✋</span>}
+    {person.userData?.raised && canParticipate(person) && <span className="hand-badge" title="Hand raised" aria-label="Hand raised">✋</span>}
     {!screen && onPin && <button type="button" className="tile-pin" aria-pressed={focused}
       aria-label={focused ? 'Unpin ' + name : 'Pin ' + name} onClick={onPin}><Icon name="pin" size={16} /></button>}
   </article>;
@@ -125,7 +128,7 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   </div>;
 }
 
-function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSpotlight, spotlight }) {
+function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSpotlight, spotlight, setRole, busy }) {
   const [query, setQuery] = useState('');
   const shown = state.participants.filter(person => participantName(person).toLowerCase().includes(query.trim().toLowerCase()));
   return <>
@@ -133,6 +136,7 @@ function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSp
       {host && <button className="btn secondary" type="button" onClick={onInvite}><Icon name="link" size={16} /> Meeting link</button>}
       <label className="field sr-field">Find a participant<input placeholder="Find a participant" value={query}
         onChange={e => setQuery(e.target.value)} /></label>
+      {host && <p className="subtle">Role assignments apply while a participant is connected to this room.</p>}
     </div>
     {host && state.waiting.length > 0 && <section className="roster-group">
       <header><h3>In the lobby ({state.waiting.length})</h3>
@@ -148,16 +152,24 @@ function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSp
     </section>}
     <section className="roster-group">
       <header><h3>In the meeting ({state.participants.length})</h3>
-        {host && shown.some(p => !p.local && p.audio) &&
+        {host && shown.some(p => !p.owner && p.audio) &&
           <button className="text-button" type="button" onClick={() => moderate('mute-all')}>Mute all</button>}</header>
       {shown.length === 0 && <p className="subtle">No matching participants.</p>}
       <ul>{shown.map(person => {
         const id = person.session_id;
         const name = participantName(person);
+        const role = participantRole(person);
+        const manage = host && !person.local && !person.owner;
+        const raised = person.userData?.raised && canParticipate(person);
         return <li key={id}>
           <Avatar name={name} />
-          <div className="person-name"><strong>{name}{person.local ? ' (you)' : ''}</strong>{person.owner && <small>Organizer</small>}</div>
-          {person.userData?.raised && <span title="Hand raised" aria-label="Hand raised">✋</span>}
+          <div className="person-name"><strong>{name}{person.local ? ' (you)' : ''}</strong>
+            {manage ? <select className="person-role" aria-label={'Role for ' + name} value={role} disabled={busy}
+              onChange={event => setRole(id, event.target.value)}>
+              {assignableRoles.map(option => <option key={option} value={option}>{meetingRoles[option].label}</option>)}
+            </select> : <small>{meetingRoles[role].label}</small>}
+          </div>
+          {raised && <span title="Hand raised" aria-label="Hand raised">✋</span>}
           <Icon name="mic" size={16} off={!person.audio} />
           <details className="person-options">
             <summary aria-label={'Actions for ' + name}><Icon name="more" size={18} /></summary>
@@ -165,9 +177,9 @@ function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSp
               <MenuItem icon="pin" onClick={() => setPin(pin === id ? '' : id)}>{pin === id ? 'Unpin' : 'Pin for me'}</MenuItem>
               {host && <MenuItem icon="view" onClick={() => setSpotlight(spotlight === id ? '' : id)}>
                 {spotlight === id ? 'Remove spotlight' : 'Spotlight for everyone'}</MenuItem>}
-              {host && !person.local && <>
+              {manage && <>
                 <MenuItem icon="mic" onClick={() => moderate('mute', id)}>Mute</MenuItem>
-                {person.userData?.raised && <MenuItem icon="hand" onClick={() => lowerHand(id)}>Lower hand</MenuItem>}
+                {raised && <MenuItem icon="hand" onClick={() => lowerHand(id)}>Lower hand</MenuItem>}
                 {person.screen && <MenuItem icon="share" onClick={() => moderate('stop-share', id)}>Stop sharing</MenuItem>}
                 <MenuItem icon="close" danger onClick={() => moderate('remove', id)}>Remove from meeting</MenuItem>
               </>}
@@ -179,31 +191,39 @@ function People({ state, host, moderate, onInvite, lowerHand, setPin, pin, setSp
   </>;
 }
 
-function Chat({ items, send }) {
+function Chat({ items, send, canWrite }) {
   const [text, setText] = useState('');
   const log = useRef(null);
-  useEffect(() => { log.current.scrollTop = log.current.scrollHeight; }, [items.length]);
+  useEffect(() => { log.current.scrollTop = log.current.scrollHeight; }, [items]);
   return <>
     <div className="chat-log" role="log" aria-label="Meeting messages" ref={log}>
       {items.length === 0 && <div className="chat-empty"><Icon name="chat" size={30} /><p>Messages sent during this meeting will appear here.</p></div>}
-      {items.map(item => <div key={item.id} className={item.own ? 'message own' : 'message'}>
-        <small>{item.own ? 'You' : item.name} <time dateTime={new Date(item.time).toISOString()}>
-          {new Date(item.time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time></small>
-        <p>{item.text}</p>
-      </div>)}
+      {items.map(item => {
+        const time = new Date(item.time);
+        const byline = <small>{item.own ? 'You' : item.name} <time dateTime={time.toISOString()}>
+          {time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time></small>;
+        return item.poll ? <article className="chat-poll" key={item.id}>
+          <div className="chat-poll-label"><Icon name="poll" size={16} /> Poll results</div>
+          {byline}
+          <PollResults poll={item.poll} results={item.poll.results} title={item.poll.question} announce={false} />
+        </article> : <div key={item.id} className={item.own ? 'message own' : 'message'}>
+          {byline}
+          <p>{item.text}</p>
+        </div>;
+      })}
     </div>
-    <form className="chat-form" onSubmit={event => {
+    {canWrite ? <form className="chat-form" onSubmit={event => {
       event.preventDefault();
       if (send(text)) setText('');
     }}>
       <input aria-label="Message" value={text} onChange={e => setText(e.target.value)}
         placeholder="Type a message" maxLength={1500} required />
       <button className="icon-button" type="submit" aria-label="Send message" title="Send message" disabled={!text.trim()}><Icon name="send" /></button>
-    </form>
+    </form> : <p className="chat-form subtle">Observers can read meeting chat.</p>}
   </>;
 }
 
-function DeviceSettings({ preferences, setDevice, children }) {
+function DeviceSettings({ preferences, setDevice, canCamera, canMic, children }) {
   const [devices, setDevices] = useState([]);
   useEffect(() => {
     const update = () => navigator.mediaDevices?.enumerateDevices().then(setDevices).catch(() => {});
@@ -212,8 +232,8 @@ function DeviceSettings({ preferences, setDevice, children }) {
     return () => navigator.mediaDevices?.removeEventListener('devicechange', update);
   }, []);
   return <div className="side-content stack">
-    <DeviceSelect title="Camera" devices={devices} kind="videoinput" value={preferences.camera} onChange={v => setDevice('camera', v)} />
-    <DeviceSelect title="Microphone" devices={devices} kind="audioinput" value={preferences.microphone} onChange={v => setDevice('microphone', v)} />
+    {canCamera && <DeviceSelect title="Camera" devices={devices} kind="videoinput" value={preferences.camera} onChange={v => setDevice('camera', v)} />}
+    {canMic && <DeviceSelect title="Microphone" devices={devices} kind="audioinput" value={preferences.microphone} onChange={v => setDevice('microphone', v)} />}
     {typeof HTMLMediaElement.prototype.setSinkId === 'function' &&
       <DeviceSelect title="Speaker" devices={devices} kind="audiooutput" value={preferences.speaker} onChange={v => setDevice('speaker', v)} />}
     {children}
@@ -389,7 +409,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const returnToken = useRef('');
   const closing = useRef(false);
   const leaving = useRef(false);
+  const chatHistory = useRef({});
   const chatLastSent = useRef(0);
+  const stateRequests = useRef({ call: null, participants: new Set() });
+  const previousRole = useRef(null);
   const studioMessage = useRef(null);
   const soundBlocked = useRef(() => setAudioBlocked(true)).current;
   const cameraFailure = useRef(null);
@@ -406,18 +429,25 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   });
   const call = () => ref.current;
   const currentRoom = target.url;
-  const activeCall = state.phase === 'connected';
+  const activeCall = state.phase === 'connected' && state.room === currentRoom;
   const activeInstance = activeCall ? call() : null;
-  const pollOrganizer = host && state.participants.some(person => person.local && person.owner);
+  const local = state.participants.find(person => person.local);
+  const remoteOrganizer = state.participants.find(person => !person.local && person.owner)?.session_id;
+  const localRole = participantRole(local);
+  const organizer = host && Boolean(local?.owner);
+  const canInteract = canParticipate(local);
+  const canCamera = participantCanSend(local, 'video');
+  const canMic = participantCanSend(local, 'audio');
+  const canPresent = participantCanSend(local, 'screenVideo');
   const quick = useQuickPoll({
-    callRef: ref, call: activeInstance, organizer: pollOrganizer, participants: state.participants,
-    localPoll: state.localData.quickPoll, sync: updateLocalData, send,
+    callRef: ref, call: activeInstance, organizer, participants: state.participants,
+    localPoll: state.localData.quickPoll, sync: updateLocalData, send, onShared: publishPollChat,
   });
-  const sharedPollId = !pollOrganizer && quick.poll?.results ? quick.poll.id : '';
+  const sharedPollId = !organizer && quick.poll?.results ? quick.poll.id : '';
   const cameraEffects = useCameraEffects({ callRef: ref, notify: setNotice, nativeSupported: state.videoEffects,
     sync: updateLocalData });
   cameraFailure.current = cameraEffects.onDailyError;
-  const localCamera = playable(state.participants.find(person => person.local), 'video');
+  const localCamera = playable(local, 'video');
   const studio = usePresenterStudio({
     call: activeInstance,
     camera: state.video ? cameraEffects.rawCamera ?? localCamera : null,
@@ -456,11 +486,43 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   useEffect(() => {
     if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
     restoreCamera.current = false;
-    adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera));
-  }, [activeInstance, busy]);
+    if (canCamera) adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera));
+  }, [activeInstance, busy, canCamera]);
   useEffect(() => {
-    if (panel === 'polls' && sharedPollId) setSeenPollResults(sharedPollId);
+    const previous = previousRole.current;
+    previousRole.current = { call: activeInstance, role: localRole };
+    if (!activeInstance || activeInstance !== call() || previous?.call !== activeInstance || previous.role === localRole) return;
+    setNotice('Your role is now ' + meetingRoles[localRole].label + '.');
+    if (!canPresent) {
+      if (studio.status === 'idle' && state.sharing) {
+        try { activeInstance.stopScreenShare(); } catch {}
+      }
+      if (studio.open || studio.status !== 'idle') {
+        studio.stop();
+        studio.closeEditor();
+      }
+      setMenu(value => ['share', 'presenter'].includes(value) ? '' : value);
+    }
+    if (!canInteract) {
+      setMenu(value => value === 'react' ? '' : value);
+      setPanel(value => value === 'activity' ? '' : value);
+      if (state.localData.raised) updateLocalData({ raised: false }, activeInstance).catch(() => {});
+    }
+    if (!canCamera) {
+      cameraEffects.setVideo(activeInstance, false, preferences.camera).catch(cameraEffects.stop);
+    }
+    if (!canMic) {
+      try { activeInstance.setLocalAudio(false, { forceDiscardTrack: true }); } catch {}
+    }
+  }, [activeInstance, localRole]);
+  useEffect(() => {
+    if ((panel === 'polls' || panel === 'chat') && sharedPollId) setSeenPollResults(sharedPollId);
   }, [panel, sharedPollId]);
+  useEffect(() => {
+    if (!sharedPollId || !activeInstance || activeInstance !== call()) return;
+    const sender = activeInstance.participants()[quick.publisher];
+    if (sender?.owner) appendPollChat(currentRoom, quick.poll, sender);
+  }, [activeInstance, currentRoom, quick.poll, quick.publisher, sharedPollId]);
   useEffect(() => {
     if (state.phase === 'left' || state.phase === 'error') cameraEffects.stop();
   }, [state.phase, cameraEffects.stop]);
@@ -472,9 +534,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     if (state.phase === 'connected') mediaIntent.current = { audio: state.audio, video: state.video };
   }, [state.phase, state.audio, state.video]);
   useEffect(() => {
-    if (state.phase !== 'connected') return;
-    if (!host && !target.label) send('request-state');
-  }, [state.phase, target]);
+    if (!host && activeInstance && remoteOrganizer) send('request-state', {}, '*', activeInstance);
+  }, [activeInstance, host, remoteOrganizer]);
   useEffect(() => {
     if (!studioConnection) return;
     const channel = new BroadcastChannel('mayne-response-studio:' + studioConnection);
@@ -522,16 +583,33 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   function send(type, fields = {}, recipient = '*', expectedCall) {
     const instance = call();
     if (instance?.meetingState() !== 'joined-meeting' || (expectedCall && instance !== expectedCall)) return false;
+    if (['chat', 'reaction'].includes(type) && !canParticipate(instance.participants().local)) return false;
     instance.sendAppMessage({ app: APP_MESSAGE, type, ...fields }, recipient);
     return true;
   }
 
   function appendMessage(room, item) {
-    setChat(prev => {
-      const items = prev[room] || [];
-      if (items.some(row => row.id === item.id)) return prev;
-      return { ...prev, [room]: [...items.slice(-199), item] };
+    const items = chatHistory.current[room] ?? [];
+    if (items.some(row => row.id === item.id)) return;
+    const next = [...items, item].sort((a, b) => a.time - b.time).slice(-200);
+    if (!next.includes(item)) return;
+    chatHistory.current = { ...chatHistory.current, [room]: next };
+    setChat(chatHistory.current);
+    if (panel !== 'chat') setUnread(n => Math.min(99, n + 1));
+  }
+
+  function appendPollChat(room, poll, sender) {
+    appendMessage(room, {
+      id: 'poll:' + poll.id, poll, time: poll.sharedAt ?? Date.now(),
+      name: participantName(sender), own: sender.local,
     });
+  }
+
+  function publishPollChat(poll, instance) {
+    const sender = instance.participants().local;
+    if (!sender?.owner) return;
+    appendPollChat(currentRoom, poll, sender);
+    try { send('poll-chat', { poll }, '*', instance); } catch {} // Guests can also read the shared poll from the roster.
   }
 
   function react(emoji, sender) {
@@ -548,18 +626,29 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       quick.receive(message, sender);
       return;
     }
-    if (message.type === 'chat') {
+    if (message.type === 'chat' && canParticipate(sender)) {
       const text = cleanText(message.text, 1500);
       if (!text || !/^[a-f0-9]{32}$/.test(message.id ?? '')) return;
       appendMessage(room.url, { id: event.fromId + ':' + message.id, name: participantName(sender), text, time: Date.now() });
-      if (panel !== 'chat') setUnread(n => Math.min(99, n + 1));
     }
-    if (message.type === 'reaction' && reactions.some(([emoji]) => emoji === message.emoji)) react(message.emoji, participantName(sender));
-    if (message.type === 'request-state' && host && !room.label) {
-      if (activity) send('activity', { url: activity }, event.fromId);
+    if (message.type === 'reaction' && canParticipate(sender) && reactions.some(([emoji]) => emoji === message.emoji)) {
+      react(message.emoji, participantName(sender));
+    }
+    if (message.type === 'request-state' && host && participants.local?.owner && !sender.local) {
+      if (stateRequests.current.call !== call()) stateRequests.current = { call: call(), participants: new Set() };
+      if (stateRequests.current.participants.has(event.fromId)) return;
+      stateRequests.current.participants.add(event.fromId);
+      if (activity && !room.label) send('activity', { url: activity }, event.fromId);
       if (spotlight) send('spotlight', { id: spotlight }, event.fromId);
+      const recent = (chatHistory.current[room.url] ?? []).filter(item => item.own && item.poll).slice(-POLL_CHAT_HISTORY);
+      for (const item of recent) send('poll-chat', { poll: item.poll }, event.fromId);
     }
     if (!sender.owner) return;
+    if (message.type === 'poll-chat') {
+      const poll = readSharedPoll(message.poll);
+      if (poll?.results) appendPollChat(room.url, poll, sender);
+      return;
+    }
     if (message.type === 'spotlight' && typeof message.id === 'string') {
       setSpotlight(message.id.slice(0, 128));
     }
@@ -568,7 +657,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       const url = activityPath(message.url, location.origin);
       if (message.url && !url) return;
       setActivity(url);
-      if (url && !host) setPanel('activity');
+      if (url && !host && canParticipate(participants.local)) setPanel('activity');
     }
     if (message.type === 'breakout' && !host && !room.label) {
       try {
@@ -600,6 +689,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   }
 
   function moderate(action, id) {
+    if (!organizer || state.participants.some(person => person.owner && person.session_id === id)) return;
     if (action === 'remove') {
       const person = state.participants.find(p => p.session_id === id);
       setConfirmation({ title: 'Remove ' + participantName(person) + '?', label: 'Remove', run: () => call().updateParticipant(id, { eject: true }) });
@@ -611,12 +701,20 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       } else if (action === 'admit-all') {
         await call().updateWaitingParticipants(Object.fromEntries(state.waiting.map(person => [person.id, { grantRequestedAccess: true }])));
       } else if (action === 'mute-all') {
-        call().updateParticipants(Object.fromEntries(state.participants.filter(person => !person.local)
+        call().updateParticipants(Object.fromEntries(state.participants.filter(person => !person.owner)
           .map(person => [person.session_id, { setAudio: false }])));
       } else {
         call().updateParticipant(id, action === 'mute' ? { setAudio: false } : { setScreenShare: false });
       }
     });
+  }
+
+  async function setRole(id, role) {
+    const instance = call();
+    if (!organizer || instance?.meetingState() !== 'joined-meeting') return;
+    const updated = await perform(() => changeParticipantRole(instance, id, role));
+    const person = instance === call() && instance.participants()[id];
+    if (updated && person) setNotice(participantName(person) + ' is now ' + meetingRoles[role].label + '.');
   }
 
   function publish(value) {
@@ -625,7 +723,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       setNotice('Enter a six- or seven-digit Response Studio code or a student link from Response Studio or Collaboration Canvas.');
       return false;
     }
-    if (!host || target.label || !activeCall || leaving.current || closing.current) {
+    if (!organizer || target.label || !activeCall || leaving.current || closing.current) {
       setNotice('Share activities from the main meeting while it is connected.');
       return false;
     }
@@ -658,13 +756,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       return;
     }
     perform(async () => {
+      if (key === 'microphone' && !participantCanSend(call()?.participants().local, 'audio')) return;
       if (key === 'microphone') await call().setInputDevicesAsync({ audioDeviceId: value || null });
       setPreferences(old => ({ ...old, [key]: value }));
     });
   }
 
   async function adjustCamera(operation, allowBusy = false) {
-    if (!activeInstance || activeInstance !== call()) return false;
+    if (!activeInstance || activeInstance !== call() || !participantCanSend(activeInstance.participants().local, 'video')) return false;
     if (allowBusy && busy) {
       try { await operation(); return true; }
       catch (error) { setNotice(error?.message || 'Could not update the camera. Try again.'); return false; }
@@ -746,9 +845,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
 
   const raised = Boolean(state.localData.raised);
   const presentation = presentationOf({ userData: state.localData });
-  const canShare = Boolean(navigator.mediaDevices?.getDisplayMedia);
-  const canChooseLayout = canShare || state.sharing;
+  const canShare = canPresent && Boolean(navigator.mediaDevices?.getDisplayMedia);
   function choosePresentation(patch) {
+    if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
     setMenu('');
     perform(() => updateLocalData({ presentation: {
       layout: presentation.layout,
@@ -758,6 +857,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     } }));
   }
   function openPresenterStudio() {
+    if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
     setMenu('');
     studio.openEditor();
   }
@@ -768,8 +868,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
     polls: 'Polls', devices: 'Device settings',
   };
-  const pollWaiting = !pollOrganizer && quick.poll?.open && !quick.answered && panel !== 'polls';
-  const pollResultsWaiting = panel !== 'polls' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
+  const pollWaiting = !organizer && quick.canVote && quick.poll?.open && !quick.answered && panel !== 'polls';
+  const pollResultsWaiting = panel !== 'polls' && panel !== 'chat' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
 
   if (!activeCall) return <div className="workspace connecting">
     <section className="notice-card">
@@ -795,11 +895,13 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           {unread > 0 && <span className="badge">{unread}</span>}</Tool>
         <Tool label="People" icon="people" on={panel === 'people'} onClick={() => showPanel('people')}>
           <span className={state.waiting.length ? 'badge attention' : 'badge'}>{state.waiting.length || state.participants.length}</span></Tool>
-        <Tool label={raised ? 'Lower' : 'Raise'} icon="hand" on={raised} title={raised ? 'Lower hand' : 'Raise hand'}
-          onClick={() => perform(() => updateLocalData({ raised: !raised }))} />
+        <Tool label={raised ? 'Lower' : 'Raise'} icon="hand" on={raised} title={raised ? 'Lower hand' : 'Raise hand'} disabled={!canInteract}
+          onClick={() => {
+            if (canParticipate(call()?.participants().local)) perform(() => updateLocalData({ raised: !raised }));
+          }} />
         <div className="tool-wrap" data-menu-root>
-          <Tool label="React" icon="react" expanded={menu === 'react'} onClick={() => toggleMenu('react')} />
-          {menu === 'react' && <Popover title="Reactions"><div className="emoji-options">{reactions.map(([emoji, label]) =>
+          <Tool label="React" icon="react" expanded={menu === 'react'} disabled={!canInteract} onClick={() => toggleMenu('react')} />
+          {canInteract && menu === 'react' && <Popover title="Reactions"><div className="emoji-options">{reactions.map(([emoji, label]) =>
             <button key={label} type="button" aria-label={label} title={label} onClick={() => {
               if (send('reaction', { emoji })) react(emoji, name);
               setMenu('');
@@ -813,13 +915,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
             <MenuItem icon="people" selected={view === 'speaker' && !pin} onClick={() => { setView('speaker'); setPin(''); setMenu(''); }}>Speaker</MenuItem>
             <MenuItem icon="camera" selected={hideSelf} onClick={() => { setHideSelf(!hideSelf); setMenu(''); }}>Hide self view</MenuItem>
             <MenuItem icon="camera" selected={hideVideo} onClick={() => { setHideVideo(!hideVideo); setMenu(''); }}>Hide incoming video</MenuItem>
-            {canChooseLayout && <MenuItem icon="present-side" onClick={() => setMenu('presenter')}>Presenter layouts</MenuItem>}
+            {canPresent && (canShare || state.sharing || studio.supported) &&
+              <MenuItem icon="present-side" onClick={() => setMenu('presenter')}>Presenter layouts</MenuItem>}
             {document.fullscreenEnabled && <MenuItem icon="expand" onClick={() => {
               setMenu('');
               perform(() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
             }}>Toggle fullscreen</MenuItem>}
           </Popover>}
-          {menu === 'presenter' && <Popover title="Presenter layouts">
+          {canPresent && menu === 'presenter' && <Popover title="Presenter layouts">
             <div className="presenter-options">
               <MenuItem icon="arrow" onClick={() => setMenu('view')}>Back to views</MenuItem>
               <p className="subtle">Choose what attendees see when you share your screen.</p>
@@ -840,14 +943,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         <Tool label="Polls" icon="poll" on={panel === 'polls'} onClick={() => showPanel('polls')}>
           {(pollWaiting || pollResultsWaiting) && <span className="badge attention" aria-hidden="true">!</span>}
         </Tool>
-        <Tool label="Activity" icon="activity" on={panel === 'activity'} onClick={() => showPanel('activity')} />
+        <Tool label="Activity" icon="activity" on={panel === 'activity'} disabled={!canInteract} onClick={() => showPanel('activity')} />
         <div className="tool-wrap" data-menu-root>
           <Tool label="More" icon="more" expanded={menu === 'more'} onClick={() => toggleMenu('more')} />
           {menu === 'more' && <Popover title="More actions">
             <MenuItem icon="gear" onClick={() => showPanel('devices')}>Device settings and effects</MenuItem>
             {state.transcription && <MenuItem icon="captions" selected={showCaptions}
               onClick={() => { setShowCaptions(!showCaptions); setMenu(''); }}>Show live captions</MenuItem>}
-            {host && <>
+            {organizer && <>
               <MenuItem icon="link" onClick={() => { setInviteDialog(true); setMenu(''); }}>Meeting link</MenuItem>
               {!target.label && <MenuItem icon="lock" onClick={() => {
                 setMenu('');
@@ -871,28 +974,33 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         </div>
         <div className="tool-divider" />
         <Tool label="Camera" icon="camera" on={state.video} off={!state.video}
-          title={state.video ? 'Turn camera off' : 'Turn camera on'} disabled={adjustingCamera && !state.video}
+          title={state.video ? 'Turn camera off' : 'Turn camera on'} disabled={!canCamera || (adjustingCamera && !state.video)}
           onClick={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, !state.video, preferences.camera), state.video)} />
         <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
-          onClick={() => perform(() => call().setLocalAudio(!state.audio))} />
+          disabled={!canMic} onClick={() => {
+            if (participantCanSend(call()?.participants().local, 'audio')) perform(() => call().setLocalAudio(!state.audio));
+          }} />
         <div className="tool-wrap share-wrap" data-menu-root>
           <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
             title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!canShare && !state.sharing}
             onClick={() => {
               if (studio.status !== 'idle') studio.stop();
-              else perform(() => state.sharing ? call().stopScreenShare() : call().startScreenShare({ displayMediaOptions: { audio: true } }));
+              else if (state.sharing) perform(() => call().stopScreenShare());
+              else if (participantCanSend(call()?.participants().local, 'screenVideo')) {
+                perform(() => call().startScreenShare({ displayMediaOptions: { audio: true } }));
+              }
             }} />
-          {studio.supported && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
+          {canPresent && studio.supported && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
             onClick={() => toggleMenu('share')}><Icon name="down" size={15} /></button>}
-          {menu === 'share' && <Popover title="Share options">
+          {canPresent && menu === 'share' && <Popover title="Share options">
             <MenuItem icon="layers" onClick={openPresenterStudio}>{studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>
           </Popover>}
         </div>
         <div className="leave-wrap tool-wrap" data-menu-root>
           <Tool label="Leave" icon="leave" className="leave" onClick={() => target.label ? returnMain() : exit()} />
-          {host && <button type="button" className="leave-options" aria-label="Leave options" aria-expanded={menu === 'leave'}
+          {organizer && <button type="button" className="leave-options" aria-label="Leave options" aria-expanded={menu === 'leave'}
             onClick={() => toggleMenu('leave')}><Icon name="chevron" size={16} /></button>}
-          {menu === 'leave' && <Popover title="Leave options">
+          {organizer && menu === 'leave' && <Popover title="Leave options">
             <MenuItem icon="leave" onClick={() => target.label ? returnMain() : exit()}>{target.label ? 'Return to main meeting' : 'Leave meeting'}</MenuItem>
             <MenuItem icon="close" danger onClick={() => { setMenu(''); endMeeting(); }}>End meeting for everyone</MenuItem>
           </Popover>}
@@ -914,33 +1022,36 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     {incoming && incoming.end * 1000 > time && panel !== 'rooms' && <div className="meeting-alert" role="status">You’re assigned to {incoming.label}.
       <button type="button" className="text-button" onClick={() => setPanel('rooms')}>View assignment</button></div>}
     {(pollWaiting || pollResultsWaiting) && <div className="meeting-alert poll-invitation">
-      <Icon name="poll" size={17} /><span role="status">{pollWaiting ? 'Poll open' : 'Poll results shared'}</span>
-      <button type="button" className="text-button" onClick={() => showPanel('polls')}>{pollWaiting ? 'Answer poll' : 'View results'}</button>
+      <Icon name="poll" size={17} /><span role="status">{pollWaiting ? 'Poll open' : 'Poll results posted to chat'}</span>
+      <button type="button" className="text-button" onClick={() => {
+        if (pollResultsWaiting) setSeenPollResults(sharedPollId);
+        showPanel(pollWaiting ? 'polls' : 'chat');
+      }}>{pollWaiting ? 'Answer poll' : 'View results'}</button>
       {pollResultsWaiting && <button className="icon-button" type="button" aria-label="Dismiss poll results notice"
         onClick={() => setSeenPollResults(sharedPollId)}><Icon name="close" size={15} /></button>}
     </div>}
     <div className={'meeting-body' + (panel === 'activity' ? ' wide-panel' : '')}>
       <Stage participants={state.participants} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
         hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption} visuals={visuals}
-        onEditPresentation={studio.status === 'live' ? openPresenterStudio : undefined} />
+        onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} />
       {panel && <aside className="sidebar" aria-label={labels[panel]}>
         <header className="sidebar-heading"><h2>{labels[panel]}</h2><button type="button" className="icon-button"
           aria-label={'Close ' + labels[panel].toLowerCase()} onClick={() => setPanel('')}><Icon name="close" size={18} /></button></header>
-        {panel === 'people' && <People state={state} host={host} moderate={moderate} onInvite={() => setInviteDialog(true)}
-          lowerHand={id => send('lower-hand', {}, id)} setPin={setPin} pin={pin}
+        {panel === 'people' && <People state={state} host={organizer} moderate={moderate} onInvite={() => setInviteDialog(true)}
+          lowerHand={id => send('lower-hand', {}, id)} setPin={setPin} pin={pin} setRole={setRole} busy={busy}
           spotlight={spotlight} setSpotlight={id => { setSpotlight(id); send('spotlight', { id }); }} />}
-        {panel === 'chat' && <Chat items={chat[currentRoom] || []} send={sendChat} />}
-        {panel === 'polls' && <QuickPolls quick={quick} organizer={pollOrganizer} draft={pollDraft} setDraft={setPollDraft} />}
-        {panel === 'activity' && <Activity url={activity} host={host && !target.label} publish={publish} studioConnection={studioConnection} />}
-        {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice}>
-          {(state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
+        {panel === 'chat' && <Chat items={chat[currentRoom] || EMPTY_CHAT} send={sendChat} canWrite={canInteract} />}
+        {panel === 'polls' && <QuickPolls quick={quick} organizer={organizer} draft={pollDraft} setDraft={setPollDraft} />}
+        {panel === 'activity' && canInteract && <Activity url={activity} host={organizer && !target.label} publish={publish} studioConnection={studioConnection} />}
+        {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice} canCamera={canCamera} canMic={canMic}>
+          {canCamera && (state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
             settings={cameraEffects.settings} tune={patch => adjustCamera(() => cameraEffects.tune(patch))}
             rawCamera={cameraEffects.rawCamera} background={cameraEffects.choice} busy={busy}
             adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
-          <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice} select={selectBackground}
-            custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
+          {canCamera && <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice}
+            select={selectBackground} custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />}
         </DeviceSettings>}
-        {panel === 'rooms' && <Rooms host={host} groups={openGroups} current={target.label} incoming={incoming?.end * 1000 > time ? incoming : null}
+        {panel === 'rooms' && <Rooms host={organizer} groups={openGroups} current={target.label} incoming={incoming?.end * 1000 > time ? incoming : null}
           open={(count, minutes) => { if (!openGroups.length && groups.length) breakoutRound.current = null; openRooms(count, minutes); }}
           close={closeRooms} visit={destination => { setIncoming(null); move(destination); }} back={returnMain}
           busy={busy} now={time} assign={assign} participants={state.participants} />}
@@ -952,7 +1063,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         return track && <Track key={person.session_id + ':' + type} track={track} audio speaker={preferences.speaker} onBlocked={soundBlocked} />;
       }))}
     </div>
-    {studio.open && <PresenterStudio studio={studio} cameraOn={state.video} busy={busy} sharing={state.sharing}
+    {canPresent && studio.open && <PresenterStudio studio={studio} cameraOn={state.video} busy={busy} sharing={state.sharing}
       stopShare={() => perform(() => activeInstance.stopScreenShare())}
       turnCameraOn={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera))} />}
     {inviteDialog && <MeetingInvitation link={guestLink(entry.invite)} close={() => setInviteDialog(false)}

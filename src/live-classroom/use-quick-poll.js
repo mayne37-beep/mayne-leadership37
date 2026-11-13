@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { newNonce } from './client.js';
 import { countPoll, createQuickPoll, currentSharedPoll, pollIdPattern, readBallot, savePollBallot } from './quick-poll.js';
+import { canParticipate } from './meeting-roles.js';
 
 const retryMs = 1800;
 const maxAttempts = 3;
 
-export function useQuickPoll({ callRef, call, organizer, participants, localPoll, sync, send }) {
+export function useQuickPoll({ callRef, call, organizer, participants, localPoll, sync, send, onShared }) {
   const hosted = useRef(null);
   const pending = useRef(null);
   const operating = useRef(null);
@@ -17,6 +18,7 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
   const [error, setError] = useState('');
   const remote = useMemo(() => organizer ? null : currentSharedPoll(participants), [organizer, participants]);
   const visible = call ? organizer ? localPoll : remote?.poll : null;
+  const canVote = canParticipate(participants.find(person => person.local));
 
   function clearPending() {
     clearTimeout(pending.current?.timer);
@@ -41,6 +43,14 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
     setError('');
     return clearPending;
   }, [visible?.id, remote?.organizer]);
+
+  useEffect(() => {
+    if (!canVote) {
+      clearPending();
+      setSending(false);
+      setError('');
+    }
+  }, [canVote]);
 
   async function manage(operation) {
     if (!call || !organizer || operating.current) return false;
@@ -98,9 +108,10 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
     const current = hosted.current;
     if (!current || current.poll.open || current.poll.results) return false;
     return manage(async () => {
-      const next = { ...current.poll, results: countPoll(current.poll, current.ballots) };
+      const next = { ...current.poll, results: countPoll(current.poll, current.ballots), sharedAt: Date.now() };
       await sync({ quickPoll: next }, call);
       current.poll = next;
+      if (callRef.current === call) onShared(next, call);
     });
   }
 
@@ -121,7 +132,8 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
   }
 
   function submit(values) {
-    if (!visible?.open || !remote?.organizer || pending.current || accepted?.id === visible.id) return;
+    if (!canParticipate(call?.participants().local) || !visible?.open || !remote?.organizer ||
+        pending.current || accepted?.id === visible.id) return;
     const ballot = readBallot(visible, values);
     if (!ballot) { setError('Enter a response before submitting.'); return; }
     setError('');
@@ -150,9 +162,12 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
       const current = hosted.current;
       if (!current || message.id !== current.poll.id || typeof message.requestId !== 'string' ||
           !pollIdPattern.test(message.requestId)) return;
-      const { saved, changed } = savePollBallot(current.poll, current.ballots, sender, message.ballot);
+      const eligible = canParticipate(sender);
+      const { saved, changed } = eligible
+        ? savePollBallot(current.poll, current.ballots, sender, message.ballot)
+        : { saved: false, changed: false };
       if (changed) setResults(countPoll(current.poll, current.ballots));
-      sendMessage('poll-receipt', { id: message.id, requestId: message.requestId, saved }, sender.session_id);
+      sendMessage('poll-receipt', { id: message.id, requestId: message.requestId, saved, eligible }, sender.session_id);
     }
     if (message.type === 'poll-receipt' && sender.owner && sender.session_id === remote?.organizer) {
       const request = pending.current;
@@ -160,6 +175,7 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
       clearPending();
       setSending(false);
       if (message.saved === true) setAccepted({ id: request.id, organizer: sender.session_id });
+      else if (message.eligible === false) setError('Observers can view shared results.');
       else setError('This poll has closed. Your response was not counted.');
     }
   }
@@ -171,5 +187,8 @@ export function useQuickPoll({ callRef, call, organizer, participants, localPoll
   const answered = Boolean(accepted && accepted.id === visible?.id && accepted.organizer === remote?.organizer);
   const ballot = ballotDraft && ballotDraft.call === call && ballotDraft.id === visible?.id &&
     ballotDraft.organizer === remote?.organizer ? ballotDraft.values : undefined;
-  return { poll: visible, results, launch, close, share, newPoll, submit, receive, answered, ballot, updateBallot, sending, busy, error };
+  return {
+    poll: visible, publisher: remote?.organizer, results, launch, close, share, newPoll, submit, receive,
+    canVote, answered, ballot, updateBallot, sending, busy, error,
+  };
 }

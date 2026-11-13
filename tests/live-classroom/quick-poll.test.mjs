@@ -57,7 +57,10 @@ test('word clouds combine repeated terms across ballots and keep shared results 
     quickPoll: { ...shared, question: '界'.repeat(180) }, raised: false, cameraBackdrop: '#ffffff',
     presentation: { layout: 'weather', mirror: true, side: 'left' },
   })) < 4096);
-  assert.deepEqual(readSharedPoll(shared).results, results);
+  const published = { ...shared, sharedAt: time + 1000 };
+  assert.deepEqual(readSharedPoll(published), published);
+  assert.ok(Buffer.byteLength(JSON.stringify({ app: 'mayne-live-classroom', type: 'poll-chat',
+    poll: { ...published, question: '界'.repeat(180) } })) < 4096);
 });
 
 test('only a current room owner can supply the poll to an attendee', () => {

@@ -102,7 +102,7 @@ function PollBallot({ quick }) {
   </form>;
 }
 
-function PollResults({ poll, results }) {
+export function PollResults({ poll, results, title = 'Results', announce = true }) {
   if (!results) return null;
   const { count } = results;
   let details;
@@ -144,7 +144,8 @@ function PollResults({ poll, results }) {
     })}</ul>;
   }
   return <section className="poll-results" aria-label="Poll results">
-    <div className="poll-result-heading"><h3>Results</h3><span role="status">{count} {count === 1 ? 'response' : 'responses'}</span></div>
+    <div className="poll-result-heading"><h3>{title}</h3><span role={announce ? 'status' : undefined}>
+      {count} {count === 1 ? 'response' : 'responses'}</span></div>
     {details}
   </section>;
 }
@@ -162,7 +163,7 @@ export function QuickPolls({ quick, organizer, draft, setDraft }) {
         <PollResults poll={poll} results={quick.results} />
         <div className="form-actions start">
           {poll.open ? <button className="btn primary" type="button" disabled={quick.busy} onClick={quick.close}>Close poll</button> : <>
-            {poll.results ? <span className="poll-feedback" role="status"><Icon name="check" size={17} />Results shared</span>
+            {poll.results ? <span className="poll-feedback" role="status"><Icon name="check" size={17} />Results posted to chat</span>
               : <button className="btn primary" type="button" disabled={quick.busy} onClick={quick.share}>Share results</button>}
             <button className="btn secondary" type="button" disabled={quick.busy} onClick={async () => {
               if (await quick.newPoll()) setDraft({ ...emptyPollDraft, type: poll.type });
@@ -170,7 +171,8 @@ export function QuickPolls({ quick, organizer, draft, setDraft }) {
           </>}
         </div>
       </> : <>
-        <PollBallot key={poll.id} quick={quick} />
+        {quick.canVote ? <PollBallot key={poll.id} quick={quick} />
+          : poll.open && <p className="subtle">Observers can view shared results.</p>}
         {poll.results && <PollResults poll={poll} results={poll.results} />}
         {!poll.open && !poll.results && <p className="subtle">Voting has ended. Results will appear when the organizer shares them.</p>}
       </>}

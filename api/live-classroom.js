@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { AUTH_KEY, AUTH_URL } from '../src/lms/model.js';
 import { cleanText } from '../src/live-classroom/shared.js';
+import { meetingRoles } from '../src/live-classroom/meeting-roles.js';
 
 const ROOM = /^mlc-[a-f0-9]{32}$/;
 const NONCE = /^[a-f0-9]{32}$/;
@@ -136,6 +137,7 @@ async function ensureRoom(config, name, start, end, breakout = false) {
     eject_at_room_exp: true,
     enable_knocking: !breakout,
     enable_screenshare: true,
+    permissions: { canSend: meetingRoles.attendee.media, canAdmin: false },
     enable_transcription_storage: false,
     max_participants: 50,
     ...(start > now() + 5 ? { nbf: start } : {}),
@@ -157,7 +159,10 @@ async function ensureRoom(config, name, start, end, breakout = false) {
 
 async function meetingToken(config, room, expires, owner = false) {
   const { token } = await daily(config, '/meeting-tokens', 'POST', {
-    properties: { room_name: room, exp: expires, is_owner: owner },
+    properties: {
+      room_name: room, exp: expires, is_owner: owner,
+      permissions: { canSend: meetingRoles[owner ? 'organizer' : 'attendee'].media, canAdmin: owner },
+    },
   });
   return token;
 }
