@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortraitProcessor } from './portrait-processor.js';
 
-const workerUrl = '/assets/live-classroom-portrait.js';
-
-export function PresenterView({ screen, camera, side, layout, name }) {
+export function PresenterView({ screen, camera, side, layout, name, coverage }) {
   const overlay = layout !== 'side-by-side';
   const cutout = layout === 'weather';
   const surface = useRef(null);
@@ -12,6 +11,8 @@ export function PresenterView({ screen, camera, side, layout, name }) {
   const [size, setSize] = useState(null);
   const [cutoutReady, setCutoutReady] = useState(false);
   const [cutoutFailed, setCutoutFailed] = useState(false);
+  const coverageRef = useRef(coverage);
+  coverageRef.current = coverage;
 
   useEffect(() => {
     const element = surface.current;
@@ -53,8 +54,7 @@ export function PresenterView({ screen, camera, side, layout, name }) {
     const video = cameraVideo.current;
     const canvas = portrait.current;
     const context = canvas.getContext('2d');
-    let worker;
-    let timer;
+    let processor;
     let frame = 0;
     let stopped = false;
     let processing = false;
@@ -63,8 +63,7 @@ export function PresenterView({ screen, camera, side, layout, name }) {
 
     function stop() {
       stopped = true;
-      worker?.terminate();
-      clearTimeout(timer);
+      processor?.close();
       cancelAnimationFrame(frame);
     }
     function fail() {
@@ -72,41 +71,40 @@ export function PresenterView({ screen, camera, side, layout, name }) {
       setCutoutReady(false);
       setCutoutFailed(true);
     }
-    function processFrame(now) {
+    async function processFrame(now) {
       frame = requestAnimationFrame(processFrame);
       if (processing || now - lastSample < 60 || video.readyState < 2 || video.currentTime === lastTime) return;
       processing = true;
       lastSample = now;
       lastTime = video.currentTime;
-      createImageBitmap(video, { resizeWidth: 480, resizeHeight: Math.max(1, Math.round(480 * video.videoHeight / video.videoWidth)) })
-        .then(bitmap => {
-          if (stopped) { bitmap.close(); return; }
-          worker.postMessage({ bitmap }, [bitmap]);
-        }).catch(() => { if (!stopped) fail(); });
+      try {
+        const width = Math.min(720, video.videoWidth);
+        const bitmap = await createImageBitmap(video, { resizeWidth: width, resizeHeight: Math.max(1, Math.round(width * video.videoHeight / video.videoWidth)) });
+        const output = await processor.process(bitmap, { coverage: coverageRef.current });
+        try {
+          if (stopped) return;
+          if (canvas.width !== output.width || canvas.height !== output.height) {
+            canvas.width = output.width;
+            canvas.height = output.height;
+          }
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(output, 0, 0);
+          setCutoutReady(true);
+        } finally {
+          output.close();
+        }
+      } catch {
+        if (!stopped) fail();
+      } finally {
+        processing = false;
+      }
     }
     try {
       if (!context || typeof createImageBitmap !== 'function' || typeof OffscreenCanvas !== 'function') throw new Error('Unsupported');
-      worker = new Worker(workerUrl);
-      worker.onmessage = ({ data }) => {
-        if (data.error) { fail(); return; }
-        if (data.ready) {
-          clearTimeout(timer);
-          frame = requestAnimationFrame(processFrame);
-          return;
-        }
-        const bitmap = data.bitmap;
-        if (canvas.width !== bitmap.width || canvas.height !== bitmap.height) {
-          canvas.width = bitmap.width;
-          canvas.height = bitmap.height;
-        }
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(bitmap, 0, 0);
-        bitmap.close();
-        setCutoutReady(true);
-        processing = false;
-      };
-      worker.onerror = fail;
-      timer = setTimeout(fail, 20000);
+      processor = createPortraitProcessor();
+      processor.initialized.then(() => {
+        if (!stopped) frame = requestAnimationFrame(processFrame);
+      }).catch(() => { if (!stopped) fail(); });
     } catch { fail(); }
     return stop;
   }, [camera, cutout]);

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Icon } from './icons.jsx';
 import { newNonce } from './client.js';
+import { jpegPrefix } from './camera-settings.js';
 
 const storagePrefix = 'mayne-live-classroom-background:';
-const jpegPrefix = 'data:image/jpeg;base64,';
 const office = '/assets/live-classroom-backgrounds/office.jpg';
 const choices = [
   { id: 'none', label: 'None' },
@@ -27,18 +27,6 @@ export function loadBackgrounds() {
   } catch {
     return [];
   }
-}
-
-export function backgroundSettings(choice) {
-  let processor = { type: 'none' };
-  if (choice?.id === 'blur') processor = { type: 'background-blur', config: {} };
-  else if (choice?.image) {
-    const source = choice.image.startsWith(jpegPrefix)
-      ? Uint8Array.from(atob(choice.image.slice(jpegPrefix.length)), char => char.charCodeAt(0)).buffer
-      : new URL(choice.image, location.origin).href;
-    processor = { type: 'background-image', config: { source } };
-  }
-  return { video: { processor } };
 }
 
 async function readImage(file) {

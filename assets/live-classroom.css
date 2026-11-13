@@ -230,8 +230,12 @@ button svg, a svg { flex: none; }
 .message.own p { background: var(--accent-light); text-align: start; }
 .chat-form { display: flex; gap: 6px; align-items: center; padding: 12px; border-top: 1px solid var(--line); }
 .chat-form .icon-button { color: #c9c6ff; }
-.background-settings { min-width: 0; margin: 5px 0 0; padding: 0; border: 0; display: grid; gap: 9px; }
-.background-settings legend { padding: 0 0 8px; font-size: 14px; font-weight: 680; }
+.background-settings, .camera-effects-settings { min-width: 0; margin: 5px 0 0; padding: 0; border: 0; display: grid; gap: 9px; }
+.background-settings legend, .camera-effects-settings legend { padding: 0 0 8px; font-size: 14px; font-weight: 680; }
+.camera-effects-preview { display: grid; place-items: center; aspect-ratio: 16 / 9; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 7px; background: #18171f; }
+.camera-effects-preview video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.camera-effects-preview p { padding: 12px; text-align: center; }
 .background-settings > .btn { justify-self: start; }
 .background-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .background-choice { display: grid; width: 100%; min-width: 0; gap: 5px; padding: 4px 4px 6px; text-align: start;
