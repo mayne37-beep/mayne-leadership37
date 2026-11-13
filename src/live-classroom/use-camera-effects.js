@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createCameraEffect, supportsCameraEffects } from './camera-effect.js';
-import { backgroundSettings, loadCameraSettings, saveCameraSettings } from './camera-settings.js';
+import { backgroundSettings, cameraPresentationSettings, loadCameraSettings, saveCameraSettings } from './camera-settings.js';
 
 export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
   const [choice, setChoice] = useState(null);
@@ -83,6 +83,27 @@ export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
   }
 
   async function select(call, nextChoice, device, enabled) {
+    const settings = settingsRef.current;
+    const previousData = cameraPresentationSettings(settings, choice);
+    const nextData = cameraPresentationSettings(settings, nextChoice);
+    const backdropChanged = previousData.cameraBackdrop !== nextData.cameraBackdrop;
+    let applied = false;
+    try {
+      if (backdropChanged) {
+        await sync(nextData);
+        enabled = enabled && call.localVideo();
+      }
+      if (callRef.current !== call) return false;
+      applied = await applyWithFallback(call, nextChoice, device, enabled);
+    } finally {
+      if (backdropChanged && !applied && callRef.current === call) await sync(previousData).catch(() => {});
+    }
+    if (!applied || callRef.current !== call) return false;
+    setChoice(nextChoice);
+    return true;
+  }
+
+  async function applyWithFallback(call, nextChoice, device, enabled) {
     try {
       await apply(call, nextChoice, device, enabled);
     } catch (error) {
@@ -95,8 +116,6 @@ export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
       setBasic(true);
       notify('Using basic camera effects on this device. Your outline setting still applies in Weather view.');
     }
-    if (callRef.current !== call) return false;
-    setChoice(nextChoice);
     return true;
   }
 
@@ -104,11 +123,10 @@ export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
     if (enabled && choice && enhanced && !(await select(call, choice, device, true))) return;
     if (callRef.current !== call) return;
     call.setLocalVideo(enabled, enabled ? undefined : { discardTrack: true });
-    if (!enabled && (current.current || preparing.current)) {
-      // Release the physical camera as soon as the user turns it off.
-      stop();
-      await call.updateInputSettings({ video: { settings: device ? { deviceId: { exact: device } } : {} } });
-    }
+    if (enabled || (!current.current && !preparing.current)) return;
+    // Release the physical camera as soon as the user turns it off.
+    stop();
+    await call.updateInputSettings({ video: { settings: device ? { deviceId: { exact: device } } : {} } });
   }
 
   async function setCamera(call, device, enabled) {
@@ -117,19 +135,22 @@ export function useCameraEffects({ callRef, notify, nativeSupported, sync }) {
   }
 
   async function tune(patch) {
-    const next = { ...settingsRef.current, ...patch };
+    const previous = settingsRef.current;
+    const next = { ...previous, ...patch };
     const call = callRef.current;
-    if (next.blur !== settingsRef.current.blur && choice?.id === 'blur' && !enhanced) {
+    if (next.blur !== previous.blur && choice?.id === 'blur' && !enhanced) {
       await call.updateInputSettings(backgroundSettings(choice, next.blur));
     }
-    if (settingsRef.current.coverage !== next.coverage) await sync({ cameraCoverage: next.coverage });
+    const before = cameraPresentationSettings(previous, choice);
+    const after = cameraPresentationSettings(next, choice);
+    if (before.cameraCoverage !== after.cameraCoverage || before.cameraBackdrop !== after.cameraBackdrop) await sync(after);
     settingsRef.current = next;
     setSettings(next);
     saveCameraSettings(next);
   }
 
   return {
-    choice, settings, enhanced, stop, select, setVideo, setCamera, tune,
+    choice, settings, enhanced, rawCamera: current.current?.source, stop, select, setVideo, setCamera, tune,
     onDailyError: () => { if (!current.current && !preparing.current) setChoice(null); },
   };
 }

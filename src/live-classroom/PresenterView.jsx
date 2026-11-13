@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortraitProcessor } from './portrait-processor.js';
 
-export function PresenterView({ screen, camera, side, layout, name, coverage }) {
+export function PresenterView({ screen, camera, side, layout, name, coverage, backdropColor }) {
   const overlay = layout !== 'side-by-side';
   const cutout = layout === 'weather';
   const surface = useRef(null);
@@ -11,8 +11,8 @@ export function PresenterView({ screen, camera, side, layout, name, coverage }) 
   const [size, setSize] = useState(null);
   const [cutoutReady, setCutoutReady] = useState(false);
   const [cutoutFailed, setCutoutFailed] = useState(false);
-  const coverageRef = useRef(coverage);
-  coverageRef.current = coverage;
+  const settings = useRef(null);
+  settings.current = { coverage, backdropColor };
 
   useEffect(() => {
     const element = surface.current;
@@ -81,7 +81,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage }) 
       try {
         const width = Math.min(720, video.videoWidth);
         const bitmap = await createImageBitmap(video, { resizeWidth: width, resizeHeight: Math.max(1, Math.round(width * video.videoHeight / video.videoWidth)) });
-        const output = await processor.process(bitmap, { coverage: coverageRef.current, timestamp: time * 1000 });
+        const output = await processor.process(bitmap, { ...settings.current, timestamp: time * 1000 });
         try {
           if (stopped) return;
           if (canvas.width !== output.width || canvas.height !== output.height) {
@@ -102,7 +102,7 @@ export function PresenterView({ screen, camera, side, layout, name, coverage }) 
     }
     try {
       if (!context || typeof createImageBitmap !== 'function' || typeof OffscreenCanvas !== 'function') throw new Error('Unsupported');
-      processor = createPortraitProcessor();
+      processor = createPortraitProcessor(settings.current.backdropColor);
       processor.initialized.then(() => {
         if (!stopped) frame = requestFrame(processFrame);
       }).catch(() => { if (!stopped) fail(); });

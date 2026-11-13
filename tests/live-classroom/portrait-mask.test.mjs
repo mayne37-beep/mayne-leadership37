@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { writePortraitMask } from '../../src/live-classroom/portrait-mask.js';
-import { coverageOption } from '../../src/live-classroom/camera-settings.js';
+import { cameraPresentationSettings, coverageOption, validBackdropColor } from '../../src/live-classroom/camera-settings.js';
+import { writeBackdropMask } from '../../src/live-classroom/backdrop-mask.js';
 import { createPortraitEdgeRefiner } from '../../src/live-classroom/portrait-edges.js';
 
 function maskFixture() {
@@ -73,4 +74,32 @@ test('a moving foreground and a resumed feed clear stale mask pixels', () => {
   render([0, 0, 0, 0, 0, 0, 0.48, 1, 1, 1, 0, 0], 33, 'most');
   assert.ok(alpha(6) > balanced);
   assert.equal(alpha(2), 0);
+});
+
+test('solid backdrop removes the sampled hue in light and shadow and preserves a soft boundary', () => {
+  const pixels = new Uint8ClampedArray([
+    30, 160, 80, 255, // Backdrop in even light.
+    14, 72, 36, 255, // The same backdrop in shadow.
+    74, 158, 87, 255, // Boundary with a mix of foreground and backdrop.
+    185, 124, 93, 255, // Skin.
+    25, 38, 70, 255, // Dark blue clothing.
+  ]);
+  writeBackdropMask(pixels, '#1ea050', coverageOption('balanced').threshold);
+  assert.equal(pixels[3], 0);
+  assert.equal(pixels[7], 0);
+  assert.ok(pixels[11] > 0 && pixels[11] < 255);
+  assert.equal(pixels[15], 255);
+  assert.equal(pixels[19], 255);
+  const dark = new Uint8ClampedArray([2, 3, 3, 255, 100, 95, 87, 255]);
+  writeBackdropMask(dark, '#000000', coverageOption('balanced').threshold);
+  assert.deepEqual([dark[3], dark[7]], [0, 255]);
+});
+
+test('Weather view only receives the solid backdrop color for an unprocessed camera feed', () => {
+  const settings = { coverage: 'most', backdropMode: 'solid', backdropColor: '#1ea050' };
+  assert.deepEqual(cameraPresentationSettings(settings, null), { cameraCoverage: 'most', cameraBackdrop: '#1ea050' });
+  assert.equal(cameraPresentationSettings(settings, { id: 'office' }).cameraBackdrop, null);
+  assert.equal(cameraPresentationSettings({ ...settings, backdropMode: 'automatic' }, null).cameraBackdrop, null);
+  assert.equal(validBackdropColor('green'), false);
+  assert.equal(validBackdropColor('#1EA050'), true);
 });
