@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons.jsx';
 import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
-import { activityPath, attendanceCsv, cleanText, reactions } from './shared.js';
+import { activityPath, attendanceCsv, cleanText, presentationOf, presenterLayouts, reactions } from './shared.js';
 import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js';
 import { participantName, useCall } from './use-call.js';
 import { BackgroundSettings, backgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
+import { PresenterView } from './PresenterView.jsx';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
@@ -53,8 +54,8 @@ function Popover({ title, children }) {
   return <div className="popover" role="group" aria-label={title}>{children}</div>;
 }
 
-function MenuItem({ icon, children, onClick, danger, selected }) {
-  return <button type="button" className={'menu-item' + (danger ? ' danger' : '')} onClick={onClick}
+function MenuItem({ icon, children, onClick, danger, selected, disabled }) {
+  return <button type="button" className={'menu-item' + (danger ? ' danger' : '')} onClick={onClick} disabled={disabled}
     aria-pressed={selected}><Icon name={icon} size={18} /><span>{children}</span></button>;
 }
 
@@ -78,6 +79,9 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   const [page, setPage] = useState(0);
   const shown = participants.filter(person => !hideSelf || !person.local || participants.length === 1);
   const shared = participants.find(person => playable(person, 'screenVideo'));
+  const { layout, side } = presentationOf(shared);
+  const presenterCamera = layout !== 'standard' && shown.includes(shared) && (!hideVideo || shared.local)
+    ? playable(shared, 'video') : null;
   const chosen = shown.find(person => person.session_id === pin);
   const speaking = shown.find(person => person.session_id === speaker || (speaker === 'local' && person.local));
   const spotlighted = shown.find(person => person.session_id === spotlight);
@@ -85,13 +89,15 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount - 1);
   const tiles = shown.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
+  const strip = shown.filter(person => person !== (presenterCamera ? shared : shared ? null : focus));
   const render = person => <Tile key={person.session_id} person={person} hidden={hideVideo}
     active={person.session_id === speaking?.session_id} focused={person.session_id === pin}
     onPin={() => setPin(person.session_id === pin ? '' : person.session_id)} />;
   return <div className="stage">
     {(shared || focus) ? <div className="focus-layout">
-      {shared ? <Tile person={shared} screen /> : render(focus)}
-      {shown.length > 1 && <div className="filmstrip">{shown.filter(person => shared || person !== focus).map(render)}</div>}
+      {presenterCamera ? <PresenterView screen={playable(shared, 'screenVideo')} camera={presenterCamera}
+        side={side} layout={layout} name={participantName(shared)} /> : shared ? <Tile person={shared} screen /> : render(focus)}
+      {shown.length > 1 && strip.length > 0 && <div className="filmstrip">{strip.map(render)}</div>}
     </div> : <div className="gallery" data-count={Math.max(1, tiles.length)}>{tiles.map(render)}</div>}
     {!shared && !focus && pageCount > 1 && <div className="page-controls">
       <button type="button" className="icon-button prev" aria-label="Previous gallery page"
@@ -314,7 +320,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const studioMessage = useRef(null);
   const soundBlocked = useRef(() => setAudioBlocked(true)).current;
   const setup = { invite: entry.invite, nonce: entry.nonce };
-  const { ref, state, connect, disconnect, update } = useCall({
+  const { ref, state, connect, disconnect, update, updateLocalData } = useCall({
     onMessage: receive,
     onBackgroundError: () => setBackground(null),
     onCaption: (event, person) => {
@@ -325,7 +331,6 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   });
   const call = () => ref.current;
   const currentRoom = target.url;
-  const local = state.participants.find(person => person.local);
   const activeCall = state.phase === 'connected';
   const activeInstance = activeCall ? call() : null;
   studioMessage.current = (message, channel) => {
@@ -441,7 +446,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     if (message.type === 'spotlight' && typeof message.id === 'string') {
       setSpotlight(message.id.slice(0, 128));
     }
-    if (message.type === 'lower-hand') call()?.setUserData({ raised: false }).catch(() => {});
+    if (message.type === 'lower-hand') updateLocalData({ raised: false }).catch(() => {});
     if (message.type === 'activity' && !room.label) {
       const url = activityPath(message.url, location.origin);
       if (message.url && !url) return;
@@ -605,7 +610,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     } });
   }
 
-  const raised = Boolean(local?.userData?.raised);
+  const raised = Boolean(state.localData.raised);
+  const presentation = presentationOf({ userData: state.localData });
+  const canShare = Boolean(navigator.mediaDevices?.getDisplayMedia);
+  const canChooseLayout = canShare || state.sharing;
+  function choosePresentation(patch) {
+    setMenu('');
+    perform(() => updateLocalData({ presentation: { ...presentation, ...patch } }));
+  }
   const memberTitle = target.label ? main.title + ' · ' + target.label : main.title;
   const displayedCaption = showCaptions && state.transcription && caption && time - caption.time < 9000 ? caption : null;
   const openGroups = groups.filter(group => group.end * 1000 > time);
@@ -636,7 +648,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         <Tool label="People" icon="people" on={panel === 'people'} onClick={() => showPanel('people')}>
           <span className={state.waiting.length ? 'badge attention' : 'badge'}>{state.waiting.length || state.participants.length}</span></Tool>
         <Tool label={raised ? 'Lower' : 'Raise'} icon="hand" on={raised} title={raised ? 'Lower hand' : 'Raise hand'}
-          onClick={() => perform(() => call().setUserData({ raised: !raised }))} />
+          onClick={() => perform(() => updateLocalData({ raised: !raised }))} />
         <div className="tool-wrap" data-menu-root>
           <Tool label="React" icon="react" expanded={menu === 'react'} onClick={() => toggleMenu('react')} />
           {menu === 'react' && <Popover title="Reactions"><div className="emoji-options">{reactions.map(([emoji, label]) =>
@@ -646,16 +658,31 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
             }}>{emoji}</button>)}</div></Popover>}
         </div>
         <div className="tool-wrap" data-menu-root>
-          <Tool label="View" icon="view" expanded={menu === 'view'} onClick={() => toggleMenu('view')} />
+          <Tool label="View" icon="view" expanded={menu === 'view' || menu === 'presenter'}
+            onClick={() => setMenu(menu === 'view' || menu === 'presenter' ? '' : 'view')} />
           {menu === 'view' && <Popover title="Meeting views">
             <MenuItem icon="view" selected={view === 'gallery' && !pin} onClick={() => { setView('gallery'); setPin(''); setMenu(''); }}>Gallery</MenuItem>
             <MenuItem icon="people" selected={view === 'speaker' && !pin} onClick={() => { setView('speaker'); setPin(''); setMenu(''); }}>Speaker</MenuItem>
             <MenuItem icon="camera" selected={hideSelf} onClick={() => { setHideSelf(!hideSelf); setMenu(''); }}>Hide self view</MenuItem>
             <MenuItem icon="camera" selected={hideVideo} onClick={() => { setHideVideo(!hideVideo); setMenu(''); }}>Hide incoming video</MenuItem>
+            {canChooseLayout && <MenuItem icon="present-side" onClick={() => setMenu('presenter')}>Presenter layouts</MenuItem>}
             {document.fullscreenEnabled && <MenuItem icon="expand" onClick={() => {
               setMenu('');
               perform(() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
             }}>Toggle fullscreen</MenuItem>}
+          </Popover>}
+          {menu === 'presenter' && <Popover title="Presenter layouts">
+            <div className="presenter-options">
+              <MenuItem icon="arrow" onClick={() => setMenu('view')}>Back to views</MenuItem>
+              <p className="subtle">Your audience sees this layout when you share your screen with your camera on.</p>
+              {presenterLayouts.map(({ id, icon, label }) => <MenuItem key={id} icon={icon} selected={presentation.layout === id}
+                disabled={busy} onClick={() => choosePresentation({ layout: id })}>{label}</MenuItem>)}
+              {presentation.layout !== 'standard' && <fieldset className="presenter-position" disabled={busy}>
+                <legend>Camera position</legend>
+                {['left', 'right'].map(side => <button className="btn secondary" type="button" key={side}
+                  aria-pressed={side === presentation.side} onClick={() => choosePresentation({ side })}>{side === 'left' ? 'Left' : 'Right'}</button>)}
+              </fieldset>}
+            </div>
           </Popover>}
         </div>
         <Tool label="Rooms" icon="rooms" on={panel === 'rooms'} onClick={() => showPanel('rooms')} />
@@ -694,7 +721,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
           onClick={() => perform(() => call().setLocalAudio(!state.audio))} />
         <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
-          title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!navigator.mediaDevices?.getDisplayMedia && !state.sharing}
+          title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!canShare && !state.sharing}
           onClick={() => perform(() => state.sharing ? call().stopScreenShare() : call().startScreenShare({ displayMediaOptions: { audio: true } }))} />
         <div className="leave-wrap tool-wrap" data-menu-root>
           <Tool label="Leave" icon="leave" className="leave" onClick={() => target.label ? returnMain() : exit()} />

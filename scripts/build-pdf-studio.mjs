@@ -71,3 +71,14 @@ await build({
   bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
 });
 console.log('Live Classroom meeting client built.');
+
+const visionPackage = path.dirname(require.resolve('@mediapipe/tasks-vision'));
+const visionOutput = path.join(out, 'assets', 'live-classroom-vision');
+await cp(path.join(visionPackage, 'wasm'), visionOutput, { recursive: true });
+await copyFile(path.join(root, 'vendor', 'live-classroom', 'person.tflite'), path.join(visionOutput, 'person.tflite'));
+await copyFile(path.join(root, 'vendor', 'live-classroom', 'LICENSE.txt'), path.join(visionOutput, 'LICENSE.txt'));
+await build({
+  entryPoints: [path.join(root, 'src', 'live-classroom', 'presenter-portrait.js')],
+  outfile: path.join(out, 'assets', 'live-classroom-portrait.js'),
+  bundle: true, minify: true, format: 'iife', platform: 'browser', target: ['es2022'], legalComments: 'eof',
+});

@@ -4,6 +4,7 @@ import Daily from '@daily-co/daily-js';
 const initial = {
   phase: 'connecting', participants: [], waiting: [], speaker: '', audio: false,
   video: false, videoEffects: false, sharing: false, recording: false, transcription: false, network: '', error: '',
+  localData: { raised: false },
 };
 
 export function participantName(participant) {
@@ -12,6 +13,7 @@ export function participantName(participant) {
 
 export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError }) {
   const ref = useRef(null);
+  const localData = useRef(initial.localData);
   const turn = useRef(0);
   const listeners = useRef(null);
   listeners.current = { onMessage, onCaption, onAttendance, onBackgroundError };
@@ -25,12 +27,31 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
     if (call && !call.isDestroyed()) await call.destroy();
   }, []);
 
+  const updateLocalData = useCallback(async patch => {
+    const call = ref.current;
+    if (call?.meetingState() !== 'joined-meeting') throw new Error('The meeting is reconnecting. Try again.');
+    const previous = localData.current;
+    const next = { ...previous, ...patch };
+    localData.current = next;
+    update({ localData: next });
+    try {
+      await call.setUserData(next);
+    } catch (error) {
+      if (ref.current === call && localData.current === next) {
+        localData.current = previous;
+        update({ localData: previous });
+      }
+      throw error;
+    }
+  }, [update]);
+
   useEffect(() => () => { disconnect().catch(() => {}); }, [disconnect]);
 
   const connect = useCallback(async (target, name, preferences, inputSettings) => {
     const current = ++turn.current;
     const previous = ref.current;
     ref.current = null;
+    localData.current = initial.localData;
     setState(initial);
     try {
       if (previous && !previous.isDestroyed()) await previous.destroy();
@@ -118,7 +139,7 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
         ...(preferences.camera ? { videoSource: preferences.camera } : {}),
         ...(preferences.microphone ? { audioSource: preferences.microphone } : {}),
         startVideoOff: !preferences.video, startAudioOff: !preferences.audio,
-        userData: { raised: false },
+        userData: localData.current,
       };
       if (!target.token) {
         const { access } = await call.preAuth(options);
@@ -148,5 +169,5 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
     }
   }, [update]);
 
-  return { ref, state, connect, disconnect, update };
+  return { ref, state, connect, disconnect, update, updateLocalData };
 }
