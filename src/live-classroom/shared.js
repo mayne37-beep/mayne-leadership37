@@ -1,5 +1,6 @@
 export const reactions = [
   ['👍', 'Like'], ['👏', 'Applause'], ['❤️', 'Love'], ['🎉', 'Celebrate'], ['😮', 'Surprised'],
+  ['😂', 'Laugh'], ['🤔', 'Thinking'],
 ];
 
 export const presenterLayouts = [
