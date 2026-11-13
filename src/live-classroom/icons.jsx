@@ -27,6 +27,8 @@ const paths = {
   send: 'M3 3l18 9-18 9 3-9z M6 12h15',
   chevron: 'M6 9l6 6 6-6',
   activity: 'M4 4h16v12H4z M12 16v4 M8 20h8 M7 12l3-3 3 2 4-4',
+  poll: 'M4 4h16v16H4z M8 15v2 M12 8v9 M16 11v6',
+  check: 'M5 12l4 4L19 6',
   lock: 'M5 10h14v10H5z M8 10V7a4 4 0 0 1 8 0v3 M12 14v2',
   expand: 'M9 4H4v5 M15 4h5v5 M4 15v5h5 M20 15v5h-5',
   download: 'M12 3v12 M8 11l4 4 4-4 M4 16v5h16v-5',
