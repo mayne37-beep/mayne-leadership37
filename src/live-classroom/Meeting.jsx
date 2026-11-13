@@ -18,6 +18,7 @@ import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, p
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
 const POLL_CHAT_HISTORY = 10;
+const REACTION_DURATION_MS = 2800;
 const EMPTY_CHAT = [];
 const palettes = ['lavender', 'blue', 'rose', 'green', 'gold'];
 
@@ -85,7 +86,7 @@ function Tile({ person, active, screen = false, hidden = false, focused = false,
   </article>;
 }
 
-function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, visuals, onEditPresentation }) {
+function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, onEditPresentation }) {
   const [page, setPage] = useState(0);
   const shown = participants.filter(person => !hideSelf || !person.local || participants.length === 1);
   const shares = participants.filter(person => playable(person, 'screenVideo'));
@@ -122,9 +123,6 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
     {composed && shared.local && onEditPresentation && <button className="btn secondary edit-live-presentation" type="button"
       onClick={onEditPresentation}><Icon name="layers" size={17} /> Edit live presentation</button>}
     {caption && <div className="caption" role="status"><strong>{caption.name}</strong> {caption.text}</div>}
-    <div className="reaction-float" aria-live="polite">
-      {visuals.map(({ id, emoji, name }) => <span key={id} aria-label={name + ' reacted ' + emoji}>{emoji}</span>)}
-    </div>
   </div>;
 }
 
@@ -474,6 +472,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     setPin('');
     setSpotlight('');
     setCaption(null);
+    setVisuals([]);
     setUnread(0);
     cameraEffects.stop();
     const enhancedBackground = cameraEffects.enhanced && cameraEffects.choice;
@@ -613,9 +612,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   }
 
   function react(emoji, sender) {
+    const reaction = reactions.find(([value]) => value === emoji);
+    if (!reaction) return;
+    const [, label] = reaction;
     const id = newNonce();
-    setVisuals(old => [...old.slice(-7), { id, emoji, name: sender }]);
-    setTimeout(() => setVisuals(old => old.filter(item => item.id !== id)), 3600);
+    setVisuals(old => [...old.slice(-3), { id, emoji, label, name: sender }]);
+    setTimeout(() => setVisuals(old => old.filter(item => item.id !== id)), REACTION_DURATION_MS);
   }
 
   function receive(event, participants, room) {
@@ -631,9 +633,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       if (!text || !/^[a-f0-9]{32}$/.test(message.id ?? '')) return;
       appendMessage(room.url, { id: event.fromId + ':' + message.id, name: participantName(sender), text, time: Date.now() });
     }
-    if (message.type === 'reaction' && canParticipate(sender) && reactions.some(([emoji]) => emoji === message.emoji)) {
-      react(message.emoji, participantName(sender));
-    }
+    if (message.type === 'reaction' && canParticipate(sender)) react(message.emoji, participantName(sender));
     if (message.type === 'request-state' && host && participants.local?.owner && !sender.local) {
       if (stateRequests.current.call !== call()) stateRequests.current = { call: call(), participants: new Set() };
       if (stateRequests.current.participants.has(event.fromId)) return;
@@ -1032,7 +1032,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     </div>}
     <div className={'meeting-body' + (panel === 'activity' ? ' wide-panel' : '')}>
       <Stage participants={state.participants} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
-        hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption} visuals={visuals}
+        hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption}
         onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} />
       {panel && <aside className="sidebar" aria-label={labels[panel]}>
         <header className="sidebar-heading"><h2>{labels[panel]}</h2><button type="button" className="icon-button"
@@ -1056,6 +1056,11 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           close={closeRooms} visit={destination => { setIncoming(null); move(destination); }} back={returnMain}
           busy={busy} now={time} assign={assign} participants={state.participants} />}
       </aside>}
+      <div className="reaction-overlay" aria-live="polite" aria-relevant="additions"
+        style={{ '--reaction-duration': REACTION_DURATION_MS + 'ms' }}>
+        <div>{visuals.map(({ id, emoji, label, name }) => <span key={id} role="img" aria-label={name + ' reacted with ' + label}>
+          {emoji}</span>)}</div>
+      </div>
     </div>
     <div className="meeting-audio" aria-hidden="true">
       {state.participants.filter(p => !p.local).flatMap(person => ['audio', 'screenAudio'].map(type => {
