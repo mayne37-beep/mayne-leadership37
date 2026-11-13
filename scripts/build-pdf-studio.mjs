@@ -69,7 +69,7 @@ await build({
   entryPoints: [path.join(root, 'src', 'live-classroom', 'App.jsx')],
   outfile: path.join(out, 'assets', 'live-classroom.js'),
   bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
-  external: ['/assets/live-classroom-document-renderer.js?v=1'],
+  external: ['/assets/live-classroom-document-renderer.js?v=2'],
 });
 for (const module of ['document-converter', 'document-renderer']) {
   await build({

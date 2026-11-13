@@ -16,6 +16,7 @@ import { useQuickPoll } from './use-quick-poll.js';
 import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, participantCanSend, participantRole } from './meeting-roles.js';
 import { loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
 import { DocumentControls, DocumentPresentation, PageControls } from './DocumentPresentation.jsx';
+import { PowerPointLinks, PowerPointNotes, PowerPointSlides, usePowerPointShortcuts } from './PowerPointPresenter.jsx';
 import { useDocumentPresentation } from './use-document-presentation.js';
 import { AnnotationLayer } from './AnnotationLayer.jsx';
 import { PresentationTools, SlideHandoff } from './PresentationTools.jsx';
@@ -415,6 +416,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [annotationTool, setAnnotationTool] = useState('pen');
   const [annotationColor, setAnnotationColor] = useState('yellow');
   const [annotationEmoji, setAnnotationEmoji] = useState('👍');
+  const [showPresenterView, setShowPresenterView] = useState(true);
+  const [slideGrid, setSlideGrid] = useState(false);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [visuals, setVisuals] = useState([]);
   const [chat, setChat] = useState({});
@@ -472,9 +475,17 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const shares = state.participants.filter(person => playable(person, 'screenVideo'));
   const shared = shares.find(person => person.owner && presentationOf(person).composed) ??
     shares.find(person => presentationOf(person).composed) ?? shares[0];
+  const livePowerPoint = canPresent && filePresentation.status === 'live' && filePresentation.deck?.powerpoint;
+  const powerpointOnStage = livePowerPoint && shared?.local;
+  const presenterView = powerpointOnStage && showPresenterView;
   const collaboration = usePresentationCollaboration({ call: activeInstance, local, shared, participants: state.participants,
     localData: state.localData, file: filePresentation, sync: updateLocalData, send, notify: setNotice });
   const annotationBoard = collaboration.board;
+  const delegated = Boolean(collaboration.controller);
+  usePowerPointShortcuts({
+    active: powerpointOnStage && !delegated && !annotationEditing && !menu,
+    page: filePresentation.deck?.page, count: filePresentation.deck?.count, goTo: filePresentation.goTo,
+  });
   const canAnnotate = annotationBoard?.mode === 'everyone' ? canInteract :
     collaboration.own && annotationBoard?.mode === 'presenter';
   function editAnnotations(value) {
@@ -535,6 +546,12 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   useEffect(() => { saveMeetingPreferences({ view, hideSelf, hideVideo, showCaptions }); }, [view, hideSelf, hideVideo, showCaptions]);
   useEffect(() => { setAnnotationEditing(false); }, [activeInstance, shared?.session_id, annotationBoard?.id]);
   useEffect(() => { if (!canAnnotate) setAnnotationEditing(false); }, [canAnnotate]);
+  useEffect(() => {
+    if (!livePowerPoint) {
+      setShowPresenterView(true);
+      setSlideGrid(false);
+    }
+  }, [livePowerPoint]);
   useEffect(() => {
     if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
     restoreCamera.current = false;
@@ -939,11 +956,14 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
     polls: 'Polls', devices: 'Device settings',
   };
+  const slideLinks = powerpointOnStage && !delegated && !annotationEditing && filePresentation.deck.links?.length
+    ? <PowerPointLinks deck={filePresentation.deck} goTo={filePresentation.goTo} /> : null;
   const annotations = annotationBoard && annotationBoard.mode !== 'off' && <AnnotationLayer
     key={annotationBoard.id + ':' + annotationBoard.pageVersion + ':' + (canAnnotate && annotationEditing ? annotationTool : 'view')}
     board={annotationBoard} tool={annotationTool} color={annotationColor} emoji={annotationEmoji}
     author={collaboration.localId} presenter={collaboration.own} edit={collaboration.edit}
     interactive={canAnnotate && annotationEditing} dialogHost={meetingRoot} />;
+  const presentationOverlay = slideLinks ? <>{annotations}{slideLinks}</> : annotations;
   const pollWaiting = Boolean(votingPollId && !pollPopupOpen && panel !== 'polls');
   const pollResultsWaiting = panel !== 'polls' && panel !== 'chat' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
 
@@ -1117,9 +1137,16 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         onClick={() => setSeenPollResults(sharedPollId)}><Icon name="close" size={15} /></button>}
     </div>}
     <div className={'meeting-body' + (panel === 'activity' ? ' wide-panel' : '')}>
-      <Stage participants={state.participants} shared={shared} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
-        hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption}
-        onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} annotations={annotations} />
+      <div className="presentation-workspace">
+        <div className="presentation-stage" data-presenter-view={presenterView || undefined}>
+          <Stage participants={state.participants} shared={shared} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
+            hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption}
+            onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} annotations={presentationOverlay} />
+          {presenterView && <PowerPointNotes presentation={filePresentation} elapsed={callDuration(time - filePresentation.deck.started)} />}
+        </div>
+        {presenterView && <PowerPointSlides presentation={filePresentation} delegated={delegated}
+          grid={slideGrid} closeGrid={() => setSlideGrid(false)} />}
+      </div>
       {panel && <aside className="sidebar" aria-label={labels[panel]}>
         <header className="sidebar-heading"><h2>{labels[panel]}</h2><button type="button" className="icon-button"
           aria-label={'Close ' + labels[panel].toLowerCase()} onClick={() => setPanel('')}><Icon name="close" size={18} /></button></header>
@@ -1156,7 +1183,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       {canInteract && collaboration.controlling && <PageControls deck={{ page: annotationBoard.page, count: annotationBoard.pages }}
         goTo={collaboration.goTo} />}
     </div>}
-    {canPresent && filePresentation.status === 'live' && <DocumentControls presentation={filePresentation} delegated={Boolean(collaboration.controller)} />}
+    {canPresent && filePresentation.status === 'live' && <DocumentControls presentation={filePresentation} delegated={delegated}
+      presenterView={presenterView} togglePresenterView={powerpointOnStage ? () => setShowPresenterView(!showPresenterView) : null}
+      openGrid={() => setSlideGrid(true)} />}
     <div className="meeting-audio" aria-hidden="true">
       {state.participants.filter(p => !p.local).flatMap(person => ['audio', 'screenAudio'].map(type => {
         const track = playable(person, type);

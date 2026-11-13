@@ -4,6 +4,15 @@ import { participantCanSend } from './meeting-roles.js';
 import { loadPresentationDocument } from './presentation-document.js';
 import { publishPresentation, screenTrack } from './presentation-stream.js';
 
+function slideLinks(pages, index, canvas) {
+  if (!pages.powerpoint) return undefined;
+  try {
+    return pages.links(index, canvas).filter(link => link.href || (link.page >= 0 && link.page < pages.count));
+  } catch {
+    return [];
+  }
+}
+
 export function useDocumentPresentation({ call, allowed, notify, sync }) {
   const supported = typeof HTMLCanvasElement.prototype.captureStream === 'function';
   const [open, setOpen] = useState(false);
@@ -87,7 +96,8 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       frame.drawImage(pageCanvas, 0, 0);
       prepared.current?.pages.close();
       prepared.current = { canvas, frame, pageCanvas, pages, page: 0 };
-      setDeck({ name: cleanText(file.name, 90), page: 0, count: pages.count });
+      setDeck({ name: cleanText(file.name, 90), page: 0, count: pages.count,
+        powerpoint: pages.powerpoint, slides: pages.slides, links: slideLinks(pages, 0, pageCanvas) });
     } catch (failure) {
       pages?.close();
       if (!operation.signal.aborted) setError(failure.message || 'The document could not be opened.');
@@ -99,14 +109,21 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
     }
   }
 
-  function goTo(page) {
+  const renderPreview = useCallback((page, canvas) => {
+    const pages = prepared.current?.pages;
+    if (!pages || page < 0 || page >= pages.count) return;
+    try { pages.render(page, canvas); } catch {}
+  }, []);
+
+  const goTo = useCallback(page => {
     const current = prepared.current;
     if (!current || !Number.isInteger(page) || page < 0 || page >= current.pages.count || current.page === page) return false;
     try {
       current.pages.render(page, current.pageCanvas);
       current.frame.drawImage(current.pageCanvas, 0, 0);
       current.page = page;
-      setDeck(previous => ({ ...previous, page }));
+      const links = slideLinks(current.pages, page, current.pageCanvas);
+      setDeck(previous => ({ ...previous, page, links }));
       return true;
     } catch {
       const message = 'This page could not be displayed. Try another page.';
@@ -114,7 +131,7 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       else notify(message);
       return false;
     }
-  }
+  }, [open, notify]);
 
   async function start() {
     if (!allowed || !call || !prepared.current || importing.current || output.current ||
@@ -155,6 +172,7 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       session.signal.throwIfAborted();
       await publishPresentation(call, stream, session.signal, 'detail-optimized');
       session.signal.throwIfAborted();
+      setDeck(previous => ({ ...previous, started: Date.now() }));
       setStatus('live');
       setOpen(false);
     } catch (failure) {
@@ -164,5 +182,5 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
     }
   }
 
-  return { supported, open, openEditor, closeEditor, deck, progress, error, status, preview, choose, goTo, start, stop };
+  return { supported, open, openEditor, closeEditor, deck, progress, error, status, preview, renderPreview, choose, goTo, start, stop };
 }
