@@ -62,6 +62,9 @@ export function readSharedPoll(value) {
         values.some(value => !Number.isSafeInteger(value) || value < 0 || value > limit)) return poll;
     poll.results = { count, values };
   }
+  if (Number.isSafeInteger(value.sharedAt) && value.sharedAt > 0 && value.sharedAt <= 8.64e15) {
+    poll.sharedAt = value.sharedAt;
+  }
   return poll;
 }
 

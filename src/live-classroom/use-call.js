@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Daily from '@daily-co/daily-js';
 
 const initial = {
-  phase: 'connecting', participants: [], waiting: [], speaker: '', audio: false,
+  phase: 'connecting', room: '', participants: [], waiting: [], speaker: '', audio: false,
   video: false, videoEffects: false, sharing: false, recording: false, transcription: false, network: '', error: '',
   localData: { raised: false },
 };
@@ -54,7 +54,7 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
     const previous = ref.current;
     ref.current = null;
     localData.current = { ...initial.localData, ...cameraData };
-    setState({ ...initial, localData: localData.current });
+    setState({ ...initial, room: target.url, localData: localData.current });
     try {
       if (previous && !previous.isDestroyed()) await previous.destroy();
       if (current !== turn.current) return;

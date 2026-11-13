@@ -115,6 +115,7 @@ test('a Daily key discovers the domain and only the organizer can manage private
   assert.equal(rooms.get(entry.room).privacy, 'private');
   assert.equal(rooms.get(entry.room).config.enable_knocking, true);
   assert.equal(rooms.get(entry.room).config.enable_recording, 'cloud');
+  assert.deepEqual(rooms.get(entry.room).config.permissions, { canSend: ['audio', 'video'], canAdmin: false });
   const retried = await call('create', { title: 'Leadership Workshop', nonce }, auth.organizer);
   assert.equal(retried.body.room, entry.room);
   assert.equal(createCount, 1);
@@ -130,7 +131,9 @@ test('a Daily key discovers the domain and only the organizer can manage private
   assert.equal((await call('host', input)).status, 401);
   assert.equal((await call('host', input, auth.other)).status, 403);
   assert.equal((await call('host', input, auth.organizer)).body.token, 'token-1');
-  assert.deepEqual(tokens[0], { room_name: entry.room, exp: entry.end, is_owner: true });
+  assert.deepEqual(tokens[0], {
+    room_name: entry.room, exp: entry.end, is_owner: true, permissions: { canSend: true, canAdmin: true },
+  });
 
   const locked = await call('lock', { ...input, locked: true }, auth.organizer);
   assert.equal(locked.body.locked, true);
@@ -141,6 +144,9 @@ test('a Daily key discovers the domain and only the organizer can manage private
   assert.equal(new Set(breakout.body.groups.map(group => group.url)).size, 2);
   assert.equal(tokens.filter(token => token.is_owner).length, 3);
   assert.equal(tokens.filter(token => token.room_name === entry.room && !token.is_owner).length, 1);
+  for (const token of tokens.filter(token => !token.is_owner)) {
+    assert.deepEqual(token.permissions, { canSend: ['audio', 'video'], canAdmin: false });
+  }
   const ended = await call('end', { ...input, round, count: 2 }, auth.organizer);
   assert.equal(ended.body.ended, true);
   assert.equal(rooms.size, 0);
