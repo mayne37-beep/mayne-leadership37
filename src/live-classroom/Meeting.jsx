@@ -375,6 +375,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [target, setTarget] = useState(main);
   const [panel, setPanel] = useState('');
   const [pollDraft, setPollDraft] = useState(emptyPollDraft);
+  const [dismissedPollId, setDismissedPollId] = useState('');
   const [seenPollResults, setSeenPollResults] = useState('');
   const [menu, setMenu] = useState('');
   const [view, setView] = useState('gallery');
@@ -441,6 +442,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     callRef: ref, call: activeInstance, organizer, participants: state.participants,
     localPoll: state.localData.quickPoll, sync: updateLocalData, send, onShared: publishPollChat,
   });
+  const votingPollId = !organizer && quick.canVote && quick.poll?.open && !quick.answered ? quick.poll.id : '';
+  const pollPopupOpen = Boolean(votingPollId && votingPollId !== dismissedPollId);
   const sharedPollId = !organizer && quick.poll?.results ? quick.poll.id : '';
   const cameraEffects = useCameraEffects({ callRef: ref, notify: setNotice, nativeSupported: state.videoEffects,
     sync: updateLocalData });
@@ -473,6 +476,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     setSpotlight('');
     setCaption(null);
     setVisuals([]);
+    setDismissedPollId('');
     setUnread(0);
     cameraEffects.stop();
     const enhancedBackground = cameraEffects.enhanced && cameraEffects.choice;
@@ -514,6 +518,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       try { activeInstance.setLocalAudio(false, { forceDiscardTrack: true }); } catch {}
     }
   }, [activeInstance, localRole]);
+  useEffect(() => {
+    if (quick.answered) setNotice('Poll response submitted.');
+  }, [quick.answered]);
   useEffect(() => {
     if ((panel === 'polls' || panel === 'chat') && sharedPollId) setSeenPollResults(sharedPollId);
   }, [panel, sharedPollId]);
@@ -868,7 +875,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
     polls: 'Polls', devices: 'Device settings',
   };
-  const pollWaiting = !organizer && quick.canVote && quick.poll?.open && !quick.answered && panel !== 'polls';
+  const pollWaiting = Boolean(votingPollId && !pollPopupOpen && panel !== 'polls');
   const pollResultsWaiting = panel !== 'polls' && panel !== 'chat' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
 
   if (!activeCall) return <div className="workspace connecting">
@@ -1024,8 +1031,13 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     {(pollWaiting || pollResultsWaiting) && <div className="meeting-alert poll-invitation">
       <Icon name="poll" size={17} /><span role="status">{pollWaiting ? 'Poll open' : 'Poll results posted to chat'}</span>
       <button type="button" className="text-button" onClick={() => {
-        if (pollResultsWaiting) setSeenPollResults(sharedPollId);
-        showPanel(pollWaiting ? 'polls' : 'chat');
+        if (pollWaiting) {
+          setMenu('');
+          setDismissedPollId('');
+        } else {
+          setSeenPollResults(sharedPollId);
+          showPanel('chat');
+        }
       }}>{pollWaiting ? 'Answer poll' : 'View results'}</button>
       {pollResultsWaiting && <button className="icon-button" type="button" aria-label="Dismiss poll results notice"
         onClick={() => setSeenPollResults(sharedPollId)}><Icon name="close" size={15} /></button>}
@@ -1085,6 +1097,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           setConfirmation(null);
           perform(action);
         }}>{confirmation.label}</button></div>
+    </Modal>}
+    {pollPopupOpen && <Modal key={votingPollId} title="Live poll" className="poll-dialog" close={() => setDismissedPollId(votingPollId)}>
+      <QuickPolls quick={quick} />
     </Modal>}
   </main>;
 }
