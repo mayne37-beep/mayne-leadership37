@@ -36,6 +36,7 @@ const paths = {
   poll: 'M4 4h16v16H4z M8 15v2 M12 8v9 M16 11v6',
   check: 'M5 12l4 4L19 6',
   lock: 'M5 10h14v10H5z M8 10V7a4 4 0 0 1 8 0v3 M12 14v2',
+  clock: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z M12 7v5l3 2',
   expand: 'M9 4H4v5 M15 4h5v5 M4 15v5h5 M20 15v5h-5',
   download: 'M12 3v12 M8 11l4 4 4-4 M4 16v5h16v-5',
   pin: 'M9 3h6l-1 5 4 4v2H6v-2l4-4z M12 14v7',

@@ -23,6 +23,8 @@ export function loadMeetingPreferences() {
     hideSelf: saved.hideSelf === true,
     hideVideo: saved.hideVideo === true,
     showCaptions: saved.showCaptions !== false,
+    speakerNotesSize: Number.isInteger(saved.speakerNotesSize) && saved.speakerNotesSize >= 0 && saved.speakerNotesSize <= 3
+      ? saved.speakerNotesSize : 1,
   };
 }
 
