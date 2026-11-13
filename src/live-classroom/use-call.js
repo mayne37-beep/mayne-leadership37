@@ -81,7 +81,7 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
       let admitted = Boolean(target.token);
       let entered = false;
       const enter = () => {
-        if (!admitted || entered) return;
+        if (!admitted || entered || !call.participants().local?.session_id) return;
         entered = true;
         const participants = Object.values(call.participants());
         snapshot({ phase: 'connected', error: '', videoEffects: browser.supportsVideoProcessing,
@@ -90,6 +90,7 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
       };
       on('joined-meeting', enter);
       on('participant-joined', ({ participant }) => {
+        if (participant.local) enter();
         snapshot();
         listeners.current.onAttendance('joined', [participant], target);
       });
