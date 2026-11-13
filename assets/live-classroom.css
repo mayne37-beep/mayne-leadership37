@@ -189,15 +189,15 @@ button svg, a svg { flex: none; }
 .caption { position: absolute; z-index: 2; bottom: 26px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; padding: 8px 13px; border-radius: 6px; background: #141319ec; color: white; text-align: center; }
 .caption strong { margin-right: 4px; }
 .reaction-overlay { pointer-events: none; position: absolute; inset: 0; z-index: 5; display: grid;
-  place-items: center; padding: 12px; overflow: hidden; }
+  place-items: center; padding: 12px; overflow: hidden; container-type: size; }
 .reaction-overlay > div { display: flex; flex-wrap: wrap; justify-content: center;
   gap: clamp(6px, 1.5vmin, 16px); font-size: clamp(52px, 11vmin, 104px); line-height: 1.15; }
-.reaction-overlay span { filter: drop-shadow(0 2px 7px #141319b8); animation: reaction-pop var(--reaction-duration) ease-out both; }
-@keyframes reaction-pop {
-  0% { opacity: 0; transform: scale(.72); }
-  12% { opacity: 1; transform: scale(1.08); }
-  24%, 78% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(.96); }
+.reaction-overlay span { filter: drop-shadow(0 2px 7px #141319b8); animation: reaction-rise var(--reaction-duration) ease-out both; }
+@keyframes reaction-rise {
+  0% { opacity: .45; transform: translateY(max(0px, calc(50cqh - .85em))) scale(.82); }
+  14% { opacity: 1; }
+  58%, 80% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-.12em) scale(.96); }
 }
 .meeting-audio { position: absolute; left: -9999px; }
 .sidebar { width: clamp(280px, 31vw, 352px); flex: 0 0 auto; min-height: 0; display: flex; flex-direction: column; overflow: auto; border-left: 1px solid var(--line); background: #25242d; }
