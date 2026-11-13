@@ -223,7 +223,7 @@ function CameraEffectsSettings({ camera, cameraOn, settings, tune, busy, adjusti
         {coverageOptions.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
       </select>
     </label>
-    <p className="subtle">{advanced ? 'Use Keep more of me if your shoulders, hands, or hair fade into the background.'
+    <p className="subtle">{advanced ? 'Start with Balanced for a steadier edge. Use Keep more of me if parts of your outline are cut off.'
       : 'Subject outline applies to Weather view on this device.'}</p>
     <label className="field">Blur strength
       <select value={settings.blur} onChange={event => tune({ blur: event.target.value })}>

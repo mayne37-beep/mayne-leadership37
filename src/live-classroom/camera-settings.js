@@ -1,7 +1,7 @@
 export const coverageOptions = [
-  { id: 'balanced', label: 'Balanced', threshold: 0.33 },
-  { id: 'more', label: 'Keep more of me', threshold: 0.20 },
-  { id: 'most', label: 'Keep the most', threshold: 0.10 },
+  { id: 'balanced', label: 'Balanced', threshold: 0.49 },
+  { id: 'more', label: 'Keep more of me', threshold: 0.42 },
+  { id: 'most', label: 'Keep the most', threshold: 0.35 },
 ];
 
 export const blurOptions = [

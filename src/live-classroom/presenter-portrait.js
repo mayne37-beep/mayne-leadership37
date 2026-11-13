@@ -1,15 +1,20 @@
 import { FilesetResolver, ImageSegmenter } from '@mediapipe/tasks-vision';
 import { blurOption, coverageOption } from './camera-settings.js';
+import { writePortraitMask } from './portrait-mask.js';
 
 const base = self.location.origin + '/assets/live-classroom-vision';
 const portrait = new OffscreenCanvas(1, 1);
 const portraitContext = portrait.getContext('2d');
+const inference = new OffscreenCanvas(1, 1);
+const inferenceContext = inference.getContext('2d', { alpha: false });
 const maskCanvas = new OffscreenCanvas(1, 1);
 const maskContext = maskCanvas.getContext('2d');
 const composite = new OffscreenCanvas(1, 1);
 const compositeContext = composite.getContext('2d');
 let segmenter;
 let maskImage;
+let maskHistory;
+let previousTimestamp = -Infinity;
 let background;
 
 async function start() {
@@ -33,12 +38,13 @@ function draw(bitmap, mask, settings) {
     maskCanvas.width = mask.width;
     maskCanvas.height = mask.height;
     maskImage = maskContext.createImageData(mask.width, mask.height);
+    maskHistory = new Float32Array(mask.width * mask.height);
+    previousTimestamp = -Infinity;
   }
-  const confidence = mask.getAsFloat32Array();
-  const threshold = coverageOption(settings.coverage).threshold;
-  for (let i = 0; i < confidence.length; i++) {
-    maskImage.data[i * 4 + 3] = (confidence[i] - threshold) * 1275;
-  }
+  const timestamp = settings.timestamp ?? performance.now();
+  writePortraitMask(mask.getAsFloat32Array(), maskHistory, maskImage, timestamp - previousTimestamp,
+    coverageOption(settings.coverage).threshold);
+  previousTimestamp = timestamp;
   maskContext.putImageData(maskImage, 0, 0);
   portraitContext.globalCompositeOperation = 'source-over';
   portraitContext.clearRect(0, 0, portrait.width, portrait.height);
@@ -76,7 +82,16 @@ self.onmessage = ({ data: { bitmap, settings = {}, background: image } }) => {
       background?.close();
       background = image;
     }
-    segmenter.segmentForVideo(bitmap, performance.now(), ({ confidenceMasks }) => draw(bitmap, confidenceMasks.at(-1), settings));
+    // The model uses a small input. Keep that work separate from the full-resolution camera image.
+    const scale = Math.min(1, 320 / Math.max(bitmap.width, bitmap.height));
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    if (inference.width !== width || inference.height !== height) {
+      inference.width = width;
+      inference.height = height;
+    }
+    inferenceContext.drawImage(bitmap, 0, 0, width, height);
+    segmenter.segmentForVideo(inference, performance.now(), ({ confidenceMasks }) => draw(bitmap, confidenceMasks.at(-1), settings));
   } catch (error) {
     console.warn('Weather view frame processing failed.', error);
     self.postMessage({ error: true });
