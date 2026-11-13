@@ -6,6 +6,8 @@ import { copyLink, downloadCsv, guestLink, newNonce, request } from './client.js
 import { participantName, useCall } from './use-call.js';
 import { BackgroundSettings, loadBackgrounds } from './BackgroundSettings.jsx';
 import { PresenterView } from './PresenterView.jsx';
+import { PresenterStudio } from './PresenterStudio.jsx';
+import { usePresenterStudio } from './use-presenter-studio.js';
 import { backgroundSettings, blurOptions, cameraPresentationSettings, coverageOptions, sampleBackdropColor } from './camera-settings.js';
 import { useCameraEffects } from './use-camera-effects.js';
 
@@ -77,12 +79,13 @@ function Tile({ person, active, screen = false, hidden = false, focused = false,
   </article>;
 }
 
-function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, visuals }) {
+function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, visuals, onEditPresentation }) {
   const [page, setPage] = useState(0);
   const shown = participants.filter(person => !hideSelf || !person.local || participants.length === 1);
-  const shared = participants.find(person => playable(person, 'screenVideo'));
-  const { layout, side } = presentationOf(shared);
-  const presenterCamera = layout !== 'standard' && shown.includes(shared) && (!hideVideo || shared.local)
+  const shares = participants.filter(person => playable(person, 'screenVideo'));
+  const shared = shares.find(person => person.userData?.presentation?.layout === 'studio') ?? shares[0];
+  const { layout, side, mirror, composed } = presentationOf(shared);
+  const presenterCamera = !composed && layout !== 'standard' && shown.includes(shared) && (!hideVideo || shared.local)
     ? playable(shared, 'video') : null;
   const chosen = shown.find(person => person.session_id === pin);
   const speaking = shown.find(person => person.session_id === speaker || (speaker === 'local' && person.local));
@@ -91,14 +94,14 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
   const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount - 1);
   const tiles = shown.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
-  const strip = shown.filter(person => person !== (presenterCamera ? shared : shared ? null : focus));
+  const strip = shown.filter(person => person !== (composed || presenterCamera ? shared : shared ? null : focus));
   const render = person => <Tile key={person.session_id} person={person} hidden={hideVideo}
     active={person.session_id === speaking?.session_id} focused={person.session_id === pin}
     onPin={() => setPin(person.session_id === pin ? '' : person.session_id)} />;
   return <div className="stage">
     {(shared || focus) ? <div className="focus-layout">
       {presenterCamera ? <PresenterView screen={playable(shared, 'screenVideo')} camera={presenterCamera}
-        side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage}
+        side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage} mirror={mirror}
         backdropColor={shared.userData?.cameraBackdrop} />
         : shared ? <Tile person={shared} screen /> : render(focus)}
       {shown.length > 1 && strip.length > 0 && <div className="filmstrip">{strip.map(render)}</div>}
@@ -110,6 +113,8 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
       <button type="button" className="icon-button next" aria-label="Next gallery page"
         disabled={currentPage === pageCount - 1} onClick={() => setPage(currentPage + 1)}><Icon name="chevron" /></button>
     </div>}
+    {composed && shared.local && onEditPresentation && <button className="btn secondary edit-live-presentation" type="button"
+      onClick={onEditPresentation}><Icon name="layers" size={17} /> Edit live presentation</button>}
     {caption && <div className="caption" role="status"><strong>{caption.name}</strong> {caption.text}</div>}
     <div className="reaction-float" aria-live="polite">
       {visuals.map(({ id, emoji, name }) => <span key={id} aria-label={name + ' reacted ' + emoji}>{emoji}</span>)}
@@ -402,6 +407,17 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     sync: updateLocalData });
   cameraFailure.current = cameraEffects.onDailyError;
   const localCamera = playable(state.participants.find(person => person.local), 'video');
+  const studio = usePresenterStudio({
+    call: activeInstance,
+    camera: state.video ? cameraEffects.rawCamera ?? localCamera : null,
+    cameraSettings: {
+      coverage: cameraEffects.settings.coverage,
+      backdropColor: cameraEffects.settings.backdropMode === 'solid' &&
+        (cameraEffects.rawCamera || !cameraEffects.choice) ? cameraEffects.settings.backdropColor : null,
+    },
+    sync: updateLocalData,
+    notify: setNotice,
+  });
   studioMessage.current = (message, channel) => {
     if (message?.type !== 'share' || typeof message.requestId !== 'string' || !/^[a-f0-9]{32}$/.test(message.requestId) ||
         typeof message.code !== 'string' || !/^\d{6,7}$/.test(message.code)) return;
@@ -693,6 +709,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   async function exit(ended = false) {
     if (leaving.current) return;
     leaving.current = true;
+    studio.stop();
     cameraEffects.stop();
     trackAttendance('left', state.participants, target);
     await disconnect().catch(() => {});
@@ -715,7 +732,16 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const canChooseLayout = canShare || state.sharing;
   function choosePresentation(patch) {
     setMenu('');
-    perform(() => updateLocalData({ presentation: { ...presentation, ...patch } }));
+    perform(() => updateLocalData({ presentation: {
+      layout: presentation.layout,
+      side: presentation.side,
+      mirror: presentation.mirror,
+      ...patch,
+    } }));
+  }
+  function openPresenterStudio() {
+    setMenu('');
+    studio.openEditor();
   }
   const memberTitle = target.label ? main.title + ' · ' + target.label : main.title;
   const displayedCaption = showCaptions && state.transcription && caption && time - caption.time < 9000 ? caption : null;
@@ -773,14 +799,17 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           {menu === 'presenter' && <Popover title="Presenter layouts">
             <div className="presenter-options">
               <MenuItem icon="arrow" onClick={() => setMenu('view')}>Back to views</MenuItem>
-              <p className="subtle">Your audience sees this layout when you share your screen with your camera on.</p>
+              <p className="subtle">Choose what attendees see when you share your screen.</p>
               {presenterLayouts.map(({ id, icon, label }) => <MenuItem key={id} icon={icon} selected={presentation.layout === id}
-                disabled={busy} onClick={() => choosePresentation({ layout: id })}>{label}</MenuItem>)}
-              {presentation.layout !== 'standard' && <fieldset className="presenter-position" disabled={busy}>
+                disabled={busy || studio.status !== 'idle'} onClick={() => choosePresentation({ layout: id })}>{label}</MenuItem>)}
+              {presentation.layout !== 'standard' && <fieldset className="presenter-position" disabled={busy || studio.status !== 'idle'}>
                 <legend>Camera position</legend>
                 {['left', 'right'].map(side => <button className="btn secondary" type="button" key={side}
                   aria-pressed={side === presentation.side} onClick={() => choosePresentation({ side })}>{side === 'left' ? 'Left' : 'Right'}</button>)}
               </fieldset>}
+              <MenuItem icon="camera" selected={presentation.mirror} disabled={busy || studio.status !== 'idle'}
+                onClick={() => choosePresentation({ mirror: !presentation.mirror })}>Mirror presenter camera</MenuItem>
+              {studio.supported && <MenuItem icon="layers" onClick={openPresenterStudio}>Presenter Studio</MenuItem>}
             </div>
           </Popover>}
         </div>
@@ -820,9 +849,19 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           onClick={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, !state.video, preferences.camera), state.video)} />
         <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
           onClick={() => perform(() => call().setLocalAudio(!state.audio))} />
-        <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
-          title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!canShare && !state.sharing}
-          onClick={() => perform(() => state.sharing ? call().stopScreenShare() : call().startScreenShare({ displayMediaOptions: { audio: true } }))} />
+        <div className="tool-wrap share-wrap" data-menu-root>
+          <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
+            title={state.sharing ? 'Stop screen sharing' : 'Share screen'} disabled={!canShare && !state.sharing}
+            onClick={() => {
+              if (studio.status !== 'idle') studio.stop();
+              else perform(() => state.sharing ? call().stopScreenShare() : call().startScreenShare({ displayMediaOptions: { audio: true } }));
+            }} />
+          {studio.supported && <button type="button" className="leave-options" aria-label="Share options" aria-expanded={menu === 'share'}
+            onClick={() => toggleMenu('share')}><Icon name="down" size={15} /></button>}
+          {menu === 'share' && <Popover title="Share options">
+            <MenuItem icon="layers" onClick={openPresenterStudio}>{studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>
+          </Popover>}
+        </div>
         <div className="leave-wrap tool-wrap" data-menu-root>
           <Tool label="Leave" icon="leave" className="leave" onClick={() => target.label ? returnMain() : exit()} />
           {host && <button type="button" className="leave-options" aria-label="Leave options" aria-expanded={menu === 'leave'}
@@ -850,7 +889,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       <button type="button" className="text-button" onClick={() => setPanel('rooms')}>View assignment</button></div>}
     <div className={'meeting-body' + (panel === 'activity' ? ' wide-panel' : '')}>
       <Stage participants={state.participants} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
-        hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption} visuals={visuals} />
+        hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption} visuals={visuals}
+        onEditPresentation={studio.status === 'live' ? openPresenterStudio : undefined} />
       {panel && <aside className="sidebar" aria-label={labels[panel]}>
         <header className="sidebar-heading"><h2>{labels[panel]}</h2><button type="button" className="icon-button"
           aria-label={'Close ' + labels[panel].toLowerCase()} onClick={() => setPanel('')}><Icon name="close" size={18} /></button></header>
@@ -879,6 +919,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         return track && <Track key={person.session_id + ':' + type} track={track} audio speaker={preferences.speaker} onBlocked={soundBlocked} />;
       }))}
     </div>
+    {studio.open && <PresenterStudio studio={studio} cameraOn={state.video} busy={busy} sharing={state.sharing}
+      stopShare={() => perform(() => activeInstance.stopScreenShare())}
+      turnCameraOn={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, true, preferences.camera))} />}
     {inviteDialog && <MeetingInvitation link={guestLink(entry.invite)} close={() => setInviteDialog(false)}
       onCopy={link => perform(async () => {
         await copyLink(link);

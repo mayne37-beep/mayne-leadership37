@@ -27,9 +27,11 @@ export function useCall({ onMessage, onCaption, onAttendance, onBackgroundError 
     if (call && !call.isDestroyed()) await call.destroy();
   }, []);
 
-  const updateLocalData = useCallback(async patch => {
+  const updateLocalData = useCallback(async (patch, expectedCall) => {
     const call = ref.current;
-    if (call?.meetingState() !== 'joined-meeting') throw new Error('The meeting is reconnecting. Try again.');
+    if (call?.meetingState() !== 'joined-meeting' || (expectedCall && expectedCall !== call)) {
+      throw new Error('The meeting is reconnecting. Try again.');
+    }
     const previous = localData.current;
     const next = { ...previous, ...patch };
     localData.current = next;

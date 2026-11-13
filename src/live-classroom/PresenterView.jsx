@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortraitProcessor } from './portrait-processor.js';
 
-export function PresenterView({ screen, camera, side, layout, name, coverage, backdropColor }) {
+export function PresenterView({ screen, camera, side, layout, name, coverage, backdropColor, mirror }) {
   const overlay = layout !== 'side-by-side';
   const cutout = layout === 'weather';
   const surface = useRef(null);
@@ -130,13 +130,14 @@ export function PresenterView({ screen, camera, side, layout, name, coverage, ba
     <div className="presenter-slide" ref={surface}>
       <div className="presenter-slide-frame" style={size || undefined}>
         <video ref={screenVideo} autoPlay muted playsInline className="presenter-screen" aria-label={name + '’s shared screen'} />
-        {overlay && <div className={'presenter-camera overlay-camera' + (cutout && cutoutReady ? ' presenter-cutout' : '')}>
+        {overlay && <div className={'presenter-camera overlay-camera' + (cutout && cutoutReady ? ' presenter-cutout' : '')}
+          data-mirror-camera={mirror ? 'true' : undefined}>
           <video ref={cameraVideo} autoPlay muted playsInline className={cutout && cutoutReady ? 'cutout-source' : undefined} aria-label={name + '’s camera'} />
           {cutout && <canvas ref={portrait} hidden={!cutoutReady} aria-label={name + ' over the shared screen'} />}
         </div>}
       </div>
     </div>
-    {!overlay && <div className="presenter-camera side-camera">
+    {!overlay && <div className="presenter-camera side-camera" data-mirror-camera={mirror ? 'true' : undefined}>
       <video ref={cameraVideo} autoPlay muted playsInline aria-label={name + '’s camera'} />
     </div>}
     {cutout && cutoutStatus === 'unavailable' && <span className="presenter-notice" role="status">Weather view is unavailable on this device. Showing picture in picture.</span>}

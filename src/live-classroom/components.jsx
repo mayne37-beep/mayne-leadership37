@@ -12,14 +12,14 @@ export function DeviceSelect({ title, devices, kind, value, onChange }) {
   </label>;
 }
 
-export function Modal({ title, children, close }) {
+export function Modal({ title, children, close, className = '' }) {
   const dialog = useRef(null);
   useEffect(() => {
     dialog.current.showModal();
     const node = dialog.current;
     return () => node.close();
   }, []);
-  return <dialog className="modal" ref={dialog} aria-label={title} onCancel={event => { event.preventDefault(); close(); }}>
+  return <dialog className={`modal ${className}`} ref={dialog} aria-label={title} onCancel={event => { event.preventDefault(); close(); }}>
     <header><h2>{title}</h2><button type="button" className="icon-button" aria-label="Close dialog" onClick={close}><Icon name="close" /></button></header>
     {children}
   </dialog>;
