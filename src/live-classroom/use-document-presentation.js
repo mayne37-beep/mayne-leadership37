@@ -86,7 +86,7 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
       const frame = canvas.getContext('2d', { alpha: false });
       frame.drawImage(pageCanvas, 0, 0);
       prepared.current?.pages.close();
-      prepared.current = { canvas, frame, pageCanvas, pages };
+      prepared.current = { canvas, frame, pageCanvas, pages, page: 0 };
       setDeck({ name: cleanText(file.name, 90), page: 0, count: pages.count });
     } catch (failure) {
       pages?.close();
@@ -101,16 +101,18 @@ export function useDocumentPresentation({ call, allowed, notify, sync }) {
 
   function goTo(page) {
     const current = prepared.current;
-    if (!current || !Number.isInteger(page) || page < 0 || page >= current.pages.count) return;
+    if (!current || !Number.isInteger(page) || page < 0 || page >= current.pages.count || current.page === page) return false;
     try {
-      if (deck.page === page) return;
       current.pages.render(page, current.pageCanvas);
       current.frame.drawImage(current.pageCanvas, 0, 0);
+      current.page = page;
       setDeck(previous => ({ ...previous, page }));
+      return true;
     } catch {
       const message = 'This page could not be displayed. Try another page.';
       if (open) setError(message);
       else notify(message);
+      return false;
     }
   }
 

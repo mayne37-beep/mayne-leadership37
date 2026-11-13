@@ -15,8 +15,12 @@ import { emptyPollDraft, readSharedPoll } from './quick-poll.js';
 import { useQuickPoll } from './use-quick-poll.js';
 import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, participantCanSend, participantRole } from './meeting-roles.js';
 import { loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
-import { DocumentControls, DocumentPresentation } from './DocumentPresentation.jsx';
+import { DocumentControls, DocumentPresentation, PageControls } from './DocumentPresentation.jsx';
 import { useDocumentPresentation } from './use-document-presentation.js';
+import { AnnotationLayer } from './AnnotationLayer.jsx';
+import { PresentationTools, SlideHandoff } from './PresentationTools.jsx';
+import { containedSize } from './annotations.js';
+import { usePresentationCollaboration } from './use-presentation-collaboration.js';
 
 const APP_MESSAGE = 'mayne-live-classroom';
 const PAGE_SIZE = 9;
@@ -39,8 +43,9 @@ function playable(participant, type) {
   return track?.state === 'playable' ? track.persistentTrack ?? track.track : null;
 }
 
-function Track({ track, audio = false, speaker, onBlocked, mirror, share, label }) {
+function Track({ track, audio = false, speaker, onBlocked, mirror, share, label, annotations }) {
   const ref = useRef(null);
+  const [size, setSize] = useState(null);
   useEffect(() => {
     const element = ref.current;
     if (!track || !element) return;
@@ -51,9 +56,26 @@ function Track({ track, audio = false, speaker, onBlocked, mirror, share, label 
   useEffect(() => {
     if (audio && ref.current?.setSinkId) ref.current.setSinkId(speaker || '').catch(() => {});
   }, [audio, speaker]);
+  useEffect(() => {
+    if (!share) return;
+    const video = ref.current;
+    function resize() { setSize(containedSize(video.clientWidth, video.clientHeight, video.videoWidth, video.videoHeight)); }
+    const observer = new ResizeObserver(resize);
+    observer.observe(video);
+    video.addEventListener('resize', resize);
+    resize();
+    return () => {
+      observer.disconnect();
+      video.removeEventListener('resize', resize);
+    };
+  }, [share, track]);
+  if (share) return <>
+    <video ref={ref} autoPlay muted playsInline className="shared-screen" aria-label={label} />
+    {annotations && size && <div className="annotation-frame" style={size}>{annotations}</div>}
+  </>;
   return audio
     ? <audio ref={ref} autoPlay data-meeting-audio />
-    : <video ref={ref} autoPlay muted playsInline className={share ? 'shared-screen' : mirror ? 'mirrored' : ''} aria-label={label} />;
+    : <video ref={ref} autoPlay muted playsInline className={mirror ? 'mirrored' : ''} aria-label={label} />;
 }
 
 function Tool({ label, icon, onClick, on, off, title, className = '', children, disabled, expanded }) {
@@ -73,14 +95,14 @@ function MenuItem({ icon, children, onClick, danger, selected, disabled }) {
     aria-pressed={selected}><Icon name={icon} size={18} /><span>{children}</span></button>;
 }
 
-function Tile({ person, active, screen = false, hidden = false, focused = false, onPin }) {
+function Tile({ person, active, screen = false, hidden = false, focused = false, onPin, annotations }) {
   const name = participantName(person);
   const label = name + (person.local ? ' (you)' : '');
   const media = playable(person, screen ? 'screenVideo' : 'video');
   const track = !screen && hidden && !person.local ? null : media;
   return <article className={'tile' + (active ? ' speaking' : '') + (screen ? ' screen-tile' : '')}
     aria-label={screen ? label + ' is sharing' : label}>
-    {track ? <Track track={track} share={screen} mirror={!screen && person.local} label={label} /> : <Avatar name={name} />}
+    {track ? <Track track={track} share={screen} mirror={!screen && person.local} label={label} annotations={annotations} /> : <Avatar name={name} />}
     <span className="tile-label">{screen ? name + ' is sharing' : label}
       {!screen && !person.audio && <Icon name="mic" off size={14} />}</span>
     {person.userData?.raised && canParticipate(person) && <span className="hand-badge" title="Hand raised" aria-label="Hand raised">✋</span>}
@@ -89,11 +111,9 @@ function Tile({ person, active, screen = false, hidden = false, focused = false,
   </article>;
 }
 
-function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, onEditPresentation }) {
+function Stage({ participants, shared, speaker, view, pin, spotlight, setPin, hideSelf, hideVideo, caption, onEditPresentation, annotations }) {
   const [page, setPage] = useState(0);
   const shown = participants.filter(person => !hideSelf || !person.local || participants.length === 1);
-  const shares = participants.filter(person => playable(person, 'screenVideo'));
-  const shared = shares.find(person => presentationOf(person).composed) ?? shares[0];
   const { layout, side, mirror, composed } = presentationOf(shared);
   const presenterCamera = !composed && layout !== 'standard' && shown.includes(shared) && (!hideVideo || shared.local)
     ? playable(shared, 'video') : null;
@@ -113,8 +133,8 @@ function Stage({ participants, speaker, view, pin, spotlight, setPin, hideSelf, 
     {(shared || focus) ? <div className="focus-layout">
       {presenterCamera ? <PresenterView screen={playable(shared, 'screenVideo')} camera={presenterCamera}
         side={side} layout={layout} name={participantName(shared)} coverage={shared.userData?.cameraCoverage} mirror={mirror}
-        backdropColor={shared.userData?.cameraBackdrop} />
-        : shared ? <Tile person={shared} screen /> : render(focus)}
+        backdropColor={shared.userData?.cameraBackdrop} annotations={annotations} />
+        : shared ? <Tile person={shared} screen annotations={annotations} /> : render(focus)}
       {shown.length > 1 && strip.length > 0 && <div className="filmstrip">{strip.map(render)}</div>}
     </div> : <div className="gallery" data-count={Math.max(1, tiles.length)}>{tiles.map(render)}</div>}
     {!shared && !focus && pageCount > 1 && <div className="page-controls">
@@ -391,6 +411,10 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [customBackgrounds, setCustomBackgrounds] = useState(loadBackgrounds);
   const [caption, setCaption] = useState(null);
   const [showCaptions, setShowCaptions] = useState(savedPreferences.showCaptions);
+  const [annotationEditing, setAnnotationEditing] = useState(false);
+  const [annotationTool, setAnnotationTool] = useState('pen');
+  const [annotationColor, setAnnotationColor] = useState('yellow');
+  const [annotationEmoji, setAnnotationEmoji] = useState('👍');
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [visuals, setVisuals] = useState([]);
   const [chat, setChat] = useState({});
@@ -406,6 +430,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const [busy, setBusy] = useState(false);
   const [adjustingCamera, setAdjustingCamera] = useState(false);
   const [time, setTime] = useState(Date.now());
+  const meetingRoot = useRef(null);
   const attendance = useRef(new Map());
   const started = useRef(Date.now());
   const mediaIntent = useRef({ audio: initialPrefs.audio, video: initialPrefs.video });
@@ -444,6 +469,18 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const canMic = participantCanSend(local, 'audio');
   const canPresent = participantCanSend(local, 'screenVideo');
   const filePresentation = useDocumentPresentation({ call: activeInstance, allowed: canPresent, notify: setNotice, sync: updateLocalData });
+  const shares = state.participants.filter(person => playable(person, 'screenVideo'));
+  const shared = shares.find(person => person.owner && presentationOf(person).composed) ??
+    shares.find(person => presentationOf(person).composed) ?? shares[0];
+  const collaboration = usePresentationCollaboration({ call: activeInstance, local, shared, participants: state.participants,
+    localData: state.localData, file: filePresentation, sync: updateLocalData, send, notify: setNotice });
+  const annotationBoard = collaboration.board;
+  const canAnnotate = annotationBoard?.mode === 'everyone' ? canInteract :
+    collaboration.own && annotationBoard?.mode === 'presenter';
+  function editAnnotations(value) {
+    setAnnotationEditing(value);
+    if (value) { setMenu(''); setPanel(''); }
+  }
   const quick = useQuickPoll({
     callRef: ref, call: activeInstance, organizer, participants: state.participants,
     localPoll: state.localData.quickPoll, sync: updateLocalData, send, onShared: publishPollChat,
@@ -496,6 +533,8 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       { ...cameraPresentationSettings(cameraEffects.settings, cameraEffects.choice), presentation: loadMeetingPreferences().presentation });
   }, [target, name, connect]);
   useEffect(() => { saveMeetingPreferences({ view, hideSelf, hideVideo, showCaptions }); }, [view, hideSelf, hideVideo, showCaptions]);
+  useEffect(() => { setAnnotationEditing(false); }, [activeInstance, shared?.session_id, annotationBoard?.id]);
+  useEffect(() => { if (!canAnnotate) setAnnotationEditing(false); }, [canAnnotate]);
   useEffect(() => {
     if (!restoreCamera.current || !activeInstance || activeInstance !== call() || busy) return;
     restoreCamera.current = false;
@@ -641,6 +680,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     const message = event.data;
     const sender = participants[event.fromId];
     if (!sender || message?.app !== APP_MESSAGE) return;
+    if (collaboration.receive(message, sender)) return;
     if (message.type === 'poll-ballot' || message.type === 'poll-receipt') {
       quick.receive(message, sender);
       return;
@@ -899,6 +939,11 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
     polls: 'Polls', devices: 'Device settings',
   };
+  const annotations = annotationBoard && annotationBoard.mode !== 'off' && <AnnotationLayer
+    key={annotationBoard.id + ':' + annotationBoard.pageVersion + ':' + (canAnnotate && annotationEditing ? annotationTool : 'view')}
+    board={annotationBoard} tool={annotationTool} color={annotationColor} emoji={annotationEmoji}
+    author={collaboration.localId} presenter={collaboration.own} edit={collaboration.edit}
+    interactive={canAnnotate && annotationEditing} dialogHost={meetingRoot} />;
   const pollWaiting = Boolean(votingPollId && !pollPopupOpen && panel !== 'polls');
   const pollResultsWaiting = panel !== 'polls' && panel !== 'chat' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
 
@@ -914,7 +959,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     </section>
   </div>;
 
-  return <main className="meeting" aria-label={memberTitle}>
+  return <main ref={meetingRoot} className="meeting" aria-label={memberTitle}>
     <header className="meeting-top">
       <div className="meeting-title">
         <span className="brand-symbol"><Icon name="camera" size={16} /></span>
@@ -1072,9 +1117,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         onClick={() => setSeenPollResults(sharedPollId)}><Icon name="close" size={15} /></button>}
     </div>}
     <div className={'meeting-body' + (panel === 'activity' ? ' wide-panel' : '')}>
-      <Stage participants={state.participants} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
+      <Stage participants={state.participants} shared={shared} speaker={state.speaker} view={view} pin={pin} spotlight={spotlight} setPin={setPin}
         hideSelf={hideSelf} hideVideo={hideVideo} caption={displayedCaption}
-        onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} />
+        onEditPresentation={canPresent && studio.status === 'live' ? openPresenterStudio : undefined} annotations={annotations} />
       {panel && <aside className="sidebar" aria-label={labels[panel]}>
         <header className="sidebar-heading"><h2>{labels[panel]}</h2><button type="button" className="icon-button"
           aria-label={'Close ' + labels[panel].toLowerCase()} onClick={() => setPanel('')}><Icon name="close" size={18} /></button></header>
@@ -1103,7 +1148,15 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           {emoji}</span>)}</div>
       </div>
     </div>
-    {canPresent && filePresentation.status === 'live' && <DocumentControls presentation={filePresentation} />}
+    {shared && <div className="presentation-tools">
+      <PresentationTools collaboration={collaboration} interactive={canAnnotate} editing={annotationEditing}
+        onEditing={editAnnotations} tool={annotationTool} setTool={setAnnotationTool} color={annotationColor}
+        setColor={setAnnotationColor} emoji={annotationEmoji} setEmoji={setAnnotationEmoji} />
+      <SlideHandoff collaboration={collaboration} canInteract={canInteract} />
+      {canInteract && collaboration.controlling && <PageControls deck={{ page: annotationBoard.page, count: annotationBoard.pages }}
+        goTo={collaboration.goTo} />}
+    </div>}
+    {canPresent && filePresentation.status === 'live' && <DocumentControls presentation={filePresentation} delegated={Boolean(collaboration.controller)} />}
     <div className="meeting-audio" aria-hidden="true">
       {state.participants.filter(p => !p.local).flatMap(person => ['audio', 'screenAudio'].map(type => {
         const track = playable(person, type);
