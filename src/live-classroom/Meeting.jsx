@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { Icon } from './icons.jsx';
 import { DeviceSelect, MeetingInvitation, Modal } from './components.jsx';
 import { activityPath, attendanceCsv, cleanText, presentationOf, presenterLayouts, reactions } from './shared.js';
@@ -14,7 +14,7 @@ import { PollResults, QuickPolls } from './QuickPolls.jsx';
 import { emptyPollDraft, readSharedPoll } from './quick-poll.js';
 import { useQuickPoll } from './use-quick-poll.js';
 import { assignableRoles, canParticipate, changeParticipantRole, meetingRoles, participantCanSend, participantRole } from './meeting-roles.js';
-import { loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
+import { deviceKinds, loadMeetingPreferences, saveMeetingPreferences } from './preferences.js';
 import { DocumentControls, DocumentPresentation, PageControls } from './DocumentPresentation.jsx';
 import { PowerPointLinks, PowerPointNotes, PowerPointSlides, usePowerPointShortcuts } from './PowerPointPresenter.jsx';
 import { PowerPointSlideshow } from './PowerPointSlideshow.jsx';
@@ -31,6 +31,7 @@ const POLL_CHAT_HISTORY = 10;
 const REACTION_DURATION_MS = 2800;
 const EMPTY_CHAT = [];
 const palettes = ['lavender', 'blue', 'rose', 'green', 'gold'];
+const deviceLabels = { camera: 'Camera', microphone: 'Microphone', speaker: 'Speaker' };
 
 function initials(name) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map(word => Array.from(word)[0]).join('').toUpperCase();
@@ -81,16 +82,46 @@ function Track({ track, audio = false, speaker, onBlocked, mirror, share, label,
     : <video ref={ref} autoPlay muted playsInline className={mirror ? 'mirrored' : ''} aria-label={label} />;
 }
 
-function Tool({ label, icon, onClick, on, off, title, className = '', children, disabled, expanded }) {
+function Tool({ label, icon, onClick, on, off, title, className = '', children, disabled, expanded, popup }) {
   return <button type="button" className={'tool ' + className + (on ? ' selected' : '')}
-    title={title || label} aria-label={title || label} aria-pressed={on} aria-expanded={expanded}
+    title={title || label} aria-label={title || label} aria-pressed={on} aria-expanded={expanded} aria-haspopup={popup}
     onClick={onClick} disabled={disabled}>
     <span className="tool-icon"><Icon name={icon} off={off} />{children}</span><span>{label}</span>
   </button>;
 }
 
-function Popover({ title, children }) {
-  return <div className="popover" role="group" aria-label={title}>{children}</div>;
+function Popover({ title, children, className = '', id }) {
+  return <div className={'popover ' + className} role="group" aria-label={title} id={id}>
+    {children}
+  </div>;
+}
+
+function MediaOptions({ title, open, disabled, toggle, children }) {
+  const id = useId();
+  const trigger = useRef(null);
+  function close() {
+    toggle();
+    trigger.current?.focus();
+  }
+  return <div className="media-settings" onKeyDown={event => {
+    if (!open || event.key !== 'Escape' || event.defaultPrevented) return;
+    event.stopPropagation();
+    close();
+  }}>
+    <button ref={trigger} className="media-options" type="button" aria-label={title} title={title}
+      aria-expanded={open} aria-controls={open ? id : undefined} onClick={toggle} disabled={disabled}>
+      <Icon name="down" size={16} />
+    </button>
+    {open && <Popover title={title} id={id} className="device-popover">
+      <header className="device-popover-heading">
+        <h2>{title}</h2>
+        <button className="icon-button" type="button" aria-label={'Close ' + title.toLowerCase()} onClick={close}>
+          <Icon name="close" size={17} />
+        </button>
+      </header>
+      {children}
+    </Popover>}
+  </div>;
 }
 
 function MenuItem({ icon, children, onClick, danger, selected, disabled }) {
@@ -248,19 +279,29 @@ function Chat({ items, send, canWrite }) {
   </>;
 }
 
-function DeviceSettings({ preferences, setDevice, canCamera, canMic, children }) {
+function DeviceSettings({ preferences, setDevice, types, mediaOn, busy, children }) {
   const [devices, setDevices] = useState([]);
   useEffect(() => {
-    const update = () => navigator.mediaDevices?.enumerateDevices().then(setDevices).catch(() => {});
+    const media = navigator.mediaDevices;
+    let active = true;
+    let version = 0;
+    const update = async () => {
+      const current = ++version;
+      try {
+        const list = await media?.enumerateDevices();
+        if (active && current === version && list) setDevices(list);
+      } catch {}
+    };
     update();
-    navigator.mediaDevices?.addEventListener('devicechange', update);
-    return () => navigator.mediaDevices?.removeEventListener('devicechange', update);
-  }, []);
-  return <div className="side-content stack">
-    {canCamera && <DeviceSelect title="Camera" devices={devices} kind="videoinput" value={preferences.camera} onChange={v => setDevice('camera', v)} />}
-    {canMic && <DeviceSelect title="Microphone" devices={devices} kind="audioinput" value={preferences.microphone} onChange={v => setDevice('microphone', v)} />}
-    {typeof HTMLMediaElement.prototype.setSinkId === 'function' &&
-      <DeviceSelect title="Speaker" devices={devices} kind="audiooutput" value={preferences.speaker} onChange={v => setDevice('speaker', v)} />}
+    media?.addEventListener('devicechange', update);
+    return () => {
+      active = false;
+      media?.removeEventListener('devicechange', update);
+    };
+  }, [mediaOn]);
+  return <div className="device-popover-content stack">
+    {types.map(type => <DeviceSelect key={type} title={deviceLabels[type]} devices={devices}
+      kind={deviceKinds[type]} value={preferences[type]} onChange={value => setDevice(type, value)} disabled={busy} />)}
     {children}
   </div>;
 }
@@ -474,6 +515,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const canInteract = canParticipate(local);
   const canCamera = participantCanSend(local, 'video');
   const canMic = participantCanSend(local, 'audio');
+  const audioSettings = [canMic && 'microphone',
+    typeof HTMLMediaElement.prototype.setSinkId === 'function' && 'speaker'].filter(Boolean);
+  const canSetAudio = audioSettings.length > 0;
   const canPresent = participantCanSend(local, 'screenVideo');
   const filePresentation = useDocumentPresentation({ call: activeInstance, allowed: canPresent, notify: setNotice, sync: updateLocalData });
   const shares = state.participants.filter(person => playable(person, 'screenVideo'));
@@ -586,9 +630,11 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
       if (state.localData.raised) updateLocalData({ raised: false }, activeInstance).catch(() => {});
     }
     if (!canCamera) {
+      setMenu(value => value === 'camera-settings' ? '' : value);
       cameraEffects.setVideo(activeInstance, false, preferences.camera).catch(cameraEffects.stop);
     }
     if (!canMic) {
+      if (!canSetAudio) setMenu(value => value === 'audio-settings' ? '' : value);
       try { activeInstance.setLocalAudio(false, { forceDiscardTrack: true }); } catch {}
     }
   }, [activeInstance, localRole]);
@@ -949,7 +995,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
     });
   }
   function openPresenterStudio() {
-    if (!participantCanSend(call()?.participants().local, 'screenVideo')) return;
+    if (!studio.supported || !participantCanSend(call()?.participants().local, 'screenVideo')) return;
     setMenu('');
     studio.openEditor();
   }
@@ -1014,7 +1060,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const openGroups = groups.filter(group => group.end * 1000 > time);
   const labels = {
     chat: 'Meeting chat', people: 'Participants', rooms: 'Breakout rooms', activity: 'Classroom activity',
-    polls: 'Polls', devices: 'Device settings',
+    polls: 'Polls',
   };
   const slideLinks = powerpointOnStage && !delegated && !annotationEditing && !filePresentation.rendering && filePresentation.deck.links?.length
     ? <PowerPointLinks deck={filePresentation.deck} goTo={filePresentation.goTo} /> : null;
@@ -1026,6 +1072,7 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
   const presentationOverlay = slideLinks ? <>{annotations}{slideLinks}</> : annotations;
   const pollWaiting = Boolean(votingPollId && !pollPopupOpen && panel !== 'polls');
   const pollResultsWaiting = panel !== 'polls' && panel !== 'chat' && Boolean(sharedPollId) && seenPollResults !== sharedPollId;
+  const hasMoreActions = organizer || state.transcription;
 
   if (!activeCall) return <div className="workspace connecting">
     <section className="notice-card">
@@ -1091,7 +1138,6 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
               </fieldset>}
               <MenuItem icon="camera" selected={presentation.mirror} disabled={busy || studio.status !== 'idle'}
                 onClick={() => choosePresentation({ mirror: !presentation.mirror })}>Mirror presenter camera</MenuItem>
-              {studio.supported && <MenuItem icon="layers" onClick={openPresenterStudio}>Presenter Studio</MenuItem>}
             </div>
           </Popover>}
         </div>
@@ -1100,10 +1146,9 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
           {(pollWaiting || pollResultsWaiting) && <span className="badge attention" aria-hidden="true">!</span>}
         </Tool>
         <Tool label="Activity" icon="activity" on={panel === 'activity'} disabled={!canInteract} onClick={() => showPanel('activity')} />
-        <div className="tool-wrap" data-menu-root>
+        {hasMoreActions && <div className="tool-wrap" data-menu-root>
           <Tool label="More" icon="more" expanded={menu === 'more'} onClick={() => toggleMenu('more')} />
           {menu === 'more' && <Popover title="More actions">
-            <MenuItem icon="gear" onClick={() => showPanel('devices')}>Device settings and effects</MenuItem>
             {state.transcription && <MenuItem icon="captions" selected={showCaptions}
               onClick={() => { setShowCaptions(!showCaptions); setMenu(''); }}>Show live captions</MenuItem>}
             {organizer && <>
@@ -1127,15 +1172,36 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
               }}>{state.transcription ? 'Stop live captions' : 'Start live captions'}</MenuItem>}
             </>}
           </Popover>}
-        </div>
+        </div>}
         <div className="tool-divider" />
-        <Tool label="Camera" icon="camera" on={state.video} off={!state.video}
-          title={state.video ? 'Turn camera off' : 'Turn camera on'} disabled={!canCamera || (adjustingCamera && !state.video)}
-          onClick={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, !state.video, preferences.camera), state.video)} />
-        <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
-          disabled={!canMic} onClick={() => {
-            if (participantCanSend(call()?.participants().local, 'audio')) perform(() => call().setLocalAudio(!state.audio));
-          }} />
+        <div className="tool-wrap media-wrap" data-menu-root>
+          <Tool label="Camera" icon="camera" on={state.video} off={!state.video}
+            title={state.video ? 'Turn camera off' : 'Turn camera on'} disabled={!canCamera || (adjustingCamera && !state.video)}
+            onClick={() => adjustCamera(() => cameraEffects.setVideo(activeInstance, !state.video, preferences.camera), state.video)} />
+          <MediaOptions title="Camera settings" open={canCamera && menu === 'camera-settings'} disabled={!canCamera}
+            toggle={() => toggleMenu('camera-settings')}>
+            <DeviceSettings preferences={preferences} setDevice={setDevice} types={['camera']} mediaOn={state.video} busy={busy}>
+              {(state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
+                settings={cameraEffects.settings} tune={patch => adjustCamera(() => cameraEffects.tune(patch))}
+                rawCamera={cameraEffects.rawCamera} background={cameraEffects.choice} busy={busy}
+                adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
+              <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice}
+                select={selectBackground} custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />
+            </DeviceSettings>
+          </MediaOptions>
+        </div>
+        <div className="tool-wrap media-wrap" data-menu-root>
+          <Tool label="Mic" icon="mic" on={state.audio} off={!state.audio} title={state.audio ? 'Mute microphone' : 'Unmute microphone'}
+            disabled={!canMic} onClick={() => {
+              if (participantCanSend(call()?.participants().local, 'audio')) perform(() => call().setLocalAudio(!state.audio));
+            }} />
+          <MediaOptions title="Audio settings" open={canSetAudio && menu === 'audio-settings'} disabled={!canSetAudio}
+            toggle={() => toggleMenu('audio-settings')}>
+            <DeviceSettings preferences={preferences} setDevice={setDevice} types={audioSettings} mediaOn={state.audio} busy={busy} />
+          </MediaOptions>
+        </div>
+        {canPresent && studio.supported && <Tool label="Presenter Studio" icon="layers" popup="dialog"
+          className={studio.status === 'live' ? 'presenter-studio-tool selected' : 'presenter-studio-tool'} onClick={openPresenterStudio} />}
         <div className="tool-wrap share-wrap" data-menu-root>
           <Tool label={state.sharing ? 'Stop share' : 'Share'} icon="share" on={state.sharing}
             title={state.sharing ? 'Stop screen sharing' : canShare || !canPresent ? 'Share screen' : 'Share options'}
@@ -1154,8 +1220,6 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
             {filePresentation.supported && <MenuItem icon="present-standard" disabled={filePresentation.status !== 'idle'}
               onClick={openFilePresentation}>Present a file</MenuItem>}
             {canShare && <MenuItem icon="present-side" disabled={state.sharing} onClick={openSlideshowShare}>Share PowerPoint slideshow</MenuItem>}
-            {studio.supported && <MenuItem icon="layers" onClick={openPresenterStudio}>
-              {studio.status === 'live' ? 'Edit live presentation' : 'Presenter Studio'}</MenuItem>}
           </Popover>}
         </div>
         <div className="leave-wrap tool-wrap" data-menu-root>
@@ -1217,14 +1281,6 @@ export function Meeting({ main, entry, name, preferences: initialPrefs, onExit }
         {panel === 'chat' && <Chat items={chat[currentRoom] || EMPTY_CHAT} send={sendChat} canWrite={canInteract} />}
         {panel === 'polls' && <QuickPolls quick={quick} organizer={organizer} draft={pollDraft} setDraft={setPollDraft} />}
         {panel === 'activity' && canInteract && <Activity url={activity} host={organizer && !target.label} publish={publish} studioConnection={studioConnection} />}
-        {panel === 'devices' && <DeviceSettings preferences={preferences} setDevice={setDevice} canCamera={canCamera} canMic={canMic}>
-          {canCamera && (state.videoEffects || cameraEffects.enhanced) && <CameraEffectsSettings camera={localCamera} cameraOn={state.video}
-            settings={cameraEffects.settings} tune={patch => adjustCamera(() => cameraEffects.tune(patch))}
-            rawCamera={cameraEffects.rawCamera} background={cameraEffects.choice} busy={busy}
-            adjusting={adjustingCamera} advanced={cameraEffects.enhanced} />}
-          {canCamera && <BackgroundSettings supported={state.videoEffects || cameraEffects.enhanced} selected={cameraEffects.choice}
-            select={selectBackground} custom={customBackgrounds} setCustom={setCustomBackgrounds} busy={busy} />}
-        </DeviceSettings>}
         {panel === 'rooms' && <Rooms host={organizer} groups={openGroups} current={target.label} incoming={incoming?.end * 1000 > time ? incoming : null}
           open={(count, minutes) => { if (!openGroups.length && groups.length) breakoutRound.current = null; openRooms(count, minutes); }}
           close={closeRooms} visit={destination => { setIncoming(null); move(destination); }} back={returnMain}

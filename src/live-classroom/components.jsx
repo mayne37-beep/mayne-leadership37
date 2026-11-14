@@ -2,10 +2,10 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { Icon } from './icons.jsx';
 
-export function DeviceSelect({ title, devices, kind, value, onChange }) {
+export function DeviceSelect({ title, devices, kind, value, onChange, disabled }) {
   const available = devices.filter(d => d.kind === kind && d.deviceId && !['default', 'communications'].includes(d.deviceId));
   return <label className="field">{title}
-    <select aria-label={title} value={value} onChange={e => onChange(e.target.value)}>
+    <select aria-label={title} value={value} disabled={disabled} onChange={e => onChange(e.target.value)}>
       <option value="">System default</option>
       {value && !available.some(device => device.deviceId === value) && <option value={value}>Previously selected</option>}
       {available.map((device, i) => <option key={device.deviceId} value={device.deviceId}>{device.label || title + ' ' + (i + 1)}</option>)}
