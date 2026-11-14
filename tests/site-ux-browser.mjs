@@ -50,6 +50,42 @@ try{
   assert.equal(await page.locator('.catalog-card:visible').count(),1);
   await page.locator('#catalog-clear').click();
   assert.equal(await page.locator('.catalog-card:visible').count(),6);
+
+  await page.goto(base+'/word-cloud-studio.html');
+  const slides=page.getByRole('complementary',{name:'Slides',exact:true});
+  const list=slides.getByRole('list',{name:'Presentation slides'});
+  const stage=page.locator('#editorStage');
+  const sidebarBounds=await slides.boundingBox(),stageBounds=await stage.boundingBox();
+  assert.ok(sidebarBounds.x===0&&sidebarBounds.x+sidebarBounds.width<=stageBounds.x,
+    `Slide sidebar is to the left of the canvas at ${width}px`);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),
+    `Classroom Response Studio fits at ${width}px`);
+  await slides.getByRole('button',{name:'Add slide',exact:true}).click();
+  assert.ok(await page.locator('#drawer').isVisible());
+  await page.getByLabel('Your question').fill('How will you use this?');
+  await slides.getByRole('button',{name:'Duplicate selected slide'}).click();
+  assert.equal(await list.getByRole('listitem').count(),3);
+  assert.match(await list.locator('[aria-current="true"]').getAttribute('aria-label'),/^Slide 3, How will you use this\?$/);
+  await list.getByRole('button',{name:'Move slide 3 up'}).focus();
+  await page.keyboard.press('Enter');
+  assert.match(await list.locator('[aria-current="true"]').getAttribute('aria-label'),/^Slide 2, How will you use this\?$/);
+  await slides.getByRole('button',{name:'Remove selected slide'}).click();
+  await page.getByRole('dialog',{name:'Remove this slide?'}).getByRole('button',{name:'Remove slide',exact:true}).click();
+  assert.equal(await list.getByRole('listitem').count(),2);
+  assert.equal(await page.getByLabel('Your question').inputValue(),'How will you use this?');
+  await page.reload();
+  assert.equal(await list.getByRole('listitem').count(),2);
+  assert.equal(await stage.getByRole('heading').textContent(),'How will you use this?');
+  if(width===1280){
+   const previews=list.locator('.slide-select');
+   await previews.first().dragTo(previews.last());
+   assert.match(await previews.first().getAttribute('aria-label'),/^Slide 1, How will you use this\?$/);
+   assert.equal(await previews.first().getAttribute('aria-current'),'true');
+   await page.getByRole('button',{name:'Start presentation',exact:true}).click();
+   assert.equal(await slides.isVisible(),false);
+   await page.keyboard.press('Escape');
+   assert.equal(await slides.isVisible(),true);
+  }
   await context.close();
  }
  console.log('Site responsive browser checks passed at 375, 768 and 1280 px.');
