@@ -379,3 +379,78 @@ kbd{white-space:nowrap}
   .production-tools .keys{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));padding:7px;gap:6px}
   .production-tools .classroom-tools{grid-template-columns:minmax(0,1fr);padding:7px}
 }
+
+
+/* Mixer placement correction: retain its original right-side position.
+   The earlier responsive rule moved it beneath the control room <=1080px,
+   and the collapsed variant could leave unused grid tracks on the right. */
+@media(min-width:691px){
+  .workspace,
+  .workspace:not(.mixer-collapsed){
+    display:grid;
+    grid-template-columns:minmax(0,1fr) clamp(190px,18vw,256px);
+    align-items:start;
+    gap:12px;
+  }
+  .workspace.mixer-collapsed{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 46px;
+    gap:12px;
+  }
+  .workspace > .switcher{
+    grid-column:1;
+    grid-row:1;
+    min-width:0;
+    width:auto;
+  }
+  .workspace > .mixer-pane,
+  .workspace > .mixer-pane.collapsed{
+    grid-column:2;
+    grid-row:1;
+    position:sticky;
+    top:12px;
+    width:auto;
+    min-width:0;
+    max-width:100%;
+    min-height:0;
+    align-self:start;
+  }
+  .workspace > .mixer-pane.collapsed .pane-head{
+    justify-content:center;
+    padding:7px 4px;
+  }
+  .workspace > .mixer-pane.collapsed .pane-head h2{display:none}
+  .workspace > .mixer-pane.collapsed .mixer-head-actions{width:100%;justify-content:center}
+  .workspace > .mixer-pane.collapsed .mix-rail-label{display:block}
+  .workspace .mix-main{grid-template-columns:minmax(0,1fr)}
+}
+/* On phones the mixer stays a right-edge drawer instead of taking over the
+   bottom of the page or squeezing the monitors to an unusable width. */
+@media(max-width:690px){
+  .workspace > .mixer-pane,
+  .workspace > .mixer-pane.collapsed{
+    position:fixed;
+    z-index:15;
+    right:8px;
+    top:clamp(100px,13vh,140px);
+    bottom:auto;
+    grid-column:auto;
+    grid-row:auto;
+    width:min(260px,calc(100vw - 20px));
+    max-width:calc(100vw - 16px);
+    max-height:calc(100dvh - 150px);
+    min-height:0;
+    align-self:auto;
+    overflow-y:auto;
+    box-shadow:0 12px 32px #0008;
+  }
+  .workspace > .mixer-pane.collapsed{width:46px}
+  .workspace > .mixer-pane.collapsed .pane-head{
+    justify-content:center;
+    padding:7px 4px;
+  }
+  .workspace > .mixer-pane.collapsed .pane-head h2{display:none}
+  .workspace > .mixer-pane.collapsed .mixer-head-actions{width:100%;justify-content:center}
+  .workspace > .mixer-pane.collapsed .mix-rail-label{display:block}
+  .workspace > .mixer-pane:not(.collapsed) .pane-head h2{display:flex}
+}
