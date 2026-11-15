@@ -634,7 +634,7 @@ class Studio {
         this.loadGraphic(result.overlay);
       }
       this.render();
-      if (result?.overlay) this.overlayEditor.show(result.overlay.id);
+      if (result?.overlay) this.overlayEditor.show(result.overlay.id, 'message', !result.replacing);
     }
   }
 
