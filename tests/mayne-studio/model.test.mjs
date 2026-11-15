@@ -89,8 +89,9 @@ test('image, video, and message overlays persist independent layout and pop-up/d
   assert.ok(assetIds(restored).includes('file-video'));
   assert.ok(assetIds(restored).includes('file-img'));
 
-  project.overlays = [{ ...base, id:'legacy', type:'hand', text:'Raise your hand',
-    animation:'pop' }, {...base,id:'old-media',type:'graphic',asset:'old-asset'}];
+  const { exitAnimation: _ignored, ...legacyBase } = base;
+  project.overlays = [{ ...legacyBase, id:'legacy', type:'hand', text:'Raise your hand',
+    animation:'pop' }, {...legacyBase,id:'old-media',type:'graphic',asset:'old-asset'}];
   const legacy = normalizeProject(project);
   assert.deepEqual(legacy.overlays.map(o => o.type),['hand','graphic']);
   assert.equal(legacy.overlays[0].exitAnimation,'pop');
