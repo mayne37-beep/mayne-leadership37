@@ -10,7 +10,7 @@ import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
 import { InlinePreviewEditor } from './inline-preview.js';
 import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
-import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS } from './transitions.js';
+import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -108,6 +108,8 @@ class Studio {
 
   load(project) {
     this.project = project;
+    // Also handle projects constructed by integrations and older in-memory studio sessions.
+    this.project.favoriteTransitions = normalizeFavoriteTransitions(project.favoriteTransitions);
     this.media.setProject(project);
     for (const overlay of project.overlays) if (overlay.asset) this.loadGraphic(overlay);
     const first = project.scenes.find(scene => scene.template === draftTemplate) || project.scenes[0];
