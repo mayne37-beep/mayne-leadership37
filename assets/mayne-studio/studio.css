@@ -258,3 +258,12 @@ kbd{white-space:nowrap}
 .inline-preview-target.selected .inline-preview-handle{display:block}
 @media(max-width:1080px){.workspace{grid-template-columns:minmax(0,1fr)}.mixer-pane{grid-column:1;min-height:0}.mix-main{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.scene-tile{flex-basis:150px}}
 @media(max-width:690px){.workspace{display:flex;flex-direction:column}.workspace>*{width:100%}.scene-pane{order:initial}.scene-list{padding:8px}.scene-tile{flex-basis:138px}.scene-tile .scene{min-height:0}.scene-edit-controls{gap:1px}.scene-edit-controls .quiet-button{font-size:9px}.live-deck-row strong{max-width:100%}.studio-tools-dialog .layer-console{display:block}.studio-tools-dialog .inspector{border-left:0;border-top:1px solid var(--line)}.studio-tools-dialog .dock-top{flex-wrap:wrap;padding:5px 10px}.studio-tools-dialog .tabs button{font-size:11px}.inline-preview-tag{font-size:8px}.inline-preview-handle{width:10px;height:10px}}
+
+/* Assign and inspect keyboard commands without a permanent settings dock. */
+.shortcut-list{display:grid;gap:4px;max-height:55dvh;overflow-y:auto;padding:4px 0}
+.shortcut-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(120px,170px) 66px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.shortcut-row label{color:var(--soft);font-size:12px}
+.shortcut-row input{width:100%;min-width:0;font-family:var(--mono);text-align:center;background:#13273b!important;border:1px solid #55667b!important;cursor:pointer}
+.shortcut-row input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.shortcut-row .button{font-size:11px}
+@media(max-width:520px){.shortcut-row{grid-template-columns:minmax(95px,1fr) minmax(95px,125px) 52px;gap:5px}.shortcut-row label{font-size:11px}.shortcut-row input{font-size:11px;padding:6px 4px}.shortcut-row .button{padding:5px 3px;font-size:10px}}
