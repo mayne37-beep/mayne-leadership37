@@ -156,9 +156,11 @@ try {
   await page.locator('[data-act="shortcuts"]').click();
   assert.equal(await dialog.locator('[data-shortcut="scenePrevious"]').inputValue(), 'Shift + Z');
   await dialog.locator('[data-act="close-dialog"]').click();
-  await page.keyboard.press('Shift+KeyZ');
   assert.equal(await page.locator('#preview-name').textContent(), 'Standby',
-    'Custom keyboard shortcuts cue scenes in Preview');
+    'Project loads its default private Preview scene');
+  await page.keyboard.press('Shift+KeyZ');
+  assert.equal(await page.locator('#preview-name').textContent(), 'Slides + Presenter',
+    'Custom keyboard shortcuts cue the previous scene in Preview');
   await page.keyboard.press('KeyQ');
   await page.locator('#toast').getByText('Instructor name live.').waitFor();
 
