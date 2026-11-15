@@ -1,6 +1,7 @@
 import { clamp, clone, makeOverlay, OVERLAY_MOTIONS } from './model.js';
 import { drawOverlay, drawOverlayStill } from './render.js';
 import { transformBox } from './scene-designer.js';
+import { discardFile } from './projects.js';
 import { e, option } from './ui.js';
 
 const handles = ['nw','n','ne','e','se','s','sw','w'];
@@ -48,16 +49,37 @@ export class OverlayEditor {
     this.target.addEventListener('pointermove', event => this.pointermove(event));
     this.target.addEventListener('pointerup', event => this.finish(event));
     this.target.addEventListener('pointercancel', event => this.finish(event));
-    this.dialog.addEventListener('close', () => { this.drag = null; this.previewStart = null; this.draft = null; });
+    this.dialog.addEventListener('close', () => {
+      // Uploading creates a temporary media record for the editor. Cancel/Escape
+      // should not quietly leave an unwanted overlay or large video behind.
+      if (this.pendingCreated && !this.committed && this.draft && this.studio.project) {
+        const { id, asset } = this.draft;
+        this.studio.project.overlays = this.studio.project.overlays.filter(item => item.id !== id);
+        this.studio.previewOverlays.delete(id);
+        this.studio.liveOverlays.delete(id);
+        this.studio.media.dispose('preview:' + id);
+        this.studio.media.dispose('program:' + id);
+        this.studio.mark();
+        this.studio.renderWorkspacePanel();
+        if (asset) discardFile(this.studio.project.id, asset).catch(() =>
+          this.studio.notify('The canceled overlay file could not be cleaned up from browser storage.', true));
+      }
+      this.pendingCreated = false;
+      this.drag = null;
+      this.previewStart = null;
+      this.draft = null;
+    });
   }
 
   get open() { return this.dialog.open; }
 
-  show(id = null, type = 'message') {
+  show(id = null, type = 'message', pendingCreated = false) {
     const existing = id ? this.studio.overlay(id) : null;
     if (id && !existing) return;
     if (this.open) this.dialog.close();
-    this.isNew = !existing;
+    this.isNew = !existing || pendingCreated;
+    this.pendingCreated = pendingCreated;
+    this.committed = false;
     this.draft = clone(existing || makeOverlay(type));
     this.previewStart = null;
     this.dialog.querySelector('#overlay-editor-title').textContent =
@@ -152,6 +174,7 @@ export class OverlayEditor {
       }
       this.studio.project.overlays.push(clone(d));
     }
+    this.committed = true;
     this.dialog.close();
     this.studio.mark();
     this.studio.renderWorkspacePanel();
@@ -173,8 +196,9 @@ export class OverlayEditor {
     if (action === 'replace-media') {
       const kind = this.draft.type === 'graphic' ? 'overlay-media' : 'overlay-' + this.draft.type;
       const id = this.draft.id;
-      this.dialog.close();
-      this.studio.pickFile(kind,{id});
+      // Keep the edited position and motion settings when replacing media.
+      this.save();
+      if (this.committed) this.studio.pickFile(kind,{id});
       return;
     }
     const d = this.draft;
