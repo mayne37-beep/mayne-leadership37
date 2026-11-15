@@ -56,6 +56,9 @@ export class SceneDesigner {
     this.canvas = this.dialog.querySelector('#designer-canvas');
     this.targets = this.dialog.querySelector('#designer-targets');
     this.stage = this.dialog.querySelector('#designer-stage');
+    this.stage.tabIndex = 0;
+    this.stage.setAttribute('role', 'group');
+    this.stage.setAttribute('aria-label', 'Scene design canvas. Select a layer to move it with arrow keys.');
     this.list = this.dialog.querySelector('#designer-list');
     this.properties = this.dialog.querySelector('#designer-properties');
     this.dialog.addEventListener('click', event => this.click(event));
@@ -74,6 +77,7 @@ export class SceneDesigner {
     if (this.open) return;
     this.refresh();
     this.dialog.showModal();
+    this.stage.focus();
     this.draw(performance.now());
   }
 
@@ -203,6 +207,7 @@ export class SceneDesigner {
     this.drag = { id: layer.id, handle, geometry: { x: layer.x, y: layer.y, w: layer.w, h: layer.h },
       clientX: event.clientX, clientY: event.clientY, pointerId: event.pointerId, element, moved: false };
     this.targets.setPointerCapture(event.pointerId);
+    this.stage.focus({ preventScroll: true });
     event.preventDefault();
   }
 
