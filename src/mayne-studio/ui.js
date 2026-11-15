@@ -77,7 +77,7 @@ export function shell() {
         <section class="monitor preview-monitor" aria-labelledby="preview-label">
           <div class="monitor-head"><h3 id="preview-label"><i></i> Preview</h3><span id="preview-name"></span></div>
           <div class="monitor-screen"><canvas id="preview-canvas" width="1280" height="720" aria-label="Preview canvas"></canvas></div>
-          <div class="monitor-foot"><span>${icon('eye',13)} Private preview</span><button class="quiet-button" type="button" data-act="scene-edit">Scene settings ${icon('gear',14)}</button></div>
+          <div class="monitor-foot"><span>${icon('eye',13)} Private preview</span><div class="scene-edit-controls"><button class="quiet-button" type="button" data-act="scene-designer">${icon('layers',13)} Design scene</button><button class="quiet-button" type="button" data-act="scene-edit">Scene settings ${icon('gear',14)}</button></div></div>
         </section>
         <section class="monitor program-monitor" aria-labelledby="program-label">
           <div class="monitor-head"><h3 id="program-label"><i></i> Program</h3><span id="program-name"></span></div>

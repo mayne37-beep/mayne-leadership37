@@ -7,6 +7,7 @@ import { StudioRenderer } from './render.js';
 import { ProgramOutput, download, outputPage } from './output.js';
 import { buttons, classroomPanel, formatGain, layersPanel, mixerPanel, options, overlaysPanel } from './panels.js';
 import { e, fields, icon, iconButton, option, shell } from './ui.js';
+import { SceneDesigner } from './scene-designer.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -38,6 +39,7 @@ class Studio {
     this.lastStatus = 0;
     this.started = performance.now();
     this.dialog = $('dialog');
+    this.designer = new SceneDesigner(this);
     this.root.addEventListener('click', event => this.click(event));
     this.root.addEventListener('input', event => this.input(event));
     this.root.addEventListener('change', event => this.change(event));
@@ -207,6 +209,7 @@ class Studio {
     this.renderDock();
     this.renderMixer();
     this.recordStatus();
+    if (this.designer.open) this.designer.refresh();
   }
 
   renderDock() {
@@ -260,6 +263,7 @@ class Studio {
     this.renderer.draw({ preview: this.shot(this.scene, false), program: this.program,
       transition: this.transition, previewOverlays: this.previewOverlays, liveOverlays: this.liveOverlays,
       timer: { ...this.timer, remaining: Math.ceil(this.timer.remaining) } }, now);
+    this.designer.draw(now);
     if (now - this.lastThumb > 1050 && !document.hidden) { this.lastThumb = now; this.thumbnails(now); }
     if (now - this.lastStatus > 110) { this.lastStatus = now; this.updateStatus(now); }
     this.media.trimEffects(now);
@@ -609,6 +613,7 @@ class Studio {
         case 'scene': this.setPreview(id); break;
         case 'new-scene': this.sceneDialog(true); break;
         case 'scene-edit': this.sceneDialog(false); break;
+        case 'scene-designer': this.designer.show(); break;
         case 'duplicate-scene': {
           if (this.project.scenes.length >= 40) throw new Error('This project already has 40 scenes.');
           const duplicate = { ...clone(this.scene), id: uid(), name: (this.scene.name + ' copy').slice(0, 120) };
@@ -905,7 +910,7 @@ class Studio {
       event.preventDefault();
       return;
     }
-    if (!this.project || this.editing || this.dialog.open || event.defaultPrevented || event.repeat
+    if (!this.project || this.editing || this.dialog.open || this.designer.open || event.defaultPrevented || event.repeat
       || event.altKey || event.ctrlKey || event.metaKey || event.target.closest?.('input,textarea,select,[contenteditable]')) return;
     const key = event.key.toUpperCase();
     if (/^[1-9]$/.test(key)) this.setPreview(this.project.scenes[Number(key) - 1]?.id);
