@@ -164,6 +164,33 @@ try {
   await page.keyboard.press('KeyQ');
   await page.locator('#toast').getByText('Instructor name live.').waitFor();
 
+  // Scene deletion: explicit per-card action, confirmation, live safety, local persistence.
+  assert.equal(await page.locator('.scene-delete').count(), 2);
+  await page.getByRole('button', { name: 'Delete scene Standby' }).click();
+  await page.getByRole('dialog', { name: 'Scene is on air' }).waitFor();
+  assert.equal(await page.locator('.scene-tile').count(), 2,
+    'The current Program scene cannot be removed');
+  await page.locator('#dialog [data-act="close-dialog"]').click();
+
+  await page.getByRole('button', { name: 'Delete scene Slides + Presenter' }).click();
+  await page.getByRole('dialog', { name: 'Delete scene' }).waitFor();
+  await page.locator('#dialog [data-act="close-dialog"]').last().click();
+  assert.equal(await page.locator('.scene-tile').count(), 2, 'Cancel preserves a scene');
+
+  await page.getByRole('button', { name: 'Delete scene Slides + Presenter' }).click();
+  await page.getByRole('dialog', { name: 'Delete scene' }).getByRole('button', { name: 'Delete scene' }).click();
+  assert.equal(await page.locator('.scene-tile').count(), 1, 'Confirmed deletion removes the selected scene');
+  assert.equal(await page.locator('#preview-name').textContent(), 'Standby',
+    'Deleting the Preview scene selects a safe remaining scene');
+  assert.equal(await page.locator('#program-name').textContent(), 'Standby',
+    'Deleting a non-live scene does not change Program');
+  assert.equal(await page.locator('.scene-delete:disabled').count(), 1,
+    'The last scene cannot be deleted');
+  await page.locator('#save-state').getByText('Saved on this device').waitFor({ timeout: 10000 });
+  await page.reload();
+  await page.locator('#studio:not([hidden])').waitFor();
+  assert.equal(await page.locator('.scene-tile').count(), 1, 'Scene deletion survives reloading the saved project');
+
   await mkdir('test-results', { recursive: true });
   await page.screenshot({ path: 'test-results/mayne-compact-control-room.png', fullPage: true });
   assert.deepEqual(errors, [], 'No uncaught JavaScript errors during control room operation');

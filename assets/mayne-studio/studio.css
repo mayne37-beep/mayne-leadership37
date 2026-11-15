@@ -267,3 +267,16 @@ kbd{white-space:nowrap}
 .shortcut-row input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .shortcut-row .button{font-size:11px}
 @media(max-width:520px){.shortcut-row{grid-template-columns:minmax(95px,1fr) minmax(95px,125px) 52px;gap:5px}.shortcut-row label{font-size:11px}.shortcut-row input{font-size:11px;padding:6px 4px}.shortcut-row .button{padding:5px 3px;font-size:10px}}
+
+
+/* Scene actions are visible on each thumbnail, including keyboard-accessible deletion. */
+.scene-card-actions{display:grid;grid-template-columns:minmax(0,1fr) 38px;border-top:1px solid var(--line)}
+.scene-card-actions .scene-gear{border-top:0;min-width:0}
+.scene-delete{display:inline-grid;place-items:center;width:100%;min-height:29px;cursor:pointer;border:0;border-left:1px solid var(--line);border-radius:0;background:#1b2532;color:#bfc9d9;transition:background .15s,color .15s}
+.scene-delete:hover:not(:disabled),.scene-delete:focus-visible{background:#532d35;color:#ffb6b6}
+.scene-delete:disabled{opacity:.35;cursor:not-allowed}
+.button.danger{background:#672e37;border:1px solid #c56d74;color:#fff2f2}
+.button.danger:hover{background:#8f3945}
+.transition-select #transition{min-width:155px;max-width:min(250px,47vw)}
+.transition-select optgroup{font-weight:650}
+@media(max-width:690px){.scene-card-actions{grid-template-columns:minmax(0,1fr) 32px}.scene-delete{min-height:31px}.transition-select #transition{min-width:130px;max-width:52vw}}

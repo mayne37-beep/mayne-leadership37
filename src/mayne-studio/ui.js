@@ -1,3 +1,5 @@
+import { TRANSITION_GROUPS } from './transitions.js';
+
 const paths = {
   plus: '<path d="M12 5v14M5 12h14"/>', chevron: '<path d="m6 9 6 6 6-6"/>',
   left: '<path d="m14 6-6 6 6 6"/>', right: '<path d="m10 6 6 6-6 6"/>',
@@ -89,9 +91,9 @@ export function shell() {
     </section>
       <section class="switch-controls" aria-label="Switching and transitions">
         <div class="transition-select"><label for="transition">Transition</label><select id="transition" data-project="transition">
-          <option value="fade">Crossfade</option><option value="wipe">Wipe</option><option value="dip">Dip to black</option><option value="cut">Cut</option>
+          ${TRANSITION_GROUPS.map(group => `<optgroup label="${e(group.name)}">${group.choices.map(([id, name]) => `<option value="${e(id)}">${e(name)}</option>`).join('')}</optgroup>`).join('')}
         </select><label class="visually-hidden" for="transition-ms">Transition duration</label>
-          <select id="transition-ms" data-project="duration"><option value="200">200 ms</option><option value="300">300 ms</option><option value="450">450 ms</option><option value="600">600 ms</option><option value="800">800 ms</option><option value="1000">1 s</option><option value="1500">1.5 s</option></select>
+          <select id="transition-ms" data-project="duration"><option value="200">200 ms</option><option value="300">300 ms</option><option value="450">450 ms</option><option value="600">600 ms</option><option value="800">800 ms</option><option value="1000">1 s</option><option value="1500">1.5 s</option><option value="2000">2 s</option><option value="2500">2.5 s</option></select>
         </div>
         <div class="take-controls"><button class="button cut" data-act="cut" type="button">Cut <kbd>C</kbd></button>
           <button class="button primary take" id="take" data-act="take" type="button">Take ${icon('arrow',17)} <kbd>Space</kbd></button></div>

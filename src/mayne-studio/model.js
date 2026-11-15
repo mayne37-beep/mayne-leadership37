@@ -1,4 +1,5 @@
 import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
+import { TRANSITIONS } from './transitions.js';
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
@@ -144,7 +145,7 @@ export function normalizeProject(input) {
       seconds: clamp(overlay.seconds, 0, 3600, 0),
       animation: oneOf(overlay.animation, ['fade', 'pop', 'slide', 'none'], 'slide'), ...placement(overlay),
     } : null),
-    transition: oneOf(input.transition, ['cut', 'fade', 'wipe', 'dip'], 'fade'),
+    transition: choices(input.transition, TRANSITIONS, 'fade'),
     duration: clamp(input.duration, 100, 2500, 450),
     master: clamp(input.master, -60, 6, 0), masterMute: input.masterMute === true,
     timerSeconds: clamp(input.timerSeconds, 1, 5400, 300),

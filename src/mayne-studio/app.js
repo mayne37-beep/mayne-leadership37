@@ -230,7 +230,10 @@ class Studio {
         title="${e(scene.name)}"><canvas width="128" height="72" aria-hidden="true" data-thumb="${scene.id}"></canvas>
         <strong>${e(scene.name)}</strong><span class="scene-meta"><span>${program ? 'Program' : preview ? 'Preview' : 'Ready'}</span>
         ${index < 9 && this.project.shortcuts['scene' + index] ? '<kbd>' + e(shortcutLabel(this.project.shortcuts['scene' + index])) + '</kbd>' : ''}</span></button>
-        <button class="scene-gear" type="button" data-act="scene-tools" data-id="${scene.id}" aria-label="Settings for ${e(scene.name)}">${icon('gear',13)} Scene settings</button></div>`;
+        <div class="scene-card-actions"><button class="scene-gear" type="button" data-act="scene-tools" data-id="${scene.id}" aria-label="Settings for ${e(scene.name)}">${icon('gear',13)} Settings</button>
+        <button class="scene-delete" type="button" data-act="scene-delete" data-id="${scene.id}" aria-label="Delete scene ${e(scene.name)}"
+        title="${this.project.scenes.length <= 1 ? 'Keep at least one scene' : program ? 'Switch Program to another scene before deleting' : 'Delete this scene'}"
+        ${this.project.scenes.length <= 1 ? 'disabled' : ''}>${icon('trash',14)}</button></div></div>`;
     }).join('');
     this.thumbnails(performance.now());
     this.renderDock();
@@ -557,6 +560,46 @@ class Studio {
       });
   }
 
+  requestSceneDeletion(id) {
+    const index = this.project.scenes.findIndex(scene => scene.id === id);
+    if (index < 0) return;
+    const scene = this.project.scenes[index];
+    if (this.project.scenes.length <= 1) {
+      this.notify('Keep at least one scene in your project.', true);
+      return;
+    }
+    if (this.program.scene.id === id || this.transition?.previous.scene.id === id) {
+      this.dialogOpen('Scene is on air', '<p>“' + e(scene.name)
+        + '” is part of the live output. First cue another scene in Preview and press Cut or Take. '
+        + 'Then you can safely delete this scene without interrupting the broadcast.</p>');
+      return;
+    }
+    this.dialogOpen('Delete scene', '<p>Delete “' + e(scene.name)
+      + '” from this project? This removes its layout and settings, but keeps imported media '
+      + 'in your project for reuse.</p><p class="warning-note">This cannot be undone after saving. '
+      + 'Download a project backup if you want a copy first.</p>',
+      '<button class="button" type="button" data-act="close-dialog">Cancel</button>'
+        + '<button class="button danger" type="submit">Delete scene</button>', () => {
+        const current = this.project.scenes.findIndex(item => item.id === id);
+        if (current < 0 || this.project.scenes.length <= 1
+          || this.program.scene.id === id || this.transition?.previous.scene.id === id) {
+          this.closeDialog();
+          this.notify('Scene could not be deleted. Check which scene is live.', true);
+          return;
+        }
+        this.project.scenes.splice(current, 1);
+        if (this.previewId === id) {
+          const replacement = this.project.scenes[Math.min(current, this.project.scenes.length - 1)];
+          this.previewId = replacement.id;
+          this.layerId = replacement.layers.at(-1)?.id;
+        }
+        this.closeDialog();
+        this.mark();
+        this.render();
+        this.notify('Scene deleted from this project.');
+      });
+  }
+
   projectDialog() {
     this.dialogOpen('Projects', '<p>Scenes and media save in this browser. Backups include imported media.</p>'
       + '<div class="input-grid">' + buttons('New classroom project','new-project') + buttons('Rename current project','rename-project')
@@ -709,6 +752,7 @@ class Studio {
       switch (act) {
         case 'scene': this.setPreview(id); break;
         case 'scene-tools': this.showTools(id); break;
+        case 'scene-delete': this.requestSceneDeletion(id); break;
         case 'close-tools': this.tools.close(); break;
         case 'arrange-preview': this.inlineEditor.toggle(); break;
         case 'shortcuts': this.shortcutDialog(); break;
@@ -748,16 +792,7 @@ class Studio {
           this.sceneDialog(false);
           break;
         }
-        case 'remove-scene':
-          if (this.project.scenes.length < 2) break;
-          this.dialogOpen('Delete scene', '<p>Delete “' + e(this.scene.name) + '” from this project?</p>',
-            '<button class="button primary" type="submit">Delete scene</button>', () => {
-              this.project.scenes.splice(this.project.scenes.indexOf(this.scene), 1);
-              this.closeDialog();
-              this.setPreview(this.project.scenes[0].id);
-              this.mark();
-            });
-          break;
+        case 'remove-scene': this.requestSceneDeletion(this.scene.id); break;
         case 'cut': this.take('cut'); break;
         case 'take': this.take(this.project.transition); break;
         case 'tab': this.tab = id; this.renderDock(); break;

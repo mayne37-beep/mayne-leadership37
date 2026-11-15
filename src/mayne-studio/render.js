@@ -1,4 +1,5 @@
 import { WIDTH, HEIGHT, VISUAL, clock, transitionProgress } from './model.js';
+import { paintTransition } from './transitions.js';
 
 const W = WIDTH, H = HEIGHT;
 const stills = {
@@ -263,26 +264,8 @@ export class StudioRenderer {
   }
 
   mix(transition, now) {
-    const ctx = this.program;
     const { eased } = transitionProgress(transition.start, transition.duration, now);
-    const old = this.outgoing.canvas, next = this.incoming.canvas;
-    ctx.save();
-    if (transition.type === 'fade') {
-      ctx.drawImage(old, 0, 0);
-      ctx.globalAlpha = eased;
-      ctx.drawImage(next, 0, 0);
-    } else if (transition.type === 'wipe') {
-      ctx.drawImage(old, 0, 0);
-      ctx.beginPath();
-      ctx.rect(0, 0, eased * W, H);
-      ctx.clip();
-      ctx.drawImage(next, 0, 0);
-    } else {
-      rect(ctx, 0, 0, W, H, '#000');
-      ctx.globalAlpha = Math.abs(eased * 2 - 1);
-      ctx.drawImage(eased < .5 ? old : next, 0, 0);
-    }
-    ctx.restore();
+    paintTransition(this.program, transition.type, eased, this.outgoing.canvas, this.incoming.canvas);
   }
 
   thumbnail(node, scene, sources, now) {
