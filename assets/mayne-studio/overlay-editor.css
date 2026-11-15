@@ -1,0 +1,35 @@
+/* Independent, non-live overlay canvas editor. */
+.overlay-editor{box-sizing:border-box;width:min(1460px,97vw);max-width:97vw;max-height:94dvh;padding:0;border:1px solid #53657f;border-radius:12px;background:#101926;color:#edf4ff;box-shadow:0 20px 90px #000c;overflow:auto}
+.overlay-editor::backdrop{background:#03070ddb;backdrop-filter:blur(4px)}
+.oe-shell{min-width:0}
+.oe-head{position:sticky;top:0;z-index:6;display:flex;justify-content:space-between;gap:14px;align-items:center;padding:14px 18px;background:#192535;border-bottom:1px solid #40536b}
+.oe-head>div:first-child{display:grid;gap:4px}
+.oe-head strong{font-size:19px}
+.oe-head span{font-size:12px;color:#b7c5d7}
+.oe-head-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.oe-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,310px);gap:14px;padding:15px;align-items:start}
+.oe-workspace{min-width:0}
+.oe-stage{position:relative;aspect-ratio:16/9;width:100%;background:#060c15;border:1px solid #7287a5;border-radius:7px;overflow:hidden;outline-offset:3px;touch-action:none}
+.oe-stage canvas{width:100%;height:100%;display:block}
+.oe-target{position:absolute;box-sizing:border-box;z-index:2;touch-action:none;cursor:move;outline:2px solid #7df1ff;outline-offset:0;background:transparent;box-shadow:0 0 0 9999px #00000009}
+.oe-target-label{position:absolute;bottom:100%;left:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 7px;border-radius:4px 4px 0 0;background:#12314ce8;color:#eafaff;font-size:11px;font-weight:700;pointer-events:none}
+.oe-handle{position:absolute;box-sizing:border-box;width:13px;height:13px;border:1px solid #075779;background:#b9f6ff;transform:translate(-50%,-50%);touch-action:none}
+.oe-handle.handle-nw{left:0;top:0;cursor:nwse-resize}.oe-handle.handle-n{left:50%;top:0;cursor:ns-resize}.oe-handle.handle-ne{left:100%;top:0;cursor:nesw-resize}
+.oe-handle.handle-e{left:100%;top:50%;cursor:ew-resize}.oe-handle.handle-se{left:100%;top:100%;cursor:nwse-resize}.oe-handle.handle-s{left:50%;top:100%;cursor:ns-resize}.oe-handle.handle-sw{left:0;top:100%;cursor:nesw-resize}.oe-handle.handle-w{left:0;top:50%;cursor:ew-resize}
+.oe-hint{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;padding:12px 2px;color:#b4c5d9;font-size:12px}
+.oe-hint .button{min-height:33px}
+.oe-inspector{display:grid;gap:10px;max-height:calc(94dvh - 102px);overflow:auto;padding-right:3px}
+.oe-section{padding:12px;border:1px solid #3e526e;border-radius:8px;background:#1b2a3e;display:grid;gap:9px;min-width:0}
+.oe-section h3{font-size:14px;font-weight:750;text-transform:capitalize;color:#e2f3ff}
+.oe-section label{display:grid;gap:5px;font-size:12px;color:#c2d2e6}
+.oe-section :is(input:not([type="checkbox"]):not([type="range"]),select,textarea){width:100%;min-width:0;box-sizing:border-box;padding:7px 8px;border:1px solid #617792;border-radius:5px;background:#101d2e;color:#f3f7ff;font-size:12px}
+.oe-section textarea{resize:vertical;min-height:64px}
+.oe-section input[type="range"]{width:100%;accent-color:#74c8ff}
+.oe-section output{font-variant-numeric:tabular-nums;color:#cdeaff}
+.oe-numbers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.oe-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.oe-presets .button{font-size:11px;padding:5px 3px;white-space:normal;min-width:0;min-height:34px}
+.oe-section .oe-check{display:flex;align-items:center;gap:8px}
+.oe-muted{font-size:11px;line-height:1.55;color:#b1c4da}
+@media(max-width:930px){.oe-body{grid-template-columns:minmax(0,1fr)}.oe-inspector{max-height:none;grid-template-columns:repeat(2,minmax(0,1fr))}.oe-inspector .oe-section:last-child{grid-column:span 2}}
+@media(max-width:560px){.overlay-editor{max-width:100vw;width:100vw;max-height:100dvh;border-radius:0}.oe-head{padding:10px;flex-wrap:wrap}.oe-head strong{font-size:16px}.oe-body{padding:9px;gap:8px}.oe-inspector{grid-template-columns:minmax(0,1fr)}.oe-inspector .oe-section:last-child{grid-column:span 1}.oe-handle{width:11px;height:11px}.oe-hint{padding:8px 2px}}
