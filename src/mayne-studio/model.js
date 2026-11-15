@@ -17,7 +17,16 @@ export const TEMPLATES = {
   standby: 'Standby', presenter: 'Presenter', slides: 'Slides + presenter',
   discussion: 'Discussion', activity: 'Activity', break: 'Break', blank: 'Blank',
 };
-export const OVERLAYS = { lower: 'Lower third', message: 'Message', arrow: 'Arrow', hand: 'Raise hand', graphic: 'Graphic' };
+// Legacy overlay types remain readable, but new overlays use only Image, Video or Message.
+export const OVERLAYS = {
+  image: 'Image', video: 'Video', message: 'Message',
+  lower: 'Lower third (legacy)', arrow: 'Arrow (legacy)', hand: 'Raised hand (legacy)', graphic: 'Media (legacy)',
+};
+export const OVERLAY_CHOICES = { image: 'Image', video: 'Video', message: 'Message' };
+export const OVERLAY_MOTIONS = {
+  fade: 'Fade', pop: 'Pop (zoom)', slide: 'Slide up', 'slide-left': 'Slide left',
+  'slide-right': 'Slide right', 'slide-down': 'Slide down', none: 'Instant',
+};
 export const AUDIO = new Set(['mic', 'screen', 'audio', 'video']);
 export const VISUAL = new Set(['camera', 'screen', 'powerpoint', 'image', 'video', 'title']);
 export const PLACE = {
@@ -63,9 +72,13 @@ export function makeOverlay(type, options = {}) {
     arrow: { name: 'Pointer arrow', seconds: 4, ...PLACE.arrow },
     hand: { name: 'Raise hand', text: 'Raise your hand', seconds: 6, x: 64, y: 72, w: 31, h: 21 },
     graphic: { name: 'Graphic', seconds: 0, ...PLACE.graphic },
+    image: { name: 'Image overlay', seconds: 0, ...PLACE.graphic },
+    video: { name: 'Video overlay', seconds: 0, ...PLACE.graphic },
   };
   return { id: uid(), type, name: OVERLAYS[type], text: '', sub: '', asset: '', seconds: 0,
-    animation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide', ...presets[type], ...options };
+    animation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
+    exitAnimation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
+    fit: 'contain', opacity: 100, loop: true, ...presets[type], ...options };
 }
 
 export function makeScene(template, name = TEMPLATES[template]) {
@@ -86,7 +99,7 @@ export function makeProject(name = 'Leadership Classroom') {
   return {
     id: uid(), name, version: VERSION, updated: Date.now(),
     scenes: ['standby', 'presenter', 'slides', 'discussion', 'activity', 'break'].map(key => makeScene(key)),
-    sources: [], overlays: ['lower', 'message', 'arrow', 'hand'].map(type => makeOverlay(type)),
+    sources: [], overlays: [makeOverlay('message')],
     transition: 'fade', duration: 450, master: 0, masterMute: false, timerSeconds: 300,
     shortcuts: { ...DEFAULT_SHORTCUTS }, favoriteTransitions: [...DEFAULT_FAVORITE_TRANSITIONS],
   };
@@ -143,7 +156,10 @@ export function normalizeProject(input) {
       id: overlay.id, type: overlay.type, name: string(overlay.name, OVERLAYS[overlay.type]),
       text: string(overlay.text, '', 160), sub: string(overlay.sub, '', 160), asset: identifier(overlay.asset),
       seconds: clamp(overlay.seconds, 0, 3600, 0),
-      animation: oneOf(overlay.animation, ['fade', 'pop', 'slide', 'none'], 'slide'), ...placement(overlay),
+      animation: choices(overlay.animation, OVERLAY_MOTIONS, 'slide'),
+      exitAnimation: choices(overlay.exitAnimation, OVERLAY_MOTIONS, choices(overlay.animation, OVERLAY_MOTIONS, 'slide')),
+      fit: oneOf(overlay.fit, ['contain', 'cover', 'stretch'], 'contain'),
+      opacity: clamp(overlay.opacity, 0, 100, 100), loop: overlay.loop !== false, ...placement(overlay),
     } : null),
     transition: choices(input.transition, TRANSITIONS, 'fade'),
     duration: clamp(input.duration, 100, 2500, 450),
