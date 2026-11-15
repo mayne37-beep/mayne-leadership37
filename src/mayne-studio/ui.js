@@ -81,6 +81,10 @@ export function shell() {
         </select><label class="visually-hidden" for="transition-ms">Transition duration</label>
           <select id="transition-ms" data-project="duration"><option value="200">200 ms</option><option value="300">300 ms</option><option value="450">450 ms</option><option value="600">600 ms</option><option value="800">800 ms</option><option value="1000">1 s</option><option value="1500">1.5 s</option><option value="2000">2 s</option><option value="2500">2.5 s</option></select>
         </div>
+        <div class="favorite-switches" aria-label="Five favorite transitions">
+          <div class="favorite-heading"><span>Favorites</span><button type="button" class="favorite-config" data-act="favorite-config" aria-label="Configure favorite transitions" title="Choose five favorite transition effects">${icon('gear',13)} Edit</button></div>
+          <div id="favorite-transition-list" class="favorite-transition-list"></div>
+        </div>
         <div class="take-controls"><button class="button cut" data-act="cut" type="button">Cut <kbd>C</kbd></button>
           <button class="button primary take" id="take" data-act="take" type="button">Take ${icon('arrow',17)} <kbd>Space</kbd></button></div>
       </section>

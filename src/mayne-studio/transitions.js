@@ -30,6 +30,24 @@ export const TRANSITIONS = Object.freeze(Object.fromEntries(
   TRANSITION_GROUPS.flatMap(group => group.choices),
 ));
 
+/** Five independently selectable one-click transition slots per project. */
+export const DEFAULT_FAVORITE_TRANSITIONS = Object.freeze([
+  'fade', 'wipe', 'push-left', 'zoom-in', 'dip',
+]);
+
+export function normalizeFavoriteTransitions(value) {
+  const provided = Array.isArray(value) ? value.slice(0, DEFAULT_FAVORITE_TRANSITIONS.length) : [];
+  const used = new Set();
+  return DEFAULT_FAVORITE_TRANSITIONS.map((fallback, index) => {
+    const candidate = provided[index];
+    const chosen = typeof candidate === 'string' && Object.hasOwn(TRANSITIONS, candidate) && !used.has(candidate)
+      ? candidate : [fallback, ...DEFAULT_FAVORITE_TRANSITIONS, ...Object.keys(TRANSITIONS)]
+        .find(type => !used.has(type));
+    used.add(chosen);
+    return chosen;
+  });
+}
+
 function direction(type) {
   switch (type.split('-')[1]) {
     case 'left': return [-1, 0];
