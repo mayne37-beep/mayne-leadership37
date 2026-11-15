@@ -47,6 +47,8 @@ jobs:
         run: node --test tests/mayne-studio/*.test.mjs
       - name: Test Mayne Studio Scene Designer in Chromium
         run: node tests/mayne-studio/scene-designer-browser.mjs
+      - name: Test Mayne Studio compact control room
+        run: node tests/mayne-studio/control-room-browser.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
