@@ -107,6 +107,15 @@ try {
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO9XhZ0AAAAASUVORK5CYII=','base64');
   await page.locator('#media-picker').setInputFiles({ name:'logo.png',mimeType:'image/png',buffer:png });
   await editor.waitFor({state:'visible'});
+  // Canceling a fresh upload must discard both its project entry and media.
+  await editor.locator('[data-oe-action="cancel"]').click();
+  await editor.waitFor({state:'hidden'});
+  assert.equal(await page.locator('.overlay-card').filter({hasText:'logo'}).count(),0,
+    'Cancel discards the just-imported overlay instead of leaving a stray entry');
+  await page.locator('#workspace-add').click();
+  await create.locator('[data-id="image"]').click();
+  await page.locator('#media-picker').setInputFiles({ name:'logo.png',mimeType:'image/png',buffer:png });
+  await editor.waitFor({state:'visible'});
   assert.equal(await editor.locator('#oe-target-label').textContent(),'logo');
   assert.ok(await editor.locator('[data-oe-field="fit"]').count() === 1);
   await editor.locator('[data-oe-field="fit"]').selectOption('cover');
