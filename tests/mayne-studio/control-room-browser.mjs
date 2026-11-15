@@ -82,6 +82,28 @@ try {
   await page.locator('#studio:not([hidden])').waitFor();
   await page.locator('#project-name').getByText('Compact Control Room E2E').waitFor();
 
+  // Controls must sit in a narrow vertical column BETWEEN both video monitors.
+  const previewBounds = await page.locator('.preview-monitor').boundingBox();
+  const programBounds = await page.locator('.program-monitor').boundingBox();
+  const switchBounds = await page.locator('.monitors > .switch-controls').boundingBox();
+  assert.ok(previewBounds?.width && programBounds?.width && switchBounds?.width);
+  assert.ok(previewBounds.x + previewBounds.width <= switchBounds.x + 1,
+    'The switch controls begin to the right of Private Preview');
+  assert.ok(switchBounds.x + switchBounds.width <= programBounds.x + 1,
+    'The switch controls end to the left of Program');
+  assert.ok(Math.abs((switchBounds.y + switchBounds.height / 2) -
+    (previewBounds.y + previewBounds.height / 2)) < 20,
+    'The central controls are vertically centered against the monitor area');
+  const cutBounds = await page.locator('.monitors [data-act="cut"]').boundingBox();
+  const takeBounds = await page.locator('.monitors [data-act="take"]').boundingBox();
+  assert.ok(cutBounds.y + cutBounds.height <= takeBounds.y,
+    'Cut and Take are vertically stacked, not placed side by side');
+  assert.ok(Math.abs((cutBounds.x + cutBounds.width / 2) -
+    (takeBounds.x + takeBounds.width / 2)) < 3,
+    'Cut and Take share the same horizontal centerline');
+  assert.equal(await page.locator('.monitors #transition').count(), 1,
+    'Transition picker is in the center monitor column');
+
   // Scenes are horizontally arranged below the two monitors.
   const monitor = await page.locator('.monitors').boundingBox();
   const strip = await page.locator('.scene-pane').boundingBox();
@@ -193,6 +215,28 @@ try {
 
   await mkdir('test-results', { recursive: true });
   await page.screenshot({ path: 'test-results/mayne-compact-control-room.png', fullPage: true });
+  // On tablet and phone the controls remain between Preview and Program,
+  // rather than falling below the scene strip or becoming too narrow to tap.
+  for (const width of [768, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    const [preview, controls, program] = await Promise.all([
+      page.locator('.preview-monitor').boundingBox(),
+      page.locator('.monitors > .switch-controls').boundingBox(),
+      page.locator('.program-monitor').boundingBox(),
+    ]);
+    assert.ok(preview.y + preview.height <= controls.y + 1,
+      'Preview stays above the switch controls at ' + width + 'px');
+    assert.ok(controls.y + controls.height <= program.y + 1,
+      'Switch controls stay above Program at ' + width + 'px');
+    const [cut, take] = await Promise.all([
+      page.locator('.monitors [data-act="cut"]').boundingBox(),
+      page.locator('.monitors [data-act="take"]').boundingBox(),
+    ]);
+    assert.ok(cut.y + cut.height <= take.y,
+      'Cut and Take remain vertically stacked at ' + width + 'px');
+    assert.ok(controls.x >= 0 && controls.x + controls.width <= width + 1,
+      'Switch controls fit within the viewport at ' + width + 'px');
+  }
   assert.deepEqual(errors, [], 'No uncaught JavaScript errors during control room operation');
   console.log('Compact control room browser checks passed: horizontal scenes, popup tools, direct drag and resize, live deck controls and keyboard mapping.');
   await context.close();
