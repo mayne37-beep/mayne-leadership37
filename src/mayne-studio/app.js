@@ -31,7 +31,8 @@ class Studio {
     this.media = new StudioMedia(() => this.mediaChanged(), (message) => this.notify(message, true));
     this.renderer = new StudioRenderer($('preview-canvas'), $('program-canvas'), this.media);
     this.output = new ProgramOutput($('program-canvas'), this.media.audio, () => this.frame(),
-      (message, error) => this.notify(message, error), () => this.recordStatus());
+      (message, error) => this.notify(message, error), () => this.recordStatus(),
+      chord => this.runShortcut(chord));
     this.tab = 'layers';
     this.timer = timers();
     this.saved = Promise.resolve();
@@ -1029,9 +1030,14 @@ class Studio {
     if (!this.project || this.editing || this.dialog.open || this.tools.open || this.designer.open ||
       event.defaultPrevented || event.repeat || event.target.closest?.('input,textarea,select,[contenteditable]')) return;
     const chord = keyboardShortcut(event);
-    const action = shortcutAction(this.project.shortcuts, chord);
-    if (!action) return;
     if (chord.endsWith('Space') && event.target.closest?.('button,a')) return;
+    if (this.runShortcut(chord)) event.preventDefault();
+  }
+
+  runShortcut(chord) {
+    if (!this.project || this.editing || !chord) return false;
+    const action = shortcutAction(this.project.shortcuts, chord);
+    if (!action) return false;
     if (action === 'take') this.take(this.project.transition);
     else if (action === 'cut') this.take('cut');
     else if (action === 'scenePrevious') this.cueAdjacent(-1);
@@ -1044,9 +1050,8 @@ class Studio {
       this.toggleOverlay(this.project.overlays[Number(action.slice(7))]?.id, true);
     else if (/^scene[0-8]$/.test(action))
       this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
-    else return;
-    event.preventDefault();
-  }
+    else return false;
+    return true;
 }
 
 if (new URLSearchParams(location.search).get('output') === '1') outputPage();
