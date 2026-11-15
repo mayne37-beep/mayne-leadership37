@@ -31,6 +31,7 @@ const paths = {
   mute: '<path d="M3 9h4l5-4v14l-5-4H3Zm13 0 5 6m0-6-5 6"/>',
   headphones: '<path d="M3 14v-2a9 9 0 0 1 18 0v2M3 12h4v8H5a2 2 0 0 1-2-2Zm18 0h-4v8h2a2 2 0 0 0 2-2Z"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.3-3 4m.1 3h.01"/>',
+  keyboard: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/>',
   check: '<path d="m5 12 4 4L19 6"/>', grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
 };
 export const icon = (key, size = 18) => '<svg aria-hidden="true" width="' + size + '" height="' + size
@@ -58,33 +59,34 @@ export function shell() {
     <button class="project-picker" type="button" data-act="projects" aria-label="Open projects">${icon('folder',17)} <span id="project-name">Projects</span>${icon('chevron',14)}</button>
     <div class="header-actions">
       <button class="button save" data-act="save" type="button">${icon('save',16)} <span>Save</span></button>
+      <button class="button" data-act="shortcuts" type="button">${icon('keyboard',16)} <span>Shortcuts</span></button>
       <button class="button output-toggle" data-act="output" type="button">${icon('popout',16)} <span>Program output</span></button>
       <button class="button record" id="record" data-act="record" type="button"><i></i> <span>Record</span></button>
     </div>
   </header>
   <main class="workspace" id="switcher">
-    <aside class="pane scene-pane" aria-label="Scenes">
+    <section class="switcher">
+      <div class="control-heading"><h2>Control room</h2><span class="format mono">1920 × 1080 <span></span> 30 FPS</span></div>
+      <div class="monitors">
+        <section class="monitor preview-monitor" aria-labelledby="preview-label">
+          <div class="monitor-head"><h3 id="preview-label"><i></i> Preview</h3><span id="preview-name"></span></div>
+          <div class="monitor-screen"><canvas id="preview-canvas" width="1280" height="720" aria-label="Preview canvas"></canvas><div id="preview-layer-controls" class="inline-preview-targets" hidden></div></div>
+          <div class="monitor-foot"><span>${icon('eye',13)} Private preview</span><div class="scene-edit-controls"><button class="quiet-button" type="button" id="arrange-preview" data-act="arrange-preview" aria-pressed="false">${icon('layers',13)} Arrange layers</button><button class="quiet-button" type="button" data-act="scene-designer">${icon('layers',13)} Larger editor</button><button class="quiet-button" type="button" data-act="scene-tools">Scene controls ${icon('gear',14)}</button></div></div>
+        </section>
+        <section class="monitor program-monitor" aria-labelledby="program-label">
+          <div class="monitor-head"><h3 id="program-label"><i></i> Program</h3><span id="program-name"></span></div>
+          <div class="monitor-screen"><canvas id="program-canvas" width="1920" height="1080" aria-label="Program canvas"></canvas></div>
+          <div class="monitor-foot"><span>${icon('screen',13)} Live output</span><span class="mono" id="session-clock">00:00:00</span></div><div class="live-deck-controls" id="live-deck-controls" hidden></div>
+        </section>
+      </div>
+    <section class="pane scene-pane" aria-label="Scenes">
       <div class="pane-head"><h2>${icon('grid',16)} Scenes</h2>${iconButton('new-scene','Add scene','plus')}</div>
       <div id="scenes" class="scene-list"></div>
       <div class="scene-bottom">
         <button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button>
         <a class="site-return" href="facilitation.html">Mayne Leadership ${icon('popout',12)}</a>
       </div>
-    </aside>
-    <section class="switcher">
-      <div class="control-heading"><h2>Control room</h2><span class="format mono">1920 × 1080 <span></span> 30 FPS</span></div>
-      <div class="monitors">
-        <section class="monitor preview-monitor" aria-labelledby="preview-label">
-          <div class="monitor-head"><h3 id="preview-label"><i></i> Preview</h3><span id="preview-name"></span></div>
-          <div class="monitor-screen"><canvas id="preview-canvas" width="1280" height="720" aria-label="Preview canvas"></canvas></div>
-          <div class="monitor-foot"><span>${icon('eye',13)} Private preview</span><div class="scene-edit-controls"><button class="quiet-button" type="button" data-act="scene-designer">${icon('layers',13)} Design scene</button><button class="quiet-button" type="button" data-act="scene-edit">Scene settings ${icon('gear',14)}</button></div></div>
-        </section>
-        <section class="monitor program-monitor" aria-labelledby="program-label">
-          <div class="monitor-head"><h3 id="program-label"><i></i> Program</h3><span id="program-name"></span></div>
-          <div class="monitor-screen"><canvas id="program-canvas" width="1920" height="1080" aria-label="Program canvas"></canvas></div>
-          <div class="monitor-foot"><span>${icon('screen',13)} Live output</span><span class="mono" id="session-clock">00:00:00</span></div>
-        </section>
-      </div>
+    </section>
       <section class="switch-controls" aria-label="Switching and transitions">
         <div class="transition-select"><label for="transition">Transition</label><select id="transition" data-project="transition">
           <option value="fade">Crossfade</option><option value="wipe">Wipe</option><option value="dip">Dip to black</option><option value="cut">Cut</option>
@@ -93,14 +95,6 @@ export function shell() {
         </div>
         <div class="take-controls"><button class="button cut" data-act="cut" type="button">Cut <kbd>C</kbd></button>
           <button class="button primary take" id="take" data-act="take" type="button">Take ${icon('arrow',17)} <kbd>Space</kbd></button></div>
-      </section>
-      <section class="dock pane" aria-label="Production tools">
-        <div class="dock-top"><div id="dock-tabs" class="tabs" role="tablist" aria-label="Production tools">
-          <button id="tab-layers" role="tab" aria-controls="dock-panel" aria-selected="true" data-act="tab" data-id="layers" type="button">${icon('layers',17)} Layers &amp; inputs</button>
-          <button id="tab-overlays" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="overlays" type="button">${icon('makeup',17)} Overlays</button>
-          <button id="tab-classroom" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="classroom" type="button">${icon('classroom',17)} Classroom</button>
-        </div><button class="button primary-outline dock-add" data-act="add-context" type="button">${icon('plus',16)} <span id="dock-add-label">Add input</span></button></div>
-        <div id="dock-panel" role="tabpanel" aria-labelledby="tab-layers"></div>
       </section>
     </section>
     <aside class="pane mixer-pane" aria-label="Audio mixer">
@@ -114,6 +108,17 @@ export function shell() {
     <span id="record-status" class="record-status mono" hidden></span>
     <div class="status-right"><span class="mono" id="runtime-status"></span><button class="quiet-button" type="button" data-act="help">${icon('help',15)} Shortcuts &amp; help</button></div>
   </footer>
+  <dialog class="studio-tools-dialog" id="studio-tools" aria-labelledby="tools-scene-name">
+    <section class="dock pane" aria-label="Scene production tools"><div class="tools-title"><strong id="tools-scene-name">Scene controls</strong><button class="button" type="button" data-act="close-tools">Close</button></div>
+      <div class="tools-scene-actions"><button class="button" type="button" data-act="scene-edit">${icon('gear',15)} Scene settings</button><button class="button" type="button" data-act="scene-designer">${icon('layers',15)} Arrange scene</button></div>
+        <div class="dock-top"><div id="dock-tabs" class="tabs" role="tablist" aria-label="Production tools">
+          <button id="tab-layers" role="tab" aria-controls="dock-panel" aria-selected="true" data-act="tab" data-id="layers" type="button">${icon('layers',17)} Layers &amp; inputs</button>
+          <button id="tab-overlays" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="overlays" type="button">${icon('makeup',17)} Overlays</button>
+          <button id="tab-classroom" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="classroom" type="button">${icon('classroom',17)} Classroom</button>
+        </div><button class="button primary-outline dock-add" data-act="add-context" type="button">${icon('plus',16)} <span id="dock-add-label">Add input</span></button></div>
+        <div id="dock-panel" role="tabpanel" aria-labelledby="tab-layers"></div>
+      </section>
+  </dialog>
   <div class="toast" id="toast" role="status" hidden></div>
   <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
   <input type="file" id="media-picker" hidden><input type="file" id="project-picker" accept=".zip,application/zip" hidden>
