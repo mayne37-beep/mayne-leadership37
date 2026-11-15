@@ -70,7 +70,7 @@ try {
   await editor.locator('[data-oe-field="exitAnimation"]').selectOption('slide-left');
   await editor.locator('[data-oe-field="seconds"]').fill('7');
   await editor.locator('[data-oe-field="seconds"]').press('Tab');
-  await editor.locator('[data-oe-field="opacity"]').fill('76');
+  await editor.locator('[data-oe-field="opacity"]').evaluate(el => { el.value = '76'; el.dispatchEvent(new Event('input',{ bubbles:true })); });
   await editor.locator('[data-oe-action="preview"]').click();
   assert.ok(await editor.locator('#oe-canvas').isVisible());
   assert.equal(await page.locator('#program-name').textContent(), 'Standby',
