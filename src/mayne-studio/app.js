@@ -61,6 +61,7 @@ class Studio {
       input.value = shortcutLabel(binding);
       this.mark();
       this.renderDock();
+      this.render();
     });
     this.root.addEventListener('click', event => this.click(event));
     this.root.addEventListener('input', event => this.input(event));
@@ -220,12 +221,14 @@ class Studio {
     ms.disabled = this.project.transition === 'cut';
     $('take').disabled = !!this.transition;
     this.root.querySelector('[data-act="cut"]').disabled = !!this.transition;
+    this.root.querySelector('[data-act="cut"] kbd').textContent = shortcutLabel(this.project.shortcuts.cut);
+    $('take').querySelector('kbd').textContent = shortcutLabel(this.project.shortcuts.take);
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
       return `<div class="scene-tile"><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
         title="${e(scene.name)}"><canvas width="128" height="72" aria-hidden="true" data-thumb="${scene.id}"></canvas>
         <strong>${e(scene.name)}</strong><span class="scene-meta"><span>${program ? 'Program' : preview ? 'Preview' : 'Ready'}</span>
-        ${index < 9 ? '<kbd>' + (index + 1) + '</kbd>' : ''}</span></button>
+        ${index < 9 && this.project.shortcuts['scene' + index] ? '<kbd>' + e(shortcutLabel(this.project.shortcuts['scene' + index])) + '</kbd>' : ''}</span></button>
         <button class="scene-gear" type="button" data-act="scene-tools" data-id="${scene.id}" aria-label="Settings for ${e(scene.name)}">${icon('gear',13)} Scene settings</button></div>`;
     }).join('');
     this.thumbnails(performance.now());
@@ -715,6 +718,7 @@ class Studio {
           if (field) field.value = shortcutLabel('');
           this.mark();
           this.renderDock();
+          this.render();
           break;
         }
         case 'shortcuts-reset': {
