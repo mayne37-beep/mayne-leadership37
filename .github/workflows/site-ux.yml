@@ -51,6 +51,8 @@ jobs:
         run: node tests/mayne-studio/control-room-browser.mjs
       - name: Test live PowerPoint keyboard controls across Program and Preview
         run: node tests/mayne-studio/live-powerpoint-browser.mjs
+      - name: Validate scene deletion and animated transitions
+        run: node tests/mayne-studio/transitions-browser.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
