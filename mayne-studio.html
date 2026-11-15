@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e121a">
+  <meta name="description" content="Produce live classroom video with Mayne Studio, the Mayne Leadership browser-based switcher.">
+  <title>Mayne Studio | Mayne Leadership</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/mayne-studio/studio.css">
+  <script type="module" src="assets/mayne-studio-app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#switcher">Skip to switcher</a>
+  <div id="studio" hidden></div>
+  <main id="output" class="output" hidden aria-label="Mayne Studio program output">
+    <video id="output-video" autoplay muted playsinline aria-label="Program feed"></video>
+    <p id="output-message" role="status">Connecting to Mayne Studio…</p>
+    <div class="output-controls">
+      <button id="output-audio" type="button">Enable audio</button>
+      <button id="output-fullscreen" type="button">Fullscreen</button>
+    </div>
+  </main>
+  <noscript><p>Enable JavaScript to use Mayne Studio.</p></noscript>
+</body>
+</html>

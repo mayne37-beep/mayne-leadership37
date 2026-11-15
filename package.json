@@ -40,6 +40,7 @@
     "dompurify": "3.4.16",
     "exceljs": "4.4.0",
     "jszip": "3.10.1",
+    "onnxruntime-web": "1.31.1",
     "pdf-lib": "1.17.1",
     "qrcode": "1.5.4",
     "react": "19.2.0",
