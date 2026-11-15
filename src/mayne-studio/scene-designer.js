@@ -49,6 +49,9 @@ export class SceneDesigner {
       'Use arrow keys to nudge the selected layer, or Shift + arrow keys for larger moves. ' +
       'Only Preview is edited; Program changes after you take the scene.</p></div>' +
       '<aside class="designer-sidebar" aria-label="Scene layers and geometry">' +
+      '<div class="designer-section"><h3>Scene composition</h3><div class="designer-actions">' +
+      '<button type="button" data-designer-action="add-input">Add input</button>' +
+      '<button type="button" data-designer-action="background">Background settings</button></div></div>' +
       '<div class="designer-section"><h3>Layer order <small>Top first</small></h3><div id="designer-list" class="designer-layer-list"></div></div>' +
       '<div class="designer-section"><h3>Selected layer</h3><div id="designer-properties"></div></div>' +
       '</aside></div></div>';
@@ -148,6 +151,8 @@ export class SceneDesigner {
     event.preventDefault();
     const { designerAction: action, id } = control.dataset;
     if (action === 'close') { this.dialog.close(); return; }
+    if (action === 'add-input') { this.dialog.close(); this.studio.inputMenu(); return; }
+    if (action === 'background') { this.dialog.close(); this.studio.sceneDialog(false); return; }
     if (action === 'pick') { this.select(id); return; }
     const scene = this.studio.scene;
     const layer = action === 'visibility' ? scene.layers.find(item => item.id === id) : this.studio.layer;
