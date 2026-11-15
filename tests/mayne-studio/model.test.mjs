@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { TRANSITIONS } from '../../src/mayne-studio/transitions.js';
+import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from '../../src/mayne-studio/transitions.js';
 import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSource, normalizeProject,
   transitionProgress, uid } from '../../src/mayne-studio/model.js';
 
@@ -46,4 +46,23 @@ test('new transition choices survive project restore and old wipe projects stay 
   assert.equal(normalizeProject(project).transition, 'fade');
   project.transition = 'wipe';
   assert.equal(normalizeProject(project).transition, 'wipe');
+});
+
+test('five distinct favorite transitions default, restore, and validate on legacy projects', () => {
+  const project = makeProject();
+  assert.deepEqual(project.favoriteTransitions, DEFAULT_FAVORITE_TRANSITIONS);
+  const custom = ['iris', 'slide-down', 'push-up', 'wipe-left', 'zoom-out'];
+  project.favoriteTransitions = custom;
+  assert.deepEqual(normalizeProject(project).favoriteTransitions, custom);
+  delete project.favoriteTransitions;
+  assert.deepEqual(normalizeProject(project).favoriteTransitions, DEFAULT_FAVORITE_TRANSITIONS,
+    'Old projects without favorites acquire five distinct defaults');
+  const repaired = normalizeFavoriteTransitions(['wipe', 'wipe', 'fake-transition', 'zoom-out', 'iris']);
+  assert.equal(repaired.length, 5);
+  assert.equal(new Set(repaired).size, 5);
+  assert.equal(repaired[0], 'wipe');
+  assert.equal(repaired[3], 'zoom-out');
+  assert.equal(repaired[4], 'iris');
+  assert.ok(repaired.every(type => Object.hasOwn(TRANSITIONS, type)));
+  assert.deepEqual(normalizeFavoriteTransitions('bad data'), DEFAULT_FAVORITE_TRANSITIONS);
 });
