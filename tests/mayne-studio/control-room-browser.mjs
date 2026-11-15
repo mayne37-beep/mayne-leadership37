@@ -178,6 +178,55 @@ try {
   assert.equal(await page.locator('#mixer-toggle').getAttribute('aria-expanded'), 'true');
   assert.ok(await page.locator('#mixer [data-gain="master"]').count() === 1,
     'Audio mixing remains functional after reopening');
+
+  // At desktop and tablet sizes the mixer must stay in the RIGHT column.
+  // In particular, 1080px and below must not push it to the bottom or
+  // leave an unused blank column when collapsed.
+  for (const width of [1440, 1200, 1080, 1024, 900, 768, 700]) {
+    await page.setViewportSize({ width, height: 900 });
+    const content = await page.locator('.workspace > .switcher').boundingBox();
+    const mixer = await page.locator('#mixer-pane').boundingBox();
+    assert.ok(mixer.x >= content.x + content.width - 1,
+      'Expanded audio mixer remains right of the production area at ' + width + 'px');
+    assert.ok(Math.abs(mixer.y - content.y) < 9,
+      'Expanded mixer begins beside monitors, not below them, at ' + width + 'px');
+    assert.ok(width - (mixer.x + mixer.width) < 35,
+      'Expanded mixer does not leave a blank area on the right at ' + width + 'px');
+    await page.locator('#mixer-toggle').click();
+    const wide = await page.locator('.workspace > .switcher').boundingBox();
+    const rail = await page.locator('#mixer-pane').boundingBox();
+    assert.ok(wide.width > content.width + 100,
+      'Collapsed mixer gives more width to monitors at ' + width + 'px');
+    assert.ok(rail.x >= wide.x + wide.width - 1 && rail.width <= 55,
+      'Collapsed audio bar remains beside monitors at ' + width + 'px');
+    assert.ok(Math.abs(rail.y - wide.y) < 9,
+      'Collapsed mixer rail never moves to the bottom at ' + width + 'px');
+    assert.ok(width - (rail.x + rail.width) < 35,
+      'Collapsed mixer does not leave blank right-side space at ' + width + 'px');
+    await page.locator('#mixer-toggle').click();
+    assert.equal(await page.locator('#mixer-toggle').getAttribute('aria-expanded'), 'true');
+  }
+
+  // Phone view uses a right-edge drawer so opening audio does not shrink
+  // the preview and program monitors to an unusable width.
+  for (const width of [690, 375]) {
+    await page.setViewportSize({ width, height: 850 });
+    const content = await page.locator('.workspace > .switcher').boundingBox();
+    const mixer = await page.locator('#mixer-pane').boundingBox();
+    assert.ok(width - (mixer.x + mixer.width) <= 12,
+      'Expanded mixer is a right-edge drawer at ' + width + 'px');
+    assert.ok(mixer.y < content.y + content.height,
+      'Mixer drawer stays beside the production view, not below it, at ' + width + 'px');
+    await page.locator('#mixer-toggle').click();
+    const rail = await page.locator('#mixer-pane').boundingBox();
+    const wide = await page.locator('.workspace > .switcher').boundingBox();
+    assert.ok(rail.width <= 55 && width - (rail.x + rail.width) <= 12,
+      'Collapsed drawer is a narrow right-side tab at ' + width + 'px');
+    assert.ok(Math.abs(content.width - wide.width) < 2,
+      'Phone monitoring area does not resize when audio is toggled at ' + width + 'px');
+    await page.locator('#mixer-toggle').click();
+  }
+  await page.setViewportSize({ width: 1440, height: 950 });
   await page.locator('.scene-tile .scene-gear').nth(1).click();
   await page.locator('#studio-tools [data-act="close-tools"]').click();
 
