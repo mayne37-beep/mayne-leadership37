@@ -113,6 +113,11 @@ try {
     const studio = window.__qaStudio;
     return studio.media.get('deck-source')?.frames.get(1)?.ready === true;
   });
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('#program-canvas');
+    const color = canvas.getContext('2d').getImageData(canvas.width / 2, canvas.height / 2, 1, 1).data;
+    return color[2] > color[0] && color[2] > color[1];
+  }, null, { timeout: 6000 });
   const pixels = await page.evaluate(() => {
     const sample = id => {
       const canvas = document.querySelector(id);
