@@ -333,3 +333,49 @@ kbd{white-space:nowrap}
   .monitors .favorite-switches{grid-column:2;grid-row:1 / span 2;border-right:0}
   .favorite-transition{min-height:29px}
 }
+
+
+/* Production-wide controls are separate from each scene's layer editor. */
+.production-tabs-head{gap:7px;padding-inline:10px;flex-wrap:wrap;align-items:center;min-height:48px}
+.production-tabs{display:flex;align-items:stretch;flex-wrap:wrap;gap:4px;min-width:0;flex:1}
+.production-tabs button{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:41px;padding:6px 12px;white-space:nowrap;border:0;border-radius:5px 5px 0 0;background:transparent;color:var(--soft);font-size:12px;cursor:pointer}
+.production-tabs button:hover{background:#243245;color:var(--text)}
+.production-tabs button[aria-selected="true"]{background:#24354b;color:#eaf3ff;box-shadow:inset 0 -3px var(--accent);font-weight:700}
+.production-tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.production-tabs button svg{flex:none}
+.production-tabs-head #workspace-add{flex:none;min-height:31px;border:1px solid #42526a;background:#24344b}
+.production-tabs-head #workspace-add:hover{background:#36516f}
+.production-panel[hidden],#mixer-body[hidden]{display:none!important}
+.production-panel{min-width:0}
+.production-tools .keys{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.production-tools .classroom-tools{grid-template-columns:repeat(auto-fit,minmax(245px,1fr));align-items:start}
+.production-tools .class-card{min-width:0}
+.scene-input-label{color:var(--soft);font-size:12px;font-weight:650}
+
+/* Mixer collapses to a narrow right-side rail. The control room expands. */
+.mixer-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:1px}
+.mix-rail-label{display:none}
+#mixer-body{display:flex;flex:1;flex-direction:column;min-width:0}
+.workspace.mixer-collapsed{grid-template-columns:minmax(0,1fr) 46px}
+.mixer-pane.collapsed{min-height:0;align-self:start}
+.mixer-pane.collapsed .pane-head{padding:7px 4px;justify-content:center;min-height:39px}
+.mixer-pane.collapsed .pane-head h2,.mixer-pane.collapsed [data-act="input-mic"]{display:none}
+.mixer-pane.collapsed .mixer-head-actions{width:100%;justify-content:center}
+.mixer-pane.collapsed #mixer-toggle{display:inline-grid;width:34px;height:34px;place-items:center;border:1px solid #41546a;background:#24344b;color:#cfe8fb}
+.mixer-pane.collapsed .mix-rail-label{display:block;margin:12px auto 15px;writing-mode:vertical-rl;text-transform:uppercase;letter-spacing:.12em;font-weight:650;font-size:10px;color:#aebdd2}
+@media(max-width:1080px){
+  .workspace.mixer-collapsed{grid-template-columns:minmax(0,1fr)}
+  .mixer-pane.collapsed{min-height:0;width:100%}
+  .mixer-pane.collapsed .pane-head{justify-content:flex-end;padding:4px 10px}
+  .mixer-pane.collapsed .mixer-head-actions{width:auto}
+  .mixer-pane.collapsed .mix-rail-label{display:none}
+  .mixer-pane.collapsed .pane-head h2{display:flex;margin-right:auto}
+}
+@media(max-width:690px){
+  .production-tabs-head{padding:4px 7px;gap:4px}
+  .production-tabs{gap:1px}
+  .production-tabs button{font-size:11px;padding:5px 7px;gap:4px;min-height:35px}
+  .production-tabs button svg{width:13px;height:13px}
+  .production-tools .keys{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));padding:7px;gap:6px}
+  .production-tools .classroom-tools{grid-template-columns:minmax(0,1fr);padding:7px}
+}

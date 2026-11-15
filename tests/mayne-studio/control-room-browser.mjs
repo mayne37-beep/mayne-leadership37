@@ -112,20 +112,74 @@ try {
   const buttons = page.locator('.scene-tile .scene-gear');
   assert.equal(await buttons.count(), 2, 'Every scene has its own settings button');
   assert.equal(await page.locator('#studio-tools').isVisible(), false,
-    'Layers, Overlays and Classroom are hidden by default');
+    'Scene layers are hidden behind scene settings');
+  assert.equal(await page.locator('.production-tabs [role="tab"]').count(), 3,
+    'Scenes, Overlays and Classroom are peer-level global tabs');
+  assert.equal(await page.locator('#scene-panel').isVisible(), true);
+  assert.equal(await page.locator('#overlays-panel').isVisible(), false);
+  assert.equal(await page.locator('#classroom-panel').isVisible(), false);
 
   await buttons.nth(1).click();
   const tools = page.locator('#studio-tools');
   assert.equal(await tools.isVisible(), true);
   assert.equal(await page.locator('#preview-name').textContent(), 'Slides + Presenter',
     'Opening a scene’s controls cues that scene privately');
-  assert.equal(await tools.locator('[role="tab"]').count(), 3);
-  await tools.locator('#tab-overlays').click();
-  assert.ok(await tools.locator('.overlay-card').count() === 1);
-  await tools.locator('#tab-classroom').click();
-  assert.ok(await tools.getByRole('heading', { name: 'PowerPoint & speaker notes' }).isVisible());
+  assert.equal(await tools.locator('[role="tab"]').count(), 0,
+    'Individual scene settings no longer include unrelated global tabs');
+  assert.equal(await tools.locator('.layer-console').count(), 1,
+    'Scene settings retain layer and input editing');
+  assert.equal(await tools.locator('.overlay-card').count(), 0);
   await tools.getByRole('button', { name: 'Close', exact: true }).click();
   assert.equal(await tools.isVisible(), false);
+
+  // Global overlays and classroom tools are accessible without opening any scene.
+  await page.locator('#workspace-overlays').click();
+  assert.equal(await page.locator('#scene-panel').isVisible(), false);
+  assert.equal(await page.locator('#overlays-panel').isVisible(), true);
+  assert.equal(await page.locator('#overlays-panel .overlay-card').count(), 1);
+  assert.equal(await page.locator('#workspace-add').getAttribute('aria-label'), 'Add overlay');
+  await page.locator('#overlays-panel [data-act="overlay-live"]').click();
+  assert.equal(await page.locator('#overlays-panel .overlay-card.is-live').count(), 1,
+    'Global overlay can go live without selecting scene settings');
+  await page.locator('#workspace-classroom').click();
+  assert.equal(await page.locator('#classroom-panel').isVisible(), true);
+  assert.ok(await page.locator('#classroom-panel').getByRole('heading', { name: 'PowerPoint & speaker notes' }).isVisible());
+  assert.equal(await page.locator('#workspace-add').getAttribute('aria-label'), 'Import PowerPoint');
+  await page.locator('#classroom-panel [data-act="timer-show"]').click();
+  assert.equal(await page.locator('#classroom-panel [data-act="timer-show"]').textContent(), 'Hide',
+    'Global classroom timer can be shown independently of the scenes');
+
+  // Accessible arrow-key navigation between the global workspaces.
+  await page.locator('#workspace-overlays').focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await page.locator('#workspace-classroom').getAttribute('aria-selected'), 'true');
+  await page.keyboard.press('Home');
+  assert.equal(await page.locator('#workspace-scenes').getAttribute('aria-selected'), 'true');
+  assert.equal(await page.locator('#scene-panel').isVisible(), true);
+  assert.equal(await page.locator('.scene-tile').count(), 2);
+
+  // Collapsing the mixer frees horizontal room but keeps an accessible reopen button.
+  const roomBefore = await page.locator('.workspace > .switcher').boundingBox();
+  await page.locator('#mixer-toggle').click();
+  const roomAfter = await page.locator('.workspace > .switcher').boundingBox();
+  assert.equal(await page.locator('#mixer-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(await page.locator('#mixer-body').isVisible(), false);
+  assert.ok(roomAfter.width > roomBefore.width + 100,
+    'Collapsing mixer expands the Preview/Program working area');
+  assert.equal(await page.locator('#mixer-pane').isVisible(), true,
+    'Mixer leaves a visible right-edge expand rail');
+  await page.reload();
+  await page.locator('#studio:not([hidden])').waitFor();
+  assert.equal(await page.locator('#mixer-toggle').getAttribute('aria-expanded'), 'false',
+    'Mixer collapse choice persists in this browser');
+  await page.locator('#mixer-toggle').click();
+  assert.equal(await page.locator('#mixer-body').isVisible(), true,
+    'Reopening restores the audio channels and faders');
+  assert.equal(await page.locator('#mixer-toggle').getAttribute('aria-expanded'), 'true');
+  assert.ok(await page.locator('#mixer [data-gain="master"]').count() === 1,
+    'Audio mixing remains functional after reopening');
+  await page.locator('.scene-tile .scene-gear').nth(1).click();
+  await page.locator('#studio-tools [data-act="close-tools"]').click();
 
   // Adjust camera placement visually on the actual private Preview canvas.
   await page.locator('[data-act="arrange-preview"]').click();

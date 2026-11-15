@@ -94,20 +94,33 @@ export function shell() {
           <div class="monitor-foot"><span>${icon('screen',13)} Live output</span><span class="mono" id="session-clock">00:00:00</span></div><div class="live-deck-controls" id="live-deck-controls" hidden></div>
         </section>
       </div>
-    <section class="pane scene-pane" aria-label="Scenes">
-      <div class="pane-head"><h2>${icon('grid',16)} Scenes</h2>${iconButton('new-scene','Add scene','plus')}</div>
-      <div id="scenes" class="scene-list"></div>
-      <div class="scene-bottom">
-        <button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button>
-        <a class="site-return" href="facilitation.html">Mayne Leadership ${icon('popout',12)}</a>
+    <section class="pane scene-pane" aria-label="Production workspaces">
+      <div class="pane-head production-tabs-head">
+        <div class="production-tabs" role="tablist" aria-label="Scenes, overlays and classroom functions">
+          <button id="workspace-scenes" role="tab" aria-controls="scene-panel" aria-selected="true" type="button" data-act="workspace-tab" data-id="scenes">${icon('grid',15)} Scenes</button>
+          <button id="workspace-overlays" role="tab" aria-controls="overlays-panel" aria-selected="false" tabindex="-1" type="button" data-act="workspace-tab" data-id="overlays">${icon('makeup',15)} Overlays</button>
+          <button id="workspace-classroom" role="tab" aria-controls="classroom-panel" aria-selected="false" tabindex="-1" type="button" data-act="workspace-tab" data-id="classroom">${icon('classroom',15)} Classroom</button>
+        </div>
+        <button type="button" id="workspace-add" class="icon-button" data-act="workspace-add" aria-label="Add scene" title="Add scene">${icon('plus',17)}</button>
       </div>
+      <div id="scene-panel" class="production-panel" role="tabpanel" aria-labelledby="workspace-scenes">
+        <div id="scenes" class="scene-list"></div>
+      </div>
+      <div id="overlays-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-overlays" hidden></div>
+      <div id="classroom-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-classroom" hidden></div>
+      <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button></div>
     </section>
-
-    </section>
-    <aside class="pane mixer-pane" aria-label="Audio mixer">
-      <div class="pane-head"><h2>${icon('gear',18)} Audio mixer</h2>${iconButton('input-mic','Add microphone','plus')}</div>
-      <div class="mix-main" id="mixer"></div>
-      <div class="mix-footer"><button class="button monitor-audio" type="button" data-act="listen" aria-pressed="false">${icon('headphones',17)} Monitor off</button></div>
+    <aside class="pane mixer-pane" id="mixer-pane" aria-label="Audio mixer">
+      <div class="pane-head"><h2>${icon('volume',18)} Audio mixer</h2>
+        <div class="mixer-head-actions">
+          <button id="mixer-toggle" type="button" class="icon-button" data-act="toggle-mixer" aria-controls="mixer-body" aria-expanded="true" aria-label="Collapse audio mixer" title="Collapse audio mixer">${icon('right',17)}</button>
+          ${iconButton('input-mic','Add microphone','plus')}
+        </div>
+      </div>
+      <span class="mix-rail-label" aria-hidden="true">Audio Mixer</span>
+      <div id="mixer-body"><div class="mix-main" id="mixer"></div>
+        <div class="mix-footer"><button class="button monitor-audio" type="button" data-act="listen" aria-pressed="false">${icon('headphones',17)} Monitor off</button></div>
+      </div>
     </aside>
   </main>
   <footer class="status-strip">
@@ -118,12 +131,8 @@ export function shell() {
   <dialog class="studio-tools-dialog" id="studio-tools" aria-labelledby="tools-scene-name">
     <section class="dock pane" aria-label="Scene production tools"><div class="tools-title"><strong id="tools-scene-name">Scene controls</strong><button class="button" type="button" data-act="close-tools">Close</button></div>
       <div class="tools-scene-actions"><button class="button" type="button" data-act="scene-edit">${icon('gear',15)} Scene settings</button><button class="button" type="button" data-act="scene-designer">${icon('layers',15)} Arrange scene</button></div>
-        <div class="dock-top"><div id="dock-tabs" class="tabs" role="tablist" aria-label="Production tools">
-          <button id="tab-layers" role="tab" aria-controls="dock-panel" aria-selected="true" data-act="tab" data-id="layers" type="button">${icon('layers',17)} Layers &amp; inputs</button>
-          <button id="tab-overlays" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="overlays" type="button">${icon('makeup',17)} Overlays</button>
-          <button id="tab-classroom" role="tab" aria-controls="dock-panel" aria-selected="false" tabindex="-1" data-act="tab" data-id="classroom" type="button">${icon('classroom',17)} Classroom</button>
-        </div><button class="button primary-outline dock-add" data-act="add-context" type="button">${icon('plus',16)} <span id="dock-add-label">Add input</span></button></div>
-        <div id="dock-panel" role="tabpanel" aria-labelledby="tab-layers"></div>
+        <div class="dock-top"><span class="scene-input-label">Inputs for this scene</span><button class="button primary-outline dock-add" data-act="add-context" type="button">${icon('plus',16)} <span id="dock-add-label">Add input</span></button></div>
+        <div id="dock-panel" aria-labelledby="tools-scene-name"></div>
       </section>
   </dialog>
   <div class="toast" id="toast" role="status" hidden></div>
