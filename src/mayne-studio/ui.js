@@ -110,6 +110,7 @@ export function shell() {
       <div id="classroom-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-classroom" hidden></div>
       <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button></div>
     </section>
+    </section>
     <aside class="pane mixer-pane" id="mixer-pane" aria-label="Audio mixer">
       <div class="pane-head"><h2>${icon('volume',18)} Audio mixer</h2>
         <div class="mixer-head-actions">
