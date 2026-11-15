@@ -48,7 +48,6 @@ class Studio {
     this.designer = new SceneDesigner(this);
     this.inlineEditor = new InlinePreviewEditor(this);
     this.tools = $('studio-tools');
-    this.tools.addEventListener('close', () => {});
     this.dialog.addEventListener('keydown', event => {
       const input = event.target.closest?.('[data-shortcut]');
       if (!input || event.key === 'Tab' || event.key === 'Escape') return;
@@ -546,7 +545,7 @@ class Studio {
         } else {
           const { source, layer } = this.addSource(type, textName(String(data.get('name')), label), { device });
           this.layerId = layer.id;
-          this.tab = 'layers';
+          
           this.mark();
           this.render();
           await this.media.connect(source);
@@ -558,7 +557,7 @@ class Studio {
     this.closeDialog();
     const { source, layer } = this.addSource('screen', slideshow ? 'PowerPoint slideshow' : 'Screen share', {});
     this.layerId = layer.id;
-    this.tab = 'layers';
+    
     this.mark();
     this.render();
     return this.media.connect(source);
@@ -605,7 +604,7 @@ class Studio {
       if (result?.source) {
         this.previewId = pick.scene;
         this.layerId = result.layer.id;
-        this.tab = 'layers';
+        
         this.media.load(result.source);
       }
       if (result?.overlay) this.loadGraphic(result.overlay);
@@ -804,6 +803,10 @@ class Studio {
       <p>Choose Arrange layers under Preview and drag a camera, slide, or graphic. Select its border
       handles to resize; hold Shift to snap to the 2% grid. The Larger editor offers extra controls.
       Your on-air Program remains unchanged until Take or Cut.</p>
+      <h3>Global production tools</h3>
+      <p>Use Scenes, Overlays, and Classroom tabs below the monitors. Overlays and classroom functions belong
+      to the overall project, not to individual scene settings. Scene settings contain only layers and inputs.
+      Collapse or expand the Audio Mixer using its arrow at the right of the workspace.</p>
       <h3>Camera and recording</h3><p>Use desktop Chrome or Edge and reconnect devices if permissions
       change. Use headphones when monitoring the audio mix.</p>
       ${this.output.lastRecording ? buttons('Download last recording','download-recording') : ''}
@@ -826,7 +829,7 @@ class Studio {
           this.closeDialog();
           const { layer } = this.addSource('title', 'Text layer', {});
           this.layerId = layer.id;
-          this.tab = 'layers';
+          
           this.mark();
           this.render();
         } else {
@@ -895,12 +898,14 @@ class Studio {
           this.favoriteDialog();
           this.renderFavorites();
           break;
-        case 'tab': this.tab = id; this.renderDock(); break;
-        case 'add-context':
-          if (this.tab === 'overlays') this.overlayNew();
-          else if (this.tab === 'classroom') this.pickFile('powerpoint');
-          else this.inputMenu();
+        case 'workspace-tab': this.setWorkspaceTab(id); break;
+        case 'workspace-add':
+          if (this.workspaceTab === 'overlays') this.overlayNew();
+          else if (this.workspaceTab === 'classroom') this.pickFile('powerpoint');
+          else this.sceneDialog(true);
           break;
+        case 'toggle-mixer': this.toggleMixer(); break;
+        case 'add-context': this.inputMenu(); break;
         case 'select-layer': this.layerId = id; this.renderDock(); break;
         case 'toggle-layer': {
           const layer = this.scene.layers.find(item => item.id === id);
@@ -1151,13 +1156,13 @@ class Studio {
   }
 
   hotkey(event) {
-    if (this.tools?.open && event.target.getAttribute?.('role') === 'tab' && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
-      const tabs = [...$('dock-tabs').querySelectorAll('[role="tab"]')];
+    if (event.target.closest?.('.production-tabs') && event.target.getAttribute?.('role') === 'tab'
+      && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
+      const tabs = [...this.root.querySelectorAll('.production-tabs [role="tab"]')];
       const index = tabs.indexOf(event.target);
       const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
         : (index + (event.key === 'ArrowLeft' ? -1 : 1) + tabs.length) % tabs.length;
-      this.tab = tabs[next].dataset.id;
-      this.renderDock();
+      this.setWorkspaceTab(tabs[next].dataset.id);
       tabs[next].focus();
       event.preventDefault();
       return;
