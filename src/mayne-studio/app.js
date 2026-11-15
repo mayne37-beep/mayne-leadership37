@@ -8,6 +8,8 @@ import { ProgramOutput, download, outputPage } from './output.js';
 import { buttons, classroomPanel, formatGain, layersPanel, mixerPanel, options, overlaysPanel } from './panels.js';
 import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
+import { InlinePreviewEditor } from './inline-preview.js';
+import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -40,6 +42,26 @@ class Studio {
     this.started = performance.now();
     this.dialog = $('dialog');
     this.designer = new SceneDesigner(this);
+    this.inlineEditor = new InlinePreviewEditor(this);
+    this.tools = $('studio-tools');
+    this.tools.addEventListener('close', () => { this.tab = 'layers'; });
+    this.dialog.addEventListener('keydown', event => {
+      const input = event.target.closest?.('[data-shortcut]');
+      if (!input || event.key === 'Tab' || event.key === 'Escape') return;
+      event.preventDefault();
+      event.stopPropagation();
+      const id = input.dataset.shortcut;
+      const binding = ['Backspace','Delete'].includes(event.key) ? '' : keyboardShortcut(event);
+      if (!binding && !['Backspace','Delete'].includes(event.key)) return;
+      if (binding && Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding)) {
+        this.notify(shortcutLabel(binding) + ' is already assigned. Clear that shortcut first.', true);
+        return;
+      }
+      this.project.shortcuts[id] = binding;
+      input.value = shortcutLabel(binding);
+      this.mark();
+      this.renderDock();
+    });
     this.root.addEventListener('click', event => this.click(event));
     this.root.addEventListener('input', event => this.input(event));
     this.root.addEventListener('change', event => this.change(event));
@@ -200,21 +222,25 @@ class Studio {
     this.root.querySelector('[data-act="cut"]').disabled = !!this.transition;
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
-      return `<button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
+      return `<div class="scene-tile"><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
         title="${e(scene.name)}"><canvas width="128" height="72" aria-hidden="true" data-thumb="${scene.id}"></canvas>
         <strong>${e(scene.name)}</strong><span class="scene-meta"><span>${program ? 'Program' : preview ? 'Preview' : 'Ready'}</span>
-        ${index < 9 ? '<kbd>' + (index + 1) + '</kbd>' : ''}</span></button>`;
+        ${index < 9 ? '<kbd>' + (index + 1) + '</kbd>' : ''}</span></button>
+        <button class="scene-gear" type="button" data-act="scene-tools" data-id="${scene.id}" aria-label="Settings for ${e(scene.name)}">${icon('gear',13)} Scene settings</button></div>`;
     }).join('');
     this.thumbnails(performance.now());
     this.renderDock();
     this.renderMixer();
     this.recordStatus();
+    this.renderProgramDeck();
+    this.inlineEditor.refresh();
     if (this.designer.open) this.designer.refresh();
   }
 
   renderDock() {
     if (!this.project || !this.program) return;
     const panel = $('dock-panel');
+    $('tools-scene-name').textContent = this.scene.name + ' · controls';
     for (const tab of $('dock-tabs').querySelectorAll('[role="tab"]')) {
       const selected = tab.dataset.id === this.tab;
       tab.setAttribute('aria-selected', String(selected));
@@ -227,6 +253,60 @@ class Studio {
       : classroomPanel(this.project, this.timer, { preview: this.shot(this.scene, false), program: this.program }, this.media);
   }
 
+  showTools(id) {
+    if (id && this.project.scenes.some(scene => scene.id === id) && id !== this.previewId) this.setPreview(id);
+    this.tab = 'layers';
+    this.renderDock();
+    if (!this.tools.open) this.tools.showModal();
+  }
+
+  renderProgramDeck() {
+    const container = $('live-deck-controls');
+    if (!this.program || !container) return;
+    const layers = this.program.scene.layers.filter(layer => layer.visible && this.program.sources.get(layer.source)?.type === 'powerpoint');
+    container.hidden = !layers.length;
+    if (!layers.length) { container.innerHTML = ''; return; }
+    container.innerHTML = layers.map(layer => {
+      const source = this.program.sources.get(layer.source);
+      const deck = this.media.get(layer.source)?.deck;
+      const count = deck?.count ?? 0;
+      const page = Math.min(Math.max(layer.page, 0), Math.max(count - 1, 0));
+      const data = 'data-id="' + layer.id + '" data-bus="program"';
+      return '<div class="live-deck-row"><strong title="' + e(source?.name) + '">' + icon('powerpoint',14) + ' ' + e(source?.name || 'PowerPoint') + '</strong>'
+        + '<div class="slide-nav"><button type="button" class="button" data-act="slide-prev" ' + data + (page <= 0 ? ' disabled' : '') + '>'
+        + icon('left',14) + ' Previous</button><span class="mono">' + (count ? 'Slide ' + (page + 1) + ' / ' + count : 'Loading slides…') + '</span>'
+        + '<button type="button" class="button" data-act="slide-next" ' + data + (!count || page >= count - 1 ? ' disabled' : '') + '>Next ' + icon('right',14) + '</button></div></div>';
+    }).join('');
+  }
+
+  activeDeck(bus) {
+    const scene = bus === 'program' ? this.program.scene : this.scene;
+    return scene.layers.find(layer => layer.visible && this.source(layer.source)?.type === 'powerpoint'
+      && this.media.get(layer.source)?.deck);
+  }
+
+  advanceDeck(bus, delta) {
+    const layer = this.activeDeck(bus);
+    if (layer) this.slide(layer.id, bus, delta);
+  }
+
+  cueAdjacent(step) {
+    const index = this.project.scenes.findIndex(scene => scene.id === this.previewId);
+    if (index < 0) return;
+    this.setPreview(this.project.scenes[(index + step + this.project.scenes.length) % this.project.scenes.length].id);
+  }
+
+  shortcutDialog() {
+    const fields = SHORTCUT_ACTIONS.map(([id, label]) =>
+      '<div class="shortcut-row"><label for="shortcut-' + id + '">' + e(label) + '</label>'
+      + '<input type="text" id="shortcut-' + id + '" data-shortcut="' + id + '" value="' +
+      e(shortcutLabel(this.project.shortcuts[id])) + '" aria-label="Set ' + e(label) + '" readonly>'
+      + '<button class="button" type="button" data-act="shortcut-clear" data-id="' + id + '">Clear</button></div>').join('');
+    this.dialogOpen('Keyboard shortcuts', '<p>Click an assignment box, then press the key or key combination you want. Changes are saved with this project. Backspace clears an assignment. Avoid browser-reserved shortcuts.</p>'
+      + '<div class="shortcut-list">' + fields + '</div>',
+      '<button class="button" type="button" data-act="shortcuts-reset">Restore defaults</button>');
+  }
+
   renderMixer() {
     if (this.project) $('mixer').innerHTML = mixerPanel(this.project, this.media);
   }
@@ -236,6 +316,7 @@ class Studio {
     this.mediaRefresh = setTimeout(() => {
       this.mediaRefresh = null;
       if (!document.activeElement?.matches('[data-layer],[data-source],[data-project]')) this.renderDock();
+      this.renderProgramDeck();
       if (!document.activeElement?.matches('[data-gain]')) this.renderMixer();
     }, 90);
   }
@@ -569,6 +650,7 @@ class Studio {
     layer.page = page;
     if (bus !== 'program') this.mark();
     this.renderDock();
+    this.renderProgramDeck();
   }
 
   help() {
