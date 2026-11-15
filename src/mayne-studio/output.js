@@ -1,4 +1,7 @@
+import { keyboardShortcut } from './shortcuts.js';
+
 const message = 'mayne-studio-output-ready';
+const shortcutMessage = 'mayne-studio-output-shortcut';
 const key = 'setMayneStudioProgram';
 const saveName = value => value.trim().replace(/[^a-z0-9 _-]/gi, '').replace(/\s+/g, '-').slice(0, 80) || 'Mayne-Studio';
 
@@ -46,22 +49,44 @@ export function outputPage() {
   output.addEventListener('dblclick', fullscreen);
   video.addEventListener('click', () => video.play().then(() => { status.hidden = true; }).catch(() => {}));
   window.addEventListener('keydown', event => {
-    if (event.key.toLowerCase() === 'f') fullscreen();
-    if (event.key.toLowerCase() === 'm') listen();
+    // The Program feed is a separate browser window: send its keystrokes back
+    // to the control room, which owns the live scene and all custom bindings.
+    const chord = keyboardShortcut(event);
+    if (event.key.toLowerCase() === 'f' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
+      event.preventDefault();
+      fullscreen();
+      return;
+    }
+    if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
+      event.preventDefault();
+      listen();
+      return;
+    }
+    if (chord && window.opener && !window.opener.closed) {
+      window.opener.postMessage({ type: shortcutMessage, chord }, location.origin);
+      event.preventDefault();
+    }
   });
   if (window.opener && !window.opener.closed) window.opener.postMessage({ type: message }, location.origin);
   else status.textContent = 'Open Program output from the Mayne Studio control room.';
 }
 
 export class ProgramOutput {
-  constructor(canvas, audio, frame, notify, stateChanged) {
+  constructor(canvas, audio, frame, notify, stateChanged, onShortcut) {
     this.canvas = canvas;
     this.audio = audio;
     this.frame = frame;
     this.notify = notify;
     this.stateChanged = stateChanged;
+    this.onShortcut = onShortcut;
     window.addEventListener('message', event => {
-      if (event.origin !== location.origin || event.source !== this.popup || event.data?.type !== message) return;
+      if (event.origin !== location.origin || event.source !== this.popup) return;
+      if (event.data?.type === shortcutMessage) {
+        if (typeof event.data.chord === 'string' && event.data.chord.length <= 48)
+          this.onShortcut?.(event.data.chord);
+        return;
+      }
+      if (event.data?.type !== message) return;
       this.feed().then(feed => {
         if (!this.popup?.closed) this.popup[key]?.(feed, () => this.frame());
       }).catch(error => this.notify(error.message, true));
