@@ -305,3 +305,31 @@ kbd{white-space:nowrap}
   .monitors .transition-select{width:55%}
   .monitors .take-controls{width:42%}
 }
+
+
+/* Five editable, one-click broadcast favorites in the center transition column. */
+.monitors>.switch-controls{gap:10px;padding:12px 8px}
+.monitors .favorite-switches{display:grid;align-content:start;gap:5px;min-width:0;width:100%;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.favorite-heading{display:flex;align-items:center;justify-content:space-between;gap:3px;padding:0 1px;font-size:11px;font-weight:700;color:var(--soft)}
+.favorite-config{display:inline-flex;align-items:center;gap:2px;padding:3px 4px;min-height:25px;border:0;border-radius:4px;background:transparent;color:#a9c7e6;cursor:pointer;font-size:10px}
+.favorite-config:hover,.favorite-config:focus-visible{background:#33475b;color:white}
+.favorite-transition-list{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;min-width:0}
+.favorite-transition{display:flex;align-items:center;gap:5px;min-width:0;width:100%;min-height:29px;padding:4px 6px;text-align:left;background:#23364b;border:1px solid #46617e;border-radius:6px;color:#e7f2ff;cursor:pointer;font-size:11px}
+.favorite-transition:hover:not(:disabled),.favorite-transition:focus-visible{border-color:#8ecbfa;background:#304e6c;color:white}
+.favorite-transition:active:not(:disabled){background:#23634f}
+.favorite-transition:disabled{opacity:.48;cursor:wait}
+.favorite-number{display:grid;place-items:center;flex:0 0 17px;height:17px;border-radius:4px;background:#405d7a;color:#fff;font-size:10px;font-weight:750}
+.favorite-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.favorite-config-fields select{max-width:100%}
+@media(max-width:850px){
+  .monitors>.switch-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,.75fr);gap:12px;align-items:center;padding:10px}
+  .monitors .transition-select,.monitors .take-controls,.monitors .favorite-switches{width:100%;min-width:0}
+  .monitors .favorite-switches{padding:0 8px;border-top:0;border-bottom:0;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+}
+@media(max-width:540px){
+  .monitors>.switch-controls{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto auto;gap:8px 10px}
+  .monitors .transition-select{grid-column:1;grid-row:1}
+  .monitors .take-controls{grid-column:1;grid-row:2}
+  .monitors .favorite-switches{grid-column:2;grid-row:1 / span 2;border-right:0}
+  .favorite-transition{min-height:29px}
+}
