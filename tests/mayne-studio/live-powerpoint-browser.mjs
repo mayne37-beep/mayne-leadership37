@@ -63,6 +63,7 @@ try {
       overlays: [], transition: 'cut', duration: 450, master: 0,
       masterMute: false, timerSeconds: 300,
     };
+    project.shortcuts = { ...window.__qaStudio.project.shortcuts };
     window.__qaStudio.load(project);
     const fakeDeck = {
       count: 4, slides: [0, 1, 2, 3].map(n => ({ notes: 'Notes for slide ' + (n + 1) })),
