@@ -53,6 +53,8 @@ jobs:
         run: node tests/mayne-studio/live-powerpoint-browser.mjs
       - name: Validate scene deletion and animated transitions
         run: node tests/mayne-studio/transitions-browser.mjs
+      - name: Test five editable transition favorites in the live switcher
+        run: node tests/mayne-studio/favorite-transitions-browser.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
