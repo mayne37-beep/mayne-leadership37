@@ -17,7 +17,7 @@
 .designer-targets{touch-action:none;overflow:hidden;background-image:linear-gradient(to right,#f5f7ff14 1px,transparent 1px),linear-gradient(to bottom,#f5f7ff14 1px,transparent 1px);background-size:10% 10%;background-position:0 0}
 .designer-target{position:absolute;box-sizing:border-box;outline:1px solid #f9bc81;outline-offset:-1px;cursor:move;touch-action:none;background:#ffbf8512}
 .designer-target:hover{background:#ffbf8520}
-.designer-target.selected{outline:2px solid #8de4ff;background:#6fd3ef16;z-index:2}
+.designer-target.selected{outline:2px solid #8de4ff;background:#6fd3ef16}
 .designer-target.selected .designer-handle{display:block}
 .designer-tag{position:absolute;left:0;top:0;max-width:100%;padding:4px 6px;background:#0a152add;border:1px solid #edb779a6;border-radius:0 0 5px 0;font-size:11px;line-height:1.1;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
 .designer-target.selected .designer-tag{background:#125175ee;border-color:#82dbff}
