@@ -7,6 +7,9 @@ on:
       - 'assets/catalog.js'
       - 'assets/site.js'
       - 'tests/site-ux*'
+      - 'src/mayne-studio/**'
+      - 'assets/mayne-studio/**'
+      - 'tests/mayne-studio/**'
       - '.github/workflows/site-ux.yml'
   push:
     branches: [main]
@@ -16,6 +19,9 @@ on:
       - 'assets/catalog.js'
       - 'assets/site.js'
       - 'tests/site-ux*'
+      - 'src/mayne-studio/**'
+      - 'assets/mayne-studio/**'
+      - 'tests/mayne-studio/**'
       - '.github/workflows/site-ux.yml'
 jobs:
   site-ux:
@@ -37,6 +43,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Test desktop, tablet and mobile layouts
         run: node tests/site-ux-browser.mjs
+      - name: Verify Mayne Studio scene geometry and saving
+        run: node --test tests/mayne-studio/*.test.mjs
+      - name: Test Mayne Studio Scene Designer in Chromium
+        run: node tests/mayne-studio/scene-designer-browser.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
