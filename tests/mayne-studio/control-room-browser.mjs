@@ -187,7 +187,7 @@ try {
     const content = await page.locator('.workspace > .switcher').boundingBox();
     const mixer = await page.locator('#mixer-pane').boundingBox();
     assert.ok(mixer.x >= content.x + content.width - 1,
-      'Expanded audio mixer remains right of the production area at ' + width + 'px');
+      'Expanded audio mixer remains right of the production area at ' + width + 'px. ' + JSON.stringify({ content, mixer }));
     assert.ok(Math.abs(mixer.y - content.y) < 9,
       'Expanded mixer begins beside monitors, not below them, at ' + width + 'px');
     assert.ok(width - (mixer.x + mixer.width) < 35,
