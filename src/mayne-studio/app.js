@@ -8,6 +8,8 @@ import { ProgramOutput, download, outputPage } from './output.js';
 import { buttons, classroomPanel, formatGain, layersPanel, mixerPanel, options, overlaysPanel } from './panels.js';
 import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
+import { InlinePreviewEditor } from './inline-preview.js';
+import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -40,6 +42,27 @@ class Studio {
     this.started = performance.now();
     this.dialog = $('dialog');
     this.designer = new SceneDesigner(this);
+    this.inlineEditor = new InlinePreviewEditor(this);
+    this.tools = $('studio-tools');
+    this.tools.addEventListener('close', () => { this.tab = 'layers'; });
+    this.dialog.addEventListener('keydown', event => {
+      const input = event.target.closest?.('[data-shortcut]');
+      if (!input || event.key === 'Tab' || event.key === 'Escape') return;
+      event.preventDefault();
+      event.stopPropagation();
+      const id = input.dataset.shortcut;
+      const binding = ['Backspace','Delete'].includes(event.key) ? '' : keyboardShortcut(event);
+      if (!binding && !['Backspace','Delete'].includes(event.key)) return;
+      if (binding && Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding)) {
+        this.notify(shortcutLabel(binding) + ' is already assigned. Clear that shortcut first.', true);
+        return;
+      }
+      this.project.shortcuts[id] = binding;
+      input.value = shortcutLabel(binding);
+      this.mark();
+      this.renderDock();
+      this.render();
+    });
     this.root.addEventListener('click', event => this.click(event));
     this.root.addEventListener('input', event => this.input(event));
     this.root.addEventListener('change', event => this.change(event));
@@ -198,23 +221,29 @@ class Studio {
     ms.disabled = this.project.transition === 'cut';
     $('take').disabled = !!this.transition;
     this.root.querySelector('[data-act="cut"]').disabled = !!this.transition;
+    this.root.querySelector('[data-act="cut"] kbd').textContent = shortcutLabel(this.project.shortcuts.cut);
+    $('take').querySelector('kbd').textContent = shortcutLabel(this.project.shortcuts.take);
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
-      return `<button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
+      return `<div class="scene-tile"><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
         title="${e(scene.name)}"><canvas width="128" height="72" aria-hidden="true" data-thumb="${scene.id}"></canvas>
         <strong>${e(scene.name)}</strong><span class="scene-meta"><span>${program ? 'Program' : preview ? 'Preview' : 'Ready'}</span>
-        ${index < 9 ? '<kbd>' + (index + 1) + '</kbd>' : ''}</span></button>`;
+        ${index < 9 && this.project.shortcuts['scene' + index] ? '<kbd>' + e(shortcutLabel(this.project.shortcuts['scene' + index])) + '</kbd>' : ''}</span></button>
+        <button class="scene-gear" type="button" data-act="scene-tools" data-id="${scene.id}" aria-label="Settings for ${e(scene.name)}">${icon('gear',13)} Scene settings</button></div>`;
     }).join('');
     this.thumbnails(performance.now());
     this.renderDock();
     this.renderMixer();
     this.recordStatus();
+    this.renderProgramDeck();
+    this.inlineEditor.refresh();
     if (this.designer.open) this.designer.refresh();
   }
 
   renderDock() {
     if (!this.project || !this.program) return;
     const panel = $('dock-panel');
+    $('tools-scene-name').textContent = this.scene.name + ' · controls';
     for (const tab of $('dock-tabs').querySelectorAll('[role="tab"]')) {
       const selected = tab.dataset.id === this.tab;
       tab.setAttribute('aria-selected', String(selected));
@@ -227,6 +256,60 @@ class Studio {
       : classroomPanel(this.project, this.timer, { preview: this.shot(this.scene, false), program: this.program }, this.media);
   }
 
+  showTools(id) {
+    if (id && this.project.scenes.some(scene => scene.id === id) && id !== this.previewId) this.setPreview(id);
+    this.tab = 'layers';
+    this.renderDock();
+    if (!this.tools.open) this.tools.showModal();
+  }
+
+  renderProgramDeck() {
+    const container = $('live-deck-controls');
+    if (!this.program || !container) return;
+    const layers = this.program.scene.layers.filter(layer => layer.visible && this.program.sources.get(layer.source)?.type === 'powerpoint');
+    container.hidden = !layers.length;
+    if (!layers.length) { container.innerHTML = ''; return; }
+    container.innerHTML = layers.map(layer => {
+      const source = this.program.sources.get(layer.source);
+      const deck = this.media.get(layer.source)?.deck;
+      const count = deck?.count ?? 0;
+      const page = Math.min(Math.max(layer.page, 0), Math.max(count - 1, 0));
+      const data = 'data-id="' + layer.id + '" data-bus="program"';
+      return '<div class="live-deck-row"><strong title="' + e(source?.name) + '">' + icon('powerpoint',14) + ' ' + e(source?.name || 'PowerPoint') + '</strong>'
+        + '<div class="slide-nav"><button type="button" class="button" data-act="slide-prev" ' + data + (page <= 0 ? ' disabled' : '') + '>'
+        + icon('left',14) + ' Previous</button><span class="mono">' + (count ? 'Slide ' + (page + 1) + ' / ' + count : 'Loading slides…') + '</span>'
+        + '<button type="button" class="button" data-act="slide-next" ' + data + (!count || page >= count - 1 ? ' disabled' : '') + '>Next ' + icon('right',14) + '</button></div></div>';
+    }).join('');
+  }
+
+  activeDeck(bus) {
+    const scene = bus === 'program' ? this.program.scene : this.scene;
+    return scene.layers.find(layer => layer.visible && this.source(layer.source)?.type === 'powerpoint'
+      && this.media.get(layer.source)?.deck);
+  }
+
+  advanceDeck(bus, delta) {
+    const layer = this.activeDeck(bus);
+    if (layer) this.slide(layer.id, bus, delta);
+  }
+
+  cueAdjacent(step) {
+    const index = this.project.scenes.findIndex(scene => scene.id === this.previewId);
+    if (index < 0) return;
+    this.setPreview(this.project.scenes[(index + step + this.project.scenes.length) % this.project.scenes.length].id);
+  }
+
+  shortcutDialog() {
+    const fields = SHORTCUT_ACTIONS.map(([id, label]) =>
+      '<div class="shortcut-row"><label for="shortcut-' + id + '">' + e(label) + '</label>'
+      + '<input type="text" id="shortcut-' + id + '" data-shortcut="' + id + '" value="' +
+      e(shortcutLabel(this.project.shortcuts[id])) + '" aria-label="Set ' + e(label) + '" readonly>'
+      + '<button class="button" type="button" data-act="shortcut-clear" data-id="' + id + '">Clear</button></div>').join('');
+    this.dialogOpen('Keyboard shortcuts', '<p>Click an assignment box, then press the key or key combination you want. Changes are saved with this project. Backspace clears an assignment. Avoid browser-reserved shortcuts.</p>'
+      + '<div class="shortcut-list">' + fields + '</div>',
+      '<button class="button" type="button" data-act="shortcuts-reset">Restore defaults</button>');
+  }
+
   renderMixer() {
     if (this.project) $('mixer').innerHTML = mixerPanel(this.project, this.media);
   }
@@ -236,6 +319,7 @@ class Studio {
     this.mediaRefresh = setTimeout(() => {
       this.mediaRefresh = null;
       if (!document.activeElement?.matches('[data-layer],[data-source],[data-project]')) this.renderDock();
+      this.renderProgramDeck();
       if (!document.activeElement?.matches('[data-gain]')) this.renderMixer();
     }, 90);
   }
@@ -569,20 +653,32 @@ class Studio {
     layer.page = page;
     if (bus !== 'program') this.mark();
     this.renderDock();
+    this.renderProgramDeck();
   }
 
   help() {
-    this.dialogOpen('Shortcuts and setup', `<div class="help-copy"><dl class="help-list">
-      <dt>Cue a scene in Preview</dt><dd><kbd>1</kbd>–<kbd>9</kbd></dd>
-      <dt>Take the selected transition</dt><dd><kbd>Space</kbd></dd>
-      <dt>Cut directly to Program</dt><dd><kbd>C</kbd></dd>
-      <dt>Toggle the assignable overlay slots</dt><dd><kbd>Q W E R T Y U I</kbd></dd>
-      <dt>Fullscreen / mute in the Program window</dt><dd><kbd>F</kbd> / <kbd>M</kbd></dd></dl>
-      <h3>Share a clean feed</h3><p>Open Program output, then share that window or tab in your meeting app. Enable its audio and share computer sound when your meeting app offers it. Leave the control room or Program window visible while recording.</p>
-      <h3>PowerPoint</h3><p>Import .pptx or .ppsx for slide controls and private notes. For embedded media or animations, open PowerPoint and capture its slideshow window. Keep Presenter View in its own window so notes stay private.</p>
-      <h3>Camera and recording</h3><p>Use desktop Chrome or Edge. After connecting your first camera, additional cameras appear by name. Pick each device separately. Use headphones when monitoring the mix.</p>
+    this.dialogOpen('Shortcuts and setup', `<div class="help-copy">
+      <p>Switch scenes with configured shortcuts. The default keys are Space for Take, C for Cut,
+      1–9 to cue scenes, Q/W/E/R/T/Y/U/I for live overlays, Page Up/Down for the live PowerPoint,
+      and comma/period for Preview slides.</p>
+      <p>Use Shortcuts at the top of the control room to assign your own keys, including modifiers.
+      Press a key in its assignment box; duplicate assignments are rejected.</p>
+      <h3>Share a clean feed</h3>
+      <p>Open Program output, then share that window or tab in your meeting app. Enable its audio and
+      share computer sound if the meeting app offers it.</p>
+      <h3>PowerPoint</h3>
+      <p>Import .pptx or .ppsx for slide controls and private notes. Live PowerPoint navigation appears
+      under Program while that scene is on air. For animations or embedded media, capture the
+      PowerPoint slideshow window instead.</p>
+      <h3>Scene editing</h3>
+      <p>Choose Arrange layers under Preview and drag a camera, slide, or graphic. Select its border
+      handles to resize; hold Shift to snap to the 2% grid. The Larger editor offers extra controls.
+      Your on-air Program remains unchanged until Take or Cut.</p>
+      <h3>Camera and recording</h3><p>Use desktop Chrome or Edge and reconnect devices if permissions
+      change. Use headphones when monitoring the audio mix.</p>
       ${this.output.lastRecording ? buttons('Download last recording','download-recording') : ''}
-      ${window.showSaveFilePicker && !this.output.active ? buttons('Record directly to disk','record-disk') : ''}</div>`);
+      ${window.showSaveFilePicker && !this.output.active ? buttons('Record directly to disk','record-disk') : ''}
+      </div>`);
   }
 
   async click(event) {
@@ -611,9 +707,29 @@ class Studio {
       }
       switch (act) {
         case 'scene': this.setPreview(id); break;
+        case 'scene-tools': this.showTools(id); break;
+        case 'close-tools': this.tools.close(); break;
+        case 'arrange-preview': this.inlineEditor.toggle(); break;
+        case 'shortcuts': this.shortcutDialog(); break;
+        case 'shortcut-clear': {
+          if (!this.project.shortcuts || !Object.hasOwn(this.project.shortcuts, id)) break;
+          this.project.shortcuts[id] = '';
+          const field = this.dialog.querySelector('[data-shortcut="' + id + '"]');
+          if (field) field.value = shortcutLabel('');
+          this.mark();
+          this.renderDock();
+          this.render();
+          break;
+        }
+        case 'shortcuts-reset': {
+          this.project.shortcuts = Object.fromEntries(SHORTCUT_ACTIONS.map(([key,,shortcut]) => [key, shortcut]));
+          this.mark();
+          this.shortcutDialog();
+          break;
+        }
         case 'new-scene': this.sceneDialog(true); break;
-        case 'scene-edit': this.sceneDialog(false); break;
-        case 'scene-designer': this.designer.show(); break;
+        case 'scene-edit': if (this.tools.open) this.tools.close(); this.sceneDialog(false); break;
+        case 'scene-designer': if (this.tools.open) this.tools.close(); this.designer.show(); break;
         case 'duplicate-scene': {
           if (this.project.scenes.length >= 40) throw new Error('This project already has 40 scenes.');
           const duplicate = { ...clone(this.scene), id: uid(), name: (this.scene.name + ' copy').slice(0, 120) };
@@ -899,7 +1015,7 @@ class Studio {
   }
 
   hotkey(event) {
-    if (event.target.getAttribute?.('role') === 'tab' && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
+    if (this.tools?.open && event.target.getAttribute?.('role') === 'tab' && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
       const tabs = [...$('dock-tabs').querySelectorAll('[role="tab"]')];
       const index = tabs.indexOf(event.target);
       const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
@@ -910,13 +1026,24 @@ class Studio {
       event.preventDefault();
       return;
     }
-    if (!this.project || this.editing || this.dialog.open || this.designer.open || event.defaultPrevented || event.repeat
-      || event.altKey || event.ctrlKey || event.metaKey || event.target.closest?.('input,textarea,select,[contenteditable]')) return;
-    const key = event.key.toUpperCase();
-    if (/^[1-9]$/.test(key)) this.setPreview(this.project.scenes[Number(key) - 1]?.id);
-    else if (key === ' ' && !event.target.closest?.('button:not(.scene):not([data-act=take]),a')) this.take(this.project.transition);
-    else if (key === 'C') this.take('cut');
-    else if (key.length === 1 && SHORTCUTS.includes(key)) this.toggleOverlay(this.project.overlays[SHORTCUTS.indexOf(key)]?.id, true);
+    if (!this.project || this.editing || this.dialog.open || this.tools.open || this.designer.open ||
+      event.defaultPrevented || event.repeat || event.target.closest?.('input,textarea,select,[contenteditable]')) return;
+    const chord = keyboardShortcut(event);
+    const action = shortcutAction(this.project.shortcuts, chord);
+    if (!action) return;
+    if (chord.endsWith('Space') && event.target.closest?.('button,a')) return;
+    if (action === 'take') this.take(this.project.transition);
+    else if (action === 'cut') this.take('cut');
+    else if (action === 'scenePrevious') this.cueAdjacent(-1);
+    else if (action === 'sceneNext') this.cueAdjacent(1);
+    else if (action === 'programPrevious') this.advanceDeck('program', -1);
+    else if (action === 'programNext') this.advanceDeck('program', 1);
+    else if (action === 'previewPrevious') this.advanceDeck('preview', -1);
+    else if (action === 'previewNext') this.advanceDeck('preview', 1);
+    else if (/^overlay[0-7]$/.test(action))
+      this.toggleOverlay(this.project.overlays[Number(action.slice(7))]?.id, true);
+    else if (/^scene[0-8]$/.test(action))
+      this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
     else return;
     event.preventDefault();
   }

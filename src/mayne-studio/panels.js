@@ -1,5 +1,6 @@
 import { AUDIO, BACKGROUNDS, clock, OVERLAYS, SHORTCUTS, SOURCES, VISUAL } from './model.js';
 import { checked, e, fields, icon, iconButton, option, pressed } from './ui.js';
+import { shortcutLabel } from './shortcuts.js';
 
 const options = (all, active) => Object.entries(all).map(([id, name]) => option(id, name, active)).join('');
 const buttons = (name, act, data = '', classes = '') => '<button class="button '+ classes +'" type="button" data-act="' + act + '" ' + data + '>' + name + '</button>';
@@ -107,7 +108,7 @@ export function overlaysPanel(project, preview, live) {
     const staged = preview.has(o.id) && preview.get(o.id).end === undefined;
     const shown = live.has(o.id) && live.get(o.id).end === undefined;
     return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}">
-      <div class="overlay-title">${icon(o.type,17)} <span title="${e(o.name)}">${e(o.name)}</span><kbd>${SHORTCUTS[index]}</kbd></div>
+      <div class="overlay-title">${icon(o.type,17)} <span title="${e(o.name)}">${e(o.name)}</span><kbd>${e(shortcutLabel(project.shortcuts?.['overlay' + index] ?? ''))}</kbd></div>
       ${iconButton('overlay-edit','Edit ' + o.name,'gear',id)}
       <div class="overlay-actions">
         ${buttons(staged ? 'Clear preview' : 'Preview','overlay-preview',id + ' aria-pressed="' + pressed(staged) + '"',staged?'cue':'')}

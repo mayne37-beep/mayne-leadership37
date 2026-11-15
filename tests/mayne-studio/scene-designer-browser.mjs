@@ -95,7 +95,7 @@ try {
   assert.equal(await page.locator('#program-name').textContent(), 'Standby');
 
   const before = await programImage(page);
-  await page.locator('[data-act="scene-designer"]').click();
+  await page.locator('.preview-monitor [data-act="scene-designer"]').click();
   const editor = page.locator('#scene-designer');
   await editor.waitFor({ state: 'visible' });
   assert.equal(await editor.locator('.designer-target').count(), 4);
@@ -152,7 +152,7 @@ try {
   await page.locator('#save-state').getByText('Saved on this device').waitFor({ timeout: 10000 });
   await page.reload();
   await page.locator('#studio:not([hidden])').waitFor();
-  await page.locator('[data-act="scene-designer"]').click();
+  await page.locator('.preview-monitor [data-act="scene-designer"]').click();
   await editor.waitFor({ state: 'visible' });
   await editor.locator('[data-designer-action="pick"][data-id="camera-layer"]').click();
   assert.equal(Number(await editor.locator('[data-designer-field="x"]').inputValue()), 52.5,

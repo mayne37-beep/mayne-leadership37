@@ -1,3 +1,5 @@
+import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
+
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 export const VERSION = 1;
@@ -85,6 +87,7 @@ export function makeProject(name = 'Leadership Classroom') {
     scenes: ['standby', 'presenter', 'slides', 'discussion', 'activity', 'break'].map(key => makeScene(key)),
     sources: [], overlays: ['lower', 'message', 'arrow', 'hand'].map(type => makeOverlay(type)),
     transition: 'fade', duration: 450, master: 0, masterMute: false, timerSeconds: 300,
+    shortcuts: { ...DEFAULT_SHORTCUTS },
   };
 }
 
@@ -145,6 +148,7 @@ export function normalizeProject(input) {
     duration: clamp(input.duration, 100, 2500, 450),
     master: clamp(input.master, -60, 6, 0), masterMute: input.masterMute === true,
     timerSeconds: clamp(input.timerSeconds, 1, 5400, 300),
+    shortcuts: normalizeShortcuts(input.shortcuts),
   };
 }
 
