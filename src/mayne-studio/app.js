@@ -1052,6 +1052,7 @@ class Studio {
       this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
     else return false;
     return true;
+  }
 }
 
 if (new URLSearchParams(location.search).get('output') === '1') outputPage();
