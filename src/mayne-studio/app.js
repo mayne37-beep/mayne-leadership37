@@ -10,6 +10,7 @@ import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
 import { InlinePreviewEditor } from './inline-preview.js';
 import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
+import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS } from './transitions.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -224,6 +225,7 @@ class Studio {
     this.root.querySelector('[data-act="cut"]').disabled = !!this.transition;
     this.root.querySelector('[data-act="cut"] kbd').textContent = shortcutLabel(this.project.shortcuts.cut);
     $('take').querySelector('kbd').textContent = shortcutLabel(this.project.shortcuts.take);
+    this.renderFavorites();
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
       return `<div class="scene-tile"><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
@@ -242,6 +244,44 @@ class Studio {
     this.renderProgramDeck();
     this.inlineEditor.refresh();
     if (this.designer.open) this.designer.refresh();
+  }
+
+  renderFavorites() {
+    const list = $('favorite-transition-list');
+    if (!list) return;
+    list.innerHTML = this.project.favoriteTransitions.map((type, index) => {
+      const name = TRANSITIONS[type] || type;
+      const label = e(name);
+      return '<button type="button" class="favorite-transition" data-act="favorite-take" data-id="' + index
+        + '" aria-label="Favorite ' + (index + 1) + ': Take with ' + label
+        + '" title="Take Preview live using ' + label + '"'
+        + (this.transition || this.editing ? ' disabled' : '') + '>'
+        + '<span class="favorite-number">' + (index + 1) + '</span>'
+        + '<span class="favorite-name">' + label + '</span></button>';
+    }).join('');
+  }
+
+  favoriteDialog() {
+    const rows = this.project.favoriteTransitions.map((type, index) =>
+      '<label>Favorite ' + (index + 1) + '<select name="favorite' + index
+      + '" required>' + options(TRANSITIONS, type) + '</select></label>').join('');
+    this.dialogOpen('Configure favorite transitions',
+      '<p>Choose five different transitions for your center bar. Clicking a favorite will immediately '
+      + 'take the Preview scene to Program using that effect and the current transition duration. '
+      + 'Your choices are saved with this project.</p><div class="form-grid favorite-config-fields">'
+      + rows + '</div>',
+      buttons('Restore defaults', 'favorite-reset')
+        + '<button class="button primary" type="submit">Save favorites</button>', data => {
+        const selected = DEFAULT_FAVORITE_TRANSITIONS.map((_, index) => String(data.get('favorite' + index) || ''));
+        if (selected.some(type => !Object.hasOwn(TRANSITIONS, type)))
+          throw new Error('Please select a valid transition for every favorite.');
+        if (new Set(selected).size !== 5)
+          throw new Error('Each of the five favorites must use a different transition.');
+        this.project.favoriteTransitions = selected;
+        this.closeDialog();
+        this.mark();
+        this.renderFavorites();
+      });
   }
 
   renderDock() {
@@ -340,6 +380,7 @@ class Studio {
       outgoing = null;
       $('take').disabled = false;
       this.root.querySelector('[data-act="cut"]').disabled = false;
+      for (const button of this.root.querySelectorAll('[data-act="favorite-take"]')) button.disabled = false;
     }
     this.expireOverlays(now);
     if (this.timer.deadline) {
@@ -795,6 +836,20 @@ class Studio {
         case 'remove-scene': this.requestSceneDeletion(this.scene.id); break;
         case 'cut': this.take('cut'); break;
         case 'take': this.take(this.project.transition); break;
+        case 'favorite-take': {
+          const index = Number(id);
+          const type = this.project.favoriteTransitions[index];
+          if (Number.isInteger(index) && index >= 0 && index < 5 && Object.hasOwn(TRANSITIONS, type))
+            this.take(type);
+          break;
+        }
+        case 'favorite-config': this.favoriteDialog(); break;
+        case 'favorite-reset':
+          this.project.favoriteTransitions = [...DEFAULT_FAVORITE_TRANSITIONS];
+          this.mark();
+          this.favoriteDialog();
+          this.renderFavorites();
+          break;
         case 'tab': this.tab = id; this.renderDock(); break;
         case 'add-context':
           if (this.tab === 'overlays') this.overlayNew();
