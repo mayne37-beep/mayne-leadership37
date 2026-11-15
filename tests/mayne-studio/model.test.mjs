@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { TRANSITIONS } from '../../src/mayne-studio/transitions.js';
 import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSource, normalizeProject,
   transitionProgress, uid } from '../../src/mayne-studio/model.js';
 
@@ -33,4 +34,16 @@ test('scene-follow audio crossfades and shared inputs stay at full gain', () => 
   assert.equal(dbGain(0), 1);
   assert.equal(dbGain(-60), 0);
   assert.equal(clock(3702, true), '01:01:42');
+});
+
+test('new transition choices survive project restore and old wipe projects stay valid', () => {
+  const project = makeProject();
+  for (const choice of Object.keys(TRANSITIONS)) {
+    project.transition = choice;
+    assert.equal(normalizeProject(project).transition, choice, choice);
+  }
+  project.transition = 'unknown-transition';
+  assert.equal(normalizeProject(project).transition, 'fade');
+  project.transition = 'wipe';
+  assert.equal(normalizeProject(project).transition, 'wipe');
 });
