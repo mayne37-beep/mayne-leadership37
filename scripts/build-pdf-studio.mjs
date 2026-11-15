@@ -96,3 +96,26 @@ await build({
   outfile: path.join(out, 'assets', 'live-classroom-portrait.js'),
   bundle: true, minify: true, format: 'iife', platform: 'browser', target: ['es2022'], legalComments: 'eof',
 });
+
+await build({
+  entryPoints: [path.join(root, 'src', 'mayne-studio', 'app.js')],
+  outdir: path.join(out, 'assets'), entryNames: 'mayne-studio-app', chunkNames: 'mayne-studio/chunks/[name]-[hash]',
+  bundle: true, splitting: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
+  external: ['/assets/live-classroom-direct-powerpoint.js?v=1'],
+});
+const ortDist = path.dirname(require.resolve('onnxruntime-web/wasm'));
+const segmentation = path.join(out, 'assets', 'mayne-studio', 'segmentation');
+await mkdir(segmentation, { recursive: true });
+for (const file of ['ort.wasm.min.mjs', 'ort-wasm-simd-threaded.wasm', 'ort-wasm-simd-threaded.mjs']) {
+  await copyFile(path.join(ortDist, file), path.join(segmentation, file));
+}
+await copyFile(path.join(root, 'vendor', 'mayne-studio', 'person.onnx'), path.join(segmentation, 'person.onnx'));
+await copyFile(path.join(root, 'vendor', 'mayne-studio', 'LICENSE.txt'), path.join(segmentation, 'model-LICENSE.txt'));
+await copyFile(path.join(root, 'vendor', 'mayne-studio', 'onnxruntime-LICENSE.txt'), path.join(segmentation, 'onnxruntime-LICENSE.txt'));
+await build({
+  entryPoints: [path.join(root, 'src', 'mayne-studio', 'person-worker.js')],
+  outfile: path.join(out, 'assets', 'mayne-studio', 'person-worker.js'),
+  bundle: true, minify: true, format: 'esm', platform: 'browser', target: ['es2022'], legalComments: 'eof',
+  external: ['/assets/mayne-studio/segmentation/ort.wasm.min.mjs'],
+});
+console.log('Mayne Studio switcher built.');
