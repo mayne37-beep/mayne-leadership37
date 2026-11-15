@@ -75,6 +75,15 @@ export function shell() {
           <div class="monitor-screen"><canvas id="preview-canvas" width="1280" height="720" aria-label="Preview canvas"></canvas><div id="preview-layer-controls" class="inline-preview-targets" hidden></div></div>
           <div class="monitor-foot"><span>${icon('eye',13)} Private preview</span><div class="scene-edit-controls"><button class="quiet-button" type="button" id="arrange-preview" data-act="arrange-preview" aria-pressed="false">${icon('layers',13)} Arrange layers</button><button class="quiet-button" type="button" data-act="scene-designer">${icon('layers',13)} Larger editor</button><button class="quiet-button" type="button" data-act="scene-tools">Scene controls ${icon('gear',14)}</button></div></div>
         </section>
+      <section class="switch-controls" aria-label="Switching and transitions">
+        <div class="transition-select"><label for="transition">Transition</label><select id="transition" data-project="transition">
+          ${TRANSITION_GROUPS.map(group => `<optgroup label="${e(group.name)}">${group.choices.map(([id, name]) => `<option value="${e(id)}">${e(name)}</option>`).join('')}</optgroup>`).join('')}
+        </select><label class="visually-hidden" for="transition-ms">Transition duration</label>
+          <select id="transition-ms" data-project="duration"><option value="200">200 ms</option><option value="300">300 ms</option><option value="450">450 ms</option><option value="600">600 ms</option><option value="800">800 ms</option><option value="1000">1 s</option><option value="1500">1.5 s</option><option value="2000">2 s</option><option value="2500">2.5 s</option></select>
+        </div>
+        <div class="take-controls"><button class="button cut" data-act="cut" type="button">Cut <kbd>C</kbd></button>
+          <button class="button primary take" id="take" data-act="take" type="button">Take ${icon('arrow',17)} <kbd>Space</kbd></button></div>
+      </section>
         <section class="monitor program-monitor" aria-labelledby="program-label">
           <div class="monitor-head"><h3 id="program-label"><i></i> Program</h3><span id="program-name"></span></div>
           <div class="monitor-screen"><canvas id="program-canvas" width="1920" height="1080" aria-label="Program canvas"></canvas></div>
@@ -89,15 +98,7 @@ export function shell() {
         <a class="site-return" href="facilitation.html">Mayne Leadership ${icon('popout',12)}</a>
       </div>
     </section>
-      <section class="switch-controls" aria-label="Switching and transitions">
-        <div class="transition-select"><label for="transition">Transition</label><select id="transition" data-project="transition">
-          ${TRANSITION_GROUPS.map(group => `<optgroup label="${e(group.name)}">${group.choices.map(([id, name]) => `<option value="${e(id)}">${e(name)}</option>`).join('')}</optgroup>`).join('')}
-        </select><label class="visually-hidden" for="transition-ms">Transition duration</label>
-          <select id="transition-ms" data-project="duration"><option value="200">200 ms</option><option value="300">300 ms</option><option value="450">450 ms</option><option value="600">600 ms</option><option value="800">800 ms</option><option value="1000">1 s</option><option value="1500">1.5 s</option><option value="2000">2 s</option><option value="2500">2.5 s</option></select>
-        </div>
-        <div class="take-controls"><button class="button cut" data-act="cut" type="button">Cut <kbd>C</kbd></button>
-          <button class="button primary take" id="take" data-act="take" type="button">Take ${icon('arrow',17)} <kbd>Space</kbd></button></div>
-      </section>
+
     </section>
     <aside class="pane mixer-pane" aria-label="Audio mixer">
       <div class="pane-head"><h2>${icon('gear',18)} Audio mixer</h2>${iconButton('input-mic','Add microphone','plus')}</div>
