@@ -34,7 +34,9 @@ class Studio {
     this.output = new ProgramOutput($('program-canvas'), this.media.audio, () => this.frame(),
       (message, error) => this.notify(message, error), () => this.recordStatus(),
       chord => this.runShortcut(chord));
-    this.tab = 'layers';
+    this.workspaceTab = 'scenes';
+    try { this.mixerCollapsed = localStorage.getItem('mayne-studio-mixer-collapsed') === '1'; }
+    catch { this.mixerCollapsed = false; }
     this.timer = timers();
     this.saved = Promise.resolve();
     this.editing = false;
@@ -46,7 +48,7 @@ class Studio {
     this.designer = new SceneDesigner(this);
     this.inlineEditor = new InlinePreviewEditor(this);
     this.tools = $('studio-tools');
-    this.tools.addEventListener('close', () => { this.tab = 'layers'; });
+    this.tools.addEventListener('close', () => {});
     this.dialog.addEventListener('keydown', event => {
       const input = event.target.closest?.('[data-shortcut]');
       if (!input || event.key === 'Tab' || event.key === 'Escape') return;
@@ -242,6 +244,7 @@ class Studio {
     this.thumbnails(performance.now());
     this.renderDock();
     this.renderMixer();
+    this.renderMixerState();
     this.recordStatus();
     this.renderProgramDeck();
     this.inlineEditor.refresh();
@@ -288,23 +291,63 @@ class Studio {
 
   renderDock() {
     if (!this.project || !this.program) return;
-    const panel = $('dock-panel');
-    $('tools-scene-name').textContent = this.scene.name + ' · controls';
-    for (const tab of $('dock-tabs').querySelectorAll('[role="tab"]')) {
-      const selected = tab.dataset.id === this.tab;
+    $('tools-scene-name').textContent = this.scene.name + ' · layers & inputs';
+    $('dock-panel').innerHTML = layersPanel(this.scene, this.project, this, this.media);
+    this.renderWorkspacePanel();
+  }
+
+  renderWorkspacePanel() {
+    if (!this.project || !this.program) return;
+    const current = this.workspaceTab;
+    const labels = { scenes: 'Add scene', overlays: 'Add overlay', classroom: 'Import PowerPoint' };
+    for (const tab of this.root.querySelectorAll('.production-tabs [role="tab"]')) {
+      const selected = tab.dataset.id === current;
       tab.setAttribute('aria-selected', String(selected));
       tab.tabIndex = selected ? 0 : -1;
     }
-    panel.setAttribute('aria-labelledby', 'tab-' + this.tab);
-    $('dock-add-label').textContent = this.tab === 'overlays' ? 'Add overlay' : this.tab === 'classroom' ? 'Add PowerPoint' : 'Add input';
-    panel.innerHTML = this.tab === 'layers' ? layersPanel(this.scene, this.project, this, this.media)
-      : this.tab === 'overlays' ? overlaysPanel(this.project, this.previewOverlays, this.liveOverlays)
-      : classroomPanel(this.project, this.timer, { preview: this.shot(this.scene, false), program: this.program }, this.media);
+    $('scene-panel').hidden = current !== 'scenes';
+    $('overlays-panel').hidden = current !== 'overlays';
+    $('classroom-panel').hidden = current !== 'classroom';
+    const add = $('workspace-add');
+    add.setAttribute('aria-label', labels[current]);
+    add.title = labels[current];
+    if (current === 'overlays') {
+      $('overlays-panel').innerHTML = overlaysPanel(this.project, this.previewOverlays, this.liveOverlays);
+    } else if (current === 'classroom') {
+      $('classroom-panel').innerHTML = classroomPanel(this.project, this.timer,
+        { preview: this.shot(this.scene, false), program: this.program }, this.media);
+    }
+  }
+
+  setWorkspaceTab(id) {
+    if (!['scenes', 'overlays', 'classroom'].includes(id)) return;
+    this.workspaceTab = id;
+    this.renderWorkspacePanel();
+  }
+
+  renderMixerState() {
+    const collapsed = this.mixerCollapsed;
+    const workspace = $('switcher');
+    workspace.classList.toggle('mixer-collapsed', collapsed);
+    $('mixer-pane').classList.toggle('collapsed', collapsed);
+    const toggle = $('mixer-toggle');
+    toggle.setAttribute('aria-expanded', String(!collapsed));
+    const label = collapsed ? 'Expand audio mixer' : 'Collapse audio mixer';
+    toggle.setAttribute('aria-label', label);
+    toggle.title = label;
+    toggle.innerHTML = icon(collapsed ? 'left' : 'right', 17);
+    $('mixer-body').hidden = collapsed;
+  }
+
+  toggleMixer() {
+    this.mixerCollapsed = !this.mixerCollapsed;
+    try { localStorage.setItem('mayne-studio-mixer-collapsed', this.mixerCollapsed ? '1' : '0'); }
+    catch { /* Keep the current session layout even if browser preferences are unavailable. */ }
+    this.renderMixerState();
   }
 
   showTools(id) {
     if (id && this.project.scenes.some(scene => scene.id === id) && id !== this.previewId) this.setPreview(id);
-    this.tab = 'layers';
     this.renderDock();
     if (!this.tools.open) this.tools.showModal();
   }
@@ -387,7 +430,7 @@ class Studio {
     this.expireOverlays(now);
     if (this.timer.deadline) {
       this.timer.remaining = Math.max(0, (this.timer.deadline - now) / 1000);
-      if (this.timer.remaining === 0) { this.timer.deadline = 0; if (this.tab === 'classroom') this.renderDock(); }
+      if (this.timer.remaining === 0) { this.timer.deadline = 0; if (this.workspaceTab === 'classroom') this.renderWorkspacePanel(); }
     }
     this.media.playSources(this.project, this.program.scene, outgoing?.scene);
     this.media.audio.update(this.project, this.media.entries, audioWeights(this.program.scene, outgoing?.scene, progress.eased));
@@ -714,7 +757,7 @@ class Studio {
       map.set(id, { overlay: { ...overlay, id: assetId }, start: now,
         expires: live && overlay.seconds ? now + overlay.seconds * 1000 : Infinity });
     }
-    if (this.tab === 'overlays') this.renderDock();
+    if (this.workspaceTab === 'overlays') this.renderWorkspacePanel();
     if (live) this.notify(overlay.name + (item && item.end === now ? ' hidden.' : ' live.'));
   }
 
@@ -727,7 +770,7 @@ class Studio {
         this.media.stopGraphic(item.overlay.id);
       }
     }
-    if (changed && this.tab === 'overlays') this.renderDock();
+    if (changed && this.workspaceTab === 'overlays') this.renderWorkspacePanel();
   }
 
   slide(layerId, bus, delta) {
