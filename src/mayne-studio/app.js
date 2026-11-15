@@ -1,4 +1,4 @@
-import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, audioWeights,
+import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
   transitionProgress, uid } from './model.js';
 import * as storage from './projects.js';
@@ -9,6 +9,7 @@ import { buttons, classroomPanel, formatGain, layersPanel, mixerPanel, options, 
 import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
 import { InlinePreviewEditor } from './inline-preview.js';
+import { OverlayEditor } from './overlay-editor.js';
 import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 
@@ -17,6 +18,9 @@ const fileAccept = {
   all: '.pptx,.ppsx,.jpg,.jpeg,.png,.webp,.gif,.avif,.webm,.mp4,.ogv,.mov,.m4v,.mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.weba,image/*,video/*,audio/*',
   powerpoint: '.pptx,.ppsx', graphic: '.png,.jpg,.jpeg,.webp,.gif,.avif,.webm,.mp4',
   backdrop: '.png,.jpg,.jpeg,.webp,.gif,.avif',
+  'overlay-image': '.png,.jpg,.jpeg,.webp,.gif,.avif',
+  'overlay-video': '.mp4,.webm,.ogv,.mov,.m4v',
+  'overlay-media': '.png,.jpg,.jpeg,.webp,.gif,.avif,.mp4,.webm,.ogv,.mov,.m4v',
 };
 const draftTemplate = 'standby';
 const timers = () => ({ visible: false, deadline: 0, remaining: 0 });
@@ -46,6 +50,7 @@ class Studio {
     this.started = performance.now();
     this.dialog = $('dialog');
     this.designer = new SceneDesigner(this);
+    this.overlayEditor = new OverlayEditor(this);
     this.inlineEditor = new InlinePreviewEditor(this);
     this.tools = $('studio-tools');
     this.dialog.addEventListener('keydown', event => {
@@ -108,6 +113,7 @@ class Studio {
   }
 
   load(project) {
+    if (this.overlayEditor.open) this.overlayEditor.dialog.close();
     this.project = project;
     // Also handle projects constructed by integrations and older in-memory studio sessions.
     this.project.favoriteTransitions = normalizeFavoriteTransitions(project.favoriteTransitions);
@@ -437,6 +443,7 @@ class Studio {
       transition: this.transition, previewOverlays: this.previewOverlays, liveOverlays: this.liveOverlays,
       timer: { ...this.timer, remaining: Math.ceil(this.timer.remaining) } }, now);
     this.designer.draw(now);
+    this.overlayEditor.draw(now);
     if (now - this.lastThumb > 1050 && !document.hidden) { this.lastThumb = now; this.thumbnails(now); }
     if (now - this.lastStatus > 110) { this.lastStatus = now; this.updateStatus(now); }
     this.media.trimEffects(now);
@@ -579,7 +586,11 @@ class Studio {
     for (const file of fileList) {
       const kind = fileKind(file);
       if (!kind || (pick.mode === 'powerpoint' && kind !== 'powerpoint')
-        || (pick.mode === 'backdrop' && kind !== 'image') || (pick.mode === 'graphic' && !['image', 'video'].includes(kind))) {
+        || (pick.mode === 'backdrop' && kind !== 'image')
+        || (pick.mode === 'graphic' && !['image', 'video'].includes(kind))
+        || (pick.mode === 'overlay-image' && kind !== 'image')
+        || (pick.mode === 'overlay-video' && kind !== 'video')
+        || (pick.mode === 'overlay-media' && !['image','video'].includes(kind))) {
         this.notify('Choose a supported media file. ' + file.name, true);
         continue;
       }
@@ -593,9 +604,17 @@ class Studio {
           scene.background = 'custom';
           return null;
         }
-        if (pick.mode === 'graphic') {
+        if (pick.mode === 'graphic' || pick.mode.startsWith('overlay-')) {
+          const replacing = pick.data?.id && draft.overlays.find(item => item.id === pick.data.id);
+          if (replacing) {
+            if (this.liveOverlays.has(replacing.id) && this.liveOverlays.get(replacing.id).end === undefined)
+              throw new Error('Hide this overlay from Program before replacing its media.');
+            replacing.asset = id;
+            return { overlay: replacing, replacing: true };
+          }
           if (draft.overlays.length >= SHORTCUTS.length) throw new Error('This project already uses all eight overlay slots.');
-          const overlay = makeOverlay('graphic', { ...pick.data, asset: id, name: pick.data?.name || name });
+          const type = pick.mode === 'graphic' ? 'graphic' : kind;
+          const overlay = makeOverlay(type, { ...pick.data, asset: id, name: pick.data?.name || name });
           draft.overlays.push(overlay);
           return { overlay };
         }
@@ -607,8 +626,15 @@ class Studio {
         
         this.media.load(result.source);
       }
-      if (result?.overlay) this.loadGraphic(result.overlay);
+      if (result?.overlay) {
+        if (result.replacing) {
+          this.media.dispose('preview:' + result.overlay.id);
+          this.media.dispose('program:' + result.overlay.id);
+        }
+        this.loadGraphic(result.overlay);
+      }
       this.render();
+      if (result?.overlay) this.overlayEditor.show(result.overlay.id);
     }
   }
 
@@ -714,30 +740,22 @@ class Studio {
   }
 
   overlayNew() {
-    if (this.project.overlays.length >= SHORTCUTS.length) throw new Error('This project already uses all eight overlay slots.');
-    this.dialogOpen('Add overlay', '<div class="input-grid">' + Object.entries(OVERLAYS).map(([id, title]) =>
-      buttons(icon(id,17) + e(title), 'overlay-type', dataId(id))).join('') + '</div>');
+    if (this.project.overlays.length >= SHORTCUTS.length)
+      throw new Error('This project already uses all eight overlay slots.');
+    this.dialogOpen('Add overlay',
+      '<p>An overlay is an independent image, video, or message that appears above any live scene. '
+      + 'Each one can be moved and resized on its own 16:9 canvas, then shown and hidden on air.</p>'
+      + '<div class="input-grid">'
+      + Object.entries(OVERLAY_CHOICES).map(([id, title]) =>
+        buttons(icon(id === 'message' ? 'message' : id,17) + e(title),
+          'overlay-type', dataId(id))).join('')
+      + '</div>');
   }
 
-  overlayEdit(id, type) {
-    const existing = id && this.overlay(id);
-    const draft = clone(existing || makeOverlay(type));
-    this.dialogOpen(existing ? 'Edit overlay' : 'Add ' + OVERLAYS[draft.type].toLowerCase(),
-      '<div class="form-grid"><label>Name<input name="name" maxlength="120" value="' + e(draft.name) + '"></label>'
-      + (['lower','message','hand'].includes(draft.type) ? '<label>On-screen text<input name="text" maxlength="160" value="' + e(draft.text) + '"></label>' : '')
-      + (draft.type === 'lower' ? '<label>Subtitle<input name="sub" maxlength="160" value="' + e(draft.sub) + '"></label>' : '')
-      + '<label>Animation<select name="animation">' + options({ slide: 'Slide', pop: 'Pop', fade: 'Fade', none: 'None' }, draft.animation) + '</select></label>'
-      + '<label>Auto-hide in seconds (0 stays on)<input name="seconds" type="number" min="0" max="3600" value="' + draft.seconds + '"></label>'
-      + fields(draft, 'overlay').replaceAll('data-overlay=', 'name=') + '</div>',
-      (existing ? buttons('Delete','delete-overlay',dataId(id)) : '') + '<button class="button primary" type="submit">Save overlay</button>', data => {
-        for (const key of ['name', 'text', 'sub', 'animation']) if (data.has(key)) draft[key] = String(data.get(key));
-        for (const key of ['x', 'y', 'w', 'h', 'seconds']) draft[key] = Number(data.get(key));
-        if (existing) Object.assign(existing, draft); else this.project.overlays.push(draft);
-        this.closeDialog();
-        this.mark();
-        this.renderDock();
-      });
+  overlayEdit(id, type = 'message') {
+    this.overlayEditor.show(id, type);
   }
+
 
   loadGraphic(overlay) {
     for (const bus of ['preview', 'program']) this.media.load({ ...overlay, id: bus + ':' + overlay.id });
@@ -1042,9 +1060,28 @@ class Studio {
         }
         case 'close-dialog': this.closeDialog(); break;
         case 'overlay-type':
-          if (id === 'graphic') { this.closeDialog(); this.pickFile('graphic'); }
-          else this.overlayEdit(null, id);
+          this.closeDialog();
+          if (id === 'image' || id === 'video') this.pickFile('overlay-' + id);
+          else if (id === 'message') this.overlayEdit(null, 'message');
           break;
+        case 'overlay-remove': {
+          const overlay = this.overlay(id);
+          if (!overlay) break;
+          this.dialogOpen('Delete overlay', '<p>Remove “' + e(overlay.name)
+            + '” from this project? Imported files used by other sources are preserved.</p>',
+            '<button class="button" type="button" data-act="close-dialog">Cancel</button>'
+            + '<button class="button danger" type="submit">Delete overlay</button>', () => {
+              this.previewOverlays.delete(id);
+              this.liveOverlays.delete(id);
+              this.media.dispose('preview:' + id);
+              this.media.dispose('program:' + id);
+              this.project.overlays = this.project.overlays.filter(item => item.id !== id);
+              this.closeDialog();
+              this.mark();
+              this.renderWorkspacePanel();
+            });
+          break;
+        }
         case 'overlay-edit': this.overlayEdit(id); break;
         case 'delete-overlay':
           this.previewOverlays.delete(id);
@@ -1167,7 +1204,7 @@ class Studio {
       event.preventDefault();
       return;
     }
-    if (!this.project || this.editing || this.dialog.open || this.tools.open || this.designer.open ||
+    if (!this.project || this.editing || this.dialog.open || this.tools.open || this.designer.open || this.overlayEditor.open ||
       event.defaultPrevented || event.repeat || event.target.closest?.('input,textarea,select,[contenteditable]')) return;
     const chord = keyboardShortcut(event);
     if (chord.endsWith('Space') && event.target.closest?.('button,a')) return;
