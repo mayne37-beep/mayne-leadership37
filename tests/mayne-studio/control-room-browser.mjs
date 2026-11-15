@@ -82,6 +82,9 @@ try {
   await page.locator('#studio:not([hidden])').waitFor();
   await page.locator('#project-name').getByText('Compact Control Room E2E').waitFor();
 
+  assert.equal(await page.locator('#mixer-pane').evaluate(node => node.parentElement.id), 'switcher',
+    'Audio Mixer is a direct child of the workspace, not nested inside the control room');
+
   // Controls must sit in a narrow vertical column BETWEEN both video monitors.
   const previewBounds = await page.locator('.preview-monitor').boundingBox();
   const programBounds = await page.locator('.program-monitor').boundingBox();
