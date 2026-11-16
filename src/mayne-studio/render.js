@@ -1,5 +1,6 @@
 import { WIDTH, HEIGHT, VISUAL, clock, transitionProgress } from './model.js';
 import { paintTransition } from './transitions.js';
+import { timerText } from './timer.js';
 
 const W = WIDTH, H = HEIGHT;
 const stills = {
@@ -131,7 +132,7 @@ function placeholder(ctx, label, x, y, w, h) {
   text(ctx, label, x + w / 2, y + h / 2, Math.min(34, h * .35), { align: 'center', color: '#c5d2e2', width: w * .78 });
 }
 
-function drawScene(ctx, medium, shot, now, preview, visited = new Set()) {
+function drawScene(ctx, medium, shot, now, preview, visited = new Set(), timer = null) {
   const { scene, sources } = shot;
   if (!scene || visited.has(scene.id) || visited.size >= 10) return;
   const path = new Set(visited);
@@ -168,8 +169,10 @@ function drawScene(ctx, medium, shot, now, preview, visited = new Set()) {
             layer.fit === 'cover' ? Math.max(w / W,h / H) : Math.min(w / W,h / H)];
         ctx.translate(x + (w - W * scale[0]) / 2,y + (h - H * scale[1]) / 2);
         ctx.scale(scale[0],scale[1]);
-        drawScene(ctx,medium,{...shot,scene:child},now,preview,path);
+        drawScene(ctx,medium,{...shot,scene:child},now,preview,path,timer);
       } else if (preview) placeholder(ctx,source.name,x,y,w,h);
+    } else if (source.type === 'timer') {
+      drawTimer(ctx,timer,layer,now,preview);
     } else if (source.type === 'title') {
       rect(ctx, x, y, w, h, '#0a111ee6', 10);
       rect(ctx, x, y, 9, h, accent, 4);
@@ -270,17 +273,86 @@ export function drawOverlayStill(ctx, media, draft, now) {
   drawOverlay(ctx, media, { overlay: { ...draft, id: 'preview:' + draft.id }, start: now - 1000 }, now);
 }
 
-function drawTimer(ctx, timer) {
-  if (!timer.visible) return;
-  const x = W - 388, y = 91;
-  rect(ctx, x, y, 282, 144, '#0c1525f2', 16);
-  rect(ctx, x, y, 282, 7, timer.remaining ? accent : '#f47e70', 3);
-  text(ctx, timer.remaining ? 'CLASS TIMER' : 'TIME’S UP', x + 141, y + 34, 22, { color: '#dde7f1', align: 'center' });
-  ctx.fillStyle = white;
-  ctx.font = '680 61px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(clock(timer.remaining), x + 141, y + 94, 256);
+/** Draw one styled timer layer in a regular scene composition. The layer
+ * controls where it appears; the shared countdown never resets on a Take. */
+export function drawTimer(ctx,timer,layer,now,preview=false) {
+  if (!timer || (!timer.visible && !preview)) return;
+  const config=timer.config||{};
+  const [x,y,w,h]=position(layer);
+  if(w<=0||h<=0)return;
+  const style=layer.timerStyle||config.timerStyle||'digital';
+  const remaining=Number.isFinite(timer.remaining)?timer.remaining:0;
+  const finished=timer.finished || remaining<=0;
+  const overtime=remaining<0;
+  const color=finished?'#ef646a':remaining<=10?'#ef646a'
+    :remaining<=30?'#f3b63f':config.timerColor||'#16a3a0';
+  const progress=Math.max(0,Math.min(1,remaining/Math.max(1,timer.total||config.timerSeconds||300)));
+  const digits=(overtime?'+':'')+timerText(overtime?Math.abs(remaining):Math.ceil(remaining),
+    (timer.total||config.timerSeconds||0)>=3600);
+  const bg=config.timerBackground==='transparent'?null
+    :config.timerBackground==='glass'?'#111a2bb5':'#0c1525f2';
+  const title=overtime?'OVERTIME':finished?'TIME’S UP':'CLASS TIMER';
+  ctx.save();
+  ctx.globalAlpha*=Math.max(.1,Math.min(1,(config.timerOpacity??100)/100));
+  if(config.timerFlash && finished && now-(timer.completedAt||0)<4800) {
+    ctx.globalAlpha*=.62+.38*Math.abs(Math.sin(now/175));
+  }
+  if(style==='fullscreen') {
+    if(bg)rect(ctx,x,y,w,h,bg,Math.min(22,h*.02));
+    else rect(ctx,x,y,w,h,'#0c152568');
+    const cx=x+w/2;
+    text(ctx,title,cx,y+h*.28,Math.min(h*.068,w*.055),
+      {align:'center',color,width:w*.85,weight:700});
+    text(ctx,digits,cx,y+h*.54,Math.min(h*.29,w*.175),
+      {align:'center',width:w*.93,color:white,weight:750});
+    rect(ctx,x+w*.12,y+h*.78,w*.76,Math.max(5,h*.023),'#ffffff28',8);
+    rect(ctx,x+w*.12,y+h*.78,w*.76*progress,Math.max(5,h*.023),color,8);
+  } else if(style==='ring') {
+    if(bg)rect(ctx,x,y,w,h,bg,Math.min(18,h*.1));
+    const radius=Math.min(w*.29,h*.39);
+    const cx=x+w*.36,cy=y+h*.51;
+    ctx.lineWidth=Math.max(5,radius*.17);
+    ctx.strokeStyle='#a6bad03a';
+    ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle=color;
+    ctx.lineCap='round';
+    ctx.beginPath();ctx.arc(cx,cy,radius,-Math.PI/2,-Math.PI/2+progress*Math.PI*2);
+    ctx.stroke();
+    text(ctx,title,x+w*.76,y+h*.36,Math.min(h*.12,w*.07),
+      {align:'center',width:w*.39,color:'#dde7f1'});
+    text(ctx,digits,x+w*.76,y+h*.61,Math.min(h*.20,w*.09),
+      {align:'center',width:w*.43,weight:750});
+  } else if(style==='traffic') {
+    if(bg)rect(ctx,x,y,w,h,bg,Math.min(18,h*.09));
+    const radius=Math.min(w*.083,h*.115);
+    const px=x+w*.16;
+    for(const [i,c] of ['#3ecc8f','#f2bd48','#f06b6b'].entries()){
+      const on=i===(finished||remaining<=10?2:remaining<=30?1:0);
+      ctx.fillStyle=on?c:'#53617575';
+      ctx.beginPath();ctx.arc(px,y+h*(.24+i*.26),radius,0,2*Math.PI);ctx.fill();
+    }
+    text(ctx,title,x+w*.65,y+h*.33,Math.min(h*.14,w*.063),
+      {align:'center',width:w*.65,color:'#dce8f3'});
+    text(ctx,digits,x+w*.66,y+h*.64,Math.min(h*.30,w*.14),
+      {align:'center',width:w*.67,weight:750});
+  } else if(style==='bar') {
+    if(bg)rect(ctx,x,y,w,h,bg,Math.min(16,h*.09));
+    text(ctx,title,x+w*.5,y+h*.24,Math.min(h*.14,w*.09),
+      {align:'center',width:w*.9,color:'#dae7f2'});
+    text(ctx,digits,x+w*.5,y+h*.52,Math.min(h*.35,w*.22),
+      {align:'center',width:w*.92,weight:750});
+    const by=y+h*.79,bh=Math.max(6,h*.105);
+    rect(ctx,x+w*.07,by,w*.86,bh,'#aab9cf32',bh*.4);
+    if(progress>0)rect(ctx,x+w*.07,by,w*.86*progress,bh,color,bh*.4);
+  } else {
+    if(bg)rect(ctx,x,y,w,h,bg,Math.min(16,h*.09));
+    rect(ctx,x,y,w,Math.max(4,h*.05),color,2);
+    text(ctx,title,x+w*.5,y+h*.27,Math.min(h*.16,w*.095),
+      {align:'center',width:w*.92,color:'#dce8f1'});
+    text(ctx,digits,x+w*.5,y+h*.65,Math.min(h*.41,w*.24),
+      {align:'center',width:w*.94,weight:750});
+  }
+  ctx.restore();
 }
 
 export class StudioRenderer {
@@ -295,16 +367,16 @@ export class StudioRenderer {
 
   draw({ preview, program, transition, previewOverlays, liveOverlays, timer }, now) {
     if (!preview || !program) return;
-    drawScene(this.preview, this.media, preview, now, true);
+    drawScene(this.preview, this.media, preview, now, true,new Set(),timer);
     for (const overlay of previewOverlays.values()) drawOverlay(this.preview, this.media, overlay, now);
-    if (!transition) drawScene(this.program, this.media, program, now, false);
+    if (!transition) drawScene(this.program, this.media, program, now, false,new Set(),timer);
     else {
-      drawScene(this.outgoing, this.media, transition.previous, now, false);
-      drawScene(this.incoming, this.media, program, now, false);
+      drawScene(this.outgoing, this.media, transition.previous, now, false,new Set(),timer);
+      drawScene(this.incoming, this.media, program, now, false,new Set(),timer);
       this.mix(transition, now);
     }
     for (const overlay of liveOverlays.values()) drawOverlay(this.program, this.media, overlay, now);
-    drawTimer(this.program, timer);
+    // Timer is drawn only in scenes containing an explicitly assigned timer layer.
   }
 
   mix(transition, now) {
@@ -312,11 +384,11 @@ export class StudioRenderer {
     paintTransition(this.program, transition.type, eased, this.outgoing.canvas, this.incoming.canvas);
   }
 
-  thumbnail(node, scene, sources, now, scenes = new Map()) {
+  thumbnail(node, scene, sources, now, scenes = new Map(), timer = null, preview = false) {
     const ctx = node.getContext('2d', { alpha: false });
     ctx.save();
     ctx.scale(node.width / W, node.height / H);
-    drawScene(ctx, this.media, { scene, sources, scenes }, now, false);
+    drawScene(ctx, this.media, { scene, sources, scenes }, now, preview,new Set(),timer);
     ctx.restore();
   }
 }
