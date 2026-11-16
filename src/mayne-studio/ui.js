@@ -101,6 +101,7 @@ export function shell() {
           <button id="workspace-overlays" role="tab" aria-controls="overlays-panel" aria-selected="false" tabindex="-1" type="button" data-act="workspace-tab" data-id="overlays">${icon('makeup',15)} Overlays</button>
           <button id="workspace-classroom" role="tab" aria-controls="classroom-panel" aria-selected="false" tabindex="-1" type="button" data-act="workspace-tab" data-id="classroom">${icon('classroom',15)} Classroom</button>
         </div>
+        <button type="button" id="manage-cameras" class="button camera-assignments-launch" data-act="manage-cameras" title="Choose which cameras belong to each scene">${icon('camera',15)} Camera assignments</button>
         <button type="button" id="workspace-add" class="icon-button" data-act="workspace-add" aria-label="Add scene" title="Add scene">${icon('plus',17)}</button>
       </div>
       <div id="scene-panel" class="production-panel" role="tabpanel" aria-labelledby="workspace-scenes">
@@ -108,7 +109,7 @@ export function shell() {
       </div>
       <div id="overlays-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-overlays" hidden></div>
       <div id="classroom-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-classroom" hidden></div>
-      <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button><button type="button" class="button" data-act="manage-cameras">${icon('camera',16)} Camera assignments</button></div>
+      <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button></div>
     </section>
     </section>
     <aside class="pane mixer-pane" id="mixer-pane" aria-label="Audio mixer">
