@@ -53,8 +53,9 @@ export function normalizeShortcuts(custom) {
 /** A custom binding can duplicate an action with another key or trigger any
  * saved overlay by stable ID (so removing a preceding overlay cannot retarget it).
  * Rows with no action or no key are allowed while the user configures them. */
-export function normalizeExtraShortcuts(input, primary=DEFAULT_SHORTCUTS, overlayIds=[]) {
+export function normalizeExtraShortcuts(input, primary=DEFAULT_SHORTCUTS, overlayIds=[], sceneIds=[]) {
   const allowedOverlays=new Set(overlayIds);
+  const allowedScenes=new Set(sceneIds);
   const seenKeys=new Set(Object.values(primary).filter(Boolean));
   const seenIds=new Set();
   const result=[];
@@ -63,7 +64,8 @@ export function normalizeExtraShortcuts(input, primary=DEFAULT_SHORTCUTS, overla
       seenIds.has(item.id)) continue;
     const action=typeof item.action==='string' ? item.action : '';
     if (action && !shortcutIds.has(action) &&
-      !(action.startsWith('overlay:') && allowedOverlays.has(action.slice(8)))) continue;
+      !(action.startsWith('overlay:') && allowedOverlays.has(action.slice(8))) &&
+      !(action.startsWith('scene:') && allowedScenes.has(action.slice(6)))) continue;
     const key=item.key==='' || validShortcut(item.key) ? item.key : '';
     seenIds.add(item.id);
     if(key && seenKeys.has(key)) {
