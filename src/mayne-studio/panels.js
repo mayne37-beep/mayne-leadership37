@@ -148,7 +148,7 @@ export function overlaysPanel(project, preview, live, filter = {search:'',group:
     return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}" data-overlay-group="${e(group)}" data-overlay-search="${e(search)}">
       <div class="overlay-title">${icon(category.toLowerCase() === 'media' ? 'image' : category.toLowerCase(),17)}
         <span title="${e(o.name)}"><b>${o.type === 'emoji'
-          ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category} · ${e(OVERLAY_GROUPS[group])}</small></span>
+          ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category}</small><small class="overlay-group-label">${e(OVERLAY_GROUPS[group])}</small></span>
         <kbd>${e(overlayShortcutLabel(project,index))}</kbd></div>
       ${iconButton('overlay-edit','Open visual editor for ' + o.name,'gear',id)}
       <div class="overlay-actions">
