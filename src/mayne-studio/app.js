@@ -703,7 +703,10 @@ class Studio {
       const name = file.name.replace(/\.[^.]+$/, '').slice(0, 120);
       const result = await this.atomic((draft, id) => {
         const scene = draft.scenes.find(item => item.id === pick.scene);
-        if (!scene) throw new Error('Select a scene and import the file again.');
+        // Overlays are project-wide; they can be imported before any scene
+        // exists, unlike media layers or scene background images.
+        if (!scene && pick.mode !== 'graphic' && !pick.mode.startsWith('overlay-'))
+          throw new Error('Create a scene and import the file again.');
         if (pick.mode === 'backdrop') {
           scene.backdrop = id;
           scene.background = 'custom';
