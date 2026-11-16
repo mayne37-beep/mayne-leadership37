@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from '../../src/mayne-studio/transitions.js';
-import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSource, normalizeProject,
+import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSource, normalizeProject, shareDeviceAcrossScenes,
   transitionProgress, uid } from '../../src/mayne-studio/model.js';
 
 test('a classroom project has ready-to-cue scenes and overlay shortcuts', () => {
@@ -96,4 +96,51 @@ test('image, video, and message overlays persist independent layout and pop-up/d
   assert.deepEqual(legacy.overlays.map(o => o.type),['hand','graphic']);
   assert.equal(legacy.overlays[0].exitAnimation,'pop');
   assert.ok(assetIds(legacy).includes('old-asset'));
+});
+
+test('connected cameras and microphones share one source across every scene without duplicates', () => {
+  const project = makeProject();
+  const camera = makeSource('camera', 'Instructor camera');
+  const mic = makeSource('mic', 'Instructor microphone', { route: 'scene' });
+  project.sources.push(camera, mic);
+  // Emulate an older project where devices were defined only in the presenter scene.
+  const presenter = project.scenes.find(scene => scene.template === 'presenter');
+  const custom = makeLayer(camera.id, { x: 10, y: 15, w: 54, h: 69 });
+  presenter.layers.push(custom, makeLayer(mic.id));
+  const count = shareDeviceAcrossScenes(project);
+  assert.equal(count, (project.scenes.length - 1) * 2);
+  assert.equal(project.sources.filter(source => source.type === 'camera').length, 1);
+  assert.equal(project.sources.filter(source => source.type === 'mic').length, 1);
+  assert.equal(mic.route, 'always', 'Microphone stays audible throughout scene changes');
+  for (const scene of project.scenes) {
+    assert.equal(scene.layers.filter(layer => layer.source === camera.id).length, 1,
+      scene.name + ' links to the same camera source');
+    assert.equal(scene.layers.filter(layer => layer.source === mic.id).length, 1,
+      scene.name + ' links to the same microphone source');
+  }
+  assert.equal(presenter.layers.find(layer => layer.source === camera.id).id, custom.id,
+    'The presenter camera keeps its existing independently edited layer');
+  assert.equal(presenter.layers.find(layer => layer.source === camera.id).w, 54);
+  assert.equal(project.scenes[0].layers.find(layer => layer.source === camera.id).x, 74,
+    'Missing camera layers are created as unobtrusive insets');
+  assert.equal(shareDeviceAcrossScenes(project), 0,
+    'Connecting devices again never duplicates linked scene layers');
+  const addedScene = makeProject().scenes[0];
+  project.scenes.push(addedScene);
+  assert.equal(shareDeviceAcrossScenes(project), 2,
+    'Scenes created later receive the already-active shared devices');
+  const restored = normalizeProject(project);
+  assert.equal(restored.sources.length, 2);
+  assert.equal(restored.scenes.at(-1).layers.filter(layer => layer.source === camera.id).length, 1);
+  assert.equal(restored.sources.find(source => source.id === mic.id).route, 'always');
+});
+
+test('shared-device capacity errors do not partly change project scene layers', () => {
+  const project = makeProject();
+  const camera = makeSource('camera', 'Camera');
+  project.sources.push(camera);
+  for (let i = 0; i < 40; i++) project.scenes[2].layers.push(makeLayer('filler-' + i));
+  const sizes = project.scenes.map(scene => scene.layers.length);
+  assert.throws(() => shareDeviceAcrossScenes(project), /too many inputs/);
+  assert.deepEqual(project.scenes.map(scene => scene.layers.length), sizes);
 });
