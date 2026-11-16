@@ -59,6 +59,8 @@ jobs:
         run: node tests/mayne-studio/overlay-editor-browser.mjs
       - name: Test one shared camera and microphone across all live scenes
         run: node tests/mayne-studio/shared-devices-browser.mjs
+      - name: Test drag-and-drop scene ordering, mobile arrows, and persistence
+        run: node tests/mayne-studio/scene-reorder-browser.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
