@@ -1,6 +1,7 @@
 import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, MAX_TIMER_SECONDS } from './timer.js';
+import { DEFAULT_EMOJI, findEmoji } from './emojis.js';
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
@@ -18,12 +19,12 @@ export const TEMPLATES = {
   standby: 'Standby', presenter: 'Presenter', slides: 'Slides + presenter',
   discussion: 'Discussion', activity: 'Activity', break: 'Break', blank: 'Blank',
 };
-// Legacy overlay types remain readable, but new overlays use only Image, Video or Message.
+// Legacy overlay types remain readable. New overlays include emoji reactions.
 export const OVERLAYS = {
-  image: 'Image', video: 'Video', message: 'Message',
+  image: 'Image', video: 'Video', message: 'Message', emoji: 'Emoji',
   lower: 'Lower third (legacy)', arrow: 'Arrow (legacy)', hand: 'Raised hand (legacy)', graphic: 'Media (legacy)',
 };
-export const OVERLAY_CHOICES = { image: 'Image', video: 'Video', message: 'Message' };
+export const OVERLAY_CHOICES = { image: 'Image', video: 'Video', message: 'Message', emoji: 'Emoji' };
 export const OVERLAY_MOTIONS = {
   fade: 'Fade', pop: 'Pop (zoom)', slide: 'Slide up', 'slide-left': 'Slide left',
   'slide-right': 'Slide right', 'slide-down': 'Slide down', none: 'Instant',
@@ -75,8 +76,10 @@ export function makeOverlay(type, options = {}) {
     graphic: { name: 'Graphic', seconds: 0, ...PLACE.graphic },
     image: { name: 'Image overlay', seconds: 0, ...PLACE.graphic },
     video: { name: 'Video overlay', seconds: 0, ...PLACE.graphic },
+    emoji: { name: 'Emoji reaction', emoji: DEFAULT_EMOJI, seconds: 5,
+      x: 73, y: 12, w: 19, h: 27, animation: 'pop', exitAnimation: 'fade' },
   };
-  return { id: uid(), type, name: OVERLAYS[type], text: '', sub: '', asset: '', seconds: 0,
+  return { id: uid(), type, name: OVERLAYS[type], text: '', sub: '', asset: '', emoji: DEFAULT_EMOJI, seconds: 0,
     animation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
     exitAnimation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
     fit: 'contain', opacity: 100, loop: true, ...presets[type], ...options };
@@ -188,6 +191,7 @@ export function normalizeProject(input) {
     overlays: unique(input.overlays, SHORTCUTS.length, overlay => Object.hasOwn(OVERLAYS, overlay.type) ? {
       id: overlay.id, type: overlay.type, name: string(overlay.name, OVERLAYS[overlay.type]),
       text: string(overlay.text, '', 160), sub: string(overlay.sub, '', 160), asset: identifier(overlay.asset),
+      emoji: findEmoji(overlay.emoji)?.emoji || DEFAULT_EMOJI,
       seconds: clamp(overlay.seconds, 0, 3600, 0),
       animation: choices(overlay.animation, OVERLAY_MOTIONS, 'slide'),
       exitAnimation: choices(overlay.exitAnimation, OVERLAY_MOTIONS, choices(overlay.animation, OVERLAY_MOTIONS, 'slide')),
