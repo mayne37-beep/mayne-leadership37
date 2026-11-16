@@ -546,9 +546,12 @@ class Studio {
       '<input type="text" id="shortcut-'+id+'" data-shortcut="'+id+'" value="'+
       e(shortcutLabel(this.project.shortcuts[id]))+'" aria-label="Set '+e(label)+'" readonly>'+
       '<button class="button" type="button" data-act="shortcut-clear" data-id="'+id+'">Clear</button></div>').join('');
-    const actions=[...SHORTCUT_ACTIONS.map(([id,label])=>[id,label]),
+    const actions=[...SHORTCUT_ACTIONS.filter(([id])=>
+        !/^overlay[0-7]$/.test(id) && !/^scene[0-8]$/.test(id)).map(([id,label])=>[id,label]),
       ...this.project.overlays.map((overlay,index)=>['overlay:'+overlay.id,
-        'Overlay '+(index+1)+': '+overlay.name])];
+        'Overlay '+(index+1)+': '+overlay.name]),
+      ...this.project.scenes.map((scene,index)=>['scene:'+scene.id,
+        'Scene '+(index+1)+': '+scene.name])];
     const custom=(this.project.extraShortcuts||[]).map((entry,index)=>{
       const selection='<option value="">Choose command…</option>'+
         actions.map(([id,label])=>option(id,label,entry.action)).join('');
@@ -1135,6 +1138,8 @@ class Studio {
           return;
         }
         this.project.scenes.splice(current, 1);
+        this.project.extraShortcuts=(this.project.extraShortcuts||[])
+          .filter(row=>row.action!=='scene:'+id);
         if (this.previewId === id) {
           const replacement = this.project.scenes[Math.min(current, this.project.scenes.length - 1)];
           this.previewId = replacement.id;
@@ -1750,7 +1755,8 @@ class Studio {
         if (!row) return;
         const value=target.value;
         const allowed=SHORTCUT_ACTIONS.some(([action])=>action===value) ||
-          (value.startsWith('overlay:') && this.project.overlays.some(o=>o.id===value.slice(8)));
+          (value.startsWith('overlay:') && this.project.overlays.some(o=>o.id===value.slice(8))) ||
+          (value.startsWith('scene:') && this.project.scenes.some(scene=>scene.id===value.slice(6)));
         if (value && !allowed) throw new Error('Choose an available shortcut action.');
         row.action=value;
         this.mark();this.renderWorkspacePanel();
@@ -1864,6 +1870,11 @@ class Studio {
     }
     else if (/^scene[0-8]$/.test(action))
       this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
+    else if (action.startsWith('scene:')) {
+      const id=action.slice(6);
+      if(!this.project.scenes.some(scene=>scene.id===id))return false;
+      this.setPreview(id);
+    }
     else return false;
     return true;
   }
