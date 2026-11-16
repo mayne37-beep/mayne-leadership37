@@ -108,7 +108,7 @@ export function shell() {
       </div>
       <div id="overlays-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-overlays" hidden></div>
       <div id="classroom-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-classroom" hidden></div>
-      <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button></div>
+      <div class="scene-bottom"><button type="button" class="button add-scene" data-act="new-scene">${icon('plus',16)} Add scene</button><button type="button" class="button" data-act="manage-cameras">${icon('camera',16)} Camera assignments</button></div>
     </section>
     </section>
     <aside class="pane mixer-pane" id="mixer-pane" aria-label="Audio mixer">
