@@ -1,4 +1,4 @@
-import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
+import { DEFAULT_SHORTCUTS, normalizeShortcuts, normalizeExtraShortcuts } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, MAX_TIMER_SECONDS } from './timer.js';
 import { DEFAULT_EMOJI, findEmoji } from './emojis.js';
@@ -7,7 +7,17 @@ import { messageStyleDefaults, messageStyleId, normalizeMessageAppearance } from
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 export const VERSION = 1;
-export const SHORTCUTS = 'QWERTYUI';
+export const OVERLAY_LIMIT = 100;
+export const OVERLAY_GROUPS = Object.freeze({
+  messages:'Messages', instructor:'Instructor names', announcements:'Announcements',
+  emojis:'Emojis', pointers:'Arrows & pointers', media:'Images & videos', other:'Other',
+});
+export const defaultOverlayGroup = type => type === 'emoji' ? 'emojis'
+  : type === 'lower' ? 'instructor'
+  : ['arrow','hand'].includes(type) ? 'pointers'
+  : ['image','video','graphic'].includes(type) ? 'media' : 'messages';
+export const overlayGroup = (group,type) => Object.hasOwn(OVERLAY_GROUPS,group)
+  ? group : defaultOverlayGroup(type);
 export const SOURCES = {
   camera: 'Camera', mic: 'Microphone', screen: 'Screen share', powerpoint: 'PowerPoint',
   image: 'Image', video: 'Video', audio: 'Audio', title: 'Text', scene: 'Scene', timer: 'Classroom timer',
@@ -81,7 +91,7 @@ export function makeOverlay(type, options = {}) {
     emoji: { name: 'Emoji reaction', emoji: DEFAULT_EMOJI, seconds: 5,
       x: 73, y: 12, w: 19, h: 27, animation: 'pop', exitAnimation: 'fade' },
   };
-  return { id: uid(), type, name: OVERLAYS[type], text: '', sub: '', asset: '', emoji: DEFAULT_EMOJI, seconds: 0,
+  return { id: uid(), type, name: OVERLAYS[type], group: defaultOverlayGroup(type), text: '', sub: '', asset: '', emoji: DEFAULT_EMOJI, seconds: 0,
     animation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
     exitAnimation: type === 'arrow' || type === 'hand' ? 'pop' : 'slide',
     fit: 'contain', opacity: 100, loop: true, ...presets[type], ...options };
@@ -137,7 +147,7 @@ export function makeProject(name = 'Leadership Classroom') {
     timerStyle: 'digital', timerColor: '#16a3a0', timerBackground: 'solid',
     timerOpacity: 100, timerEnd: 'stop', timerChime: false, timerFlash: false,
     timerPresets: [],
-    shortcuts: { ...DEFAULT_SHORTCUTS }, favoriteTransitions: [...DEFAULT_FAVORITE_TRANSITIONS],
+    shortcuts: { ...DEFAULT_SHORTCUTS }, extraShortcuts: [], favoriteTransitions: [...DEFAULT_FAVORITE_TRANSITIONS],
   };
 }
 
@@ -186,12 +196,9 @@ export function normalizeProject(input) {
       coverage: oneOf(layer.coverage, ['balanced', 'more', 'most'], 'balanced'), mirror: layer.mirror === true,
     } : null),
   }));
-  // Empty projects are valid. Previously created projects retain their exact scenes.
-  return {
-    id: identifier(input.id, uid()), name: string(input.name, 'Studio project', 90).trim() || 'Studio project',
-    version: VERSION, updated: clamp(input.updated, 0, Number.MAX_SAFE_INTEGER, Date.now()), sources, scenes,
-    overlays: unique(input.overlays, SHORTCUTS.length, overlay => Object.hasOwn(OVERLAYS, overlay.type) ? {
+  const overlays=unique(input.overlays, OVERLAY_LIMIT, overlay => Object.hasOwn(OVERLAYS, overlay.type) ? {
       id: overlay.id, type: overlay.type, name: string(overlay.name, OVERLAYS[overlay.type]),
+      group: overlayGroup(overlay.group,overlay.type),
       text: string(overlay.text, '', 160), sub: string(overlay.sub, '', 160), asset: identifier(overlay.asset),
       emoji: findEmoji(overlay.emoji)?.emoji || DEFAULT_EMOJI,
       seconds: clamp(overlay.seconds, 0, 3600, 0),
@@ -203,7 +210,13 @@ export function normalizeProject(input) {
         messageStyle: messageStyleId(overlay.messageStyle),
         messageAppearance: normalizeMessageAppearance(overlay.messageAppearance,overlay.messageStyle),
       } : {}),
-    } : null),
+    } : null);
+  const shortcuts=normalizeShortcuts(input.shortcuts);
+  // Empty projects are valid. Previously created projects retain their exact scenes.
+  return {
+    id: identifier(input.id, uid()), name: string(input.name, 'Studio project', 90).trim() || 'Studio project',
+    version: VERSION, updated: clamp(input.updated, 0, Number.MAX_SAFE_INTEGER, Date.now()), sources, scenes,
+    overlays,
     transition: choices(input.transition, TRANSITIONS, 'fade'),
     duration: clamp(input.duration, 100, 2500, 450),
     master: clamp(input.master, -60, 6, 0), masterMute: input.masterMute === true,
@@ -218,7 +231,7 @@ export function normalizeProject(input) {
       .filter(item => item && typeof item.name === 'string' && item.name.trim() &&
         Number.isInteger(item.seconds) && item.seconds >= 1 && item.seconds <= MAX_TIMER_SECONDS)
       .map(item => ({ name: item.name.trim().slice(0,32), seconds:item.seconds })),
-    shortcuts: normalizeShortcuts(input.shortcuts),
+    shortcuts, extraShortcuts: normalizeExtraShortcuts(input.extraShortcuts,shortcuts,overlays.map(o=>o.id)),
     favoriteTransitions: normalizeFavoriteTransitions(input.favoriteTransitions),
   };
 }
