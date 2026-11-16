@@ -1,5 +1,6 @@
 import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
+  shareDeviceAcrossScenes,
   transitionProgress, uid } from './model.js';
 import * as storage from './projects.js';
 import { StudioMedia, fileKind } from './media.js';
@@ -520,10 +521,47 @@ class Studio {
     return layer;
   }
 
+  /** Device streams belong to the project, never to an individual scene.
+   * Keep per-scene camera layouts independently editable while displaying the
+   * shared device on the current live Program as soon as it connects. */
+  shareLiveDevice(source = null) {
+    const added = shareDeviceAcrossScenes(this.project, source);
+    if (this.program) {
+      const actual = this.project.scenes.find(scene => scene.id === this.program.scene.id);
+      if (actual) for (const device of (source ? [source] :
+        this.project.sources.filter(item => ['camera','mic'].includes(item.type)))) {
+        const layer = actual.layers.find(item => item.source === device.id);
+        if (layer && !this.program.scene.layers.some(item => item.source === device.id))
+          this.program.scene.layers.push(clone(layer));
+        this.program.sources.set(device.id, clone(device));
+      }
+    }
+    return added;
+  }
+
+  async connectInput(source) {
+    if (!source) return;
+    if (source.type === 'camera' || source.type === 'mic') {
+      this.shareLiveDevice(source);
+      this.mark();
+      this.render();
+    }
+    await this.media.connect(source);
+    this.render();
+  }
+
   addSource(type, name, options, project = this.project, scene = this.scene) {
     if (project.sources.length >= 100) throw new Error('A project can hold up to 100 inputs.');
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const source = makeSource(type, name, options);
+    if (type === 'camera' || type === 'mic') {
+      // Allocate all scene references before adding the project source. A
+      // capacity error cannot leave an orphaned camera or microphone behind.
+      shareDeviceAcrossScenes(project, source);
+      project.sources.push(source);
+      if (project === this.project) this.shareLiveDevice(source);
+      return { source, layer: scene.layers.find(item => item.source === source.id) };
+    }
     project.sources.push(source);
     const layer = this.addLayer(project, scene, source);
     return { source, layer };
@@ -548,14 +586,14 @@ class Studio {
           existing.device = device;
           existing.name = textName(String(data.get('name')), label);
           this.mark();
-          await this.media.connect(existing);
+          await this.connectInput(existing);
         } else {
           const { source, layer } = this.addSource(type, textName(String(data.get('name')), label), { device });
           this.layerId = layer.id;
           
           this.mark();
           this.render();
-          await this.media.connect(source);
+          await this.connectInput(source);
         }
       });
   }
@@ -658,6 +696,8 @@ class Studio {
           const template = String(data.get('template'));
           const item = makeScene(template, textName(String(data.get('name')), TEMPLATES[template]));
           this.project.scenes.push(item);
+          try { this.shareLiveDevice(); }
+          catch (error) { this.project.scenes.pop(); throw error; }
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
@@ -968,7 +1008,28 @@ class Studio {
             });
           break;
         }
-        case 'connect': await this.media.connect(this.source(id)); break;
+        case 'remove-shared-device': {
+          const source = this.source(id);
+          if (!source || !['camera','mic'].includes(source.type)) break;
+          this.dialogOpen('Remove shared ' + (source.type === 'camera' ? 'camera' : 'microphone'),
+            '<p>Remove “' + e(source.name) + '” from every scene and from the Audio Mixer? '
+            + 'This will disconnect the device and remove its saved per-scene placement.</p>',
+            '<button class="button" type="button" data-act="close-dialog">Cancel</button>'
+            + '<button class="button danger" type="submit">Remove shared input</button>', () => {
+              this.media.disconnect(source.id);
+              this.project.sources = this.project.sources.filter(item => item.id !== source.id);
+              for (const scene of this.project.scenes)
+                scene.layers = scene.layers.filter(layer => layer.source !== source.id);
+              this.program.scene.layers = this.program.scene.layers.filter(layer => layer.source !== source.id);
+              this.program.sources.delete(source.id);
+              this.layerId = this.scene.layers.at(-1)?.id;
+              this.closeDialog();
+              this.mark();
+              this.render();
+            });
+          break;
+        }
+        case 'connect': await this.connectInput(this.source(id)); break;
         case 'disconnect': this.media.disconnect(id); this.render(); break;
         case 'change-device': await this.deviceMenu(this.source(id).type, this.source(id)); break;
         case 'play-media': case 'restart-media': {
