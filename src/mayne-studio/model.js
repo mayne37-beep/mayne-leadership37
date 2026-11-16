@@ -7,7 +7,7 @@ export const VERSION = 1;
 export const SHORTCUTS = 'QWERTYUI';
 export const SOURCES = {
   camera: 'Camera', mic: 'Microphone', screen: 'Screen share', powerpoint: 'PowerPoint',
-  image: 'Image', video: 'Video', audio: 'Audio', title: 'Text',
+  image: 'Image', video: 'Video', audio: 'Audio', title: 'Text', scene: 'Scene',
 };
 export const BACKGROUNDS = {
   studio: 'Training studio', office: 'Sunlit office', reading: 'Reading room',
@@ -28,7 +28,7 @@ export const OVERLAY_MOTIONS = {
   'slide-right': 'Slide right', 'slide-down': 'Slide down', none: 'Instant',
 };
 export const AUDIO = new Set(['mic', 'screen', 'audio', 'video']);
-export const VISUAL = new Set(['camera', 'screen', 'powerpoint', 'image', 'video', 'title']);
+export const VISUAL = new Set(['camera', 'screen', 'powerpoint', 'image', 'video', 'title', 'scene']);
 export const PLACE = {
   full: { x: 0, y: 0, w: 100, h: 100 },
   slides: { x: 5, y: 10, w: 66, h: 75 },
@@ -59,7 +59,7 @@ export const clock = (seconds, long = false) => {
 export function makeSource(type, name, options = {}) {
   return { id: uid(), type, name: name || SOURCES[type], asset: '', device: '', text: 'On-screen title',
     sub: '', gain: 0, mute: false, route: type === 'mic' ? 'always' : 'scene',
-    loop: false, autoplay: true, ...options };
+    sceneId: '', sync: false, page: 0, loop: false, autoplay: true, ...options };
 }
 export function makeLayer(source, placement = PLACE.full) {
   return { id: uid(), source, ...placement, opacity: 100, visible: true, fit: 'cover',
@@ -156,6 +156,7 @@ export function normalizeProject(input) {
   const sources = unique(input.sources, 100, s => Object.hasOwn(SOURCES, s.type) ? {
     id: s.id, type: s.type, name: string(s.name, SOURCES[s.type]),
     asset: identifier(s.asset), device: string(s.device, '', 256),
+    sceneId: identifier(s.sceneId), sync: s.sync === true, page: Math.floor(clamp(s.page,0,199,0)),
     text: string(s.text, '', 180), sub: string(s.sub, '', 240),
     gain: clamp(s.gain, -60, 6, 0), mute: s.mute === true,
     route: oneOf(s.route, ['always', 'scene'], s.type === 'mic' ? 'always' : 'scene'),
@@ -195,6 +196,81 @@ export function normalizeProject(input) {
     shortcuts: normalizeShortcuts(input.shortcuts),
     favoriteTransitions: normalizeFavoriteTransitions(input.favoriteTransitions),
   };
+}
+
+/** Walk only the layers that actually belong to a composition. A scene can
+ * appear as a resizable visual layer in another scene. Cycles and excessive
+ * nesting are ignored for both rendering and media routing. */
+export function visibleSceneLayers(shot, root = shot.scene) {
+  const result = [];
+  const walk = (scene, path) => {
+    if (!scene || path.has(scene.id) || path.size >= 10) return;
+    const next = new Set(path);
+    next.add(scene.id);
+    for (const layer of scene.layers) {
+      if (!layer.visible) continue;
+      const source = shot.sources.get(layer.source);
+      if (!source) continue;
+      if (source.type === 'scene') walk(shot.scenes?.get(source.sceneId), next);
+      else result.push({ layer, source, scene });
+    }
+  };
+  walk(root, new Set());
+  return result;
+}
+
+/** Prevent self-references and indirect loops before adding a scene as a layer. */
+export function canEmbedScene(project, parentId, childId) {
+  if (!parentId || !childId || parentId === childId) return false;
+  const scenes = new Map(project.scenes.map(scene => [scene.id, scene]));
+  const sources = new Map(project.sources.map(source => [source.id, source]));
+  if (!scenes.has(parentId) || !scenes.has(childId)) return false;
+  const seen = new Set();
+  const visit = id => {
+    if (id === parentId) return true;
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return (scenes.get(id)?.layers ?? []).some(layer => {
+      const source = sources.get(layer.source);
+      return source?.type === 'scene' && visit(source.sceneId);
+    });
+  };
+  return !visit(childId);
+}
+
+/** When a scene is reused, all decks inside it share one playhead regardless
+ * of whether it is rendered full-frame, embedded, Preview, or Program. */
+export function linkSceneDecks(project, sceneId) {
+  const shot = { scene: project.scenes.find(scene => scene.id === sceneId),
+    scenes: new Map(project.scenes.map(scene => [scene.id, scene])),
+    sources: new Map(project.sources.map(source => [source.id, source])) };
+  const ids = new Set();
+  for (const {layer,source} of visibleSceneLayers(shot)) {
+    if (source.type !== 'powerpoint') continue;
+    if (!source.sync) source.page = layer.page;
+    source.sync = true;
+    ids.add(source.id);
+  }
+  syncLinkedDecks(project);
+  return ids;
+}
+
+/** Synchronize old separate layer slide numbers and on-air snapshots without
+ * altering unrelated decks that intentionally have independent Preview/Program. */
+export function syncLinkedDecks(project, shots = []) {
+  const states = new Map(project.sources.filter(source =>
+    source.type === 'powerpoint' && source.sync).map(source => [source.id,source.page]));
+  if (!states.size) return;
+  const allScenes = new Set(project.scenes);
+  for (const shot of shots) {
+    if (!shot) continue;
+    allScenes.add(shot.scene);
+    for (const scene of shot.scenes?.values() ?? []) allScenes.add(scene);
+    for (const source of shot.sources?.values() ?? []) if (states.has(source.id))
+      { source.sync = true; source.page = states.get(source.id); }
+  }
+  for (const scene of allScenes) for (const layer of scene?.layers ?? [])
+    if (states.has(layer.source)) layer.page = states.get(layer.source);
 }
 
 export function assetIds(project) {
