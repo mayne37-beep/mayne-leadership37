@@ -286,6 +286,49 @@ export function canEmbedScene(project, parentId, childId) {
   return !visit(childId);
 }
 
+/** Discover decks reused through an embedded scene or by assigning the same
+ * PowerPoint input to two or more scenes. Linking is based on stable source
+ * IDs, not scene names, positions, or copies of the original slide deck.
+ *
+ * This also repairs older saved projects and scenes where an instructor added
+ * the PowerPoint *after* embedding an initially empty slides scene. The first
+ * real deck layer supplies the initial page; subsequent navigation uses the
+ * PowerPoint source as the project's canonical playhead.
+ *
+ * Unreused decks are left alone: Preview and Program may intentionally sit
+ * on different slides in a simple, single-scene presentation. */
+export function linkReusedDecks(project) {
+  const sources = new Map(project.sources.map(source => [source.id, source]));
+  const scenes = new Map(project.scenes.map(scene => [scene.id, scene]));
+  const shot = { sources, scenes };
+  const embedded = new Set();
+  const uses = new Map();
+  const firstLayer = new Map();
+  for (const scene of project.scenes) {
+    for (const layer of scene.layers) {
+      const source = sources.get(layer.source);
+      if (source?.type === 'scene' && scenes.has(source.sceneId)) embedded.add(source.sceneId);
+      if (source?.type !== 'powerpoint') continue;
+      if (!uses.has(source.id)) uses.set(source.id, new Set());
+      uses.get(source.id).add(scene.id);
+      if (!firstLayer.has(source.id)) firstLayer.set(source.id, layer);
+    }
+  }
+  const linked = new Set([...uses].filter(([, sceneIds]) => sceneIds.size > 1)
+    .map(([sourceId]) => sourceId));
+  for (const sceneId of embedded) {
+    for (const {source} of visibleSceneLayers(shot, scenes.get(sceneId), true))
+      if (source.type === 'powerpoint') linked.add(source.id);
+  }
+  for (const sourceId of linked) {
+    const source = sources.get(sourceId);
+    if (!source || source.sync) continue;
+    source.page = firstLayer.get(sourceId)?.page ?? source.page ?? 0;
+    source.sync = true;
+  }
+  return linked;
+}
+
 /** When a scene is reused, all decks inside it share one playhead regardless
  * of whether it is rendered full-frame, embedded, Preview, or Program. */
 export function linkSceneDecks(project, sceneId) {
@@ -306,6 +349,10 @@ export function linkSceneDecks(project, sceneId) {
 /** Synchronize old separate layer slide numbers and on-air snapshots without
  * altering unrelated decks that intentionally have independent Preview/Program. */
 export function syncLinkedDecks(project, shots = []) {
+  // Reconcile newly reused decks on every scene change/navigation. This is
+  // inexpensive for a 100-scene project and prevents late-imported PowerPoints
+  // from silently remaining independent in previously embedded studios.
+  linkReusedDecks(project);
   const states = new Map(project.sources.filter(source =>
     source.type === 'powerpoint' && source.sync).map(source => [source.id,source.page]));
   if (!states.size) return;
