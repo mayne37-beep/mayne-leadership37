@@ -1,4 +1,4 @@
-import { AUDIO, BACKGROUNDS, clock, OVERLAYS, SHORTCUTS, SOURCES, VISUAL } from './model.js';
+import { AUDIO, BACKGROUNDS, clock, OVERLAYS, SHORTCUTS, SOURCES, VISUAL, visibleSceneLayers } from './model.js';
 import { checked, e, fields, icon, iconButton, option, pressed } from './ui.js';
 import { shortcutLabel } from './shortcuts.js';
 
@@ -7,6 +7,7 @@ const buttons = (name, act, data = '', classes = '') => '<button class="button '
 const field = (label, scope, key, value, limit = 120) => '<label>' + label + '<input maxlength="' + limit + '" data-' + scope + '="' + key + '" value="' + e(value) + '"></label>';
 const inputState = (source, entry) => {
   if (source.type === 'title') return 'Text layer';
+  if (source.type === 'scene') return 'Reusable scene';
   if (entry?.state === 'error') return 'Input unavailable';
   if (entry?.state === 'loading') return 'Connecting…';
   if (entry?.state === 'ready') return entry.deck ? entry.deck.count + ' slides' : 'Ready';
@@ -38,11 +39,11 @@ export function layersPanel(scene, project, state, media) {
       ${iconButton('scene-edit','Scene background settings','gear')}
     </div>
     ${rows ? '' : `<div class="empty-panel"><p>Add a camera, PowerPoint, or other input to this scene.</p><div class="inspector-tools">${buttons(icon('camera',15) + ' Camera', 'input-camera')}${buttons(icon('powerpoint',15) + ' PowerPoint', 'input-powerpoint')}</div></div>`}
-    </div><aside class="inspector" aria-label="Layer properties">${source && layer ? layerInspector(layer, source, media) :
+    </div><aside class="inspector" aria-label="Layer properties">${source && layer ? layerInspector(layer, source, media, project) :
       '<div class="section-label"><h3>Layer properties</h3></div><div class="empty-panel">' + icon('layers',20) + '<p>Select a layer to adjust its placement and appearance.</p></div>'}</aside></div>`;
 }
 
-function layerInspector(layer, source, media) {
+function layerInspector(layer, source, media, project) {
   const id = 'data-id="' + layer.id + '"';
   const sourceId = 'data-id="' + source.id + '"';
   const entry = media.get(source.id);
@@ -56,7 +57,14 @@ function layerInspector(layer, source, media) {
       'remove-layer', 'Remove input from this scene only',
       'trash', id)}</div>
     <div class="fieldset">
-      ${field('Input name', 'source', 'name', source.name)}
+      ${source.type === 'scene'
+        ? '<p class="slide-label">Embedded scene: <strong>' +
+          e(project.scenes.find(item => item.id === source.sceneId)?.name ?? 'Missing scene') +
+          '</strong>. Its whole composition is shown at this layer’s position. '
+          + 'Use the scene editor to change its contents; drag and resize this layer to '
+          + 'place it on a TV, classroom display, or whiteboard.</p>'
+          + buttons('Edit embedded scene', 'open-embedded-scene', 'data-id="' + e(source.sceneId) + '"')
+        : field('Input name', 'source', 'name', source.name)}
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
       ${source.type === 'camera' ? '<p class="slide-label">This camera is assigned only to scenes with this input layer. Connecting or disconnecting controls the shared camera source, without adding it to other scenes. Use Camera assignments under Scenes to choose where it appears.</p>' :
@@ -130,9 +138,9 @@ export function overlaysPanel(project, preview, live) {
 }
 
 export function classroomPanel(project, timer, state, media) {
-  const deck = ['program', 'preview'].flatMap(bus => state[bus]?.scene.layers
-    .filter(layer => layer.visible && media.get(layer.source)?.deck)
-    .map(layer => [bus, layer]) ?? []);
+  const deck = ['program', 'preview'].flatMap(bus => state[bus]
+    ? visibleSceneLayers(state[bus]).filter(({source}) => source.type === 'powerpoint'
+      && media.get(source.id)?.deck).map(({layer}) => [bus,layer]) : []);
   return `<div class="classroom-tools">
     <section class="class-card"><h3>Countdown timer</h3><span class="timer-read mono" id="timer-read">${clock(Math.ceil(timer.remaining))}</span>
       <label>Duration in seconds<input type="number" min="1" max="5400" data-project="timerSeconds" value="${project.timerSeconds}"></label>
