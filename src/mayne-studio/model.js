@@ -80,7 +80,8 @@ export function makeSource(type, name, options = {}) {
 }
 export function makeLayer(source, placement = PLACE.full) {
   return { id: uid(), source, ...placement, opacity: 100, visible: true, fit: 'cover', timerStyle: '',
-    page: 0, matte: 'off', key: '#00a040', coverage: 'balanced', mirror: false };
+    page: 0, matte: 'off', key: '#00a040', coverage: 'balanced',
+    keyStrength: 50, keySoftness: 50, keyDespill: 0, mirror: false };
 }
 export function makeOverlay(type, options = {}) {
   const presets = {
@@ -198,7 +199,11 @@ export function normalizeProject(input) {
       timerStyle: oneOf(layer.timerStyle, [...Object.keys(TIMER_STYLES),''], ''),
       matte: oneOf(layer.matte, ['off', 'chroma', 'person'], 'off'),
       key: /^#[a-f0-9]{6}$/i.test(layer.key) ? layer.key : '#00a040',
-      coverage: oneOf(layer.coverage, ['balanced', 'more', 'most'], 'balanced'), mirror: layer.mirror === true,
+      coverage: oneOf(layer.coverage, ['balanced', 'more', 'most'], 'balanced'),
+      keyStrength: Math.round(clamp(layer.keyStrength, 0, 100, 50)),
+      keySoftness: Math.round(clamp(layer.keySoftness, 0, 100, 50)),
+      keyDespill: Math.round(clamp(layer.keyDespill, 0, 100, 0)),
+      mirror: layer.mirror === true,
     } : null),
   }));
   const overlays=unique(input.overlays, OVERLAY_LIMIT, overlay => Object.hasOwn(OVERLAYS, overlay.type) ? {
