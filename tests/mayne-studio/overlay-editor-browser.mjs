@@ -110,6 +110,8 @@ try {
   // Canceling a fresh upload must discard both its project entry and media.
   await editor.locator('[data-oe-action="cancel"]').click();
   await editor.waitFor({state:'hidden'});
+  await page.waitForFunction(() => ![...document.querySelectorAll('.overlay-card')]
+    .some(card => card.textContent.includes('logo')));
   assert.equal(await page.locator('.overlay-card').filter({hasText:'logo'}).count(),0,
     'Cancel discards the just-imported overlay instead of leaving a stray entry');
   await page.locator('#workspace-add').click();
