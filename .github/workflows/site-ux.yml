@@ -63,6 +63,8 @@ jobs:
         run: node tests/mayne-studio/shared-devices-browser.mjs
       - name: Test drag-and-drop scene ordering, mobile arrows, and persistence
         run: node tests/mayne-studio/scene-reorder-browser.mjs
+      - name: Test 100-scene library, custom groups and keyboard cues
+        run: node tests/mayne-studio/scene-library-browser.mjs
       - name: Test embedded scenes and synchronized PowerPoint in Program and Preview
         run: node tests/mayne-studio/nested-scenes-browser.mjs
       - name: Test classroom timer input, presets, scene styles, overtime and persistence
