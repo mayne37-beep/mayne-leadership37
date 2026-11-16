@@ -458,7 +458,7 @@ class Studio {
     const cards=panel.querySelectorAll('[data-overlay-group]');
     for(const card of cards){
       const visible=(this.overlayGroup==='all'||card.dataset.overlayGroup===this.overlayGroup) &&
-        (!query||card.dataset.overlaySearch.includes(query));
+        (!query||card.dataset.overlayTerms.includes(query));
       card.hidden=!visible;
       if(visible)count++;
     }
