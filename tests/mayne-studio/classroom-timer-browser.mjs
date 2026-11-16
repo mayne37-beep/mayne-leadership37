@@ -53,6 +53,46 @@ try {
 
   await page.locator('#workspace-classroom').click();
   const panel=page.locator('#classroom-panel');
+  // Starting the timer needs NO scene assignment: only the real Program canvas
+  // receives the countdown. Private Preview and strip thumbnails stay clean.
+  const colorAt=(id)=>page.evaluate(id=>{
+    const canvas=document.getElementById(id);
+    return Array.from(canvas.getContext('2d').getImageData(
+      Math.floor(canvas.width*.80),Math.floor(canvas.height*.10),1,1).data).slice(0,3);
+  },id);
+  const idlePreview=await colorAt('preview-canvas');
+  await panel.locator('[data-act=timer-toggle]').click();
+  await page.waitForFunction(()=>{
+    const studio=window.__qaStudio;
+    if (!studio.timer.deadline || !studio.timer.visible) return false;
+    const canvas=document.getElementById('program-canvas');
+    const color=canvas.getContext('2d').getImageData(
+      Math.floor(canvas.width*.80),Math.floor(canvas.height*.10),1,1).data;
+    return color[2] > 20;
+  });
+  const livePixel=await colorAt('program-canvas');
+  const privatePixel=await colorAt('preview-canvas');
+  assert.ok(livePixel[2] > privatePixel[2]+14,
+    'Starting the countdown draws it on Program/live output, never Preview');
+  assert.deepEqual(privatePixel,idlePreview,
+    'Preview canvas remains untouched by the running timer');
+  assert.deepEqual(await page.evaluate(()=>{
+    const studio=window.__qaStudio;
+    return {
+      timerInputs:studio.project.sources.filter(s=>s.type==='timer').length,
+      sceneLayers:studio.project.scenes.map(scene=>scene.layers.length),
+    };
+  }),{timerInputs:0,sceneLayers:[0,0,0]},
+    'Starting on live output does not insert an input into any scenes');
+  await page.evaluate(()=>window.__qaStudio.thumbnails(performance.now()));
+  const thumbPixel=await page.locator('.scene-tile').first().locator('canvas').evaluate(canvas=>
+    Array.from(canvas.getContext('2d').getImageData(
+      Math.floor(canvas.width*.80),Math.floor(canvas.height*.10),1,1).data).slice(0,3));
+  assert.ok(thumbPixel[2] < livePixel[2]-14,
+    'Scene thumbnails never show the live-only countdown');
+  await panel.locator('[data-act=timer-show]').click();
+  assert.equal(await page.evaluate(()=>window.__qaStudio.timer.visible),false);
+  await panel.locator('[data-act=timer-reset]').click();
   assert.ok(await panel.locator('.timer-scene-assignment').evaluate(node =>
     !!(node.compareDocumentPosition(node.closest('.timer-designer').querySelector('.timer-time-fields'))
       & Node.DOCUMENT_POSITION_FOLLOWING)),
