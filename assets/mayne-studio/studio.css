@@ -710,3 +710,8 @@ kbd{white-space:nowrap}
 .chroma-lab .chroma-tip{font-size:10px;color:#a9c5d9;margin-top:-6px}
 @media(max-width:920px){.chroma-preview-grid{grid-template-columns:minmax(0,1fr)}}
 @media(min-width:921px) and (max-width:1310px){.chroma-preview-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* A shared PowerPoint is one continuous slide deck across all studio views. */
+.live-deck-shared{display:inline-flex;align-items:center;margin:3px 0 5px;
+  color:#9ee8da;font-size:10px;letter-spacing:.012em;font-weight:650}
+.live-deck-shared::before{content:'●';font-size:8px;margin-right:5px}
