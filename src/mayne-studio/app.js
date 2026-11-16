@@ -709,7 +709,9 @@ class Studio {
     if (!Number.isInteger(n)||n<1||n>MAX_TIMER_SECONDS)
       throw new Error('Enter a duration between 00:00:01 and 23:59:59.');
     this.project.timerSeconds=n;
+    const running=!!this.timer.deadline;
     resetTimer(this.timer,n);
+    if (running) startTimer(this.timer,performance.now(),n);
     this.mark();
     this.renderWorkspacePanel();
   }
@@ -1552,19 +1554,57 @@ class Studio {
         case 'overlay-preview': case 'overlay-live': this.toggleOverlay(id, act === 'overlay-live'); break;
         case 'slide-prev': case 'slide-next': this.slide(id, bus, act === 'slide-next' ? 1 : -1); break;
         case 'timer-toggle':
-          if (this.timer.deadline) this.timer.deadline = 0;
+          if (this.timer.deadline) pauseTimer(this.timer,performance.now());
           else {
-            this.timer.remaining ||= this.project.timerSeconds;
-            this.timer.deadline = performance.now() + this.timer.remaining * 1000;
-            this.timer.visible = true;
+            if (this.project.timerChime) {
+              try { await this.media.audio.activate(); }
+              catch { this.notify('Timer runs, but chime audio is unavailable in this browser.',true); }
+            }
+            startTimer(this.timer,performance.now(),this.project.timerSeconds);
           }
-          this.renderDock();
+          this.renderWorkspacePanel();
           break;
         case 'timer-reset':
-          this.timer = { ...this.timer, remaining: this.project.timerSeconds, deadline: 0 };
-          this.renderDock();
+          resetTimer(this.timer,this.project.timerSeconds);
+          this.renderWorkspacePanel();
           break;
-        case 'timer-show': this.timer.visible = !this.timer.visible; this.renderDock(); break;
+        case 'timer-show':
+          this.timer.visible=!this.timer.visible;
+          this.renderWorkspacePanel();
+          break;
+        case 'timer-adjust':
+          adjustTimer(this.timer,Number(id),performance.now());
+          this.renderWorkspacePanel();
+          break;
+        case 'timer-assign':
+          this.assignTimerToScene();
+          break;
+        case 'timer-style':
+          this.setTimerStyle(id);
+          break;
+        case 'timer-preset':
+          this.timerSetDuration(Number(id));
+          break;
+        case 'timer-save-preset':
+          this.dialogOpen('Save a timer preset',
+            '<p>Save the current countdown duration as a one-click classroom favorite.</p>'
+            + '<div class="form-grid"><label>Preset name'
+            + '<input name="name" maxlength="32" placeholder="Group discussion" required></label></div>',
+            '<button type="button" class="button" data-act="close-dialog">Cancel</button>'
+            + '<button type="submit" class="button primary">Save preset</button>', data => {
+              const name=String(data.get('name')||'').trim().slice(0,32);
+              if (!name) throw new Error('Enter a name for the timer preset.');
+              const presets=this.project.timerPresets||[];
+              if (presets.length>=8) throw new Error('You can save eight presets. Delete one first.');
+              presets.push({name,seconds:this.project.timerSeconds});
+              this.project.timerPresets=presets;
+              this.closeDialog();this.mark();this.renderWorkspacePanel();
+            });
+          break;
+        case 'timer-preset-delete':
+          this.project.timerPresets.splice(Number(id),1);
+          this.mark();this.renderWorkspacePanel();
+          break;
         case 'output': this.output.open(); break;
         case 'record': await this.output.record(this.project.name); break;
         case 'record-disk': this.closeDialog(); await this.output.record(this.project.name, true); break;
@@ -1625,10 +1665,28 @@ class Studio {
         this.project.transition = target.value;
         $('transition-ms').disabled = target.value === 'cut';
       } else if (project === 'duration') this.project.duration = Number(target.value);
-      else if (project === 'timerSeconds') {
-        this.project.timerSeconds = Math.round(clamp(Number(target.value), 1, 5400));
-        target.value = this.project.timerSeconds;
-        if (!this.timer.deadline) this.timer.remaining = this.project.timerSeconds;
+      else if (target.dataset.timerTime) {
+        const input=(unit)=>this.root.querySelector('[data-timer-time="'+unit+'"]')?.value;
+        const seconds=parseTimerFields(input('h'),input('m'),input('s'));
+        if (seconds===null) throw new Error('Enter hours 0–23, minutes 0–59 and seconds 0–59 (at least one second).');
+        this.timerSetDuration(seconds);
+        return;
+      } else if (project === 'timerSeconds') {
+        this.timerSetDuration(Number(target.value));
+        return;
+      } else if (project?.startsWith('timer')) {
+        if (project === 'timerColor') {
+          if (!/^#[0-9a-f]{6}$/i.test(target.value)) throw new Error('Invalid timer color.');
+          this.project[project]=target.value;
+        } else if (project === 'timerOpacity') this.project[project]=clamp(Number(target.value),10,100,100);
+        else if (project === 'timerBackground' && ['solid','glass','transparent'].includes(target.value))
+          this.project[project]=target.value;
+        else if (project === 'timerEnd' && ['stop','overtime'].includes(target.value))
+          this.project[project]=target.value;
+        else if (['timerChime','timerFlash'].includes(project)) this.project[project]=target.checked;
+        else return;
+        this.mark();this.renderWorkspacePanel();
+        return;
       } else if (layer && this.layer) {
         if (layer === 'preset') {
           const preset = target.value === 'board' ? { x: 7, y: 4, w: 48, h: 43 } : PLACE[target.value];
@@ -1640,6 +1698,10 @@ class Studio {
         } else if (layer !== 'opacity') {
           this.layer[layer] = target.type === 'checkbox' ? target.checked : target.value;
           if (layer === 'matte') this.renderDock();
+          if (layer === 'timerStyle') {
+            this.syncTimerToProgram(this.scene.id);
+            if (this.workspaceTab === 'classroom') this.renderWorkspacePanel();
+          }
         }
       } else if (source && this.layer) {
         const entry = this.source(this.layer.source);
