@@ -212,7 +212,7 @@ try {
   await reverse.waitFor();
   const reverseIds=await reverse.locator('option').evaluateAll(nodes=>nodes.map(x=>x.value));
   assert.ok(!reverseIds.includes('studio'),'Embedding Studio in Slides would create a cycle');
-  await reverse.locator('[data-act="close-dialog"]').click();
+  await reverse.getByRole('button',{name:'Cancel'}).click();
   await editor.locator('[data-act="close-tools"]').click();
 
   // Media and source references round-trip through the normal saved project.
