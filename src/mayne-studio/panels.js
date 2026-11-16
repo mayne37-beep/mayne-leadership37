@@ -130,11 +130,13 @@ export function overlaysPanel(project, preview, live) {
     const id = 'data-id="' + o.id + '"';
     const staged = preview.has(o.id) && preview.get(o.id).end === undefined;
     const shown = live.has(o.id) && live.get(o.id).end === undefined;
-    const category = ['image','video','graphic'].includes(o.type)
-      ? (o.type === 'video' ? 'Video' : o.type === 'image' ? 'Image' : 'Media') : 'Message';
+    const category = o.type === 'emoji' ? 'Emoji'
+      : ['image','video','graphic'].includes(o.type)
+        ? (o.type === 'video' ? 'Video' : o.type === 'image' ? 'Image' : 'Media') : 'Message';
     return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}">
       <div class="overlay-title">${icon(category.toLowerCase() === 'media' ? 'image' : category.toLowerCase(),17)}
-        <span title="${e(o.name)}"><b>${e(o.name)}</b><small class="overlay-type-label">${category}</small></span>
+        <span title="${e(o.name)}"><b>${o.type === 'emoji'
+          ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category}</small></span>
         <kbd>${e(shortcutLabel(project.shortcuts?.['overlay' + index] ?? ''))}</kbd></div>
       ${iconButton('overlay-edit','Open visual editor for ' + o.name,'gear',id)}
       <div class="overlay-actions">
@@ -143,7 +145,7 @@ export function overlaysPanel(project, preview, live) {
         ${buttons('Delete','overlay-remove',id)}
       </div>
     </article>`;
-  }).join('') + (project.overlays.length ? '' : '<p class="empty-panel">Add a graphic or text overlay.</p>') + '</div>';
+  }).join('') + (project.overlays.length ? '' : '<p class="empty-panel">Add an image, video, message or emoji overlay.</p>') + '</div>';
 }
 
 export function classroomPanel(project, timer, state, media) {

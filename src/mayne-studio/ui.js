@@ -25,6 +25,7 @@ const paths = {
   title: '<path d="M4 5h16M12 5v15m-4 0h8m-12-9V5m16 6V5"/>',
   lower: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M6 13h11M6 16h6"/>',
   message: '<path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-6 4V5a1 1 0 0 1 1-1Z"/><path d="M7 8h10m-10 4h7"/>',
+  emoji: '<circle cx="12" cy="12" r="9"/><path d="M8 14c1.5 2.5 6.5 2.5 8 0"/><path d="M8.5 9h.01M15.5 9h.01"/>',
   arrow: '<path d="M4 12h15m-6-6 6 6-6 6"/>',
   hand: '<path d="M8 13V6a1.5 1.5 0 0 1 3 0v4-7a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v6-2a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a5 5 0 0 1-4-2l-4-5c-1-2 1-3 2-2l2 2"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',

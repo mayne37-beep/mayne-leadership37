@@ -1,6 +1,7 @@
 import { WIDTH, HEIGHT, VISUAL, clock, transitionProgress } from './model.js';
 import { paintTransition } from './transitions.js';
 import { timerText } from './timer.js';
+import { DEFAULT_EMOJI, findEmoji } from './emojis.js';
 
 const W = WIDTH, H = HEIGHT;
 const stills = {
@@ -229,6 +230,19 @@ export function drawOverlay(ctx, media, active, now) {
     if (['graphic', 'image', 'video'].includes(overlay.type)) {
       const image = media.drawable(overlay, { page: 0 }, now);
       if (image) drawImage(ctx, image, x, y, w, h, overlay.fit ?? 'contain');
+    } else if (overlay.type === 'emoji') {
+      // The same native Unicode glyph is composited into the false Program
+      // editor, Preview and recorded/live canvas. No text badge/background.
+      const glyph = findEmoji(overlay.emoji)?.emoji || DEFAULT_EMOJI;
+      ctx.beginPath();
+      ctx.rect(x,y,w,h);
+      ctx.clip();
+      const size = Math.max(1,Math.floor(Math.min(w * .84, h * .84, 620)));
+      ctx.font = size + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(glyph,x+w/2,y+h/2,w*.94);
     } else if (overlay.type === 'arrow') {
       ctx.fillStyle = accent;
       ctx.strokeStyle = '#111826';

@@ -3,6 +3,7 @@ import { drawOverlay, drawOverlayStill } from './render.js';
 import { transformBox } from './scene-designer.js';
 import { discardFile } from './projects.js';
 import { e, option } from './ui.js';
+import { DEFAULT_EMOJI, EMOJI_GROUPS, emojiOptions, findEmoji } from './emojis.js';
 
 const handles = ['nw','n','ne','e','se','s','sw','w'];
 const geometry = ['x','y','w','h'];
@@ -18,6 +19,8 @@ export class OverlayEditor {
     this.drag = null;
     this.draft = null;
     this.previewStart = null;
+    this.emojiCategory = 'all';
+    this.emojiQuery = '';
     this.dialog = document.createElement('dialog');
     this.dialog.id = 'overlay-editor';
     this.dialog.className = 'overlay-editor';
@@ -81,6 +84,8 @@ export class OverlayEditor {
     this.pendingCreated = pendingCreated;
     this.committed = false;
     this.draft = clone(existing || makeOverlay(type));
+    this.emojiCategory = 'all';
+    this.emojiQuery = '';
     this.previewStart = null;
     this.dialog.querySelector('#overlay-editor-title').textContent =
       (this.isNew ? 'Create ' : 'Edit ') + this.typeLabel() + ' overlay';
@@ -91,6 +96,7 @@ export class OverlayEditor {
   }
 
   typeLabel() {
+    if (this.draft.type === 'emoji') return 'emoji';
     if (['image','video'].includes(this.draft.type)) return this.draft.type;
     if (this.draft.type === 'graphic') return 'media';
     return 'message';
@@ -99,13 +105,14 @@ export class OverlayEditor {
   refresh() {
     if (!this.draft) return;
     const d = this.draft;
-    const message = !['image','video','graphic'].includes(d.type);
+    const message = !['image','video','graphic','emoji'].includes(d.type);
     this.inspector.innerHTML =
       '<div class="oe-section"><h3>' + e(this.typeLabel()) + ' settings</h3>' +
       '<label>Overlay name<input data-oe-field="name" maxlength="120" value="' + e(d.name) + '"></label>' +
       (message
         ? '<label>Message text<textarea data-oe-field="text" maxlength="160" rows="3">' + e(d.text) + '</textarea></label>' +
           '<label>Second line (optional)<input data-oe-field="sub" maxlength="160" value="' + e(d.sub) + '"></label>'
+        : d.type === 'emoji' ? this.emojiPicker() 
         : '<p class="oe-muted">Your image or video will appear at this exact position above the live scene.</p>' +
           '<button type="button" class="button" data-oe-action="replace-media">Replace file</button>' +
           select('Fill behavior','fit',{contain:'Fit entire file',cover:'Fill and crop',stretch:'Stretch'},d.fit ?? 'contain') +
@@ -129,7 +136,52 @@ export class OverlayEditor {
       '<label>Auto-hide after (seconds)<input type="number" min="0" max="3600" step="1"' +
       ' data-oe-field="seconds" value="' + d.seconds + '"></label>' +
       '<p class="oe-muted">0 stays on air until you click Hide live. The animation restarts every time you show it.</p></div>';
+    this.renderEmojiChoices();
     this.updateTarget();
+  }
+
+  /** Keep the selected emoji and filter state independent of the scene and
+   * show one curated native-color emoji glyph at a time on the video layer. */
+  emojiPicker() {
+    return '<div class="oe-emoji-library" aria-label="Emoji library">' +
+      '<div class="oe-emoji-chosen" id="oe-emoji-chosen" role="status" aria-live="polite"></div>' +
+      '<label>Search emojis<input id="oe-emoji-search" type="search" autocomplete="off" placeholder="Try applause, star, question…" value="' +
+      e(this.emojiQuery) + '"></label>' +
+      '<div class="oe-emoji-categories" aria-label="Emoji categories">' +
+      '<button type="button" class="oe-emoji-category" data-oe-action="emoji-category" data-category="all">All</button>' +
+      Object.entries(EMOJI_GROUPS).map(([key,group]) =>
+        '<button type="button" class="oe-emoji-category" data-oe-action="emoji-category" data-category="' +
+        key + '">' + e(group.name) + '</button>').join('') + '</div>' +
+      '<div class="oe-emoji-count" id="oe-emoji-count" aria-live="polite"></div>' +
+      '<div id="oe-emoji-results" class="oe-emoji-results" role="group" aria-label="Available emojis"></div>' +
+      '<p class="oe-muted">The emoji is drawn directly over your video with no background. '
+      + 'The exact emoji appearance can vary with your computer’s emoji font.</p></div>';
+  }
+
+  renderEmojiChoices() {
+    if (this.draft?.type !== 'emoji') return;
+    const container=this.inspector.querySelector('#oe-emoji-results');
+    if (!container) return;
+    const items=emojiOptions(this.emojiCategory,this.emojiQuery);
+    const chosen=findEmoji(this.draft.emoji)||findEmoji(DEFAULT_EMOJI);
+    this.inspector.querySelector('#oe-emoji-chosen').innerHTML =
+      '<span class="oe-emoji-chosen-glyph" aria-hidden="true">' + e(chosen.emoji) +
+      '</span><span>Selected: <strong>' + e(chosen.label) + '</strong></span>';
+    this.inspector.querySelector('#oe-emoji-count').textContent =
+      items.length + ' emoji' + (items.length === 1 ? '' : 's') + ' available';
+    for(const button of this.inspector.querySelectorAll('[data-oe-action="emoji-category"]')) {
+      const active=button.dataset.category===this.emojiCategory;
+      button.classList.toggle('is-selected',active);
+      button.setAttribute('aria-pressed',String(active));
+    }
+    container.innerHTML=items.length
+      ? items.map(item => '<button type="button" class="oe-emoji-choice' +
+        (item.emoji===chosen.emoji ? ' is-selected' : '') +
+        '" data-oe-action="choose-emoji" data-emoji="' + e(item.emoji) +
+        '" aria-label="' + e(item.label) + '" title="' + e(item.label) +
+        '" aria-pressed="' + (item.emoji===chosen.emoji) + '">' +
+        '<span aria-hidden="true">' + e(item.emoji) + '</span></button>').join('')
+      : '<p class="oe-muted oe-emoji-empty">No matching emojis. Try another search.</p>';
   }
 
   updateTarget() {
@@ -190,6 +242,25 @@ export class OverlayEditor {
     const action = button.dataset.oeAction;
     if (action === 'cancel') { this.dialog.close(); return; }
     if (action === 'save') { this.save(); return; }
+    if (action === 'choose-emoji' && this.draft?.type === 'emoji') {
+      const item=findEmoji(button.dataset.emoji);
+      if(!item)return;
+      this.draft.emoji=item.emoji;
+      if(this.draft.name==='Emoji reaction' || this.draft.name.startsWith('Emoji: '))
+        this.draft.name='Emoji: '+item.label;
+      this.inspector.querySelector('[data-oe-field="name"]').value=this.draft.name;
+      this.renderEmojiChoices();
+      this.updateTarget();
+      this.draw(performance.now());
+      return;
+    }
+    if (action === 'emoji-category' && this.draft?.type === 'emoji') {
+      const key=button.dataset.category;
+      if(key!=='all' && !Object.hasOwn(EMOJI_GROUPS,key))return;
+      this.emojiCategory=key;
+      this.renderEmojiChoices();
+      return;
+    }
     if (action === 'preview') {
       this.previewStart = performance.now();
       if (['video','graphic'].includes(this.draft.type)) this.studio.media.playGraphic('preview:'+this.draft.id);
@@ -206,14 +277,21 @@ export class OverlayEditor {
     const d = this.draft;
     if (action === 'center') { d.x = Math.round((100-d.w)/2); d.y = Math.round((100-d.h)/2); }
     else if (action === 'bottom') Object.assign(d,{x:5,y:79,w:50,h:16});
-    else if (action === 'reset') Object.assign(d,['image','video','graphic'].includes(d.type)
-      ? {x:68,y:66,w:27,h:29} : {x:22,y:6,w:56,h:12});
+    else if (action === 'reset') Object.assign(d,d.type === 'emoji'
+      ? {x:73,y:12,w:19,h:27}
+      : ['image','video','graphic'].includes(d.type)
+        ? {x:68,y:66,w:27,h:29} : {x:22,y:6,w:56,h:12});
     else return;
     this.updateTarget();
     this.draw(performance.now());
   }
 
   input(event) {
+    if (event.target.id === 'oe-emoji-search' && this.draft?.type === 'emoji') {
+      this.emojiQuery=event.target.value;
+      this.renderEmojiChoices();
+      return;
+    }
     const field = event.target.dataset.oeField;
     if (!this.draft || !field || geometry.includes(field)) return;
     if (['name','text','sub'].includes(field)) {

@@ -33,3 +33,34 @@
 .oe-muted{font-size:11px;line-height:1.55;color:#b1c4da}
 @media(max-width:930px){.oe-body{grid-template-columns:minmax(0,1fr)}.oe-inspector{max-height:none;grid-template-columns:repeat(2,minmax(0,1fr))}.oe-inspector .oe-section:last-child{grid-column:span 2}}
 @media(max-width:560px){.overlay-editor{max-width:100vw;width:100vw;max-height:100dvh;border-radius:0}.oe-head{padding:10px;flex-wrap:wrap}.oe-head strong{font-size:16px}.oe-body{padding:9px;gap:8px}.oe-inspector{grid-template-columns:minmax(0,1fr)}.oe-inspector .oe-section:last-child{grid-column:span 1}.oe-handle{width:11px;height:11px}.oe-hint{padding:8px 2px}}
+
+
+/* Native emoji library for the independent Overlay Designer. */
+.oe-emoji-library{display:grid;gap:9px;min-width:0}
+.oe-emoji-chosen{display:flex;align-items:center;gap:12px;padding:7px 10px;
+  min-height:48px;border:1px solid #4c7790;border-radius:8px;background:#112a40;color:#d9edff;font-size:12px}
+.oe-emoji-chosen-glyph{display:grid;place-items:center;flex:0 0 45px;width:45px;height:45px;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:32px;line-height:1}
+.oe-emoji-categories{display:flex;flex-wrap:wrap;gap:5px;max-width:100%}
+.oe-emoji-category{cursor:pointer;min-height:28px;padding:4px 8px;
+  border:1px solid #4a617c;border-radius:14px;background:#243650;color:#d0e2f8;
+  font-size:10px;font-weight:650}
+.oe-emoji-category:hover,.oe-emoji-category:focus-visible{background:#355473;border-color:#78a8d6}
+.oe-emoji-category.is-selected{background:#25617b;border-color:#83d8eb;color:#fff}
+.oe-emoji-count{font-size:10px;color:#aec5dc}
+.oe-emoji-results{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;
+  max-height:248px;overflow-y:auto;overscroll-behavior:contain;padding:4px;
+  border:1px solid #364f68;border-radius:6px;background:#101b2e}
+.oe-emoji-choice{display:grid;place-items:center;min-width:0;min-height:43px;
+  border:1px solid transparent;border-radius:6px;background:#21344a;color:#f1f8ff;cursor:pointer}
+.oe-emoji-choice span{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  font-size:26px;line-height:1.1}
+.oe-emoji-choice:hover,.oe-emoji-choice:focus-visible{background:#35526c;border-color:#77a9c8}
+.oe-emoji-choice.is-selected{background:#215970;border:2px solid #8bdbf1}
+.oe-emoji-choice:focus-visible{outline:2px solid #e8f9ff;outline-offset:1px}
+.oe-emoji-empty{grid-column:1/-1;padding:9px;line-height:1.5}
+@media(max-width:560px){
+  .oe-emoji-results{grid-template-columns:repeat(6,minmax(0,1fr));max-height:210px}
+  .oe-emoji-choice{min-height:41px}
+  .oe-emoji-choice span{font-size:24px}
+}
