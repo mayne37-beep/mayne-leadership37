@@ -297,7 +297,7 @@ export function canEmbedScene(project, parentId, childId) {
  *
  * Unreused decks are left alone: Preview and Program may intentionally sit
  * on different slides in a simple, single-scene presentation. */
-export function linkReusedDecks(project) {
+export function linkReusedDecks(project, shots = []) {
   const sources = new Map(project.sources.map(source => [source.id, source]));
   const scenes = new Map(project.scenes.map(scene => [scene.id, scene]));
   const shot = { sources, scenes };
@@ -323,7 +323,12 @@ export function linkReusedDecks(project) {
   for (const sourceId of linked) {
     const source = sources.get(sourceId);
     if (!source || source.sync) continue;
-    source.page = firstLayer.get(sourceId)?.page ?? source.page ?? 0;
+    // When enabling sharing during a class, do not unexpectedly jump an
+    // already-live slide back to the slide stored in the editable scene.
+    const active = shots.map(shot => shot?.scene
+      ? visibleSceneLayers(shot).find(({source}) => source.id === sourceId)?.layer
+      : null).find(Boolean);
+    source.page = active?.page ?? firstLayer.get(sourceId)?.page ?? source.page ?? 0;
     source.sync = true;
   }
   return linked;
@@ -352,7 +357,7 @@ export function syncLinkedDecks(project, shots = []) {
   // Reconcile newly reused decks on every scene change/navigation. This is
   // inexpensive for a 100-scene project and prevents late-imported PowerPoints
   // from silently remaining independent in previously embedded studios.
-  linkReusedDecks(project);
+  linkReusedDecks(project, shots);
   const states = new Map(project.sources.filter(source =>
     source.type === 'powerpoint' && source.sync).map(source => [source.id,source.page]));
   if (!states.size) return;
