@@ -87,7 +87,8 @@ export class SceneDesigner {
   draw(now) {
     if (!this.open || !this.studio.project) return;
     const shot = this.studio.shot(this.studio.scene, false);
-    this.studio.renderer.thumbnail(this.canvas, this.studio.scene, shot.sources, now, shot.scenes);
+    this.studio.renderer.thumbnail(this.canvas, this.studio.scene, shot.sources, now, shot.scenes,
+      {...this.studio.timer,config:this.studio.project},true);
   }
 
   refresh() {

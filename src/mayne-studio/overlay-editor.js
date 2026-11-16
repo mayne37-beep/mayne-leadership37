@@ -144,7 +144,8 @@ export class OverlayEditor {
   draw(now) {
     if (!this.open || !this.draft || !this.studio.program) return;
     this.studio.renderer.thumbnail(this.canvas, this.studio.program.scene,
-      this.studio.program.sources, now, this.studio.program.scenes);
+      this.studio.program.sources, now, this.studio.program.scenes,
+      {...this.studio.timer,config:this.studio.project});
     const ctx = this.canvas.getContext('2d');
     ctx.save();
     ctx.scale(this.canvas.width / 1920, this.canvas.height / 1080);

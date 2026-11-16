@@ -533,3 +533,74 @@ kbd{white-space:nowrap}
   .scene-order-step{flex-basis:23px;width:23px;height:27px}
   .scene-order-index{font-size:9px}
 }
+
+
+/* Shared classroom timer designer. Duration entry stays directly editable;
+   the timer itself is a regular, optional scene layer in the studio canvas. */
+.classroom-tools{align-items:start}
+.class-card.timer-designer{grid-column:1/-1;display:flex;flex-direction:column;gap:12px;padding:16px}
+.timer-designer h3{font-size:17px;color:#f2f8ff}
+.timer-live-line{display:flex;align-items:center;gap:15px;flex-wrap:wrap;
+  padding:12px 16px;border:1px solid #415974;border-radius:9px;background:#122135}
+.timer-designer .timer-read{font-size:clamp(33px,4.8vw,54px);font-weight:800;line-height:1.15;
+  letter-spacing:.035em;color:#f1f8ff;font-variant-numeric:tabular-nums}
+.timer-status{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#c4d6ed;
+  padding:5px 8px;border-radius:10px;background:#2d405b}
+.timer-section-title{margin-top:4px;font-size:12px;font-weight:750;letter-spacing:.035em;
+  color:#cfe2f6;border-bottom:1px solid #364a60;padding-bottom:6px}
+.timer-time-fields{display:flex;align-items:center;gap:8px;max-width:480px}
+.timer-time-fields label{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;
+  text-align:center;font-size:10px;color:#b7c9dc;font-weight:650}
+.timer-time-fields input{width:100%;height:52px;box-sizing:border-box;text-align:center;
+  font-size:25px!important;font-variant-numeric:tabular-nums;font-weight:750;
+  background:#122137;border:1px solid #536d8b;border-radius:7px;color:#f0f7ff}
+.timer-time-fields>span{padding-top:15px;font-size:26px;font-weight:800;color:#90acc9}
+.timer-time-fields input:focus-visible{outline:2px solid #7bc6fc;outline-offset:2px}
+.timer-preset-list{display:flex;gap:7px;flex-wrap:wrap}
+.timer-preset-item{display:inline-flex;align-items:stretch;border-radius:6px;overflow:hidden}
+.timer-preset-item>.timer-preset{font-size:11px;border-radius:6px;min-height:31px;
+  border-color:#415874;background:#23384f;color:#edf6ff}
+.timer-preset-item>.timer-preset:hover{background:#345674}
+.timer-preset-delete{border:1px solid #536577;border-left:0;border-radius:0 5px 5px 0;
+  background:#243147;color:#ffbaba;cursor:pointer;padding:0 8px;min-width:26px}
+.timer-saved-presets{display:flex;flex-direction:column;gap:7px;color:#bed1e6;font-size:11px}
+.timer-designer .timer-actions{display:flex;gap:7px;flex-wrap:wrap}
+.timer-designer .timer-actions .button{min-height:34px}
+.timer-live-adjust{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.timer-live-adjust>span{color:#b5c9e1;font-size:11px;margin-right:7px}
+.timer-live-adjust .button{font-size:11px;padding:5px 8px;min-height:28px}
+.timer-style-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.timer-style-choice{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:5px;min-width:0;padding:11px 5px;background:#17293f;border:1px solid #46617a;
+  border-radius:9px;color:#d8e5f4;cursor:pointer;font-size:11px;text-align:center}
+.timer-style-choice:hover{background:#28415c;border-color:#799fc1}
+.timer-style-choice.active{border:2px solid #75c4fa;box-shadow:0 0 0 1px #77c7ff55;
+  background:#243e57;color:#fff}
+.timer-style-sample{display:grid;place-items:center;width:100%;height:48px;font-size:23px;
+  color:#65d3c7;font-weight:750}
+.timer-style-digital{font-size:22px;letter-spacing:.03em;font-family:monospace}
+.timer-style-ring{font-size:43px;line-height:1}
+.timer-style-bar{font-size:19px;letter-spacing:-3px}
+.timer-style-traffic{font-size:30px}
+.timer-style-fullscreen{font-size:43px}
+.timer-config-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.timer-config-grid label{display:flex;flex-direction:column;gap:6px;min-width:0;
+  font-size:11px;color:#bfd2e7;font-weight:650}
+.timer-config-grid select,.timer-config-grid input[type="color"]{width:100%;min-height:36px}
+.timer-config-grid input[type="color"]{background:#14263b;border:1px solid #4d6780;
+  padding:3px;border-radius:6px;cursor:pointer}
+.timer-config-grid input[type="range"]{width:100%}
+.timer-checks{display:flex;flex-wrap:wrap;gap:14px;color:#c9dded}
+.timer-checks label{display:flex;gap:6px;align-items:center;font-size:11px}
+.timer-scene-assignment{display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  padding:12px;border:1px dashed #506d85;background:#142238;border-radius:8px}
+.timer-scene-assignment strong{font-size:12px}
+.timer-scene-hint{font-size:11px;line-height:1.5;color:#b8cbe0}
+@media(max-width:950px){.timer-style-options{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:610px){
+  .class-card.timer-designer{padding:11px;gap:10px}
+  .timer-time-fields{gap:5px}
+  .timer-time-fields input{height:46px;font-size:21px!important}
+  .timer-style-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .timer-config-grid{grid-template-columns:1fr}
+}

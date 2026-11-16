@@ -1,6 +1,7 @@
 import { AUDIO, BACKGROUNDS, clock, OVERLAYS, SHORTCUTS, SOURCES, VISUAL, visibleSceneLayers } from './model.js';
 import { checked, e, fields, icon, iconButton, option, pressed } from './ui.js';
 import { shortcutLabel } from './shortcuts.js';
+import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, BUILTIN_TIMER_PRESETS, timerParts, timerText } from './timer.js';
 
 const options = (all, active) => Object.entries(all).map(([id, name]) => option(id, name, active)).join('');
 const buttons = (name, act, data = '', classes = '') => '<button class="button '+ classes +'" type="button" data-act="' + act + '" ' + data + '>' + name + '</button>';
@@ -8,6 +9,7 @@ const field = (label, scope, key, value, limit = 120) => '<label>' + label + '<i
 const inputState = (source, entry) => {
   if (source.type === 'title') return 'Text layer';
   if (source.type === 'scene') return 'Reusable scene';
+  if (source.type === 'timer') return 'Shared countdown';
   if (entry?.state === 'error') return 'Input unavailable';
   if (entry?.state === 'loading') return 'Connecting…';
   if (entry?.state === 'ready') return entry.deck ? entry.deck.count + ' slides' : 'Ready';
@@ -67,6 +69,12 @@ function layerInspector(layer, source, media, project) {
         : field('Input name', 'source', 'name', source.name)}
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
+      ${source.type === 'timer'
+        ? '<p class="slide-label">One shared classroom countdown. This layer displays it only in this scene. '
+          + 'Position it over the TV, whiteboard or video using Arrange scene. The clock keeps running through scene changes.</p>'
+          + '<label>Timer style<select data-layer="timerStyle">' + options(TIMER_STYLES,layer.timerStyle || 'digital') + '</select></label>'
+          + buttons('Open Classroom timer controls','workspace-tab','data-id="classroom"')
+        : ''}
       ${source.type === 'camera' ? '<p class="slide-label">This camera is assigned only to scenes with this input layer. Connecting or disconnecting controls the shared camera source, without adding it to other scenes. Use Camera assignments under Scenes to choose where it appears.</p>' :
           source.type === 'mic' ? '<p class="slide-label">This microphone is one shared audio source. Its mixer channel is active across scene changes.</p>' : ''}
       ${capture ? `<div class="inspector-tools">${connect}
@@ -141,11 +149,66 @@ export function classroomPanel(project, timer, state, media) {
   const deck = ['program', 'preview'].flatMap(bus => state[bus]
     ? visibleSceneLayers(state[bus]).filter(({source}) => source.type === 'powerpoint'
       && media.get(source.id)?.deck).map(({layer}) => [bus,layer]) : []);
+  const time=timerParts(project.timerSeconds);
+  const currentScene=state.preview?.scene && project.scenes.find(s=>s.id===state.preview.scene.id);
+  const sceneTimer=currentScene?.layers.find(layer=>project.sources.some(source=>source.id===layer.source&&source.type==='timer'));
+  const assigned=project.scenes.filter(scene=>scene.layers.some(layer=>project.sources.some(source=>source.id===layer.source&&source.type==='timer'))).length;
+  const selectedStyle=sceneTimer?.timerStyle||project.timerStyle||'digital';
+  const timerDisplay=timer.remaining < 0 ? '+'+timerText(Math.abs(timer.remaining),project.timerSeconds>=3600)
+    : timerText(Math.ceil(timer.remaining),project.timerSeconds>=3600);
+  const presetButton=(name,seconds,index=null)=>'<span class="timer-preset-item"><button type="button" class="button timer-preset" data-act="timer-preset" data-id="'+seconds+'">'+e(name)+'</button>'+
+    (index===null?'':'<button type="button" class="timer-preset-delete" data-act="timer-preset-delete" data-id="'+index+'" aria-label="Delete '+e(name)+'" title="Delete saved preset">×</button>')+'</span>';
   return `<div class="classroom-tools">
-    <section class="class-card"><h3>Countdown timer</h3><span class="timer-read mono" id="timer-read">${clock(Math.ceil(timer.remaining))}</span>
-      <label>Duration in seconds<input type="number" min="1" max="5400" data-project="timerSeconds" value="${project.timerSeconds}"></label>
-      <div class="timer-actions">${buttons(timer.deadline ? 'Pause' : 'Start on air', 'timer-toggle', '', 'primary-outline')}
-        ${buttons('Reset','timer-reset')}${buttons(timer.visible ? 'Hide' : 'Show on air', 'timer-show')}</div></section>
+    <section class="class-card timer-designer">
+      <h3>Classroom countdown designer</h3>
+      <p>One shared countdown continues while you switch scenes. Choose which scenes display it.</p>
+      <div class="timer-live-line"><output class="timer-read mono" id="timer-read" role="timer" aria-label="Countdown remaining">${timerDisplay}</output>
+        <span id="timer-status" class="timer-status">${timer.deadline?(timer.finished?'Overtime':'Running'):timer.finished?'Finished':'Paused / ready'}</span></div>
+      <div class="timer-section-title">Set countdown duration</div>
+      <div class="timer-time-fields">
+        <label>Hours<input aria-label="Timer hours" type="number" min="0" max="23" step="1" inputmode="numeric" data-timer-time="h" value="${time.h}"></label>
+        <span aria-hidden="true">:</span>
+        <label>Minutes<input aria-label="Timer minutes" type="number" min="0" max="59" step="1" inputmode="numeric" data-timer-time="m" value="${time.m}"></label>
+        <span aria-hidden="true">:</span>
+        <label>Seconds<input aria-label="Timer seconds" type="number" min="0" max="59" step="1" inputmode="numeric" data-timer-time="s" value="${time.s}"></label>
+      </div>
+      <div class="timer-preset-list" aria-label="Quick countdown presets">${BUILTIN_TIMER_PRESETS.map(m=>presetButton(m+' min',m*60)).join('')}</div>
+      ${project.timerPresets?.length?'<div class="timer-saved-presets"><span>Saved favorites</span><div class="timer-preset-list">'+project.timerPresets.map((p,i)=>presetButton(p.name,p.seconds,i)).join('')+'</div></div>':''}
+      <div class="timer-actions">
+        ${buttons(timer.deadline?'Pause':'Start countdown','timer-toggle','','primary-outline')}
+        ${buttons('Reset','timer-reset')}
+        ${buttons(timer.visible?'Hide from output':'Show on output','timer-show')}
+        ${buttons('Save preset…','timer-save-preset')}
+      </div>
+      <div class="timer-live-adjust">
+        <span>Adjust while running</span>
+        ${[-60,-30,-10,10,30,60].map(n=>buttons((n>0?'+':'')+n+'s','timer-adjust','data-id="'+n+'"')).join('')}
+      </div>
+      <div class="timer-section-title">Choose how it looks</div>
+      <div class="timer-style-options" aria-label="Countdown appearance">
+        ${Object.entries(TIMER_STYLES).map(([id,name])=>'<button type="button" class="timer-style-choice '+(selectedStyle===id?'active':'')+'" aria-pressed="'+(selectedStyle===id)+'" data-act="timer-style" data-id="'+id+'"><span class="timer-style-sample timer-style-'+id+'" aria-hidden="true">'+(id==='traffic'?'🟡':id==='bar'?'▰▰▰':id==='ring'?'◉':id==='fullscreen'?'▣':'05:00')+'</span><span>'+e(name)+'</span></button>').join('')}
+      </div>
+      <div class="timer-section-title">Appearance &amp; finish behavior</div>
+      <div class="timer-config-grid">
+        <label>Accent color<input type="color" data-project="timerColor" value="${project.timerColor}"></label>
+        <label>Background<select data-project="timerBackground">${options(TIMER_BACKGROUNDS,project.timerBackground)}</select></label>
+        <label>Opacity <span id="timer-opacity-read">${project.timerOpacity}%</span><input type="range" min="10" max="100" step="5" data-project="timerOpacity" value="${project.timerOpacity}"></label>
+        <label>At zero<select data-project="timerEnd">${options(TIMER_ENDINGS,project.timerEnd)}</select></label>
+      </div>
+      <div class="timer-checks">
+        <label><input type="checkbox" data-project="timerChime" ${checked(project.timerChime)}> Play a finish chime</label>
+        <label><input type="checkbox" data-project="timerFlash" ${checked(project.timerFlash)}> Flash the timer when time expires</label>
+      </div>
+      <div class="timer-section-title">Where students see the timer</div>
+      <p>Timer display is scene-specific. It never adds cameras or automatically appears in a new scene.</p>
+      <div class="timer-scene-assignment">
+        <strong>Preview scene: ${e(currentScene?.name||'No scene selected')}</strong>
+        ${buttons(sceneTimer?'Remove timer from this scene':'Add timer to this scene',
+          'timer-assign','',sceneTimer?'':'primary-outline')}
+        ${sceneTimer?'<span class="timer-scene-hint">Drag or resize the timer under Settings → Arrange scene. This scene uses the '+e(TIMER_STYLES[selectedStyle])+ ' style.</span>':''}
+        <span class="timer-scene-hint">Assigned to ${assigned} of ${project.scenes.length} scenes. Style changes affect the Preview scene only; new assignments use the selected style.</span>
+      </div>
+    </section>
     <section class="class-card"><h3>PowerPoint &amp; speaker notes</h3>
       ${deck.length ? deck.map(([bus, layer]) => '<p><strong>' + (bus === 'program' ? 'Program' : 'Preview') + '</strong></p>'
         + deckPanel(media.get(layer.source), layer, bus, true)).join('') : '<p>Import a deck to cue slides and read notes privately.</p>'}

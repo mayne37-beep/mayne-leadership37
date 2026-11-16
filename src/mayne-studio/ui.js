@@ -28,6 +28,7 @@ const paths = {
   arrow: '<path d="M4 12h15m-6-6 6 6-6 6"/>',
   hand: '<path d="M8 13V6a1.5 1.5 0 0 1 3 0v4-7a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v6-2a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a5 5 0 0 1-4-2l-4-5c-1-2 1-3 2-2l2 2"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  timer: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2M8 2h8m-4 0v2"/>',
   more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
   gear: '<path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="2" fill="currentColor"/><circle cx="16" cy="17" r="2" fill="currentColor"/>',
   close: '<path d="m6 6 12 12m0-12L6 18"/>', trash: '<path d="M3 6h18m-12 0V3h6v3m4 0-1 15H6L5 6m5 4v7m4-7v7"/>',
