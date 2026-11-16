@@ -53,6 +53,10 @@ try {
 
   await page.locator('#workspace-classroom').click();
   const panel=page.locator('#classroom-panel');
+  assert.ok(await panel.locator('.timer-scene-assignment').evaluate(node =>
+    !!(node.compareDocumentPosition(node.closest('.timer-designer').querySelector('.timer-time-fields'))
+      & Node.DOCUMENT_POSITION_FOLLOWING)),
+    'Add timer to this scene is at the top of the designer, before countdown time fields');
   assert.equal(await panel.locator('[data-timer-time]').count(),3);
   await panel.locator('[data-timer-time=h]').fill('01');
   await panel.locator('[data-timer-time=h]').press('Tab');
