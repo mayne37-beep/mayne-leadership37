@@ -69,6 +69,8 @@ jobs:
         run: node tests/mayne-studio/scene-library-browser.mjs
       - name: Test embedded scenes and synchronized PowerPoint in Program and Preview
         run: node tests/mayne-studio/nested-scenes-browser.mjs
+      - name: Test shared PowerPoint slides across three live studio views
+        run: node tests/mayne-studio/shared-powerpoint-browser.mjs
       - name: Test classroom timer input, presets, scene styles, overtime and persistence
         run: |
           node --test tests/mayne-studio/classroom-timer.test.mjs
