@@ -293,7 +293,8 @@ export function drawTimer(ctx,timer,layer,now) {
     :config.timerBackground==='glass'?'#111a2bb5':'#0c1525f2';
   const title=overtime?'OVERTIME':finished?'TIME’S UP':'CLASS TIMER';
   ctx.save();
-  ctx.globalAlpha*=Math.max(.1,Math.min(1,(config.timerOpacity??100)/100));
+  ctx.globalAlpha*=Math.max(.1,Math.min(1,(config.timerOpacity??100)/100))
+    * Math.max(0,Math.min(1,(layer.opacity??100)/100));
   if(config.timerFlash && finished && now-(timer.completedAt||0)<4800) {
     ctx.globalAlpha*=.62+.38*Math.abs(Math.sin(now/175));
   }
