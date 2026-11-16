@@ -125,7 +125,7 @@ function drawSolidBackdropPortrait(bitmap, settings) {
   backdropContext.globalCompositeOperation = 'copy';
   backdropContext.drawImage(bitmap, 0, 0);
   const pixels = backdropContext.getImageData(0, 0, width, height);
-  writeBackdropMask(pixels.data, settings.backdropColor, coverageOption(settings.coverage).threshold);
+  writeBackdropMask(pixels.data, settings.backdropColor, coverageOption(settings.coverage).threshold, settings);
   backdropContext.putImageData(pixels, 0, 0);
   if (automaticAspect) {
     automaticAspect = 0;
