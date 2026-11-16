@@ -73,6 +73,17 @@ class Studio {
       this.render();
     });
     this.root.addEventListener('click', event => this.click(event));
+    // Only the grip is draggable: clicking a thumbnail still cues Preview.
+    // A drag moves scene IDs in the project array; it never takes a scene live.
+    this.sceneDragId = null;
+    const sceneStrip = $('scenes');
+    sceneStrip.addEventListener('dragstart', event => this.sceneDragStart(event));
+    sceneStrip.addEventListener('dragover', event => this.sceneDragOver(event));
+    sceneStrip.addEventListener('drop', event => this.sceneDrop(event));
+    sceneStrip.addEventListener('dragend', () => this.sceneDragEnd());
+    sceneStrip.addEventListener('dragleave', event => {
+      if (!sceneStrip.contains(event.relatedTarget)) this.clearSceneDropTarget();
+    });
     this.root.addEventListener('input', event => this.input(event));
     this.root.addEventListener('change', event => this.change(event));
     this.dialog.addEventListener('submit', event => {
@@ -204,6 +215,78 @@ class Studio {
     } finally { this.editing = false; }
   }
 
+  /** Reorder the saved scene list without changing any camera assignments,
+   * layer geometry, selected Preview scene, or currently broadcasting Program. */
+  reorderScene(sourceId, destinationId, after = false) {
+    if (!this.project || this.editing) return false;
+    const scenes = this.project.scenes;
+    const from = scenes.findIndex(scene => scene.id === sourceId);
+    const target = destinationId === null ? scenes.length
+      : scenes.findIndex(scene => scene.id === destinationId);
+    if (from < 0 || target < 0 || sourceId === destinationId) return false;
+    let to = target + (destinationId !== null && after ? 1 : 0);
+    if (from < to) to--;
+    if (to === from) return false;
+    const [scene] = scenes.splice(from, 1);
+    scenes.splice(to, 0, scene);
+    this.mark();
+    this.render();
+    return true;
+  }
+
+  clearSceneDropTarget() {
+    for (const tile of $('scenes').querySelectorAll('.scene-drop-before,.scene-drop-after'))
+      tile.classList.remove('scene-drop-before', 'scene-drop-after');
+  }
+
+  sceneDragStart(event) {
+    const grip = event.target.closest?.('[data-scene-drag]');
+    const id = grip?.dataset.sceneDrag;
+    if (this.editing || !id || !this.project.scenes.some(scene => scene.id === id)) {
+      event.preventDefault();
+      return;
+    }
+    this.sceneDragId = id;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', 'mayne-scene:' + id);
+    grip.closest('.scene-tile')?.classList.add('scene-dragging');
+  }
+
+  sceneDragOver(event) {
+    if (!this.sceneDragId) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    const strip = $('scenes');
+    const bounds = strip.getBoundingClientRect();
+    if (event.clientX < bounds.left + 28) strip.scrollLeft -= 13;
+    else if (event.clientX > bounds.right - 28) strip.scrollLeft += 13;
+    this.clearSceneDropTarget();
+    const tile = event.target.closest?.('.scene-tile');
+    if (!tile || tile.dataset.sceneId === this.sceneDragId) return;
+    tile.classList.add(event.clientX > tile.getBoundingClientRect().left
+      + tile.getBoundingClientRect().width / 2 ? 'scene-drop-after' : 'scene-drop-before');
+  }
+
+  sceneDrop(event) {
+    if (!this.sceneDragId) return;
+    event.preventDefault();
+    const sourceId = this.sceneDragId;
+    const tile = event.target.closest?.('.scene-tile');
+    const destinationId = tile?.dataset.sceneId || null;
+    const after = tile ? event.clientX >
+      tile.getBoundingClientRect().left + tile.getBoundingClientRect().width / 2 : true;
+    this.sceneDragEnd();
+    const changed = this.reorderScene(sourceId, destinationId, after);
+    if (changed) this.notify('Scene order updated and saved with your project.');
+  }
+
+  sceneDragEnd() {
+    this.sceneDragId = null;
+    this.clearSceneDropTarget();
+    for (const tile of $('scenes').querySelectorAll('.scene-dragging'))
+      tile.classList.remove('scene-dragging');
+  }
+
   setPreview(id) {
     if (!this.project.scenes.some(scene => scene.id === id)) return;
     this.previewId = id;
@@ -242,7 +325,17 @@ class Studio {
     this.renderFavorites();
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
-      return `<div class="scene-tile"><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
+      return `<div class="scene-tile" data-scene-id="${scene.id}"><div class="scene-reorder-bar">
+        <span class="scene-drag-handle" data-scene-drag="${scene.id}" draggable="true"
+          title="Drag to reorder ${e(scene.name)}" aria-label="Drag to reorder ${e(scene.name)}">
+          ${icon('grip',14)}<span>Move</span></span>
+        <span class="scene-order-index" aria-label="Position ${index + 1} of ${this.project.scenes.length}">${index + 1} / ${this.project.scenes.length}</span>
+        <button type="button" class="scene-order-step" data-act="scene-reorder-left" data-id="${scene.id}"
+          title="Move ${e(scene.name)} earlier" aria-label="Move ${e(scene.name)} left" ${index === 0 ? 'disabled' : ''}>${icon('left',13)}</button>
+        <button type="button" class="scene-order-step" data-act="scene-reorder-right" data-id="${scene.id}"
+          title="Move ${e(scene.name)} later" aria-label="Move ${e(scene.name)} right"
+          ${index === this.project.scenes.length - 1 ? 'disabled' : ''}>${icon('right',13)}</button>
+        </div><button class="scene ${program ? 'on-program' : ''}" type="button" data-act="scene" data-id="${scene.id}" aria-pressed="${preview}"
         title="${e(scene.name)}"><canvas width="128" height="72" aria-hidden="true" data-thumb="${scene.id}"></canvas>
         <strong>${e(scene.name)}</strong><span class="scene-meta"><span>${program ? 'Program' : preview ? 'Preview' : 'Ready'}</span>
         ${index < 9 && this.project.shortcuts['scene' + index] ? '<kbd>' + e(shortcutLabel(this.project.shortcuts['scene' + index])) + '</kbd>' : ''}</span></button>
@@ -930,7 +1023,12 @@ class Studio {
       <p>Import .pptx or .ppsx for slide controls and private notes. Live PowerPoint navigation appears
       under Program while that scene is on air. For animations or embedded media, capture the
       PowerPoint slideshow window instead.</p>
-      <h3>Scene editing</h3>
+      <h3>Scene editing and order</h3>
+      <p>In the Scenes tab, grab the Move handle on a scene card and drag it before or after
+      another scene to change the order. The left and right arrows on each card also
+      reorder one position at a time, including on touchscreens. Ordering updates the
+      keyboard scene number shortcuts, saves with your project, and does not interrupt Program.
+      Camera layers and scene settings are preserved.</p>
       <p>Choose Arrange layers under Preview and drag a camera, slide, or graphic. Select its border
       handles to resize; hold Shift to snap to the 2% grid. The Larger editor offers extra controls.
       Your on-air Program remains unchanged until Take or Cut.</p>
@@ -971,6 +1069,16 @@ class Studio {
       }
       switch (act) {
         case 'scene': this.setPreview(id); break;
+        case 'scene-reorder-left': case 'scene-reorder-right': {
+          const index = this.project.scenes.findIndex(scene => scene.id === id);
+          const step = act === 'scene-reorder-left' ? -1 : 1;
+          const neighbor = this.project.scenes[index + step];
+          if (neighbor && this.reorderScene(id, neighbor.id, step > 0)) {
+            this.notify('Scene order updated and saved with your project.');
+            this.root.querySelector('[data-act="' + act + '"][data-id="' + id + '"]')?.focus();
+          }
+          break;
+        }
         case 'scene-tools': this.showTools(id); break;
         case 'scene-delete': this.requestSceneDeletion(id); break;
         case 'close-tools': this.tools.close(); break;
