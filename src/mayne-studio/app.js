@@ -320,6 +320,9 @@ class Studio {
 
   setPreview(id) {
     if (!this.project.scenes.some(scene => scene.id === id)) return;
+    // Newly embedded decks and late PowerPoint imports reuse the same
+    // project-wide page before this studio's private Preview is drawn.
+    syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
     this.previewId = id;
     this.layerId = this.scene.layers.at(-1)?.id;
     this.render();
@@ -327,6 +330,9 @@ class Studio {
 
   take(type) {
     if (!this.project.scenes.length || this.transition || this.editing) return;
+    // Cue a fresh studio snapshot at the canonical PowerPoint page. Switching
+    // camera views must never reset or branch the shared slideshow.
+    syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
     const previous = this.program;
     this.program = this.shot(this.scene);
     if (this.project.scenes.some(scene => scene.id === previous.scene.id)) this.previewId = previous.scene.id;
@@ -582,6 +588,7 @@ class Studio {
       const page = Math.min(Math.max(layer.page, 0), Math.max(count - 1, 0));
       const data = 'data-id="' + layer.id + '" data-bus="program"';
       return '<div class="live-deck-row"><strong title="' + e(source?.name) + '">' + icon('powerpoint',14) + ' ' + e(source?.name || 'PowerPoint') + '</strong>'
+        + (source?.sync ? '<span class="live-deck-shared">Shared across studio views</span>' : '')
         + '<div class="slide-nav"><button type="button" class="button" data-act="slide-prev" ' + data + (page <= 0 ? ' disabled' : '') + '>'
         + icon('left',14) + ' Previous</button><span class="mono">' + (count ? 'Slide ' + (page + 1) + ' / ' + count : 'Loading slides…') + '</span>'
         + '<button type="button" class="button" data-act="slide-next" ' + data + (!count || page >= count - 1 ? ' disabled' : '') + '>Next ' + icon('right',14) + '</button></div></div>';
@@ -967,8 +974,9 @@ class Studio {
       '<p>Choose an existing scene to appear inside <strong>' + e(parent.name)
       + '</strong>—for example, a full PowerPoint scene inside a classroom TV. '
       + 'Move and resize the embedded scene using Arrange layers or the larger Scene Designer.</p>'
-      + '<p>PowerPoint decks inside the reused scene will share the same slide number '
-      + 'in full-screen, studio, Preview and Program views.</p>'
+      + '<p>PowerPoint decks inside the reused scene will share one live slide position '
+      + 'across full-screen, all studios, Preview and Program—even if you add the '
+      + 'PowerPoint after embedding the scene.</p>'
       + '<div class="form-grid"><label>Scene to embed<select name="child">'
       + eligible.map(child => option(child.id,child.name)).join('')
       + '</select></label></div>',
@@ -1011,6 +1019,12 @@ class Studio {
     if (source.type === 'timer') layer.timerStyle = project.timerStyle;
     if (source.type === 'powerpoint' && source.sync) layer.page = source.page;
     scene.layers.push(layer);
+    if (['powerpoint','scene'].includes(source.type)) {
+      // Linking also runs when a PowerPoint is imported into a slide scene
+      // that was already embedded in one or more studio views.
+      syncLinkedDecks(project, project === this.project
+        ? [this.program,this.transition?.previous] : []);
+    }
     return layer;
   }
 
@@ -1395,6 +1409,10 @@ class Studio {
   }
 
   slide(layerId, bus, delta) {
+    // Re-detect shared inputs before navigation, including scenes built before
+    // automatic linking existed. A linked deck always advances one page
+    // globally, regardless of which studio currently contains it.
+    syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
     const shot = bus === 'program' ? this.program : this.shot(this.scene, false);
     const found = visibleSceneLayers(shot).find(({layer,source}) =>
       layer.id === layerId && source.type === 'powerpoint');
