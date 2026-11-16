@@ -1,4 +1,4 @@
-import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
+import { AUDIO, BACKGROUNDS, PLACE, OVERLAY_LIMIT, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
   assignDeviceToScene, isDefaultSharedCameraInset, canEmbedScene, visibleSceneLayers,
   linkSceneDecks, syncLinkedDecks, transitionProgress, uid } from './model.js';
@@ -11,7 +11,7 @@ import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
 import { InlinePreviewEditor } from './inline-preview.js';
 import { OverlayEditor } from './overlay-editor.js';
-import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
+import { SHORTCUT_ACTIONS, EXTRA_SHORTCUT_LIMIT, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 import { TIMER_STYLES, MAX_TIMER_SECONDS, newTimer, timerText, parseTimerFields, tickTimer, pauseTimer, startTimer, resetTimer, adjustTimer } from './timer.js';
 
@@ -41,6 +41,8 @@ class Studio {
       (message, error) => this.notify(message, error), () => this.recordStatus(),
       chord => this.runShortcut(chord));
     this.workspaceTab = 'scenes';
+    this.overlaySearch = '';
+    this.overlayGroup = 'all';
     try { this.mixerCollapsed = localStorage.getItem('mayne-studio-mixer-collapsed') === '1'; }
     catch { this.mixerCollapsed = false; }
     this.timer = timers();
@@ -56,18 +58,24 @@ class Studio {
     this.inlineEditor = new InlinePreviewEditor(this);
     this.tools = $('studio-tools');
     this.dialog.addEventListener('keydown', event => {
-      const input = event.target.closest?.('[data-shortcut]');
+      const input = event.target.closest?.('[data-shortcut],[data-extra-shortcut]');
       if (!input || event.key === 'Tab' || event.key === 'Escape') return;
       event.preventDefault();
       event.stopPropagation();
       const id = input.dataset.shortcut;
+      const extraId = input.dataset.extraShortcut;
       const binding = ['Backspace','Delete'].includes(event.key) ? '' : keyboardShortcut(event);
       if (!binding && !['Backspace','Delete'].includes(event.key)) return;
-      if (binding && Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding)) {
+      if (binding && (Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding) ||
+        (this.project.extraShortcuts || []).some(row=>row.id !== extraId && row.key === binding))) {
         this.notify(shortcutLabel(binding) + ' is already assigned. Clear that shortcut first.', true);
         return;
       }
-      this.project.shortcuts[id] = binding;
+      if (extraId) {
+        const row=this.project.extraShortcuts?.find(item=>item.id===extraId);
+        if(!row)return;
+        row.key=binding;
+      } else this.project.shortcuts[id] = binding;
       input.value = shortcutLabel(binding);
       this.mark();
       this.renderDock();
@@ -433,11 +441,32 @@ class Studio {
     add.setAttribute('aria-label', labels[current]);
     add.title = labels[current];
     if (current === 'overlays') {
-      $('overlays-panel').innerHTML = overlaysPanel(this.project, this.previewOverlays, this.liveOverlays);
+      $('overlays-panel').innerHTML = overlaysPanel(this.project, this.previewOverlays, this.liveOverlays,
+        {search:this.overlaySearch,group:this.overlayGroup});
+      this.filterOverlayLibrary();
     } else if (current === 'classroom') {
       $('classroom-panel').innerHTML = classroomPanel(this.project, this.timer,
         { preview: this.shot(this.scene, false), program: this.program }, this.media);
     }
+  }
+
+  filterOverlayLibrary() {
+    const panel=$('overlays-panel');
+    if (!panel || panel.hidden) return;
+    const query=this.overlaySearch.trim().toLowerCase();
+    let count=0;
+    const cards=panel.querySelectorAll('[data-overlay-group]');
+    for(const card of cards){
+      const visible=(this.overlayGroup==='all'||card.dataset.overlayGroup===this.overlayGroup) &&
+        (!query||card.dataset.overlaySearch.includes(query));
+      card.hidden=!visible;
+      if(visible)count++;
+    }
+    const status=panel.querySelector('#overlay-library-count');
+    if(status)status.textContent=count+' of '+cards.length+' shown · '+this.project.overlays.length+
+      ' / '+OVERLAY_LIMIT+' saved';
+    const empty=panel.querySelector('#overlay-library-empty');
+    if(empty)empty.hidden=count>0||!cards.length;
   }
 
   setWorkspaceTab(id) {
@@ -979,7 +1008,7 @@ class Studio {
             replacing.asset = id;
             return { overlay: replacing, replacing: true };
           }
-          if (draft.overlays.length >= SHORTCUTS.length) throw new Error('This project already uses all eight overlay slots.');
+          if (draft.overlays.length >= OVERLAY_LIMIT) throw new Error('This project already has '+OVERLAY_LIMIT+' overlays.');
           const type = pick.mode === 'graphic' ? 'graphic' : kind;
           const overlay = makeOverlay(type, { ...pick.data, asset: id, name: pick.data?.name || name });
           draft.overlays.push(overlay);
@@ -1121,8 +1150,8 @@ class Studio {
   }
 
   overlayNew() {
-    if (this.project.overlays.length >= SHORTCUTS.length)
-      throw new Error('This project already uses all eight overlay slots.');
+    if (this.project.overlays.length >= OVERLAY_LIMIT)
+      throw new Error('This project already has '+OVERLAY_LIMIT+' overlays.');
     this.dialogOpen('Add overlay',
       '<p>An overlay is an independent image, video, message, or emoji reaction that appears above any live scene. '
       + 'Each one can be moved and resized on its own 16:9 canvas, then shown and hidden on air.</p>'
@@ -1628,6 +1657,11 @@ class Studio {
   input(event) {
     if (this.editing || !this.project) return;
     const { target } = event;
+    if (target.matches?.('[data-overlay-search]')) {
+      this.overlaySearch=target.value.slice(0,140);
+      this.filterOverlayLibrary();
+      return;
+    }
     const id = target.dataset.gain;
     if (id) {
       const gain = Number(target.value);
@@ -1645,6 +1679,22 @@ class Studio {
     try {
       if (target.name?.startsWith('cam-') && target.closest('.camera-matrix')) {
         target.parentElement.querySelector('span').textContent = target.checked ? 'Assigned' : 'Off';
+        return;
+      }
+      if (target.matches?.('[data-overlay-filter]')) {
+        this.overlayGroup=target.value;
+        this.filterOverlayLibrary();
+        return;
+      }
+      if (target.dataset.extraAction) {
+        const row=this.project.extraShortcuts?.find(item=>item.id===target.dataset.extraAction);
+        if (!row) return;
+        const value=target.value;
+        const allowed=SHORTCUT_ACTIONS.some(([action])=>action===value) ||
+          (value.startsWith('overlay:') && this.project.overlays.some(o=>o.id===value.slice(8)));
+        if (value && !allowed) throw new Error('Choose an available shortcut action.');
+        row.action=value;
+        this.mark();this.renderWorkspacePanel();
         return;
       }
       if (target.id === 'media-picker') { await this.addFiles(target.files); return; }
@@ -1736,7 +1786,7 @@ class Studio {
 
   runShortcut(chord) {
     if (!this.project || this.editing || !chord) return false;
-    const action = shortcutAction(this.project.shortcuts, chord);
+    const action = shortcutAction(this.project.shortcuts, chord, this.project.extraShortcuts || []);
     if (!action) return false;
     if (action === 'take') this.take(this.project.transition);
     else if (action === 'cut') this.take('cut');
@@ -1748,6 +1798,11 @@ class Studio {
     else if (action === 'previewNext') this.advanceDeck('preview', 1);
     else if (/^overlay[0-7]$/.test(action))
       this.toggleOverlay(this.project.overlays[Number(action.slice(7))]?.id, true);
+    else if (action.startsWith('overlay:')) {
+      const id=action.slice(8);
+      if(!this.overlay(id))return false;
+      this.toggleOverlay(id,true);
+    }
     else if (/^scene[0-8]$/.test(action))
       this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
     else return false;
