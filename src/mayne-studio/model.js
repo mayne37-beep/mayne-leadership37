@@ -1,5 +1,6 @@
 import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
+import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, MAX_TIMER_SECONDS } from './timer.js';
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
@@ -7,7 +8,7 @@ export const VERSION = 1;
 export const SHORTCUTS = 'QWERTYUI';
 export const SOURCES = {
   camera: 'Camera', mic: 'Microphone', screen: 'Screen share', powerpoint: 'PowerPoint',
-  image: 'Image', video: 'Video', audio: 'Audio', title: 'Text', scene: 'Scene',
+  image: 'Image', video: 'Video', audio: 'Audio', title: 'Text', scene: 'Scene', timer: 'Classroom timer',
 };
 export const BACKGROUNDS = {
   studio: 'Training studio', office: 'Sunlit office', reading: 'Reading room',
@@ -28,7 +29,7 @@ export const OVERLAY_MOTIONS = {
   'slide-right': 'Slide right', 'slide-down': 'Slide down', none: 'Instant',
 };
 export const AUDIO = new Set(['mic', 'screen', 'audio', 'video']);
-export const VISUAL = new Set(['camera', 'screen', 'powerpoint', 'image', 'video', 'title', 'scene']);
+export const VISUAL = new Set(['camera', 'screen', 'powerpoint', 'image', 'video', 'title', 'scene', 'timer']);
 export const PLACE = {
   full: { x: 0, y: 0, w: 100, h: 100 },
   slides: { x: 5, y: 10, w: 66, h: 75 },
@@ -62,7 +63,7 @@ export function makeSource(type, name, options = {}) {
     sceneId: '', sync: false, page: 0, loop: false, autoplay: true, ...options };
 }
 export function makeLayer(source, placement = PLACE.full) {
-  return { id: uid(), source, ...placement, opacity: 100, visible: true, fit: 'cover',
+  return { id: uid(), source, ...placement, opacity: 100, visible: true, fit: 'cover', timerStyle: '',
     page: 0, matte: 'off', key: '#00a040', coverage: 'balanced', mirror: false };
 }
 export function makeOverlay(type, options = {}) {
@@ -128,6 +129,9 @@ export function makeProject(name = 'Leadership Classroom') {
     scenes: [],
     sources: [], overlays: [makeOverlay('message')],
     transition: 'fade', duration: 450, master: 0, masterMute: false, timerSeconds: 300,
+    timerStyle: 'digital', timerColor: '#16a3a0', timerBackground: 'solid',
+    timerOpacity: 100, timerEnd: 'stop', timerChime: false, timerFlash: false,
+    timerPresets: [],
     shortcuts: { ...DEFAULT_SHORTCUTS }, favoriteTransitions: [...DEFAULT_FAVORITE_TRANSITIONS],
   };
 }
@@ -171,6 +175,7 @@ export function normalizeProject(input) {
       id: layer.id, source: layer.source, ...placement(layer),
       opacity: clamp(layer.opacity, 0, 100, 100), visible: layer.visible !== false,
       fit: oneOf(layer.fit, ['cover', 'contain', 'stretch'], 'cover'), page: Math.floor(clamp(layer.page, 0, 199, 0)),
+      timerStyle: oneOf(layer.timerStyle, [...Object.keys(TIMER_STYLES),''], ''),
       matte: oneOf(layer.matte, ['off', 'chroma', 'person'], 'off'),
       key: /^#[a-f0-9]{6}$/i.test(layer.key) ? layer.key : '#00a040',
       coverage: oneOf(layer.coverage, ['balanced', 'more', 'most'], 'balanced'), mirror: layer.mirror === true,
@@ -192,7 +197,17 @@ export function normalizeProject(input) {
     transition: choices(input.transition, TRANSITIONS, 'fade'),
     duration: clamp(input.duration, 100, 2500, 450),
     master: clamp(input.master, -60, 6, 0), masterMute: input.masterMute === true,
-    timerSeconds: clamp(input.timerSeconds, 1, 5400, 300),
+    timerSeconds: Math.floor(clamp(input.timerSeconds, 1, MAX_TIMER_SECONDS, 300)),
+    timerStyle: choices(input.timerStyle, TIMER_STYLES, 'digital'),
+    timerColor: typeof input.timerColor === 'string' && /^#[0-9a-f]{6}$/i.test(input.timerColor) ? input.timerColor : '#16a3a0',
+    timerBackground: choices(input.timerBackground, TIMER_BACKGROUNDS, 'solid'),
+    timerOpacity: clamp(input.timerOpacity, 10, 100, 100),
+    timerEnd: choices(input.timerEnd, TIMER_ENDINGS, 'stop'),
+    timerChime: input.timerChime === true, timerFlash: input.timerFlash === true,
+    timerPresets: (Array.isArray(input.timerPresets)?input.timerPresets:[]).slice(0,8)
+      .filter(item => item && typeof item.name === 'string' && item.name.trim() &&
+        Number.isInteger(item.seconds) && item.seconds >= 1 && item.seconds <= MAX_TIMER_SECONDS)
+      .map(item => ({ name: item.name.trim().slice(0,32), seconds:item.seconds })),
     shortcuts: normalizeShortcuts(input.shortcuts),
     favoriteTransitions: normalizeFavoriteTransitions(input.favoriteTransitions),
   };
