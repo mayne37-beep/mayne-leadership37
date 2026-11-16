@@ -70,8 +70,9 @@ function layerInspector(layer, source, media, project) {
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
       ${source.type === 'timer'
-        ? '<p class="slide-label">One shared classroom countdown. This layer displays it only in this scene. '
-          + 'Position it over the TV, whiteboard or video using Arrange scene. The clock keeps running through scene changes.</p>'
+        ? '<p class="slide-label">Live output only: this layer sets the countdown’s style and location whenever this scene is on Program. '
+          + 'The countdown is intentionally hidden in private Preview, scene thumbnails and the scene editor. '
+          + 'Move or resize its placement using Arrange scene; only the live output shows the running clock.</p>'
           + '<label>Timer style<select data-layer="timerStyle">' + options(TIMER_STYLES,layer.timerStyle || 'digital') + '</select></label>'
           + buttons('Open Classroom timer controls','workspace-tab','data-id="classroom"')
         : ''}
