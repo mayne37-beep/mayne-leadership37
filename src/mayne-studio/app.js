@@ -620,7 +620,9 @@ class Studio {
       ['slideshow', 'Capture PowerPoint slideshow'], ['files', 'Video, image or audio'], ['title', 'Text layer'],
       ['scene', 'Embed another scene'],
     ];
-    const available = this.project.sources.filter(source => !this.scene.layers.some(layer => layer.source === source.id));
+    const available = this.project.sources.filter(source =>
+      !this.scene.layers.some(layer => layer.source === source.id)
+      && (source.type !== 'scene' || canEmbedScene(this.project,this.scene.id,source.sceneId)));
     this.dialogOpen('Add an input',
       '<p>Add a new camera or microphone here for <strong>' + e(this.scene.name)
       + '</strong> only. To display a camera already used in another scene, select '
@@ -690,6 +692,7 @@ class Studio {
       : slides && ['powerpoint', 'screen', 'image', 'video'].includes(source.type) ? PLACE.slides : PLACE.full;
     const layer = makeLayer(source.id, layers);
     if (['powerpoint', 'screen', 'image', 'scene'].includes(source.type)) layer.fit = 'contain';
+    if (source.type === 'powerpoint' && source.sync) layer.page = source.page;
     scene.layers.push(layer);
     return layer;
   }
@@ -1269,9 +1272,15 @@ class Studio {
         case 'reuse-input': {
           const source = this.source($('reuse-input')?.value);
           if (!source) break;
+          if (source.type === 'scene' && !canEmbedScene(this.project,this.scene.id,source.sceneId))
+            throw new Error('That scene would create a circular reference.');
           this.layerId = ['camera','mic'].includes(source.type)
             ? assignDeviceToScene(this.project, this.scene, source).id
             : this.addLayer(this.project, this.scene, source).id;
+          if (source.type === 'scene') {
+            linkSceneDecks(this.project,source.sceneId);
+            syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
+          }
           this.closeDialog();
           this.mark();
           this.render();
