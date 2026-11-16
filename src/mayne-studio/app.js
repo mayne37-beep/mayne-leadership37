@@ -5,7 +5,7 @@ import { AUDIO, BACKGROUNDS, PLACE, SCENE_LIMIT, DEFAULT_SCENE_GROUP, sceneGroup
   linkSceneDecks, syncLinkedDecks, transitionProgress, uid } from './model.js';
 import * as storage from './projects.js';
 import { StudioMedia, fileKind } from './media.js';
-import { StudioRenderer } from './render.js';
+import { StudioRenderer, drawImage } from './render.js';
 import { ProgramOutput, download, outputPage } from './output.js';
 import { buttons, classroomPanel, formatGain, layersPanel, mixerPanel, options, overlaysPanel } from './panels.js';
 import { e, fields, icon, iconButton, option, shell } from './ui.js';
@@ -47,6 +47,7 @@ class Studio {
     this.sceneSearch = '';
     this.sceneGroupFilter = 'all';
     this.lastThumbScroll = 0;
+    this.lastChromaPreview = 0;
     try { this.mixerCollapsed = localStorage.getItem('mayne-studio-mixer-collapsed') === '1'; }
     catch { this.mixerCollapsed = false; }
     this.timer = timers();
@@ -86,6 +87,13 @@ class Studio {
       this.render();
     });
     this.root.addEventListener('click', event => this.click(event));
+    // Keyboard users can sample the center of the camera's raw preview.
+    this.root.addEventListener('keydown', event => {
+      if (!event.target.matches?.('[data-chroma-sample]') ||
+        !['Enter',' '].includes(event.key)) return;
+      event.preventDefault();
+      this.sampleChromaKey(event.target);
+    });
     // Only the grip is draggable: clicking a thumbnail still cues Preview.
     // A drag moves scene IDs in the project array; it never takes a scene live.
     this.sceneDragId = null;
@@ -702,6 +710,85 @@ class Studio {
     }
   }
 
+
+  /** Draw original camera frames plus the processed matte in nonmodal controls.
+   * Both panels read the same connected camera. The keyed side uses the exact
+   * StudioMedia.drawable path seen by scene Preview and live Program. */
+  drawChromaPreview(now) {
+    const original=$('chroma-raw-preview');
+    const keyed=$('chroma-keyed-preview');
+    if(!original || !keyed || !this.layer || this.layer.matte!=='chroma')return;
+    if(now-this.lastChromaPreview<125)return;
+    this.lastChromaPreview=now;
+    const layer=this.layer;
+    const source=this.source(layer.source);
+    if(!source || source.type!=='camera')return;
+    const video=this.media.get(source.id)?.element;
+    const ready=!!video && video.readyState>=2 && video.videoWidth>0;
+    const raw=original.getContext('2d',{willReadFrequently:true});
+    const effect=keyed.getContext('2d');
+    const width=original.width,height=original.height;
+    raw.clearRect(0,0,width,height);
+    effect.clearRect(0,0,width,height);
+    const status=$('chroma-preview-status');
+    if(!ready){
+      original.dataset.chromaReady='false';
+      for(const ctx of [raw,effect]){
+        ctx.fillStyle='#142338';ctx.fillRect(0,0,width,height);
+        ctx.fillStyle='#bfd4e9';ctx.font='14px sans-serif';ctx.textAlign='center';
+        ctx.fillText('Connect camera to preview',width/2,height/2);
+      }
+      if(status)status.textContent='Connect this camera to sample the backdrop color.';
+      return;
+    }
+    drawImage(raw,video,0,0,width,height,'cover',layer.mirror);
+    original.dataset.chromaReady='true';
+    // Checkerboard indicates transparent pixels, not a green background.
+    effect.fillStyle='#e5eaf0';effect.fillRect(0,0,width,height);
+    effect.fillStyle='#aab5c2';
+    for(let y=0;y<height;y+=18)for(let x=0;x<width;x+=18)
+      if(((x/18+y/18)&1)===0)effect.fillRect(x,y,18,18);
+    const frame=this.media.drawable(source,layer,now);
+    if(frame){
+      drawImage(effect,frame,0,0,width,height,'cover',layer.mirror);
+      if(status)status.textContent='Click a backdrop area in Original Camera, then adjust the key sliders.';
+    } else if(status)status.textContent='Processing the selected key…';
+  }
+
+  /** Pick the exact visible video color, including mirroring and cover crop,
+   * by reading a small averaged patch in the raw preview canvas. */
+  sampleChromaKey(canvas,event=null) {
+    const layer=this.layer;
+    if(!layer || layer.matte!=='chroma' ||
+      this.source(layer.source)?.type!=='camera' || canvas.dataset.chromaReady!=='true'){
+      this.notify('Connect the camera before sampling its backdrop.',true);
+      return;
+    }
+    const bounds=canvas.getBoundingClientRect();
+    if(!bounds.width || !bounds.height)return;
+    const x=event ? (event.clientX-bounds.left)/bounds.width : .5;
+    const y=event ? (event.clientY-bounds.top)/bounds.height : .5;
+    if(x<0 || x>1 || y<0 || y>1)return;
+    const width=canvas.width,height=canvas.height;
+    const cx=Math.max(0,Math.min(width-1,Math.floor(x*width)));
+    const cy=Math.max(0,Math.min(height-1,Math.floor(y*height)));
+    const startX=Math.max(0,cx-2),startY=Math.max(0,cy-2);
+    const patch=canvas.getContext('2d',{willReadFrequently:true})
+      .getImageData(startX,startY,Math.min(5,width-startX),Math.min(5,height-startY)).data;
+    let red=0,green=0,blue=0;
+    const samples=patch.length/4;
+    for(let i=0;i<patch.length;i+=4) {
+      red+=patch[i];green+=patch[i+1];blue+=patch[i+2];
+    }
+    layer.key='#'+[red,green,blue].map(channel=>
+      Math.round(channel/samples).toString(16).padStart(2,'0')).join('');
+    this.mark();
+    this.lastChromaPreview=0;
+    this.renderDock();
+    this.drawChromaPreview(performance.now());
+    this.notify('Camera backdrop sampled: '+layer.key.toUpperCase());
+  }
+
   updateStatus(now) {
     $('session-clock').textContent = clock((now - this.started) / 1000, true);
     if ($('timer-read')) $('timer-read').textContent =
@@ -712,6 +799,7 @@ class Studio {
       ? (this.timer.finished ? 'Overtime' : 'Running')
       : this.timer.finished ? 'Finished' : 'Paused / ready';
     if ($('matte-status') && this.layer) $('matte-status').textContent = this.media.matteStatus($('matte-status').dataset.id, this.layer);
+    this.drawChromaPreview(now);
     for (const node of this.root.querySelectorAll('[data-meter]')) {
       const level = clamp(this.media.audio.level(node.dataset.meter), -60, 0, -60);
       node.style.setProperty('--level', ((level + 60) / .6).toFixed(1) + '%');
@@ -1376,6 +1464,12 @@ class Studio {
   }
 
   async click(event) {
+    // The original camera preview is embedded in the inspector, never
+    // obscured by a modal or the browser's native color chooser.
+    if (event.target.matches?.('[data-chroma-sample]')) {
+      this.sampleChromaKey(event.target,event);
+      return;
+    }
     const button = event.target.closest('[data-act]');
     if (!button || !this.project || button.disabled) return;
     const { act, id, bus } = button.dataset;
@@ -1402,6 +1496,16 @@ class Studio {
         return;
       }
       switch (act) {
+        case 'chroma-reset':
+          if (this.layer && this.source(this.layer.source)?.type === 'camera') {
+            Object.assign(this.layer,{
+              key:'#00a040',keyStrength:50,keySoftness:50,keyDespill:0,
+            });
+            this.mark();
+            this.renderDock();
+            this.notify('Chroma key settings reset for this camera layer.');
+          }
+          break;
         case 'scene': this.setPreview(id); break;
         case 'open-embedded-scene':
           if (this.project.scenes.some(scene => scene.id === id)) {
@@ -1810,6 +1914,12 @@ class Studio {
       this.thumbnails(performance.now());
       return;
     }
+    const chromaOutput=['keyStrength','keySoftness','keyDespill'].includes(target.dataset.layer)
+      ? this.root.querySelector('[data-chroma-output="'+target.dataset.layer+'"]') : null;
+    if (chromaOutput) {
+      chromaOutput.textContent=target.value+'%';
+      return;
+    }
     const id = target.dataset.gain;
     if (id) {
       const gain = Number(target.value);
@@ -1901,6 +2011,17 @@ class Studio {
         } else if (['x', 'y', 'w', 'h'].includes(layer)) {
           this.layer[layer] = clamp(Number(target.value), Number(target.min), Number(target.max), this.layer[layer]);
           target.value = this.layer[layer];
+        } else if (['keyStrength','keySoftness','keyDespill'].includes(layer)) {
+          this.layer[layer]=Math.round(clamp(Number(target.value),0,100,
+            layer==='keyStrength'?50:layer==='keySoftness'?50:0));
+          target.value=this.layer[layer];
+          this.lastChromaPreview=0;
+        } else if (layer === 'key') {
+          if (!/^#[0-9a-f]{6}$/i.test(target.value)) throw new Error('Invalid chroma key color.');
+          this.layer.key=target.value;
+          const label=$('chroma-key-code');
+          if(label)label.textContent=target.value.toUpperCase();
+          this.lastChromaPreview=0;
         } else if (layer !== 'opacity') {
           this.layer[layer] = target.type === 'checkbox' ? target.checked : target.value;
           if (layer === 'matte') this.renderDock();

@@ -383,7 +383,8 @@ export class StudioMedia {
   }
 
   matte(layer, id, video, now) {
-    const key = [id, layer.matte, layer.key, layer.coverage].join(':');
+    const key = [id, layer.matte, layer.key, layer.coverage,
+      layer.keyStrength ?? 50, layer.keySoftness ?? 50, layer.keyDespill ?? 0].join(':');
     if (!this.effects.has(key)) {
       if (!window.Worker || !window.OffscreenCanvas || !window.createImageBitmap) return null;
       const worker = layer.matte === 'chroma'
@@ -418,14 +419,19 @@ export class StudioMedia {
       createImageBitmap(video, { resizeWidth: width, resizeHeight: height }).then(bitmap => {
         if (this.effects.get(key) !== effect) { bitmap.close(); return; }
         effect.worker.postMessage({ bitmap, settings: { coverage: layer.coverage,
-          backdropColor: layer.matte === 'chroma' ? layer.key : null, timestamp: now } }, [bitmap]);
+          backdropColor: layer.matte === 'chroma' ? layer.key : null,
+          keyStrength: layer.keyStrength ?? 50,
+          keySoftness: layer.keySoftness ?? 50,
+          keyDespill: layer.keyDespill ?? 0,
+          timestamp: now } }, [bitmap]);
       }).catch(() => { effect.busy = false; });
     }
     return effect.frame ?? null;
   }
 
   matteStatus(id, layer) {
-    const effect = this.effects.get([id, layer.matte, layer.key, layer.coverage].join(':'));
+    const effect = this.effects.get([id, layer.matte, layer.key, layer.coverage,
+      layer.keyStrength ?? 50, layer.keySoftness ?? 50, layer.keyDespill ?? 0].join(':'));
     if (effect?.errored) return 'Camera effect unavailable';
     if (effect?.produced) return effect.frame ? 'Background removed' : 'Looking for presenter';
     return 'Processing camera';

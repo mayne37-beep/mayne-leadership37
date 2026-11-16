@@ -90,9 +90,49 @@ function layerInspector(layer, source, media, project) {
       <label>Opacity<input type="range" min="0" max="100" data-layer="opacity" value="${layer.opacity}"></label>
       ${source.type !== 'title' ? `<label>Fit<select data-layer="fit">${options({cover:'Fill frame',contain:'Fit inside frame',stretch:'Stretch'},layer.fit)}</select></label>` : ''}
       ${source.type === 'camera' ? `<label>Camera background<select data-layer="matte">${options({off:'Original camera',chroma:'Green screen / chroma key',person:'Remove background (AI)'},layer.matte)}</select></label>
-        ${layer.matte === 'chroma' ? `<label>Key color<input type="color" data-layer="key" value="${layer.key}"></label>` : ''}
-        ${layer.matte !== 'off' ? `<label>Subject coverage<select data-layer="coverage">${options({balanced:'Balanced',more:'Keep more',most:'Keep most'},layer.coverage)}</select></label>
-          <p class="slide-label" id="matte-status" data-id="${source.id}">${e(media.matteStatus(source.id, layer))}</p>` : ''}
+        ${layer.matte === 'chroma' ? `
+          <div class="chroma-lab">
+            <div class="chroma-lab-header"><strong>Chroma key calibration</strong><span>Private camera preview</span></div>
+            <p class="slide-label">Click the green or blue backdrop in the Original Camera image to pick its actual color. No color-picker pop-up is needed.</p>
+            <div class="chroma-preview-grid">
+              <figure class="chroma-preview-card">
+                <canvas id="chroma-raw-preview" data-chroma-sample role="button" tabindex="0"
+                  aria-label="Sample the camera background color; click the image or press Enter for its center"
+                  width="320" height="180" title="Click a backdrop area to sample its color"></canvas>
+                <figcaption>Original camera · click to sample</figcaption>
+              </figure>
+              <figure class="chroma-preview-card">
+                <canvas id="chroma-keyed-preview" width="320" height="180"
+                  aria-label="Camera with selected chroma background removed"></canvas>
+                <figcaption>Background removed · transparent checkerboard</figcaption>
+              </figure>
+            </div>
+            <p id="chroma-preview-status" class="slide-label" aria-live="polite">Connect your camera to sample its background.</p>
+            <div class="chroma-key-color"><label>Selected key color
+              <input type="color" data-layer="key" value="${e(layer.key)}"
+                aria-label="Set exact chroma key color"></label>
+              <output id="chroma-key-code">${e(layer.key).toUpperCase()}</output>
+              ${buttons('Reset key','chroma-reset')}
+            </div>
+            <label class="chroma-range">Background removal strength
+              <span><output data-chroma-output="keyStrength">${layer.keyStrength ?? 50}%</output>
+                <input type="range" min="0" max="100" step="1" data-layer="keyStrength" value="${layer.keyStrength ?? 50}"
+                  aria-label="Background removal strength; zero shows all background"></span>
+            </label>
+            <p class="chroma-tip">0% keeps the original background; higher values remove more of the sampled color.</p>
+            <label class="chroma-range">Edge softness
+              <span><output data-chroma-output="keySoftness">${layer.keySoftness ?? 50}%</output>
+                <input type="range" min="0" max="100" step="1" data-layer="keySoftness" value="${layer.keySoftness ?? 50}"
+                  aria-label="Chroma key edge softness"></span>
+            </label>
+            <label class="chroma-range">Color spill reduction
+              <span><output data-chroma-output="keyDespill">${layer.keyDespill ?? 0}%</output>
+                <input type="range" min="0" max="100" step="1" data-layer="keyDespill" value="${layer.keyDespill ?? 0}"
+                  aria-label="Reduce green or blue color spill on edges"></span>
+            </label>
+          </div>` : ''}
+        ${layer.matte === 'person' ? `<label>Subject coverage<select data-layer="coverage">${options({balanced:'Balanced',more:'Keep more',most:'Keep most'},layer.coverage)}</select></label>` : ''}
+        ${layer.matte !== 'off' ? `<p class="slide-label" id="matte-status" data-id="${source.id}">${e(media.matteStatus(source.id, layer))}</p>` : ''}
         <label class="inline"><input type="checkbox" data-layer="mirror"${checked(layer.mirror)}> Mirror camera</label>` : ''}
       ` : ''}
       ${entry?.deck ? deckPanel(entry, layer, 'preview') : ''}

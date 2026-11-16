@@ -679,3 +679,34 @@ kbd{white-space:nowrap}
   .scene-library-toolbar label{flex-basis:124px}
   .scene-library-count{flex-basis:100%;padding-bottom:1px}
 }
+
+
+/* Non-modal chroma-key calibration. The raw camera stays visible and clickable
+   while background-removal strength, edge softness, and despill are adjusted. */
+.chroma-lab{display:grid;gap:9px;padding:10px;margin:3px 0;
+  border:1px solid #44617a;border-radius:9px;background:#102238;min-width:0}
+.chroma-lab-header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.chroma-lab-header strong{font-size:12px;color:#edf7ff}
+.chroma-lab-header span{font-size:10px;color:#a3d9e9}
+.inspector .chroma-lab p{margin:0;font-size:11px;line-height:1.45}
+.chroma-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.chroma-preview-card{margin:0;display:grid;align-content:start;gap:4px;min-width:0}
+.chroma-preview-card canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;
+  background:#15273a;border:1px solid #6b849f;border-radius:6px;box-sizing:border-box}
+#chroma-raw-preview{cursor:crosshair;touch-action:manipulation}
+#chroma-raw-preview:focus-visible{outline:3px solid #80dbff;outline-offset:3px}
+.chroma-preview-card figcaption{font-size:10px;line-height:1.35;color:#bdcee2}
+.chroma-key-color{display:flex;gap:9px;align-items:end;flex-wrap:wrap}
+.chroma-key-color label{display:grid;gap:3px;flex:1;min-width:75px}
+.chroma-key-color input[type="color"]{min-height:33px;height:33px;
+  padding:2px 4px;cursor:pointer;background:#1e3048;border:1px solid #54718b;border-radius:5px}
+.chroma-key-color output{min-width:70px;align-self:center;font-family:var(--mono);
+  font-size:11px;color:#d6e8fb}
+.chroma-key-color .button{min-height:30px;padding:5px 9px;font-size:11px}
+.chroma-range{display:grid;gap:5px}
+.chroma-range>span{display:flex;align-items:center;gap:8px;min-width:0}
+.chroma-range output{font:700 11px var(--mono);color:#dcf2ff;min-width:39px}
+.chroma-range input[type="range"]{width:100%;min-height:23px;accent-color:#56c5a2}
+.chroma-lab .chroma-tip{font-size:10px;color:#a9c5d9;margin-top:-6px}
+@media(max-width:920px){.chroma-preview-grid{grid-template-columns:minmax(0,1fr)}}
+@media(min-width:921px) and (max-width:1310px){.chroma-preview-grid{grid-template-columns:minmax(0,1fr)}}
