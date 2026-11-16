@@ -72,7 +72,7 @@ try {
     [{name:'Long group task',seconds:3723}]);
   await panel.locator('[data-act=timer-preset][data-id="300"]').click();
   assert.equal(await panel.locator('#timer-read').textContent(),'05:00');
-  await panel.getByRole('button',{name:'Long group task'}).click();
+  await panel.getByRole('button',{name:'Long group task',exact:true}).click();
   assert.equal(await panel.locator('#timer-read').textContent(),'01:02:03');
   await panel.locator('[data-act=timer-preset][data-id="300"]').click();
 
