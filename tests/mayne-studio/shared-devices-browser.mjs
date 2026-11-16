@@ -209,7 +209,7 @@ try {
 
   // New scenes must start with NO camera unless the operator explicitly
   // chooses an existing source in that scene.
-  await page.locator('[data-act="new-scene"]').click();
+  await page.locator('#workspace-add').click();
   const create=page.getByRole('dialog',{name:'Add scene'});
   await create.locator('[name="template"]').selectOption('blank');
   await create.locator('[name="name"]').fill('Studio 7');
