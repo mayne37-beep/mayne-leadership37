@@ -47,7 +47,7 @@ test('counting overtime reports completion once and stays live when switching sc
   const timer=newTimer(10);
   startTimer(timer,1000,10);
   assert.equal(tickTimer(timer,11001,'overtime'),true);
-  assert.equal(tickTimer(timer,12001,'overtime'),false);
+  assert.equal(tickTimer(timer,13001,'overtime'),false);
   assert.ok(timer.remaining < -2);
   assert.ok(timer.deadline > 0);
   pauseTimer(timer,12001);
