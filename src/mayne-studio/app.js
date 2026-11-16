@@ -570,7 +570,7 @@ class Studio {
       + 'that camera differently.</p><p class="slide-label">This also lets you remove camera '
       + 'layers that the previous update may have added automatically. Changes to a scene '
       + 'already on air take effect the next time you Take that scene.</p>'
-      + '<div class="camera-matrix">' + header + rows + '</div>'
+      + '<div class="camera-matrix" style="--camera-cols:' + cameras.length + '">' + header + rows + '</div>'
       + '<p class="slide-label">Review before saving. “Clear default insets” only unchecks '
       + 'unmodified inset-sized camera layers; it does not change anything until you apply.</p>',
       '<button type="button" class="button" data-act="camera-uncheck-defaults">Clear default insets</button>'
