@@ -1,27 +1,37 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from '../../src/mayne-studio/transitions.js';
-import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSource, normalizeProject, assignDeviceToScene, isDefaultSharedCameraInset,
+import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeScene, makeSource, normalizeProject, assignDeviceToScene, isDefaultSharedCameraInset,
   transitionProgress, uid } from '../../src/mayne-studio/model.js';
 
-test('a classroom project has ready-to-cue scenes and overlay shortcuts', () => {
+test('new projects start with no studio templates, scenes, cameras, or microphone layers', () => {
   const project = makeProject();
-  assert.deepEqual(project.scenes.map(scene => scene.template), ['standby', 'presenter', 'slides', 'discussion', 'activity', 'break']);
+  assert.deepEqual(project.scenes, []);
+  assert.deepEqual(project.sources, []);
+  assert.deepEqual(normalizeProject(project).scenes, []);
+  const first = makeScene('blank', 'My Studio');
+  assert.deepEqual(first.layers, []);
+  assert.equal(first.background, 'black');
+  project.scenes.push(first);
+  assert.deepEqual(normalizeProject(project).scenes.map(scene => scene.name), ['My Studio']);
+
   assert.deepEqual(project.overlays.map(overlay => overlay.type), ['message']);
   assert.deepEqual(normalizeProject(project), project);
 });
 
 test('project restore keeps layouts, slide positions, and device-local media references', () => {
   const project = makeProject();
+  project.scenes.push(makeScene('blank', 'Custom scene'));
   const source = makeSource('powerpoint', 'Slides', { asset: uid() });
   project.sources.push(source);
   const layer = { ...makeLayer(source.id), page: 4, matte: 'person', w: 70 };
-  project.scenes[2].layers.push(layer, makeLayer(uid()));
-  project.scenes[2].backdrop = uid();
+  project.scenes[0].layers.push(layer, makeLayer(uid()));
+  project.scenes[0].backdrop = uid();
   const restored = normalizeProject(project);
-  assert.deepEqual(restored.scenes[2].layers, [layer]);
-  assert.deepEqual(assetIds(restored), [source.asset, project.scenes[2].backdrop]);
-  assert.throws(() => normalizeProject({ version: 1, scenes: [] }), /no valid scenes/);
+  assert.deepEqual(restored.scenes[0].layers, [layer]);
+  assert.deepEqual(assetIds(restored), [source.asset, project.scenes[0].backdrop]);
+  assert.deepEqual(normalizeProject(makeProject()).scenes, [], 'Saved projects can legitimately be empty');
+  assert.throws(() => normalizeProject({version:999, scenes:[]}), /with this version/);
 });
 
 test('scene-follow audio crossfades and shared inputs stay at full gain', () => {
@@ -101,6 +111,7 @@ test('image, video, and message overlays persist independent layout and pop-up/d
 
 test('connected camera is assigned only to explicitly selected scenes, reusing one source ID', () => {
   const project = makeProject();
+  for (let i = 1; i <= 6; i++) project.scenes.push(makeScene('blank','Studio ' + i));
   const cameraA = makeSource('camera', 'Camera A');
   const cameraB = makeSource('camera', 'Camera B');
   const cameraC = makeSource('camera', 'Camera C');
@@ -140,6 +151,7 @@ test('connected camera is assigned only to explicitly selected scenes, reusing o
 
 test('candidate cleanup identifies untouched default camera insets but never removes them automatically', () => {
   const project=makeProject();
+  for (let i = 1; i <= 3; i++) project.scenes.push(makeScene('blank','Studio ' + i));
   const camera=makeSource('camera','Camera');
   project.sources.push(camera);
   const inset=assignDeviceToScene(project,project.scenes[1],camera);
@@ -157,4 +169,14 @@ test('candidate cleanup identifies untouched default camera insets but never rem
   for(let i=0;i<40;i++) extra.layers.push(makeLayer('fill-'+i));
   assert.throws(()=>assignDeviceToScene(project,extra,camera),/already has 40 layers/);
   assert.equal(extra.layers.length,40,'Capacity error does not alter other scenes');
+});
+
+test('existing named template scenes remain readable but are never added to new projects', () => {
+  const project=makeProject('Legacy');
+  project.scenes.push(makeScene('standby','My existing Standby'));
+  project.scenes.push(makeScene('slides','My existing Slides'));
+  const normalized=normalizeProject(project);
+  assert.deepEqual(normalized.scenes.map(s=>s.template),['standby','slides']);
+  assert.deepEqual(normalized.scenes.map(s=>s.name),['My existing Standby','My existing Slides']);
+  assert.equal(makeProject('Fresh').scenes.length,0);
 });

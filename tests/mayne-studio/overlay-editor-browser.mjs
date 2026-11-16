@@ -73,7 +73,7 @@ try {
   await editor.locator('[data-oe-field="opacity"]').evaluate(el => { el.value = '76'; el.dispatchEvent(new Event('input',{ bubbles:true })); });
   await editor.locator('[data-oe-action="preview"]').click();
   assert.ok(await editor.locator('#oe-canvas').isVisible());
-  assert.equal(await page.locator('#program-name').textContent(), 'Standby',
+  assert.equal(await page.locator('#program-name').textContent(), 'No scene on air',
     'Previewing an overlay does not replace the live scene');
   await editor.locator('[data-oe-action="save"]').click();
   await editor.waitFor({state:'hidden'});
@@ -83,7 +83,7 @@ try {
   const welcome = page.locator('#overlays-panel .overlay-card').filter({hasText:'Welcome to class'});
   await welcome.locator('[data-act="overlay-live"]').click();
   await welcome.locator('[data-act="overlay-live"]').getByText('Hide live').waitFor();
-  assert.equal(await page.locator('#program-name').textContent(),'Standby',
+  assert.equal(await page.locator('#program-name').textContent(),'No scene on air',
     'Overlay activation does not take a different scene live');
   await welcome.locator('[data-act="overlay-live"]').click();
   await page.locator('#save-state').getByText('Saved on this device').waitFor({timeout:12000});

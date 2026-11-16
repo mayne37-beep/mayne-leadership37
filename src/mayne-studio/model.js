@@ -124,7 +124,8 @@ export function makeScene(template, name = TEMPLATES[template]) {
 export function makeProject(name = 'Leadership Classroom') {
   return {
     id: uid(), name, version: VERSION, updated: Date.now(),
-    scenes: ['standby', 'presenter', 'slides', 'discussion', 'activity', 'break'].map(key => makeScene(key)),
+    // Fresh projects are empty: the operator creates every scene and input explicitly.
+    scenes: [],
     sources: [], overlays: [makeOverlay('message')],
     transition: 'fade', duration: 450, master: 0, masterMute: false, timerSeconds: 300,
     shortcuts: { ...DEFAULT_SHORTCUTS }, favoriteTransitions: [...DEFAULT_FAVORITE_TRANSITIONS],
@@ -174,7 +175,7 @@ export function normalizeProject(input) {
       coverage: oneOf(layer.coverage, ['balanced', 'more', 'most'], 'balanced'), mirror: layer.mirror === true,
     } : null),
   }));
-  if (!scenes.length) throw new Error('The project has no valid scenes.');
+  // Empty projects are valid. Previously created projects retain their exact scenes.
   return {
     id: identifier(input.id, uid()), name: string(input.name, 'Studio project', 90).trim() || 'Studio project',
     version: VERSION, updated: clamp(input.updated, 0, Number.MAX_SAFE_INTEGER, Date.now()), sources, scenes,

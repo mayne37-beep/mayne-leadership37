@@ -42,6 +42,26 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(url);
   await page.waitForFunction(() => !!window.__qaStudio?.project);
+  assert.equal(await page.locator('.scene-tile').count(), 0,
+    'Fresh studio must have zero pre-created studio scenes');
+  assert.ok(await page.getByRole('button',{name:'Create first scene'}).isVisible());
+  assert.equal(await page.locator('#take').isDisabled(), true,
+    'Cannot take a non-existent scene on air');
+  await page.getByRole('button',{name:'Create first scene'}).click();
+  const create = page.getByRole('dialog',{name:'Add scene'});
+  await create.waitFor();
+  assert.equal(await create.locator('[name="template"]').count(),0,
+    'Scene creation offers no built-in studio templates');
+  await create.locator('[name="name"]').fill('My Camera One');
+  await create.getByRole('button',{name:'Add scene'}).click();
+  assert.equal(await page.locator('.scene-tile').count(),1);
+  assert.deepEqual(await page.evaluate(()=>window.__qaStudio.project.scenes.map(s=>s.layers)),[[]],
+    'A user-created scene starts with zero cameras or microphones');
+  await page.locator('#workspace-add').click();
+  await create.locator('[name="name"]').fill('My Camera Two');
+  await create.getByRole('button',{name:'Add scene'}).click();
+  assert.equal(await page.locator('.scene-tile').count(),2);
+  assert.equal(await page.locator('#take').isDisabled(),false);
 
   const buttons = page.locator('.monitors .favorite-transition');
   assert.equal(await buttons.count(), 5, 'Five transition favorite buttons appear between monitors');

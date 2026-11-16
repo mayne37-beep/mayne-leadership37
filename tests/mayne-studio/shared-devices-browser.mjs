@@ -211,7 +211,8 @@ try {
   // chooses an existing source in that scene.
   await page.locator('#workspace-add').click();
   const create=page.getByRole('dialog',{name:'Add scene'});
-  await create.locator('[name="template"]').selectOption('blank');
+  assert.equal(await create.locator('[name="template"]').count(),0,
+    'New scenes have no preset template chooser');
   await create.locator('[name="name"]').fill('Studio 7');
   await create.getByRole('button',{name:'Add scene'}).click();
   assert.deepEqual(await page.evaluate(()=>{
