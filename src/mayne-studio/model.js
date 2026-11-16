@@ -81,37 +81,30 @@ export function makeOverlay(type, options = {}) {
     fit: 'contain', opacity: 100, loop: true, ...presets[type], ...options };
 }
 
-/** Camera and microphone inputs are connected once per project and shared by every scene.
- * A camera's independent layer in each scene can be resized, positioned or hidden
- * without opening another device stream. The microphone stays in the Program mix.
- * This is idempotent so reconnecting devices never duplicates scene layers.
- */
-export function shareDeviceAcrossScenes(project, device = null) {
-  const devices = device ? [device] : project.sources.filter(source =>
-    source.type === 'camera' || source.type === 'mic');
-  // Fail before changing any scene if the shared devices cannot fit.
-  for (const scene of project.scenes) {
-    const pending = devices.filter(source => source && ['camera','mic'].includes(source.type)
-      && !scene.layers.some(layer => layer.source === source.id));
-    if (scene.layers.length + pending.length > 40)
-      throw new Error('Cannot share devices across all scenes: “' + scene.name
-        + '” already contains too many inputs. Remove unused layers first.');
-  }
-  let added = 0;
-  for (const source of devices) {
-    if (!source || !['camera', 'mic'].includes(source.type)) continue;
-    if (source.type === 'mic') source.route = 'always';
-    for (const scene of project.scenes) {
-      if (scene.layers.some(layer => layer.source === source.id)) continue;
-      if (scene.layers.length >= 40) throw new Error(
-        'Cannot share ' + source.name + ' with all scenes: “' + scene.name + '” already has 40 inputs.');
-      // A camera defaults to a non-obstructive inset. Existing scene-specific
-      // camera framing is never overwritten. A mic needs no on-screen rectangle.
-      scene.layers.push(makeLayer(source.id, source.type === 'camera' ? PLACE.inset : PLACE.full));
-      added++;
-    }
-  }
-  return added;
+/** Assign one existing device to a scene, without creating or connecting a second
+ * device stream. Other scenes keep their explicit source/layer selections. */
+export function assignDeviceToScene(project, scene, device) {
+  if (!device || !['camera', 'mic'].includes(device.type) ||
+      !project.sources.some(source => source.id === device.id))
+    throw new Error('Choose an existing camera or microphone input.');
+  const current = scene.layers.find(layer => layer.source === device.id);
+  if (current) return current;
+  if (scene.layers.length >= 40)
+    throw new Error('“' + scene.name + '” already has 40 layers. Remove an input before adding this camera.');
+  const placement = device.type === 'camera' ? PLACE.inset : PLACE.full;
+  const layer = makeLayer(device.id, placement);
+  scene.layers.push(layer);
+  return layer;
+}
+
+/** Identify placements the previous "all scenes" update may have inserted.
+ * Detection only: do NOT automatically delete user-edited or original layers.
+ * The operator reviews suggested removals before applying anything. */
+export function isDefaultSharedCameraInset(layer, device) {
+  return device?.type === 'camera' && !!layer && layer.source === device.id &&
+    ['x','y','w','h'].every(key => layer[key] === PLACE.inset[key]) &&
+    layer.opacity === 100 && layer.visible !== false && layer.fit === 'cover' &&
+    (layer.matte ?? 'off') === 'off' && layer.mirror !== true;
 }
 
 export function makeScene(template, name = TEMPLATES[template]) {
