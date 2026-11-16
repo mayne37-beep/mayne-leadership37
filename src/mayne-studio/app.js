@@ -565,14 +565,15 @@ class Studio {
       'Choose <strong>Add shortcut</strong> to create another command, including shortcuts '+
       'for overlays beyond the first eight. A key can trigger only one command. '+
       'Some combinations are reserved by your browser.</p>'+
-      '<div class="shortcut-list">'+fields+'</div>'+
       '<div class="shortcut-extra-heading"><strong>Additional shortcuts ('+
       (this.project.extraShortcuts?.length||0)+' / '+EXTRA_SHORTCUT_LIMIT+')</strong>'+
       '<button type="button" class="button primary-outline" data-act="shortcut-extra-add">+ Add shortcut</button></div>'+
       '<p class="shortcut-extra-help">Pick an action, then click its key field and press the shortcut you want. '+
       'Overlay choices refer to their saved names and stay linked if the library order changes.</p>'+
       '<div class="shortcut-list shortcut-extra-list">'+(custom||
-        '<p class="slide-label">No additional shortcuts yet.</p>')+'</div>',
+        '<p class="slide-label">No additional shortcuts yet.</p>')+'</div>'+
+      '<div class="shortcut-extra-heading"><strong>Standard shortcuts</strong></div>'+
+      '<div class="shortcut-list">'+fields+'</div>',
       '<button class="button" type="button" data-act="shortcuts-reset">Restore defaults</button>');
   }
 
