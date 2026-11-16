@@ -53,6 +53,34 @@ try {
 
   await page.locator('#workspace-classroom').click();
   const panel=page.locator('#classroom-panel');
+  // The countdown designer should use available width instead of stacking all
+  // timer and appearance settings vertically. Every original control remains.
+  const compact=await panel.locator('.timer-designer-grid').evaluate(node=>{
+    const main=node.querySelector('.timer-main-controls').getBoundingClientRect();
+    const appearance=node.querySelector('.timer-appearance-controls').getBoundingClientRect();
+    return {mainRight:main.right,appearanceLeft:appearance.left,
+      topDifference:Math.abs(main.top-appearance.top),
+      height:node.getBoundingClientRect().height};
+  });
+  assert.ok(compact.appearanceLeft>=compact.mainRight-2 && compact.topDifference<4,
+    'Duration and appearance controls form parallel columns in a wide studio');
+  assert.ok(compact.height<500,'Wide-screen timer controls remain compact');
+  assert.equal(await panel.locator('.timer-style-choice').count(),5,
+    'All five timer styles remain directly accessible');
+  assert.equal(await panel.locator('.timer-config-grid [data-project]').count(),4,
+    'Appearance and completion options are retained');
+
+  await page.setViewportSize({width:540,height:920});
+  const narrow=await panel.locator('.timer-designer-grid').evaluate(node=>{
+    const main=node.querySelector('.timer-main-controls').getBoundingClientRect();
+    const appearance=node.querySelector('.timer-appearance-controls').getBoundingClientRect();
+    return {aligned:Math.abs(main.left-appearance.left)<4,
+      stacked:appearance.top>=main.bottom-2,
+      overflow:node.scrollWidth>node.clientWidth+2};
+  });
+  assert.ok(narrow.aligned && narrow.stacked && !narrow.overflow,
+    'The countdown editor stacks without horizontal overflow on narrow screens');
+  await page.setViewportSize({width:1450,height:950});
   // Starting the timer needs NO scene assignment: only the real Program canvas
   // receives the countdown. Private Preview and strip thumbnails stay clean.
   const colorAt=(id)=>page.evaluate(id=>{

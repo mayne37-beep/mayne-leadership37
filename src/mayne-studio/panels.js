@@ -163,25 +163,24 @@ export function classroomPanel(project, timer, state, media) {
     (index===null?'':'<button type="button" class="timer-preset-delete" data-act="timer-preset-delete" data-id="'+index+'" aria-label="Delete '+e(name)+'" title="Delete saved preset">×</button>')+'</span>';
   return `<div class="classroom-tools">
     <section class="class-card timer-designer">
-      <h3>Classroom countdown designer</h3>
-      <div class="timer-section-title">Live output only</div>
-      <p>The timer is shown only on Program and the live output. It never appears in private Preview, scene thumbnails, or the scene editor.</p>
+      <div class="timer-designer-heading"><h3>Classroom countdown designer</h3><span class="timer-live-tag">Program only</span></div>
+      <p class="timer-program-note">The timer is visible on live Program, never in private Preview or scene editors.</p>
       <div class="timer-scene-assignment">
-        <strong>Selected scene: ${e(currentScene?.name||'No scene selected')}</strong>
+        <strong>Scene: ${e(currentScene?.name||'No scene selected')}</strong>
         <div class="timer-actions">
           ${buttons(timer.visible?'Hide from live output':'Show on live output','timer-show','','primary-outline')}
           ${currentScene ? buttons(sceneTimer?'Remove timer layout from this scene':'Add timer layout to this scene',
             'timer-assign','',sceneTimer?'':'primary-outline') : ''}
         </div>
-        ${sceneTimer?'<span class="timer-scene-hint">This scene uses the '+e(TIMER_STYLES[selectedStyle])+
-          ' style when it is live. Adjust its position under Settings → Arrange scene; the timer graphic stays hidden while editing.</span>':
-          '<span class="timer-scene-hint">No scene layout is required: Start shows the timer directly on the live output in its default position.</span>'}
-        <span class="timer-scene-hint">Custom placement in ${assigned} of ${project.scenes.length} scenes. The same running timer follows Program when you switch scenes.</span>
+        ${sceneTimer?'<span class="timer-scene-hint">Live style: '+e(TIMER_STYLES[selectedStyle])+
+          '. Adjust placement in Arrange scene; the timer appears on Program only.</span>':
+          '<span class="timer-scene-hint">No scene layout needed: Start displays the timer on Program.</span>'}
+        <span class="timer-scene-hint">Custom layout: ${assigned} of ${project.scenes.length} scenes. One clock continues across scenes.</span>
       </div>
-      <p>One shared countdown continues while you switch scenes. Starting it sends it directly to the live output.</p>
+      <div class="timer-designer-grid"><div class="timer-main-controls">
       <div class="timer-live-line"><output class="timer-read mono" id="timer-read" role="timer" aria-label="Countdown remaining">${timerDisplay}</output>
         <span id="timer-status" class="timer-status">${timer.deadline?(timer.finished?'Overtime':'Running'):timer.finished?'Finished':'Paused / ready'}</span></div>
-      <div class="timer-section-title">Set countdown duration</div>
+      <div class="timer-section-title">Set duration</div>
       <div class="timer-time-fields">
         <label>Hours<input aria-label="Timer hours" type="number" min="0" max="23" step="1" inputmode="numeric" data-timer-time="h" value="${time.h}"></label>
         <span aria-hidden="true">:</span>
@@ -200,11 +199,12 @@ export function classroomPanel(project, timer, state, media) {
         <span>Adjust while running</span>
         ${[-60,-30,-10,10,30,60].map(n=>buttons((n>0?'+':'')+n+'s','timer-adjust','data-id="'+n+'"')).join('')}
       </div>
-      <div class="timer-section-title">Choose how it looks</div>
+      </div><div class="timer-appearance-controls">
+      <div class="timer-section-title">Timer style</div>
       <div class="timer-style-options" aria-label="Countdown appearance">
         ${Object.entries(TIMER_STYLES).map(([id,name])=>'<button type="button" class="timer-style-choice '+(selectedStyle===id?'active':'')+'" aria-pressed="'+(selectedStyle===id)+'" data-act="timer-style" data-id="'+id+'"><span class="timer-style-sample timer-style-'+id+'" aria-hidden="true">'+(id==='traffic'?'🟡':id==='bar'?'▰▰▰':id==='ring'?'◉':id==='fullscreen'?'▣':'05:00')+'</span><span>'+e(name)+'</span></button>').join('')}
       </div>
-      <div class="timer-section-title">Appearance &amp; finish behavior</div>
+      <div class="timer-section-title">Appearance &amp; finish</div>
       <div class="timer-config-grid">
         <label>Accent color<input type="color" data-project="timerColor" value="${project.timerColor}"></label>
         <label>Background<select data-project="timerBackground">${options(TIMER_BACKGROUNDS,project.timerBackground)}</select></label>
@@ -215,6 +215,7 @@ export function classroomPanel(project, timer, state, media) {
         <label><input type="checkbox" data-project="timerChime" ${checked(project.timerChime)}> Play a finish chime</label>
         <label><input type="checkbox" data-project="timerFlash" ${checked(project.timerFlash)}> Flash the timer when time expires</label>
       </div>
+      </div></div>
     </section>
     <section class="class-card"><h3>PowerPoint &amp; speaker notes</h3>
       ${deck.length ? deck.map(([bus, layer]) => '<p><strong>' + (bus === 'program' ? 'Program' : 'Preview') + '</strong></p>'
