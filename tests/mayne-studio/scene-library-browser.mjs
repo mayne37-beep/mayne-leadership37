@@ -92,7 +92,8 @@ try{
   assert.equal(await page.locator('.scene-order-step:disabled').count(),2);
 
   // The last scene gets a custom user-created category, not just built-in groups.
-  await page.locator('[data-act="scene-edit"]').click();
+  await page.locator('.scene-tile').last().locator('[data-act="scene-tools"]').click();
+  await page.locator('#studio-tools [data-act="scene-edit"]').click();
   const editor=page.getByRole('dialog',{name:'Scene settings'});
   assert.equal(await editor.locator('[name="group"]').inputValue(),'Workshops');
   await editor.locator('[name="group"]').fill('Advanced Leadership');
