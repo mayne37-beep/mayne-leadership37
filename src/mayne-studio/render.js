@@ -149,7 +149,9 @@ function drawScene(ctx, medium, shot, now, preview, visited = new Set(), timer =
   if (['standby', 'discussion', 'activity', 'break'].includes(scene.template)) stageTitle(ctx, scene.title, scene.caption, scene.template);
   for (const layer of layers) {
     const source = sources.get(layer.source);
-    if (!source || !VISUAL.has(source.type)) continue;
+    // Timer layers only describe the live on-air layout. They are never
+    // rendered as part of a scene, Preview, thumbnail, or editor canvas.
+    if (!source || !VISUAL.has(source.type) || source.type === 'timer') continue;
     const bounds = position(layer);
     const [x, y, w, h] = bounds;
     ctx.save();
@@ -171,8 +173,6 @@ function drawScene(ctx, medium, shot, now, preview, visited = new Set(), timer =
         ctx.scale(scale[0],scale[1]);
         drawScene(ctx,medium,{...shot,scene:child},now,preview,path,timer);
       } else if (preview) placeholder(ctx,source.name,x,y,w,h);
-    } else if (source.type === 'timer') {
-      drawTimer(ctx,timer,layer,now,preview);
     } else if (source.type === 'title') {
       rect(ctx, x, y, w, h, '#0a111ee6', 10);
       rect(ctx, x, y, 9, h, accent, 4);
@@ -275,8 +275,8 @@ export function drawOverlayStill(ctx, media, draft, now) {
 
 /** Draw one styled timer layer in a regular scene composition. The layer
  * controls where it appears; the shared countdown never resets on a Take. */
-export function drawTimer(ctx,timer,layer,now,preview=false) {
-  if (!timer || (!timer.visible && !preview)) return;
+export function drawTimer(ctx,timer,layer,now) {
+  if (!timer?.visible) return;
   const config=timer.config||{};
   const [x,y,w,h]=position(layer);
   if(w<=0||h<=0)return;
@@ -355,6 +355,52 @@ export function drawTimer(ctx,timer,layer,now,preview=false) {
   ctx.restore();
 }
 
+/** Resolve a timer assigned to the currently live scene, including
+ * reusable nested scenes, into absolute Program-frame coordinates. This
+ * describes only the timer placement; the actual countdown draws once, atop
+ * the entire live composition, never in private Preview or scene thumbnails.
+ */
+export function liveTimerLayout(shot) {
+  if (!shot?.scene) return null;
+  const visit=(scene, originX, originY, scaleX, scaleY, seen)=>{
+    if (!scene || seen.has(scene.id) || seen.size>=10) return null;
+    const path=new Set(seen);path.add(scene.id);
+    for(const layer of [...scene.layers].reverse()) {
+      if (!layer.visible) continue;
+      const source=shot.sources?.get(layer.source);
+      if (!source) continue;
+      if(source.type==='timer') {
+        return {...layer,
+          x:(originX+W*layer.x/100*scaleX)/W*100,
+          y:(originY+H*layer.y/100*scaleY)/H*100,
+          w:layer.w*scaleX, h:layer.h*scaleY};
+      }
+      if(source.type==='scene') {
+        const child=shot.scenes?.get(source.sceneId);
+        if(!child || path.has(child.id))continue;
+        const [x,y,w,h]=position(layer);
+        const ratio=layer.fit==='stretch'?[w/W,h/H]:
+          [layer.fit==='cover'?Math.max(w/W,h/H):Math.min(w/W,h/H),
+           layer.fit==='cover'?Math.max(w/W,h/H):Math.min(w/W,h/H)];
+        const childX=originX+(x+(w-W*ratio[0])/2)*scaleX;
+        const childY=originY+(y+(h-H*ratio[1])/2)*scaleY;
+        const found=visit(child,childX,childY,scaleX*ratio[0],scaleY*ratio[1],path);
+        if(found)return found;
+      }
+    }
+    return null;
+  };
+  return visit(shot.scene,0,0,1,1,new Set());
+}
+
+/** With no scene-specific timer placement, Start still puts a countdown
+ * directly on the live output. No scene layer or source is auto-created. */
+export function liveTimerFallback(config = {}) {
+  return config.timerStyle==='fullscreen'
+    ? {x:0,y:0,w:100,h:100,timerStyle:'fullscreen'}
+    : {x:75,y:7,w:22,h:19,timerStyle:config.timerStyle||'digital'};
+}
+
 export class StudioRenderer {
   constructor(preview, program, media) {
     this.media = media;
@@ -376,7 +422,10 @@ export class StudioRenderer {
       this.mix(transition, now);
     }
     for (const overlay of liveOverlays.values()) drawOverlay(this.program, this.media, overlay, now);
-    // Timer is drawn only in scenes containing an explicitly assigned timer layer.
+    // Program is the only timer destination. Drawing after transitions and
+    // overlays avoids duplicates and keeps the timer continuously on-air.
+    if (timer?.visible) drawTimer(this.program,timer,
+      liveTimerLayout(program) || liveTimerFallback(timer.config),now);
   }
 
   mix(transition, now) {
