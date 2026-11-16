@@ -13,6 +13,7 @@ import { InlinePreviewEditor } from './inline-preview.js';
 import { OverlayEditor } from './overlay-editor.js';
 import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
+import { TIMER_STYLES, MAX_TIMER_SECONDS, newTimer, timerText, parseTimerFields, tickTimer, pauseTimer, startTimer, resetTimer, adjustTimer } from './timer.js';
 
 const $ = id => document.getElementById(id);
 const fileAccept = {
@@ -24,7 +25,7 @@ const fileAccept = {
   'overlay-media': '.png,.jpg,.jpeg,.webp,.gif,.avif,.mp4,.webm,.ogv,.mov,.m4v',
 };
 const blankSceneId = 'mayne-empty-workspace';
-const timers = () => ({ visible: false, deadline: 0, remaining: 0 });
+const timers = newTimer;
 const dataId = id => 'data-id="' + id + '"';
 const textName = (name, fallback) => name.trim().slice(0, 120) || fallback;
 
@@ -142,7 +143,7 @@ class Studio {
     this.transition = null;
     this.previewOverlays.clear();
     this.liveOverlays.clear();
-    this.timer = { ...timers(), remaining: project.timerSeconds };
+    this.timer = timers(project.timerSeconds);
     this.started = performance.now();
     storage.lastProject(project.id);
     this.setSaveStatus('Saved on this device');
@@ -550,9 +551,9 @@ class Studio {
       for (const button of this.root.querySelectorAll('[data-act="favorite-take"]')) button.disabled = false;
     }
     this.expireOverlays(now);
-    if (this.timer.deadline) {
-      this.timer.remaining = Math.max(0, (this.timer.deadline - now) / 1000);
-      if (this.timer.remaining === 0) { this.timer.deadline = 0; if (this.workspaceTab === 'classroom') this.renderWorkspacePanel(); }
+    if (this.timer.deadline && tickTimer(this.timer,now,this.project.timerEnd)) {
+      if (this.project.timerChime) this.playTimerChime();
+      if (this.workspaceTab === 'classroom') this.renderWorkspacePanel();
     }
     const incomingAudio = this.audibleShot(this.program);
     const outgoingAudio = this.audibleShot(outgoing);
@@ -560,7 +561,7 @@ class Studio {
     this.media.audio.update(this.project, this.media.entries, audioWeights(incomingAudio, outgoingAudio, progress.eased));
     this.renderer.draw({ preview: this.shot(this.scene, false), program: this.program,
       transition: this.transition, previewOverlays: this.previewOverlays, liveOverlays: this.liveOverlays,
-      timer: { ...this.timer, remaining: Math.ceil(this.timer.remaining) } }, now);
+      timer: { ...this.timer, config: this.project } }, now);
     this.designer.draw(now);
     this.overlayEditor.draw(now);
     if (now - this.lastThumb > 1050 && !document.hidden) { this.lastThumb = now; this.thumbnails(now); }
@@ -578,7 +579,13 @@ class Studio {
 
   updateStatus(now) {
     $('session-clock').textContent = clock((now - this.started) / 1000, true);
-    if ($('timer-read')) $('timer-read').textContent = clock(Math.ceil(this.timer.remaining));
+    if ($('timer-read')) $('timer-read').textContent =
+      (this.timer.remaining < 0 ? '+' : '') + timerText(
+        this.timer.remaining < 0 ? Math.abs(this.timer.remaining) : Math.ceil(this.timer.remaining),
+        this.project.timerSeconds >= 3600);
+    if ($('timer-status')) $('timer-status').textContent = this.timer.deadline
+      ? (this.timer.finished ? 'Overtime' : 'Running')
+      : this.timer.finished ? 'Finished' : 'Paused / ready';
     if ($('matte-status') && this.layer) $('matte-status').textContent = this.media.matteStatus($('matte-status').dataset.id, this.layer);
     for (const node of this.root.querySelectorAll('[data-meter]')) {
       const level = clamp(this.media.audio.level(node.dataset.meter), -60, 0, -60);
@@ -618,7 +625,7 @@ class Studio {
     const actions = [
       ['camera', 'Camera'], ['mic', 'Microphone'], ['screen', 'Screen or app window'], ['powerpoint', 'PowerPoint deck'],
       ['slideshow', 'Capture PowerPoint slideshow'], ['files', 'Video, image or audio'], ['title', 'Text layer'],
-      ['scene', 'Embed another scene'],
+      ['scene', 'Embed another scene'], ['timer', 'Classroom timer'],
     ];
     const available = this.project.sources.filter(source =>
       !this.scene.layers.some(layer => layer.source === source.id)
@@ -633,6 +640,98 @@ class Studio {
       + '</div>' + (available.length ? '<div class="form-grid"><label>Use an existing input<select id="reuse-input"><option value="">Select an input</option>'
         + available.map(source => option(source.id, source.name)).join('') + '</select></label>'
         + '<div class="inline">' + buttons('Assign to this scene', 'reuse-input') + buttons('Remove input entirely', 'delete-input') + '</div></div>' : ''));
+  }
+
+  timerLayerForScene(scene = this.scene) {
+    if (!scene || !this.project.scenes.some(item => item.id === scene.id)) return null;
+    return scene.layers.find(layer => this.source(layer.source)?.type === 'timer') || null;
+  }
+
+  syncTimerToProgram(sceneId) {
+    const source = this.project.sources.find(item => item.type === 'timer');
+    if (!source) return;
+    // The live Program holds a snapshot. Only update its timer references,
+    // never replace camera, PowerPoint or other live scene layers.
+    for (const [id, live] of [[this.program.scene.id,this.program.scene],
+      ...this.program.scenes.entries()]) {
+      if (id !== sceneId) continue;
+      const actual = this.project.scenes.find(scene => scene.id === id);
+      if (!actual) continue;
+      live.layers = live.layers.filter(layer => layer.source !== source.id);
+      for (const layer of actual.layers)
+        if (layer.source === source.id) live.layers.push(clone(layer));
+    }
+    this.program.sources.set(source.id,clone(source));
+  }
+
+  assignTimerToScene(scene=this.scene, enabled) {
+    if (!this.project.scenes.some(item => item.id === scene.id))
+      throw new Error('Create a scene before adding a timer.');
+    const existing = this.timerLayerForScene(scene);
+    const wanted = enabled ?? !existing;
+    if (wanted && !existing) {
+      let source = this.project.sources.find(item => item.type === 'timer');
+      if (!source) {
+        if (this.project.sources.length >= 100) throw new Error('Project input limit reached.');
+        source = makeSource('timer','Classroom timer');
+        this.project.sources.push(source);
+      }
+      this.layerId = this.addLayer(this.project,scene,source).id;
+    } else if (!wanted && existing) {
+      scene.layers = scene.layers.filter(layer => layer.id !== existing.id);
+      if (this.layerId === existing.id) this.layerId = scene.layers.at(-1)?.id;
+    } else return;
+    this.syncTimerToProgram(scene.id);
+    this.mark();
+    this.render();
+    this.notify(wanted ? 'Timer added to this scene. Resize it under Arrange scene.' :
+      'Timer removed from this scene; the shared clock is still available.');
+  }
+
+  setTimerStyle(style) {
+    if (!Object.hasOwn(TIMER_STYLES,style)) return;
+    const layer=this.timerLayerForScene();
+    if (layer) {
+      if (style === 'fullscreen') Object.assign(layer,PLACE.full);
+      else if (layer.timerStyle === 'fullscreen' &&
+        layer.x===0 && layer.y===0 && layer.w===100 && layer.h===100)
+        Object.assign(layer,{x:75,y:7,w:22,h:19});
+      layer.timerStyle=style;
+      this.syncTimerToProgram(this.scene.id);
+    }
+    this.project.timerStyle=style;
+    this.mark();
+    this.render();
+  }
+
+  timerSetDuration(seconds) {
+    const n=Math.round(Number(seconds));
+    if (!Number.isInteger(n)||n<1||n>MAX_TIMER_SECONDS)
+      throw new Error('Enter a duration between 00:00:01 and 23:59:59.');
+    this.project.timerSeconds=n;
+    resetTimer(this.timer,n);
+    this.mark();
+    this.renderWorkspacePanel();
+  }
+
+  playTimerChime() {
+    // Reuse the production AudioBus so the chime is available to the
+    // Program recording/stream, rather than only the local computer speakers.
+    const audio=this.media.audio;
+    if (!audio.context || !audio.master) return;
+    const ctx=audio.context;
+    for (const [i,frequency] of [880,660].entries()) {
+      const oscillator=ctx.createOscillator(),gain=ctx.createGain();
+      const when=ctx.currentTime+i*.2;
+      oscillator.type='sine';
+      oscillator.frequency.setValueAtTime(frequency,when);
+      gain.gain.setValueAtTime(.0001,when);
+      gain.gain.exponentialRampToValueAtTime(.12,when+.025);
+      gain.gain.exponentialRampToValueAtTime(.0001,when+.23);
+      oscillator.connect(gain).connect(audio.master);
+      oscillator.start(when);oscillator.stop(when+.24);
+      oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
+    }
   }
 
   /** Embed an existing user-built scene on the current scene's canvas.
@@ -686,12 +785,15 @@ class Studio {
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const slides = scene.template === 'slides';
     const hasSlides = scene.layers.some(layer => ['powerpoint','image','screen'].includes(project.sources.find(s => s.id === layer.source)?.type));
-    const layers = source.type === 'scene' ? { x: 7, y: 4, w: 48, h: 43 }
+    const layers = source.type === 'timer' ? (project.timerStyle === 'fullscreen'
+        ? PLACE.full : {x:75,y:7,w:22,h:19})
+      : source.type === 'scene' ? { x: 7, y: 4, w: 48, h: 43 }
       : source.type === 'title' ? PLACE.title
       : source.type === 'camera' && (slides || hasSlides || scene.layers.some(layer => project.sources.find(s => s.id === layer.source)?.type === 'camera')) ? PLACE.inset
       : slides && ['powerpoint', 'screen', 'image', 'video'].includes(source.type) ? PLACE.slides : PLACE.full;
     const layer = makeLayer(source.id, layers);
     if (['powerpoint', 'screen', 'image', 'scene'].includes(source.type)) layer.fit = 'contain';
+    if (source.type === 'timer') layer.timerStyle = project.timerStyle;
     if (source.type === 'powerpoint' && source.sync) layer.page = source.page;
     scene.layers.push(layer);
     return layer;
@@ -1139,6 +1241,7 @@ class Studio {
       if (act.startsWith('input-')) {
         const type = act.slice(6);
         if (type === 'scene') this.sceneLayerDialog();
+        else if (type === 'timer') { this.closeDialog(); this.assignTimerToScene(); }
         else if (['camera', 'mic'].includes(type)) await this.deviceMenu(type);
         else if (['screen', 'slideshow'].includes(type)) await this.startScreen(type === 'slideshow');
         else if (type === 'title') {
