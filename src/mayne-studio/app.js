@@ -312,6 +312,7 @@ class Studio {
       tab.tabIndex = selected ? 0 : -1;
     }
     $('scene-panel').hidden = current !== 'scenes';
+    $('manage-cameras').hidden = current !== 'scenes';
     $('overlays-panel').hidden = current !== 'overlays';
     $('classroom-panel').hidden = current !== 'classroom';
     const add = $('workspace-add');
@@ -501,11 +502,16 @@ class Studio {
       ['slideshow', 'Capture PowerPoint slideshow'], ['files', 'Video, image or audio'], ['title', 'Text layer'],
     ];
     const available = this.project.sources.filter(source => !this.scene.layers.some(layer => layer.source === source.id));
-    this.dialogOpen('Add an input', '<div class="input-grid">' + actions.map(([id, label]) =>
+    this.dialogOpen('Add an input',
+      '<p>Add a new camera or microphone here for <strong>' + e(this.scene.name)
+      + '</strong> only. To display a camera already used in another scene, select '
+      + '<strong>Use an existing input</strong> below instead. An existing camera shares '
+      + 'one connection while its placement remains independent in each scene.</p>'
+      + '<div class="input-grid">' + actions.map(([id, label]) =>
       buttons(icon(id === 'slideshow' ? 'popout' : id === 'files' ? 'folder' : id, 17) + e(label), 'input-' + id)).join('')
       + '</div>' + (available.length ? '<div class="form-grid"><label>Use an existing input<select id="reuse-input"><option value="">Select an input</option>'
         + available.map(source => option(source.id, source.name)).join('') + '</select></label>'
-        + '<div class="inline">' + buttons('Add to preview scene', 'reuse-input') + buttons('Remove from project', 'delete-input') + '</div></div>' : ''));
+        + '<div class="inline">' + buttons('Assign to this scene', 'reuse-input') + buttons('Remove input entirely', 'delete-input') + '</div></div>' : ''));
   }
 
   addLayer(project, scene, source) {
@@ -1254,6 +1260,10 @@ class Studio {
   async change({ target }) {
     if (this.editing || !this.project) return;
     try {
+      if (target.name?.startsWith('cam-') && target.closest('.camera-matrix')) {
+        target.parentElement.querySelector('span').textContent = target.checked ? 'Assigned' : 'Off';
+        return;
+      }
       if (target.id === 'media-picker') { await this.addFiles(target.files); return; }
       if (target.id === 'project-picker') {
         const file = target.files[0];
