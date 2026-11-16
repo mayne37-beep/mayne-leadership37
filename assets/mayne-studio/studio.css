@@ -454,3 +454,32 @@ kbd{white-space:nowrap}
   .workspace > .mixer-pane.collapsed .mix-rail-label{display:block}
   .workspace > .mixer-pane:not(.collapsed) .pane-head h2{display:flex}
 }
+
+
+/* Cameras are connected globally but deliberately assigned to chosen scenes. */
+.production-tabs-head .camera-assignments-launch{
+  display:inline-flex;align-items:center;gap:5px;min-width:0;min-height:31px;
+  padding:6px 9px;border:1px solid #405873;border-radius:5px;
+  background:#223750;color:#d8edff;white-space:nowrap;font-size:11px;
+}
+.production-tabs-head .camera-assignments-launch:hover{background:#31516e}
+.production-tabs-head .camera-assignments-launch[hidden]{display:none!important}
+.camera-matrix{max-width:100%;overflow-x:auto;border:1px solid #4c607d;border-radius:7px;margin:12px 0}
+.camera-matrix-head,.camera-matrix-row{
+  display:grid;grid-template-columns:minmax(95px,1.3fr) repeat(var(--camera-cols,1),minmax(95px,1fr));
+  align-items:center;gap:0;min-width:max-content;
+}
+.camera-matrix-head{background:#263b52}
+.camera-matrix-head>*{padding:9px 8px;text-align:center;font-size:12px}
+.camera-matrix-row{border-top:1px solid #40516a}
+.camera-matrix-row>strong{padding:9px 8px;white-space:normal;font-size:12px}
+.camera-matrix-row:nth-child(odd){background:#1a293c}
+.camera-matrix-check{display:flex;align-items:center;justify-content:center;gap:5px;
+  min-height:39px;cursor:pointer;font-size:11px;color:#b5c9de}
+.camera-matrix-check input{accent-color:#80c1ff;width:16px;height:16px}
+.camera-matrix-check:has(input:checked){color:#e8f6ff;font-weight:650}
+@media(max-width:690px){
+  .production-tabs-head .camera-assignments-launch{font-size:10px;padding:4px 7px;min-height:29px}
+  .production-tabs-head .camera-assignments-launch svg{width:14px;height:14px}
+  .camera-matrix-head,.camera-matrix-row{grid-template-columns:minmax(90px,1.3fr) repeat(var(--camera-cols,1),minmax(94px,1fr))}
+}
