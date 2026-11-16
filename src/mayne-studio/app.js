@@ -573,7 +573,8 @@ class Studio {
     const shot = this.shot(this.scene, false);
     for (const node of $('scenes').querySelectorAll('canvas')) {
       const scene = this.project.scenes.find(item => item.id === node.dataset.thumb);
-      if (scene) this.renderer.thumbnail(node, scene, shot.sources, now, shot.scenes);
+      if (scene) this.renderer.thumbnail(node, scene, shot.sources, now, shot.scenes,
+        {...this.timer,config:this.project});
     }
   }
 
