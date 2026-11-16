@@ -1153,6 +1153,13 @@ class Studio {
       }
       switch (act) {
         case 'scene': this.setPreview(id); break;
+        case 'open-embedded-scene':
+          if (this.project.scenes.some(scene => scene.id === id)) {
+            if (this.tools.open) this.tools.close();
+            this.setPreview(id);
+            this.showTools(id);
+          }
+          break;
         case 'scene-reorder-left': case 'scene-reorder-right': {
           const index = this.project.scenes.findIndex(scene => scene.id === id);
           const step = act === 'scene-reorder-left' ? -1 : 1;
