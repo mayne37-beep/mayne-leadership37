@@ -554,14 +554,15 @@ class Studio {
     if (project.sources.length >= 100) throw new Error('A project can hold up to 100 inputs.');
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const source = makeSource(type, name, options);
-    project.sources.push(source);
     if (type === 'camera' || type === 'mic') {
-      // A single underlying input ID is reused in all scenes: never request
-      // extra camera/microphone streams on each Take.
+      // Allocate all scene references before adding the project source. A
+      // capacity error cannot leave an orphaned camera or microphone behind.
       shareDeviceAcrossScenes(project, source);
+      project.sources.push(source);
       if (project === this.project) this.shareLiveDevice(source);
       return { source, layer: scene.layers.find(item => item.source === source.id) };
     }
+    project.sources.push(source);
     const layer = this.addLayer(project, scene, source);
     return { source, layer };
   }
