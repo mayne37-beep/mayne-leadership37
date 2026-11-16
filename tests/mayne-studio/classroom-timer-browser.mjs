@@ -106,7 +106,9 @@ try {
 
   await panel.locator('[data-project=timerBackground]').selectOption('glass');
   await panel.locator('[data-project=timerColor]').fill('#123abc');
-  await panel.locator('[data-project=timerOpacity]').fill('65');
+  await panel.locator('[data-project=timerOpacity]').evaluate(node => {
+    node.value='65';node.dispatchEvent(new Event('change',{bubbles:true}));
+  });
   await panel.locator('[data-project=timerEnd]').selectOption('overtime');
   await panel.locator('[data-project=timerFlash]').check();
   assert.deepEqual(await page.evaluate(()=>{
