@@ -14,6 +14,7 @@ export const SHORTCUT_ACTIONS = [
 ];
 export const DEFAULT_SHORTCUTS = Object.freeze(Object.fromEntries(SHORTCUT_ACTIONS.map(([id,,key]) => [id, key])));
 export const shortcutIds = new Set(SHORTCUT_ACTIONS.map(([id]) => id));
+export const EXTRA_SHORTCUT_LIMIT = 100;
 const codePattern = /^(?:Key[A-Z]|Digit[0-9]|F(?:[1-9]|1[0-2])|Space|PageUp|PageDown|BracketLeft|BracketRight|Minus|Equal|Comma|Period|Semicolon|Quote|Backslash|Backquote|Slash|ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Home|End|Insert)$/;
 export const validShortcut = value => {
   if (typeof value !== 'string') return false;
@@ -48,7 +49,45 @@ export function normalizeShortcuts(custom) {
   }
   return result;
 }
-export function shortcutAction(shortcuts, chord) {
+
+/** A custom binding can duplicate an action with another key or trigger any
+ * saved overlay by stable ID (so removing a preceding overlay cannot retarget it).
+ * Rows with no action or no key are allowed while the user configures them. */
+export function normalizeExtraShortcuts(input, primary=DEFAULT_SHORTCUTS, overlayIds=[], sceneIds=[]) {
+  const allowedOverlays=new Set(overlayIds);
+  const allowedScenes=new Set(sceneIds);
+  const seenKeys=new Set(Object.values(primary).filter(Boolean));
+  const seenIds=new Set();
+  const result=[];
+  for(const item of Array.isArray(input)?input.slice(0,EXTRA_SHORTCUT_LIMIT):[]) {
+    if(!item || typeof item.id!=='string' || !/^[a-z0-9_-]{1,64}$/i.test(item.id) ||
+      seenIds.has(item.id)) continue;
+    const action=typeof item.action==='string' ? item.action : '';
+    if (action && !shortcutIds.has(action) &&
+      !(action.startsWith('overlay:') && allowedOverlays.has(action.slice(8))) &&
+      !(action.startsWith('scene:') && allowedScenes.has(action.slice(6)))) continue;
+    const key=item.key==='' || validShortcut(item.key) ? item.key : '';
+    seenIds.add(item.id);
+    if(key && seenKeys.has(key)) {
+      result.push({id:item.id,action,key:''});
+      continue;
+    }
+    if(key)seenKeys.add(key);
+    result.push({id:item.id,action,key});
+  }
+  return result;
+}
+
+/** Return the operator's preferred key for an overlay (including overlays 9+). */
+export function overlayShortcutLabel(project,index) {
+  const id=project.overlays?.[index]?.id;
+  const extra=project.extraShortcuts?.find(row=>row.action==='overlay:'+id && row.key);
+  const primary=project.shortcuts?.['overlay'+index];
+  return shortcutLabel(primary || extra?.key || '');
+}
+
+export function shortcutAction(shortcuts, chord, extraShortcuts = []) {
   if (!chord) return '';
-  return SHORTCUT_ACTIONS.find(([id]) => shortcuts[id] === chord)?.[0] || '';
+  return SHORTCUT_ACTIONS.find(([id]) => shortcuts[id] === chord)?.[0] ||
+    extraShortcuts.find(row=>row.key===chord && row.action)?.action || '';
 }

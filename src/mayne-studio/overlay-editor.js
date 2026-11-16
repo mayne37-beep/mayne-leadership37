@@ -1,4 +1,5 @@
-import { clamp, clone, makeOverlay, OVERLAY_MOTIONS } from './model.js';
+import { clamp, clone, makeOverlay, OVERLAY_MOTIONS, OVERLAY_LIMIT,
+  OVERLAY_GROUPS, overlayGroup } from './model.js';
 import { drawOverlay, drawOverlayStill } from './render.js';
 import { transformBox } from './scene-designer.js';
 import { discardFile } from './projects.js';
@@ -112,6 +113,7 @@ export class OverlayEditor {
     this.inspector.innerHTML =
       '<div class="oe-section"><h3>' + e(this.typeLabel()) + ' settings</h3>' +
       '<label>Overlay name<input data-oe-field="name" maxlength="120" value="' + e(d.name) + '"></label>' +
+      select('Library group','group',OVERLAY_GROUPS,overlayGroup(d.group,d.type)) +
       (message
         ? '<label>Message text<textarea data-oe-field="text" maxlength="160" rows="3">' + e(d.text) + '</textarea></label>' +
           '<label>Second line (optional)<input data-oe-field="sub" maxlength="160" value="' + e(d.sub) + '"></label>'
@@ -284,8 +286,8 @@ export class OverlayEditor {
     const existing = this.studio.overlay(d.id);
     if (existing) Object.assign(existing,clone(d));
     else {
-      if (this.studio.project.overlays.length >= 8) {
-        this.studio.notify('This project already has eight overlay slots.',true); return;
+      if (this.studio.project.overlays.length >= OVERLAY_LIMIT) {
+        this.studio.notify('This project already has '+OVERLAY_LIMIT+' overlays.',true); return;
       }
       this.studio.project.overlays.push(clone(d));
     }
@@ -389,6 +391,7 @@ export class OverlayEditor {
       this.draft.seconds = clamp(Number(event.target.value),0,3600,0);
       event.target.value = this.draft.seconds;
     } else if (field === 'loop') this.draft.loop = event.target.checked;
+    else if (field === 'group') this.draft.group = overlayGroup(event.target.value,this.draft.type);
     else if (['animation','exitAnimation','fit'].includes(field)) this.draft[field] = event.target.value;
     this.draw(performance.now());
   }

@@ -1,4 +1,4 @@
-import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
+import { AUDIO, BACKGROUNDS, PLACE, OVERLAY_LIMIT, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
   assignDeviceToScene, isDefaultSharedCameraInset, canEmbedScene, visibleSceneLayers,
   linkSceneDecks, syncLinkedDecks, transitionProgress, uid } from './model.js';
@@ -11,7 +11,7 @@ import { e, fields, icon, iconButton, option, shell } from './ui.js';
 import { SceneDesigner } from './scene-designer.js';
 import { InlinePreviewEditor } from './inline-preview.js';
 import { OverlayEditor } from './overlay-editor.js';
-import { SHORTCUT_ACTIONS, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
+import { SHORTCUT_ACTIONS, EXTRA_SHORTCUT_LIMIT, keyboardShortcut, shortcutAction, shortcutLabel } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 import { TIMER_STYLES, MAX_TIMER_SECONDS, newTimer, timerText, parseTimerFields, tickTimer, pauseTimer, startTimer, resetTimer, adjustTimer } from './timer.js';
 
@@ -41,6 +41,8 @@ class Studio {
       (message, error) => this.notify(message, error), () => this.recordStatus(),
       chord => this.runShortcut(chord));
     this.workspaceTab = 'scenes';
+    this.overlaySearch = '';
+    this.overlayGroup = 'all';
     try { this.mixerCollapsed = localStorage.getItem('mayne-studio-mixer-collapsed') === '1'; }
     catch { this.mixerCollapsed = false; }
     this.timer = timers();
@@ -56,18 +58,24 @@ class Studio {
     this.inlineEditor = new InlinePreviewEditor(this);
     this.tools = $('studio-tools');
     this.dialog.addEventListener('keydown', event => {
-      const input = event.target.closest?.('[data-shortcut]');
+      const input = event.target.closest?.('[data-shortcut],[data-extra-shortcut]');
       if (!input || event.key === 'Tab' || event.key === 'Escape') return;
       event.preventDefault();
       event.stopPropagation();
       const id = input.dataset.shortcut;
+      const extraId = input.dataset.extraShortcut;
       const binding = ['Backspace','Delete'].includes(event.key) ? '' : keyboardShortcut(event);
       if (!binding && !['Backspace','Delete'].includes(event.key)) return;
-      if (binding && Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding)) {
+      if (binding && (Object.entries(this.project.shortcuts).some(([key, value]) => key !== id && value === binding) ||
+        (this.project.extraShortcuts || []).some(row=>row.id !== extraId && row.key === binding))) {
         this.notify(shortcutLabel(binding) + ' is already assigned. Clear that shortcut first.', true);
         return;
       }
-      this.project.shortcuts[id] = binding;
+      if (extraId) {
+        const row=this.project.extraShortcuts?.find(item=>item.id===extraId);
+        if(!row)return;
+        row.key=binding;
+      } else this.project.shortcuts[id] = binding;
       input.value = shortcutLabel(binding);
       this.mark();
       this.renderDock();
@@ -433,11 +441,32 @@ class Studio {
     add.setAttribute('aria-label', labels[current]);
     add.title = labels[current];
     if (current === 'overlays') {
-      $('overlays-panel').innerHTML = overlaysPanel(this.project, this.previewOverlays, this.liveOverlays);
+      $('overlays-panel').innerHTML = overlaysPanel(this.project, this.previewOverlays, this.liveOverlays,
+        {search:this.overlaySearch,group:this.overlayGroup});
+      this.filterOverlayLibrary();
     } else if (current === 'classroom') {
       $('classroom-panel').innerHTML = classroomPanel(this.project, this.timer,
         { preview: this.shot(this.scene, false), program: this.program }, this.media);
     }
+  }
+
+  filterOverlayLibrary() {
+    const panel=$('overlays-panel');
+    if (!panel || panel.hidden) return;
+    const query=this.overlaySearch.trim().toLowerCase();
+    let count=0;
+    const cards=panel.querySelectorAll('[data-overlay-group]');
+    for(const card of cards){
+      const visible=(this.overlayGroup==='all'||card.dataset.overlayGroup===this.overlayGroup) &&
+        (!query||card.dataset.overlayTerms.includes(query));
+      card.hidden=!visible;
+      if(visible)count++;
+    }
+    const status=panel.querySelector('#overlay-library-count');
+    if(status)status.textContent=count+' of '+cards.length+' shown · '+this.project.overlays.length+
+      ' / '+OVERLAY_LIMIT+' saved';
+    const empty=panel.querySelector('#overlay-library-empty');
+    if(empty)empty.hidden=count>0||!cards.length;
   }
 
   setWorkspaceTab(id) {
@@ -512,13 +541,42 @@ class Studio {
   }
 
   shortcutDialog() {
-    const fields = SHORTCUT_ACTIONS.map(([id, label]) =>
-      '<div class="shortcut-row"><label for="shortcut-' + id + '">' + e(label) + '</label>'
-      + '<input type="text" id="shortcut-' + id + '" data-shortcut="' + id + '" value="' +
-      e(shortcutLabel(this.project.shortcuts[id])) + '" aria-label="Set ' + e(label) + '" readonly>'
-      + '<button class="button" type="button" data-act="shortcut-clear" data-id="' + id + '">Clear</button></div>').join('');
-    this.dialogOpen('Keyboard shortcuts', '<p>Click an assignment box, then press the key or key combination you want. Changes are saved with this project. Backspace clears an assignment. Avoid browser-reserved shortcuts.</p>'
-      + '<div class="shortcut-list">' + fields + '</div>',
+    const fields=SHORTCUT_ACTIONS.map(([id,label]) =>
+      '<div class="shortcut-row"><label for="shortcut-'+id+'">'+e(label)+'</label>'+
+      '<input type="text" id="shortcut-'+id+'" data-shortcut="'+id+'" value="'+
+      e(shortcutLabel(this.project.shortcuts[id]))+'" aria-label="Set '+e(label)+'" readonly>'+
+      '<button class="button" type="button" data-act="shortcut-clear" data-id="'+id+'">Clear</button></div>').join('');
+    const actions=[...SHORTCUT_ACTIONS.filter(([id])=>
+        !/^overlay[0-7]$/.test(id) && !/^scene[0-8]$/.test(id)).map(([id,label])=>[id,label]),
+      ...this.project.overlays.map((overlay,index)=>['overlay:'+overlay.id,
+        'Overlay '+(index+1)+': '+overlay.name]),
+      ...this.project.scenes.map((scene,index)=>['scene:'+scene.id,
+        'Scene '+(index+1)+': '+scene.name])];
+    const custom=(this.project.extraShortcuts||[]).map((entry,index)=>{
+      const selection='<option value="">Choose command…</option>'+
+        actions.map(([id,label])=>option(id,label,entry.action)).join('');
+      return '<div class="shortcut-row shortcut-extra-row">'+
+        '<select id="extra-action-'+e(entry.id)+'" data-extra-action="'+e(entry.id)+
+          '" aria-label="Action for additional shortcut '+(index+1)+'">'+selection+'</select>'+
+        '<input type="text" data-extra-shortcut="'+e(entry.id)+'" value="'+
+          e(shortcutLabel(entry.key))+'" aria-label="Key for additional shortcut '+(index+1)+'" readonly>'+
+        '<button class="button" type="button" data-act="shortcut-extra-remove" data-id="'+
+          e(entry.id)+'">Remove</button></div>';
+    }).join('');
+    this.dialogOpen('Keyboard shortcuts',
+      '<p>Click an assignment box and press a key combination. Backspace clears it. '+
+      'Choose <strong>Add shortcut</strong> to create another command, including shortcuts '+
+      'for overlays beyond the first eight. A key can trigger only one command. '+
+      'Some combinations are reserved by your browser.</p>'+
+      '<div class="shortcut-extra-heading"><strong>Additional shortcuts ('+
+      (this.project.extraShortcuts?.length||0)+' / '+EXTRA_SHORTCUT_LIMIT+')</strong>'+
+      '<button type="button" class="button primary-outline" data-act="shortcut-extra-add">+ Add shortcut</button></div>'+
+      '<p class="shortcut-extra-help">Pick an action, then click its key field and press the shortcut you want. '+
+      'Overlay choices refer to their saved names and stay linked if the library order changes.</p>'+
+      '<div class="shortcut-list shortcut-extra-list">'+(custom||
+        '<p class="slide-label">No additional shortcuts yet.</p>')+'</div>'+
+      '<div class="shortcut-extra-heading"><strong>Standard shortcuts</strong></div>'+
+      '<div class="shortcut-list">'+fields+'</div>',
       '<button class="button" type="button" data-act="shortcuts-reset">Restore defaults</button>');
   }
 
@@ -979,7 +1037,7 @@ class Studio {
             replacing.asset = id;
             return { overlay: replacing, replacing: true };
           }
-          if (draft.overlays.length >= SHORTCUTS.length) throw new Error('This project already uses all eight overlay slots.');
+          if (draft.overlays.length >= OVERLAY_LIMIT) throw new Error('This project already has '+OVERLAY_LIMIT+' overlays.');
           const type = pick.mode === 'graphic' ? 'graphic' : kind;
           const overlay = makeOverlay(type, { ...pick.data, asset: id, name: pick.data?.name || name });
           draft.overlays.push(overlay);
@@ -1080,6 +1138,8 @@ class Studio {
           return;
         }
         this.project.scenes.splice(current, 1);
+        this.project.extraShortcuts=(this.project.extraShortcuts||[])
+          .filter(row=>row.action!=='scene:'+id);
         if (this.previewId === id) {
           const replacement = this.project.scenes[Math.min(current, this.project.scenes.length - 1)];
           this.previewId = replacement.id;
@@ -1121,8 +1181,8 @@ class Studio {
   }
 
   overlayNew() {
-    if (this.project.overlays.length >= SHORTCUTS.length)
-      throw new Error('This project already uses all eight overlay slots.');
+    if (this.project.overlays.length >= OVERLAY_LIMIT)
+      throw new Error('This project already has '+OVERLAY_LIMIT+' overlays.');
     this.dialogOpen('Add overlay',
       '<p>An overlay is an independent image, video, message, or emoji reaction that appears above any live scene. '
       + 'Each one can be moved and resized on its own 16:9 canvas, then shown and hidden on air.</p>'
@@ -1202,7 +1262,11 @@ class Studio {
       1–9 to cue scenes, Q/W/E/R/T/Y/U/I for live overlays, Page Up/Down for the live PowerPoint,
       and comma/period for Preview slides.</p>
       <p>Use Shortcuts at the top of the control room to assign your own keys, including modifiers.
-      Press a key in its assignment box; duplicate assignments are rejected.</p>
+      Press a key in its assignment box, or select Add shortcut to create additional commands
+      for any saved overlay or production action. Duplicate assignments are rejected.</p>
+      <p>The Overlays workspace includes up to 100 saved items. Use the search box and group
+      selector to find message, emoji, announcement and media overlays. Only active overlays
+      are drawn on Program, so avoid stacking large numbers of video overlays at once.</p>
       <h3>Share a clean feed</h3>
       <p>Open Program output, then share that window or tab in your meeting app. Enable its audio and
       share computer sound if the meeting app offers it.</p>
@@ -1284,6 +1348,32 @@ class Studio {
         case 'close-tools': this.tools.close(); break;
         case 'arrange-preview': this.inlineEditor.toggle(); break;
         case 'shortcuts': this.shortcutDialog(); break;
+        case 'shortcut-extra-add': {
+          this.project.extraShortcuts ||= [];
+          if(this.project.extraShortcuts.length >= EXTRA_SHORTCUT_LIMIT)
+            throw new Error('You have reached the additional shortcut limit.');
+          const newId=uid();
+          this.project.extraShortcuts.push({id:newId,action:'',key:''});
+          this.mark();
+          this.shortcutDialog();
+          this.dialog.querySelector('[data-extra-action="'+newId+'"]')?.focus();
+          break;
+        }
+        case 'shortcut-extra-remove': {
+          this.project.extraShortcuts=(this.project.extraShortcuts||[]).filter(row=>row.id!==id);
+          this.mark();
+          this.shortcutDialog();
+          break;
+        }
+        case 'shortcut-extra-clear': {
+          const row=this.project.extraShortcuts?.find(item=>item.id===id);
+          if (!row)break;
+          row.key='';
+          this.mark();
+          this.shortcutDialog();
+          break;
+        }
+
         case 'shortcut-clear': {
           if (!this.project.shortcuts || !Object.hasOwn(this.project.shortcuts, id)) break;
           this.project.shortcuts[id] = '';
@@ -1296,6 +1386,7 @@ class Studio {
         }
         case 'shortcuts-reset': {
           this.project.shortcuts = Object.fromEntries(SHORTCUT_ACTIONS.map(([key,,shortcut]) => [key, shortcut]));
+          this.project.extraShortcuts=[];
           this.mark();
           this.shortcutDialog();
           break;
@@ -1535,6 +1626,8 @@ class Studio {
               this.media.dispose('preview:' + id);
               this.media.dispose('program:' + id);
               this.project.overlays = this.project.overlays.filter(item => item.id !== id);
+              this.project.extraShortcuts=(this.project.extraShortcuts||[])
+                .filter(row=>row.action!=='overlay:'+id);
               this.closeDialog();
               this.mark();
               this.renderWorkspacePanel();
@@ -1628,6 +1721,11 @@ class Studio {
   input(event) {
     if (this.editing || !this.project) return;
     const { target } = event;
+    if (target.matches?.('[data-overlay-search]')) {
+      this.overlaySearch=target.value.slice(0,140);
+      this.filterOverlayLibrary();
+      return;
+    }
     const id = target.dataset.gain;
     if (id) {
       const gain = Number(target.value);
@@ -1645,6 +1743,23 @@ class Studio {
     try {
       if (target.name?.startsWith('cam-') && target.closest('.camera-matrix')) {
         target.parentElement.querySelector('span').textContent = target.checked ? 'Assigned' : 'Off';
+        return;
+      }
+      if (target.matches?.('[data-overlay-filter]')) {
+        this.overlayGroup=target.value;
+        this.filterOverlayLibrary();
+        return;
+      }
+      if (target.dataset.extraAction) {
+        const row=this.project.extraShortcuts?.find(item=>item.id===target.dataset.extraAction);
+        if (!row) return;
+        const value=target.value;
+        const allowed=SHORTCUT_ACTIONS.some(([action])=>action===value) ||
+          (value.startsWith('overlay:') && this.project.overlays.some(o=>o.id===value.slice(8))) ||
+          (value.startsWith('scene:') && this.project.scenes.some(scene=>scene.id===value.slice(6)));
+        if (value && !allowed) throw new Error('Choose an available shortcut action.');
+        row.action=value;
+        this.mark();this.renderWorkspacePanel();
         return;
       }
       if (target.id === 'media-picker') { await this.addFiles(target.files); return; }
@@ -1736,7 +1851,7 @@ class Studio {
 
   runShortcut(chord) {
     if (!this.project || this.editing || !chord) return false;
-    const action = shortcutAction(this.project.shortcuts, chord);
+    const action = shortcutAction(this.project.shortcuts, chord, this.project.extraShortcuts || []);
     if (!action) return false;
     if (action === 'take') this.take(this.project.transition);
     else if (action === 'cut') this.take('cut');
@@ -1748,8 +1863,18 @@ class Studio {
     else if (action === 'previewNext') this.advanceDeck('preview', 1);
     else if (/^overlay[0-7]$/.test(action))
       this.toggleOverlay(this.project.overlays[Number(action.slice(7))]?.id, true);
+    else if (action.startsWith('overlay:')) {
+      const id=action.slice(8);
+      if(!this.overlay(id))return false;
+      this.toggleOverlay(id,true);
+    }
     else if (/^scene[0-8]$/.test(action))
       this.setPreview(this.project.scenes[Number(action.slice(5))]?.id);
+    else if (action.startsWith('scene:')) {
+      const id=action.slice(6);
+      if(!this.project.scenes.some(scene=>scene.id===id))return false;
+      this.setPreview(id);
+    }
     else return false;
     return true;
   }
