@@ -58,7 +58,10 @@ export function pauseTimer(timer,now) {
 }
 export function startTimer(timer,now,duration) {
   if(timer.deadline)return false;
-  if(timer.remaining<=0){timer.remaining=duration;timer.finished=false;timer.completedAt=0;}
+  // A paused overtime count resumes counting up from its negative offset.
+  if(timer.remaining<=0 && !(timer.finished && timer.remaining<0)){
+    timer.remaining=duration;timer.finished=false;timer.completedAt=0;
+  }
   timer.total=timer.total || duration;
   timer.deadline=now+timer.remaining*1000;
   timer.visible=true;
