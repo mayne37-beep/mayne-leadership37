@@ -50,18 +50,27 @@ try {
     const project={
       id:'shared-devices-test',name:'Shared Device Test',version:1,updated:Date.now(),
       sources:[
-        {id:'shared-camera',type:'camera',name:'Main instructor camera',device:'',gain:0},
-        {id:'shared-mic',type:'mic',name:'Main instructor microphone',device:'',route:'scene',gain:0},
+        {id:'camera-A',type:'camera',name:'Camera A',device:'',gain:0},
+        {id:'camera-B',type:'camera',name:'Camera B',device:'',gain:0},
+        {id:'camera-C',type:'camera',name:'Camera C',device:'',gain:0},
+        {id:'shared-mic',type:'mic',name:'Instructor microphone',device:'',route:'scene',gain:0},
       ],
       scenes:[
-        {id:'standby',name:'Standby',template:'standby',background:'black',
-          title:'Standby',caption:'',backdrop:'',layers:[]},
-        {id:'presenter',name:'Presenter',template:'presenter',background:'studio',
-          title:'Instructor',caption:'',backdrop:'',layers:[
-            layer('original-camera','shared-camera',61,17,32,62),
-            layer('original-mic','shared-mic',0,0,100,100)]},
-        {id:'slides',name:'Slides',template:'slides',background:'navy',
-          title:'',caption:'',backdrop:'',layers:[]},
+        {id:'studio1',name:'Studio 1',template:'presenter',background:'studio',
+          title:'',caption:'',backdrop:'',layers:[
+            layer('a-in-studio1','camera-A',21,18,58,70),
+            layer('mic-in-studio1','shared-mic',0,0,100,100)]},
+        {id:'studio2',name:'Studio 2',template:'presenter',background:'studio',
+          title:'',caption:'',backdrop:'',layers:[layer('b-in-studio2','camera-B',54,16,37,70)]},
+        {id:'studio3',name:'Studio 3',template:'presenter',background:'studio',
+          title:'',caption:'',backdrop:'',layers:[layer('c-in-studio3','camera-C',13,22,61,54)]},
+        {id:'studio4',name:'Studio 4',template:'blank',background:'black',
+          title:'',caption:'',backdrop:'',layers:[
+            layer('old-auto-inset','camera-A',74,53,22,36)]},
+        {id:'studio5',name:'Studio 5',template:'presenter',background:'studio',
+          title:'',caption:'',backdrop:'',layers:[layer('a-in-studio5','camera-A',43,22,43,58)]},
+        {id:'studio6',name:'Studio 6',template:'presenter',background:'studio',
+          title:'',caption:'',backdrop:'',layers:[layer('a-in-studio6','camera-A',36,12,51,76)]},
       ],
       overlays:[],transition:'cut',duration:450,master:0,masterMute:false,timerSeconds:300,
     };
@@ -91,115 +100,162 @@ try {
       return original(...args);
     };
   });
-  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes[0].layers.length),0,
-    'Older projects initially retain their prior scene-specific device placement');
-
-  // Connect from the actual Scene Settings UI; the connection must become global.
-  await page.locator('[data-act="scene-tools"][data-id="presenter"]').click();
+  // Reconnect source A from the scene where it is actually assigned.
+  // Connecting must NEVER insert A into scenes belonging to other cameras.
+  await page.locator('[data-act="scene-tools"][data-id="studio1"]').click();
   const settings=page.locator('#studio-tools');
   await settings.waitFor({state:'visible'});
-  await settings.locator('[data-act="select-layer"][data-id="original-camera"]').click();
-  await settings.locator('[data-act="connect"][data-id="shared-camera"]').click();
-  await page.waitForFunction(()=>window.__qaStudio.media.get('shared-camera')?.state==='ready');
-  assert.deepEqual(await page.evaluate(()=>{
-    const studio=window.__qaStudio, scenes=studio.project.scenes;
-    return {
-      links:scenes.map(scene=>scene.layers.filter(layer=>layer.source==='shared-camera').length),
-      presenter:scenes[1].layers.find(layer=>layer.source==='shared-camera').x,
-      defaultInset:scenes[0].layers.find(layer=>layer.source==='shared-camera').x,
-      programLayer:studio.program.scene.layers.some(layer=>layer.source==='shared-camera'),
-      programSource:studio.program.sources.has('shared-camera'),
-      tracks:studio.media.get('shared-camera').stream.getVideoTracks().length,
-    };
-  }),{links:[1,1,1],presenter:61,defaultInset:74,programLayer:true,programSource:true,tracks:1},
-    'One connected camera is linked across all scenes, with original presenter framing preserved');
-
-  await settings.locator('[data-act="select-layer"][data-id="original-mic"]').click();
+  await settings.locator('[data-act="select-layer"][data-id="a-in-studio1"]').click();
+  await settings.locator('[data-act="connect"][data-id="camera-A"]').click();
+  await page.waitForFunction(()=>window.__qaStudio.media.get('camera-A')?.state==='ready');
+  const membership=await page.evaluate(()=>{
+    const s=window.__qaStudio;
+    return s.project.scenes.map(scene=>scene.layers
+      .filter(layer=>s.source(layer.source)?.type==='camera')
+      .map(layer=>s.source(layer.source).name));
+  });
+  assert.deepEqual(membership,[
+    ['Camera A'],['Camera B'],['Camera C'],['Camera A'],['Camera A'],['Camera A'],
+  ],'Connecting Camera A does not create it in scenes belonging to B or C');
+  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes[0]
+    .layers.find(l=>l.source==='camera-A').x),21,
+    'Studio 1 keeps its independently edited camera framing');
+  assert.equal(await page.evaluate(()=>window.__captureRequests),1);
+  await settings.locator('[data-act="select-layer"][data-id="mic-in-studio1"]').click();
   await settings.locator('[data-act="connect"][data-id="shared-mic"]').click();
   await page.waitForFunction(()=>window.__qaStudio.media.get('shared-mic')?.state==='ready');
-  const devices=await page.evaluate(()=>{
-    const studio=window.__qaStudio;
-    return {
-      microphoneRoute:studio.project.sources.find(s=>s.id==='shared-mic').route,
-      micLayers:studio.project.scenes.map(s=>s.layers.filter(l=>l.source==='shared-mic').length),
-      cameraReady:studio.media.get('shared-camera').state==='ready',
-      micReady:studio.media.get('shared-mic').state==='ready',
-      captureRequests:window.__captureRequests,
-      audioTracks:studio.media.get('shared-mic').stream.getAudioTracks().length,
-    };
-  });
-  assert.equal(devices.microphoneRoute,'always','Microphone audio no longer follows a specific scene');
-  assert.deepEqual(devices.micLayers,[1,1,1]);
-  assert.equal(devices.cameraReady,true);
-  assert.equal(devices.micReady,true);
-  assert.equal(devices.captureRequests,2,'One getUserMedia request for each shared input');
-  assert.equal(devices.audioTracks,1);
-
-  // Switching Program and Preview never opens additional device streams.
+  assert.equal(await page.evaluate(()=>window.__qaStudio.source('shared-mic').route),'always');
+  assert.deepEqual(await page.evaluate(()=>window.__qaStudio.project.scenes
+    .map(scene=>scene.layers.filter(l=>l.source==='shared-mic').length)),
+    [1,0,0,0,0,0],
+    'A globally audible microphone does not need unwanted layers in every scene');
   await settings.locator('[data-act="close-tools"]').click();
-  for(const next of ['slides','presenter','standby','slides']) {
-    await page.evaluate(id=>{window.__qaStudio.setPreview(id);window.__qaStudio.take('cut');},next);
-    const status=await page.evaluate(()=>{
+
+  // Camera B and C are independent sources; connecting each on its own scene
+  // does not change which scenes contain A, B or C.
+  for(const [sceneId,layerId,sourceId] of [
+    ['studio2','b-in-studio2','camera-B'],
+    ['studio3','c-in-studio3','camera-C'],
+  ]){
+    await page.locator('[data-act="scene-tools"][data-id="'+sceneId+'"]').click();
+    await settings.locator('[data-act="select-layer"][data-id="'+layerId+'"]').click();
+    await settings.locator('[data-act="connect"][data-id="'+sourceId+'"]').click();
+    await page.waitForFunction(id=>window.__qaStudio.media.get(id)?.state==='ready',sourceId);
+    await settings.locator('[data-act="close-tools"]').click();
+  }
+  assert.equal(await page.evaluate(()=>window.__captureRequests),4,
+    'One camera capture request per distinct input plus one microphone request');
+
+  // The previous update could have persisted default inset layers everywhere.
+  // A supervised Camera assignments matrix must remove suspected extras
+  // without changing intentional or edited camera geometry.
+  await page.locator('#manage-cameras').click();
+  const matrix=page.getByRole('dialog',{name:'Camera assignments'});
+  await matrix.waitFor();
+  assert.equal(await matrix.locator('.camera-matrix-head strong').count(),3);
+  assert.equal(await matrix.locator('input[name="cam-3-0"]').isChecked(),true,
+    'Previous automatic inset is visible for explicit review');
+  await matrix.getByRole('button',{name:'Clear default insets'}).click();
+  assert.equal(await matrix.locator('input[name="cam-3-0"]').isChecked(),false,
+    'Default auto-inset can be unchecked without deleting other cameras');
+  assert.equal(await matrix.locator('input[name="cam-0-0"]').isChecked(),true,
+    'Custom Studio 1 camera framing stays checked');
+  await matrix.getByRole('button',{name:'Apply camera assignments'}).click();
+  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes[3].layers
+    .some(l=>l.source==='camera-A')),false,
+    'Confirmed cleanup removes A from Studio 4 only');
+
+  // Actual on-air scenes must display only their own camera sources, while all
+  // four already connected device streams remain active across all Takes.
+  const expected=new Map([
+    ['studio1',['camera-A']],['studio2',['camera-B']],['studio3',['camera-C']],
+    ['studio4',[]],['studio5',['camera-A']],['studio6',['camera-A']],
+  ]);
+  for(const [sceneId,cameraIds] of expected){
+    await page.evaluate(id=>{window.__qaStudio.setPreview(id);window.__qaStudio.take('cut');},sceneId);
+    const result=await page.evaluate(()=>{
       const studio=window.__qaStudio;
       return {
-        camera:studio.program.scene.layers.filter(l=>l.source==='shared-camera').length,
-        mic:studio.program.scene.layers.filter(l=>l.source==='shared-mic').length,
-        cameraLive:studio.media.get('shared-camera')?.stream.active,
-        microphoneLive:studio.media.get('shared-mic')?.stream.active,
+        cameras:studio.program.scene.layers.filter(l=>l.visible &&
+          studio.program.sources.get(l.source)?.type==='camera').map(l=>l.source),
+        live:['camera-A','camera-B','camera-C','shared-mic'].every(id=>
+          studio.media.get(id)?.stream?.active===true),
+        micRoute:studio.source('shared-mic').route,
         requests:window.__captureRequests,
       };
     });
-    assert.equal(status.camera,1,'Camera appears on Program scene '+next);
-    assert.equal(status.mic,1,'Microphone is linked to Program scene '+next);
-    assert.equal(status.cameraLive,true,'Same camera stream stays active on '+next);
-    assert.equal(status.microphoneLive,true,'Same microphone stream stays active on '+next);
-    assert.equal(status.requests,2,'Switching scenes must not reopen a device');
+    assert.deepEqual(result.cameras,cameraIds,
+      sceneId+' renders ONLY explicitly assigned camera layers');
+    assert.equal(result.live,true,'All connected sources stay available across '+sceneId);
+    assert.equal(result.micRoute,'always','Microphone stays in Program across Takes');
+    assert.equal(result.requests,4,'Switching to '+sceneId+' never reconnects a camera');
   }
 
-  // Existing and newly created scenes retain their own camera placement.
-  await page.evaluate(()=>{
-    const studio=window.__qaStudio;
-    studio.project.scenes[0].layers.find(l=>l.source==='shared-camera').x=28;
-    studio.shareLiveDevice();
-  });
-  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes[1]
-    .layers.find(l=>l.source==='shared-camera').x),61,
-    'Editing camera position in Standby does not change Presenter position');
-  await page.evaluate(()=>window.__qaStudio.sceneDialog(true));
-  const newScene=page.getByRole('dialog',{name:'Add scene'});
-  await newScene.locator('[name="template"]').selectOption('blank');
-  await newScene.locator('[name="name"]').fill('Live Q&A');
-  await newScene.getByRole('button',{name:'Add scene'}).click();
-  assert.deepEqual(await page.evaluate(()=>{
-    const studio=window.__qaStudio;
-    const scene=studio.project.scenes.find(s=>s.name==='Live Q&A');
-    return [scene.layers.filter(l=>l.source==='shared-camera').length,
-      scene.layers.filter(l=>l.source==='shared-mic').length,
-      window.__captureRequests];
-  }),[1,1,2],'New scenes instantly include already-connected camera and microphone');
+  // Switch Studio 6 from A to B using checkbox assignments. Do not change
+  // Studio 1 or 5, which deliberately share the original A source.
+  await page.locator('#manage-cameras').click();
+  await matrix.locator('input[name="cam-5-0"]').uncheck();
+  await matrix.locator('input[name="cam-5-1"]').check();
+  await matrix.getByRole('button',{name:'Apply camera assignments'}).click();
+  assert.deepEqual(await page.evaluate(()=>window.__qaStudio.project.scenes.map(scene=>
+    scene.layers.filter(l=>['camera-A','camera-B','camera-C'].includes(l.source))
+      .map(l=>l.source))),[
+        ['camera-A'],['camera-B'],['camera-C'],[],['camera-A'],['camera-B'],
+      ],'Changing one scene to Camera B leaves Studio 1 and Studio 5 using A');
+  await page.evaluate(()=>{window.__qaStudio.setPreview('studio6');window.__qaStudio.take('cut');});
+  assert.deepEqual(await page.evaluate(()=>window.__qaStudio.program.scene.layers
+    .filter(l=>['camera-A','camera-B','camera-C'].includes(l.source)).map(l=>l.source)),
+    ['camera-B'],'The Program uses the newly assigned camera after Take');
 
-  // Reconnection never adds duplicate layers or opens another stream if already ready.
-  await page.evaluate(async()=>{
-    const studio=window.__qaStudio;
-    await studio.connectInput(studio.source('shared-camera'));
-    await studio.connectInput(studio.source('shared-mic'));
-  });
-  assert.equal(await page.evaluate(()=>window.__captureRequests),2);
+  // New scenes must start with NO camera unless the operator explicitly
+  // chooses an existing source in that scene.
+  await page.locator('#workspace-add').click();
+  const create=page.getByRole('dialog',{name:'Add scene'});
+  await create.locator('[name="template"]').selectOption('blank');
+  await create.locator('[name="name"]').fill('Studio 7');
+  await create.getByRole('button',{name:'Add scene'}).click();
+  assert.deepEqual(await page.evaluate(()=>{
+    const s=window.__qaStudio, scene=s.project.scenes.find(scene=>scene.name==='Studio 7');
+    return [scene.layers.length,window.__captureRequests];
+  }),[0,4],'New scenes start empty and do not connect cameras');
+
+  await page.locator('[data-act="scene-tools"]').filter({hasText:'Settings'}).last().click();
+  await settings.waitFor({state:'visible'});
+  await settings.locator('[data-act="add-context"]').click();
+  const add=page.getByRole('dialog',{name:'Add an input'});
+  await add.locator('#reuse-input').selectOption('camera-A');
+  await add.getByRole('button',{name:'Assign to this scene'}).click();
+  await page.waitForFunction(()=>window.__qaStudio.project.scenes.at(-1).layers
+    .some(layer=>layer.source==='camera-A'));
+  assert.equal(await page.evaluate(()=>window.__captureRequests),4,
+    'Reusing Camera A in Studio 7 needs no additional camera connection');
+  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes.at(-1).layers
+    .filter(l=>l.source==='camera-A').length),1);
+  await settings.locator('[data-act="select-layer"]').filter({hasText:'Camera A'}).click();
+  const removeButton=settings.locator('[data-act="remove-layer"]');
+  assert.equal(await removeButton.count(),1,
+    'A camera in scene settings can be removed from this scene, not globally');
+  await removeButton.click();
+  assert.equal(await page.evaluate(()=>window.__qaStudio.project.scenes.at(-1).layers
+    .some(layer=>layer.source==='camera-A')),false,
+    'Removing the Studio 7 camera layer never disconnects Camera A from Studios 1 and 5');
+  assert.equal(await page.evaluate(()=>window.__qaStudio.media.get('camera-A')?.state),'ready');
+  await settings.locator('[data-act="close-tools"]').click();
+
   await page.locator('[data-act="save"]').click();
   await page.locator('#save-state').getByText('Saved on this device').waitFor({timeout:12000});
   await page.reload();
   await page.waitForFunction(()=>window.__qaStudio?.project?.id==='shared-devices-test');
-  assert.equal(await page.evaluate(()=>{
-    const studio=window.__qaStudio;
-    return studio.project.scenes.every(scene=>
-      scene.layers.filter(l=>l.source==='shared-camera').length===1 &&
-      scene.layers.filter(l=>l.source==='shared-mic').length===1);
-  }),true,'Global device links and per-scene positions persist after saving and reloading');
-  assert.equal(await page.evaluate(()=>window.__qaStudio.media.get('shared-camera')),undefined,
-    'Browser camera permissions are reconnected explicitly after a page reload');
+  assert.deepEqual(await page.evaluate(()=>window.__qaStudio.project.scenes.map(scene=>
+    scene.layers.filter(l=>['camera-A','camera-B','camera-C'].includes(l.source))
+      .map(l=>l.source))),[
+        ['camera-A'],['camera-B'],['camera-C'],[],['camera-A'],['camera-B'],[],
+      ],'Only intentional camera assignments persist after browser reload');
+  assert.equal(await page.evaluate(()=>window.__qaStudio.media.get('camera-A')),undefined,
+    'Device permissions are not reopened automatically across browser reloads');
 
   assert.deepEqual(errors,[],'No uncaught errors during camera/mic sharing and scene switching');
-  console.log('Global camera/mic: one capture each, all scenes, immediate Program, independent placement, new scenes, persistence passed.');
+  console.log('Camera assignments: explicit A/B/C scene routing, no auto inserts, review cleanup, one stream per source, per-scene removal and persistence passed.');
   await context.close();
 } finally {
   if (browser) await browser.close();
