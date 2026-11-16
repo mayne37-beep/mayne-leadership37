@@ -145,7 +145,7 @@ export function overlaysPanel(project, preview, live, filter = {search:'',group:
         ? (o.type === 'video' ? 'Video' : o.type === 'image' ? 'Image' : 'Media') : 'Message';
     const group=overlayGroup(o.group,o.type);
     const search=(o.name+' '+(o.text||'')+' '+(o.sub||'')).toLowerCase();
-    return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}" data-overlay-group="${e(group)}" data-overlay-search="${e(search)}">
+    return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}" data-overlay-group="${e(group)}" data-overlay-terms="${e(search)}">
       <div class="overlay-title">${icon(category.toLowerCase() === 'media' ? 'image' : category.toLowerCase(),17)}
         <span title="${e(o.name)}"><b>${o.type === 'emoji'
           ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category}</small><small class="overlay-group-label">${e(OVERLAY_GROUPS[group])}</small></span>
