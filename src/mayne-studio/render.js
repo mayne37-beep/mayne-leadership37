@@ -172,58 +172,82 @@ function drawScene(ctx, medium, shot, now, preview) {
   if (scene.template === 'presenter' || scene.template === 'blank') stageTitle(ctx, scene.title, scene.caption, 'presenter');
 }
 
-function drawOverlay(ctx, media, active, now) {
-  const { overlay, start, end } = active;
-  const entry = transitionProgress(start, 240, now).eased;
-  const exit = end === undefined ? 1 : 1 - transitionProgress(end, 240, now).eased;
-  const progress = overlay.animation === 'none' ? Number(end === undefined) : Math.min(entry, exit);
-  if (!progress) return;
-  let [x, y, w, h] = position(overlay);
-  ctx.save();
-  ctx.globalAlpha = progress;
-  if (overlay.animation === 'slide') y += 55 * (1 - progress);
-  if (overlay.animation === 'pop') {
+function overlayMotion(ctx, box, motion, progress) {
+  let [x, y, w, h] = box;
+  if (motion === 'slide') y += H * .1 * (1 - progress);
+  else if (motion === 'slide-down') y -= H * .1 * (1 - progress);
+  else if (motion === 'slide-left') x += W * .09 * (1 - progress);
+  else if (motion === 'slide-right') x -= W * .09 * (1 - progress);
+  else if (motion === 'pop') {
     ctx.translate(x + w / 2, y + h / 2);
-    const scale = .74 + progress * .26;
-    ctx.scale(scale, scale);
+    ctx.scale(.7 + .3 * progress, .7 + .3 * progress);
     x = -w / 2;
     y = -h / 2;
   }
-  if (overlay.type === 'graphic') {
-    const image = media.drawable(overlay, { page: 0 }, now);
-    if (image) drawImage(ctx, image, x, y, w, h, 'contain');
-  } else if (overlay.type === 'arrow') {
-    ctx.fillStyle = accent;
-    ctx.strokeStyle = '#111826';
-    ctx.lineWidth = 8;
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x + w * .1, y + h * .4);
-    ctx.lineTo(x + w * .64, y + h * .4);
-    ctx.lineTo(x + w * .64, y + h * .15);
-    ctx.lineTo(x + w * .94, y + h * .5);
-    ctx.lineTo(x + w * .64, y + h * .85);
-    ctx.lineTo(x + w * .64, y + h * .6);
-    ctx.lineTo(x + w * .1, y + h * .6);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-  } else if (overlay.type === 'lower') {
-    rect(ctx, x, y, w, h, '#0c1525f3', 11);
-    rect(ctx, x, y, 10, h, accent, 4);
-    text(ctx, overlay.text, x + w * .048, y + h * (overlay.sub ? .39 : .5), h * .35, { width: w * .89, weight: 700 });
-    text(ctx, overlay.sub, x + w * .048, y + h * .73, h * .19, { width: w * .89, color: '#d9e4f1' });
-  } else {
-    rect(ctx, x, y, w, h, '#0c1525f3', 18);
-    if (overlay.type === 'hand') {
+  return [x, y, w, h];
+}
+
+/**
+ * Render an independent overlay on the Preview or Program bus.
+ * Motion applies only to the overlay; background and scene remain unchanged.
+ */
+export function drawOverlay(ctx, media, active, now) {
+  const { overlay, start, end } = active;
+  const entry = transitionProgress(start, 240, now).eased;
+  const exit = end === undefined ? 1 : 1 - transitionProgress(end, 240, now).eased;
+  const entering = end === undefined || entry < exit;
+  const motion = entering ? overlay.animation : (overlay.exitAnimation ?? overlay.animation);
+  const progress = motion === 'none' ? Number(end === undefined) : Math.min(entry, exit);
+  if (!progress) return;
+  ctx.save();
+  try {
+    ctx.globalAlpha = (overlay.opacity ?? 100) / 100 * progress;
+    const [x, y, w, h] = overlayMotion(ctx, position(overlay), motion, progress);
+    if (['graphic', 'image', 'video'].includes(overlay.type)) {
+      const image = media.drawable(overlay, { page: 0 }, now);
+      if (image) drawImage(ctx, image, x, y, w, h, overlay.fit ?? 'contain');
+    } else if (overlay.type === 'arrow') {
+      ctx.fillStyle = accent;
+      ctx.strokeStyle = '#111826';
+      ctx.lineWidth = 8;
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x + w * .1, y + h * .4);
+      ctx.lineTo(x + w * .64, y + h * .4);
+      ctx.lineTo(x + w * .64, y + h * .15);
+      ctx.lineTo(x + w * .94, y + h * .5);
+      ctx.lineTo(x + w * .64, y + h * .85);
+      ctx.lineTo(x + w * .64, y + h * .6);
+      ctx.lineTo(x + w * .1, y + h * .6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    } else if (overlay.type === 'lower') {
+      rect(ctx, x, y, w, h, '#0c1525f3', 11);
+      rect(ctx, x, y, 10, h, accent, 4);
+      text(ctx, overlay.text, x + w * .048, y + h * (overlay.sub ? .39 : .5), h * .35, { width: w * .89, weight: 700 });
+      text(ctx, overlay.sub, x + w * .048, y + h * .73, h * .19, { width: w * .89, color: '#d9e4f1' });
+    } else if (overlay.type === 'hand') {
+      rect(ctx, x, y, w, h, '#0c1525f3', 18);
       text(ctx, '✋', x + w * .16, y + h * .5, h * .35, { align: 'center' });
       text(ctx, overlay.text, x + w * .3, y + h * .5, h * .24, { width: w * .66 });
     } else {
+      rect(ctx, x, y, w, h, '#0c1525f3', 18);
       rect(ctx, x, y, w, 7, accent, 3);
-      text(ctx, overlay.text, x + w / 2, y + h * .54, h * .36, { align: 'center', width: w * .89 });
+      text(ctx, overlay.text, x + w / 2, y + h * (overlay.sub ? .38 : .54),
+        h * (overlay.sub ? .30 : .36), { align: 'center', width: w * .89 });
+      if (overlay.sub) text(ctx, overlay.sub, x + w / 2, y + h * .75, h * .19,
+        { align: 'center', width: w * .89, color: '#d9e4f1' });
     }
+  } finally {
+    ctx.restore();
   }
-  ctx.restore();
+}
+
+// The Overlay Designer previews the exact on-air drawing without ever
+// changing the real Program canvas or activating an actual overlay.
+export function drawOverlayStill(ctx, media, draft, now) {
+  drawOverlay(ctx, media, { overlay: { ...draft, id: 'preview:' + draft.id }, start: now - 1000 }, now);
 }
 
 function drawTimer(ctx, timer) {

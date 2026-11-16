@@ -7,7 +7,7 @@ import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeSour
 test('a classroom project has ready-to-cue scenes and overlay shortcuts', () => {
   const project = makeProject();
   assert.deepEqual(project.scenes.map(scene => scene.template), ['standby', 'presenter', 'slides', 'discussion', 'activity', 'break']);
-  assert.deepEqual(project.overlays.map(overlay => overlay.type), ['lower', 'message', 'arrow', 'hand']);
+  assert.deepEqual(project.overlays.map(overlay => overlay.type), ['message']);
   assert.deepEqual(normalizeProject(project), project);
 });
 
@@ -65,4 +65,35 @@ test('five distinct favorite transitions default, restore, and validate on legac
   assert.equal(repaired[4], 'iris');
   assert.ok(repaired.every(type => Object.hasOwn(TRANSITIONS, type)));
   assert.deepEqual(normalizeFavoriteTransitions('bad data'), DEFAULT_FAVORITE_TRANSITIONS);
+});
+
+test('image, video, and message overlays persist independent layout and pop-up/down effects', () => {
+  const project = makeProject();
+  const base = project.overlays[0];
+  project.overlays = [
+    { ...base, id: 'message', type: 'message', text: 'Update', sub: 'Secondary',
+      x: 17, y: 23, w: 41, h: 16, animation: 'pop', exitAnimation: 'slide-left', opacity: 77, seconds: 6 },
+    { ...base, id: 'image', type: 'image', asset: 'file-img', animation: 'slide-right',
+      exitAnimation: 'fade', x: 5, y: 40, w: 40, h: 38, fit: 'cover', opacity: 65 },
+    { ...base, id: 'video', type: 'video', asset: 'file-video', animation: 'fade',
+      exitAnimation: 'pop', x: 18, y: 3, w: 30, h: 50, fit: 'contain', loop: false },
+  ];
+  const restored = normalizeProject(project);
+  assert.deepEqual(restored.overlays.map(o => o.type), ['message','image','video']);
+  assert.equal(restored.overlays[0].exitAnimation,'slide-left');
+  assert.equal(restored.overlays[0].opacity,77);
+  assert.equal(restored.overlays[0].x,17);
+  assert.equal(restored.overlays[1].fit,'cover');
+  assert.equal(restored.overlays[1].asset,'file-img');
+  assert.equal(restored.overlays[2].loop,false);
+  assert.ok(assetIds(restored).includes('file-video'));
+  assert.ok(assetIds(restored).includes('file-img'));
+
+  const { exitAnimation: _ignored, ...legacyBase } = base;
+  project.overlays = [{ ...legacyBase, id:'legacy', type:'hand', text:'Raise your hand',
+    animation:'pop' }, {...legacyBase,id:'old-media',type:'graphic',asset:'old-asset'}];
+  const legacy = normalizeProject(project);
+  assert.deepEqual(legacy.overlays.map(o => o.type),['hand','graphic']);
+  assert.equal(legacy.overlays[0].exitAnimation,'pop');
+  assert.ok(assetIds(legacy).includes('old-asset'));
 });

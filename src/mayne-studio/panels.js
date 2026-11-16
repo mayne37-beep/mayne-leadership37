@@ -107,12 +107,17 @@ export function overlaysPanel(project, preview, live) {
     const id = 'data-id="' + o.id + '"';
     const staged = preview.has(o.id) && preview.get(o.id).end === undefined;
     const shown = live.has(o.id) && live.get(o.id).end === undefined;
+    const category = ['image','video','graphic'].includes(o.type)
+      ? (o.type === 'video' ? 'Video' : o.type === 'image' ? 'Image' : 'Media') : 'Message';
     return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}">
-      <div class="overlay-title">${icon(o.type,17)} <span title="${e(o.name)}">${e(o.name)}</span><kbd>${e(shortcutLabel(project.shortcuts?.['overlay' + index] ?? ''))}</kbd></div>
-      ${iconButton('overlay-edit','Edit ' + o.name,'gear',id)}
+      <div class="overlay-title">${icon(category.toLowerCase() === 'media' ? 'image' : category.toLowerCase(),17)}
+        <span title="${e(o.name)}"><b>${e(o.name)}</b><small class="overlay-type-label">${category}</small></span>
+        <kbd>${e(shortcutLabel(project.shortcuts?.['overlay' + index] ?? ''))}</kbd></div>
+      ${iconButton('overlay-edit','Open visual editor for ' + o.name,'gear',id)}
       <div class="overlay-actions">
         ${buttons(staged ? 'Clear preview' : 'Preview','overlay-preview',id + ' aria-pressed="' + pressed(staged) + '"',staged?'cue':'')}
         ${buttons(shown ? 'Hide live' : 'Go live','overlay-live',id + ' aria-pressed="' + pressed(shown) + '"',shown?'on-air':'')}
+        ${buttons('Delete','overlay-remove',id)}
       </div>
     </article>`;
   }).join('') + (project.overlays.length ? '' : '<p class="empty-panel">Add a graphic or text overlay.</p>') + '</div>';

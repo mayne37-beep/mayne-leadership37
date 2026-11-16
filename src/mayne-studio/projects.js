@@ -46,6 +46,7 @@ export function lastProject(id) {
 export const loadProject = id => access('projects', 'readonly', tx => tx.objectStore('projects').get(id));
 export const listProjects = () => access('projects', 'readonly', tx => tx.objectStore('projects').getAll());
 export const loadFile = (project, asset) => access('files', 'readonly', tx => tx.objectStore('files').get([project, asset]));
+export const discardFile = (project, asset) => access('files', 'readwrite', tx => tx.objectStore('files').delete([project, asset]));
 
 export function saveProject(project, media = []) {
   const snapshot = clone(project);
