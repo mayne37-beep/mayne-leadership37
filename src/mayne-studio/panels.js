@@ -49,17 +49,18 @@ function layerInspector(layer, source, media) {
   const capture = ['camera', 'mic', 'screen'].includes(source.type);
   const visuals = VISUAL.has(source.type);
   const connected = entry?.state === 'ready';
-  const connect = connected ? buttons('Disconnect everywhere', 'disconnect', sourceId)
-    : buttons(entry?.state === 'loading' ? 'Connecting…' : 'Connect input in all scenes', 'connect', sourceId, 'primary-outline');
+  const connect = connected
+    ? buttons('Disconnect device', 'disconnect', sourceId)
+    : buttons(entry?.state === 'loading' ? 'Connecting…' : 'Connect device', 'connect', sourceId, 'primary-outline');
   return `<div class="section-label"><h3>Layer properties</h3>${iconButton(
-      ['camera','mic'].includes(source.type) ? 'remove-shared-device' : 'remove-layer',
-      ['camera','mic'].includes(source.type) ? 'Remove shared input from every scene' : 'Remove layer',
-      'trash', ['camera','mic'].includes(source.type) ? sourceId : id)}</div>
+      'remove-layer', 'Remove input from this scene only',
+      'trash', id)}</div>
     <div class="fieldset">
       ${field('Input name', 'source', 'name', source.name)}
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
-      ${['camera','mic'].includes(source.type) ? '<p class="slide-label">Shared input · connected once for every scene. Disconnect here to turn it off everywhere.</p>' : ''}
+      ${source.type === 'camera' ? '<p class="slide-label">This camera is assigned only to scenes with this input layer. Connecting or disconnecting controls the shared camera source, without adding it to other scenes. Use Camera assignments under Scenes to choose where it appears.</p>' :
+          source.type === 'mic' ? '<p class="slide-label">This microphone is one shared audio source. Its mixer channel is active across scene changes.</p>' : ''}
       ${capture ? `<div class="inspector-tools">${connect}
         ${source.type !== 'screen' ? buttons('Device…','change-device',sourceId) : ''}</div>` : ''}
       ${entry?.state === 'error' ? '<p class="warning-note">' + e(entry.message) + '</p>' : ''}
