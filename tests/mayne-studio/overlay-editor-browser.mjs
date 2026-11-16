@@ -33,8 +33,8 @@ try {
   const create = page.getByRole('dialog', { name: 'Add overlay' });
   await create.waitFor();
   const types = await create.locator('[data-act="overlay-type"]').evaluateAll(items => items.map(node => node.dataset.id));
-  assert.deepEqual(types, ['image','video','message'],
-    'Only Image, Video, Message are available; old arrow/hand controls are removed');
+  assert.deepEqual(types, ['image','video','message','emoji'],
+    'The overlay chooser includes native Emoji alongside Image, Video and Message');
 
   // A new message opens the visual canvas editor directly, independently of any scene.
   await create.locator('[data-id="message"]').click();
@@ -98,6 +98,81 @@ try {
   assert.equal(await editor.locator('[data-oe-field="opacity"]').inputValue(),'76');
   assert.ok(Number(await editor.locator('[data-oe-field="x"]').inputValue()) >= initialX + 10,
     'Layout position persisted in browser storage');
+  await editor.locator('[data-oe-action="cancel"]').click();
+
+  // Emoji overlay: choose from native glyphs by category or name, customize
+  // geometry/motion, then cue on Program without taking a different scene.
+  await page.locator('#workspace-add').click();
+  await create.locator('[data-id="emoji"]').click();
+  await editor.waitFor({state:'visible'});
+  assert.equal(await editor.locator('[data-oe-field="text"]').count(),0,
+    'Emoji overlays have a dedicated picker rather than message text controls');
+  assert.ok(await editor.locator('[data-oe-action="choose-emoji"]').count()>=120,
+    'The emoji picker offers an extensive library');
+  assert.equal(await editor.locator('#oe-emoji-chosen').getByText('Clapping hands').isVisible(),true);
+  await editor.locator('#oe-emoji-search').fill('sparkle');
+  assert.ok(await editor.locator('[data-oe-action="choose-emoji"]').count()>=1,
+    'Searching narrows the emoji choices');
+  await editor.locator('[data-oe-action="choose-emoji"][aria-label="Sparkles"]').click();
+  assert.ok((await editor.locator('#oe-emoji-chosen').textContent()).includes('Sparkles'));
+  await editor.locator('#oe-emoji-search').fill('');
+  await editor.locator('[data-oe-action="emoji-category"][data-category="gestures"]').click();
+  assert.equal(await editor.locator('[data-oe-action="emoji-category"][data-category="gestures"]').getAttribute('aria-pressed'),'true',
+    'Emoji category selection is keyboard- and screen-reader-accessible');
+  await editor.locator('[data-oe-action="choose-emoji"][aria-label="Thumbs up"]').click();
+  assert.equal(await editor.locator('[data-oe-field="name"]').inputValue(),'Emoji: Thumbs up');
+  await editor.locator('[data-oe-field="x"]').fill('36');
+  await editor.locator('[data-oe-field="x"]').press('Tab');
+  await editor.locator('[data-oe-field="y"]').fill('21');
+  await editor.locator('[data-oe-field="y"]').press('Tab');
+  await editor.locator('[data-oe-field="animation"]').selectOption('pop');
+  await editor.locator('[data-oe-field="exitAnimation"]').selectOption('fade');
+  await editor.locator('[data-oe-field="seconds"]').fill('6');
+  await editor.locator('[data-oe-field="seconds"]').press('Tab');
+  await editor.locator('[data-oe-action="preview"]').click();
+  assert.ok(await editor.locator('#oe-canvas').isVisible(),
+    'Emoji can be safely previewed on the offline video canvas');
+  assert.equal(await page.locator('#program-name').textContent(),'No scene on air',
+    'Previewing an emoji must not switch the broadcast scene');
+  await editor.locator('[data-oe-action="save"]').click();
+  await editor.waitFor({state:'hidden'});
+  const emojiCard=page.locator('#overlays-panel .overlay-card').filter({hasText:'Emoji: Thumbs up'});
+  assert.equal(await emojiCard.count(),1,'Saved emoji appears in the Overlays workspace');
+  assert.equal(await emojiCard.getByText('Emoji',{exact:true}).count(),1);
+  assert.ok(await emojiCard.locator('.overlay-emoji-glyph').textContent()==='👍');
+  const sample=()=>page.evaluate(()=>{
+    const canvas=document.querySelector('#program-canvas');
+    const ctx=canvas.getContext('2d');
+    const data=ctx.getImageData(Math.floor(canvas.width*.36),
+      Math.floor(canvas.height*.21),Math.floor(canvas.width*.19),
+      Math.floor(canvas.height*.27)).data;
+    let total=0;
+    for(let i=0;i<data.length;i+=12)total+=data[i]+data[i+1]+data[i+2];
+    return total;
+  });
+  const beforeEmoji=await sample();
+  await emojiCard.locator('[data-act="overlay-live"]').click();
+  await emojiCard.getByText('Hide live').waitFor();
+  await page.waitForTimeout(500);
+  const afterEmoji=await sample();
+  assert.ok(Math.abs(afterEmoji-beforeEmoji)>2000,
+    'The emoji changes actual Program pixels as a transparent video overlay');
+  assert.equal(await page.locator('#program-name').textContent(),'No scene on air',
+    'Going live with an emoji never changes the selected studio scene');
+  await emojiCard.locator('[data-act="overlay-live"]').click();
+  await page.locator('#save-state').getByText('Saved on this device').waitFor({timeout:12000});
+  await page.reload();
+  await page.locator('#studio:not([hidden])').waitFor();
+  await page.locator('#workspace-overlays').click();
+  const restoredEmoji=page.locator('.overlay-card').filter({hasText:'Emoji: Thumbs up'});
+  assert.equal(await restoredEmoji.count(),1,'Emoji is saved with the browser project');
+  await restoredEmoji.locator('[data-act="overlay-edit"]').click();
+  await editor.waitFor({state:'visible'});
+  assert.ok((await editor.locator('#oe-emoji-chosen').textContent()).includes('Thumbs up'),
+    'The previously selected emoji is retained after reload');
+  assert.equal(await editor.locator('[data-oe-field="x"]').inputValue(),'36');
+  assert.equal(await editor.locator('[data-oe-field="seconds"]').inputValue(),'6');
+  assert.equal(await editor.locator('[data-oe-field="exitAnimation"]').inputValue(),'fade');
   await editor.locator('[data-oe-action="cancel"]').click();
 
   // Add a real image and edit its placement independently from text overlays.
@@ -177,7 +252,7 @@ try {
   assert.equal(await page.locator('.overlay-card').filter({hasText:'logo'}).count(),0);
   assert.ok(await page.locator('.overlay-card').filter({hasText:'Welcome to class'}).count() === 1);
   assert.deepEqual(errors,[]);
-  console.log('Overlay Designer: three types, drag/resize, motion, save/reload, image+video uploads, Go Live and delete passed.');
+  console.log('Overlay Designer: image, video, message and emoji overlay library, search, geometry, motion, save/reload, Go Live and delete passed.');
   await context.close();
 } finally {
   if(browser) await browser.close();
