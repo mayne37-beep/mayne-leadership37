@@ -1,6 +1,6 @@
 import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
-  shareDeviceAcrossScenes,
+  assignDeviceToScene, isDefaultSharedCameraInset,
   transitionProgress, uid } from './model.js';
 import * as storage from './projects.js';
 import { StudioMedia, fileKind } from './media.js';
@@ -521,47 +521,85 @@ class Studio {
     return layer;
   }
 
-  /** Device streams belong to the project, never to an individual scene.
-   * Keep per-scene camera layouts independently editable while displaying the
-   * shared device on the current live Program as soon as it connects. */
-  shareLiveDevice(source = null) {
-    const added = shareDeviceAcrossScenes(this.project, source);
-    if (this.program) {
-      const actual = this.project.scenes.find(scene => scene.id === this.program.scene.id);
-      if (actual) for (const device of (source ? [source] :
-        this.project.sources.filter(item => ['camera','mic'].includes(item.type)))) {
-        const layer = actual.layers.find(item => item.source === device.id);
-        if (layer && !this.program.scene.layers.some(item => item.source === device.id))
-          this.program.scene.layers.push(clone(layer));
-        this.program.sources.set(device.id, clone(device));
-      }
-    }
-    return added;
-  }
-
+  /** A connected device is shared by reference, not inserted in every scene.
+   * Only scenes with an explicitly assigned layer can display that camera. */
   async connectInput(source) {
     if (!source) return;
-    if (source.type === 'camera' || source.type === 'mic') {
-      this.shareLiveDevice(source);
+    if (source.type === 'mic' && source.route !== 'always') {
+      source.route = 'always';
       this.mark();
-      this.render();
     }
     await this.media.connect(source);
     this.render();
+  }
+
+  /** Project-wide camera assignment matrix: independent camera stream, explicit
+   * per-scene visibility and geometry. Legacy auto-added insets are identified
+   * as suggestions only; nothing is removed without operator confirmation. */
+  cameraAssignments() {
+    const cameras = this.project.sources.filter(source => source.type === 'camera');
+    if (!cameras.length) {
+      this.dialogOpen('Camera assignments',
+        '<p>There are no cameras in this project yet. Choose a scene, open its '
+        + 'Settings and select Add input → Camera to add one.</p>');
+      return;
+    }
+    const header = '<div class="camera-matrix-head"><span>Scene</span>'
+      + cameras.map(camera => '<strong title="' + e(camera.name) + '">' + e(camera.name) + '</strong>').join('')
+      + '</div>';
+    const rows = this.project.scenes.map((scene, rowIndex) =>
+      '<div class="camera-matrix-row"><strong>' + e(scene.name) + '</strong>'
+      + cameras.map((camera, columnIndex) => {
+        const layer = scene.layers.find(item => item.source === camera.id);
+        const suggested = isDefaultSharedCameraInset(layer, camera);
+        return '<label class="camera-matrix-check" title="'
+          + e(camera.name) + ' in ' + e(scene.name) + '">'
+          + '<input type="checkbox" name="cam-' + rowIndex + '-' + columnIndex
+          + '" data-default-inset="' + suggested + '"' + (layer ? ' checked' : '') + '>'
+          + '<span>' + (layer ? 'Assigned' : 'Off') + '</span></label>';
+      }).join('') + '</div>').join('');
+    this.dialogOpen('Camera assignments',
+      '<p><b>A camera only appears in scenes where its box is checked.</b> All scenes '
+      + 'that use the same camera share one device connection, but can size and position '
+      + 'that camera differently.</p><p class="slide-label">This also lets you remove camera '
+      + 'layers that the previous update may have added automatically. Changes to a scene '
+      + 'already on air take effect the next time you Take that scene.</p>'
+      + '<div class="camera-matrix">' + header + rows + '</div>'
+      + '<p class="slide-label">Review before saving. “Clear default insets” only unchecks '
+      + 'unmodified inset-sized camera layers; it does not change anything until you apply.</p>',
+      '<button type="button" class="button" data-act="camera-uncheck-defaults">Clear default insets</button>'
+      + '<button type="button" class="button" data-act="close-dialog">Cancel</button>'
+      + '<button type="submit" class="button primary">Apply camera assignments</button>',
+      data => {
+        const planned = this.project.scenes.map((scene, rowIndex) => {
+          const additions = cameras.filter((camera, columnIndex) =>
+            data.has('cam-' + rowIndex + '-' + columnIndex) &&
+            !scene.layers.some(layer => layer.source === camera.id));
+          const removed = new Set(cameras.filter((camera, columnIndex) =>
+            !data.has('cam-' + rowIndex + '-' + columnIndex)).map(camera => camera.id));
+          if (scene.layers.length + additions.length
+            - scene.layers.filter(layer => removed.has(layer.source)).length > 40)
+            throw new Error('“' + scene.name + '” has too many layers for the chosen cameras.');
+          return { scene, additions, removed };
+        });
+        for (const { scene, additions, removed } of planned) {
+          scene.layers = scene.layers.filter(layer => !removed.has(layer.source));
+          for (const camera of additions) assignDeviceToScene(this.project, scene, camera);
+        }
+        this.layerId = this.scene.layers.some(layer => layer.id === this.layerId)
+          ? this.layerId : this.scene.layers.at(-1)?.id;
+        this.closeDialog();
+        this.mark();
+        this.render();
+      });
   }
 
   addSource(type, name, options, project = this.project, scene = this.scene) {
     if (project.sources.length >= 100) throw new Error('A project can hold up to 100 inputs.');
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const source = makeSource(type, name, options);
-    if (type === 'camera' || type === 'mic') {
-      // Allocate all scene references before adding the project source. A
-      // capacity error cannot leave an orphaned camera or microphone behind.
-      shareDeviceAcrossScenes(project, source);
-      project.sources.push(source);
-      if (project === this.project) this.shareLiveDevice(source);
-      return { source, layer: scene.layers.find(item => item.source === source.id) };
-    }
+    // Add a new device to the chosen scene only. Other scenes can explicitly
+    // reuse this source ID, with a single shared MediaStream connection.
     project.sources.push(source);
     const layer = this.addLayer(project, scene, source);
     return { source, layer };
@@ -696,8 +734,6 @@ class Studio {
           const template = String(data.get('template'));
           const item = makeScene(template, textName(String(data.get('name')), TEMPLATES[template]));
           this.project.scenes.push(item);
-          try { this.shareLiveDevice(); }
-          catch (error) { this.project.scenes.pop(); throw error; }
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
@@ -964,6 +1000,13 @@ class Studio {
           break;
         case 'toggle-mixer': this.toggleMixer(); break;
         case 'add-context': this.inputMenu(); break;
+        case 'manage-cameras': this.cameraAssignments(); break;
+        case 'camera-uncheck-defaults':
+          for (const input of this.dialog.querySelectorAll('input[data-default-inset="true"]')) {
+            input.checked = false;
+            input.parentElement.querySelector('span').textContent = 'Off';
+          }
+          break;
         case 'select-layer': this.layerId = id; this.renderDock(); break;
         case 'toggle-layer': {
           const layer = this.scene.layers.find(item => item.id === id);
@@ -979,16 +1022,20 @@ class Studio {
           break;
         }
         case 'remove-layer': {
+          // Removing a camera from this scene NEVER disconnects that shared
+          // camera from other scenes that refer to the same source.
           this.scene.layers = this.scene.layers.filter(layer => layer.id !== id);
           this.layerId = this.scene.layers.at(-1)?.id;
           this.mark();
-          this.renderDock();
+          this.render();
           break;
         }
         case 'reuse-input': {
           const source = this.source($('reuse-input')?.value);
           if (!source) break;
-          this.layerId = this.addLayer(this.project, this.scene, source).id;
+          this.layerId = ['camera','mic'].includes(source.type)
+            ? assignDeviceToScene(this.project, this.scene, source).id
+            : this.addLayer(this.project, this.scene, source).id;
           this.closeDialog();
           this.mark();
           this.render();
