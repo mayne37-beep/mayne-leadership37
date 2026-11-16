@@ -105,7 +105,9 @@ try {
     'Full-screen break scene and small studio ring have independent styles');
 
   await panel.locator('[data-project=timerBackground]').selectOption('glass');
-  await panel.locator('[data-project=timerColor]').fill('#123abc');
+  await panel.locator('[data-project=timerColor]').evaluate(node => {
+    node.value='#123abc';node.dispatchEvent(new Event('change',{bubbles:true}));
+  });
   await panel.locator('[data-project=timerOpacity]').evaluate(node => {
     node.value='65';node.dispatchEvent(new Event('change',{bubbles:true}));
   });
