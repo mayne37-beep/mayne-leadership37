@@ -9,6 +9,7 @@ const field = (label, scope, key, value, limit = 120) => '<label>' + label + '<i
 const inputState = (source, entry) => {
   if (source.type === 'title') return 'Text layer';
   if (source.type === 'scene') return 'Reusable scene';
+  if (source.type === 'timer') return 'Shared countdown';
   if (entry?.state === 'error') return 'Input unavailable';
   if (entry?.state === 'loading') return 'Connecting…';
   if (entry?.state === 'ready') return entry.deck ? entry.deck.count + ' slides' : 'Ready';
@@ -68,6 +69,12 @@ function layerInspector(layer, source, media, project) {
         : field('Input name', 'source', 'name', source.name)}
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
+      ${source.type === 'timer'
+        ? '<p class="slide-label">One shared classroom countdown. This layer displays it only in this scene. '
+          + 'Position it over the TV, whiteboard or video using Arrange scene. The clock keeps running through scene changes.</p>'
+          + '<label>Timer style<select data-layer="timerStyle">' + options(TIMER_STYLES,layer.timerStyle || 'digital') + '</select></label>'
+          + buttons('Open Classroom timer controls','workspace-tab','data-id="classroom"')
+        : ''}
       ${source.type === 'camera' ? '<p class="slide-label">This camera is assigned only to scenes with this input layer. Connecting or disconnecting controls the shared camera source, without adding it to other scenes. Use Camera assignments under Scenes to choose where it appears.</p>' :
           source.type === 'mic' ? '<p class="slide-label">This microphone is one shared audio source. Its mixer channel is active across scene changes.</p>' : ''}
       ${capture ? `<div class="inspector-tools">${connect}
