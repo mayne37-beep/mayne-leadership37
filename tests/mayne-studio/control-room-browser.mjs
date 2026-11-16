@@ -151,9 +151,9 @@ try {
   await page.locator('#classroom-panel [data-act="timer-show"]').click();
   assert.equal(await page.locator('#classroom-panel [data-act="timer-show"]').textContent(), 'Hide from output',
     'The timer can be shown or hidden globally from the Classroom tab');
-  assert.equal(await page.evaluate(() => window.__qaStudio.project.sources
-    .filter(source => source.type === 'timer').length), 0,
-    'Showing the shared countdown never inserts unwanted timer layers into existing scenes');
+  assert.equal(await page.locator('#classroom-panel [data-act="timer-assign"]').textContent(),
+    'Add timer to this scene',
+    'The timer must still be explicitly assigned to the selected scene');
 
   // Accessible arrow-key navigation between the global workspaces.
   await page.locator('#workspace-overlays').focus();
