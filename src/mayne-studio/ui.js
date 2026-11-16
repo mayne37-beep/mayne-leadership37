@@ -16,6 +16,7 @@ const paths = {
   eye: '<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/>',
   eyeOff: '<path d="m3 3 18 18M10 6l2-.1c6 0 10 6 10 6s-1 1.5-2.5 3M17 17a10 10 0 0 1-5 1c-6 0-10-6-10-6a17 17 0 0 1 4-4"/>',
   camera: '<rect x="2" y="5" width="13" height="14" rx="2"/><path d="m15 10 6-4v12l-6-4"/>',
+  scene: '<rect x="3" y="5" width="14" height="12" rx="1"/><path d="M8 17v3h13V9h-4m-7-1h4m-7 3h7"/>',
   mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2m-7 9v3"/>',
   powerpoint: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4m-3-7V7h4a2 2 0 0 1 0 4H9"/>',
   image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 16-5-5L5 21"/>',
