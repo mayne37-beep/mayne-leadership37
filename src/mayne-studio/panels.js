@@ -1,6 +1,7 @@
-import { AUDIO, BACKGROUNDS, clock, OVERLAYS, SHORTCUTS, SOURCES, VISUAL, visibleSceneLayers } from './model.js';
+import { AUDIO, BACKGROUNDS, clock, OVERLAYS, OVERLAY_GROUPS, OVERLAY_LIMIT,
+  overlayGroup, SOURCES, VISUAL, visibleSceneLayers } from './model.js';
 import { checked, e, fields, icon, iconButton, option, pressed } from './ui.js';
-import { shortcutLabel } from './shortcuts.js';
+import { overlayShortcutLabel } from './shortcuts.js';
 import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, BUILTIN_TIMER_PRESETS, timerParts, timerText } from './timer.js';
 
 const options = (all, active) => Object.entries(all).map(([id, name]) => option(id, name, active)).join('');
@@ -125,19 +126,30 @@ export function deckPanel(entry, layer, target, compact = false) {
   </div>`;
 }
 
-export function overlaysPanel(project, preview, live) {
-  return '<div class="keys">' + project.overlays.map((o, index) => {
+export function overlaysPanel(project, preview, live, filter = {search:'',group:'all'}) {
+  const groupOptions = '<option value="all">All groups</option>' +
+    Object.entries(OVERLAY_GROUPS).map(([id,label])=>option(id,label,filter.group)).join('');
+  return '<div class="overlay-library">' +
+    '<div class="overlay-library-toolbar">' +
+      '<label>Find overlay<input type="search" data-overlay-search autocomplete="off" placeholder="Search name or message" value="' +
+        e(filter.search || '') + '"></label>' +
+      '<label>Group<select data-overlay-filter>' + groupOptions + '</select></label>' +
+      '<span class="overlay-library-count" id="overlay-library-count" aria-live="polite">' +
+        project.overlays.length + ' / ' + OVERLAY_LIMIT + ' saved</span>' +
+    '</div><div class="keys overlay-library-list">' + project.overlays.map((o, index) => {
     const id = 'data-id="' + o.id + '"';
     const staged = preview.has(o.id) && preview.get(o.id).end === undefined;
     const shown = live.has(o.id) && live.get(o.id).end === undefined;
     const category = o.type === 'emoji' ? 'Emoji'
       : ['image','video','graphic'].includes(o.type)
         ? (o.type === 'video' ? 'Video' : o.type === 'image' ? 'Image' : 'Media') : 'Message';
-    return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}">
+    const group=overlayGroup(o.group,o.type);
+    const search=(o.name+' '+(o.text||'')+' '+(o.sub||'')).toLowerCase();
+    return `<article class="overlay-card ${shown ? 'is-live' : ''} ${staged ? 'is-preview' : ''}" data-overlay-group="${e(group)}" data-overlay-search="${e(search)}">
       <div class="overlay-title">${icon(category.toLowerCase() === 'media' ? 'image' : category.toLowerCase(),17)}
         <span title="${e(o.name)}"><b>${o.type === 'emoji'
-          ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category}</small></span>
-        <kbd>${e(shortcutLabel(project.shortcuts?.['overlay' + index] ?? ''))}</kbd></div>
+          ? '<span class="overlay-emoji-glyph" aria-hidden="true">'+e(o.emoji)+'</span> ' : ''}${e(o.name)}</b><small class="overlay-type-label">${category} · ${e(OVERLAY_GROUPS[group])}</small></span>
+        <kbd>${e(overlayShortcutLabel(project,index))}</kbd></div>
       ${iconButton('overlay-edit','Open visual editor for ' + o.name,'gear',id)}
       <div class="overlay-actions">
         ${buttons(staged ? 'Clear preview' : 'Preview','overlay-preview',id + ' aria-pressed="' + pressed(staged) + '"',staged?'cue':'')}
@@ -145,7 +157,8 @@ export function overlaysPanel(project, preview, live) {
         ${buttons('Delete','overlay-remove',id)}
       </div>
     </article>`;
-  }).join('') + (project.overlays.length ? '' : '<p class="empty-panel">Add an image, video, message or emoji overlay.</p>') + '</div>';
+  }).join('') + (project.overlays.length ? '' : '<p class="empty-panel">Add an image, video, message or emoji overlay.</p>') + '</div>' +
+    '<p class="overlay-library-empty" id="overlay-library-empty" hidden>No overlays match this search or group.</p></div>';
 }
 
 export function classroomPanel(project, timer, state, media) {
