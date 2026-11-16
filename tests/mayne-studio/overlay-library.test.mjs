@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeProject, makeOverlay, normalizeProject, OVERLAY_LIMIT, OVERLAY_GROUPS,
+import { makeProject, makeOverlay, makeScene, normalizeProject, OVERLAY_LIMIT, OVERLAY_GROUPS,
   overlayGroup } from '../../src/mayne-studio/model.js';
 import { DEFAULT_SHORTCUTS, normalizeExtraShortcuts, shortcutAction,
   overlayShortcutLabel, EXTRA_SHORTCUT_LIMIT } from '../../src/mayne-studio/shortcuts.js';
@@ -77,4 +77,21 @@ test('older projects without additional shortcuts still normalize safely',()=>{
   const output=normalizeProject(project);
   assert.deepEqual(output.extraShortcuts,[]);
   assert.equal(output.shortcuts.overlay0,'KeyQ');
+});
+
+test('more shortcut rows can target the tenth scene by stable ID',()=>{
+  const project=makeProject('Many studio scenes');
+  project.scenes=Array.from({length:12},(_,i)=>({...makeScene('blank','Studio scene '+(i+1)),
+    id:'studio-scene-'+i}));
+  project.extraShortcuts=[
+    shortcut('extra-scene','scene:studio-scene-9','Ctrl+Alt+KeyP'),
+    shortcut('extra-invalid','scene:not-in-project','Ctrl+Alt+KeyI'),
+  ];
+  const result=normalizeProject(project);
+  assert.equal(result.extraShortcuts.length,1);
+  assert.equal(shortcutAction(result.shortcuts,'Ctrl+Alt+KeyP',result.extraShortcuts),
+    'scene:studio-scene-9');
+  result.scenes.reverse(); // stable scene identifier remains the target
+  assert.equal(result.scenes.find(s=>s.id===result.extraShortcuts[0].action.slice(6)).name,
+    'Studio scene 10');
 });
