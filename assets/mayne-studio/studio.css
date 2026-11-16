@@ -495,3 +495,41 @@ kbd{white-space:nowrap}
 .studio-empty-scenes p{font-size:12px;color:var(--soft);line-height:1.55;max-width:500px}
 .studio-empty-scenes .button{min-height:36px}
 @media(max-width:690px){.studio-empty-scenes{margin:8px;padding:14px;min-height:120px}}
+
+
+/* Direct scene-strip ordering: a dedicated drag grip plus accessible
+   move-left / move-right controls. Does not change the on-air scene. */
+.scene-tile .scene-reorder-bar{
+  display:flex;align-items:center;gap:3px;min-height:31px;
+  padding:3px 5px;border-bottom:1px solid var(--line);
+  background:#1d2c40;color:#afc9e6;
+}
+.scene-drag-handle{
+  display:inline-flex;align-items:center;justify-content:flex-start;gap:4px;
+  flex:1;min-width:0;padding:4px 5px;border-radius:4px;
+  cursor:grab;user-select:none;-webkit-user-select:none;
+  font-size:10px;font-weight:650;line-height:16px;
+  touch-action:pan-x;
+}
+.scene-drag-handle:hover{background:#2b435d;color:#f5fbff}
+.scene-drag-handle:active{cursor:grabbing}
+.scene-drag-handle svg{flex:none}
+.scene-order-index{font-size:9px;letter-spacing:.02em;font-variant-numeric:tabular-nums;white-space:nowrap;color:#9fb4cc}
+.scene-order-step{
+  display:grid;place-items:center;flex:0 0 25px;width:25px;height:25px;
+  padding:0;border:1px solid transparent;border-radius:5px;
+  background:#21354a;color:#cbe3fd;cursor:pointer;
+}
+.scene-order-step:hover:not(:disabled),.scene-order-step:focus-visible{
+  border-color:#658eae;background:#325374;color:white;
+}
+.scene-order-step:disabled{color:#708198;opacity:.45;cursor:not-allowed}
+.scene-tile.scene-dragging{opacity:.53;outline:1px dashed #8bbfe0}
+.scene-tile.scene-drop-before{box-shadow:inset 5px 0 #80d6ff;outline:2px solid #80d6ff}
+.scene-tile.scene-drop-after{box-shadow:inset -5px 0 #80d6ff;outline:2px solid #80d6ff}
+@media(max-width:690px){
+  .scene-tile .scene-reorder-bar{padding:2px;gap:1px}
+  .scene-drag-handle{padding:4px 2px;font-size:9px}
+  .scene-order-step{flex-basis:23px;width:23px;height:27px}
+  .scene-order-index{font-size:9px}
+}

@@ -4,6 +4,7 @@ const paths = {
   plus: '<path d="M12 5v14M5 12h14"/>', chevron: '<path d="m6 9 6 6 6-6"/>',
   left: '<path d="m14 6-6 6 6 6"/>', right: '<path d="m10 6 6 6-6 6"/>',
   up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
+  grip: '<circle cx="8" cy="5" r="1.25"/><circle cx="16" cy="5" r="1.25"/><circle cx="8" cy="12" r="1.25"/><circle cx="16" cy="12" r="1.25"/><circle cx="8" cy="19" r="1.25"/><circle cx="16" cy="19" r="1.25"/>',
   back: '<path d="M20 12H4m6-6-6 6 6 6"/>',
   screen: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/>',
   popout: '<path d="M13 3h8v8m0-8-10 10m8 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>',
