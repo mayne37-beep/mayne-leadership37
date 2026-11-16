@@ -231,7 +231,7 @@ export function normalizeProject(input) {
       .filter(item => item && typeof item.name === 'string' && item.name.trim() &&
         Number.isInteger(item.seconds) && item.seconds >= 1 && item.seconds <= MAX_TIMER_SECONDS)
       .map(item => ({ name: item.name.trim().slice(0,32), seconds:item.seconds })),
-    shortcuts, extraShortcuts: normalizeExtraShortcuts(input.extraShortcuts,shortcuts,overlays.map(o=>o.id)),
+    shortcuts, extraShortcuts: normalizeExtraShortcuts(input.extraShortcuts,shortcuts,overlays.map(o=>o.id),scenes.map(s=>s.id)),
     favoriteTransitions: normalizeFavoriteTransitions(input.favoriteTransitions),
   };
 }
