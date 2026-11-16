@@ -46,6 +46,40 @@ try {
   await name.fill('Welcome to class');
   await editor.locator('[data-oe-field="text"]').fill('Welcome!');
   await editor.locator('[data-oe-field="sub"]').fill('Leadership 101');
+  // Visual styles are Message-only and use the same canvas as live Program.
+  assert.equal(await editor.locator('[data-oe-action="message-style"]').count(),6,
+    'Message Overlay Designer offers six selectable appearances');
+  const backgroundPixel=()=>editor.locator('#oe-canvas').evaluate(canvas=>{
+    const ctx=canvas.getContext('2d');
+    return [...ctx.getImageData(Math.floor(canvas.width*.70),
+      Math.floor(canvas.height*.11),1,1).data].slice(0,3);
+  });
+  const classicPixel=await backgroundPixel();
+  await editor.locator('[data-oe-action="message-style"][data-style="minimal"]').click();
+  assert.notDeepEqual(await backgroundPixel(),classicPixel,
+    'Selecting a preset changes the false Program drawing immediately');
+  await editor.locator('[data-oe-action="message-style"][data-style="alert"]').click();
+  assert.equal(await editor.locator('[data-oe-action="message-style"][data-style="alert"]')
+    .getAttribute('aria-pressed'),'true','Alert is the selected style');
+  await editor.locator('[data-msg-field="font"]').selectOption('serif');
+  await editor.locator('[data-msg-field="weight"]').selectOption('800');
+  await editor.locator('[data-msg-field="align"]').selectOption('left');
+  await editor.locator('[data-msg-field="size"]').evaluate(node=>{
+    node.value='135';node.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await editor.locator('[data-msg-field="background"]').evaluate(node=>{
+    node.value='#dd2233';node.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await editor.locator('[data-msg-field="backgroundOpacity"]').evaluate(node=>{
+    node.value='100';node.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await editor.locator('[data-msg-field="borderWidth"]').evaluate(node=>{
+    node.value='5';node.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await editor.locator('[data-msg-field="shadow"]').check();
+  const customPixel=await backgroundPixel();
+  assert.ok(customPixel[0]>customPixel[1]+90 && customPixel[0]>customPixel[2]+90,
+    'Custom background color renders on the actual message preview canvas');
   const target = editor.locator('#oe-target');
   const stage = await editor.locator('#oe-stage').boundingBox();
   const initialX = Number(await editor.locator('[data-oe-field="x"]').inputValue());
@@ -96,6 +130,16 @@ try {
   assert.equal(await editor.locator('[data-oe-field="exitAnimation"]').inputValue(),'slide-left');
   assert.equal(await editor.locator('[data-oe-field="seconds"]').inputValue(),'7');
   assert.equal(await editor.locator('[data-oe-field="opacity"]').inputValue(),'76');
+  assert.equal(await editor.locator('[data-oe-action="message-style"][data-style="alert"]')
+    .getAttribute('aria-pressed'),'true','Saved visual preset survives browser reload');
+  assert.equal(await editor.locator('[data-msg-field="font"]').inputValue(),'serif');
+  assert.equal(await editor.locator('[data-msg-field="weight"]').inputValue(),'800');
+  assert.equal(await editor.locator('[data-msg-field="align"]').inputValue(),'left');
+  assert.equal(await editor.locator('[data-msg-field="size"]').inputValue(),'135');
+  assert.equal(await editor.locator('[data-msg-field="background"]').inputValue(),'#dd2233');
+  assert.equal(await editor.locator('[data-msg-field="backgroundOpacity"]').inputValue(),'100');
+  assert.equal(await editor.locator('[data-msg-field="borderWidth"]').inputValue(),'5');
+  assert.equal(await editor.locator('[data-msg-field="shadow"]').isChecked(),true);
   assert.ok(Number(await editor.locator('[data-oe-field="x"]').inputValue()) >= initialX + 10,
     'Layout position persisted in browser storage');
   await editor.locator('[data-oe-action="cancel"]').click();
@@ -107,6 +151,8 @@ try {
   await editor.waitFor({state:'visible'});
   assert.equal(await editor.locator('[data-oe-field="text"]').count(),0,
     'Emoji overlays have a dedicated picker rather than message text controls');
+  assert.equal(await editor.locator('.oe-message-appearance').count(),0,
+    'Appearance controls do not change native emoji overlays');
   assert.ok(await editor.locator('[data-oe-action="choose-emoji"]').count()>=120,
     'The emoji picker offers an extensive library');
   assert.equal(await editor.locator('#oe-emoji-chosen').getByText('Clapping hands').isVisible(),true);
