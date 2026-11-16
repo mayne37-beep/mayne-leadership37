@@ -541,13 +541,39 @@ class Studio {
   }
 
   shortcutDialog() {
-    const fields = SHORTCUT_ACTIONS.map(([id, label]) =>
-      '<div class="shortcut-row"><label for="shortcut-' + id + '">' + e(label) + '</label>'
-      + '<input type="text" id="shortcut-' + id + '" data-shortcut="' + id + '" value="' +
-      e(shortcutLabel(this.project.shortcuts[id])) + '" aria-label="Set ' + e(label) + '" readonly>'
-      + '<button class="button" type="button" data-act="shortcut-clear" data-id="' + id + '">Clear</button></div>').join('');
-    this.dialogOpen('Keyboard shortcuts', '<p>Click an assignment box, then press the key or key combination you want. Changes are saved with this project. Backspace clears an assignment. Avoid browser-reserved shortcuts.</p>'
-      + '<div class="shortcut-list">' + fields + '</div>',
+    const fields=SHORTCUT_ACTIONS.map(([id,label]) =>
+      '<div class="shortcut-row"><label for="shortcut-'+id+'">'+e(label)+'</label>'+
+      '<input type="text" id="shortcut-'+id+'" data-shortcut="'+id+'" value="'+
+      e(shortcutLabel(this.project.shortcuts[id]))+'" aria-label="Set '+e(label)+'" readonly>'+
+      '<button class="button" type="button" data-act="shortcut-clear" data-id="'+id+'">Clear</button></div>').join('');
+    const actions=[...SHORTCUT_ACTIONS.map(([id,label])=>[id,label]),
+      ...this.project.overlays.map((overlay,index)=>['overlay:'+overlay.id,
+        'Overlay '+(index+1)+': '+overlay.name])];
+    const custom=(this.project.extraShortcuts||[]).map((entry,index)=>{
+      const selection='<option value="">Choose command…</option>'+
+        actions.map(([id,label])=>option(id,label,entry.action)).join('');
+      return '<div class="shortcut-row shortcut-extra-row">'+
+        '<label for="extra-action-'+e(entry.id)+'" class="sr-only">Shortcut '+(index+1)+' action</label>'+
+        '<select id="extra-action-'+e(entry.id)+'" data-extra-action="'+e(entry.id)+
+          '" aria-label="Action for additional shortcut '+(index+1)+'">'+selection+'</select>'+
+        '<input type="text" data-extra-shortcut="'+e(entry.id)+'" value="'+
+          e(shortcutLabel(entry.key))+'" aria-label="Key for additional shortcut '+(index+1)+'" readonly>'+
+        '<button class="button" type="button" data-act="shortcut-extra-remove" data-id="'+
+          e(entry.id)+'">Remove</button></div>';
+    }).join('');
+    this.dialogOpen('Keyboard shortcuts',
+      '<p>Click an assignment box and press a key combination. Backspace clears it. '+
+      'Choose <strong>Add shortcut</strong> to create another command, including shortcuts '+
+      'for overlays beyond the first eight. A key can trigger only one command. '+
+      'Some combinations are reserved by your browser.</p>'+
+      '<div class="shortcut-list">'+fields+'</div>'+
+      '<div class="shortcut-extra-heading"><strong>Additional shortcuts ('+
+      (this.project.extraShortcuts?.length||0)+' / '+EXTRA_SHORTCUT_LIMIT+')</strong>'+
+      '<button type="button" class="button primary-outline" data-act="shortcut-extra-add">+ Add shortcut</button></div>'+
+      '<p class="shortcut-extra-help">Pick an action, then click its key field and press the shortcut you want. '+
+      'Overlay choices refer to their saved names and stay linked if the library order changes.</p>'+
+      '<div class="shortcut-list shortcut-extra-list">'+(custom||
+        '<p class="slide-label">No additional shortcuts yet.</p>')+'</div>',
       '<button class="button" type="button" data-act="shortcuts-reset">Restore defaults</button>');
   }
 
@@ -1313,6 +1339,32 @@ class Studio {
         case 'close-tools': this.tools.close(); break;
         case 'arrange-preview': this.inlineEditor.toggle(); break;
         case 'shortcuts': this.shortcutDialog(); break;
+        case 'shortcut-extra-add': {
+          this.project.extraShortcuts ||= [];
+          if(this.project.extraShortcuts.length >= EXTRA_SHORTCUT_LIMIT)
+            throw new Error('You have reached the additional shortcut limit.');
+          const newId=uid();
+          this.project.extraShortcuts.push({id:newId,action:'',key:''});
+          this.mark();
+          this.shortcutDialog();
+          this.dialog.querySelector('[data-extra-action="'+newId+'"]')?.focus();
+          break;
+        }
+        case 'shortcut-extra-remove': {
+          this.project.extraShortcuts=(this.project.extraShortcuts||[]).filter(row=>row.id!==id);
+          this.mark();
+          this.shortcutDialog();
+          break;
+        }
+        case 'shortcut-extra-clear': {
+          const row=this.project.extraShortcuts?.find(item=>item.id===id);
+          if (!row)break;
+          row.key='';
+          this.mark();
+          this.shortcutDialog();
+          break;
+        }
+
         case 'shortcut-clear': {
           if (!this.project.shortcuts || !Object.hasOwn(this.project.shortcuts, id)) break;
           this.project.shortcuts[id] = '';
@@ -1325,6 +1377,7 @@ class Studio {
         }
         case 'shortcuts-reset': {
           this.project.shortcuts = Object.fromEntries(SHORTCUT_ACTIONS.map(([key,,shortcut]) => [key, shortcut]));
+          this.project.extraShortcuts=[];
           this.mark();
           this.shortcutDialog();
           break;
