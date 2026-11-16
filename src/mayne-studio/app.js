@@ -1124,7 +1124,7 @@ class Studio {
     if (this.project.overlays.length >= SHORTCUTS.length)
       throw new Error('This project already uses all eight overlay slots.');
     this.dialogOpen('Add overlay',
-      '<p>An overlay is an independent image, video, or message that appears above any live scene. '
+      '<p>An overlay is an independent image, video, message, or emoji reaction that appears above any live scene. '
       + 'Each one can be moved and resized on its own 16:9 canvas, then shown and hidden on air.</p>'
       + '<div class="input-grid">'
       + Object.entries(OVERLAY_CHOICES).map(([id, title]) =>
