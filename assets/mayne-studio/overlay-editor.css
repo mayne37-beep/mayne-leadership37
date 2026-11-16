@@ -64,3 +64,33 @@
   .oe-emoji-choice{min-height:41px}
   .oe-emoji-choice span{font-size:24px}
 }
+
+
+/* Message-only visual presets and custom type/color controls. */
+.oe-message-appearance{gap:10px}
+.oe-message-styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.oe-message-style{display:grid;gap:4px;place-items:center;min-width:0;padding:6px 4px;
+  border:1px solid #4d6984;border-radius:7px;background:#17293f;color:#dceafa;
+  cursor:pointer;font-size:10px;line-height:1.2}
+.oe-message-style:hover,.oe-message-style:focus-visible{background:#2a4764;border-color:#84b8df}
+.oe-message-style.is-selected{border:2px solid #88d8f5;background:#24506b;color:#fff}
+.oe-message-swatch{display:grid;place-items:center;position:relative;overflow:hidden;
+  width:100%;min-height:35px;border:1px solid;border-radius:5px;font-size:16px;font-weight:800;
+  text-shadow:0 1px 3px #0008}
+.oe-message-swatch-line{position:absolute}
+.oe-message-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.oe-message-fields label{min-width:0;font-size:11px}
+.oe-message-fields output{font-weight:700}
+.oe-message-fields input[type="color"]{height:35px;min-height:35px;padding:3px;cursor:pointer}
+.oe-message-fields input[type="range"]{min-height:23px}
+.oe-message-fields select{min-height:34px}
+@media(max-width:930px){
+  .oe-message-appearance{grid-column:span 2}
+  .oe-message-styles{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .oe-message-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .oe-message-appearance{grid-column:span 1}
+  .oe-message-styles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .oe-message-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

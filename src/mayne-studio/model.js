@@ -2,6 +2,7 @@ import { DEFAULT_SHORTCUTS, normalizeShortcuts } from './shortcuts.js';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from './transitions.js';
 import { TIMER_STYLES, TIMER_ENDINGS, TIMER_BACKGROUNDS, MAX_TIMER_SECONDS } from './timer.js';
 import { DEFAULT_EMOJI, findEmoji } from './emojis.js';
+import { messageStyleDefaults, messageStyleId, normalizeMessageAppearance } from './message-styles.js';
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
@@ -70,7 +71,8 @@ export function makeLayer(source, placement = PLACE.full) {
 export function makeOverlay(type, options = {}) {
   const presets = {
     lower: { name: 'Instructor name', text: 'Instructor', sub: 'Mayne Leadership', seconds: 0, x: 5, y: 79, w: 50, h: 16 },
-    message: { name: 'Class prompt', text: 'Share your thoughts in chat', seconds: 8, x: 22, y: 6, w: 56, h: 12 },
+    message: { name: 'Class prompt', text: 'Share your thoughts in chat', seconds: 8, x: 22, y: 6, w: 56, h: 12,
+      messageStyle: 'classic', messageAppearance: messageStyleDefaults('classic') },
     arrow: { name: 'Pointer arrow', seconds: 4, ...PLACE.arrow },
     hand: { name: 'Raise hand', text: 'Raise your hand', seconds: 6, x: 64, y: 72, w: 31, h: 21 },
     graphic: { name: 'Graphic', seconds: 0, ...PLACE.graphic },
@@ -197,6 +199,10 @@ export function normalizeProject(input) {
       exitAnimation: choices(overlay.exitAnimation, OVERLAY_MOTIONS, choices(overlay.animation, OVERLAY_MOTIONS, 'slide')),
       fit: oneOf(overlay.fit, ['contain', 'cover', 'stretch'], 'contain'),
       opacity: clamp(overlay.opacity, 0, 100, 100), loop: overlay.loop !== false, ...placement(overlay),
+      ...(overlay.type === 'message' ? {
+        messageStyle: messageStyleId(overlay.messageStyle),
+        messageAppearance: normalizeMessageAppearance(overlay.messageAppearance,overlay.messageStyle),
+      } : {}),
     } : null),
     transition: choices(input.transition, TRANSITIONS, 'fade'),
     duration: clamp(input.duration, 100, 2500, 450),
