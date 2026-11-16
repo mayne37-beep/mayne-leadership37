@@ -135,6 +135,8 @@ try{
   await setRange('keyStrength',82);
   await setRange('keySoftness',28);
   await setRange('keyDespill',40);
+  // Close the modal scene-tools inspector before using the header Save button.
+  await page.locator('#studio-tools [data-act="close-tools"]').click();
   await page.locator('[data-act="save"]').click();
   await page.locator('#save-state').getByText('Saved on this device').waitFor({timeout:12000});
 
