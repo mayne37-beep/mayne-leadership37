@@ -4,6 +4,8 @@ import { transformBox } from './scene-designer.js';
 import { discardFile } from './projects.js';
 import { e, option } from './ui.js';
 import { DEFAULT_EMOJI, EMOJI_GROUPS, emojiOptions, findEmoji } from './emojis.js';
+import { MESSAGE_STYLES, MESSAGE_FONTS, MESSAGE_WEIGHTS, MESSAGE_ALIGNMENTS, MESSAGE_ACCENT_EDGES,
+  messageStyleDefaults, messageStyleId, normalizeMessageAppearance } from './message-styles.js';
 
 const handles = ['nw','n','ne','e','se','s','sw','w'];
 const geometry = ['x','y','w','h'];
@@ -106,6 +108,7 @@ export class OverlayEditor {
     if (!this.draft) return;
     const d = this.draft;
     const message = !['image','video','graphic','emoji'].includes(d.type);
+    const styleMessage = d.type === 'message';
     this.inspector.innerHTML =
       '<div class="oe-section"><h3>' + e(this.typeLabel()) + ' settings</h3>' +
       '<label>Overlay name<input data-oe-field="name" maxlength="120" value="' + e(d.name) + '"></label>' +
@@ -119,7 +122,8 @@ export class OverlayEditor {
           (d.type === 'video' || d.type === 'graphic'
             ? '<label class="oe-check"><input data-oe-field="loop" type="checkbox" ' +
               (d.loop === false ? '' : 'checked') + '> Loop video while visible</label>' : '')) +
-      '</div><div class="oe-section"><h3>Size and position</h3>' +
+      '</div>' + (styleMessage ? this.messageAppearanceControls() : '') +
+      '<div class="oe-section"><h3>Size and position</h3>' +
       '<p class="oe-muted">Percentages of a 1920 × 1080 video frame; drag or enter precise values.</p>' +
       '<div class="oe-numbers">' +
       numeric('x','Left %',d,-100,100) + numeric('y','Top %',d,-100,100) +
@@ -138,6 +142,63 @@ export class OverlayEditor {
       '<p class="oe-muted">0 stays on air until you click Hide live. The animation restarts every time you show it.</p></div>';
     this.renderEmojiChoices();
     this.updateTarget();
+  }
+
+  /** Presets affect only message appearance; independent scene position,
+   * message text, animations and fade timing remain unchanged. */
+  messageAppearanceControls() {
+    const d=this.draft;
+    const appearance=normalizeMessageAppearance(d.messageAppearance,d.messageStyle);
+    const style=messageStyleId(d.messageStyle);
+    const picker=(label,field,values)=>'<label>'+label+'<select data-msg-field="'+field+'">'+
+      Object.entries(values).map(([id,name])=>option(id,name,appearance[field])).join('')+'</select></label>';
+    const color=(label,field)=>'<label>'+label+'<input type="color" data-msg-field="'+field+
+      '" value="'+e(appearance[field])+'"></label>';
+    const range=(label,field,min,max,step=1)=>'<label>'+label+
+      ' <output data-msg-output="'+field+'">'+appearance[field]+(field==='size'||field==='backgroundOpacity'?'%':'')+
+      '</output><input type="range" data-msg-field="'+field+'" min="'+min+'" max="'+max+
+      '" step="'+step+'" value="'+appearance[field]+'"></label>';
+    return '<div class="oe-section oe-message-appearance"><h3>Message appearance</h3>'+
+      '<p class="oe-muted">Pick a look, then personalize it. Changes update the offline preview; only Save applies them.</p>'+
+      '<div class="oe-message-styles" role="group" aria-label="Message style presets">'+
+      Object.entries(MESSAGE_STYLES).map(([id,p])=>
+        '<button type="button" class="oe-message-style'+(id===style?' is-selected':'')+
+        '" data-oe-action="message-style" data-style="'+id+
+        '" aria-pressed="'+(id===style)+'" title="'+e(p.description)+'">'+
+        '<span class="oe-message-swatch" style="background:'+p.background+
+        ';border-color:'+p.border+';color:'+p.textColor+'">'+
+        '<span class="oe-message-swatch-line" style="background:'+p.accent+
+        ';'+(p.accentEdge==='left'?'left:0;top:0;width:5px;height:100%;':
+          p.accentEdge==='top'?'left:0;top:0;width:100%;height:4px;':'display:none;')+
+        '"></span><span aria-hidden="true">Aa</span></span>'+
+        '<span>'+e(p.name)+'</span></button>').join('')+'</div>'+
+      '<div class="oe-message-fields">'+
+      picker('Font family','font',MESSAGE_FONTS)+picker('Font weight','weight',MESSAGE_WEIGHTS)+
+      picker('Text alignment','align',MESSAGE_ALIGNMENTS)+
+      range('Text size','size',55,160,5)+
+      color('Text color','textColor')+color('Second line color','subColor')+
+      color('Background','background')+range('Background opacity','backgroundOpacity',0,100,5)+
+      color('Accent color','accent')+picker('Accent location','accentEdge',MESSAGE_ACCENT_EDGES)+
+      color('Border color','border')+range('Border thickness','borderWidth',0,12,1)+
+      range('Rounded corners','radius',0,60,2)+'</div>'+
+      '<label class="oe-check"><input type="checkbox" data-msg-field="shadow"'+
+      (appearance.shadow?' checked':'')+'> Drop shadow behind text</label></div>';
+  }
+
+  updateMessageAppearance(event) {
+    if (this.draft?.type!=='message') return;
+    const field=event.target.dataset.msgField;
+    if(!field) return;
+    const input=event.target;
+    const raw=input.type==='checkbox'?input.checked:
+      ['range','number'].includes(input.type)?Number(input.value):input.value;
+    this.draft.messageAppearance=normalizeMessageAppearance({
+      ...this.draft.messageAppearance,[field]:raw,
+    },this.draft.messageStyle);
+    const output=this.inspector.querySelector('[data-msg-output="'+field+'"]');
+    if(output) output.textContent=this.draft.messageAppearance[field]+
+      (field==='size'||field==='backgroundOpacity'?'%':'');
+    this.draw(performance.now());
   }
 
   /** Keep the selected emoji and filter state independent of the scene and
@@ -242,6 +303,15 @@ export class OverlayEditor {
     const action = button.dataset.oeAction;
     if (action === 'cancel') { this.dialog.close(); return; }
     if (action === 'save') { this.save(); return; }
+    if (action === 'message-style' && this.draft?.type === 'message') {
+      const style=button.dataset.style;
+      if(!Object.hasOwn(MESSAGE_STYLES,style))return;
+      this.draft.messageStyle=style;
+      this.draft.messageAppearance=messageStyleDefaults(style);
+      this.refresh();
+      this.draw(performance.now());
+      return;
+    }
     if (action === 'choose-emoji' && this.draft?.type === 'emoji') {
       const item=findEmoji(button.dataset.emoji);
       if(!item)return;
@@ -287,6 +357,7 @@ export class OverlayEditor {
   }
 
   input(event) {
+    if (event.target.dataset.msgField) { this.updateMessageAppearance(event); return; }
     if (event.target.id === 'oe-emoji-search' && this.draft?.type === 'emoji') {
       this.emojiQuery=event.target.value;
       this.renderEmojiChoices();
@@ -305,6 +376,7 @@ export class OverlayEditor {
   }
 
   change(event) {
+    if (event.target.dataset.msgField) { this.updateMessageAppearance(event); return; }
     const field = event.target.dataset.oeField;
     if (!this.draft || !field) return;
     if (geometry.includes(field)) {
