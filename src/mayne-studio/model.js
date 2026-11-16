@@ -81,6 +81,31 @@ export function makeOverlay(type, options = {}) {
     fit: 'contain', opacity: 100, loop: true, ...presets[type], ...options };
 }
 
+/** Camera and microphone inputs are connected once per project and shared by every scene.
+ * A camera's independent layer in each scene can be resized, positioned or hidden
+ * without opening another device stream. The microphone stays in the Program mix.
+ * This is idempotent so reconnecting devices never duplicates scene layers.
+ */
+export function shareDeviceAcrossScenes(project, device = null) {
+  const devices = device ? [device] : project.sources.filter(source =>
+    source.type === 'camera' || source.type === 'mic');
+  let added = 0;
+  for (const source of devices) {
+    if (!source || !['camera', 'mic'].includes(source.type)) continue;
+    if (source.type === 'mic') source.route = 'always';
+    for (const scene of project.scenes) {
+      if (scene.layers.some(layer => layer.source === source.id)) continue;
+      if (scene.layers.length >= 40) throw new Error(
+        'Cannot share ' + source.name + ' with all scenes: “' + scene.name + '” already has 40 inputs.');
+      // A camera defaults to a non-obstructive inset. Existing scene-specific
+      // camera framing is never overwritten. A mic needs no on-screen rectangle.
+      scene.layers.push(makeLayer(source.id, source.type === 'camera' ? PLACE.inset : PLACE.full));
+      added++;
+    }
+  }
+  return added;
+}
+
 export function makeScene(template, name = TEMPLATES[template]) {
   const defaults = {
     standby: ['studio', 'Class begins shortly', 'Get settled and check your audio.'],
