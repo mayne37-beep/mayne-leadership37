@@ -1521,7 +1521,7 @@ class Studio {
         case 'overlay-type':
           this.closeDialog();
           if (id === 'image' || id === 'video') this.pickFile('overlay-' + id);
-          else if (id === 'message') this.overlayEdit(null, 'message');
+          else if (id === 'message' || id === 'emoji') this.overlayEdit(null, id);
           break;
         case 'overlay-remove': {
           const overlay = this.overlay(id);
