@@ -553,7 +553,6 @@ class Studio {
       const selection='<option value="">Choose command…</option>'+
         actions.map(([id,label])=>option(id,label,entry.action)).join('');
       return '<div class="shortcut-row shortcut-extra-row">'+
-        '<label for="extra-action-'+e(entry.id)+'" class="sr-only">Shortcut '+(index+1)+' action</label>'+
         '<select id="extra-action-'+e(entry.id)+'" data-extra-action="'+e(entry.id)+
           '" aria-label="Action for additional shortcut '+(index+1)+'">'+selection+'</select>'+
         '<input type="text" data-extra-shortcut="'+e(entry.id)+'" value="'+
