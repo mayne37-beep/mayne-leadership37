@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { makeProject, makeScene, makeSource, makeLayer, normalizeProject } from '../../src/mayne-studio/model.js';
+import { liveTimerLayout, liveTimerFallback } from '../../src/mayne-studio/render.js';
 import {
   timerParts, timerText, parseTimerFields, newTimer, tickTimer, pauseTimer, startTimer,
   resetTimer, adjustTimer, MAX_TIMER_SECONDS,
@@ -87,4 +88,57 @@ test('timer style/appearance and per-scene source assignments survive saved proj
     [['fullscreen'],['ring'],[]],
     'Studio style is independent and camera-only scene is never auto-assigned a timer');
   assert.equal(project.sources.filter(s=>s.type==='timer').length,1);
+});
+
+test('only the current live Program determines optional placement; global fallback requires no scene input',()=>{
+  const project=makeProject();
+  const studio=makeScene('blank','Studio');
+  const breakScene=makeScene('blank','Break');
+  project.scenes.push(studio,breakScene);
+  const noLayout={scene:studio,sources:new Map(),scenes:new Map([[studio.id,studio],[breakScene.id,breakScene]])};
+  assert.equal(liveTimerLayout(noLayout),null);
+  assert.deepEqual(liveTimerFallback({timerStyle:'digital'}),
+    {x:75,y:7,w:22,h:19,timerStyle:'digital'});
+  assert.deepEqual(liveTimerFallback({timerStyle:'fullscreen'}),
+    {x:0,y:0,w:100,h:100,timerStyle:'fullscreen'});
+  const timer=makeSource('timer','Countdown');
+  project.sources.push(timer);
+  const layer=makeLayer(timer.id);
+  Object.assign(layer,{x:60,y:9,w:24,h:17,timerStyle:'ring'});
+  studio.layers.push(layer);
+  const shot={
+    scene:studio,
+    sources:new Map(project.sources.map(source=>[source.id,source])),
+    scenes:new Map(project.scenes.map(scene=>[scene.id,scene]))
+  };
+  assert.deepEqual(
+    Object.fromEntries(['x','y','w','h','timerStyle'].map(key=>[key,liveTimerLayout(shot)[key]])),
+    {x:60,y:9,w:24,h:17,timerStyle:'ring'});
+  assert.equal(liveTimerLayout({...shot,scene:breakScene}),null,
+    'Live timer placement never leaks to an unrelated scene');
+});
+
+test('nested reusable scene timer placement is projected into on-air coordinates only',()=>{
+  const project=makeProject();
+  const child=makeScene('blank','Child');
+  const parent=makeScene('blank','Parent');
+  project.scenes.push(child,parent);
+  const timer=makeSource('timer','Countdown');
+  const nested=makeSource('scene','Child',{sceneId:child.id});
+  project.sources.push(timer,nested);
+  const timerLayer=makeLayer(timer.id);
+  Object.assign(timerLayer,{x:20,y:10,w:40,h:20,timerStyle:'bar'});
+  child.layers.push(timerLayer);
+  const nestedLayer=makeLayer(nested.id);
+  Object.assign(nestedLayer,{x:10,y:20,w:50,h:50,fit:'stretch'});
+  parent.layers.push(nestedLayer);
+  const shot={scene:parent,
+    scenes:new Map(project.scenes.map(s=>[s.id,s])),
+    sources:new Map(project.sources.map(s=>[s.id,s]))};
+  const position=liveTimerLayout(shot);
+  assert.equal(position.timerStyle,'bar');
+  assert.ok(Math.abs(position.x-20)<.001);
+  assert.ok(Math.abs(position.y-25)<.001);
+  assert.ok(Math.abs(position.w-20)<.001);
+  assert.ok(Math.abs(position.h-10)<.001);
 });
