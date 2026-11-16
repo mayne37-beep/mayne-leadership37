@@ -57,6 +57,8 @@ jobs:
         run: node tests/mayne-studio/favorite-transitions-browser.mjs
       - name: Test visual overlay designer, media and live cues
         run: node tests/mayne-studio/overlay-editor-browser.mjs
+      - name: Test searchable overlay library and expandable hotkeys
+        run: node tests/mayne-studio/overlay-library-browser.mjs
       - name: Test one shared camera and microphone across all live scenes
         run: node tests/mayne-studio/shared-devices-browser.mjs
       - name: Test drag-and-drop scene ordering, mobile arrows, and persistence
