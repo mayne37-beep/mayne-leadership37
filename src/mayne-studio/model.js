@@ -201,14 +201,14 @@ export function normalizeProject(input) {
 /** Walk only the layers that actually belong to a composition. A scene can
  * appear as a resizable visual layer in another scene. Cycles and excessive
  * nesting are ignored for both rendering and media routing. */
-export function visibleSceneLayers(shot, root = shot.scene) {
+export function visibleSceneLayers(shot, root = shot.scene, includeHidden = false) {
   const result = [];
   const walk = (scene, path) => {
     if (!scene || path.has(scene.id) || path.size >= 10) return;
     const next = new Set(path);
     next.add(scene.id);
     for (const layer of scene.layers) {
-      if (!layer.visible) continue;
+      if (!layer.visible && !includeHidden) continue;
       const source = shot.sources.get(layer.source);
       if (!source) continue;
       if (source.type === 'scene') walk(shot.scenes?.get(source.sceneId), next);
@@ -245,7 +245,7 @@ export function linkSceneDecks(project, sceneId) {
     scenes: new Map(project.scenes.map(scene => [scene.id, scene])),
     sources: new Map(project.sources.map(source => [source.id, source])) };
   const ids = new Set();
-  for (const {layer,source} of visibleSceneLayers(shot)) {
+  for (const {layer,source} of visibleSceneLayers(shot, shot.scene, true)) {
     if (source.type !== 'powerpoint') continue;
     if (!source.sync) source.page = layer.page;
     source.sync = true;
