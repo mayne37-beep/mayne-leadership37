@@ -89,6 +89,14 @@ export function makeOverlay(type, options = {}) {
 export function shareDeviceAcrossScenes(project, device = null) {
   const devices = device ? [device] : project.sources.filter(source =>
     source.type === 'camera' || source.type === 'mic');
+  // Fail before changing any scene if the shared devices cannot fit.
+  for (const scene of project.scenes) {
+    const pending = devices.filter(source => source && ['camera','mic'].includes(source.type)
+      && !scene.layers.some(layer => layer.source === source.id));
+    if (scene.layers.length + pending.length > 40)
+      throw new Error('Cannot share devices across all scenes: “' + scene.name
+        + '” already contains too many inputs. Remove unused layers first.');
+  }
   let added = 0;
   for (const source of devices) {
     if (!source || !['camera', 'mic'].includes(source.type)) continue;
