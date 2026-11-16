@@ -1007,6 +1007,27 @@ class Studio {
             });
           break;
         }
+        case 'remove-shared-device': {
+          const source = this.source(id);
+          if (!source || !['camera','mic'].includes(source.type)) break;
+          this.dialogOpen('Remove shared ' + (source.type === 'camera' ? 'camera' : 'microphone'),
+            '<p>Remove “' + e(source.name) + '” from every scene and from the Audio Mixer? '
+            + 'This will disconnect the device and remove its saved per-scene placement.</p>',
+            '<button class="button" type="button" data-act="close-dialog">Cancel</button>'
+            + '<button class="button danger" type="submit">Remove shared input</button>', () => {
+              this.media.disconnect(source.id);
+              this.project.sources = this.project.sources.filter(item => item.id !== source.id);
+              for (const scene of this.project.scenes)
+                scene.layers = scene.layers.filter(layer => layer.source !== source.id);
+              this.program.scene.layers = this.program.scene.layers.filter(layer => layer.source !== source.id);
+              this.program.sources.delete(source.id);
+              this.layerId = this.scene.layers.at(-1)?.id;
+              this.closeDialog();
+              this.mark();
+              this.render();
+            });
+          break;
+        }
         case 'connect': await this.connectInput(this.source(id)); break;
         case 'disconnect': this.media.disconnect(id); this.render(); break;
         case 'change-device': await this.deviceMenu(this.source(id).type, this.source(id)); break;
