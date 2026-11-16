@@ -1133,6 +1133,7 @@ class Studio {
     if (!adding && !this.project.scenes.length) { this.sceneDialog(true); return; }
     const scene = this.scene;
     const position = this.project.scenes.indexOf(scene);
+    const groupChoices=[...new Set(this.project.scenes.map(item=>sceneGroup(item.group)))];
     const body = '<div class="form-grid">' + (adding
       ? '<p>Your scene starts blank. Add only the cameras, microphones and other layers you choose.</p>'
       + '<label>Scene name<input name="name" required maxlength="120" placeholder="e.g. Studio 1"></label>'
@@ -1140,7 +1141,12 @@ class Studio {
       + '<label>Background<select name="background">' + options(Object.fromEntries(Object.entries(BACKGROUNDS).filter(([id]) => id !== 'custom' || scene.backdrop)), scene.background) + '</select></label>'
       + '<div class="inline">' + buttons(icon('image',15) + ' Upload background','input-backdrop') + '</div>'
       + '<label>On-screen title<input name="title" maxlength="100" value="' + e(scene.title) + '"></label>'
-      + '<label>On-screen caption<input name="caption" maxlength="200" value="' + e(scene.caption) + '"></label>') + '</div>';
+      + '<label>On-screen caption<input name="caption" maxlength="200" value="' + e(scene.caption) + '"></label>') +
+      '<label>Scene group<input name="group" list="scene-group-suggestions" maxlength="40" value="' +
+        e(adding ? DEFAULT_SCENE_GROUP : sceneGroup(scene.group)) +
+        '" placeholder="e.g. Leadership 101"></label>' +
+      '<datalist id="scene-group-suggestions">' + groupChoices.map(name=>'<option value="'+e(name)+'"></option>').join('') +
+      '</datalist></div>';
     const manage = adding ? '' : buttons('Duplicate','duplicate-scene') + buttons('Move up','scene-up',position === 0 ? 'disabled' : '')
       + buttons('Move down','scene-down',position === this.project.scenes.length - 1 ? 'disabled' : '')
       + buttons('Delete','remove-scene',this.project.scenes.length < 2 ? 'disabled' : '');
@@ -1150,6 +1156,7 @@ class Studio {
           if (this.project.scenes.length >= SCENE_LIMIT) throw new Error('This project already has '+SCENE_LIMIT+' scenes.');
           const wasEmpty = this.project.scenes.length === 0;
           const item = makeScene('blank', textName(String(data.get('name')), 'Scene ' + (this.project.scenes.length + 1)));
+          item.group=sceneGroup(data.get('group'));
           this.project.scenes.push(item);
           this.sceneSearch='';this.sceneGroupFilter='all';
           // First user-created scene becomes the starting monitor scene.
@@ -1158,6 +1165,7 @@ class Studio {
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
+          scene.group=sceneGroup(data.get('group'));
           for (const source of this.project.sources)
             if (source.type === 'scene' && source.sceneId === scene.id) source.name = scene.name;
           scene.background = String(data.get('background'));
