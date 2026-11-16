@@ -685,8 +685,8 @@ class Studio {
     this.syncTimerToProgram(scene.id);
     this.mark();
     this.render();
-    this.notify(wanted ? 'Timer added to this scene. Resize it under Arrange scene.' :
-      'Timer removed from this scene; the shared clock is still available.');
+    this.notify(wanted ? 'Live timer layout added to this scene. It appears only on Program; resize the placement in Arrange scene.' :
+      'Scene-specific timer layout removed. You can still show the countdown directly on live output.');
   }
 
   setTimerStyle(style) {
