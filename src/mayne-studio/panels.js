@@ -49,13 +49,17 @@ function layerInspector(layer, source, media) {
   const capture = ['camera', 'mic', 'screen'].includes(source.type);
   const visuals = VISUAL.has(source.type);
   const connected = entry?.state === 'ready';
-  const connect = connected ? buttons('Disconnect', 'disconnect', sourceId)
-    : buttons(entry?.state === 'loading' ? 'Connecting…' : 'Connect input', 'connect', sourceId, 'primary-outline');
-  return `<div class="section-label"><h3>Layer properties</h3>${iconButton('remove-layer','Remove layer','trash',id)}</div>
+  const connect = connected ? buttons('Disconnect everywhere', 'disconnect', sourceId)
+    : buttons(entry?.state === 'loading' ? 'Connecting…' : 'Connect input in all scenes', 'connect', sourceId, 'primary-outline');
+  return `<div class="section-label"><h3>Layer properties</h3>${iconButton(
+      ['camera','mic'].includes(source.type) ? 'remove-shared-device' : 'remove-layer',
+      ['camera','mic'].includes(source.type) ? 'Remove shared input from every scene' : 'Remove layer',
+      'trash', ['camera','mic'].includes(source.type) ? sourceId : id)}</div>
     <div class="fieldset">
       ${field('Input name', 'source', 'name', source.name)}
       ${source.type === 'title' ? field('Title', 'source', 'text', source.text, 180)
         + field('Subtitle', 'source', 'sub', source.sub, 240) : ''}
+      ${['camera','mic'].includes(source.type) ? '<p class="slide-label">Shared input · connected once for every scene. Disconnect here to turn it off everywhere.</p>' : ''}
       ${capture ? `<div class="inspector-tools">${connect}
         ${source.type !== 'screen' ? buttons('Device…','change-device',sourceId) : ''}</div>` : ''}
       ${entry?.state === 'error' ? '<p class="warning-note">' + e(entry.message) + '</p>' : ''}
@@ -78,7 +82,8 @@ function layerInspector(layer, source, media) {
          ${buttons('Restart','restart-media',sourceId)}<span class="slide-label media-clock" data-source-id="${source.id}"></span></div>
          <label class="inline"><input type="checkbox" data-source="loop"${checked(source.loop)}> Loop</label>
          <label class="inline"><input type="checkbox" data-source="autoplay"${checked(source.autoplay)}> Play on take</label>` : ''}
-      ${AUDIO.has(source.type) ? `<label>Audio routing<select data-source="route">${options({scene:'Follow the Program scene',always:'Always in the Program mix'},source.route)}</select></label>` : ''}
+      ${source.type === 'mic' ? '<p class="slide-label">Microphone audio always follows the full Program, including scene transitions.</p>' :
+        AUDIO.has(source.type) ? `<label>Audio routing<select data-source="route">${options({scene:'Follow the Program scene',always:'Always in the Program mix'},source.route)}</select></label>` : ''}
     </div>`;
 }
 
