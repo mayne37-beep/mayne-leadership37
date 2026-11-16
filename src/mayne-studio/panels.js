@@ -161,16 +161,21 @@ export function classroomPanel(project, timer, state, media) {
   return `<div class="classroom-tools">
     <section class="class-card timer-designer">
       <h3>Classroom countdown designer</h3>
-      <div class="timer-section-title">Where students see the timer</div>
-      <p>Timer display is scene-specific. It never adds cameras or automatically appears in a new scene.</p>
+      <div class="timer-section-title">Live output only</div>
+      <p>The timer is shown only on Program and the live output. It never appears in private Preview, scene thumbnails, or the scene editor.</p>
       <div class="timer-scene-assignment">
-        <strong>Preview scene: ${e(currentScene?.name||'No scene selected')}</strong>
-        ${buttons(sceneTimer?'Remove timer from this scene':'Add timer to this scene',
-          'timer-assign','',sceneTimer?'':'primary-outline')}
-        ${sceneTimer?'<span class="timer-scene-hint">Drag or resize the timer under Settings → Arrange scene. This scene uses the '+e(TIMER_STYLES[selectedStyle])+ ' style.</span>':''}
-        <span class="timer-scene-hint">Assigned to ${assigned} of ${project.scenes.length} scenes. Style changes affect the Preview scene only; new assignments use the selected style.</span>
+        <strong>Selected scene: ${e(currentScene?.name||'No scene selected')}</strong>
+        <div class="timer-actions">
+          ${buttons(timer.visible?'Hide from live output':'Show on live output','timer-show','','primary-outline')}
+          ${currentScene ? buttons(sceneTimer?'Remove timer layout from this scene':'Add timer layout to this scene',
+            'timer-assign','',sceneTimer?'':'primary-outline') : ''}
+        </div>
+        ${sceneTimer?'<span class="timer-scene-hint">This scene uses the '+e(TIMER_STYLES[selectedStyle])+
+          ' style when it is live. Adjust its position under Settings → Arrange scene; the timer graphic stays hidden while editing.</span>':
+          '<span class="timer-scene-hint">No scene layout is required: Start shows the timer directly on the live output in its default position.</span>'}
+        <span class="timer-scene-hint">Custom placement in ${assigned} of ${project.scenes.length} scenes. The same running timer follows Program when you switch scenes.</span>
       </div>
-      <p>One shared countdown continues while you switch scenes. Choose which scenes display it.</p>
+      <p>One shared countdown continues while you switch scenes. Starting it sends it directly to the live output.</p>
       <div class="timer-live-line"><output class="timer-read mono" id="timer-read" role="timer" aria-label="Countdown remaining">${timerDisplay}</output>
         <span id="timer-status" class="timer-status">${timer.deadline?(timer.finished?'Overtime':'Running'):timer.finished?'Finished':'Paused / ready'}</span></div>
       <div class="timer-section-title">Set countdown duration</div>
@@ -184,9 +189,8 @@ export function classroomPanel(project, timer, state, media) {
       <div class="timer-preset-list" aria-label="Quick countdown presets">${BUILTIN_TIMER_PRESETS.map(m=>presetButton(m+' min',m*60)).join('')}</div>
       ${project.timerPresets?.length?'<div class="timer-saved-presets"><span>Saved favorites</span><div class="timer-preset-list">'+project.timerPresets.map((p,i)=>presetButton(p.name,p.seconds,i)).join('')+'</div></div>':''}
       <div class="timer-actions">
-        ${buttons(timer.deadline?'Pause':'Start countdown','timer-toggle','','primary-outline')}
+        ${buttons(timer.deadline?'Pause':'Start on live output','timer-toggle','','primary-outline')}
         ${buttons('Reset','timer-reset')}
-        ${buttons(timer.visible?'Hide from output':'Show on output','timer-show')}
         ${buttons('Save preset…','timer-save-preset')}
       </div>
       <div class="timer-live-adjust">
