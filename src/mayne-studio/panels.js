@@ -161,6 +161,15 @@ export function classroomPanel(project, timer, state, media) {
   return `<div class="classroom-tools">
     <section class="class-card timer-designer">
       <h3>Classroom countdown designer</h3>
+      <div class="timer-section-title">Where students see the timer</div>
+      <p>Timer display is scene-specific. It never adds cameras or automatically appears in a new scene.</p>
+      <div class="timer-scene-assignment">
+        <strong>Preview scene: ${e(currentScene?.name||'No scene selected')}</strong>
+        ${buttons(sceneTimer?'Remove timer from this scene':'Add timer to this scene',
+          'timer-assign','',sceneTimer?'':'primary-outline')}
+        ${sceneTimer?'<span class="timer-scene-hint">Drag or resize the timer under Settings → Arrange scene. This scene uses the '+e(TIMER_STYLES[selectedStyle])+ ' style.</span>':''}
+        <span class="timer-scene-hint">Assigned to ${assigned} of ${project.scenes.length} scenes. Style changes affect the Preview scene only; new assignments use the selected style.</span>
+      </div>
       <p>One shared countdown continues while you switch scenes. Choose which scenes display it.</p>
       <div class="timer-live-line"><output class="timer-read mono" id="timer-read" role="timer" aria-label="Countdown remaining">${timerDisplay}</output>
         <span id="timer-status" class="timer-status">${timer.deadline?(timer.finished?'Overtime':'Running'):timer.finished?'Finished':'Paused / ready'}</span></div>
@@ -198,15 +207,6 @@ export function classroomPanel(project, timer, state, media) {
       <div class="timer-checks">
         <label><input type="checkbox" data-project="timerChime" ${checked(project.timerChime)}> Play a finish chime</label>
         <label><input type="checkbox" data-project="timerFlash" ${checked(project.timerFlash)}> Flash the timer when time expires</label>
-      </div>
-      <div class="timer-section-title">Where students see the timer</div>
-      <p>Timer display is scene-specific. It never adds cameras or automatically appears in a new scene.</p>
-      <div class="timer-scene-assignment">
-        <strong>Preview scene: ${e(currentScene?.name||'No scene selected')}</strong>
-        ${buttons(sceneTimer?'Remove timer from this scene':'Add timer to this scene',
-          'timer-assign','',sceneTimer?'':'primary-outline')}
-        ${sceneTimer?'<span class="timer-scene-hint">Drag or resize the timer under Settings → Arrange scene. This scene uses the '+e(TIMER_STYLES[selectedStyle])+ ' style.</span>':''}
-        <span class="timer-scene-hint">Assigned to ${assigned} of ${project.scenes.length} scenes. Style changes affect the Preview scene only; new assignments use the selected style.</span>
       </div>
     </section>
     <section class="class-card"><h3>PowerPoint &amp; speaker notes</h3>
