@@ -2,6 +2,7 @@ import { WIDTH, HEIGHT, VISUAL, clock, transitionProgress } from './model.js';
 import { paintTransition } from './transitions.js';
 import { timerText } from './timer.js';
 import { DEFAULT_EMOJI, findEmoji } from './emojis.js';
+import { paintMessageOverlay } from './message-styles.js';
 
 const W = WIDTH, H = HEIGHT;
 const stills = {
@@ -264,6 +265,8 @@ export function drawOverlay(ctx, media, active, now) {
       rect(ctx, x, y, 10, h, accent, 4);
       text(ctx, overlay.text, x + w * .048, y + h * (overlay.sub ? .39 : .5), h * .35, { width: w * .89, weight: 700 });
       text(ctx, overlay.sub, x + w * .048, y + h * .73, h * .19, { width: w * .89, color: '#d9e4f1' });
+    } else if (overlay.type === 'message') {
+      paintMessageOverlay(ctx,overlay,x,y,w,h);
     } else if (overlay.type === 'hand') {
       rect(ctx, x, y, w, h, '#0c1525f3', 18);
       text(ctx, '✋', x + w * .16, y + h * .5, h * .35, { align: 'center' });
