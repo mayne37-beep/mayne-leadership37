@@ -109,7 +109,17 @@ export function shell() {
         <button type="button" id="workspace-add" class="icon-button" data-act="workspace-add" aria-label="Add scene" title="Add scene">${icon('plus',17)}</button>
       </div>
       <div id="scene-panel" class="production-panel" role="tabpanel" aria-labelledby="workspace-scenes">
+        <div class="scene-library-toolbar" id="scene-library-toolbar">
+          <label>Find scene<input type="search" id="scene-library-search" data-scene-search
+            placeholder="Search scenes by name" autocomplete="off"></label>
+          <label>Group<select id="scene-library-group" data-scene-filter>
+            <option value="all">All groups</option>
+          </select></label>
+          <span id="scene-library-count" class="scene-library-count" aria-live="polite">0 / 100 saved</span>
+        </div>
+        <div id="scene-library-hint" class="scene-library-hint" hidden>Clear filters to reorder scenes.</div>
         <div id="scenes" class="scene-list"></div>
+        <p id="scene-library-empty" class="scene-library-empty" hidden>No scenes match this search or group.</p>
       </div>
       <div id="overlays-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-overlays" hidden></div>
       <div id="classroom-panel" class="production-panel production-tools" role="tabpanel" aria-labelledby="workspace-classroom" hidden></div>

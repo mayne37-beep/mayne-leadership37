@@ -7,6 +7,10 @@ import { messageStyleDefaults, messageStyleId, normalizeMessageAppearance } from
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 export const VERSION = 1;
+export const SCENE_LIMIT = 100;
+export const DEFAULT_SCENE_GROUP = 'General';
+export const sceneGroup = value => typeof value === 'string' && value.trim()
+  ? value.trim().slice(0,40) : DEFAULT_SCENE_GROUP;
 export const OVERLAY_LIMIT = 100;
 export const OVERLAY_GROUPS = Object.freeze({
   messages:'Messages', instructor:'Instructor names', announcements:'Announcements',
@@ -134,7 +138,7 @@ export function makeScene(template, name = TEMPLATES[template]) {
     blank: ['black', '', ''],
   };
   const [background, title, caption] = defaults[template] ?? defaults.blank;
-  return { id: uid(), name, template, background, title, caption, backdrop: '', layers: [] };
+  return { id: uid(), name, group: DEFAULT_SCENE_GROUP, template, background, title, caption, backdrop: '', layers: [] };
 }
 
 export function makeProject(name = 'Leadership Classroom') {
@@ -182,8 +186,9 @@ export function normalizeProject(input) {
     loop: s.loop === true, autoplay: s.autoplay !== false,
   } : null);
   const sourceIds = new Set(sources.map(s => s.id));
-  const scenes = unique(input.scenes, 40, scene => ({
-    id: scene.id, name: string(scene.name, 'Scene'), template: choices(scene.template, TEMPLATES, 'blank'),
+  const scenes = unique(input.scenes, SCENE_LIMIT, scene => ({
+    id: scene.id, name: string(scene.name, 'Scene'), group: sceneGroup(scene.group),
+    template: choices(scene.template, TEMPLATES, 'blank'),
     background: choices(scene.background, BACKGROUNDS, 'black'), title: string(scene.title, '', 100),
     caption: string(scene.caption, '', 200), backdrop: identifier(scene.backdrop),
     layers: unique(scene.layers, 40, layer => sourceIds.has(layer.source) ? {

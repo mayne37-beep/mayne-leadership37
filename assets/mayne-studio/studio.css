@@ -659,3 +659,23 @@ kbd{white-space:nowrap}
  .shortcut-extra-row{grid-template-columns:minmax(100px,1fr) minmax(95px,125px) 60px}
  .shortcut-extra-row select{font-size:10px}
 }
+
+
+/* Project-wide scene library: custom groups, quick search, 100-scene capacity.
+   The existing horizontal thumbnail strip and scene reordering remain intact. */
+.scene-library-toolbar{display:flex;align-items:end;flex-wrap:wrap;gap:8px;padding:9px 10px 2px}
+.scene-library-toolbar label{display:grid;gap:3px;flex:1 1 180px;min-width:105px;color:var(--soft);font-size:11px}
+.scene-library-toolbar :is(input,select){box-sizing:border-box;width:100%;min-height:31px;
+  padding:5px 8px;border:1px solid #58718c;border-radius:5px;
+  background:#13273b;color:var(--text);font-size:12px}
+.scene-library-toolbar :is(input,select):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.scene-library-count{white-space:nowrap;font-size:11px;color:var(--soft);padding-bottom:6px}
+.scene-library-hint,.scene-library-empty{padding:4px 11px;font-size:11px;color:var(--soft)}
+.scene-library-empty{padding:12px}
+.scene-library-hint[hidden],.scene-library-empty[hidden],.scene-list .scene-tile[hidden]{display:none!important}
+.scene-list .scene-order-step:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:690px){
+  .scene-library-toolbar{padding:7px 8px 1px;gap:6px}
+  .scene-library-toolbar label{flex-basis:124px}
+  .scene-library-count{flex-basis:100%;padding-bottom:1px}
+}

@@ -1,4 +1,5 @@
-import { AUDIO, BACKGROUNDS, PLACE, OVERLAY_LIMIT, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
+import { AUDIO, BACKGROUNDS, PLACE, SCENE_LIMIT, DEFAULT_SCENE_GROUP, sceneGroup,
+  OVERLAY_LIMIT, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
   assignDeviceToScene, isDefaultSharedCameraInset, canEmbedScene, visibleSceneLayers,
   linkSceneDecks, syncLinkedDecks, transitionProgress, uid } from './model.js';
@@ -43,6 +44,9 @@ class Studio {
     this.workspaceTab = 'scenes';
     this.overlaySearch = '';
     this.overlayGroup = 'all';
+    this.sceneSearch = '';
+    this.sceneGroupFilter = 'all';
+    this.lastThumbScroll = 0;
     try { this.mixerCollapsed = localStorage.getItem('mayne-studio-mixer-collapsed') === '1'; }
     catch { this.mixerCollapsed = false; }
     this.timer = timers();
@@ -86,6 +90,10 @@ class Studio {
     // A drag moves scene IDs in the project array; it never takes a scene live.
     this.sceneDragId = null;
     const sceneStrip = $('scenes');
+    sceneStrip.addEventListener('scroll', () => {
+      const now=performance.now();
+      if(now-this.lastThumbScroll>90){this.lastThumbScroll=now;this.thumbnails(now);}
+    },{passive:true});
     sceneStrip.addEventListener('dragstart', event => this.sceneDragStart(event));
     sceneStrip.addEventListener('dragover', event => this.sceneDragOver(event));
     sceneStrip.addEventListener('drop', event => this.sceneDrop(event));
@@ -257,7 +265,7 @@ class Studio {
   sceneDragStart(event) {
     const grip = event.target.closest?.('[data-scene-drag]');
     const id = grip?.dataset.sceneDrag;
-    if (this.editing || !id || !this.project.scenes.some(scene => scene.id === id)) {
+    if (this.editing || this.sceneFiltersActive() || !id || !this.project.scenes.some(scene => scene.id === id)) {
       event.preventDefault();
       return;
     }
@@ -268,7 +276,7 @@ class Studio {
   }
 
   sceneDragOver(event) {
-    if (!this.sceneDragId) return;
+    if (!this.sceneDragId || this.sceneFiltersActive()) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     const strip = $('scenes');
@@ -283,7 +291,7 @@ class Studio {
   }
 
   sceneDrop(event) {
-    if (!this.sceneDragId) return;
+    if (!this.sceneDragId || this.sceneFiltersActive()) return;
     event.preventDefault();
     const sourceId = this.sceneDragId;
     const tile = event.target.closest?.('.scene-tile');
@@ -340,7 +348,7 @@ class Studio {
     this.renderFavorites();
     $('scenes').innerHTML = this.project.scenes.map((scene, index) => {
       const preview = scene.id === this.previewId, program = scene.id === this.program.scene.id;
-      return `<div class="scene-tile" data-scene-id="${scene.id}"><div class="scene-reorder-bar">
+      return `<div class="scene-tile" data-scene-id="${scene.id}" data-scene-name="${e(scene.name.toLowerCase())}" data-scene-group="${e(sceneGroup(scene.group))}"><div class="scene-reorder-bar">
         <span class="scene-drag-handle" data-scene-drag="${scene.id}" draggable="true"
           title="Drag to reorder ${e(scene.name)}" aria-label="Drag to reorder ${e(scene.name)}">
           ${icon('grip',14)}<span>Move</span></span>
@@ -362,6 +370,7 @@ class Studio {
       + '<p>No studios or camera inputs have been added. Create a blank scene, then '
       + 'add only the cameras, microphones and other inputs you want in that scene.</p>'
       + '<button class="button primary" type="button" data-act="new-scene">Create first scene</button></div>';
+    this.updateSceneLibrary();
     this.thumbnails(performance.now());
     this.renderDock();
     this.renderMixer();
@@ -370,6 +379,54 @@ class Studio {
     this.renderProgramDeck();
     this.inlineEditor.refresh();
     if (this.designer.open) this.designer.refresh();
+  }
+
+
+  sceneFiltersActive() {
+    return !!this.sceneSearch.trim() || this.sceneGroupFilter!=='all';
+  }
+
+  /** Filter existing thumbnails without modifying Program, Preview or scene order. */
+  updateSceneLibrary() {
+    const search=$('scene-library-search');
+    const groups=$('scene-library-group');
+    if(!search || !groups || !this.project)return;
+    search.value=this.sceneSearch;
+    const names=[...new Set(this.project.scenes.map(scene=>sceneGroup(scene.group)))]
+      .sort((a,b)=>a.localeCompare(b));
+    if(this.sceneGroupFilter!=='all' && !names.includes(this.sceneGroupFilter))
+      this.sceneGroupFilter='all';
+    groups.innerHTML='<option value="all">All groups</option>'+
+      names.map(name=>option(name,name,this.sceneGroupFilter)).join('');
+    this.filterSceneLibrary();
+  }
+
+  filterSceneLibrary() {
+    const list=$('scenes');
+    if(!list || !this.project)return;
+    const query=this.sceneSearch.trim().toLowerCase();
+    const filtered=this.sceneFiltersActive();
+    let shown=0;
+    const tiles=list.querySelectorAll('.scene-tile');
+    for(const [index,tile] of [...tiles].entries()) {
+      const visible=(this.sceneGroupFilter==='all' || tile.dataset.sceneGroup===this.sceneGroupFilter) &&
+        (!query || tile.dataset.sceneName.includes(query));
+      tile.hidden=!visible;
+      if(visible)shown++;
+      const grip=tile.querySelector('[data-scene-drag]');
+      if(grip)grip.draggable=!filtered;
+      const left=tile.querySelector('[data-act="scene-reorder-left"]');
+      const right=tile.querySelector('[data-act="scene-reorder-right"]');
+      if(left)left.disabled=filtered||index===0;
+      if(right)right.disabled=filtered||index===tiles.length-1;
+    }
+    const counter=$('scene-library-count');
+    if(counter)counter.textContent=shown+' of '+tiles.length+' shown · '+
+      this.project.scenes.length+' / '+SCENE_LIMIT+' saved';
+    const hint=$('scene-library-hint');
+    if(hint)hint.hidden=!filtered||!tiles.length;
+    const empty=$('scene-library-empty');
+    if(empty)empty.hidden=!!shown||!tiles.length;
   }
 
   renderFavorites() {
@@ -629,8 +686,17 @@ class Studio {
 
   thumbnails(now) {
     const shot = this.shot(this.scene, false);
-    for (const node of $('scenes').querySelectorAll('canvas')) {
-      const scene = this.project.scenes.find(item => item.id === node.dataset.thumb);
+    const strip=$('scenes');
+    const bounds=strip.getBoundingClientRect();
+    const sceneMap=new Map(this.project.scenes.map(scene=>[scene.id,scene]));
+    for (const node of strip.querySelectorAll('canvas')) {
+      const tile=node.closest('.scene-tile');
+      if(tile?.hidden)continue;
+      const box=tile?.getBoundingClientRect();
+      const active=tile?.dataset.sceneId===this.previewId || tile?.dataset.sceneId===this.program.scene.id;
+      // Skip offscreen cards to avoid drawing all 100 thumbnails every second.
+      if(!active && box && (box.right<bounds.left-220 || box.left>bounds.right+220))continue;
+      const scene = sceneMap.get(node.dataset.thumb);
       if (scene) this.renderer.thumbnail(node, scene, shot.sources, now, shot.scenes,
         {...this.timer,config:this.project});
     }
@@ -1067,6 +1133,7 @@ class Studio {
     if (!adding && !this.project.scenes.length) { this.sceneDialog(true); return; }
     const scene = this.scene;
     const position = this.project.scenes.indexOf(scene);
+    const groupChoices=[...new Set(this.project.scenes.map(item=>sceneGroup(item.group)))];
     const body = '<div class="form-grid">' + (adding
       ? '<p>Your scene starts blank. Add only the cameras, microphones and other layers you choose.</p>'
       + '<label>Scene name<input name="name" required maxlength="120" placeholder="e.g. Studio 1"></label>'
@@ -1074,23 +1141,31 @@ class Studio {
       + '<label>Background<select name="background">' + options(Object.fromEntries(Object.entries(BACKGROUNDS).filter(([id]) => id !== 'custom' || scene.backdrop)), scene.background) + '</select></label>'
       + '<div class="inline">' + buttons(icon('image',15) + ' Upload background','input-backdrop') + '</div>'
       + '<label>On-screen title<input name="title" maxlength="100" value="' + e(scene.title) + '"></label>'
-      + '<label>On-screen caption<input name="caption" maxlength="200" value="' + e(scene.caption) + '"></label>') + '</div>';
+      + '<label>On-screen caption<input name="caption" maxlength="200" value="' + e(scene.caption) + '"></label>') +
+      '<label>Scene group<input name="group" list="scene-group-suggestions" maxlength="40" value="' +
+        e(adding ? DEFAULT_SCENE_GROUP : sceneGroup(scene.group)) +
+        '" placeholder="e.g. Leadership 101"></label>' +
+      '<datalist id="scene-group-suggestions">' + groupChoices.map(name=>'<option value="'+e(name)+'"></option>').join('') +
+      '</datalist></div>';
     const manage = adding ? '' : buttons('Duplicate','duplicate-scene') + buttons('Move up','scene-up',position === 0 ? 'disabled' : '')
       + buttons('Move down','scene-down',position === this.project.scenes.length - 1 ? 'disabled' : '')
       + buttons('Delete','remove-scene',this.project.scenes.length < 2 ? 'disabled' : '');
     this.dialogOpen(adding ? 'Add scene' : 'Scene settings', body, manage
       + '<button class="button primary" type="submit">' + (adding ? 'Add scene' : 'Apply to Preview') + '</button>', data => {
         if (adding) {
-          if (this.project.scenes.length >= 40) throw new Error('This project already has 40 scenes.');
+          if (this.project.scenes.length >= SCENE_LIMIT) throw new Error('This project already has '+SCENE_LIMIT+' scenes.');
           const wasEmpty = this.project.scenes.length === 0;
           const item = makeScene('blank', textName(String(data.get('name')), 'Scene ' + (this.project.scenes.length + 1)));
+          item.group=sceneGroup(data.get('group'));
           this.project.scenes.push(item);
+          this.sceneSearch='';this.sceneGroupFilter='all';
           // First user-created scene becomes the starting monitor scene.
           // Nothing, including a camera, is automatically added to it.
           if (wasEmpty) this.program = this.shot(item);
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
+          scene.group=sceneGroup(data.get('group'));
           for (const source of this.project.sources)
             if (source.type === 'scene' && source.sceneId === scene.id) source.name = scene.name;
           scene.background = String(data.get('background'));
@@ -1264,6 +1339,8 @@ class Studio {
       <p>Use Shortcuts at the top of the control room to assign your own keys, including modifiers.
       Press a key in its assignment box, or select Add shortcut to create additional commands
       for any saved overlay or production action. Duplicate assignments are rejected.</p>
+      <p>The Scenes workspace supports up to 100 scenes. Search by name and organize scenes
+      with custom groups. Clear filters before reordering scenes.</p>
       <p>The Overlays workspace includes up to 100 saved items. Use the search box and group
       selector to find message, emoji, announcement and media overlays. Only active overlays
       are drawn on Program, so avoid stacking large numbers of video overlays at once.</p>
@@ -1395,9 +1472,10 @@ class Studio {
         case 'scene-edit': if (this.tools.open) this.tools.close(); this.sceneDialog(false); break;
         case 'scene-designer': if (this.tools.open) this.tools.close(); this.designer.show(); break;
         case 'duplicate-scene': {
-          if (this.project.scenes.length >= 40) throw new Error('This project already has 40 scenes.');
+          if (this.project.scenes.length >= SCENE_LIMIT) throw new Error('This project already has '+SCENE_LIMIT+' scenes.');
           const duplicate = { ...clone(this.scene), id: uid(), name: (this.scene.name + ' copy').slice(0, 120) };
           this.project.scenes.splice(this.project.scenes.indexOf(this.scene) + 1, 0, duplicate);
+          this.sceneSearch='';this.sceneGroupFilter='all';
           this.closeDialog();
           this.setPreview(duplicate.id);
           this.mark();
@@ -1726,6 +1804,12 @@ class Studio {
       this.filterOverlayLibrary();
       return;
     }
+    if (target.matches?.('[data-scene-search]')) {
+      this.sceneSearch=target.value.slice(0,120);
+      this.filterSceneLibrary();
+      this.thumbnails(performance.now());
+      return;
+    }
     const id = target.dataset.gain;
     if (id) {
       const gain = Number(target.value);
@@ -1743,6 +1827,12 @@ class Studio {
     try {
       if (target.name?.startsWith('cam-') && target.closest('.camera-matrix')) {
         target.parentElement.querySelector('span').textContent = target.checked ? 'Assigned' : 'Off';
+        return;
+      }
+      if (target.matches?.('[data-scene-filter]')) {
+        this.sceneGroupFilter=target.value;
+        this.filterSceneLibrary();
+        this.thumbnails(performance.now());
         return;
       }
       if (target.matches?.('[data-overlay-filter]')) {
