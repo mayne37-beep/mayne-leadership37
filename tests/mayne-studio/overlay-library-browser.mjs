@@ -63,7 +63,7 @@ try {
   assert.equal(await panel.locator('.overlay-library-list').isVisible(),true);
   assert.equal(await panel.locator('[data-overlay-search]').count(),1);
   assert.equal(await panel.locator('[data-overlay-filter]').count(),1);
-  await panel.locator('[data-overlay-search]').fill('Item 97');
+  await panel.locator('[data-overlay-search]').fill('Item 98');
   assert.equal(await panel.locator('.overlay-card:visible').count(),1,
     'Search narrows the library without deleting or changing saved overlays');
   await panel.locator('[data-overlay-filter]').selectOption('messages');
