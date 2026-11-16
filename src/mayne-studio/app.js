@@ -23,7 +23,7 @@ const fileAccept = {
   'overlay-video': '.mp4,.webm,.ogv,.mov,.m4v',
   'overlay-media': '.png,.jpg,.jpeg,.webp,.gif,.avif,.mp4,.webm,.ogv,.mov,.m4v',
 };
-const draftTemplate = 'standby';
+const blankSceneId = 'mayne-empty-workspace';
 const timers = () => ({ visible: false, deadline: 0, remaining: 0 });
 const dataId = id => 'data-id="' + id + '"';
 const textName = (name, fallback) => name.trim().slice(0, 120) || fallback;
@@ -120,9 +120,12 @@ class Studio {
     this.project.favoriteTransitions = normalizeFavoriteTransitions(project.favoriteTransitions);
     this.media.setProject(project);
     for (const overlay of project.overlays) if (overlay.asset) this.loadGraphic(overlay);
-    const first = project.scenes.find(scene => scene.template === draftTemplate) || project.scenes[0];
-    this.program = this.shot(first);
-    this.previewId = project.scenes.find(scene => scene.template === 'presenter')?.id || project.scenes[0].id;
+    // Empty preview is an unsaved monitor placeholder, not a template studio.
+    this.emptyScene = { ...makeScene('blank', 'No scene'), id: blankSceneId };
+    const first = project.scenes.find(scene => scene.template === 'standby') || project.scenes[0];
+    this.program = this.shot(first || this.emptyScene);
+    this.previewId = project.scenes.find(scene => scene.template === 'presenter')?.id
+      || project.scenes[0]?.id || null;
     this.layerId = this.scene.layers.at(-1)?.id;
     this.transition = null;
     this.previewOverlays.clear();
@@ -134,7 +137,7 @@ class Studio {
     this.render();
   }
 
-  get scene() { return this.project.scenes.find(scene => scene.id === this.previewId) || this.project.scenes[0]; }
+  get scene() { return this.project.scenes.find(scene => scene.id === this.previewId) || this.project.scenes[0] || this.emptyScene; }
   get layer() { return this.scene.layers.find(layer => layer.id === this.layerId); }
   source(id) { return this.project.sources.find(source => source.id === id); }
   overlay(id) { return this.project.overlays.find(item => item.id === id); }
@@ -209,7 +212,7 @@ class Studio {
   }
 
   take(type) {
-    if (this.transition || this.editing) return;
+    if (!this.project.scenes.length || this.transition || this.editing) return;
     const previous = this.program;
     this.program = this.shot(this.scene);
     if (this.project.scenes.some(scene => scene.id === previous.scene.id)) this.previewId = previous.scene.id;
@@ -222,17 +225,18 @@ class Studio {
   render() {
     if (!this.project) return;
     $('project-name').textContent = this.project.name;
-    $('preview-name').textContent = this.scene.name;
-    $('preview-canvas').setAttribute('aria-label', 'Preview: ' + this.scene.name);
-    $('program-name').textContent = this.program?.scene.name ?? '';
-    $('program-canvas').setAttribute('aria-label', 'Program: ' + this.program?.scene.name);
+    const empty = this.project.scenes.length === 0;
+    $('preview-name').textContent = empty ? 'No scene created' : this.scene.name;
+    $('preview-canvas').setAttribute('aria-label', empty ? 'Preview: no scenes yet' : 'Preview: ' + this.scene.name);
+    $('program-name').textContent = empty ? 'No scene on air' : this.program?.scene.name ?? '';
+    $('program-canvas').setAttribute('aria-label', empty ? 'Program: no scenes yet' : 'Program: ' + this.program?.scene.name);
     $('transition').value = this.project.transition;
     const ms = $('transition-ms');
     if (![...ms.options].some(item => Number(item.value) === this.project.duration)) ms.add(new Option(this.project.duration + ' ms', this.project.duration));
     ms.value = this.project.duration;
     ms.disabled = this.project.transition === 'cut';
-    $('take').disabled = !!this.transition;
-    this.root.querySelector('[data-act="cut"]').disabled = !!this.transition;
+    $('take').disabled = empty || !!this.transition;
+    this.root.querySelector('[data-act="cut"]').disabled = empty || !!this.transition;
     this.root.querySelector('[data-act="cut"] kbd').textContent = shortcutLabel(this.project.shortcuts.cut);
     $('take').querySelector('kbd').textContent = shortcutLabel(this.project.shortcuts.take);
     this.renderFavorites();
@@ -246,7 +250,10 @@ class Studio {
         <button class="scene-delete" type="button" data-act="scene-delete" data-id="${scene.id}" aria-label="Delete scene ${e(scene.name)}"
         title="${this.project.scenes.length <= 1 ? 'Keep at least one scene' : program ? 'Switch Program to another scene before deleting' : 'Delete this scene'}"
         ${this.project.scenes.length <= 1 ? 'disabled' : ''}>${icon('trash',14)}</button></div></div>`;
-    }).join('');
+    }).join('') || '<div class="studio-empty-scenes"><strong>Start with your own scene</strong>'
+      + '<p>No studios or camera inputs have been added. Create a blank scene, then '
+      + 'add only the cameras, microphones and other inputs you want in that scene.</p>'
+      + '<button class="button primary" type="button" data-act="new-scene">Create first scene</button></div>';
     this.thumbnails(performance.now());
     this.renderDock();
     this.renderMixer();
@@ -266,7 +273,7 @@ class Studio {
       return '<button type="button" class="favorite-transition" data-act="favorite-take" data-id="' + index
         + '" aria-label="Favorite ' + (index + 1) + ': Take with ' + label
         + '" title="Take Preview live using ' + label + '"'
-        + (this.transition || this.editing ? ' disabled' : '') + '>'
+        + (!this.project.scenes.length || this.transition || this.editing ? ' disabled' : '') + '>'
         + '<span class="favorite-number">' + (index + 1) + '</span>'
         + '<span class="favorite-name">' + label + '</span></button>';
     }).join('');
@@ -297,8 +304,11 @@ class Studio {
 
   renderDock() {
     if (!this.project || !this.program) return;
-    $('tools-scene-name').textContent = this.scene.name + ' · layers & inputs';
-    $('dock-panel').innerHTML = layersPanel(this.scene, this.project, this, this.media);
+    $('tools-scene-name').textContent = this.project.scenes.length
+      ? this.scene.name + ' · layers & inputs' : 'No scene selected';
+    $('dock-panel').innerHTML = this.project.scenes.length
+      ? layersPanel(this.scene, this.project, this, this.media)
+      : '<div class="empty-panel"><p>Create a scene first to add or position inputs.</p></div>';
     this.renderWorkspacePanel();
   }
 
@@ -312,7 +322,11 @@ class Studio {
       tab.tabIndex = selected ? 0 : -1;
     }
     $('scene-panel').hidden = current !== 'scenes';
-    $('manage-cameras').hidden = current !== 'scenes';
+    $('manage-cameras').hidden = current !== 'scenes' || !this.project.scenes.length;
+    const canEditScene = !!this.project.scenes.length;
+    this.root.querySelectorAll('[data-act="scene-tools"],[data-act="arrange-preview"],[data-act="scene-designer"]').forEach(button => {
+      button.disabled = !canEditScene;
+    });
     $('overlays-panel').hidden = current !== 'overlays';
     $('classroom-panel').hidden = current !== 'classroom';
     const add = $('workspace-add');
@@ -354,6 +368,7 @@ class Studio {
   }
 
   showTools(id) {
+    if (!this.project.scenes.length) { this.sceneDialog(true); return; }
     if (id && this.project.scenes.some(scene => scene.id === id) && id !== this.previewId) this.setPreview(id);
     this.renderDock();
     if (!this.tools.open) this.tools.showModal();
@@ -497,6 +512,7 @@ class Studio {
   closeDialog() { if (this.dialog.open) this.dialog.close(); this.dialogHandler = null; }
 
   inputMenu() {
+    if (!this.project.scenes.length) { this.sceneDialog(true); return; }
     const actions = [
       ['camera', 'Camera'], ['mic', 'Microphone'], ['screen', 'Screen or app window'], ['powerpoint', 'PowerPoint deck'],
       ['slideshow', 'Capture PowerPoint slideshow'], ['files', 'Video, image or audio'], ['title', 'Text layer'],
@@ -601,6 +617,8 @@ class Studio {
   }
 
   addSource(type, name, options, project = this.project, scene = this.scene) {
+    if (!project.scenes.some(item => item.id === scene.id))
+      throw new Error('Create a blank scene before adding a camera or other input.');
     if (project.sources.length >= 100) throw new Error('A project can hold up to 100 inputs.');
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const source = makeSource(type, name, options);
@@ -612,6 +630,7 @@ class Studio {
   }
 
   async deviceMenu(type, existing) {
+    if (!this.project.scenes.length) { this.sceneDialog(true); return; }
     if (!navigator.mediaDevices?.enumerateDevices) throw new Error('Open the studio over HTTPS to use media devices.');
     const all = await navigator.mediaDevices.enumerateDevices();
     const hardware = all.filter(device => device.kind === (type === 'camera' ? 'videoinput' : 'audioinput'));
@@ -653,6 +672,10 @@ class Studio {
   }
 
   pickFile(mode, data = null) {
+    if (!this.project.scenes.length && !mode.startsWith('overlay-') && mode !== 'graphic') {
+      this.sceneDialog(true);
+      return;
+    }
     this.pick = { mode, data, scene: this.scene.id };
     const picker = $('media-picker');
     picker.value = '';
@@ -721,10 +744,12 @@ class Studio {
   }
 
   sceneDialog(adding) {
+    if (!adding && !this.project.scenes.length) { this.sceneDialog(true); return; }
     const scene = this.scene;
     const position = this.project.scenes.indexOf(scene);
     const body = '<div class="form-grid">' + (adding
-      ? '<label>Scene template<select name="template">' + options(TEMPLATES, 'blank') + '</select></label><label>Scene name<input name="name" maxlength="120" placeholder="Use template name"></label>'
+      ? '<p>Your scene starts blank. Add only the cameras, microphones and other layers you choose.</p>'
+      + '<label>Scene name<input name="name" required maxlength="120" placeholder="e.g. Studio 1"></label>'
       : '<label>Scene name<input name="name" required maxlength="120" value="' + e(scene.name) + '"></label>'
       + '<label>Background<select name="background">' + options(Object.fromEntries(Object.entries(BACKGROUNDS).filter(([id]) => id !== 'custom' || scene.backdrop)), scene.background) + '</select></label>'
       + '<div class="inline">' + buttons(icon('image',15) + ' Upload background','input-backdrop') + '</div>'
@@ -737,9 +762,12 @@ class Studio {
       + '<button class="button primary" type="submit">' + (adding ? 'Add scene' : 'Apply to Preview') + '</button>', data => {
         if (adding) {
           if (this.project.scenes.length >= 40) throw new Error('This project already has 40 scenes.');
-          const template = String(data.get('template'));
-          const item = makeScene(template, textName(String(data.get('name')), TEMPLATES[template]));
+          const wasEmpty = this.project.scenes.length === 0;
+          const item = makeScene('blank', textName(String(data.get('name')), 'Scene ' + (this.project.scenes.length + 1)));
           this.project.scenes.push(item);
+          // First user-created scene becomes the starting monitor scene.
+          // Nothing, including a camera, is automatically added to it.
+          if (wasEmpty) this.program = this.shot(item);
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
