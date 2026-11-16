@@ -149,10 +149,10 @@ try {
   assert.ok(await page.locator('#classroom-panel').getByRole('heading', { name: 'PowerPoint & speaker notes' }).isVisible());
   assert.equal(await page.locator('#workspace-add').getAttribute('aria-label'), 'Import PowerPoint');
   await page.locator('#classroom-panel [data-act="timer-show"]').click();
-  assert.equal(await page.locator('#classroom-panel [data-act="timer-show"]').textContent(), 'Hide from output',
+  assert.equal(await page.locator('#classroom-panel [data-act="timer-show"]').textContent(), 'Hide from live output',
     'The timer can be shown or hidden globally from the Classroom tab');
   assert.equal(await page.locator('#classroom-panel [data-act="timer-assign"]').textContent(),
-    'Add timer to this scene',
+    'Add timer layout to this scene',
     'The timer must still be explicitly assigned to the selected scene');
 
   // Accessible arrow-key navigation between the global workspaces.
