@@ -1257,7 +1257,11 @@ class Studio {
       1–9 to cue scenes, Q/W/E/R/T/Y/U/I for live overlays, Page Up/Down for the live PowerPoint,
       and comma/period for Preview slides.</p>
       <p>Use Shortcuts at the top of the control room to assign your own keys, including modifiers.
-      Press a key in its assignment box; duplicate assignments are rejected.</p>
+      Press a key in its assignment box, or select Add shortcut to create additional commands
+      for any saved overlay or production action. Duplicate assignments are rejected.</p>
+      <p>The Overlays workspace includes up to 100 saved items. Use the search box and group
+      selector to find message, emoji, announcement and media overlays. Only active overlays
+      are drawn on Program, so avoid stacking large numbers of video overlays at once.</p>
       <h3>Share a clean feed</h3>
       <p>Open Program output, then share that window or tab in your meeting app. Enable its audio and
       share computer sound if the meeting app offers it.</p>
@@ -1617,6 +1621,8 @@ class Studio {
               this.media.dispose('preview:' + id);
               this.media.dispose('program:' + id);
               this.project.overlays = this.project.overlays.filter(item => item.id !== id);
+              this.project.extraShortcuts=(this.project.extraShortcuts||[])
+                .filter(row=>row.action!=='overlay:'+id);
               this.closeDialog();
               this.mark();
               this.renderWorkspacePanel();
