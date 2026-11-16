@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { TRANSITIONS, DEFAULT_FAVORITE_TRANSITIONS, normalizeFavoriteTransitions } from '../../src/mayne-studio/transitions.js';
 import { assetIds, audioWeights, clock, dbGain, makeLayer, makeProject, makeScene, makeSource, normalizeProject, assignDeviceToScene, isDefaultSharedCameraInset,
-  transitionProgress, uid } from '../../src/mayne-studio/model.js';
+  transitionProgress, uid, canEmbedScene, visibleSceneLayers, linkSceneDecks, syncLinkedDecks } from '../../src/mayne-studio/model.js';
 
 test('new projects start with no studio templates, scenes, cameras, or microphone layers', () => {
   const project = makeProject();
@@ -179,4 +179,65 @@ test('existing named template scenes remain readable but are never added to new 
   assert.deepEqual(normalized.scenes.map(s=>s.template),['standby','slides']);
   assert.deepEqual(normalized.scenes.map(s=>s.name),['My existing Standby','My existing Slides']);
   assert.equal(makeProject('Fresh').scenes.length,0);
+});
+
+test('a scene may embed an existing scene without templates, extra cameras or circular compositions', () => {
+  const project=makeProject();
+  const slides=makeScene('blank','Slides only');
+  const studio=makeScene('blank','Classroom studio');
+  const third=makeScene('blank','Alternate studio');
+  project.scenes.push(slides,studio,third);
+  const deck=makeSource('powerpoint','Class deck',{page:0});
+  const camera=makeSource('camera','Presenter camera');
+  const nested=makeSource('scene','Slides only',{sceneId:slides.id});
+  project.sources.push(deck,camera,nested);
+  const originalDeck=makeLayer(deck.id);
+  originalDeck.page=3;
+  slides.layers.push(originalDeck);
+  studio.layers.push(makeLayer(camera.id),makeLayer(nested.id));
+  assert.equal(canEmbedScene(project,studio.id,slides.id),true);
+  assert.equal(canEmbedScene(project,slides.id,studio.id),false,
+    'A cycle through existing scene references is forbidden');
+  assert.equal(canEmbedScene(project,slides.id,slides.id),false,
+    'A scene cannot embed itself');
+  const shot={scene:studio,sources:new Map(project.sources.map(s=>[s.id,s])),
+    scenes:new Map(project.scenes.map(s=>[s.id,s]))};
+  assert.deepEqual(visibleSceneLayers(shot).map(({source})=>source.id),
+    [camera.id,deck.id], 'Nested scene contents are traversed with independent camera layers');
+  const linked=linkSceneDecks(project,slides.id);
+  assert.deepEqual([...linked],[deck.id]);
+  assert.equal(deck.sync,true);
+  assert.equal(deck.page,3);
+  assert.equal(normalizeProject(project).sources.find(s=>s.id===nested.id).sceneId,slides.id);
+  const restored=normalizeProject(project);
+  assert.equal(restored.sources.find(s=>s.id===deck.id).sync,true);
+  assert.equal(restored.sources.find(s=>s.id===deck.id).page,3);
+  const program={scene:structuredClone(studio),
+    sources:new Map(project.sources.map(s=>[s.id,structuredClone(s)])),
+    scenes:new Map(project.scenes.map(s=>[s.id,structuredClone(s)]))};
+  deck.page=5;
+  syncLinkedDecks(project,[program]);
+  assert.equal(slides.layers[0].page,5);
+  assert.equal(program.scenes.get(slides.id).layers[0].page,5,
+    'On-air nested scene snapshot gets the same linked slide');
+  assert.equal(program.sources.get(deck.id).page,5,
+    'On-air source snapshot gets the current slide');
+  assert.equal(studio.layers.some(l=>l.source===camera.id),true,
+    'Composing scenes does not alter cameras or their assignments');
+});
+
+test('nested scene cycles are blocked defensively even if a file contains a loop',()=>{
+  const project=makeProject();
+  const a=makeScene('blank','A'),b=makeScene('blank','B');
+  project.scenes.push(a,b);
+  const ab=makeSource('scene','B',{sceneId:b.id});
+  const ba=makeSource('scene','A',{sceneId:a.id});
+  project.sources.push(ab,ba);
+  a.layers.push(makeLayer(ab.id));
+  b.layers.push(makeLayer(ba.id));
+  const shot={scene:a,sources:new Map(project.sources.map(s=>[s.id,s])),
+    scenes:new Map(project.scenes.map(s=>[s.id,s]))};
+  assert.deepEqual(visibleSceneLayers(shot),[],
+    'Cycle traversal terminates safely without trying to draw endlessly');
+  assert.equal(canEmbedScene(project,a.id,b.id),false);
 });

@@ -131,8 +131,11 @@ function placeholder(ctx, label, x, y, w, h) {
   text(ctx, label, x + w / 2, y + h / 2, Math.min(34, h * .35), { align: 'center', color: '#c5d2e2', width: w * .78 });
 }
 
-function drawScene(ctx, medium, shot, now, preview) {
+function drawScene(ctx, medium, shot, now, preview, visited = new Set()) {
   const { scene, sources } = shot;
+  if (!scene || visited.has(scene.id) || visited.size >= 10) return;
+  const path = new Set(visited);
+  path.add(scene.id);
   drawBackground(ctx, medium, scene);
   const layers = scene.layers.filter(layer => layer.visible);
   const deck = layers.some(layer => ['powerpoint', 'screen', 'image'].includes(sources.get(layer.source)?.type));
@@ -149,8 +152,25 @@ function drawScene(ctx, medium, shot, now, preview) {
     const bounds = position(layer);
     const [x, y, w, h] = bounds;
     ctx.save();
-    ctx.globalAlpha = layer.opacity / 100;
-    if (source.type === 'title') {
+    ctx.globalAlpha *= layer.opacity / 100;
+    if (source.type === 'scene') {
+      const child = shot.scenes?.get(source.sceneId);
+      if (child && !path.has(child.id)) {
+        // Render an entire reusable composition into the selected rectangle.
+        // A whiteboard or TV can be any aspect ratio, with either a letterboxed
+        // 16:9 scene, cropped scene, or scene stretched to its layer bounds.
+        ctx.beginPath();
+        ctx.rect(x,y,w,h);
+        ctx.clip();
+        rect(ctx,x,y,w,h,'#030508');
+        const scale = layer.fit === 'stretch' ? [w / W,h / H]
+          : [layer.fit === 'cover' ? Math.max(w / W,h / H) : Math.min(w / W,h / H),
+            layer.fit === 'cover' ? Math.max(w / W,h / H) : Math.min(w / W,h / H)];
+        ctx.translate(x + (w - W * scale[0]) / 2,y + (h - H * scale[1]) / 2);
+        ctx.scale(scale[0],scale[1]);
+        drawScene(ctx,medium,{...shot,scene:child},now,preview,path);
+      } else if (preview) placeholder(ctx,source.name,x,y,w,h);
+    } else if (source.type === 'title') {
       rect(ctx, x, y, w, h, '#0a111ee6', 10);
       rect(ctx, x, y, 9, h, accent, 4);
       text(ctx, source.text, x + 32, y + h * (source.sub ? .38 : .5), h * .37, { width: w * .9, weight: 700 });
@@ -292,11 +312,11 @@ export class StudioRenderer {
     paintTransition(this.program, transition.type, eased, this.outgoing.canvas, this.incoming.canvas);
   }
 
-  thumbnail(node, scene, sources, now) {
+  thumbnail(node, scene, sources, now, scenes = new Map()) {
     const ctx = node.getContext('2d', { alpha: false });
     ctx.save();
     ctx.scale(node.width / W, node.height / H);
-    drawScene(ctx, this.media, { scene, sources }, now, false);
+    drawScene(ctx, this.media, { scene, sources, scenes }, now, false);
     ctx.restore();
   }
 }

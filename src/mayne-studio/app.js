@@ -1,7 +1,7 @@
 import { AUDIO, BACKGROUNDS, PLACE, SHORTCUTS, SOURCES, TEMPLATES, OVERLAYS, OVERLAY_CHOICES, audioWeights,
   clamp, clock, clone, makeLayer, makeOverlay, makeProject, makeScene, makeSource, normalizeProject,
-  assignDeviceToScene, isDefaultSharedCameraInset,
-  transitionProgress, uid } from './model.js';
+  assignDeviceToScene, isDefaultSharedCameraInset, canEmbedScene, visibleSceneLayers,
+  linkSceneDecks, syncLinkedDecks, transitionProgress, uid } from './model.js';
 import * as storage from './projects.js';
 import { StudioMedia, fileKind } from './media.js';
 import { StudioRenderer } from './render.js';
@@ -127,6 +127,7 @@ class Studio {
   load(project) {
     if (this.overlayEditor.open) this.overlayEditor.dialog.close();
     this.project = project;
+    syncLinkedDecks(this.project);
     // Also handle projects constructed by integrations and older in-memory studio sessions.
     this.project.favoriteTransitions = normalizeFavoriteTransitions(project.favoriteTransitions);
     this.media.setProject(project);
@@ -154,7 +155,12 @@ class Studio {
   overlay(id) { return this.project.overlays.find(item => item.id === id); }
   shot(scene, snapshot = true) {
     const sources = new Map(this.project.sources.map(source => [source.id, snapshot ? clone(source) : source]));
-    return { scene: snapshot ? clone(scene) : scene, sources };
+    const scenes = new Map(this.project.scenes.map(item => [item.id, snapshot ? clone(item) : item]));
+    return { scene: scenes.get(scene.id) ?? (snapshot ? clone(scene) : scene), sources, scenes };
+  }
+
+  audibleShot(shot) {
+    return shot && { layers: visibleSceneLayers(shot).map(({layer}) => layer) };
   }
 
   notify(message, error = false) {
@@ -470,7 +476,8 @@ class Studio {
   renderProgramDeck() {
     const container = $('live-deck-controls');
     if (!this.program || !container) return;
-    const layers = this.program.scene.layers.filter(layer => layer.visible && this.program.sources.get(layer.source)?.type === 'powerpoint');
+    const layers = visibleSceneLayers(this.program).filter(({source}) => source.type === 'powerpoint')
+      .map(({layer}) => layer);
     container.hidden = !layers.length;
     if (!layers.length) { container.innerHTML = ''; return; }
     container.innerHTML = layers.map(layer => {
@@ -487,9 +494,9 @@ class Studio {
   }
 
   activeDeck(bus) {
-    const scene = bus === 'program' ? this.program.scene : this.scene;
-    return scene.layers.find(layer => layer.visible && this.source(layer.source)?.type === 'powerpoint'
-      && this.media.get(layer.source)?.deck);
+    const shot = bus === 'program' ? this.program : this.shot(this.scene, false);
+    return visibleSceneLayers(shot).find(({source}) =>
+      source.type === 'powerpoint' && this.media.get(source.id)?.deck)?.layer;
   }
 
   advanceDeck(bus, delta) {
@@ -547,8 +554,10 @@ class Studio {
       this.timer.remaining = Math.max(0, (this.timer.deadline - now) / 1000);
       if (this.timer.remaining === 0) { this.timer.deadline = 0; if (this.workspaceTab === 'classroom') this.renderWorkspacePanel(); }
     }
-    this.media.playSources(this.project, this.program.scene, outgoing?.scene);
-    this.media.audio.update(this.project, this.media.entries, audioWeights(this.program.scene, outgoing?.scene, progress.eased));
+    const incomingAudio = this.audibleShot(this.program);
+    const outgoingAudio = this.audibleShot(outgoing);
+    this.media.playSources(this.project, incomingAudio, outgoingAudio);
+    this.media.audio.update(this.project, this.media.entries, audioWeights(incomingAudio, outgoingAudio, progress.eased));
     this.renderer.draw({ preview: this.shot(this.scene, false), program: this.program,
       transition: this.transition, previewOverlays: this.previewOverlays, liveOverlays: this.liveOverlays,
       timer: { ...this.timer, remaining: Math.ceil(this.timer.remaining) } }, now);
@@ -560,10 +569,10 @@ class Studio {
   }
 
   thumbnails(now) {
-    const map = this.shot(this.scene, false).sources;
+    const shot = this.shot(this.scene, false);
     for (const node of $('scenes').querySelectorAll('canvas')) {
       const scene = this.project.scenes.find(item => item.id === node.dataset.thumb);
-      this.renderer.thumbnail(node, scene, map, now);
+      if (scene) this.renderer.thumbnail(node, scene, shot.sources, now, shot.scenes);
     }
   }
 
@@ -609,8 +618,11 @@ class Studio {
     const actions = [
       ['camera', 'Camera'], ['mic', 'Microphone'], ['screen', 'Screen or app window'], ['powerpoint', 'PowerPoint deck'],
       ['slideshow', 'Capture PowerPoint slideshow'], ['files', 'Video, image or audio'], ['title', 'Text layer'],
+      ['scene', 'Embed another scene'],
     ];
-    const available = this.project.sources.filter(source => !this.scene.layers.some(layer => layer.source === source.id));
+    const available = this.project.sources.filter(source =>
+      !this.scene.layers.some(layer => layer.source === source.id)
+      && (source.type !== 'scene' || canEmbedScene(this.project,this.scene.id,source.sceneId)));
     this.dialogOpen('Add an input',
       '<p>Add a new camera or microphone here for <strong>' + e(this.scene.name)
       + '</strong> only. To display a camera already used in another scene, select '
@@ -623,15 +635,64 @@ class Studio {
         + '<div class="inline">' + buttons('Assign to this scene', 'reuse-input') + buttons('Remove input entirely', 'delete-input') + '</div></div>' : ''));
   }
 
+  /** Embed an existing user-built scene on the current scene's canvas.
+   * No template scenes or cameras are created. */
+  sceneLayerDialog() {
+    const parent = this.scene;
+    const eligible = this.project.scenes.filter(child => canEmbedScene(this.project, parent.id, child.id)
+      && !parent.layers.some(layer =>
+        this.source(layer.source)?.type === 'scene' && this.source(layer.source).sceneId === child.id));
+    if (!eligible.length) {
+      this.dialogOpen('Embed another scene',
+        '<p>Create a separate scene first, such as a PowerPoint-only scene. '
+        + 'You can then reuse it inside this studio as a movable and resizable layer. '
+        + 'A scene cannot embed itself or create a circular reference.</p>');
+      return;
+    }
+    this.dialogOpen('Embed another scene',
+      '<p>Choose an existing scene to appear inside <strong>' + e(parent.name)
+      + '</strong>—for example, a full PowerPoint scene inside a classroom TV. '
+      + 'Move and resize the embedded scene using Arrange layers or the larger Scene Designer.</p>'
+      + '<p>PowerPoint decks inside the reused scene will share the same slide number '
+      + 'in full-screen, studio, Preview and Program views.</p>'
+      + '<div class="form-grid"><label>Scene to embed<select name="child">'
+      + eligible.map(child => option(child.id,child.name)).join('')
+      + '</select></label></div>',
+      '<button type="button" class="button" data-act="close-dialog">Cancel</button>'
+      + '<button type="submit" class="button primary">Add scene layer</button>', data => {
+        const id = String(data.get('child'));
+        if (!canEmbedScene(this.project,parent.id,id)) throw new Error('That scene would create a circular reference.');
+        if (parent.layers.some(layer => this.source(layer.source)?.type === 'scene'
+          && this.source(layer.source).sceneId === id)) throw new Error('This scene is already embedded here.');
+        const child = this.project.scenes.find(scene => scene.id === id);
+        if (!child) throw new Error('Choose an existing scene.');
+        let source = this.project.sources.find(source => source.type === 'scene' && source.sceneId === id);
+        if (!source) {
+          if (this.project.sources.length >= 100) throw new Error('Project input limit reached.');
+          source = makeSource('scene', child.name, { sceneId:id });
+          this.project.sources.push(source);
+        }
+        this.layerId = this.addLayer(this.project,parent,source).id;
+        linkSceneDecks(this.project,id);
+        syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
+        this.closeDialog();
+        this.mark();
+        this.render();
+        this.notify('Embedded scene added. Related PowerPoints now stay on the same slide.');
+      });
+  }
+
   addLayer(project, scene, source) {
     if (scene.layers.length >= 40) throw new Error('A scene can contain up to 40 input layers.');
     const slides = scene.template === 'slides';
     const hasSlides = scene.layers.some(layer => ['powerpoint','image','screen'].includes(project.sources.find(s => s.id === layer.source)?.type));
-    const layers = source.type === 'title' ? PLACE.title
+    const layers = source.type === 'scene' ? { x: 7, y: 4, w: 48, h: 43 }
+      : source.type === 'title' ? PLACE.title
       : source.type === 'camera' && (slides || hasSlides || scene.layers.some(layer => project.sources.find(s => s.id === layer.source)?.type === 'camera')) ? PLACE.inset
       : slides && ['powerpoint', 'screen', 'image', 'video'].includes(source.type) ? PLACE.slides : PLACE.full;
     const layer = makeLayer(source.id, layers);
-    if (['powerpoint', 'screen', 'image'].includes(source.type)) layer.fit = 'contain';
+    if (['powerpoint', 'screen', 'image', 'scene'].includes(source.type)) layer.fit = 'contain';
+    if (source.type === 'powerpoint' && source.sync) layer.page = source.page;
     scene.layers.push(layer);
     return layer;
   }
@@ -867,6 +928,8 @@ class Studio {
           this.setPreview(item.id);
         } else {
           scene.name = textName(String(data.get('name')), scene.name);
+          for (const source of this.project.sources)
+            if (source.type === 'scene' && source.sceneId === scene.id) source.name = scene.name;
           scene.background = String(data.get('background'));
           scene.title = String(data.get('title')).slice(0, 100);
           scene.caption = String(data.get('caption')).slice(0, 200);
@@ -883,6 +946,13 @@ class Studio {
     const scene = this.project.scenes[index];
     if (this.project.scenes.length <= 1) {
       this.notify('Keep at least one scene in your project.', true);
+      return;
+    }
+    if (this.project.scenes.some(parent => parent.layers.some(layer =>
+      this.source(layer.source)?.type === 'scene' && this.source(layer.source).sceneId === id))) {
+      this.dialogOpen('Scene is embedded', '<p>“' + e(scene.name)
+        + '” is used inside another scene. Remove its embedded scene layer from the '
+        + 'parent studio first, then delete this scene.</p>');
       return;
     }
     if (this.program.scene.id === id || this.transition?.previous.scene.id === id) {
@@ -997,16 +1067,28 @@ class Studio {
   }
 
   slide(layerId, bus, delta) {
-    const scene = bus === 'program' ? this.program.scene : this.scene;
-    const layer = scene.layers.find(item => item.id === layerId);
-    const deck = layer && this.media.get(layer.source)?.deck;
+    const shot = bus === 'program' ? this.program : this.shot(this.scene, false);
+    const found = visibleSceneLayers(shot).find(({layer,source}) =>
+      layer.id === layerId && source.type === 'powerpoint');
+    if (!found) return;
+    const {layer} = found;
+    const deck = this.media.get(layer.source)?.deck;
     if (!deck) return;
-    const page = Math.min(deck.count - 1, Math.max(0, layer.page + delta));
-    if (layer.page === page) return;
-    layer.page = page;
-    if (bus !== 'program') this.mark();
+    const source = this.source(layer.source);
+    const current = source?.sync ? source.page : layer.page;
+    const page = Math.min(deck.count - 1, Math.max(0, current + delta));
+    if (current === page) return;
+    if (source?.sync) {
+      source.page = page;
+      syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
+      this.mark();
+    } else {
+      layer.page = page;
+      if (bus !== 'program') this.mark();
+    }
     this.renderDock();
     this.renderProgramDeck();
+    if (this.workspaceTab === 'classroom') this.renderWorkspacePanel();
   }
 
   help() {
@@ -1023,7 +1105,11 @@ class Studio {
       <p>Import .pptx or .ppsx for slide controls and private notes. Live PowerPoint navigation appears
       under Program while that scene is on air. For animations or embedded media, capture the
       PowerPoint slideshow window instead.</p>
-      <h3>Scene editing and order</h3>
+      <h3>Scene editing, nesting, and order</h3>
+      <p>In a scene's Layers & Inputs, choose Add input → Embed another scene. Select a
+      previously created scene, then resize and drag it over a TV or whiteboard. Its
+      PowerPoint automatically stays synchronized with the full-screen version—even
+      after switching between studio, Preview, and Program.</p>
       <p>In the Scenes tab, grab the Move handle on a scene card and drag it before or after
       another scene to change the order. The left and right arrows on each card also
       reorder one position at a time, including on touchscreens. Ordering updates the
@@ -1052,7 +1138,8 @@ class Studio {
     try {
       if (act.startsWith('input-')) {
         const type = act.slice(6);
-        if (['camera', 'mic'].includes(type)) await this.deviceMenu(type);
+        if (type === 'scene') this.sceneLayerDialog();
+        else if (['camera', 'mic'].includes(type)) await this.deviceMenu(type);
         else if (['screen', 'slideshow'].includes(type)) await this.startScreen(type === 'slideshow');
         else if (type === 'title') {
           this.closeDialog();
@@ -1069,6 +1156,13 @@ class Studio {
       }
       switch (act) {
         case 'scene': this.setPreview(id); break;
+        case 'open-embedded-scene':
+          if (this.project.scenes.some(scene => scene.id === id)) {
+            if (this.tools.open) this.tools.close();
+            this.setPreview(id);
+            this.showTools(id);
+          }
+          break;
         case 'scene-reorder-left': case 'scene-reorder-right': {
           const index = this.project.scenes.findIndex(scene => scene.id === id);
           const step = act === 'scene-reorder-left' ? -1 : 1;
@@ -1178,9 +1272,15 @@ class Studio {
         case 'reuse-input': {
           const source = this.source($('reuse-input')?.value);
           if (!source) break;
+          if (source.type === 'scene' && !canEmbedScene(this.project,this.scene.id,source.sceneId))
+            throw new Error('That scene would create a circular reference.');
           this.layerId = ['camera','mic'].includes(source.type)
             ? assignDeviceToScene(this.project, this.scene, source).id
             : this.addLayer(this.project, this.scene, source).id;
+          if (source.type === 'scene') {
+            linkSceneDecks(this.project,source.sceneId);
+            syncLinkedDecks(this.project,[this.program,this.transition?.previous]);
+          }
           this.closeDialog();
           this.mark();
           this.render();
